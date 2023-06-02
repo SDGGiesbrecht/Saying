@@ -1,0 +1,10 @@
+# Linux
+*~
+
+# macOS
+.DS_Store
+
+# Swift
+.build
+Packages
+.swiftpm
