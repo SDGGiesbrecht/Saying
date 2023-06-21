@@ -1,0 +1,44 @@
+thing
+ (
+  English: truth value
+  Deutsch: Wahrheitswert
+  français : valeur de vérité
+  ελληνικά: αληθοτιμή
+  עברית: ערך אמת
+ )
+ Swift: Bool
+
+action
+ [
+  [
+   English: Performs logical conjuction.
+   Deutsch: Führt eine logische Konjunktion durch.
+  ]
+  test (verify ((true) and (true)) is (true))
+  test (verify ((true) and (false)) is (false))
+  test (verify ((false) and (true)) is (false))
+  test (verify ((false) and (false)) is (false))
+  parameter: first
+  (
+   [
+    English: A truth value.
+    Deutsch: Eine Wahrheitswert.
+   ]
+  )
+  parameter: second
+  (
+   [
+    English: Another truth value.
+    Deutsch: Eine weitere Wahrheitswert.
+   ]
+  )
+ ]
+ (
+  English: (first: truth value) and (second: truth value)
+  Deutsch: (erste: [first]) und (zweite: [second])
+  français : (première: [first]) et (deuxième: [second])
+  ελληνικά: (πρώτη: [first]) και (δεύτερα: [second])
+  עברית: (ראשון: [first]) ו(שני: [second])
+ )
+ truth value
+ Swift: infix operator (first “&&” second)
