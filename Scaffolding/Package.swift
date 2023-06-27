@@ -12,6 +12,7 @@ let package = Package(
       name: "scaffolding",
       dependencies: [
         .product(name: "SDGCollections", package: "SDGCornerstone"),
+        .product(name: "SDGText", package: "SDGCornerstone"),
         .product(name: "SDGPersistence", package: "SDGCornerstone"),
       ]
     ),

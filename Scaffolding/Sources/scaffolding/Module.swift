@@ -15,7 +15,11 @@ struct Module {
   func build() throws {
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
-      print(sourceFile.lastPathComponent)
+      let loaded = try File(from: sourceFile)
+      switch loaded.contents {
+      case .utf8(let source):
+        print(source)
+      }
     }
   }
 }
