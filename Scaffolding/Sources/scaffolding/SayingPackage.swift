@@ -3,7 +3,7 @@ import Foundation
 import SDGCollections
 import SDGPersistence
 
-struct SayingPackage {
+struct Package {
 
   var location: URL
 
@@ -11,19 +11,23 @@ struct SayingPackage {
     return location.appendingPathComponent("Source")
   }
 
-  let ignoredFiles: Set<String> = [".DS_Store"]
+  static let ignoredFiles: Set<String> = [".DS_Store"]
 
   func modules() throws -> [Module] {
     return try FileManager.default.contents(ofDirectory: sourceDirectory)
-      .lazy.filter({ $0.lastPathComponent ∉ ignoredFiles })
+      .lazy.filter({ $0.lastPathComponent ∉ Package.ignoredFiles })
       .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
       .map({ Module(directory: $0)})
   }
 
-  func test() throws {
+  func build() throws {
     let modules = try self.modules()
     for module in modules {
-      print(module.directory.lastPathComponent)
+      try module.build()
     }
+  }
+
+  func test() throws {
+    try build()
   }
 }

@@ -8,7 +8,7 @@ import Foundation
       .deletingLastPathComponent()
       .deletingLastPathComponent()
       .deletingLastPathComponent()
-    let package = SayingPackage(location: packageRoot)
+    let package = Package(location: packageRoot)
     try package.test()
   }
 }
