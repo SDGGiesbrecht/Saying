@@ -1,4 +1,6 @@
+import SDGText
+
 struct Parsed<T> {
   let node: T
-  let location: 
+  let location: Slice<StrictString>
 }

@@ -1,8 +1,5 @@
-//
-//  File.swift
-//  
-//
-//  Created by Jeremy on 2023‐07‐10.
-//
-
-import Foundation
+extension Token {
+  enum TokenizationError: Error {
+    case invalidScalar(Unicode.Scalar)
+  }
+}
