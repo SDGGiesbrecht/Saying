@@ -33,7 +33,7 @@ struct GitStyleFile {
       segments.append(
         UTF8Segment(
           offset: adjustedOffset,
-          content: StrictString(segment)
+          source: StrictString(segment)
         )
       )
     }
@@ -53,11 +53,11 @@ struct GitStyleFile {
           cursor: (offset: offset, index: index)
         )
         if index ≠ lastIndex {
-          if segments.last?.content == "\u{2028}" {
+          if segments.last?.source == "\u{2028}" {
             let first = segments.removeLast()
-            segments.append(UTF8Segment(offset: first.offset, content: "\u{2029}"))
+            segments.append(UTF8Segment(offset: first.offset, source: "\u{2029}"))
           } else {
-            segments.append(UTF8Segment(offset: offset, content: "\u{2028}"))
+            segments.append(UTF8Segment(offset: offset, source: "\u{2028}"))
           }
         }
       } else {

@@ -8,6 +8,7 @@ extension Token {
     }
 
     case paragraphBreak
+    case lineBreak
     case openingParenthesis
     case closingParenthesis
     case openingBracket
@@ -23,6 +24,8 @@ extension Token {
       switch self {
       case .paragraphBreak:
         return ["\u{2029}"]
+      case .lineBreak:
+        return ["\u{2028}"]
       case .openingParenthesis:
         return ["("]
       case .closingParenthesis:
@@ -58,7 +61,7 @@ extension Token {
 
     var isSingleScalar: Bool {
       switch self {
-      case .paragraphBreak, .openingParenthesis, .closingParenthesis, .openingBracket, .closingBracket, .openingQuotationMark, .closingQuotationMark, .colon, .symbolInsertion, .space:
+      case .paragraphBreak, .lineBreak, .openingParenthesis, .closingParenthesis, .openingBracket, .closingBracket, .openingQuotationMark, .closingQuotationMark, .colon, .symbolInsertion, .space:
         return true
       case .identifier:
         return false

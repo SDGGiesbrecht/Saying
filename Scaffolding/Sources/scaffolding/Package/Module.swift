@@ -18,9 +18,10 @@ struct Module {
       let loaded = try File(from: sourceFile)
       switch loaded.contents {
       case .utf8(let source):
-        print(source.segments)
-        //let tokens = try Token.tokenize(source: source).get()
-        //print(tokens.map({ $0.node.source }))
+        let tokens = try ParsedToken.tokenize(source: source).get()
+        for token in tokens {
+          print("\(token.location.underlyingScalarOffsetOfStart()): “\(token.token.source)”")
+        }
       }
     }
   }

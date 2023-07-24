@@ -5,7 +5,7 @@ import SDGText
 struct UTF8File {
 
   init(source: StrictString) {
-    self.source = UTF8Segments([UTF8Segment(offset: 0, content: source)])
+    self.source = UTF8Segments([UTF8Segment(offset: 0, source: source)])
   }
 
   init(from url: URL) throws {
