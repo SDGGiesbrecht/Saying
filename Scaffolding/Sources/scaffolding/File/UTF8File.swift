@@ -5,7 +5,7 @@ import SDGText
 struct UTF8File {
 
   init(source: StrictString) {
-    self.source = source
+    self.source = UTF8Segments([UTF8Segment(offset: 0, content: source)])
   }
 
   init(from url: URL) throws {
@@ -16,5 +16,5 @@ struct UTF8File {
     source = gitStyle.parsed()
   }
 
-  let source: StrictString
+  let source: UTF8Segments
 }

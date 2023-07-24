@@ -18,8 +18,9 @@ struct Module {
       let loaded = try File(from: sourceFile)
       switch loaded.contents {
       case .utf8(let source):
-        let tokens = try Token.tokenize(source: source).get()
-        print(tokens.map({ $0.node.source }))
+        print(source.segments)
+        //let tokens = try Token.tokenize(source: source).get()
+        //print(tokens.map({ $0.node.source }))
       }
     }
   }

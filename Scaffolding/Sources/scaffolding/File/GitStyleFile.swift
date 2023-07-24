@@ -1,5 +1,7 @@
 import Foundation
 
+import SDGLogic
+import SDGCollections
 import SDGText
 import SDGPersistence
 
@@ -15,21 +17,62 @@ struct GitStyleFile {
 
   let source: StrictString
 
-  func parsed() -> StrictString {
-    var result = source
-    if result.last == "\n" {
-      result.removeLast()
+  private func registerSegment(
+    in segments: inout [UTF8Segment],
+    segmentStart: inout (offset: Int, index: StrictString.Index)?,
+    cursor: (offset: Int, index: StrictString.Index)
+  ) {
+    if let segmentStart = segmentStart,
+       segmentStart.offset ≠ cursor.offset {
+      var segment = source[segmentStart.index..<cursor.index]
+      var adjustedOffset = segmentStart.offset
+      while segment.first == " " {
+        segment.removeFirst()
+        adjustedOffset += 1
+      }
+      segments.append(
+        UTF8Segment(
+          offset: adjustedOffset,
+          content: StrictString(segment)
+        )
+      )
     }
-    return result
-      .components(separatedBy: "\n")
-      .lazy.map({ line in
-        var string = StrictString(line.contents)
-        while string.first == " " {
-          string.removeFirst()
+    segmentStart = nil
+  }
+
+  func parsed() -> UTF8Segments {
+    var segmentStart: (offset: Int, index: StrictString.Index)? = nil
+    var segments: [UTF8Segment] = []
+    let lastIndex = source.indices.last
+    for (offset, index) in source.indices.enumerated() {
+      let scalar = source[index]
+      if scalar == "\n" {
+        registerSegment(
+          in: &segments,
+          segmentStart: &segmentStart,
+          cursor: (offset: offset, index: index)
+        )
+        if index ≠ lastIndex {
+          if segments.last?.content == "\u{2028}" {
+            let first = segments.removeLast()
+            segments.append(UTF8Segment(offset: first.offset, content: "\u{2029}"))
+          } else {
+            segments.append(UTF8Segment(offset: offset, content: "\u{2028}"))
+          }
         }
-        return StrictString(string)
-      })
-      .joined(separator: "\u{2028}")
-      .replacingMatches(for: "\u{2028}", with: "\u{2029}")
+      } else {
+        if segmentStart == nil {
+          segmentStart = (offset: offset, index: index)
+        }
+        if index == lastIndex {
+          registerSegment(
+            in: &segments,
+            segmentStart: &segmentStart,
+            cursor: (offset: offset + 1, index: source.endIndex)
+          )
+        }
+      }
+    }
+    return UTF8Segments(segments)
   }
 }
