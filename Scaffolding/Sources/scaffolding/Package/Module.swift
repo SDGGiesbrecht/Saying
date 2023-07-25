@@ -18,8 +18,8 @@ struct Module {
       let loaded = try File(from: sourceFile)
       switch loaded.contents {
       case .utf8(let source):
-        let tokens = ParsedToken.tokenize(source: source)
-        for token in tokens {
+        let interface = InterfaceSyntax.parse(source: source)
+        for token in interface.tokens {
           print("\(token.location.underlyingScalarOffsetOfStart()): “\(token.token.source)”")
         }
       }
