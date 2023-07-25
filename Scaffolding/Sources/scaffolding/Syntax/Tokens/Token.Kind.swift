@@ -19,6 +19,7 @@ extension Token {
     case symbolInsertion
     case space
     case identifier
+    case error
 
     var allowedCharacters: Set<Unicode.Scalar> {
       switch self {
@@ -56,12 +57,14 @@ extension Token {
         values.append(contentsOf: 0x3B1...0x3C9) // α–ω
         values.append(contentsOf: 0x5D0...0x5EA) // א–ת
         return Set(values.lazy.map({ Unicode.Scalar($0)! }))
+      case .error:
+        return []
       }
     }
 
     var isSingleScalar: Bool {
       switch self {
-      case .paragraphBreak, .lineBreak, .openingParenthesis, .closingParenthesis, .openingBracket, .closingBracket, .openingQuotationMark, .closingQuotationMark, .colon, .symbolInsertion, .space:
+      case .paragraphBreak, .lineBreak, .openingParenthesis, .closingParenthesis, .openingBracket, .closingBracket, .openingQuotationMark, .closingQuotationMark, .colon, .symbolInsertion, .space, .error:
         return true
       case .identifier:
         return false

@@ -14,6 +14,11 @@ struct Token {
     self.source = source
   }
 
+  init(error: Unicode.Scalar) {
+    self.kind = .error
+    self.source = StrictString(error)
+  }
+
   let kind: Kind
   let source: StrictString
 }
