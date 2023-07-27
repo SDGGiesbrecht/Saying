@@ -18,9 +18,10 @@ struct Module {
       let loaded = try File(from: sourceFile)
       switch loaded.contents {
       case .utf8(let source):
-        let interface = InterfaceSyntax.parse(source: source)
-        for token in interface.tokens {
-          print("\(token.location.underlyingScalarOffsetOfStart()): “\(token.token.source)”")
+        let fileInterface = try InterfaceSyntax.File.parse(source: source).get()
+        for declaration in fileInterface.declarations.combinedEntries {
+          let source = declaration.tokens.map({ "\($0.token.source)|" }).joined().dropLast()
+          print("\(declaration.location.underlyingScalarOffsetOfStart()): \(source)")
         }
       }
     }

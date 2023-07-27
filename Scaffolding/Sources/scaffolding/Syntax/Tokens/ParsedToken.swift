@@ -1,6 +1,6 @@
 import SDGText
 
-struct ParsedToken {
+struct ParsedToken: ParsedSyntaxNode {
 
   static func tokenize(source: UTF8Segments) -> [ParsedToken] {
     var parsed: [ParsedToken] = []
