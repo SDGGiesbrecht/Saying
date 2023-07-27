@@ -20,8 +20,14 @@ struct Module {
       case .utf8(let source):
         let fileInterface = try InterfaceSyntax.File.parse(source: source).get()
         for declaration in fileInterface.declarations.combinedEntries {
-          let source = declaration.tokens.map({ "\($0.token.source)|" }).joined().dropLast()
-          print("\(declaration.location.underlyingScalarOffsetOfStart()): \(source)")
+          switch declaration.kind {
+          case .thing(let thing):
+            let source = thing.tokens.map({ "\($0.token.source)|" }).joined().dropLast()
+            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(source)")
+          case .action(let action):
+            let source = action.tokens.map({ "\($0.token.source)|" }).joined().dropLast()
+            print("action (\(action.location.underlyingScalarOffsetOfStart())): \(source)")
+          }
         }
       }
     }

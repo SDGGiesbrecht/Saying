@@ -1,0 +1,3 @@
+enum Localization {
+  case english
+}
