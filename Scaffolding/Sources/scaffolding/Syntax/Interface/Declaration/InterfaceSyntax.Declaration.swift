@@ -18,10 +18,13 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
       return .success(InterfaceSyntax.Declaration(kind: .thing(thing), location: thing.location))
     case .failure(let error):
       switch error {
-      case .keywordMissing:
-        return .failure(.keywordMissing)
-      case .notAThing:
-        break
+      case .commonParseError(let error):
+        switch error {
+        case .keywordMissing, .noLineBreakAfterKeyword:
+          return .failure(ParseError(error)!)
+        case .mismatchedKeyword:
+          break
+        }
       }
     }
 
@@ -30,10 +33,13 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
       return .success(InterfaceSyntax.Declaration(kind: .action(action), location: location))
     case .failure(let error):
       switch error {
-      case .keywordMissing:
-        return .failure(.keywordMissing)
-      case .notAnAction:
-        break
+      case .commonParseError(let error):
+        switch error {
+        case .keywordMissing, .noLineBreakAfterKeyword:
+          return .failure(ParseError(error)!)
+        case .mismatchedKeyword:
+          break
+        }
       }
     }
 

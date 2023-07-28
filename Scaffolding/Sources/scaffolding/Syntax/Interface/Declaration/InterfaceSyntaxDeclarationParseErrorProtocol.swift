@@ -1,4 +1,3 @@
 protocol InterfaceSyntaxDeclarationParseErrorProtocol: Error {
-  static var keywordMissing: Self { get }
-  static var mismatchedKeyword: Self { get }
+  static func commonParseError(_ error: InterfaceSyntax.Declaration.CommonParseError) -> Self
 }

@@ -6,6 +6,7 @@ extension InterfaceSyntax {
   struct ActionDeclaration: ParsedSyntaxNode {
 
     let keyword: ParsedToken
+    let lineBreakAfterKeyword: ParsedToken
     let unparsedTokens: [ParsedToken]
     let location: Slice<UTF8Segments>
   }
