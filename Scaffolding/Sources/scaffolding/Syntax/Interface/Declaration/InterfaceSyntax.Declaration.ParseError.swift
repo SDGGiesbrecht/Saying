@@ -8,13 +8,16 @@ extension InterfaceSyntax.Declaration {
         self = .keywordMissing
       case .mismatchedKeyword:
         return nil
-      case .noLineBreakAfterKeyword(let index):
-        self = .noLineBreakAfterKeyword(index)
+      case .unexpectedTextAfterKeyword(let text):
+        self = .unexpectedTextAfterKeyword(text)
+      case .detailsMissing(let keyword):
+        self = .detailsMissing(keyword)
       }
     }
 
     case keywordMissing
     case invalidDeclarationKind(ParsedToken)
-    case noLineBreakAfterKeyword(UTF8Segments.Index)
+    case unexpectedTextAfterKeyword([ParsedToken])
+    case detailsMissing(ParsedToken)
   }
 }

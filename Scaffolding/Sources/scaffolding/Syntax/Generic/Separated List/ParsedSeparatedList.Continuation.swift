@@ -1,4 +1,4 @@
-struct ParsedSeparatedListContinuation<Entry, Separator> {
+struct ParsedSeparatedListContinuation<Entry, Separator>: ParsedSyntaxNode {
 
   let separator: Separator
   let entry: Entry

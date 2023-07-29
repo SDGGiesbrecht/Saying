@@ -3,6 +3,7 @@ extension InterfaceSyntax.Declaration {
   enum CommonParseError: Error {
     case keywordMissing
     case mismatchedKeyword(ParsedToken)
-    case noLineBreakAfterKeyword(UTF8Segments.Index)
+    case unexpectedTextAfterKeyword([ParsedToken])
+    case detailsMissing(ParsedToken)
   }
 }

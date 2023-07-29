@@ -1,3 +1,4 @@
+import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -11,7 +12,7 @@ protocol InterfaceSyntaxDeclarationProtocol {
   init(
     keyword: ParsedToken,
     lineBreakAfterKeyword: ParsedToken,
-    unparsedTokens: [ParsedToken],
+    deferredLines: ParsedSeparatedList<Deferred, ParsedToken>,
     location: Slice<UTF8Segments>
   )
 }
@@ -19,23 +20,43 @@ protocol InterfaceSyntaxDeclarationProtocol {
 extension InterfaceSyntaxDeclarationProtocol {
 
   static func parse(
-    source: [ParsedToken],
+    lines: ParsedSeparatedList<Deferred, ParsedToken>,
     location: Slice<UTF8Segments>
   ) -> Result<Self, Self.ParseError> {
-    guard let keyword = source.first else {
+
+    guard let firstLine = lines.entries?.first,
+      let keyword = firstLine.tokens.first else {
       return .failure(Self.ParseError.commonParseError(.keywordMissing))
     }
     guard keyword.token.source ∈ Self.keywords else {
       return .failure(Self.ParseError.commonParseError(.mismatchedKeyword(keyword)))
     }
-    var unparsed = source.dropFirst()
-
-    guard let lineBreakAfterKeyword = unparsed.first,
-      lineBreakAfterKeyword.token.kind == .lineBreak else {
-      return .failure(Self.ParseError.commonParseError(.noLineBreakAfterKeyword(keyword.location.endIndex)))
+    let unexpected = firstLine.tokens.dropFirst()
+    guard unexpected.isEmpty else {
+      return .failure(Self.ParseError.commonParseError(.unexpectedTextAfterKeyword(Array(unexpected))))
     }
-    unparsed.removeFirst()
 
-    return .success(Self(keyword: keyword, lineBreakAfterKeyword: lineBreakAfterKeyword, unparsedTokens: Array(unparsed), location: location))
+    guard var continuations = lines.entries?.continuations,
+      let firstContinuation = continuations.first else {
+      return .failure(Self.ParseError.commonParseError(.detailsMissing(keyword)))
+    }
+    continuations.removeFirst()
+
+    let first = firstContinuation.entry
+    let listLocation = [first, continuations.last ?? first].location()!
+    return .success(
+      Self(
+        keyword: keyword,
+        lineBreakAfterKeyword: firstContinuation.separator,
+        deferredLines: ParsedSeparatedList(
+          entries: ParsedNonEmptySeparatedList(
+            first: first,
+            continuations: continuations,
+            location: listLocation
+          ),
+          location: listLocation),
+        location: location
+      )
+    )
   }
 }

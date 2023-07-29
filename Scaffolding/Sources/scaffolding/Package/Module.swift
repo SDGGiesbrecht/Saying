@@ -22,10 +22,12 @@ struct Module {
         for declaration in fileInterface.declarations.combinedEntries {
           switch declaration.kind {
           case .thing(let thing):
-            let source = thing.unparsedTokens.map({ "\($0.token.source)|" }).joined().dropLast()
+            let source = thing.deferredLines.combinedEntries
+              .flatMap({ $0.tokens.map({ "\($0.token.source)|" }) }).joined().dropLast()
             print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(source)")
           case .action(let action):
-            let source = action.unparsedTokens.map({ "\($0.token.source)|" }).joined().dropLast()
+            let source = action.deferredLines.combinedEntries
+              .flatMap({ $0.tokens.map({ "\($0.token.source)|" }) }).joined().dropLast()
             print("action (\(action.location.underlyingScalarOffsetOfStart())): \(source)")
           }
         }
