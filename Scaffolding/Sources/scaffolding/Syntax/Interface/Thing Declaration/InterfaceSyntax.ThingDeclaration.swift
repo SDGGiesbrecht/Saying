@@ -6,7 +6,7 @@ extension InterfaceSyntax {
   struct ThingDeclaration: ParsedSyntaxNode {
     let keyword: ParsedToken
     let lineBreakAfterKeyword: ParsedToken
-    let deferredLines: ParsedSeparatedList<Deferred, ParsedToken>
+    let deferredLines: ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
     let location: Slice<UTF8Segments>
   }
 }

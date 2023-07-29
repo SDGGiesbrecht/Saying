@@ -1,6 +1,7 @@
+import SDGText
+
 struct ParsedSeparatedList<Entry, Separator>: ParsedSyntaxNode
-where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode,
-  Entry: ParsedSeparatedListEntry {
+where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
 
   init(
     entries: ParsedNonEmptySeparatedList<Entry, Separator>?,
@@ -18,7 +19,7 @@ where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode,
   }
 }
 
-extension ParsedSeparatedList where Separator == ParsedToken {
+extension ParsedSeparatedList where Entry: ParsedSeparatedListEntry, Separator == ParsedToken {
 
   static func parse(
     source: [ParsedToken],
@@ -39,6 +40,37 @@ extension ParsedSeparatedList where Separator == ParsedToken {
       }
     case .success(let nonEmpty):
       return .success(ParsedSeparatedList(entries: nonEmpty, location: location))
+    }
+  }
+}
+
+extension ParsedSeparatedList {
+
+  func processNesting(
+    isOpening: (Entry) -> Bool,
+    isClosing: (Entry) -> Bool
+  ) -> Result<
+    ParsedSeparatedList<ParsedSeparatedNestingNode<Entry, Separator>, Separator>,
+    ParsedNestingNodeParseError<Entry>
+  > {
+    guard let entries = self.entries else {
+      return .success(
+        ParsedSeparatedList<ParsedSeparatedNestingNode<Entry, Separator>, Separator>(
+          entries: nil,
+          location: location
+        )
+      )
+    }
+    switch entries.processNesting(isOpening: isOpening, isClosing: isClosing) {
+    case .failure(let error):
+      return .failure(error)
+    case .success(let converted):
+      return .success(
+        ParsedSeparatedList<ParsedSeparatedNestingNode<Entry, Separator>, Separator>(
+          entries: converted,
+          location: location
+        )
+      )
     }
   }
 }

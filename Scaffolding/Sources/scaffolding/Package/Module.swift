@@ -1,6 +1,7 @@
 import Foundation
 
 import SDGCollections
+import SDGText
 
 struct Module {
 
@@ -23,12 +24,14 @@ struct Module {
           switch declaration.kind {
           case .thing(let thing):
             let source = thing.deferredLines.combinedEntries
-              .flatMap({ $0.tokens.map({ "\($0.token.source)|" }) }).joined().dropLast()
-            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(source)")
+              .map({ StrictString($0.location) })
+              .joined(separator: "\n ")
+            print("thing (\(thing.location.underlyingScalarOffsetOfStart())):\n \(source)")
           case .action(let action):
             let source = action.deferredLines.combinedEntries
-              .flatMap({ $0.tokens.map({ "\($0.token.source)|" }) }).joined().dropLast()
-            print("action (\(action.location.underlyingScalarOffsetOfStart())): \(source)")
+              .map({ StrictString($0.location) })
+              .joined(separator: "\n ")
+            print("action (\(action.location.underlyingScalarOffsetOfStart())):\n \(source)")
           }
         }
       }

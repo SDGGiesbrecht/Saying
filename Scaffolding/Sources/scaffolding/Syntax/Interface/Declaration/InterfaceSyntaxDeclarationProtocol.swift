@@ -12,7 +12,7 @@ protocol InterfaceSyntaxDeclarationProtocol {
   init(
     keyword: ParsedToken,
     lineBreakAfterKeyword: ParsedToken,
-    deferredLines: ParsedSeparatedList<Deferred, ParsedToken>,
+    deferredLines: ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>,
     location: Slice<UTF8Segments>
   )
 }
@@ -42,21 +42,67 @@ extension InterfaceSyntaxDeclarationProtocol {
     }
     continuations.removeFirst()
 
-    let first = firstContinuation.entry
-    let listLocation = [first, continuations.last ?? first].location()!
-    return .success(
-      Self(
-        keyword: keyword,
-        lineBreakAfterKeyword: firstContinuation.separator,
-        deferredLines: ParsedSeparatedList(
-          entries: ParsedNonEmptySeparatedList(
-            first: first,
-            continuations: continuations,
-            location: listLocation
-          ),
-          location: listLocation),
-        location: location
-      )
+    let remainderLocation = firstContinuation.entry.location.base[
+      firstContinuation.entry.location.startIndex..<lines.location.endIndex
+    ]
+    let remainder = ParsedSeparatedList<Deferred, ParsedToken>(
+      entries: ParsedNonEmptySeparatedList(
+        first: firstContinuation.entry,
+        continuations: Array(continuations),
+        location: remainderLocation
+      ),
+      location: remainderLocation
     )
+
+    switch remainder.processNesting(
+      isOpening: { node in
+        guard node.tokens.count == 1,
+          let kind = node.tokens.first?.token.kind else {
+          return false
+        }
+        return kind == .openingParenthesis ∨ kind == .openingBracket
+      },
+      isClosing: { node in
+        guard node.tokens.count == 1,
+          let kind = node.tokens.first?.token.kind else {
+          return false
+        }
+        return kind == .closingParenthesis ∨ kind == .closingBracket
+      }
+    ) {
+    case .failure(let error):
+      return .failure(.commonParseError(.nestingError(error)))
+    case .success(let grouped):
+      scan: for node in grouped.combinedEntries {
+        let opening: Deferred
+        let closing: Deferred
+        switch node.kind {
+        case .leaf:
+          continue scan
+        case .emptyGroup(let group):
+          opening = group.opening
+          closing = group.closing
+        case .group(let group):
+          opening = group.opening
+          closing = group.closing
+        }
+        if opening.tokens.first!.token.kind == .openingParenthesis,
+          closing.tokens.first!.token.kind ≠ .closingParenthesis {
+          return .failure(.commonParseError(.nestingError(.unpairedElement(opening))))
+        }
+        if opening.tokens.first!.token.kind == .openingBracket,
+          closing.tokens.first!.token.kind ≠ .closingBracket {
+          return .failure(.commonParseError(.nestingError(.unpairedElement(opening))))
+        }
+      }
+      return .success(
+        Self(
+          keyword: keyword,
+          lineBreakAfterKeyword: firstContinuation.separator,
+          deferredLines: grouped,
+          location: location
+        )
+      )
+    }
   }
 }

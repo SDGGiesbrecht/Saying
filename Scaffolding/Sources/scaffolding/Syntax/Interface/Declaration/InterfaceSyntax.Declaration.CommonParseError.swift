@@ -5,5 +5,6 @@ extension InterfaceSyntax.Declaration {
     case mismatchedKeyword(ParsedToken)
     case unexpectedTextAfterKeyword([ParsedToken])
     case detailsMissing(ParsedToken)
+    case nestingError(ParsedNestingNodeParseError<Deferred>)
   }
 }

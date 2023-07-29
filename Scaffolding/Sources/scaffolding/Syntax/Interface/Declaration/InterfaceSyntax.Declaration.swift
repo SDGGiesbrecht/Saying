@@ -1,3 +1,5 @@
+import SDGText
+
 extension InterfaceSyntax {
 
   struct Declaration: ParsedSyntaxNode {
@@ -28,7 +30,7 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
         switch error {
         case .commonParseError(let error):
           switch error {
-          case .keywordMissing, .unexpectedTextAfterKeyword, .detailsMissing:
+          case .keywordMissing, .unexpectedTextAfterKeyword, .detailsMissing, .nestingError:
             return .failure(ParseError(error)!)
           case .mismatchedKeyword:
             break
@@ -43,7 +45,7 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
         switch error {
         case .commonParseError(let error):
           switch error {
-          case .keywordMissing, .unexpectedTextAfterKeyword, .detailsMissing:
+          case .keywordMissing, .unexpectedTextAfterKeyword, .detailsMissing, .nestingError:
             return .failure(ParseError(error)!)
           case .mismatchedKeyword:
             break

@@ -12,6 +12,8 @@ extension InterfaceSyntax.Declaration {
         self = .unexpectedTextAfterKeyword(text)
       case .detailsMissing(let keyword):
         self = .detailsMissing(keyword)
+      case .nestingError(let error):
+        self = .nestingError(error)
       }
     }
 
@@ -19,5 +21,6 @@ extension InterfaceSyntax.Declaration {
     case invalidDeclarationKind(ParsedToken)
     case unexpectedTextAfterKeyword([ParsedToken])
     case detailsMissing(ParsedToken)
+    case nestingError(ParsedNestingNodeParseError<Deferred>)
   }
 }
