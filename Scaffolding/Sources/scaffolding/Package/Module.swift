@@ -21,7 +21,7 @@ struct Module {
       case .utf8(let source):
         let fileInterface = try InterfaceSyntax.File.parse(source: source).get()
         for declaration in fileInterface.declarations.combinedEntries {
-          switch declaration.kind {
+          switch declaration {
           case .thing(let thing):
             let source = thing.deferredLines.combinedEntries
               .map({ StrictString($0.location) })

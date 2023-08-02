@@ -8,22 +8,28 @@ where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
 
   init(
     first: Entry,
-    continuations: [ParsedSeparatedListContinuation<Entry, Separator>],
-    location: Slice<UTF8Segments>
+    continuations: [ParsedSeparatedListContinuation<Entry, Separator>]
   ) {
     self.first = first
     self.continuations = continuations
-    self.location = location
   }
 
   let first: Entry
   let continuations: [ParsedSeparatedListContinuation<Entry, Separator>]
-  let location: Slice<UTF8Segments>
 
   var combinedEntries: [Entry] {
     var entries = [first]
     entries.append(contentsOf: continuations.lazy.map({ $0.entry }))
     return entries
+  }
+}
+
+extension ParsedNonEmptySeparatedList: DerivedLocation {
+  var firstChild: ParsedSyntaxNode {
+    return first
+  }
+  var lastChild: ParsedSyntaxNode {
+    return continuations.last ?? first
   }
 }
 
@@ -42,7 +48,7 @@ extension ParsedNonEmptySeparatedList where Entry: ParsedSeparatedListEntry, Sep
     let lastToken = source.indices.last
     for tokenIndex in source.indices {
       let token = source[tokenIndex]
-      defer { cursor = token.location.endIndex }
+      defer { cursor = token.endIndex }
       let foundSeparator = isSeparator(token)
       if foundSeparator ∨ tokenIndex == lastToken {
         if tokenIndex == lastToken {
@@ -63,8 +69,7 @@ extension ParsedNonEmptySeparatedList where Entry: ParsedSeparatedListEntry, Sep
             continuations.append(
               ParsedSeparatedListContinuation(
                 separator: separator,
-                entry: entry,
-                location: [separator, entry].location()!
+                entry: entry
               )
             )
           }
@@ -82,8 +87,7 @@ extension ParsedNonEmptySeparatedList where Entry: ParsedSeparatedListEntry, Sep
     return .success(
       ParsedNonEmptySeparatedList(
         first: first,
-        continuations: continuations,
-        location: source.location()!
+        continuations: continuations
       )
     )
   }
@@ -123,40 +127,28 @@ extension ParsedNonEmptySeparatedList {
         remainingContinuations = continuations[index...].dropFirst()
         if let firstContinuation = contentContinuations.first {
           let firstContent = firstContinuation.entry
-          let contentLocation = [firstContent, contentContinuations.last!].location()!
-          let groupLocation = [first, closing.entry].location()!
-          newFirst = ParsedSeparatedNestingNode(
-            kind: .group(
-              ParsedSeparatedNestingGroup(
-                opening: first,
-                openingSeparator: firstContinuation.separator,
-                contents: ParsedSeparatedList(
-                  entries: ParsedNonEmptySeparatedList(
-                    first: firstContent,
-                    continuations: Array(contentContinuations.dropFirst()),
-                    location: contentLocation
-                  ),
-                  location: contentLocation
+          newFirst = .group(
+            ParsedSeparatedNestingGroup(
+              opening: first,
+              openingSeparator: firstContinuation.separator,
+              contents: ParsedSeparatedList(
+                entries: ParsedNonEmptySeparatedList(
+                  first: firstContent,
+                  continuations: Array(contentContinuations.dropFirst())
                 ),
-                closingSeparator: closing.separator,
-                closing: closing.entry,
-                location: groupLocation
-              )
-            ),
-            location: groupLocation
+                location: [firstContent, contentContinuations.last!].location()!
+              ),
+              closingSeparator: closing.separator,
+              closing: closing.entry
+            )
           )
         } else {
-          let groupLocation = [first, closing.entry].location()!
-          newFirst = ParsedSeparatedNestingNode(
-            kind: .emptyGroup(
-              ParsedEmptySeparatedNestingGroup(
-                opening: first,
-                separator: closing.separator,
-                closing: closing.entry,
-                location: groupLocation
-              )
-            ),
-            location: groupLocation
+          newFirst = .emptyGroup(
+            ParsedEmptySeparatedNestingGroup(
+              opening: first,
+              separator: closing.separator,
+              closing: closing.entry
+            )
           )
         }
       } else {
@@ -165,7 +157,7 @@ extension ParsedNonEmptySeparatedList {
     } else if isClosing(first) {
       return .failure(.unpairedElement(first))
     } else {
-      newFirst = ParsedSeparatedNestingNode<Entry, Separator>(kind: .leaf(first), location: first.location)
+      newFirst = .leaf(first)
     }
 
     var compressedContinuations: [
@@ -195,51 +187,37 @@ extension ParsedNonEmptySeparatedList {
           remainingContinuations = continuations[index...].dropFirst()
           if let firstContinuation = contentContinuations.first {
             let firstContent = firstContinuation.entry
-            let contentLocation = [firstContent, contentContinuations.last!].location()!
-            let groupLocation = [next.entry, closing.entry].location()!
             compressedContinuations.append(
               ParsedSeparatedListContinuation(
                 separator: next.separator,
-                entry: ParsedSeparatedNestingNode(
-                  kind: .group(
-                    ParsedSeparatedNestingGroup(
-                      opening: next.entry,
-                      openingSeparator: firstContinuation.separator,
-                      contents: ParsedSeparatedList(
-                        entries: ParsedNonEmptySeparatedList(
-                          first: firstContent,
-                          continuations: Array(contentContinuations.dropFirst()),
-                          location: contentLocation
-                        ),
-                        location: contentLocation
+                entry: .group(
+                  ParsedSeparatedNestingGroup(
+                    opening: next.entry,
+                    openingSeparator: firstContinuation.separator,
+                    contents: ParsedSeparatedList(
+                      entries: ParsedNonEmptySeparatedList(
+                        first: firstContent,
+                        continuations: Array(contentContinuations.dropFirst())
                       ),
-                      closingSeparator: closing.separator,
-                      closing: closing.entry,
-                      location: groupLocation
-                    )
-                  ),
-                  location: groupLocation
-                ),
-                location: [next.separator, closing.entry].location()!
+                      location: [firstContent, contentContinuations.last!].location()!
+                    ),
+                    closingSeparator: closing.separator,
+                    closing: closing.entry
+                  )
+                )
               )
             )
           } else {
-            let groupLocation = [first, closing.entry].location()!
             compressedContinuations.append(
               ParsedSeparatedListContinuation(
                 separator: next.separator,
-                entry: ParsedSeparatedNestingNode(
-                  kind: .emptyGroup(
-                    ParsedEmptySeparatedNestingGroup(
-                      opening: first,
-                      separator: closing.separator,
-                      closing: closing.entry,
-                      location: groupLocation
-                    )
-                  ),
-                  location: groupLocation
-                ),
-                location: [next.separator, closing.entry].location()!
+                entry: .emptyGroup(
+                  ParsedEmptySeparatedNestingGroup(
+                    opening: first,
+                    separator: closing.separator,
+                    closing: closing.entry
+                  )
+                )
               )
             )
           }
@@ -252,11 +230,7 @@ extension ParsedNonEmptySeparatedList {
         compressedContinuations.append(
           ParsedSeparatedListContinuation(
             separator: next.separator,
-            entry: ParsedSeparatedNestingNode(
-              kind: .leaf(next.entry),
-              location: next.entry.location
-            ),
-            location: next.location
+            entry: .leaf(next.entry)
           )
         )
       }
@@ -265,8 +239,8 @@ extension ParsedNonEmptySeparatedList {
     return .success(
       ParsedNonEmptySeparatedList<ParsedSeparatedNestingNode, Separator>(
         first: newFirst,
-        continuations: compressedContinuations,
-        location: location)
+        continuations: compressedContinuations
+      )
     )
   }
 }

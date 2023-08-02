@@ -2,9 +2,20 @@ import SDGText
 
 extension InterfaceSyntax {
 
-  struct Declaration: ParsedSyntaxNode {
-    let kind: Kind
-    let location: Slice<UTF8Segments>
+  enum Declaration: ParsedSyntaxNode {
+    case thing(InterfaceSyntax.ThingDeclaration)
+    case action(InterfaceSyntax.ActionDeclaration)
+  }
+}
+
+extension InterfaceSyntax.Declaration: AlternateForms {
+  var form: ParsedSyntaxNode {
+    switch self {
+    case .thing(let thing):
+      return thing
+    case .action(let action):
+      return action
+    }
   }
 }
 
@@ -23,9 +34,9 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
       fatalError("Line breaking failed (which should never happen): \(error)")
     case .success(let lines):
 
-      switch InterfaceSyntax.ThingDeclaration.parse(lines: lines, location: location) {
+      switch InterfaceSyntax.ThingDeclaration.parse(lines: lines) {
       case .success(let thing):
-        return .success(InterfaceSyntax.Declaration(kind: .thing(thing), location: thing.location))
+        return .success(.thing(thing))
       case .failure(let error):
         switch error {
         case .commonParseError(let error):
@@ -38,9 +49,9 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
         }
       }
 
-      switch InterfaceSyntax.ActionDeclaration.parse(lines: lines, location: location) {
+      switch InterfaceSyntax.ActionDeclaration.parse(lines: lines) {
       case .success(let action):
-        return .success(InterfaceSyntax.Declaration(kind: .action(action), location: location))
+        return .success(.action(action))
       case .failure(let error):
         switch error {
         case .commonParseError(let error):

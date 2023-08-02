@@ -1,6 +1,6 @@
 import SDGText
 
-struct ParsedSeparatedList<Entry, Separator>: ParsedSyntaxNode
+struct ParsedSeparatedList<Entry, Separator>: ParsedSyntaxNode, StoredLocation
 where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
 
   init(

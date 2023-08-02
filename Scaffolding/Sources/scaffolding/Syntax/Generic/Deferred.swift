@@ -1,4 +1,4 @@
-struct Deferred: ParsedSyntaxNode {
+struct Deferred: ParsedSyntaxNode, StoredLocation {
   let tokens: [ParsedToken]
   let location: Slice<UTF8Segments>
 }
