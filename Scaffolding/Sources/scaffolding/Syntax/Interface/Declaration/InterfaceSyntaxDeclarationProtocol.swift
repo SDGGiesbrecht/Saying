@@ -2,7 +2,7 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
-protocol InterfaceSyntaxDeclarationProtocol {
+protocol InterfaceSyntaxDeclarationProtocol: DerivedLocation {
 
   associatedtype ParseError: InterfaceSyntaxDeclarationParseErrorProtocol
 
@@ -12,16 +12,29 @@ protocol InterfaceSyntaxDeclarationProtocol {
   init(
     keyword: ParsedToken,
     lineBreakAfterKeyword: ParsedToken,
-    deferredLines: ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>,
-    location: Slice<UTF8Segments>
+    deferredLines: ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
   )
+
+  var keyword: ParsedToken { get }
+  var lineBreakAfterKeyword: ParsedToken { get }
+  var deferredLines: ParsedSeparatedList<
+    ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken
+  > { get }
+}
+
+extension InterfaceSyntaxDeclarationProtocol { // DerivedLocation
+  var firstChild: ParsedSyntaxNode {
+    return keyword
+  }
+  var lastChild: ParsedSyntaxNode {
+    return deferredLines
+  }
 }
 
 extension InterfaceSyntaxDeclarationProtocol {
 
   static func parse(
-    lines: ParsedSeparatedList<Deferred, ParsedToken>,
-    location: Slice<UTF8Segments>
+    lines: ParsedSeparatedList<Deferred, ParsedToken>
   ) -> Result<Self, Self.ParseError> {
 
     guard let firstLine = lines.entries?.first,
@@ -48,8 +61,7 @@ extension InterfaceSyntaxDeclarationProtocol {
     let remainder = ParsedSeparatedList<Deferred, ParsedToken>(
       entries: ParsedNonEmptySeparatedList(
         first: firstContinuation.entry,
-        continuations: Array(continuations),
-        location: remainderLocation
+        continuations: Array(continuations)
       ),
       location: remainderLocation
     )
@@ -76,7 +88,7 @@ extension InterfaceSyntaxDeclarationProtocol {
       scan: for node in grouped.combinedEntries {
         let opening: Deferred
         let closing: Deferred
-        switch node.kind {
+        switch node {
         case .leaf:
           continue scan
         case .emptyGroup(let group):
@@ -99,8 +111,7 @@ extension InterfaceSyntaxDeclarationProtocol {
         Self(
           keyword: keyword,
           lineBreakAfterKeyword: firstContinuation.separator,
-          deferredLines: grouped,
-          location: location
+          deferredLines: grouped
         )
       )
     }

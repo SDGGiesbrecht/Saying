@@ -1,7 +1,14 @@
-struct ParsedSeparatedListContinuation<Entry, Separator>: ParsedSyntaxNode {
-
+struct ParsedSeparatedListContinuation<Entry, Separator>: ParsedSyntaxNode
+where Separator: ParsedSyntaxNode, Entry: ParsedSyntaxNode {
   let separator: Separator
   let entry: Entry
-  let location: Slice<UTF8Segments>
 }
 
+extension ParsedSeparatedListContinuation: DerivedLocation {
+  var firstChild: ParsedSyntaxNode {
+    return separator
+  }
+  var lastChild: ParsedSyntaxNode {
+    return entry
+  }
+}
