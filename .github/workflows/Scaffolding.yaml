@@ -10,13 +10,15 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v2
-    - name: Build Scaffolding
+    - name: Build scaffolding
       shell: bash
       run: |
         set -x
-
         swift run --package-path Scaffolding
-
+    - name: Check for changes
+      shell: bash
+      run: |
+        set -x
         git config --global --add safe.directory '*'
         git add . --intent-to-add
         if [[ $(git diff) ]]; then
