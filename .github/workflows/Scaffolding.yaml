@@ -15,11 +15,11 @@ jobs:
       run: |
         set -x
         swift run --package-path Scaffolding
+        echo 'Hello, world!' > 'Hello, World!.txt'
     - name: Check generated files for mismatched states
       shell: bash
       run: |
         set -x
-        echo 'Hello, world!' > 'Hello, World!.txt'
         git config --global --add safe.directory '*'
         git add . --intent-to-add
         git diff --exit-code
