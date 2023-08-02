@@ -1,0 +1,24 @@
+name: Scaffolding
+
+on: [push, pull_request]
+
+jobs:
+  Scaffolding:
+    name: Scaffolding
+    runs-on: ubuntu-20.04
+    container: swift:5.7.3-focal
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build scaffolding
+      shell: bash
+      run: |
+        set -x
+        swift run --package-path Scaffolding
+    - name: Check generated files for mismatched states
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
