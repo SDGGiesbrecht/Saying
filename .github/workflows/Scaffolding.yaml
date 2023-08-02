@@ -23,4 +23,5 @@ jobs:
         git add . --intent-to-add
         if [[ $(git diff) ]]; then
           echo "Generated files are in a mismatched state."
+          exit 1
         fi
