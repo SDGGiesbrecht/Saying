@@ -11,14 +11,14 @@ protocol InterfaceSyntaxDeclarationProtocol: DerivedLocation {
 
   init(
     keyword: ParsedToken,
-    lineBreakAfterKeyword: ParsedToken,
-    deferredLines: ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
+    documentation: Line<InterfaceSyntax.Documentation>?,
+    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>>
   )
 
   var keyword: ParsedToken { get }
-  var lineBreakAfterKeyword: ParsedToken { get }
-  var deferredLines: ParsedSeparatedList<
-    ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken
+  var documentation: Line<InterfaceSyntax.Documentation>? { get }
+  var deferredLines: Line<
+    ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
   > { get }
 }
 
@@ -49,10 +49,7 @@ extension InterfaceSyntaxDeclarationProtocol {
     guard unexpected.isEmpty else {
       return .failure(Self.ParseError.commonParseError(.unexpectedTextAfterKeyword(Array(unexpected))))
     }
-
-    guard let keywordSeparator = keywordLine.separator else {
-      return .failure(Self.ParseError.commonParseError(.detailsMissing(keyword)))
-    }
+    var remainingSeparator = keywordLine.separator
 
     switch remainingLines.processNesting(
       isOpening: { node in
@@ -95,11 +92,46 @@ extension InterfaceSyntaxDeclarationProtocol {
           return .failure(.commonParseError(.nestingError(.unpairedElement(opening))))
         }
       }
+      var remainingGroups = grouped
+
+      var documentationLine: (documentation: InterfaceSyntax.Documentation, separator: ParsedToken?)?
+      if let next = remainingGroups.entries?.first {
+        switch next {
+        case .leaf:
+          break
+        case .emptyGroup(let group):
+          if group.opening.tokens.first?.token.kind == .openingBracket {
+            let removed = remainingGroups.removeFirst()!
+            documentationLine = (documentation: .empty(group), separator: removed.separator)
+          }
+        case .group(let group):
+          if group.opening.tokens.first?.token.kind == .openingBracket {
+            let removed = remainingGroups.removeFirst()!
+            documentationLine = (documentation: .nonEmpty(group), separator: removed.separator)
+          }
+        }
+      }
+      let documentation: Line<InterfaceSyntax.Documentation>?
+      if let line = documentationLine {
+        documentation = Line<InterfaceSyntax.Documentation>(
+          lineBreak: remainingSeparator!,
+          content: line.documentation
+        )
+        remainingSeparator = documentationLine?.separator
+      } else {
+        documentation = nil
+      }
+
+      guard let detailsSeparator = remainingSeparator else {
+        return .failure(
+          Self.ParseError.commonParseError(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
+        )
+      }
       return .success(
         Self(
           keyword: keyword,
-          lineBreakAfterKeyword: keywordSeparator,
-          deferredLines: grouped
+          documentation: documentation,
+          deferredLines: Line(lineBreak: detailsSeparator, content: remainingGroups)
         )
       )
     }

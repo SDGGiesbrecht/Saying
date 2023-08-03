@@ -10,17 +10,17 @@ extension InterfaceSyntax.Declaration {
         return nil
       case .unexpectedTextAfterKeyword(let text):
         self = .unexpectedTextAfterKeyword(text)
-      case .detailsMissing(let keyword):
-        self = .detailsMissing(keyword)
       case .nestingError(let error):
         self = .nestingError(error)
+      case .detailsMissing(let keyword):
+        self = .detailsMissing(keyword)
       }
     }
 
     case keywordMissing
     case invalidDeclarationKind(ParsedToken)
     case unexpectedTextAfterKeyword([ParsedToken])
-    case detailsMissing(ParsedToken)
     case nestingError(ParsedNestingNodeParseError<Deferred>)
+    case detailsMissing(UTF8Segments.Index)
   }
 }
