@@ -5,8 +5,10 @@ extension InterfaceSyntax {
 
   struct ThingDeclaration: ParsedSyntaxNode {
     let keyword: ParsedToken
-    let lineBreakAfterKeyword: ParsedToken
-    let deferredLines: ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
+    let documentation: Line<InterfaceSyntax.Documentation>?
+    let deferredLines: Line<
+      ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
+    >
   }
 }
 

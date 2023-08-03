@@ -23,12 +23,12 @@ struct Module {
         for declaration in fileInterface.declarations.combinedEntries {
           switch declaration {
           case .thing(let thing):
-            let source = thing.deferredLines.combinedEntries
+            let source = thing.deferredLines.content.combinedEntries
               .map({ StrictString($0.location) })
               .joined(separator: "\n ")
             print("thing (\(thing.location.underlyingScalarOffsetOfStart())):\n \(source)")
           case .action(let action):
-            let source = action.deferredLines.combinedEntries
+            let source = action.deferredLines.content.combinedEntries
               .map({ StrictString($0.location) })
               .joined(separator: "\n ")
             print("action (\(action.location.underlyingScalarOffsetOfStart())):\n \(source)")
