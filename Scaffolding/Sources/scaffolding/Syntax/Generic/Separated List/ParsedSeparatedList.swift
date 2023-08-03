@@ -46,6 +46,28 @@ extension ParsedSeparatedList where Entry: ParsedSeparatedListEntry, Separator =
 
 extension ParsedSeparatedList {
 
+  mutating func removeFirst() -> (entry: Entry, separator: Separator?)? {
+    guard let entries = self.entries else {
+      return nil
+    }
+    guard let firstContinuation = entries.continuations.first else {
+      self = ParsedSeparatedList(
+        entries: nil,
+        location: context.emptySubSequence(at: self.location.endIndex)
+      )
+      return (entry: entries.first, separator: nil)
+    }
+    let newEntries = ParsedNonEmptySeparatedList(
+      first: firstContinuation.entry,
+      continuations: Array(entries.continuations.dropFirst())
+    )
+    self = ParsedSeparatedList(
+      entries: newEntries,
+      location: newEntries.location
+    )
+    return (entry: entries.first, separator: firstContinuation.separator)
+  }
+
   func processNesting(
     isOpening: (Entry) -> Bool,
     isClosing: (Entry) -> Bool

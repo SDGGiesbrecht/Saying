@@ -36,37 +36,25 @@ extension InterfaceSyntaxDeclarationProtocol {
   static func parse(
     lines: ParsedSeparatedList<Deferred, ParsedToken>
   ) -> Result<Self, Self.ParseError> {
+    var remainingLines = lines
 
-    guard let firstLine = lines.entries?.first,
-      let keyword = firstLine.tokens.first else {
+    guard let keywordLine = remainingLines.removeFirst(),
+      let keyword = keywordLine.entry.tokens.first else {
       return .failure(Self.ParseError.commonParseError(.keywordMissing))
     }
     guard keyword.token.source ∈ Self.keywords else {
       return .failure(Self.ParseError.commonParseError(.mismatchedKeyword(keyword)))
     }
-    let unexpected = firstLine.tokens.dropFirst()
+    let unexpected = keywordLine.entry.tokens.dropFirst()
     guard unexpected.isEmpty else {
       return .failure(Self.ParseError.commonParseError(.unexpectedTextAfterKeyword(Array(unexpected))))
     }
 
-    guard var continuations = lines.entries?.continuations,
-      let firstContinuation = continuations.first else {
+    guard let keywordSeparator = keywordLine.separator else {
       return .failure(Self.ParseError.commonParseError(.detailsMissing(keyword)))
     }
-    continuations.removeFirst()
 
-    let remainderLocation = firstContinuation.entry.location.base[
-      firstContinuation.entry.location.startIndex..<lines.location.endIndex
-    ]
-    let remainder = ParsedSeparatedList<Deferred, ParsedToken>(
-      entries: ParsedNonEmptySeparatedList(
-        first: firstContinuation.entry,
-        continuations: Array(continuations)
-      ),
-      location: remainderLocation
-    )
-
-    switch remainder.processNesting(
+    switch remainingLines.processNesting(
       isOpening: { node in
         guard node.tokens.count == 1,
           let kind = node.tokens.first?.token.kind else {
@@ -110,7 +98,7 @@ extension InterfaceSyntaxDeclarationProtocol {
       return .success(
         Self(
           keyword: keyword,
-          lineBreakAfterKeyword: firstContinuation.separator,
+          lineBreakAfterKeyword: keywordSeparator,
           deferredLines: grouped
         )
       )
