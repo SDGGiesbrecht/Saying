@@ -9,25 +9,19 @@ protocol InterfaceSyntaxDeclarationProtocol: DerivedLocation {
   static var keyword: [Localization: StrictString] { get }
   static var keywords: Set<StrictString> { get }
 
-  init(
+  static func parseUniqueComponents(
     keyword: ParsedToken,
     documentation: Line<InterfaceSyntax.Documentation>?,
     deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>>
-  )
+  ) -> Result<Self, ParseError>
 
   var keyword: ParsedToken { get }
   var documentation: Line<InterfaceSyntax.Documentation>? { get }
-  var deferredLines: Line<
-    ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
-  > { get }
 }
 
 extension InterfaceSyntaxDeclarationProtocol { // DerivedLocation
   var firstChild: ParsedSyntaxNode {
     return keyword
-  }
-  var lastChild: ParsedSyntaxNode {
-    return deferredLines
   }
 }
 
@@ -127,12 +121,10 @@ extension InterfaceSyntaxDeclarationProtocol {
           Self.ParseError.commonParseError(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
         )
       }
-      return .success(
-        Self(
-          keyword: keyword,
-          documentation: documentation,
-          deferredLines: Line(lineBreak: detailsSeparator, content: remainingGroups)
-        )
+      return Self.parseUniqueComponents(
+        keyword: keyword,
+        documentation: documentation,
+        deferredLines: Line(lineBreak: detailsSeparator, content: remainingGroups)
       )
     }
   }
