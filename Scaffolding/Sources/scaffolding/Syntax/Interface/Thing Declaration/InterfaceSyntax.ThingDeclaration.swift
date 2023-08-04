@@ -48,22 +48,26 @@ extension InterfaceSyntax.ThingDeclaration: InterfaceSyntaxDeclarationProtocol {
       }
       let removed = remainingGroups.removeFirst()!
       remainingSeparator = removed.separator
-      let name = ParsedThingNameDeclaration(deferred: group)
+      switch ParsedThingNameDeclaration.parse(source: group) {
+      case .failure(let error):
+        return .failure(.unique(.brokenName(error)))
+      case .success(let name):
 
-      guard let detailsSeparator = remainingSeparator else {
-        return .failure(
-          Self.ParseError.common(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
+        guard let detailsSeparator = remainingSeparator else {
+          return .failure(
+            Self.ParseError.common(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
+          )
+        }
+
+        return .success(
+          InterfaceSyntax.ThingDeclaration(
+            keyword: keyword,
+            documentation: documentation,
+            name: name,
+            deferredLines: Line(lineBreak: detailsSeparator, content: remainingGroups)
+          )
         )
       }
-
-      return .success(
-        InterfaceSyntax.ThingDeclaration(
-          keyword: keyword,
-          documentation: documentation,
-          name: name,
-          deferredLines: Line(lineBreak: detailsSeparator, content: remainingGroups)
-        )
-      )
     }
   }
 }
