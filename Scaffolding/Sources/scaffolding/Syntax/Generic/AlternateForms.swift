@@ -2,7 +2,13 @@ protocol AlternateForms: DerivedLocation, ParsedSyntaxNode {
   var form: ParsedSyntaxNode { get }
 }
 
-extension AlternateForms {
+extension AlternateForms { // ParsedSyntaxNode
+  var children: [ParsedSyntaxNode] {
+    return [form]
+  }
+}
+
+extension AlternateForms { // DerivedLocation
   var firstChild: ParsedSyntaxNode {
     return form
   }

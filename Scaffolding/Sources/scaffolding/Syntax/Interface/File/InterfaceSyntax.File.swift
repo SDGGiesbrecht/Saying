@@ -1,6 +1,6 @@
 extension InterfaceSyntax {
 
-  struct File: ParsedSyntaxNode {
+  struct File {
 
     static func parse(source: UTF8Segments) -> Result<Self, Self.ParseError> {
       let tokens = ParsedToken.tokenize(source: source)
@@ -17,6 +17,12 @@ extension InterfaceSyntax {
     }
 
     let declarations: ParsedSeparatedList<Declaration, ParsedToken>
+  }
+}
+
+extension InterfaceSyntax.File: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    return [declarations]
   }
 }
 

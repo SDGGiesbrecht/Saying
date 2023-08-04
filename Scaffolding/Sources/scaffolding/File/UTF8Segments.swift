@@ -1,3 +1,4 @@
+import SDGLogic
 import SDGText
 
 internal struct UTF8Segments {
@@ -43,5 +44,28 @@ extension UTF8Segments: Collection {
   }
   subscript(position: Index) -> Unicode.Scalar {
     segments[position.segment].source[position.scalar!]
+  }
+}
+
+extension UTF8Segments: BidirectionalCollection {
+
+  func index(before i: Index) -> Index {
+    guard let scalar = i.scalar else {
+      return lastOfSegment(before: i.segment)
+    }
+    let segment = segments[i.segment].source
+    if scalar == segment.startIndex {
+      return lastOfSegment(before: i.segment)
+    }
+    return Index(segment: i.segment, scalar: segment.index(before: scalar))
+  }
+
+  private func lastOfSegment(before segmentIndex: Int) -> Index {
+    let previousSegmentIndex = segments.indices[..<segmentIndex].last!
+    let previousSegment = segments[previousSegmentIndex].source
+    return Index(
+      segment: previousSegmentIndex,
+      scalar: previousSegment.index(before: previousSegment.endIndex)
+    )
   }
 }

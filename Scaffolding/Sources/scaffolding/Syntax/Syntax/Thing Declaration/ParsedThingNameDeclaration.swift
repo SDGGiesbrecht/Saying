@@ -1,9 +1,21 @@
-struct ParsedThingNameDeclaration: ParsedSyntaxNode {
+struct ParsedThingNameDeclaration {
   let openingParenthesis: ParsedToken
   let openingLineBreak: ParsedToken
-  let names: ParsedSeparatedList<Deferred, ParsedToken>
+  let names: ParsedSeparatedList<
+    ParsedDictionaryEntry<
+      ParsedUninterruptedIdentifier,
+      ParsedUninterruptedIdentifier
+    >,
+    ParsedToken
+  >
   let closingLineBreak: ParsedToken
   let closingParenthesis: ParsedToken
+}
+
+extension ParsedThingNameDeclaration: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    return [openingParenthesis, openingLineBreak, names, closingLineBreak, closingParenthesis]
+  }
 }
 
 extension ParsedThingNameDeclaration: DerivedLocation {
@@ -29,14 +41,23 @@ extension ParsedThingNameDeclaration {
       fatalError("The thing name declaration parser was given something that is not a thing name declaration (which should never happen).")
     }
 
-    return .success(
-      ParsedThingNameDeclaration(
-        openingParenthesis: opening,
-        openingLineBreak: source.openingSeparator,
-        names: source.contents,
-        closingLineBreak: source.closingSeparator,
-        closingParenthesis: closing
+    typealias Expected = ParsedDictionaryEntry<
+      ParsedUninterruptedIdentifier,
+      ParsedUninterruptedIdentifier
+    >
+    switch source.contents.map({ Expected.parse(source: $0) }) {
+    case .failure(let error):
+      return .failure(.entryParseError(error))
+    case .success(let names):
+      return .success(
+        ParsedThingNameDeclaration(
+          openingParenthesis: opening,
+          openingLineBreak: source.openingSeparator,
+          names: names,
+          closingLineBreak: source.closingSeparator,
+          closingParenthesis: closing
+        )
       )
-    )
+    }
   }
 }

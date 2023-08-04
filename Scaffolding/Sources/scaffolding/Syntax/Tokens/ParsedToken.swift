@@ -1,6 +1,6 @@
 import SDGText
 
-struct ParsedToken: ParsedSyntaxNode, StoredLocation {
+struct ParsedToken: StoredLocation {
 
   static func tokenize(source: UTF8Segments) -> [ParsedToken] {
     var parsed: [ParsedToken] = []
@@ -35,4 +35,29 @@ struct ParsedToken: ParsedSyntaxNode, StoredLocation {
 
   let token: Token
   let location: Slice<UTF8Segments>
+}
+
+extension ParsedToken: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    return []
+  }
+  func source() -> StrictString {
+    return token.source
+  }
+}
+
+extension ParsedToken: ParsedSeparatedListEntry {
+
+  static func parse(
+    source: [ParsedToken],
+    location: Slice<UTF8Segments>
+  ) -> Result<ParsedToken, ParseError> {
+    guard let token = source.first else {
+      return .failure(.none(location.startIndex))
+    }
+    guard source.count == 1 else {
+      return .failure(.multipleTokens(source))
+    }
+    return .success(token)
+  }
 }

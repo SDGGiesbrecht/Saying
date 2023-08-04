@@ -23,17 +23,17 @@ struct Module {
         for declaration in fileInterface.declarations.combinedEntries {
           switch declaration {
           case .thing(let thing):
-            let name = thing.name.names.combinedEntries
-              .map({ StrictString($0.location) })
-              .joined(separator: "\n  ")
+            let names = thing.name.names.combinedEntries
+              .map({ $0.definition.text })
+              .joined(separator: ", ")
             let source = thing.deferredLines.content.combinedEntries
-              .map({ StrictString($0.location) })
+              .map({ $0.source() })
               .joined(separator: "\n  ")
-            print("thing (\(thing.location.underlyingScalarOffsetOfStart())):\n \(name)\n \(source)")
+            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(names)\n \(source)")
           case .action(let action):
             let source = action.deferredLines.content.combinedEntries
-              .map({ StrictString($0.location) })
-              .joined(separator: "\n  ")
+              .map({ $0.source() })
+              .joined(separator: "\n ")
             print("action (\(action.location.underlyingScalarOffsetOfStart())):\n \(source)")
           }
         }

@@ -3,12 +3,23 @@ import SDGText
 
 extension InterfaceSyntax {
 
-  struct ActionDeclaration: ParsedSyntaxNode {
+  struct ActionDeclaration {
     let keyword: ParsedToken
     let documentation: Line<InterfaceSyntax.Documentation>?
     let deferredLines: Line<
       ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
     >
+  }
+}
+
+extension InterfaceSyntax.ActionDeclaration: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    var result: [ParsedSyntaxNode] = [keyword]
+    if let documentation = documentation {
+      result.append(documentation)
+    }
+    result.append(deferredLines)
+    return result
   }
 }
 

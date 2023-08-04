@@ -1,6 +1,6 @@
 import SDGText
 
-struct ParsedSeparatedList<Entry, Separator>: ParsedSyntaxNode, StoredLocation
+struct ParsedSeparatedList<Entry, Separator>: StoredLocation
 where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
 
   init(
@@ -19,13 +19,24 @@ where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
   }
 }
 
-extension ParsedSeparatedList where Entry: ParsedSeparatedListEntry, Separator == ParsedToken {
+extension ParsedSeparatedList: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    var result: [ParsedSyntaxNode] = []
+    if let entries = entries {
+      result.append(entries)
+    }
+    return result
+  }
+}
+
+extension ParsedSeparatedList {
 
   static func parse(
     source: [ParsedToken],
     location: Slice<UTF8Segments>,
     isSeparator: (ParsedToken) -> Bool
-  ) -> Result<Self, Self.ParseError> {
+  ) -> Result<Self, Self.ParseError>
+  where Entry: ParsedSeparatedListEntry, Separator == ParsedToken {
     switch ParsedNonEmptySeparatedList<Entry, Separator>.parse(
       source: source,
       location: location,
@@ -45,6 +56,22 @@ extension ParsedSeparatedList where Entry: ParsedSeparatedListEntry, Separator =
 }
 
 extension ParsedSeparatedList {
+
+  func map<NewEntry, Error>(
+    _ closure: (Entry) -> Result<NewEntry, Error>
+  ) -> Result<ParsedSeparatedList<NewEntry, Separator>, Error> {
+    guard let entries = self.entries else {
+      return .success(ParsedSeparatedList<NewEntry, Separator>(entries: nil, location: location))
+    }
+    switch entries.map(closure) {
+    case .failure(let error):
+      return .failure(error)
+    case .success(let newEntries):
+      return .success(
+        ParsedSeparatedList<NewEntry, Separator>(entries: newEntries, location: location)
+      )
+    }
+  }
 
   mutating func removeFirst() -> (entry: Entry, separator: Separator?)? {
     guard let entries = self.entries else {
