@@ -39,13 +39,15 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
         return .success(.thing(thing))
       case .failure(let error):
         switch error {
-        case .commonParseError(let error):
+        case .common(let error):
           switch error {
           case .keywordMissing, .unexpectedTextAfterKeyword, .detailsMissing, .nestingError:
             return .failure(ParseError(error)!)
           case .mismatchedKeyword:
             break
           }
+        case .unique(let error):
+          return .failure(.thingParsingError(.unique(error)))
         }
       }
 
@@ -54,7 +56,7 @@ extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
         return .success(.action(action))
       case .failure(let error):
         switch error {
-        case .commonParseError(let error):
+        case .common(let error):
           switch error {
           case .keywordMissing, .unexpectedTextAfterKeyword, .detailsMissing, .nestingError:
             return .failure(ParseError(error)!)

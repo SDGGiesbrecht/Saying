@@ -6,6 +6,7 @@ extension InterfaceSyntax {
   struct ThingDeclaration: ParsedSyntaxNode {
     let keyword: ParsedToken
     let documentation: Line<InterfaceSyntax.Documentation>?
+    let name: ParsedThingNameDeclaration
     let deferredLines: Line<
       ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
     >
@@ -30,12 +31,39 @@ extension InterfaceSyntax.ThingDeclaration: InterfaceSyntaxDeclarationProtocol {
     documentation: Line<InterfaceSyntax.Documentation>?,
     deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>>
   ) -> Result<InterfaceSyntax.ThingDeclaration, ParseError> {
-    return .success(
-      InterfaceSyntax.ThingDeclaration(
-        keyword: keyword,
-        documentation: documentation,
-        deferredLines: deferredLines
+    var remainingGroups = deferredLines.content
+    var remainingSeparator: ParsedToken? = nil
+
+    guard let next = remainingGroups.entries?.first else {
+      return .failure(.unique(.nameMissing(remainingGroups.startIndex)))
+    }
+    switch next {
+    case .leaf(let leaf):
+      return .failure(.unique(.nameMissing(leaf.startIndex)))
+    case .emptyGroup(let group):
+      return .failure(.unique(.nameMissing(group.closing.startIndex)))
+    case .group(let group):
+      guard group.opening.tokens.first?.token.kind == .openingParenthesis else {
+        return .failure(.unique(.nameMissing(group.startIndex)))
+      }
+      let removed = remainingGroups.removeFirst()!
+      remainingSeparator = removed.separator
+      let name = ParsedThingNameDeclaration(deferred: group)
+
+      guard let detailsSeparator = remainingSeparator else {
+        return .failure(
+          Self.ParseError.common(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
+        )
+      }
+
+      return .success(
+        InterfaceSyntax.ThingDeclaration(
+          keyword: keyword,
+          documentation: documentation,
+          name: name,
+          deferredLines: Line(lineBreak: detailsSeparator, content: remainingGroups)
+        )
       )
-    )
+    }
   }
 }

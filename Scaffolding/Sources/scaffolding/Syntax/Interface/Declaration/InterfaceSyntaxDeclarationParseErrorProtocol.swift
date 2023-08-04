@@ -1,3 +1,3 @@
 protocol InterfaceSyntaxDeclarationParseErrorProtocol: Error {
-  static func commonParseError(_ error: InterfaceSyntax.Declaration.CommonParseError) -> Self
+  static func common(_ error: InterfaceSyntax.Declaration.CommonParseError) -> Self
 }

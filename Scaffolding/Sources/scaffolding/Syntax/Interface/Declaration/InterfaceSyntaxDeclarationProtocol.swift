@@ -34,14 +34,14 @@ extension InterfaceSyntaxDeclarationProtocol {
 
     guard let keywordLine = remainingLines.removeFirst(),
       let keyword = keywordLine.entry.tokens.first else {
-      return .failure(Self.ParseError.commonParseError(.keywordMissing))
+      return .failure(Self.ParseError.common(.keywordMissing))
     }
     guard keyword.token.source ∈ Self.keywords else {
-      return .failure(Self.ParseError.commonParseError(.mismatchedKeyword(keyword)))
+      return .failure(Self.ParseError.common(.mismatchedKeyword(keyword)))
     }
     let unexpected = keywordLine.entry.tokens.dropFirst()
     guard unexpected.isEmpty else {
-      return .failure(Self.ParseError.commonParseError(.unexpectedTextAfterKeyword(Array(unexpected))))
+      return .failure(Self.ParseError.common(.unexpectedTextAfterKeyword(Array(unexpected))))
     }
     var remainingSeparator = keywordLine.separator
 
@@ -62,7 +62,7 @@ extension InterfaceSyntaxDeclarationProtocol {
       }
     ) {
     case .failure(let error):
-      return .failure(.commonParseError(.nestingError(error)))
+      return .failure(.common(.nestingError(error)))
     case .success(let grouped):
       scan: for node in grouped.combinedEntries {
         let opening: Deferred
@@ -79,11 +79,11 @@ extension InterfaceSyntaxDeclarationProtocol {
         }
         if opening.tokens.first!.token.kind == .openingParenthesis,
           closing.tokens.first!.token.kind ≠ .closingParenthesis {
-          return .failure(.commonParseError(.nestingError(.unpairedElement(opening))))
+          return .failure(.common(.nestingError(.unpairedElement(opening))))
         }
         if opening.tokens.first!.token.kind == .openingBracket,
           closing.tokens.first!.token.kind ≠ .closingBracket {
-          return .failure(.commonParseError(.nestingError(.unpairedElement(opening))))
+          return .failure(.common(.nestingError(.unpairedElement(opening))))
         }
       }
       var remainingGroups = grouped
@@ -118,7 +118,7 @@ extension InterfaceSyntaxDeclarationProtocol {
 
       guard let detailsSeparator = remainingSeparator else {
         return .failure(
-          Self.ParseError.commonParseError(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
+          Self.ParseError.common(.detailsMissing(documentation?.endIndex ?? keyword.endIndex))
         )
       }
       return Self.parseUniqueComponents(
