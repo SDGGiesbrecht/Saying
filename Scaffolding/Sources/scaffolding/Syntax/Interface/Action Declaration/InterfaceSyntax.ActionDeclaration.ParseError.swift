@@ -2,6 +2,6 @@ extension InterfaceSyntax.ActionDeclaration {
 
   enum ParseError: InterfaceSyntaxDeclarationParseErrorProtocol {
 
-    case commonParseError(InterfaceSyntax.Declaration.CommonParseError)
+    case common(InterfaceSyntax.Declaration.CommonParseError)
   }
 }

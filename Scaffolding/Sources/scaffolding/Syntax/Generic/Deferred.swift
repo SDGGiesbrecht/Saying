@@ -1,6 +1,12 @@
-struct Deferred: ParsedSyntaxNode, StoredLocation {
+struct Deferred: StoredLocation {
   let tokens: [ParsedToken]
   let location: Slice<UTF8Segments>
+}
+
+extension Deferred: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    return tokens
+  }
 }
 
 extension Deferred: ParsedSeparatedListEntry {

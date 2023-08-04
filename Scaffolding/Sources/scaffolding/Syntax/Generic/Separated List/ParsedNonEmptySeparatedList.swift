@@ -3,7 +3,7 @@ import SDGMathematics
 import SDGCollections
 import SDGText
 
-struct ParsedNonEmptySeparatedList<Entry, Separator>: ParsedSyntaxNode
+struct ParsedNonEmptySeparatedList<Entry, Separator>
 where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
 
   init(
@@ -21,6 +21,14 @@ where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
     var entries = [first]
     entries.append(contentsOf: continuations.lazy.map({ $0.entry }))
     return entries
+  }
+}
+
+extension ParsedNonEmptySeparatedList: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    var result: [ParsedSyntaxNode] = [first]
+    result.append(contentsOf: continuations)
+    return result
   }
 }
 
@@ -94,6 +102,32 @@ extension ParsedNonEmptySeparatedList where Entry: ParsedSeparatedListEntry, Sep
 }
 
 extension ParsedNonEmptySeparatedList {
+
+  func map<NewEntry, Error>(
+    _ closure: (Entry) -> Result<NewEntry, Error>
+  ) -> Result<ParsedNonEmptySeparatedList<NewEntry, Separator>, Error> {
+    switch closure(first) {
+    case .failure(let error):
+      return .failure(error)
+    case .success(let newFirst):
+      var newContinuations: [ParsedSeparatedListContinuation<NewEntry, Separator>] = []
+      newContinuations.reserveCapacity(continuations.count)
+      for continuation in continuations {
+        switch continuation.map(closure) {
+        case .failure(let error):
+          return .failure(error)
+        case .success(let new):
+          newContinuations.append(new)
+        }
+      }
+      return .success(
+        ParsedNonEmptySeparatedList<NewEntry, Separator>(
+          first: newFirst,
+          continuations: newContinuations
+        )
+      )
+    }
+  }
 
   func processNesting(
     isOpening: (Entry) -> Bool,

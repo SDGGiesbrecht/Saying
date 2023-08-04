@@ -22,5 +22,6 @@ extension InterfaceSyntax.Declaration {
     case unexpectedTextAfterKeyword([ParsedToken])
     case nestingError(ParsedNestingNodeParseError<Deferred>)
     case detailsMissing(UTF8Segments.Index)
+    case thingParsingError(InterfaceSyntax.ThingDeclaration.ParseError)
   }
 }
