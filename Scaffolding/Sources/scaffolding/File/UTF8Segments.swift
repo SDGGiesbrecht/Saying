@@ -7,6 +7,10 @@ internal struct UTF8Segments {
     self.segments = segments
   }
 
+  init(_ segment: StrictString) {
+    self.segments = [UTF8Segment(offset: 0, source: segment)]
+  }
+
   var segments: [UTF8Segment]
 
   func underlyingScalarOffset(of index: Index) -> Int {

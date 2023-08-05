@@ -2,6 +2,6 @@ extension Node {
 
   enum Kind {
     case fixedLeaf(Unicode.Scalar)
-    case variableLeaf
+    case variableLeaf(allowed: Set<Unicode.Scalar>)
   }
 }

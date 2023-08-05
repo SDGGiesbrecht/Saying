@@ -21,6 +21,7 @@ extension Token {
     case identifier
     case error
 
+    #warning("Remove.")
     var allowedCharacters: Set<Unicode.Scalar> {
       switch self {
       case .paragraphBreak:

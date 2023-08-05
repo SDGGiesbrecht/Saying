@@ -14,7 +14,22 @@ struct Node {
     Node(name: "Colon", kind: .fixedLeaf(":")),
     Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
     Node(name: "Space", kind: .fixedLeaf(" ")),
-    Node(name: "IdentifierComponent", kind: .variableLeaf),
+    Node(
+      name: "IdentifierComponent",
+      kind: .variableLeaf(allowed: {
+        var values: [UInt32] = []
+        values.append(0x2E) // .
+        values.append(contentsOf: 0x30...0x39) // 0–9
+        values.append(contentsOf: 0x41...0x5A) // A–Z
+        values.append(contentsOf: 0x61...0x7A) // a–z
+        values.append(contentsOf: 0x300...0x302) // ◌̀–◌̂
+        values.append(0x308) // “◌̈”
+        values.append(0x327) // “◌̧”
+        values.append(contentsOf: 0x3B1...0x3C9) // α–ω
+        values.append(contentsOf: 0x5D0...0x5EA) // א–ת
+        return Set(values.lazy.map({ Unicode.Scalar($0)! }))
+      }())
+    ),
   ]
 
   let name: StrictString
@@ -28,7 +43,11 @@ struct Node {
   }
 
   static func source() -> StrictString {
-    var result: [StrictString] = nodes.map({ $0.source() })
+    var result: [StrictString] = [
+      "import SDGCollections",
+      "",
+    ]
+    result.append(contentsOf: nodes.lazy.map({ $0.source() }))
     result.append(contentsOf: [
       nodeKind(),
       parsedNodeKind(),
@@ -44,6 +63,8 @@ struct Node {
       parsedDeclarationSource(),
       syntaxNodeConformance(),
       parsedSyntaxNodeConformance(),
+      parsableSyntaxNodeConformance(),
+      parseError(),
     ]
     if let leaf = syntaxLeafConformance() {
       result.append(leaf)
@@ -181,6 +202,89 @@ struct Node {
     switch kind {
     case .fixedLeaf, .variableLeaf:
       return nil
+    }
+  }
+  
+  func parsableSyntaxNodeConformance() -> StrictString {
+    var result: [StrictString] = [
+      "extension Parsed\(name): ParsableSyntaxNode {",
+    ]
+    if let allowed = allowedDefinition() {
+      result.append(allowed)
+    }
+    result.append(contentsOf: [
+      "",
+      "  static func parse(source: Slice<UTF8Segments>) -> Result<Parsed\(name), ParseError> {",
+      parseImplementation(),
+      "  }",
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
+  func parseImplementation() -> StrictString {
+    switch kind {
+    case .fixedLeaf(let scalar):
+      return [
+        "guard let first = source.first,",
+        "  source.dropFirst().isEmpty,",
+        "  first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
+        "    return .failure(.notA\(name)(source))",
+        "}",
+        "return .success(Parsed\(name)(location: source))",
+      ].joined(separator: "\n")
+    case .variableLeaf:
+      return [
+        "for index in source.indices {",
+        "  if source[index] ∉ allowed {",
+        "    return .failure(.invalidScalarFor\(name)(source[index...].prefix(1)))",
+        "  }",
+        "}",
+        "return .success(Parsed\(name)(location: source))",
+      ].joined(separator: "\n")
+    }
+  }
+
+  func parseError() -> StrictString {
+    return [
+      "extension Parsed\(name) {",
+      "",
+      "  enum ParseError: Error {",
+      parseErrorCases().lazy.map({ "    \($0)" }).joined(separator: "\n"),
+      "  }",
+      "}",
+    ].joined(separator: "\n")
+  }
+
+  func parseErrorCases() -> [StrictString] {
+    switch kind {
+    case .fixedLeaf:
+      return [
+        "case notA\(name)(Slice<UTF8Segments>)"
+      ]
+    case .variableLeaf:
+      return [
+        "case invalidScalarFor\(name)(Slice<UTF8Segments>)",
+      ]
+    }
+  }
+
+  func allowedDefinition() -> StrictString? {
+    switch kind {
+    case .fixedLeaf:
+      return nil
+    case .variableLeaf(let allowed):
+      var result: [StrictString] = [
+        "",
+        "  static let allowed: Set<Unicode.Scalar> = [",
+      ]
+      for scalar in allowed.sorted() {
+        result.append("    \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22},")
+      }
+      result.append(contentsOf: [
+        "  ]",
+      ])
+      return result.joined(separator: "\n")
     }
   }
 
