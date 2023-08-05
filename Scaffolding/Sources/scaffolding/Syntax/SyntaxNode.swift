@@ -1,6 +1,7 @@
 import SDGText
 
 protocol SyntaxNode {
+  var nodeKind: SyntaxNodeKind { get }
   var children: [SyntaxNode] { get }
   func source() -> StrictString
 }

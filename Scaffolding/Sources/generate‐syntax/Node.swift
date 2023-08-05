@@ -20,9 +20,32 @@ struct Node {
   let name: StrictString
   let kind: Kind
 
-  static func source() -> StrictString {
-    return nodes.lazy.map({ $0.source() }).joined(separator: "\n\n")
+  var lowercasedName: StrictString {
+    var result = name
+    let first = result.removeFirst()
+    result.prepend(contentsOf: first.properties.lowercaseMapping.scalars)
+    return result
   }
+
+  static func source() -> StrictString {
+    var result: [StrictString] = nodes.map({ $0.source() })
+    result.append(contentsOf: [
+      nodeKind()
+    ])
+    return result.joined(separator: "\n\n")
+  }
+
+  static func nodeKind() -> StrictString {
+    var result: [StrictString] = [
+      "enum SyntaxNodeKind {",
+    ]
+    result.append(contentsOf: nodes.lazy.map({ $0.kindCase() }))
+    result.append(contentsOf: [
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
   func source() -> StrictString {
     var result = [
       declarationSource(),
@@ -61,6 +84,10 @@ struct Node {
     return [
       "extension \(name): SyntaxNode {",
       "",
+      "  var nodeKind: SyntaxNodeKind {",
+      "    return .\(lowercasedName)(self)",
+      "  }",
+      "",
       "  var children: [SyntaxNode] {",
       childrenImplementation(),
       "  }",
@@ -91,5 +118,9 @@ struct Node {
         "extension \(name): SyntaxLeaf {}"
       ].joined(separator: "\n")
     }
+  }
+
+  func kindCase() -> StrictString {
+    return "case \(lowercasedName)(\(name))"
   }
 }
