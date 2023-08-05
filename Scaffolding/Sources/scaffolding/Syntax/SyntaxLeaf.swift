@@ -1,6 +1,7 @@
 import SDGText
 
 protocol SyntaxLeaf: SyntaxNode {
+  var leafKind: SyntaxLeafKind { get }
   var text: StrictString { get }
 }
 

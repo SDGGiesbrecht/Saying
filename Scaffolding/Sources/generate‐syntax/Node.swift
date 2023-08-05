@@ -30,20 +30,10 @@ struct Node {
   static func source() -> StrictString {
     var result: [StrictString] = nodes.map({ $0.source() })
     result.append(contentsOf: [
-      nodeKind()
+      nodeKind(),
+      leafKind(),
     ])
     return result.joined(separator: "\n\n")
-  }
-
-  static func nodeKind() -> StrictString {
-    var result: [StrictString] = [
-      "enum SyntaxNodeKind {",
-    ]
-    result.append(contentsOf: nodes.lazy.map({ $0.kindCase() }))
-    result.append(contentsOf: [
-      "}",
-    ])
-    return result.joined(separator: "\n")
   }
 
   func source() -> StrictString {
@@ -58,7 +48,7 @@ struct Node {
   }
 
   func declarationSource() -> StrictString {
-    if let text = textProperty() {
+    if let text = storedTextProperty() {
       return [
         "struct \(name) {",
         text,
@@ -71,7 +61,7 @@ struct Node {
     }
   }
 
-  func textProperty() -> StrictString? {
+  func storedTextProperty() -> StrictString? {
     switch kind {
     case .fixedLeaf:
       return nil
@@ -103,24 +93,65 @@ struct Node {
   }
 
   func syntaxLeafConformance() -> StrictString? {
+    var result: [StrictString] = [
+      "extension \(name): SyntaxLeaf {",
+      "",
+      "  var leafKind: SyntaxLeafKind {",
+      "    return .\(lowercasedName)(self)",
+      "  }",
+    ]
+    if let text = derivedTextProperty() {
+      result.append(text)
+    }
+    result.append(contentsOf: [
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
+  func derivedTextProperty() -> StrictString? {
     switch kind {
     case .fixedLeaf(let scalar):
       return [
-        "extension \(name): SyntaxLeaf {",
-        "",
         "  var text: StrictString {",
         "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
         "  }",
-        "}",
       ].joined(separator: "\n")
     case .variableLeaf:
-      return [
-        "extension \(name): SyntaxLeaf {}"
-      ].joined(separator: "\n")
+      return nil
     }
   }
 
-  func kindCase() -> StrictString {
+  static func nodeKind() -> StrictString {
+    var result: [StrictString] = [
+      "enum SyntaxNodeKind {",
+    ]
+    result.append(contentsOf: nodes.lazy.map({ $0.nodeKindCase() }))
+    result.append(contentsOf: [
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
+  func nodeKindCase() -> StrictString {
     return "case \(lowercasedName)(\(name))"
+  }
+
+  static func leafKind() -> StrictString {
+    var result: [StrictString] = [
+      "enum SyntaxLeafKind {",
+    ]
+    result.append(contentsOf: nodes.lazy.compactMap({ $0.leafKindCase() }))
+    result.append(contentsOf: [
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
+  func leafKindCase() -> StrictString? {
+    switch kind {
+    case .variableLeaf, .fixedLeaf:
+      return "case \(lowercasedName)(\(name))"
+    }
   }
 }
