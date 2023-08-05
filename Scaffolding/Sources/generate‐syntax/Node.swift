@@ -1,3 +1,4 @@
+import SDGLogic
 import SDGText
 
 struct Node {
@@ -19,53 +20,43 @@ struct Node {
     ]
     result.append(contentsOf: nodes.lazy.map({ $0.source() }))
     result.append(contentsOf: [
-      nodeKind(),
-      parsedNodeKind(),
-      leafKind(),
-      parsedLeafKind(),
+      nodeKind(parsed: false),
+      nodeKind(parsed: true),
+      leafKind(parsed: false),
+      leafKind(parsed: true),
     ])
     return result.joined(separator: "\n\n")
   }
 
   func source() -> StrictString {
     var result = [
-      declarationSource(),
-      parsedDeclarationSource(),
-      syntaxNodeConformance(),
-      parsedSyntaxNodeConformance(),
+      declarationSource(parsed: false),
+      declarationSource(parsed: true),
+      syntaxNodeConformance(parsed: false),
+      syntaxNodeConformance(parsed: true),
       parsableSyntaxNodeConformance(),
       parseError(),
       syntaxUtilities(parsed: false),
       syntaxUtilities(parsed: true),
     ]
-    if let leaf = syntaxLeafConformance() {
+    if let leaf = syntaxLeafConformance(parsed: false) {
       result.append(leaf)
     }
-    if let leaf = parsedSyntaxLeafConformance() {
+    if let leaf = syntaxLeafConformance(parsed: true) {
       result.append(leaf)
     }
     return result.joined(separator: "\n\n")
   }
 
-  func declarationSource() -> StrictString {
+  func declarationSource(parsed: Bool) -> StrictString {
     var result: [StrictString] = [
-      "struct \(name) {"
+      "struct \(parsed ? "Parsed" : "")\(name) {"
     ]
-    result.append(contentsOf: childrenProperties())
-    if let text = storedTextProperty() {
+    result.append(contentsOf: childrenProperties(parsed: parsed))
+    if let text = storedTextProperty(parsed: parsed) {
       result.append(text)
     }
-    result.append(contentsOf: [
-      "}",
-    ])
-    return result.joined(separator: "\n")
-  }
-  func parsedDeclarationSource() -> StrictString {
-    var result: [StrictString] = [
-      "struct Parsed\(name) {"
-    ]
-    result.append(contentsOf: parsedChildrenProperties())
-    if let location = storedLocationProperty() {
+    if let location = storedLocationProperty(parsed: parsed) {
       result.append(location)
     }
     result.append(contentsOf: [
@@ -74,7 +65,7 @@ struct Node {
     return result.joined(separator: "\n")
   }
 
-  func childrenProperties() -> [StrictString] {
+  func childrenProperties(parsed: Bool) -> [StrictString] {
     switch kind {
     case .fixedLeaf, .variableLeaf:
       return []
@@ -82,96 +73,79 @@ struct Node {
       return children.map { child in
         switch child.kind {
         case .required:
-          return "  var \(child.name): \(child.type)"
+          return "  var \(child.name): \(parsed ? "Parsed" : "")\(child.type)"
         case .optional:
-          return "  var \(child.name): \(child.type)?"
-        }
-      }
-    }
-  }
-  func parsedChildrenProperties() -> [StrictString] {
-    switch kind {
-    case .fixedLeaf, .variableLeaf:
-      return []
-    case .compound(let children):
-      return children.map { child in
-        switch child.kind {
-        case .required:
-          return "  let \(child.name): Parsed\(child.type)"
-        case .optional:
-          return "  let \(child.name): Parsed\(child.type)?"
+          return "  var \(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
         }
       }
     }
   }
 
-  func storedTextProperty() -> StrictString? {
-    switch kind {
-    case .fixedLeaf, .compound:
+  func storedTextProperty(parsed: Bool) -> StrictString? {
+    if parsed {
       return nil
-    case .variableLeaf:
-      return "  let text: StrictString"
-    }
-  }
-
-  func storedLocationProperty() -> StrictString? {
-    switch kind {
-    case .fixedLeaf, .variableLeaf:
-      return "  let location: Slice<UTF8Segments>"
-    case .compound(let children):
-      if children.guaranteedNonEmpty {
+    } else {
+      switch kind {
+      case .fixedLeaf, .compound:
         return nil
-      } else {
-        return "  let location: Slice<UTF8Segments>"
+      case .variableLeaf:
+        return "  let text: StrictString"
       }
     }
   }
 
-  func syntaxNodeConformance() -> StrictString {
-    return [
-      "extension \(name): SyntaxNode {",
-      "",
-      "  var nodeKind: SyntaxNodeKind {",
-      "    return .\(lowercasedName)(self)",
-      "  }",
-      "",
-      "  var children: [SyntaxNode] {",
-      childrenImplementation(),
-      "  }",
-      "}",
-    ].joined(separator: "\n")
+  func storedLocationProperty(parsed: Bool) -> StrictString? {
+    if ¬parsed {
+      return nil
+    } else {
+      switch kind {
+      case .fixedLeaf, .variableLeaf:
+        return "  let location: Slice<UTF8Segments>"
+      case .compound(let children):
+        if children.guaranteedNonEmpty {
+          return nil
+        } else {
+          return "  let location: Slice<UTF8Segments>"
+        }
+      }
+    }
   }
-  func parsedSyntaxNodeConformance() -> StrictString {
+
+  func syntaxNodeConformance(parsed: Bool) -> StrictString {
     var result: [StrictString] = [
-      "extension Parsed\(name): ParsedSyntaxNode {",
+      "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxNode {",
       "",
-      "  var nodeKind: ParsedSyntaxNodeKind {",
+      "  var nodeKind: \(parsed ? "Parsed" : "")SyntaxNodeKind {",
       "    return .\(lowercasedName)(self)",
       "  }",
       "",
-      "  var children: [ParsedSyntaxNode] {",
-      parsedChildrenImplementation(),
-      "  }",
-      "",
-      "  var context: UTF8Segments {",
-      contextImplementation(),
-      "  }",
-      "",
-      "  var startIndex: UTF8Segments.Index {",
-      startIndexImplementation(),
-      "  }",
-      "",
-      "  var endIndex: UTF8Segments.Index {",
-      endIndexImplementation(),
+      "  var children: [\(parsed ? "Parsed" : "")SyntaxNode] {",
+      childrenImplementation(parsed: parsed),
       "  }",
     ]
-    if let location = locationImplementation() {
+    if parsed {
       result.append(contentsOf: [
         "",
-        "  var location: Slice<UTF8Segments> {",
-        location,
+        "  var context: UTF8Segments {",
+        contextImplementation(),
+        "  }",
+        "",
+        "  var startIndex: UTF8Segments.Index {",
+        startIndexImplementation(),
+        "  }",
+        "",
+        "  var endIndex: UTF8Segments.Index {",
+        endIndexImplementation(),
         "  }",
       ])
+      if let location = locationImplementation() {
+        result.append(contentsOf: [
+          "",
+          "  var location: Slice<UTF8Segments> {",
+          location,
+          "  }",
+        ])
+      }
     }
     result.append(contentsOf: [
       "}",
@@ -179,39 +153,13 @@ struct Node {
     return result.joined(separator: "\n")
   }
 
-  func childrenImplementation() -> StrictString {
+  func childrenImplementation(parsed: Bool) -> StrictString {
     switch kind {
     case .fixedLeaf, .variableLeaf:
       return "    return []"
     case .compound(let children):
       var result: [StrictString] = [
-        "    var result: [SyntaxNode] = []",
-      ]
-      for child in children {
-        switch child.kind {
-        case .required:
-          result.append("    result.append(\(child.name))")
-        case .optional:
-          result.append(contentsOf: [
-            "    if let \(child.name) = self.\(child.name) {",
-            "      result.append(\(child.name))",
-            "    }",
-          ])
-        }
-      }
-      result.append(contentsOf: [
-        "    return result"
-      ])
-      return result.joined(separator: "\n")
-    }
-  }
-  func parsedChildrenImplementation() -> StrictString {
-    switch kind {
-    case .fixedLeaf, .variableLeaf:
-      return "    return []"
-    case .compound(let children):
-      var result: [StrictString] = [
-        "    var result: [ParsedSyntaxNode] = []",
+        "    var result: [\(parsed ? "Parsed" : "")SyntaxNode] = []",
       ]
       for child in children {
         switch child.kind {
@@ -375,17 +323,17 @@ struct Node {
     }
   }
 
-  func syntaxLeafConformance() -> StrictString? {
+  func syntaxLeafConformance(parsed: Bool) -> StrictString? {
     switch kind {
     case .fixedLeaf, .variableLeaf:
       var result: [StrictString] = [
-        "extension \(name): SyntaxLeaf {",
+        "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxLeaf {",
         "",
-        "  var leafKind: SyntaxLeafKind {",
+        "  var leafKind: \(parsed ? "Parsed" : "")SyntaxLeafKind {",
         "    return .\(lowercasedName)(self)",
         "  }",
       ]
-      if let text = derivedTextProperty() {
+      if let text = derivedTextProperty(parsed: parsed) {
         result.append(text)
       }
       result.append(contentsOf: [
@@ -396,96 +344,54 @@ struct Node {
       return nil
     }
   }
-  func parsedSyntaxLeafConformance() -> StrictString? {
-    switch kind {
-    case .fixedLeaf, .variableLeaf:
-      return [
-        "extension Parsed\(name): ParsedSyntaxLeaf {",
-        "",
-        "  var leafKind: ParsedSyntaxLeafKind {",
-        "    return .\(lowercasedName)(self)",
-        "  }",
-        "}",
-      ].joined(separator: "\n")
-    case .compound:
+
+  func derivedTextProperty(parsed: Bool) -> StrictString? {
+    if parsed {
       return nil
+    } else {
+      switch kind {
+      case .fixedLeaf(let scalar):
+        return [
+          "  var text: StrictString {",
+          "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
+          "  }",
+        ].joined(separator: "\n")
+      case .variableLeaf, .compound:
+        return nil
+      }
     }
   }
 
-  func derivedTextProperty() -> StrictString? {
-    switch kind {
-    case .fixedLeaf(let scalar):
-      return [
-        "  var text: StrictString {",
-        "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
-        "  }",
-      ].joined(separator: "\n")
-    case .variableLeaf, .compound:
-      return nil
-    }
-  }
-
-  static func nodeKind() -> StrictString {
+  static func nodeKind(parsed: Bool) -> StrictString {
     var result: [StrictString] = [
-      "enum SyntaxNodeKind {",
+      "enum \(parsed ? "Parsed" : "")SyntaxNodeKind {",
     ]
-    result.append(contentsOf: nodes.lazy.map({ $0.nodeKindCase() }))
-    result.append(contentsOf: [
-      "}",
-    ])
-    return result.joined(separator: "\n")
-  }
-  static func parsedNodeKind() -> StrictString {
-    var result: [StrictString] = [
-      "enum ParsedSyntaxNodeKind {",
-    ]
-    result.append(contentsOf: nodes.lazy.map({ $0.parsedNodeKindCase() }))
+    result.append(contentsOf: nodes.lazy.map({ $0.nodeKindCase(parsed: parsed) }))
     result.append(contentsOf: [
       "}",
     ])
     return result.joined(separator: "\n")
   }
 
-  func nodeKindCase() -> StrictString {
-    return "  case \(lowercasedName)(\(name))"
-  }
-  func parsedNodeKindCase() -> StrictString {
-    return "  case \(lowercasedName)(Parsed\(name))"
+  func nodeKindCase(parsed: Bool) -> StrictString {
+    return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
   }
 
-  static func leafKind() -> StrictString {
+  static func leafKind(parsed: Bool) -> StrictString {
     var result: [StrictString] = [
-      "enum SyntaxLeafKind {",
+      "enum \(parsed ? "Parsed" : "")SyntaxLeafKind {",
     ]
-    result.append(contentsOf: nodes.lazy.compactMap({ $0.leafKindCase() }))
-    result.append(contentsOf: [
-      "}",
-    ])
-    return result.joined(separator: "\n")
-  }
-  static func parsedLeafKind() -> StrictString {
-    var result: [StrictString] = [
-      "enum ParsedSyntaxLeafKind {",
-    ]
-    result.append(contentsOf: nodes.lazy.compactMap({ $0.parsedLeafKindCase() }))
+    result.append(contentsOf: nodes.lazy.compactMap({ $0.leafKindCase(parsed: parsed) }))
     result.append(contentsOf: [
       "}",
     ])
     return result.joined(separator: "\n")
   }
 
-  func leafKindCase() -> StrictString? {
+  func leafKindCase(parsed: Bool) -> StrictString? {
     switch kind {
     case .variableLeaf, .fixedLeaf:
-      return "  case \(lowercasedName)(\(name))"
-    case .compound:
-      return nil
-    }
-  }
-  func parsedLeafKindCase() -> StrictString? {
-    switch kind {
-    case .variableLeaf, .fixedLeaf:
-      return "  case \(lowercasedName)(Parsed\(name))"
+      return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
     case .compound:
       return nil
     }
