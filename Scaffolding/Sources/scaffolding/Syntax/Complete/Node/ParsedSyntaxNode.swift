@@ -2,7 +2,7 @@ import SDGText
 
 protocol ParsedSyntaxNode {
   var nodeKind: ParsedSyntaxNodeKind { get }
-  var children: [SyntaxNode] { get }
+  var children: [ParsedSyntaxNode] { get }
 
   var context: UTF8Segments { get }
   var startIndex: UTF8Segments.Index { get }
