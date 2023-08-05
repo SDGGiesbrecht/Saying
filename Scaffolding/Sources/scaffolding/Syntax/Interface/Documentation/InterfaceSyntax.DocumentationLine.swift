@@ -7,7 +7,7 @@ extension InterfaceSyntax {
 }
 
 extension InterfaceSyntax.Documentation: AlternateForms {
-  var form: ManualParsedSyntaxNode {
+  var form: ParsedSyntaxNode {
     switch self {
     case .empty(let empty):
       return empty

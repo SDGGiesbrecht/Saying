@@ -1,5 +1,5 @@
 struct ParsedSeparatedNestingGroup<Leaf, Separator>
-where Leaf: ManualParsedSyntaxNode, Separator: ManualParsedSyntaxNode {
+where Leaf: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
   let opening: Leaf
   let openingSeparator: Separator
   let contents: ParsedSeparatedList<Leaf, Separator>
@@ -7,17 +7,17 @@ where Leaf: ManualParsedSyntaxNode, Separator: ManualParsedSyntaxNode {
   let closing: Leaf
 }
 
-extension ParsedSeparatedNestingGroup: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
+extension ParsedSeparatedNestingGroup: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
     return [opening, openingSeparator, contents, closingSeparator, closing]
   }
 }
 
 extension ParsedSeparatedNestingGroup: DerivedLocation {
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return opening
   }
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return closing
   }
 }

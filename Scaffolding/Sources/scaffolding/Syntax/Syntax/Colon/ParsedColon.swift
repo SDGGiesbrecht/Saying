@@ -5,9 +5,9 @@ struct ManualParsedColon {
   let trailingSpace: ParsedToken
 }
 
-extension ManualParsedColon: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
-    var result: [ManualParsedSyntaxNode] = []
+extension ManualParsedColon: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    var result: [ParsedSyntaxNode] = []
     if let leadingSpace = leadingSpace {
       result.append(leadingSpace)
     }
@@ -17,10 +17,10 @@ extension ManualParsedColon: ManualParsedSyntaxNode {
 }
 
 extension ManualParsedColon: DerivedLocation {
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return leadingSpace ?? colon
   }
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return trailingSpace
   }
 }

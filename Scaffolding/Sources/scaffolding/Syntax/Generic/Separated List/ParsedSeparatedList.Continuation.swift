@@ -1,20 +1,20 @@
 struct ParsedSeparatedListContinuation<Entry, Separator>
-where Separator: ManualParsedSyntaxNode, Entry: ManualParsedSyntaxNode {
+where Separator: ParsedSyntaxNode, Entry: ParsedSyntaxNode {
   let separator: Separator
   let entry: Entry
 }
 
-extension ParsedSeparatedListContinuation: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
+extension ParsedSeparatedListContinuation: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
     return [separator, entry]
   }
 }
 
 extension ParsedSeparatedListContinuation: DerivedLocation {
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return separator
   }
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return entry
   }
 }

@@ -1,6 +1,6 @@
-protocol DerivedLocation: ManualParsedSyntaxNode {
-  var firstChild: ManualParsedSyntaxNode { get }
-  var lastChild: ManualParsedSyntaxNode { get }
+protocol DerivedLocation: ParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode { get }
+  var lastChild: ParsedSyntaxNode { get }
 }
 
 extension DerivedLocation {

@@ -1,20 +1,20 @@
 struct Line<Content>
-where Content: ManualParsedSyntaxNode {
+where Content: ParsedSyntaxNode {
   let lineBreak: ParsedToken
   let content: Content
 }
 
-extension Line: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
+extension Line: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
     return [lineBreak, content]
   }
 }
 
 extension Line: DerivedLocation {
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return lineBreak
   }
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return content
   }
 }

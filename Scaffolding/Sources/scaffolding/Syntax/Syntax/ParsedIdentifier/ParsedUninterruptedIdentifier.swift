@@ -4,17 +4,17 @@ struct ParsedUninterruptedIdentifier {
   let components: ParsedNonEmptySeparatedList<ParsedToken, ParsedToken>
 }
 
-extension ParsedUninterruptedIdentifier: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
+extension ParsedUninterruptedIdentifier: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
     return [components]
   }
 }
 
 extension ParsedUninterruptedIdentifier: DerivedLocation {
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return components
   }
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return components
   }
 }

@@ -1,4 +1,4 @@
-protocol StoredLocation: ManualParsedSyntaxNode {}
+protocol StoredLocation: ParsedSyntaxNode {}
 
 extension StoredLocation {
   var context: UTF8Segments {

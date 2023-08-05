@@ -20,7 +20,7 @@ protocol InterfaceSyntaxDeclarationProtocol: DerivedLocation {
 }
 
 extension InterfaceSyntaxDeclarationProtocol { // DerivedLocation
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return keyword
   }
 }

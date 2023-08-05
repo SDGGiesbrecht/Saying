@@ -12,9 +12,9 @@ extension InterfaceSyntax {
   }
 }
 
-extension InterfaceSyntax.ActionDeclaration: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
-    var result: [ManualParsedSyntaxNode] = [keyword]
+extension InterfaceSyntax.ActionDeclaration: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    var result: [ParsedSyntaxNode] = [keyword]
     if let documentation = documentation {
       result.append(documentation)
     }
@@ -24,7 +24,7 @@ extension InterfaceSyntax.ActionDeclaration: ManualParsedSyntaxNode {
 }
 
 extension InterfaceSyntax.ActionDeclaration: DerivedLocation {
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return deferredLines
   }
 }

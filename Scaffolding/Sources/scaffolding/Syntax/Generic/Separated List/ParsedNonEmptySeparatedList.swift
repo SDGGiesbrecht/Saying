@@ -4,7 +4,7 @@ import SDGCollections
 import SDGText
 
 struct ParsedNonEmptySeparatedList<Entry, Separator>
-where Entry: ManualParsedSyntaxNode, Separator: ManualParsedSyntaxNode {
+where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
 
   init(
     first: Entry,
@@ -24,19 +24,19 @@ where Entry: ManualParsedSyntaxNode, Separator: ManualParsedSyntaxNode {
   }
 }
 
-extension ParsedNonEmptySeparatedList: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
-    var result: [ManualParsedSyntaxNode] = [first]
+extension ParsedNonEmptySeparatedList: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
+    var result: [ParsedSyntaxNode] = [first]
     result.append(contentsOf: continuations)
     return result
   }
 }
 
 extension ParsedNonEmptySeparatedList: DerivedLocation {
-  var firstChild: ManualParsedSyntaxNode {
+  var firstChild: ParsedSyntaxNode {
     return first
   }
-  var lastChild: ManualParsedSyntaxNode {
+  var lastChild: ParsedSyntaxNode {
     return continuations.last ?? first
   }
 }

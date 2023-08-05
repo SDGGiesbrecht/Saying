@@ -3,8 +3,8 @@ struct Deferred: StoredLocation {
   let location: Slice<UTF8Segments>
 }
 
-extension Deferred: ManualParsedSyntaxNode {
-  var children: [ManualParsedSyntaxNode] {
+extension Deferred: ParsedSyntaxNode {
+  var children: [ParsedSyntaxNode] {
     return tokens
   }
 }

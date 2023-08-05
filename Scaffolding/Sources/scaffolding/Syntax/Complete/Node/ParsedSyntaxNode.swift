@@ -11,6 +11,12 @@ protocol ParsedSyntaxNode {
 }
 
 extension ParsedSyntaxNode {
+
+  #warning("This is temporary to allow use by deprecated nodes.")
+  var nodeKind: ParsedSyntaxNodeKind {
+    fatalError("\(Self.self) has no node kind.")
+  }
+  
   func source() -> StrictString {
     return StrictString(location)
   }
