@@ -21,7 +21,6 @@ extension Token {
     case identifier
     case error
 
-    #warning("Remove.")
     var allowedCharacters: Set<Unicode.Scalar> {
       switch self {
       case .paragraphBreak:
@@ -47,17 +46,7 @@ extension Token {
       case .space:
         return [" "]
       case .identifier:
-        var values: [UInt32] = []
-        values.append(0x2E) // .
-        values.append(contentsOf: 0x30...0x39) // 0–9
-        values.append(contentsOf: 0x41...0x5A) // A–Z
-        values.append(contentsOf: 0x61...0x7A) // a–z
-        values.append(contentsOf: 0x300...0x302) // ◌̀–◌̂
-        values.append(0x308) // “◌̈”
-        values.append(0x327) // “◌̧”
-        values.append(contentsOf: 0x3B1...0x3C9) // α–ω
-        values.append(contentsOf: 0x5D0...0x5EA) // א–ת
-        return Set(values.lazy.map({ Unicode.Scalar($0)! }))
+        return ParsedIdentifierComponent.allowed
       case .error:
         return []
       }
