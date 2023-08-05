@@ -1,21 +1,21 @@
 struct ParsedDictionaryEntry<Term, Definition>
-where Term: OldParsedSyntaxNode, Definition: OldParsedSyntaxNode {
+where Term: ManualParsedSyntaxNode, Definition: ManualParsedSyntaxNode {
   let term: Term
-  let colon: OldParsedColon
+  let colon: ManualParsedColon
   let definition: Definition
 }
 
-extension ParsedDictionaryEntry: OldParsedSyntaxNode {
-  var children: [OldParsedSyntaxNode] {
+extension ParsedDictionaryEntry: ManualParsedSyntaxNode {
+  var children: [ManualParsedSyntaxNode] {
     return [term, colon, definition]
   }
 }
 
 extension ParsedDictionaryEntry: DerivedLocation {
-  var firstChild: OldParsedSyntaxNode {
+  var firstChild: ManualParsedSyntaxNode {
     return term
   }
-  var lastChild: OldParsedSyntaxNode {
+  var lastChild: ManualParsedSyntaxNode {
     return definition
   }
 }
@@ -41,7 +41,7 @@ extension ParsedDictionaryEntry {
     }
     let trailingSpace = definitionTokens.removeFirst()
 
-    let colonNode = OldParsedColon(
+    let colonNode = ManualParsedColon(
       leadingSpace: leadingSpace,
       colon: colon,
       trailingSpace: trailingSpace

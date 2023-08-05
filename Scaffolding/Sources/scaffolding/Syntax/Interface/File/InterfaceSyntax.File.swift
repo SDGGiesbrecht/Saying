@@ -20,17 +20,17 @@ extension InterfaceSyntax {
   }
 }
 
-extension InterfaceSyntax.File: OldParsedSyntaxNode {
-  var children: [OldParsedSyntaxNode] {
+extension InterfaceSyntax.File: ManualParsedSyntaxNode {
+  var children: [ManualParsedSyntaxNode] {
     return [declarations]
   }
 }
 
 extension InterfaceSyntax.File: DerivedLocation {
-  var firstChild: OldParsedSyntaxNode {
+  var firstChild: ManualParsedSyntaxNode {
     return declarations
   }
-  var lastChild: OldParsedSyntaxNode {
+  var lastChild: ManualParsedSyntaxNode {
     return declarations
   }
 }

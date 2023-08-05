@@ -1,4 +1,4 @@
-protocol ParsedDictionaryTerm: OldParsedSyntaxNode {
+protocol ParsedDictionaryTerm: ManualParsedSyntaxNode {
 
   associatedtype ParseError: Error
 

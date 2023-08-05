@@ -37,8 +37,8 @@ struct ParsedToken: StoredLocation {
   let location: Slice<UTF8Segments>
 }
 
-extension ParsedToken: OldParsedSyntaxNode {
-  var children: [OldParsedSyntaxNode] {
+extension ParsedToken: ManualParsedSyntaxNode {
+  var children: [ManualParsedSyntaxNode] {
     return []
   }
   func source() -> StrictString {

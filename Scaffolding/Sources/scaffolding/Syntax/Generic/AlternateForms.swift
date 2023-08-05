@@ -1,18 +1,18 @@
-protocol AlternateForms: DerivedLocation, OldParsedSyntaxNode {
-  var form: OldParsedSyntaxNode { get }
+protocol AlternateForms: DerivedLocation, ManualParsedSyntaxNode {
+  var form: ManualParsedSyntaxNode { get }
 }
 
-extension AlternateForms { // OldParsedSyntaxNode
-  var children: [OldParsedSyntaxNode] {
+extension AlternateForms { // ManualParsedSyntaxNode
+  var children: [ManualParsedSyntaxNode] {
     return [form]
   }
 }
 
 extension AlternateForms { // DerivedLocation
-  var firstChild: OldParsedSyntaxNode {
+  var firstChild: ManualParsedSyntaxNode {
     return form
   }
-  var lastChild: OldParsedSyntaxNode {
+  var lastChild: ManualParsedSyntaxNode {
     return form
   }
 }

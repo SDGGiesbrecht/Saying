@@ -1,21 +1,21 @@
 struct ParsedEmptySeparatedNestingGroup<Leaf, Separator>
-where Leaf: OldParsedSyntaxNode, Separator: OldParsedSyntaxNode {
+where Leaf: ManualParsedSyntaxNode, Separator: ManualParsedSyntaxNode {
   let opening: Leaf
   let separator: Separator
   let closing: Leaf
 }
 
-extension ParsedEmptySeparatedNestingGroup: OldParsedSyntaxNode {
-  var children: [OldParsedSyntaxNode] {
+extension ParsedEmptySeparatedNestingGroup: ManualParsedSyntaxNode {
+  var children: [ManualParsedSyntaxNode] {
     return [opening, separator, closing]
   }
 }
 
 extension ParsedEmptySeparatedNestingGroup: DerivedLocation {
-  var firstChild: OldParsedSyntaxNode {
+  var firstChild: ManualParsedSyntaxNode {
     return opening
   }
-  var lastChild: OldParsedSyntaxNode {
+  var lastChild: ManualParsedSyntaxNode {
     return closing
   }
 }
