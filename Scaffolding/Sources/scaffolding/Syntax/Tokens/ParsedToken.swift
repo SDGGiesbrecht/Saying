@@ -61,3 +61,24 @@ extension ParsedToken: ParsedSeparatedListEntry {
     return .success(token)
   }
 }
+
+extension ParsedToken {
+
+  var asColon: ParsedColon? {
+    switch token.kind {
+    case .colon:
+      return ParsedColon(location: location)
+    default:
+      return nil
+    }
+  }
+
+  var asSpace: ParsedSpace? {
+    switch token.kind {
+    case .space:
+      return ParsedSpace(location: location)
+    default:
+      return nil
+    }
+  }
+}

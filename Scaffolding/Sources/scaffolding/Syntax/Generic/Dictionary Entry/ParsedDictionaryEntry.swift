@@ -1,7 +1,7 @@
 struct ParsedDictionaryEntry<Term, Definition>
 where Term: ParsedSyntaxNode, Definition: ParsedSyntaxNode {
   let term: Term
-  let colon: ManualParsedColon
+  let colon: ParsedSpacedColon
   let definition: Definition
 }
 
@@ -41,10 +41,10 @@ extension ParsedDictionaryEntry {
     }
     let trailingSpace = definitionTokens.removeFirst()
 
-    let colonNode = ManualParsedColon(
-      leadingSpace: leadingSpace,
-      colon: colon,
-      trailingSpace: trailingSpace
+    let colonNode = ParsedSpacedColon(
+      leadingSpace: leadingSpace?.asSpace,
+      colon: colon.asColon!,
+      trailingSpace: trailingSpace.asSpace!
     )
 
     let termTokenArray = Array(termTokens)
