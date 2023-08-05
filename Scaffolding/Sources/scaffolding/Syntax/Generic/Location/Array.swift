@@ -1,4 +1,4 @@
-extension Array where Element: ParsedSyntaxNode {
+extension Array where Element: OldParsedSyntaxNode {
 
   func location() -> Slice<UTF8Segments>? {
     if let first = self.first,
@@ -10,7 +10,7 @@ extension Array where Element: ParsedSyntaxNode {
   }
 }
 
-extension Array where Element == ParsedSyntaxNode {
+extension Array where Element == OldParsedSyntaxNode {
 
   func location() -> Slice<UTF8Segments>? {
     if let first = self.first,

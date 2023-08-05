@@ -2,14 +2,14 @@ import SDGText
 
 extension InterfaceSyntax {
 
-  enum Declaration: ParsedSyntaxNode {
+  enum Declaration: OldParsedSyntaxNode {
     case thing(InterfaceSyntax.ThingDeclaration)
     case action(InterfaceSyntax.ActionDeclaration)
   }
 }
 
 extension InterfaceSyntax.Declaration: AlternateForms {
-  var form: ParsedSyntaxNode {
+  var form: OldParsedSyntaxNode {
     switch self {
     case .thing(let thing):
       return thing

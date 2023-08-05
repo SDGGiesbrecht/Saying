@@ -1,7 +1,7 @@
 import SDGText
 
 struct ParsedSeparatedList<Entry, Separator>: StoredLocation
-where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
+where Entry: OldParsedSyntaxNode, Separator: OldParsedSyntaxNode {
 
   init(
     entries: ParsedNonEmptySeparatedList<Entry, Separator>?,
@@ -19,9 +19,9 @@ where Entry: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
   }
 }
 
-extension ParsedSeparatedList: ParsedSyntaxNode {
-  var children: [ParsedSyntaxNode] {
-    var result: [ParsedSyntaxNode] = []
+extension ParsedSeparatedList: OldParsedSyntaxNode {
+  var children: [OldParsedSyntaxNode] {
+    var result: [OldParsedSyntaxNode] = []
     if let entries = entries {
       result.append(entries)
     }

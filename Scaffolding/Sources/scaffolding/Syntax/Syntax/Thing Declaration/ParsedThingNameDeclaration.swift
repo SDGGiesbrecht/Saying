@@ -12,17 +12,17 @@ struct ParsedThingNameDeclaration {
   let closingParenthesis: ParsedToken
 }
 
-extension ParsedThingNameDeclaration: ParsedSyntaxNode {
-  var children: [ParsedSyntaxNode] {
+extension ParsedThingNameDeclaration: OldParsedSyntaxNode {
+  var children: [OldParsedSyntaxNode] {
     return [openingParenthesis, openingLineBreak, names, closingLineBreak, closingParenthesis]
   }
 }
 
 extension ParsedThingNameDeclaration: DerivedLocation {
-  var firstChild: ParsedSyntaxNode {
+  var firstChild: OldParsedSyntaxNode {
     return openingParenthesis
   }
-  var lastChild: ParsedSyntaxNode {
+  var lastChild: OldParsedSyntaxNode {
     return closingParenthesis
   }
 }

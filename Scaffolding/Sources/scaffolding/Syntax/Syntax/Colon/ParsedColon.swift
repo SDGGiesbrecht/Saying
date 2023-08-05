@@ -1,12 +1,13 @@
-struct ParsedColon {
+#warning("Remove.")
+struct OldParsedColon {
   let leadingSpace: ParsedToken?
   let colon: ParsedToken
   let trailingSpace: ParsedToken
 }
 
-extension ParsedColon: ParsedSyntaxNode {
-  var children: [ParsedSyntaxNode] {
-    var result: [ParsedSyntaxNode] = []
+extension OldParsedColon: OldParsedSyntaxNode {
+  var children: [OldParsedSyntaxNode] {
+    var result: [OldParsedSyntaxNode] = []
     if let leadingSpace = leadingSpace {
       result.append(leadingSpace)
     }
@@ -15,11 +16,11 @@ extension ParsedColon: ParsedSyntaxNode {
   }
 }
 
-extension ParsedColon: DerivedLocation {
-  var firstChild: ParsedSyntaxNode {
+extension OldParsedColon: DerivedLocation {
+  var firstChild: OldParsedSyntaxNode {
     return leadingSpace ?? colon
   }
-  var lastChild: ParsedSyntaxNode {
+  var lastChild: OldParsedSyntaxNode {
     return trailingSpace
   }
 }

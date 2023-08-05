@@ -1,4 +1,4 @@
-protocol ParsedSeparatedListEntry: ParsedSyntaxNode {
+protocol ParsedSeparatedListEntry: OldParsedSyntaxNode {
 
   associatedtype ParseError: Error
 

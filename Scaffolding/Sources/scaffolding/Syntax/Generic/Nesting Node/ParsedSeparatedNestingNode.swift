@@ -1,12 +1,12 @@
-enum ParsedSeparatedNestingNode<Leaf, Separator>: ParsedSyntaxNode
-where Leaf: ParsedSyntaxNode, Separator: ParsedSyntaxNode {
+enum ParsedSeparatedNestingNode<Leaf, Separator>: OldParsedSyntaxNode
+where Leaf: OldParsedSyntaxNode, Separator: OldParsedSyntaxNode {
   case leaf(Leaf)
   case emptyGroup(ParsedEmptySeparatedNestingGroup<Leaf, Separator>)
   case group(ParsedSeparatedNestingGroup<Leaf, Separator>)
 }
 
 extension ParsedSeparatedNestingNode: AlternateForms {
-  var form: ParsedSyntaxNode {
+  var form: OldParsedSyntaxNode {
     switch self {
     case .leaf(let leaf):
       return leaf

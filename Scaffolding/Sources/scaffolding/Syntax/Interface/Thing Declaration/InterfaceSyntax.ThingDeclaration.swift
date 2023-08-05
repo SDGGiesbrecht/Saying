@@ -13,9 +13,9 @@ extension InterfaceSyntax {
   }
 }
 
-extension InterfaceSyntax.ThingDeclaration: ParsedSyntaxNode {
-  var children: [ParsedSyntaxNode] {
-    var result: [ParsedSyntaxNode] = [keyword]
+extension InterfaceSyntax.ThingDeclaration: OldParsedSyntaxNode {
+  var children: [OldParsedSyntaxNode] {
+    var result: [OldParsedSyntaxNode] = [keyword]
     if let documentation = documentation {
       result.append(documentation)
     }
@@ -25,7 +25,7 @@ extension InterfaceSyntax.ThingDeclaration: ParsedSyntaxNode {
 }
 
 extension InterfaceSyntax.ThingDeclaration: DerivedLocation {
-  var lastChild: ParsedSyntaxNode {
+  var lastChild: OldParsedSyntaxNode {
     return deferredLines
   }
 }
