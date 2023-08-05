@@ -16,7 +16,24 @@ let package = Package(
         .product(name: "SDGCollections", package: "SDGCornerstone"),
         .product(name: "SDGText", package: "SDGCornerstone"),
         .product(name: "SDGPersistence", package: "SDGCornerstone"),
+      ],
+      plugins: [
+        .plugin(name: "GenerateSyntax")
       ]
     ),
+    .plugin(
+      name: "GenerateSyntax",
+      capability: .buildTool(),
+      dependencies: [
+        "generate‐syntax"
+      ]
+    ),
+    .executableTarget(
+      name: "generate‐syntax",
+      dependencies: [
+        .product(name: "SDGText", package: "SDGCornerstone"),
+        .product(name: "SDGPersistence", package: "SDGCornerstone"),
+      ]
+    )
   ]
 )
