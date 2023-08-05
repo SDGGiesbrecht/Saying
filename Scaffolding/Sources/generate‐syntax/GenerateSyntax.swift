@@ -11,6 +11,7 @@ import SDGPersistence
 
   static func source() -> StrictString {
     return [
+      "import SDGText",
       Node.source()
     ].joined(separator: "\n")
   }
