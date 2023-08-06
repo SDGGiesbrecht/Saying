@@ -72,10 +72,20 @@ struct Node {
     case .compound(let children):
       return children.map { child in
         switch child.kind {
+        case .fixed:
+          if parsed {
+            return "  let \(child.name): Parsed\(child.type)"
+          } else {
+            return [
+              "  var \(child.name): \(child.type) {",
+              "    return \(child.type)()",
+              "  }",
+            ].joined(separator: "\n")
+          }
         case .required:
-          return "  var \(child.name): \(parsed ? "Parsed" : "")\(child.type)"
+          return "  \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)"
         case .optional:
-          return "  var \(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
+          return "  \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
         }
       }
     }
@@ -163,7 +173,7 @@ struct Node {
       ]
       for child in children {
         switch child.kind {
-        case .required:
+        case .fixed, .required:
           result.append("    result.append(\(child.name))")
         case .optional:
           result.append(contentsOf: [
@@ -270,7 +280,7 @@ struct Node {
         "return .success(Parsed\(name)(location: source))",
       ].joined(separator: "\n")
     case .compound(let children):
-      #error("Not implemented yet.")
+      #warning("Not implemented yet.")
       return [
         "fatalError()",
       ].joined(separator: "\n")
@@ -299,7 +309,7 @@ struct Node {
         "case invalidScalarFor\(name)(Slice<UTF8Segments>)",
       ]
     case .compound(let children):
-      #error("Not implemented yet.")
+      #warning("Not implemented yet.")
       return []
     }
   }
@@ -423,7 +433,7 @@ struct Node {
         var resolution: [StrictString] = []
         accumulator: for child in childList {
           switch child.kind {
-          case .required:
+          case .fixed, .required:
             resolution.append("\(child.name)")
             break accumulator
           case .optional:
