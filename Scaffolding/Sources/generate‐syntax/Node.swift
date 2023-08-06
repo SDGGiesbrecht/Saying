@@ -251,7 +251,7 @@ struct Node {
     }
     result.append(contentsOf: [
       "",
-      "  static func parse(source: Slice<UTF8Segments>) -> Result<Parsed\(name), ParseError> {",
+      "  static func parse(source: Slice<UTF8Segments>) -> Result<Parsed\(name), ErrorList<ParseError>> {",
       parseImplementation(),
       "  }",
       "}",
@@ -263,21 +263,26 @@ struct Node {
     switch kind {
     case .fixedLeaf(let scalar):
       return [
-        "guard let first = source.first,",
-        "  source.dropFirst().isEmpty,",
-        "  first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
-        "    return .failure(.notA\(name)(source))",
-        "}",
-        "return .success(Parsed\(name)(location: source))",
+        "    guard let first = source.first,",
+        "      source.dropFirst().isEmpty,",
+        "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
+        "        return .failure([.notA\(name)(source)])",
+        "    }",
+        "    return .success(Parsed\(name)(location: source))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
-        "for index in source.indices {",
-        "  if source[index] ∉ allowed {",
-        "    return .failure(.invalidScalarFor\(name)(source[index...].prefix(1)))",
-        "  }",
-        "}",
-        "return .success(Parsed\(name)(location: source))",
+        "    let errors: [ParseError] = source.indices.compactMap { index in",
+        "      if source[index] ∉ allowed {",
+        "        return .invalidScalarFor\(name)(source[index...].prefix(1))",
+        "      } else {",
+        "        return nil",
+        "      }",
+        "    }",
+        "    guard errors.isEmpty else {",
+        "      return .failure(ErrorList(errors))",
+        "    }",
+        "    return .success(Parsed\(name)(location: source))",
       ].joined(separator: "\n")
     case .compound(let children):
       #warning("Not implemented yet.")
