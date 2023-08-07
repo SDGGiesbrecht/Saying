@@ -5,6 +5,7 @@ struct Node {
 
   let name: StrictString
   let kind: Kind
+  let graph: Set<Graph>
 
   var lowercasedName: StrictString {
     var result = name
@@ -24,6 +25,7 @@ struct Node {
       nodeKind(parsed: true),
       leafKind(parsed: false),
       leafKind(parsed: true),
+      tokenKind(),
     ])
     return result.joined(separator: "\n\n")
   }
@@ -32,18 +34,26 @@ struct Node {
     var result = [
       declarationSource(parsed: false),
       declarationSource(parsed: true),
-      syntaxNodeConformance(parsed: false),
-      syntaxNodeConformance(parsed: true),
-      parsableSyntaxNodeConformance(),
-      parseError(),
-      syntaxUtilities(parsed: false),
-      syntaxUtilities(parsed: true),
     ]
-    if let leaf = syntaxLeafConformance(parsed: false) {
-      result.append(leaf)
+    if graph.contains(.complete) {
+      result.append(contentsOf: [
+        syntaxNodeConformance(parsed: false),
+        syntaxNodeConformance(parsed: true),
+        parsableSyntaxNodeConformance(),
+        parseError(),
+        syntaxUtilities(parsed: false),
+        syntaxUtilities(parsed: true),
+      ])
+      if let leaf = syntaxLeafConformance(parsed: false) {
+        result.append(leaf)
+      }
+      if let leaf = syntaxLeafConformance(parsed: true) {
+        result.append(leaf)
+      }
     }
-    if let leaf = syntaxLeafConformance(parsed: true) {
-      result.append(leaf)
+    if graph.contains(.tokens),
+      let token = syntaxTokenConformance() {
+      result.append(token)
     }
     return result.joined(separator: "\n\n")
   }
@@ -67,7 +77,7 @@ struct Node {
 
   func childrenProperties(parsed: Bool) -> [StrictString] {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return []
     case .compound(let children):
       return children.map { child in
@@ -96,7 +106,7 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf, .compound:
+      case .fixedLeaf, .compound, .errorToken:
         return nil
       case .variableLeaf:
         return "  let text: StrictString"
@@ -109,7 +119,7 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf, .variableLeaf:
+      case .fixedLeaf, .variableLeaf, .errorToken:
         return "  let location: Slice<UTF8Segments>"
       case .compound(let children):
         if children.guaranteedNonEmpty {
@@ -165,7 +175,7 @@ struct Node {
 
   func childrenImplementation(parsed: Bool) -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return "    return []"
     case .compound(let children):
       var result: [StrictString] = [
@@ -192,7 +202,7 @@ struct Node {
 
   func contextImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return "    return location.base"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -205,7 +215,7 @@ struct Node {
   
   func startIndexImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return "    return location.startIndex"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -218,7 +228,7 @@ struct Node {
   
   func endIndexImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return "    return location.endIndex"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -231,7 +241,7 @@ struct Node {
 
   func locationImplementation() -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return nil
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -289,6 +299,8 @@ struct Node {
       return [
         "fatalError()",
       ].joined(separator: "\n")
+    case .errorToken:
+      return ""
     }
   }
 
@@ -316,12 +328,14 @@ struct Node {
     case .compound(let children):
       #warning("Not implemented yet.")
       return []
+    case .errorToken:
+      return []
     }
   }
 
   func allowedDefinition() -> StrictString? {
     switch kind {
-    case .fixedLeaf, .compound:
+    case .fixedLeaf, .compound, .errorToken:
       return nil
     case .variableLeaf(let allowed):
       var result: [StrictString] = [
@@ -355,7 +369,7 @@ struct Node {
         "}",
       ])
       return result.joined(separator: "\n")
-    case .compound:
+    case .compound, .errorToken:
       return nil
     }
   }
@@ -371,9 +385,25 @@ struct Node {
           "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
           "  }",
         ].joined(separator: "\n")
-      case .variableLeaf, .compound:
+      case .variableLeaf, .compound, .errorToken:
         return nil
       }
+    }
+  }
+
+  func syntaxTokenConformance() -> StrictString? {
+    switch kind {
+    case .fixedLeaf, .variableLeaf, .errorToken:
+      return [
+        "extension Parsed\(name): ParsedToken {",
+        "",
+        "  var tokenKind: ParsedTokenKind {",
+        "    return .\(lowercasedName)(self)",
+        "  }",
+        "}",
+      ].joined(separator: "\n")
+    case .compound:
+      return nil
     }
   }
 
@@ -407,6 +437,26 @@ struct Node {
     switch kind {
     case .variableLeaf, .fixedLeaf:
       return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
+    case .compound, .errorToken:
+      return nil
+    }
+  }
+
+  static func tokenKind() -> StrictString {
+    var result: [StrictString] = [
+      "enum ParsedTokenKind {",
+    ]
+    result.append(contentsOf: nodes.lazy.compactMap({ $0.tokenKindCase() }))
+    result.append(contentsOf: [
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
+  func tokenKindCase() -> StrictString? {
+    switch kind {
+    case .variableLeaf, .fixedLeaf, .errorToken:
+      return "  case \(lowercasedName)(Parsed\(name))"
     case .compound:
       return nil
     }
@@ -430,7 +480,7 @@ struct Node {
 
   func borderChild(parsed: Bool, last: Bool) -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .variableLeaf, .errorToken:
       return nil
     case .compound(let children):
       if children.guaranteedNonEmpty {
