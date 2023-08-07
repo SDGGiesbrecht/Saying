@@ -18,8 +18,8 @@ extension InterfaceSyntax.Declaration {
     }
 
     case keywordMissing
-    case invalidDeclarationKind(ParsedToken)
-    case unexpectedTextAfterKeyword([ParsedToken])
+    case invalidDeclarationKind(OldParsedToken)
+    case unexpectedTextAfterKeyword([OldParsedToken])
     case nestingError(ParsedNestingNodeParseError<Deferred>)
     case detailsMissing(UTF8Segments.Index)
     case thingParsingError(InterfaceSyntax.ThingDeclaration.ParseError)

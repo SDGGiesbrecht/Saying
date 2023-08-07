@@ -1,15 +1,15 @@
 struct ParsedThingNameDeclaration {
-  let openingParenthesis: ParsedToken
-  let openingLineBreak: ParsedToken
+  let openingParenthesis: OldParsedToken
+  let openingLineBreak: OldParsedToken
   let names: ParsedSeparatedList<
     ParsedDictionaryEntry<
       ParsedUninterruptedIdentifier,
       ParsedUninterruptedIdentifier
     >,
-    ParsedToken
+    OldParsedToken
   >
-  let closingLineBreak: ParsedToken
-  let closingParenthesis: ParsedToken
+  let closingLineBreak: OldParsedToken
+  let closingParenthesis: OldParsedToken
 }
 
 extension ParsedThingNameDeclaration: ParsedSyntaxNode {
@@ -30,7 +30,7 @@ extension ParsedThingNameDeclaration: DerivedLocation {
 extension ParsedThingNameDeclaration {
 
   static func parse(
-    source: ParsedSeparatedNestingGroup<Deferred, ParsedToken>
+    source: ParsedSeparatedNestingGroup<Deferred, OldParsedToken>
   ) -> Result<ParsedThingNameDeclaration, ParseError> {
     guard source.opening.tokens.count == 1,
       let opening = source.opening.tokens.first,

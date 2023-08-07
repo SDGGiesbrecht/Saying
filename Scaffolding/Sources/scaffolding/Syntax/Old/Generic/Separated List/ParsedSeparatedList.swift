@@ -32,11 +32,11 @@ extension ParsedSeparatedList: ParsedSyntaxNode {
 extension ParsedSeparatedList {
 
   static func parse(
-    source: [ParsedToken],
+    source: [OldParsedToken],
     location: Slice<UTF8Segments>,
-    isSeparator: (ParsedToken) -> Bool
+    isSeparator: (OldParsedToken) -> Bool
   ) -> Result<Self, Self.ParseError>
-  where Entry: ParsedSeparatedListEntry, Separator == ParsedToken {
+  where Entry: ParsedSeparatedListEntry, Separator == OldParsedToken {
     switch ParsedNonEmptySeparatedList<Entry, Separator>.parse(
       source: source,
       location: location,

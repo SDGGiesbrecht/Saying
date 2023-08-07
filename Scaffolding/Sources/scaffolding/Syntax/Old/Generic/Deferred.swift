@@ -1,5 +1,5 @@
 struct Deferred: StoredLocation {
-  let tokens: [ParsedToken]
+  let tokens: [OldParsedToken]
   let location: Slice<UTF8Segments>
 }
 
@@ -11,7 +11,7 @@ extension Deferred: ParsedSyntaxNode {
 
 extension Deferred: ParsedSeparatedListEntry {
 
-  static func parse(source: [ParsedToken], location: Slice<UTF8Segments>) -> Result<Deferred, Never> {
+  static func parse(source: [OldParsedToken], location: Slice<UTF8Segments>) -> Result<Deferred, Never> {
     return .success(Deferred(tokens: source, location: location))
   }
 }

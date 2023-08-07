@@ -1,8 +1,8 @@
 extension InterfaceSyntax {
 
   enum Documentation {
-    case empty(ParsedEmptySeparatedNestingGroup<Deferred, ParsedToken>)
-    case nonEmpty(ParsedSeparatedNestingGroup<Deferred, ParsedToken>)
+    case empty(ParsedEmptySeparatedNestingGroup<Deferred, OldParsedToken>)
+    case nonEmpty(ParsedSeparatedNestingGroup<Deferred, OldParsedToken>)
   }
 }
 

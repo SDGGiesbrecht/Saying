@@ -1,7 +1,7 @@
 import SDGText
 
 struct ParsedUninterruptedIdentifier {
-  let components: ParsedNonEmptySeparatedList<ParsedToken, ParsedToken>
+  let components: ParsedNonEmptySeparatedList<OldParsedToken, OldParsedToken>
 }
 
 extension ParsedUninterruptedIdentifier: ParsedSyntaxNode {
@@ -28,10 +28,10 @@ extension ParsedUninterruptedIdentifier {
 extension ParsedUninterruptedIdentifier: ParsedDictionaryTerm, ParsedDictionaryDefinition {
 
   static func parse(
-    source: [ParsedToken],
+    source: [OldParsedToken],
     location: Slice<UTF8Segments>
   ) -> Result<ParsedUninterruptedIdentifier, ParseError> {
-    switch ParsedNonEmptySeparatedList<ParsedToken, ParsedToken>.parse(
+    switch ParsedNonEmptySeparatedList<OldParsedToken, OldParsedToken>.parse(
       source: source,
       location: location,
       isSeparator: { $0.token.kind == .space }
@@ -47,13 +47,13 @@ extension ParsedUninterruptedIdentifier: ParsedDictionaryTerm, ParsedDictionaryD
           let spaceAfter = location[index...].dropFirst().prefix(1)
           let spaceToken = Token(source: " ", kind: .space)!
           if spaceBefore.isEmpty {
-            return .failure(.initialSpace(ParsedToken(token: spaceToken, location: spaceAfter)))
+            return .failure(.initialSpace(OldParsedToken(token: spaceToken, location: spaceAfter)))
           } else if spaceAfter.isEmpty {
-            return .failure(.finalSpace(ParsedToken(token: spaceToken, location: spaceBefore)))
+            return .failure(.finalSpace(OldParsedToken(token: spaceToken, location: spaceBefore)))
           } else {
             return .failure(.consecutiveSpaces([
-              ParsedToken(token: spaceToken, location: spaceBefore),
-              ParsedToken(token: spaceToken, location: spaceAfter),
+              OldParsedToken(token: spaceToken, location: spaceBefore),
+              OldParsedToken(token: spaceToken, location: spaceAfter),
             ]))
           }
         case .multipleTokens:

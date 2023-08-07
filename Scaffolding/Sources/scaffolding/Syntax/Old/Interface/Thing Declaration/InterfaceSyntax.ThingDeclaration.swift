@@ -4,11 +4,11 @@ import SDGText
 extension InterfaceSyntax {
 
   struct ThingDeclaration {
-    let keyword: ParsedToken
+    let keyword: OldParsedToken
     let documentation: Line<InterfaceSyntax.Documentation>?
     let name: ParsedThingNameDeclaration
     let deferredLines: Line<
-      ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
+      ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, OldParsedToken>, OldParsedToken>
     >
   }
 }
@@ -38,12 +38,12 @@ extension InterfaceSyntax.ThingDeclaration: InterfaceSyntaxDeclarationProtocol {
   static let keywords = Set(keyword.values)
 
   static func parseUniqueComponents(
-    keyword: ParsedToken,
+    keyword: OldParsedToken,
     documentation: Line<InterfaceSyntax.Documentation>?,
-    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>>
+    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, OldParsedToken>, OldParsedToken>>
   ) -> Result<InterfaceSyntax.ThingDeclaration, ParseError> {
     var remainingGroups = deferredLines.content
-    var remainingSeparator: ParsedToken? = nil
+    var remainingSeparator: OldParsedToken? = nil
 
     guard let next = remainingGroups.entries?.first else {
       return .failure(.unique(.nameMissing(remainingGroups.startIndex)))

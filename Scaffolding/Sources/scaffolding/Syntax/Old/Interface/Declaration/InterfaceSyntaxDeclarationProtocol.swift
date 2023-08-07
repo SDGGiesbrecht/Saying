@@ -10,12 +10,12 @@ protocol InterfaceSyntaxDeclarationProtocol: DerivedLocation {
   static var keywords: Set<StrictString> { get }
 
   static func parseUniqueComponents(
-    keyword: ParsedToken,
+    keyword: OldParsedToken,
     documentation: Line<InterfaceSyntax.Documentation>?,
-    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>>
+    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, OldParsedToken>, OldParsedToken>>
   ) -> Result<Self, ParseError>
 
-  var keyword: ParsedToken { get }
+  var keyword: OldParsedToken { get }
   var documentation: Line<InterfaceSyntax.Documentation>? { get }
 }
 
@@ -28,7 +28,7 @@ extension InterfaceSyntaxDeclarationProtocol { // DerivedLocation
 extension InterfaceSyntaxDeclarationProtocol {
 
   static func parse(
-    lines: ParsedSeparatedList<Deferred, ParsedToken>
+    lines: ParsedSeparatedList<Deferred, OldParsedToken>
   ) -> Result<Self, Self.ParseError> {
     var remainingLines = lines
 
@@ -88,7 +88,7 @@ extension InterfaceSyntaxDeclarationProtocol {
       }
       var remainingGroups = grouped
 
-      var documentationLine: (documentation: InterfaceSyntax.Documentation, separator: ParsedToken?)?
+      var documentationLine: (documentation: InterfaceSyntax.Documentation, separator: OldParsedToken?)?
       if let next = remainingGroups.entries?.first {
         switch next {
         case .leaf:

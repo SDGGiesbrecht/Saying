@@ -1,9 +1,9 @@
 import SDGText
 
-struct ParsedToken: StoredLocation {
+struct OldParsedToken: StoredLocation {
 
-  static func tokenize(source: UTF8Segments) -> [ParsedToken] {
-    var parsed: [ParsedToken] = []
+  static func tokenize(source: UTF8Segments) -> [OldParsedToken] {
+    var parsed: [OldParsedToken] = []
     var remainder = source[...]
     while let index = remainder.indices.first {
       let scalar = source[index]
@@ -28,7 +28,7 @@ struct ParsedToken: StoredLocation {
         token = Token(error: scalar)
       }
       remainder = source[slice.endIndex...]
-      parsed.append(ParsedToken(token: token, location: slice))
+      parsed.append(OldParsedToken(token: token, location: slice))
     }
     return parsed
   }
@@ -37,7 +37,7 @@ struct ParsedToken: StoredLocation {
   let location: Slice<UTF8Segments>
 }
 
-extension ParsedToken: ParsedSyntaxNode {
+extension OldParsedToken: ParsedSyntaxNode {
   var children: [ParsedSyntaxNode] {
     return []
   }
@@ -46,12 +46,12 @@ extension ParsedToken: ParsedSyntaxNode {
   }
 }
 
-extension ParsedToken: ParsedSeparatedListEntry {
+extension OldParsedToken: ParsedSeparatedListEntry {
 
   static func parse(
-    source: [ParsedToken],
+    source: [OldParsedToken],
     location: Slice<UTF8Segments>
-  ) -> Result<ParsedToken, ParseError> {
+  ) -> Result<OldParsedToken, ParseError> {
     guard let token = source.first else {
       return .failure(.none(location.startIndex))
     }
@@ -62,7 +62,7 @@ extension ParsedToken: ParsedSeparatedListEntry {
   }
 }
 
-extension ParsedToken {
+extension OldParsedToken {
 
   var asColon: ParsedColon? {
     switch token.kind {

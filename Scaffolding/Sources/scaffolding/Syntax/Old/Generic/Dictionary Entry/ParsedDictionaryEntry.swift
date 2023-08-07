@@ -31,7 +31,7 @@ extension ParsedDictionaryEntry {
     let colon = source.tokens[colonIndex]
     var definitionTokens = source.tokens[colonIndex...].dropFirst()
 
-    var leadingSpace: ParsedToken?
+    var leadingSpace: OldParsedToken?
     if termTokens.last?.token.kind == .space {
       leadingSpace = termTokens.removeLast()
     }

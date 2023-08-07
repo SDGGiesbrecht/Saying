@@ -22,10 +22,10 @@ extension InterfaceSyntax.Declaration: AlternateForms {
 extension InterfaceSyntax.Declaration: ParsedSeparatedListEntry {
 
   static func parse(
-    source: [ParsedToken],
+    source: [OldParsedToken],
     location: Slice<UTF8Segments>
   ) -> Result<Self, Self.ParseError> {
-    switch ParsedSeparatedList<Deferred, ParsedToken>.parse(
+    switch ParsedSeparatedList<Deferred, OldParsedToken>.parse(
       source: source,
       location: location,
       isSeparator: { $0.token.kind == .lineBreak }

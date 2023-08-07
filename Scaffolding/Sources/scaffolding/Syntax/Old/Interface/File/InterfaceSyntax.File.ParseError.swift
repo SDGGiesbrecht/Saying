@@ -2,7 +2,7 @@ extension InterfaceSyntax.File {
 
   enum ParseError: Error {
     case brokenDeclarationList(
-      ParsedSeparatedList<InterfaceSyntax.Declaration, ParsedToken>.ParseError
+      ParsedSeparatedList<InterfaceSyntax.Declaration, OldParsedToken>.ParseError
     )
   }
 }

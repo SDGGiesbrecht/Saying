@@ -3,8 +3,8 @@ extension InterfaceSyntax {
   struct File {
 
     static func parse(source: UTF8Segments) -> Result<Self, Self.ParseError> {
-      let tokens = ParsedToken.tokenize(source: source)
-      switch ParsedSeparatedList<Declaration, ParsedToken>.parse(
+      let tokens = OldParsedToken.tokenize(source: source)
+      switch ParsedSeparatedList<Declaration, OldParsedToken>.parse(
         source: tokens,
         location: tokens.location() ?? source.emptySubSequence(at: source.startIndex),
         isSeparator: { $0.token.kind == .paragraphBreak }
@@ -16,7 +16,7 @@ extension InterfaceSyntax {
       }
     }
 
-    let declarations: ParsedSeparatedList<Declaration, ParsedToken>
+    let declarations: ParsedSeparatedList<Declaration, OldParsedToken>
   }
 }
 

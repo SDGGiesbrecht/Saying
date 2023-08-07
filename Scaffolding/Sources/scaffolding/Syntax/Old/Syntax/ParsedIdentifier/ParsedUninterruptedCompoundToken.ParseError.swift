@@ -2,8 +2,8 @@ extension ParsedUninterruptedIdentifier {
 
   enum ParseError: Error {
   case missingToken(UTF8Segments.Index)
-  case initialSpace(ParsedToken)
-  case consecutiveSpaces([ParsedToken])
-  case finalSpace(ParsedToken)
+  case initialSpace(OldParsedToken)
+  case consecutiveSpaces([OldParsedToken])
+  case finalSpace(OldParsedToken)
   }
 }

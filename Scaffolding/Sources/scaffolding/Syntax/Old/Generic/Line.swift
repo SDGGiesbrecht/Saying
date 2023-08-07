@@ -1,6 +1,6 @@
 struct Line<Content>
 where Content: ParsedSyntaxNode {
-  let lineBreak: ParsedToken
+  let lineBreak: OldParsedToken
   let content: Content
 }
 

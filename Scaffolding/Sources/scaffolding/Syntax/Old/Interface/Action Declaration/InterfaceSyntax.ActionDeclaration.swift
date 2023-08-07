@@ -4,10 +4,10 @@ import SDGText
 extension InterfaceSyntax {
 
   struct ActionDeclaration {
-    let keyword: ParsedToken
+    let keyword: OldParsedToken
     let documentation: Line<InterfaceSyntax.Documentation>?
     let deferredLines: Line<
-      ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>
+      ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, OldParsedToken>, OldParsedToken>
     >
   }
 }
@@ -37,9 +37,9 @@ extension InterfaceSyntax.ActionDeclaration: InterfaceSyntaxDeclarationProtocol 
   static let keywords = Set(keyword.values)
 
   static func parseUniqueComponents(
-    keyword: ParsedToken,
+    keyword: OldParsedToken,
     documentation: Line<InterfaceSyntax.Documentation>?,
-    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, ParsedToken>, ParsedToken>>
+    deferredLines: Line<ParsedSeparatedList<ParsedSeparatedNestingNode<Deferred, OldParsedToken>, OldParsedToken>>
   ) -> Result<InterfaceSyntax.ActionDeclaration, ParseError> {
     return .success(
       InterfaceSyntax.ActionDeclaration(

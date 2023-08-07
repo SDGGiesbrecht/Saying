@@ -41,16 +41,16 @@ extension ParsedNonEmptySeparatedList: DerivedLocation {
   }
 }
 
-extension ParsedNonEmptySeparatedList where Entry: ParsedSeparatedListEntry, Separator == ParsedToken {
+extension ParsedNonEmptySeparatedList where Entry: ParsedSeparatedListEntry, Separator == OldParsedToken {
 
   static func parse(
-    source: [ParsedToken],
+    source: [OldParsedToken],
     location: Slice<UTF8Segments>,
-    isSeparator: (ParsedToken) -> Bool
+    isSeparator: (OldParsedToken) -> Bool
   ) -> Result<Self, Self.ParseError> {
     var firstEntry: Entry? = nil
     var continuations: [ParsedSeparatedListContinuation<Entry, Separator>] = []
-    var entryBuffer: [ParsedToken] = []
+    var entryBuffer: [OldParsedToken] = []
     var separatorBuffer: Separator? = nil
     var cursor: UTF8Segments.Index = location.startIndex
     let lastToken = source.indices.last
