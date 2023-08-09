@@ -12,7 +12,7 @@ protocol ParsedSyntaxNode {
 
 extension ParsedSyntaxNode {
 
-  #error("This is temporary to allow use by deprecated nodes.")
+  #warning("This is temporary to allow use by deprecated nodes.")
   var nodeKind: ParsedSyntaxNodeKind {
     fatalError("\(Self.self) has no node kind.")
   }

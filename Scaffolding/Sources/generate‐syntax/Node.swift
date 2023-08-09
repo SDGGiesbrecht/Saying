@@ -295,7 +295,7 @@ struct Node {
         "    return .success(Parsed\(name)(location: source))",
       ].joined(separator: "\n")
     case .compound(let children):
-      #error("Not implemented yet.")
+      #warning("Not implemented yet.")
       return [
         "fatalError()",
       ].joined(separator: "\n")
@@ -326,7 +326,7 @@ struct Node {
         "case invalidScalarFor\(name)(Slice<UTF8Segments>)",
       ]
     case .compound(let children):
-      #error("Not implemented yet.")
+      #warning("Not implemented yet.")
       return []
     case .errorToken:
       return []
