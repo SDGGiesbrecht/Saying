@@ -63,7 +63,16 @@ extension Node {
               Child(name: "text", type: "UninterruptedIdentifier", kind: .required),
             ])
           ),
+        ],
+        Node.nonEmptySeparatedList(
+          name: "ParagraphList",
+          entryName: "text",
+          entryType: "ParagraphEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak"
+        ),
 
+        [
           Node(
             name: "ThingNameEntry",
             kind: .compound(children: [

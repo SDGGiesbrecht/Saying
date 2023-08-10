@@ -16,8 +16,8 @@ struct Module {
   func build() throws {
     #warning("Debugging...")
     let source: StrictString = "English: Documentation."
-    assert((try? ParsedParagraphEntry.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedParagraphEntry.fastParse(source: source)?.source() == source)
+    assert((try? ParsedParagraphList.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedParagraphList.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
