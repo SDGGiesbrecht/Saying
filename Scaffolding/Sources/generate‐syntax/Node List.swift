@@ -40,8 +40,8 @@ extension Node {
             name: "SpacedColon",
             kind: .compound(children: [
               Child(name: "leadingSpace", type: "Space", kind: .optional),
-              Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "trailingSpace", type: "Space", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .fixed),
+              Child(name: "trailingSpace", type: "Space", kind: .fixed),
             ])
           ),
         ],
@@ -75,11 +75,11 @@ extension Node {
           Node(
             name: "ThingName",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .required),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .required),
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "names", type: "ThingNameList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
 
@@ -89,6 +89,17 @@ extension Node {
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
               Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+
+          Node(
+            name: "ThingDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ThingKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "name", type: "ThingName", kind: .required),
+              Child(name: "implementationLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "implementation", type: "ThingImplementation", kind: .required),
             ])
           ),
         ],

@@ -14,10 +14,40 @@ struct Module {
   }
 
   func build() throws {
-#warning("Debugging...")
-let source: StrictString = "Swift: Bool"
-assert((try? ParsedThingImplementation.diagnosticParse(source: source).get())?.source() == source)
-assert(ParsedThingImplementation.fastParse(source: source)?.source() == source)
+    #warning("Debugging...")
+    let node = ThingDeclaration(
+      keyword: ThingKeyword(text: "thing"),
+      name: ThingName(
+        names: ThingNameList(
+          first: ThingNameEntry(
+            language: UninterruptedIdentifier(
+              first: IdentifierComponent(text: "English"),
+              continuations: []
+            ),
+            colon: SpacedColon(),
+            name: UninterruptedIdentifier(
+              first: IdentifierComponent(text: "truth"),
+              continuations: []
+            )
+          ),
+          continuations: []
+        )
+      ),
+      implementation: ThingImplementation(
+        language: UninterruptedIdentifier(
+          first: IdentifierComponent(text: "Swift"),
+          continuations: []
+        ),
+        colon: SpacedColon(),
+        type: UninterruptedIdentifier(
+          first: IdentifierComponent(text: "Bool"),
+          continuations: []
+        )
+      )
+    )
+    let source: StrictString = node.source()
+    assert((try? ParsedThingDeclaration.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedThingDeclaration.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
