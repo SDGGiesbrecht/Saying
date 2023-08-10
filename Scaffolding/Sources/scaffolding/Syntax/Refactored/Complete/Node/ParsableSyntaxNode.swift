@@ -2,26 +2,49 @@ import SDGText
 
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
   associatedtype ParseError: Error
-  static func parse(source: Slice<UTF8Segments>) -> Result<Self, ErrorList<ParseError>>
+  static func diagnosticParseNext(in remainder: Slice<UTF8Segments>) -> Result<Self, ErrorList<ParseError>>
+  static func fastParseNext(in remainder: Slice<UTF8Segments>) -> Self?
 }
 
 extension ParsableSyntaxNode {
 
-  static func parse(source: UTF8Segments) -> Result<Self, ErrorList<ParseError>> {
-    return parse(source: source[...])
+  static func diagnosticParse(source: UTF8Segments) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
+    var remainder = source[...]
+    switch diagnosticParseNext(in: remainder) {
+    case .failure(let errors):
+      return .failure(errors.map({ .brokenNode($0) }))
+    case .success(let parsed):
+      remainder = remainder[parsed.location.endIndex...]
+      guard remainder.isEmpty else {
+        return .failure([.extraneousText(remainder)])
+      }
+      return .success(parsed)
+    }
   }
-  static func parse(source: StrictString) -> Result<Self, ErrorList<ParseError>> {
-    return parse(source: UTF8Segments(source))
+  static func diagnosticParse(source: StrictString) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
+    return diagnosticParse(source: UTF8Segments(source))
   }
 
-  init?(source: Slice<UTF8Segments>) {
-    guard let result = try? Self.parse(source: source).get() else {
+  static func fastParse(source: UTF8Segments) -> Self? {
+    var remainder = source[...]
+    guard let parsed = fastParseNext(in: remainder) else {
       return nil
     }
-    self = result
+    remainder = remainder[parsed.location.endIndex...]
+    guard remainder.isEmpty else {
+      return nil
+    }
+    return parsed
   }
+  static func fastParse(source: StrictString) -> Self? {
+    return fastParse(source: UTF8Segments(source))
+  }
+
   init?(source: UTF8Segments) {
-    self.init(source: source[...])
+    guard let parsed = Self.fastParse(source: source) else {
+      return nil
+    }
+    self = parsed
   }
   init?(source: StrictString) {
     self.init(source: UTF8Segments(source))

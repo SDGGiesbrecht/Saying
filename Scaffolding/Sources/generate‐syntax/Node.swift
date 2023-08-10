@@ -16,6 +16,7 @@ struct Node {
 
   static func source() -> StrictString {
     var result: [StrictString] = [
+      "import SDGLogic",
       "import SDGCollections",
       "",
     ]
@@ -261,38 +262,75 @@ struct Node {
     }
     result.append(contentsOf: [
       "",
-      "  static func parse(source: Slice<UTF8Segments>) -> Result<Parsed\(name), ErrorList<ParseError>> {",
-      parseImplementation(),
+      "  static func diagnosticParseNext(",
+      "    in remainder: Slice<UTF8Segments>",
+      "  ) -> Result<Parsed\(name), ErrorList<ParseError>> {",
+      diagnosticParseImplementation(),
+      "  }",
+      "",
+      "  static func fastParseNext(in remainder: Slice<UTF8Segments>) -> Parsed\(name)? {",
+      fastParseImplementation(),
       "  }",
       "}",
     ])
     return result.joined(separator: "\n")
   }
 
-  func parseImplementation() -> StrictString {
+  func diagnosticParseImplementation() -> StrictString {
     switch kind {
     case .fixedLeaf(let scalar):
       return [
-        "    guard let first = source.first,",
-        "      source.dropFirst().isEmpty,",
+        "    guard let first = remainder.first,",
         "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
-        "        return .failure([.notA\(name)(source)])",
+        "        return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(Parsed\(name)(location: source))",
+        "    return .success(Parsed\(name)(location: remainder.prefix(1)))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
-        "    let errors: [ParseError] = source.indices.compactMap { index in",
-        "      if source[index] ∉ allowed {",
-        "        return .invalidScalarFor\(name)(source[index...].prefix(1))",
-        "      } else {",
+        "    var cursor = remainder.startIndex",
+        "    while let nextIndex = remainder[cursor...].indices.first,",
+        "      remainder[nextIndex] ∈ allowed {",
+        "        cursor = remainder.index(after: cursor)",
+        "    }",
+        "    let range = remainder.startIndex..<cursor",
+        "    guard ¬range.isEmpty else {",
+        "      return .failure([.notA\(name)(remainder.prefix(1))])",
+        "    }",
+        "    return .success(Parsed\(name)(location: remainder[range]))",
+      ].joined(separator: "\n")
+    case .compound(let children):
+      #warning("Not implemented yet.")
+      return [
+        "fatalError()",
+      ].joined(separator: "\n")
+    case .errorToken:
+      return ""
+    }
+  }
+
+  func fastParseImplementation() -> StrictString {
+    switch kind {
+    case .fixedLeaf(let scalar):
+      return [
+        "    guard let first = remainder.first,",
+        "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
         "        return nil",
-        "      }",
         "    }",
-        "    guard errors.isEmpty else {",
-        "      return .failure(ErrorList(errors))",
+        "    return Parsed\(name)(location: remainder.prefix(1))",
+      ].joined(separator: "\n")
+    case .variableLeaf:
+      return [
+        "    var cursor = remainder.startIndex",
+        "    while let nextIndex = remainder[cursor...].indices.first,",
+        "      remainder[nextIndex] ∈ allowed {",
+        "        cursor = remainder.index(after: cursor)",
         "    }",
-        "    return .success(Parsed\(name)(location: source))",
+        "    let range = remainder.startIndex..<cursor",
+        "    guard ¬range.isEmpty else {",
+        "      return nil",
+        "    }",
+        "    return Parsed\(name)(location: remainder[range])",
       ].joined(separator: "\n")
     case .compound(let children):
       #warning("Not implemented yet.")
@@ -317,13 +355,9 @@ struct Node {
 
   func parseErrorCases() -> [StrictString] {
     switch kind {
-    case .fixedLeaf:
+    case .fixedLeaf, .variableLeaf:
       return [
         "case notA\(name)(Slice<UTF8Segments>)"
-      ]
-    case .variableLeaf:
-      return [
-        "case invalidScalarFor\(name)(Slice<UTF8Segments>)",
       ]
     case .compound(let children):
       #warning("Not implemented yet.")
