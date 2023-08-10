@@ -51,6 +51,17 @@ extension Node {
           separatorType: "Space",
           isIdentifierSegment: true
         ),
+
+        [
+          Node(
+            name: "ThingNameEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          )
+        ],
       ] as [[Node]]
     ).joined()
   )
