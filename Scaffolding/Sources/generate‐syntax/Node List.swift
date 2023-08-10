@@ -56,6 +56,15 @@ extension Node {
 
         [
           Node(
+            name: "ParagraphEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "text", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+
+          Node(
             name: "ThingNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
