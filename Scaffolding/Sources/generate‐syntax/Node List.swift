@@ -69,6 +69,18 @@ extension Node {
           separatorName: "lineBreak",
           separatorType: "LineBreak"
         ),
+        [
+          Node(
+            name: "ThingName",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .required),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .required),
+              Child(name: "names", type: "ThingNameList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .required),
+            ])
+          )
+        ],
       ] as [[Node]]
     ).joined()
   )
