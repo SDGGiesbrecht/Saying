@@ -14,7 +14,7 @@ struct Module {
   }
 
   func build() throws {
-    #warning("Debugging...")
+    #error("Debugging...")
     let node = ThingDeclaration(
       keyword: ThingKeyword(text: "thing"),
       name: ThingName(
