@@ -16,7 +16,7 @@ extension ParsedSyntaxNode {
   var nodeKind: ParsedSyntaxNodeKind {
     fatalError("\(Self.self) has no node kind.")
   }
-  
+
   func source() -> StrictString {
     return StrictString(location)
   }

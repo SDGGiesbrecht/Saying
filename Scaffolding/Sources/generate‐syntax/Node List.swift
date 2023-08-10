@@ -1,41 +1,71 @@
+import SDGText
+
 extension Node {
 
-  static let nodes: [Node] = [
-    Node(name: "ParagraphBreak", kind: .fixedLeaf("\u{2029}")),
-    Node(name: "LineBreak", kind: .fixedLeaf("\u{2028}")),
-    Node(name: "OpeningParenthesis", kind: .fixedLeaf("(")),
-    Node(name: "ClosingParenthesis", kind: .fixedLeaf(")")),
-    Node(name: "OpeningBracket", kind: .fixedLeaf("[")),
-    Node(name: "ClosingBracket", kind: .fixedLeaf("]")),
-    Node(name: "OpeningQuotationMark", kind: .fixedLeaf("“")),
-    Node(name: "ClosingQuotationMark", kind: .fixedLeaf("”")),
-    Node(name: "Colon", kind: .fixedLeaf(":")),
-    Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
-    Node(name: "Space", kind: .fixedLeaf(" ")),
-    Node(
-      name: "IdentifierComponent",
-      kind: .variableLeaf(allowed: {
-        var values: [UInt32] = []
-        values.append(0x2E) // .
-        values.append(contentsOf: 0x30...0x39) // 0–9
-        values.append(contentsOf: 0x41...0x5A) // A–Z
-        values.append(contentsOf: 0x61...0x7A) // a–z
-        values.append(contentsOf: 0x300...0x302) // ◌̀–◌̂
-        values.append(0x308) // “◌̈”
-        values.append(0x327) // “◌̧”
-        values.append(contentsOf: 0x3B1...0x3C9) // α–ω
-        values.append(contentsOf: 0x5D0...0x5EA) // א–ת
-        return Set(values.lazy.map({ Unicode.Scalar($0)! }))
-      }())
-    ),
+  static let nodes: [Node] = Array(
+    (
+      [
+        [
+          Node(name: "ParagraphBreak", kind: .fixedLeaf("\u{2029}")),
+          Node(name: "LineBreak", kind: .fixedLeaf("\u{2028}")),
+          Node(name: "OpeningParenthesis", kind: .fixedLeaf("(")),
+          Node(name: "ClosingParenthesis", kind: .fixedLeaf(")")),
+          Node(name: "OpeningBracket", kind: .fixedLeaf("[")),
+          Node(name: "ClosingBracket", kind: .fixedLeaf("]")),
+          Node(name: "OpeningQuotationMark", kind: .fixedLeaf("“")),
+          Node(name: "ClosingQuotationMark", kind: .fixedLeaf("”")),
+          Node(name: "Colon", kind: .fixedLeaf(":")),
+          Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
+          Node(name: "Space", kind: .fixedLeaf(" ")),
+          Node(
+            name: "IdentifierComponent",
+            kind: .variableLeaf(allowed: {
+              var values: [UInt32] = []
+              values.append(0x2E) // .
+              values.append(contentsOf: 0x30...0x39) // 0–9
+              values.append(contentsOf: 0x41...0x5A) // A–Z
+              values.append(contentsOf: 0x61...0x7A) // a–z
+              values.append(contentsOf: 0x300...0x302) // ◌̀–◌̂
+              values.append(0x308) // “◌̈”
+              values.append(0x327) // “◌̧”
+              values.append(contentsOf: 0x3B1...0x3C9) // α–ω
+              values.append(contentsOf: 0x5D0...0x5EA) // א–ת
+              return Set(values.lazy.map({ Unicode.Scalar($0)! }))
+            }())
+          ),
 
-    Node(
-      name: "SpacedColon",
-      kind: .compound(children: [
-        Child(name: "leadingSpace", type: "Space", kind: .optional),
-        Child(name: "colon", type: "Colon", kind: .required),
-        Child(name: "trailingSpace", type: "Space", kind: .required),
-      ])
-    ),
-  ]
+          Node(
+            name: "SpacedColon",
+            kind: .compound(children: [
+              Child(name: "leadingSpace", type: "Space", kind: .optional),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "trailingSpace", type: "Space", kind: .required),
+            ])
+          ),
+        ],
+        Node.nonEmptySeparatedList(
+          name: "UninterruptedIdentifier",
+          entryName: "component",
+          entryType: "IdentifierComponent",
+          separatorName: "space",
+          separatorType: "Space"
+        ),
+      ] as [[Node]]
+    ).joined()
+  )
+
+  static func nonEmptySeparatedList(
+    name: StrictString,
+    entryName: StrictString,
+    entryType: StrictString,
+    separatorName: StrictString,
+    separatorType: StrictString
+  ) -> [Node] {
+    return [
+      Node(name: "\(name)Continuation", kind: .compound(children: [
+        Child(name: separatorName, type: separatorType, kind: .required),
+        Child(name: entryName, type: entryType, kind: .required),
+      ]))
+    ]
+  }
 }
