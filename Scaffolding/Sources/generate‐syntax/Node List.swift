@@ -19,6 +19,8 @@ extension Node {
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
+          Node(name: "TestKeyword", kind: .keyword(["test", "Test", /* test */ "δοκιμή", "בדיקה"])),
+          Node(name: "ParameterKeyword", kind: .keyword(["parameter", "Übergabewert", "paramètre", "παράμετρος", "פרמטר"])),
           Node(
             name: "IdentifierComponent",
             kind: .variableLeaf(allowed: {
@@ -80,6 +82,27 @@ extension Node {
               Child(name: "paragraphs", type: "ParagraphList", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+            ])
+          ),
+
+          Node(
+            name: "ParameterDetails",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "paragraph", type: "Paragraph", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ParameterDocumentation",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ParameterKeyword", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "details", type: "ParameterDetails", kind: .required),
             ])
           ),
 

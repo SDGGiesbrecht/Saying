@@ -15,9 +15,35 @@ struct Module {
 
   func build() throws {
     #warning("Debugging...")
-    let source: StrictString = "[\u{2028}English: Documentation.\u{2028}]"
-    assert((try? ParsedParagraph.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedParagraph.fastParse(source: source)?.source() == source)
+    let node = ParameterDocumentation(
+      keyword: ParameterKeyword(text: "paramètre"),
+      colon: SpacedColon(),
+      name: UninterruptedIdentifier(
+        first: IdentifierComponent(text: "name"),
+        continuations: []
+      ),
+      details: ParameterDetails(
+        paragraph: Paragraph(
+          paragraphs: ParagraphList(
+            first: ParagraphEntry(
+              language: UninterruptedIdentifier(
+                first: IdentifierComponent(text: "English"),
+                continuations: []
+              ),
+              colon: SpacedColon(),
+              text: UninterruptedIdentifier(
+                first: IdentifierComponent(text: "Documentation."),
+                continuations: []
+              )
+            ),
+            continuations: []
+          )
+        )
+      )
+    )
+    let source: StrictString = "paramètre: name\u{2028}(\u{2028}[\u{2028}English: Documentation.\u{2028}]\u{2028})"
+    assert((try? ParsedParameterDocumentation.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedParameterDocumentation.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
