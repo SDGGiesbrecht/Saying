@@ -300,10 +300,58 @@ struct Node {
         "    return .success(Parsed\(name)(location: remainder[range]))",
       ].joined(separator: "\n")
     case .compound(let children):
-      #warning("Not implemented yet.")
-      return [
-        "fatalError()",
-      ].joined(separator: "\n")
+      var result: [StrictString] = [
+        "    var remainder = remainder",
+        "    var errors: [ParseError] = []",
+      ]
+      for child in children {
+        result.append(contentsOf: [
+          "    let \(child.name) = Parsed\(child.type).diagnosticParseNext(in: remainder)",
+          "    switch \(child.name) {",
+        ])
+        switch child .kind {
+        case .fixed, .required:
+          result.append(contentsOf: [
+            "    case .failure(let error):",
+            "      errors.append(contentsOf: error.errors.map({ .broken\(child.uppercasedName)($0) }))",
+          ])
+        case .optional:
+          result.append(contentsOf: [
+            "    case .failure:",
+            "      break",
+          ])
+        }
+        result.append(contentsOf: [
+          "    case .success(let parsed):",
+          "      remainder = remainder[parsed.location.endIndex...]",
+          "    }",
+        ])
+      }
+      result.append(contentsOf: [
+        "    guard errors.isEmpty else {",
+        "      return .failure(ErrorList(errors))",
+        "    }",
+        "    return .success(",
+        "      Parsed\(name)(",
+      ])
+      for childIndex in children.indices {
+        let child = children[childIndex]
+        switch child.kind {
+        case .fixed, .required:
+          result.append(contentsOf: [
+            "        \(child.name): (try? \(child.name).get())!\(childIndex == children.indices.last ? "" : ",")",
+          ])
+        case .optional:
+          result.append(contentsOf: [
+            "        \(child.name): try? \(child.name).get()\(childIndex == children.indices.last ? "" : ",")",
+          ])
+        }
+      }
+      result.append(contentsOf: [
+        "      )",
+        "    )",
+      ])
+      return result.joined(separator: "\n")
     case .errorToken:
       return ""
     }
@@ -333,10 +381,51 @@ struct Node {
         "    return Parsed\(name)(location: remainder[range])",
       ].joined(separator: "\n")
     case .compound(let children):
-      #warning("Not implemented yet.")
-      return [
-        "fatalError()",
-      ].joined(separator: "\n")
+      var result: [StrictString] = [
+        "    var remainder = remainder",
+      ]
+      for child in children {
+        result.append(contentsOf: [
+          "    let \(child.name) = Parsed\(child.type).fastParseNext(in: remainder)",
+          "    switch \(child.name) {",
+          "    case .none:",
+        ])
+        switch child .kind {
+        case .fixed, .required:
+          result.append(contentsOf: [
+            "      return nil",
+          ])
+        case .optional:
+          result.append(contentsOf: [
+            "      break",
+          ])
+        }
+        result.append(contentsOf: [
+          "    case .some(let parsed):",
+          "      remainder = remainder[parsed.location.endIndex...]",
+          "    }",
+        ])
+      }
+      result.append(contentsOf: [
+        "    return Parsed\(name)(",
+      ])
+      for childIndex in children.indices {
+        let child = children[childIndex]
+        switch child.kind {
+        case .fixed, .required:
+          result.append(contentsOf: [
+            "      \(child.name): \(child.name)!\(childIndex == children.indices.last ? "" : ",")",
+          ])
+        case .optional:
+          result.append(contentsOf: [
+            "      \(child.name): \(child.name)\(childIndex == children.indices.last ? "" : ",")",
+          ])
+        }
+      }
+      result.append(contentsOf: [
+        "    )",
+      ])
+      return result.joined(separator: "\n")
     case .errorToken:
       return ""
     }
@@ -360,8 +449,14 @@ struct Node {
         "case notA\(name)(Slice<UTF8Segments>)"
       ]
     case .compound(let children):
-      #warning("Not implemented yet.")
-      return []
+      return children.compactMap { child in
+        switch child.kind {
+        case .fixed, .required:
+          return "case broken\(child.uppercasedName)(Parsed\(child.type).ParseError)"
+        case .optional:
+          return nil
+        }
+      }
     case .errorToken:
       return []
     }
