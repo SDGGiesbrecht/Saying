@@ -5,6 +5,7 @@ struct Node {
 
   let name: StrictString
   let kind: Kind
+  var isIdentifierSegment = false
 
   var lowercasedName: StrictString {
     var result = name
@@ -21,6 +22,8 @@ struct Node {
       nodeKind(parsed: true),
       leafKind(parsed: false),
       leafKind(parsed: true),
+      identifierSegmentKind(parsed: false),
+      identifierSegmentKind(parsed: true),
     ])
     return result.joined(separator: "\n\n")
   }
@@ -44,6 +47,12 @@ struct Node {
     if let leaf = syntaxLeafConformance(parsed: true) {
       result.append(leaf)
     }
+    if let identifier = identifierSegmentConformance(parsed: false) {
+      result.append(identifier)
+    }
+    if let identifier = identifierSegmentConformance(parsed: true) {
+      result.append(identifier)
+    }
     return result.joined(separator: "\n\n")
   }
 
@@ -66,7 +75,7 @@ struct Node {
 
   func childrenProperties(parsed: Bool) -> [StrictString] {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return []
     case .compound(let children):
       return children.map { child in
@@ -85,6 +94,8 @@ struct Node {
           return "  \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)"
         case .optional:
           return "  \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
+        case .array:
+          return "  \(parsed ? "let" : "var") \(child.name): [\(parsed ? "Parsed" : "")\(child.type)]"
         }
       }
     }
@@ -95,7 +106,7 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf, .compound, .errorToken:
+      case .fixedLeaf, .compound:
         return nil
       case .variableLeaf:
         return "  let text: StrictString"
@@ -108,7 +119,7 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf, .variableLeaf, .errorToken:
+      case .fixedLeaf, .variableLeaf:
         return "  let location: Slice<UTF8Segments>"
       case .compound(let children):
         if children.guaranteedNonEmpty {
@@ -164,7 +175,7 @@ struct Node {
 
   func childrenImplementation(parsed: Bool) -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return "    return []"
     case .compound(let children):
       var result: [StrictString] = [
@@ -180,6 +191,8 @@ struct Node {
             "      result.append(\(child.name))",
             "    }",
           ])
+        case .array:
+          result.append("    result.append(contentsOf: \(child.name))")
         }
       }
       result.append(contentsOf: [
@@ -191,7 +204,7 @@ struct Node {
 
   func contextImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return "    return location.base"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -204,7 +217,7 @@ struct Node {
   
   func startIndexImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return "    return location.startIndex"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -217,7 +230,7 @@ struct Node {
   
   func endIndexImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return "    return location.endIndex"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -230,7 +243,7 @@ struct Node {
 
   func locationImplementation() -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return nil
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -293,27 +306,40 @@ struct Node {
         "    var errors: [ParseError] = []",
       ]
       for child in children {
-        result.append(contentsOf: [
-          "    let \(child.name) = Parsed\(child.type).diagnosticParseNext(in: remainder)",
-          "    switch \(child.name) {",
-        ])
-        switch child .kind {
-        case .fixed, .required:
+        switch child.kind {
+        case .fixed, .required, .optional:
           result.append(contentsOf: [
-            "    case .failure(let error):",
-            "      errors.append(contentsOf: error.errors.map({ .broken\(child.uppercasedName)($0) }))",
+            "    let \(child.name) = Parsed\(child.type).diagnosticParseNext(in: remainder)",
+            "    switch \(child.name) {",
           ])
-        case .optional:
+          switch child.kind {
+          case .fixed, .required:
+            result.append(contentsOf: [
+              "    case .failure(let error):",
+              "      errors.append(contentsOf: error.errors.map({ .broken\(child.uppercasedName)($0) }))",
+            ])
+          case .optional:
+            result.append(contentsOf: [
+              "    case .failure:",
+              "      break",
+            ])
+          case .array:
+            break
+          }
           result.append(contentsOf: [
-            "    case .failure:",
-            "      break",
+            "    case .success(let parsed):",
+            "      remainder = remainder[parsed.location.endIndex...]",
+            "    }",
+          ])
+        case .array:
+          result.append(contentsOf: [
+            "    var \(child.name): [Parsed\(child.type)] = []",
+            "    while let parsed = try? Parsed\(child.type).diagnosticParseNext(in: remainder).get() {",
+            "      \(child.name).append(parsed)",
+            "      remainder = remainder[parsed.location.endIndex...]",
+            "    }",
           ])
         }
-        result.append(contentsOf: [
-          "    case .success(let parsed):",
-          "      remainder = remainder[parsed.location.endIndex...]",
-          "    }",
-        ])
       }
       result.append(contentsOf: [
         "    guard errors.isEmpty else {",
@@ -333,6 +359,10 @@ struct Node {
           result.append(contentsOf: [
             "        \(child.name): try? \(child.name).get()\(childIndex == children.indices.last ? "" : ",")",
           ])
+        case .array:
+          result.append(contentsOf: [
+            "        \(child.name): \(child.name)\(childIndex == children.indices.last ? "" : ",")",
+          ])
         }
       }
       result.append(contentsOf: [
@@ -340,8 +370,6 @@ struct Node {
         "    )",
       ])
       return result.joined(separator: "\n")
-    case .errorToken:
-      return ""
     }
   }
 
@@ -373,26 +401,39 @@ struct Node {
         "    var remainder = remainder",
       ]
       for child in children {
-        result.append(contentsOf: [
-          "    let \(child.name) = Parsed\(child.type).fastParseNext(in: remainder)",
-          "    switch \(child.name) {",
-          "    case .none:",
-        ])
-        switch child .kind {
-        case .fixed, .required:
+        switch child.kind {
+        case .fixed, .required, .optional:
           result.append(contentsOf: [
-            "      return nil",
+            "    let \(child.name) = Parsed\(child.type).fastParseNext(in: remainder)",
+            "    switch \(child.name) {",
+            "    case .none:",
           ])
-        case .optional:
+          switch child.kind {
+          case .fixed, .required:
+            result.append(contentsOf: [
+              "      return nil",
+            ])
+          case .optional:
+            result.append(contentsOf: [
+              "      break",
+            ])
+          case .array:
+            break
+          }
           result.append(contentsOf: [
-            "      break",
+            "    case .some(let parsed):",
+            "      remainder = remainder[parsed.location.endIndex...]",
+            "    }",
+          ])
+        case .array:
+          result.append(contentsOf: [
+            "    var \(child.name): [Parsed\(child.type)] = []",
+            "    while let parsed = Parsed\(child.type).fastParseNext(in: remainder) {",
+            "      \(child.name).append(parsed)",
+            "      remainder = remainder[parsed.location.endIndex...]",
+            "    }",
           ])
         }
-        result.append(contentsOf: [
-          "    case .some(let parsed):",
-          "      remainder = remainder[parsed.location.endIndex...]",
-          "    }",
-        ])
       }
       result.append(contentsOf: [
         "    return Parsed\(name)(",
@@ -404,7 +445,7 @@ struct Node {
           result.append(contentsOf: [
             "      \(child.name): \(child.name)!\(childIndex == children.indices.last ? "" : ",")",
           ])
-        case .optional:
+        case .optional, .array:
           result.append(contentsOf: [
             "      \(child.name): \(child.name)\(childIndex == children.indices.last ? "" : ",")",
           ])
@@ -414,8 +455,6 @@ struct Node {
         "    )",
       ])
       return result.joined(separator: "\n")
-    case .errorToken:
-      return ""
     }
   }
 
@@ -441,18 +480,16 @@ struct Node {
         switch child.kind {
         case .fixed, .required:
           return "case broken\(child.uppercasedName)(Parsed\(child.type).ParseError)"
-        case .optional:
+        case .optional, .array:
           return nil
         }
       }
-    case .errorToken:
-      return []
     }
   }
 
   func allowedDefinition() -> StrictString? {
     switch kind {
-    case .fixedLeaf, .compound, .errorToken:
+    case .fixedLeaf, .compound:
       return nil
     case .variableLeaf(let allowed):
       var result: [StrictString] = [
@@ -486,7 +523,7 @@ struct Node {
         "}",
       ])
       return result.joined(separator: "\n")
-    case .compound, .errorToken:
+    case .compound:
       return nil
     }
   }
@@ -502,9 +539,24 @@ struct Node {
           "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
           "  }",
         ].joined(separator: "\n")
-      case .variableLeaf, .compound, .errorToken:
+      case .variableLeaf, .compound:
         return nil
       }
+    }
+  }
+
+  func identifierSegmentConformance(parsed: Bool) -> StrictString? {
+    if isIdentifierSegment {
+      return [
+        "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")IdentifierSegment {",
+        "",
+        "  var identifierSegmentKind: \(parsed ? "Parsed" : "")IdentifierSegmentKind {",
+        "    return .\(lowercasedName)(self)",
+        "  }",
+        "}",
+      ].joined(separator: "\n")
+    } else {
+      return nil
     }
   }
 
@@ -538,7 +590,26 @@ struct Node {
     switch kind {
     case .variableLeaf, .fixedLeaf:
       return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
-    case .compound, .errorToken:
+    case .compound:
+      return nil
+    }
+  }
+
+  static func identifierSegmentKind(parsed: Bool) -> StrictString {
+    var result: [StrictString] = [
+      "enum \(parsed ? "Parsed" : "")IdentifierSegmentKind {",
+    ]
+    result.append(contentsOf: nodes.lazy.compactMap({ $0.identifierSegmentKindCase(parsed: parsed) }))
+    result.append(contentsOf: [
+      "}",
+    ])
+    return result.joined(separator: "\n")
+  }
+
+  func identifierSegmentKindCase(parsed: Bool) -> StrictString? {
+    if isIdentifierSegment {
+      return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
+    } else {
       return nil
     }
   }
@@ -561,7 +632,7 @@ struct Node {
 
   func borderChild(parsed: Bool, last: Bool) -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
+    case .fixedLeaf, .variableLeaf:
       return nil
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -574,6 +645,8 @@ struct Node {
             break accumulator
           case .optional:
             resolution.append("\(child.name) ??")
+          case .array:
+            resolution.append("\(child.name).\(last ? "last" : "first") ??")
           }
         }
         return [

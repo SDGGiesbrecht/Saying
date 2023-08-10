@@ -4,6 +4,7 @@ extension Node.Child {
     case fixed
     case required
     case optional
+    case array
   }
 }
 
@@ -13,7 +14,7 @@ extension Node.Child.Kind {
     switch self {
     case .fixed, .required:
       return true
-    case .optional:
+    case .optional, .array:
       return false
     }
   }

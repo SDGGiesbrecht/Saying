@@ -29,7 +29,7 @@ assert(ParsedUninterruptedIdentifierContinuation.fastParse(source: source)?.sour
           switch declaration {
           case .thing(let thing):
             let names = thing.name.names.combinedEntries
-              .map({ $0.definition.text })
+              .map({ $0.definition.identifierText() })
               .joined(separator: ", ")
             let source = thing.deferredLines.content.combinedEntries
               .map({ $0.source() })

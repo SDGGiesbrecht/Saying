@@ -48,7 +48,8 @@ extension Node {
           entryName: "component",
           entryType: "IdentifierComponent",
           separatorName: "space",
-          separatorType: "Space"
+          separatorType: "Space",
+          isIdentifierSegment: true
         ),
       ] as [[Node]]
     ).joined()
@@ -59,13 +60,22 @@ extension Node {
     entryName: StrictString,
     entryType: StrictString,
     separatorName: StrictString,
-    separatorType: StrictString
+    separatorType: StrictString,
+    isIdentifierSegment: Bool
   ) -> [Node] {
     return [
       Node(name: "\(name)Continuation", kind: .compound(children: [
         Child(name: separatorName, type: separatorType, kind: .required),
         Child(name: entryName, type: entryType, kind: .required),
-      ]))
+      ])),
+      Node(
+        name: name,
+        kind: .compound(children: [
+          Child(name: "first", type: entryType, kind: .required),
+          Child(name: "continuations", type: "\(name)Continuation", kind: .array),
+        ]),
+        isIdentifierSegment: isIdentifierSegment
+      ),
     ]
   }
 }
