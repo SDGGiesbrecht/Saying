@@ -71,8 +71,18 @@ extension Node {
           separatorName: "lineBreak",
           separatorType: "LineBreak"
         ),
-
         [
+          Node(
+            name: "Paragraph",
+            kind: .compound(children: [
+              Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "paragraphs", type: "ParagraphList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+            ])
+          ),
+
           Node(
             name: "ThingNameEntry",
             kind: .compound(children: [
