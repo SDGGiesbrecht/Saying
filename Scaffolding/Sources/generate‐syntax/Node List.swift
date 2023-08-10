@@ -62,6 +62,13 @@ extension Node {
             ])
           )
         ],
+        Node.nonEmptySeparatedList(
+          name: "ThingNameList",
+          entryName: "name",
+          entryType: "ThingNameEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak"
+        ),
       ] as [[Node]]
     ).joined()
   )
@@ -72,7 +79,7 @@ extension Node {
     entryType: StrictString,
     separatorName: StrictString,
     separatorType: StrictString,
-    isIdentifierSegment: Bool
+    isIdentifierSegment: Bool = false
   ) -> [Node] {
     return [
       Node(name: "\(name)Continuation", kind: .compound(children: [
