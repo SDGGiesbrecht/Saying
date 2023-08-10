@@ -81,7 +81,16 @@ extension Node {
               Child(name: "closingLineBreak", type: "LineBreak", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .required),
             ])
-          )
+          ),
+
+          Node(
+            name: "ThingImplementation",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
         ],
       ] as [[Node]]
     ).joined()
