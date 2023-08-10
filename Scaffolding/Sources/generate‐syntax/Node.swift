@@ -75,7 +75,7 @@ struct Node {
 
   func childrenProperties(parsed: Bool) -> [StrictString] {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return []
     case .compound(let children):
       return children.map { child in
@@ -108,7 +108,7 @@ struct Node {
       switch kind {
       case .fixedLeaf, .compound:
         return nil
-      case .variableLeaf:
+      case .keyword, .variableLeaf:
         return "  let text: StrictString"
       }
     }
@@ -119,7 +119,7 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf, .variableLeaf:
+      case .fixedLeaf, .keyword, .variableLeaf:
         return "  let location: Slice<UTF8Segments>"
       case .compound(let children):
         if children.guaranteedNonEmpty {
@@ -175,7 +175,7 @@ struct Node {
 
   func childrenImplementation(parsed: Bool) -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return "    return []"
     case .compound(let children):
       var result: [StrictString] = [
@@ -204,7 +204,7 @@ struct Node {
 
   func contextImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return "    return location.base"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -217,7 +217,7 @@ struct Node {
   
   func startIndexImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return "    return location.startIndex"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -230,7 +230,7 @@ struct Node {
   
   func endIndexImplementation() -> StrictString {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return "    return location.endIndex"
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -243,7 +243,7 @@ struct Node {
 
   func locationImplementation() -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return nil
     case .compound(let children):
       if children.guaranteedNonEmpty {
@@ -286,6 +286,19 @@ struct Node {
         "        return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
         "    return .success(Parsed\(name)(location: remainder.prefix(1)))",
+      ].joined(separator: "\n")
+    case .keyword:
+      return [
+        "    var cursor = remainder.startIndex",
+        "    while let nextIndex = remainder[cursor...].indices.first,",
+        "      remainder[nextIndex] ∈ ParsedIdentifierComponent.allowed {",
+        "        cursor = remainder.index(after: cursor)",
+        "    }",
+        "    let slice = remainder[remainder.startIndex..<cursor]",
+        "    guard StrictString(slice) ∈ allowed else {",
+        "      return .failure([.notA\(name)(slice)])",
+        "    }",
+        "    return .success(Parsed\(name)(location: slice))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
@@ -383,6 +396,19 @@ struct Node {
         "    }",
         "    return Parsed\(name)(location: remainder.prefix(1))",
       ].joined(separator: "\n")
+    case .keyword:
+      return [
+        "    var cursor = remainder.startIndex",
+        "    while let nextIndex = remainder[cursor...].indices.first,",
+        "      remainder[nextIndex] ∈ ParsedIdentifierComponent.allowed {",
+        "        cursor = remainder.index(after: cursor)",
+        "    }",
+        "    let slice = remainder[remainder.startIndex..<cursor]",
+        "    guard StrictString(slice) ∈ allowed else {",
+        "      return nil",
+        "    }",
+        "    return Parsed\(name)(location: slice)",
+      ].joined(separator: "\n")
     case .variableLeaf:
       return [
         "    var cursor = remainder.startIndex",
@@ -471,7 +497,7 @@ struct Node {
 
   func parseErrorCases() -> [StrictString] {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return [
         "case notA\(name)(Slice<UTF8Segments>)"
       ]
@@ -491,6 +517,18 @@ struct Node {
     switch kind {
     case .fixedLeaf, .compound:
       return nil
+    case .keyword(let allowed):
+      var result: [StrictString] = [
+        "",
+        "  static let allowed: Set<StrictString> = [",
+      ]
+      for keyword in allowed.sorted() {
+        result.append("    \u{22}\(keyword)\u{22},")
+      }
+      result.append(contentsOf: [
+        "  ]",
+      ])
+      return result.joined(separator: "\n")
     case .variableLeaf(let allowed):
       var result: [StrictString] = [
         "",
@@ -508,7 +546,7 @@ struct Node {
 
   func syntaxLeafConformance(parsed: Bool) -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       var result: [StrictString] = [
         "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxLeaf {",
         "",
@@ -539,7 +577,7 @@ struct Node {
           "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
           "  }",
         ].joined(separator: "\n")
-      case .variableLeaf, .compound:
+      case .keyword, .variableLeaf, .compound:
         return nil
       }
     }
@@ -588,7 +626,7 @@ struct Node {
 
   func leafKindCase(parsed: Bool) -> StrictString? {
     switch kind {
-    case .variableLeaf, .fixedLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
     case .compound:
       return nil
@@ -632,7 +670,7 @@ struct Node {
 
   func borderChild(parsed: Bool, last: Bool) -> StrictString? {
     switch kind {
-    case .fixedLeaf, .variableLeaf:
+    case .fixedLeaf, .keyword, .variableLeaf:
       return nil
     case .compound(let children):
       if children.guaranteedNonEmpty {
