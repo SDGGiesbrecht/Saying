@@ -5,7 +5,6 @@ struct Node {
 
   let name: StrictString
   let kind: Kind
-  let graph: Set<Graph>
 
   var lowercasedName: StrictString {
     var result = name
@@ -15,18 +14,13 @@ struct Node {
   }
 
   static func source() -> StrictString {
-    var result: [StrictString] = [
-      "import SDGLogic",
-      "import SDGCollections",
-      "",
-    ]
+    var result: [StrictString] = []
     result.append(contentsOf: nodes.lazy.map({ $0.source() }))
     result.append(contentsOf: [
       nodeKind(parsed: false),
       nodeKind(parsed: true),
       leafKind(parsed: false),
       leafKind(parsed: true),
-      tokenKind(),
     ])
     return result.joined(separator: "\n\n")
   }
@@ -36,25 +30,19 @@ struct Node {
       declarationSource(parsed: false),
       declarationSource(parsed: true),
     ]
-    if graph.contains(.complete) {
-      result.append(contentsOf: [
-        syntaxNodeConformance(parsed: false),
-        syntaxNodeConformance(parsed: true),
-        parsableSyntaxNodeConformance(),
-        parseError(),
-        syntaxUtilities(parsed: false),
-        syntaxUtilities(parsed: true),
-      ])
-      if let leaf = syntaxLeafConformance(parsed: false) {
-        result.append(leaf)
-      }
-      if let leaf = syntaxLeafConformance(parsed: true) {
-        result.append(leaf)
-      }
+    result.append(contentsOf: [
+      syntaxNodeConformance(parsed: false),
+      syntaxNodeConformance(parsed: true),
+      parsableSyntaxNodeConformance(),
+      parseError(),
+      syntaxUtilities(parsed: false),
+      syntaxUtilities(parsed: true),
+    ])
+    if let leaf = syntaxLeafConformance(parsed: false) {
+      result.append(leaf)
     }
-    if graph.contains(.tokens),
-      let token = syntaxTokenConformance() {
-      result.append(token)
+    if let leaf = syntaxLeafConformance(parsed: true) {
+      result.append(leaf)
     }
     return result.joined(separator: "\n\n")
   }
@@ -520,22 +508,6 @@ struct Node {
     }
   }
 
-  func syntaxTokenConformance() -> StrictString? {
-    switch kind {
-    case .fixedLeaf, .variableLeaf, .errorToken:
-      return [
-        "extension Parsed\(name): ParsedToken {",
-        "",
-        "  var tokenKind: ParsedTokenKind {",
-        "    return .\(lowercasedName)(self)",
-        "  }",
-        "}",
-      ].joined(separator: "\n")
-    case .compound:
-      return nil
-    }
-  }
-
   static func nodeKind(parsed: Bool) -> StrictString {
     var result: [StrictString] = [
       "enum \(parsed ? "Parsed" : "")SyntaxNodeKind {",
@@ -567,26 +539,6 @@ struct Node {
     case .variableLeaf, .fixedLeaf:
       return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
     case .compound, .errorToken:
-      return nil
-    }
-  }
-
-  static func tokenKind() -> StrictString {
-    var result: [StrictString] = [
-      "enum ParsedTokenKind {",
-    ]
-    result.append(contentsOf: nodes.lazy.compactMap({ $0.tokenKindCase() }))
-    result.append(contentsOf: [
-      "}",
-    ])
-    return result.joined(separator: "\n")
-  }
-
-  func tokenKindCase() -> StrictString? {
-    switch kind {
-    case .variableLeaf, .fixedLeaf, .errorToken:
-      return "  case \(lowercasedName)(Parsed\(name))"
-    case .compound:
       return nil
     }
   }
