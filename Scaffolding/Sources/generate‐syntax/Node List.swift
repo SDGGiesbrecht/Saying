@@ -452,6 +452,13 @@ extension Node {
               Child(name: "implementation", type: "ActionImplementation", kind: .required),
             ])
           ),
+          Node(
+            name: "Declaration",
+            kind: .alternates([
+              Alternate(name: "thing", type: "ThingDeclaration"),
+              Alternate(name: "action", type: "ActionDeclaration"),
+            ])
+          ),
         ],
       ] as [[Node]]
     ).joined()

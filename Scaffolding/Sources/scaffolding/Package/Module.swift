@@ -37,8 +37,8 @@ struct Module {
       "truth value",
       "Swift: first “ ¤(26)¤(26) ” second",
     ].joined(separator: "\u{2028}")
-    assert((try? ParsedActionDeclaration.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedActionDeclaration.fastParse(source: source)?.source() == source)
+    assert((try? ParsedDeclaration.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedDeclaration.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
