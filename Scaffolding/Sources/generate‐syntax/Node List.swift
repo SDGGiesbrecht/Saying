@@ -214,6 +214,13 @@ extension Node {
               Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
             ])
           ),
+          Node(
+            name: "AttachedDocumentation",
+            kind: .compound(children: [
+              Child(name: "documentation", type: "Documentation", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+            ])
+          ),
 
           Node(
             name: "ThingNameEntry",
@@ -257,6 +264,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "keyword", type: "ThingKeyword", kind: .required),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
               Child(name: "implementationLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "implementation", type: "ThingImplementation", kind: .required),
