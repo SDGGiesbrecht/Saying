@@ -88,6 +88,33 @@ extension Node {
             ]),
             isIdentifierSegment: true
           ),
+          Node(
+            name: "Argument",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "argument", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ]),
+            isIdentifierSegment: true
+          ),
+        ],
+        Node.separatedList(
+          name: "ActionArguments",
+          entryName: "argument",
+          entryType: "Argument",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment"
+        ),
+        [
+          Node(
+            name: "CompoundAction",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "arguments", type: "ActionArguments", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ]),
+            isIdentifierSegment: true
+          ),
 
           Node(
             name: "ParagraphEntry",

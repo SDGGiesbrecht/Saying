@@ -15,9 +15,9 @@ struct Module {
 
   func build() throws {
     #warning("Debugging...")
-    let source: StrictString = " text"
-    assert((try? ParsedMedialIdentifierSegment.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedMedialIdentifierSegment.fastParse(source: source)?.source() == source)
+    let source: StrictString = "(true) and (true)"
+    assert((try? ParsedCompoundAction.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedCompoundAction.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
