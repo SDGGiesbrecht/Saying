@@ -58,7 +58,7 @@ struct Node {
 
   func declarationSource(parsed: Bool) -> StrictString {
     var result: [StrictString] = [
-      "struct \(parsed ? "Parsed" : "")\(name) {"
+      "\(typeKeyword()) \(parsed ? "Parsed" : "")\(name) {"
     ]
     result.append(contentsOf: childrenProperties(parsed: parsed))
     if let text = storedTextProperty(parsed: parsed) {
@@ -71,6 +71,15 @@ struct Node {
       "}",
     ])
     return result.joined(separator: "\n")
+  }
+
+  func typeKeyword() -> StrictString {
+    switch kind {
+    case .fixedLeaf, .keyword, .variableLeaf, .compound:
+      return "struct"
+    case .alternates:
+      return "enum"
+    }
   }
 
   func childrenProperties(parsed: Bool) -> [StrictString] {
@@ -98,6 +107,10 @@ struct Node {
           return "  \(parsed ? "let" : "var") \(child.name): [\(parsed ? "Parsed" : "")\(child.type)]"
         }
       }
+    case .alternates(let alternates):
+      return alternates.map { alternate in
+        return "  case \(alternate.name)(\(parsed ? "Parsed" : "")\(alternate.type))"
+      }
     }
   }
 
@@ -106,7 +119,7 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf, .compound:
+      case .fixedLeaf, .compound, .alternates:
         return nil
       case .keyword, .variableLeaf:
         return "  let text: StrictString"
@@ -127,6 +140,8 @@ struct Node {
         } else {
           return "  let location: Slice<UTF8Segments>"
         }
+      case .alternates:
+        return nil
       }
     }
   }
@@ -199,6 +214,20 @@ struct Node {
         "    return result"
       ])
       return result.joined(separator: "\n")
+    case .alternates(let alternates):
+      var result: [StrictString] = [
+        "    switch self {",
+      ]
+      for alternate in alternates {
+        result.append(contentsOf: [
+          "    case .\(alternate.name)(let \(alternate.name)):",
+          "      return [\(alternate.name)]",
+        ])
+      }
+      result.append(contentsOf: [
+        "    }",
+      ])
+      return result.joined(separator: "\n")
     }
   }
 
@@ -212,6 +241,8 @@ struct Node {
       } else {
         return "    return location.base"
       }
+    case .alternates:
+      return "    return firstChild.context"
     }
   }
   
@@ -225,6 +256,8 @@ struct Node {
       } else {
         return "    return location.startIndex"
       }
+    case .alternates:
+      return "    return firstChild.startIndex"
     }
   }
   
@@ -238,6 +271,8 @@ struct Node {
       } else {
         return "    return location.endIndex"
       }
+    case .alternates:
+      return "    return lastChild.endIndex"
     }
   }
 
@@ -251,6 +286,8 @@ struct Node {
       } else {
         return nil
       }
+    case .alternates:
+      return "    return context[startIndex..<endIndex]"
     }
   }
   
@@ -383,6 +420,25 @@ struct Node {
         "    )",
       ])
       return result.joined(separator: "\n")
+    case .alternates(let alternates):
+      var result: [StrictString] = [
+        "    var errors: [ParseError] = []",
+      ]
+      for alternate in alternates {
+        result.append(contentsOf: [
+          "    let \(alternate.name) = Parsed\(alternate.type).diagnosticParseNext(in: remainder)",
+          "    switch \(alternate.name) {",
+          "    case .failure(let error):",
+          "      errors.append(contentsOf: error.errors.map({ .broken\(alternate.uppercasedName)($0) }))",
+          "    case .success(let parsed):",
+          "      return .success(.\(alternate.name)(parsed))",
+          "    }",
+        ])
+      }
+      result.append(contentsOf: [
+        "    return .failure(ErrorList(errors))",
+      ])
+      return result.joined(separator: "\n")
     }
   }
 
@@ -481,6 +537,19 @@ struct Node {
         "    )",
       ])
       return result.joined(separator: "\n")
+    case .alternates(let alternates):
+      var result: [StrictString] = []
+      for alternate in alternates {
+        result.append(contentsOf: [
+          "    if let \(alternate.name) = Parsed\(alternate.type).fastParseNext(in: remainder) {",
+          "      return .\(alternate.name)(\(alternate.name))",
+          "    }",
+        ])
+      }
+      result.append(contentsOf: [
+        "    return nil",
+      ])
+      return result.joined(separator: "\n")
     }
   }
 
@@ -510,12 +579,16 @@ struct Node {
           return nil
         }
       }
+    case .alternates(let alternates):
+      return alternates.map { alternate in
+        return "case broken\(alternate.uppercasedName)(Parsed\(alternate.type).ParseError)"
+      }
     }
   }
 
   func allowedDefinition() -> StrictString? {
     switch kind {
-    case .fixedLeaf, .compound:
+    case .fixedLeaf, .compound, .alternates:
       return nil
     case .keyword(let allowed):
       var result: [StrictString] = [
@@ -561,7 +634,7 @@ struct Node {
         "}",
       ])
       return result.joined(separator: "\n")
-    case .compound:
+    case .compound, .alternates:
       return nil
     }
   }
@@ -577,7 +650,7 @@ struct Node {
           "    return \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22}",
           "  }",
         ].joined(separator: "\n")
-      case .keyword, .variableLeaf, .compound:
+      case .keyword, .variableLeaf, .compound, .alternates:
         return nil
       }
     }
@@ -628,7 +701,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
-    case .compound:
+    case .compound, .alternates:
       return nil
     }
   }
@@ -696,6 +769,22 @@ struct Node {
       } else {
         return nil
       }
+    case .alternates(let alternates):
+      var result: [StrictString] = [
+        "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNode {",
+        "    switch self {"
+      ]
+      for alternate in alternates {
+        result.append(contentsOf: [
+          "    case .\(alternate.name)(let \(alternate.name)):",
+          "      return \(alternate.name)",
+        ])
+      }
+      result.append(contentsOf: [
+        "    }",
+        "  }",
+      ])
+      return result.joined(separator: "\n")
     }
   }
 }

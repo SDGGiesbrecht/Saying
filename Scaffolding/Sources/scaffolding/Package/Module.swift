@@ -16,8 +16,8 @@ struct Module {
   func build() throws {
     #warning("Debugging...")
     let source: StrictString = " text"
-    assert((try? ParsedNonEmptyFinalIdentifierSegment.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedNonEmptyFinalIdentifierSegment.fastParse(source: source)?.source() == source)
+    assert((try? ParsedMedialIdentifierSegment.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedMedialIdentifierSegment.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {

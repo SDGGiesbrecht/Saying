@@ -47,7 +47,7 @@ extension Node {
             ])
           ),
         ],
-        Node.nonEmptySeparatedList(
+        Node.separatedList(
           name: "UninterruptedIdentifier",
           entryName: "component",
           entryType: "IdentifierComponent",
@@ -57,26 +57,33 @@ extension Node {
         ),
         [
           Node(
-            name: "NonEmptyInitialIdentifierSegment",
+            name: "InitialIdentifierSegment",
             kind: .compound(children: [
               Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "followingSpace", type: "Space", kind: .optional),
+              Child(name: "space", type: "Space", kind: .optional),
             ]),
             isIdentifierSegment: true
           ),
           Node(
-            name: "NonEmptyMedialIdentifierSegment",
+            name: "TextMedialIdentifierSegment",
             kind: .compound(children: [
-              Child(name: "leadingSpace", type: "Space", kind: .optional),
+              Child(name: "initialSpace", type: "Space", kind: .optional),
               Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "followingSpace", type: "Space", kind: .optional),
+              Child(name: "finalSpace", type: "Space", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "MedialIdentifierSegment",
+            kind: .alternates([
+              Alternate(name: "text", type: "TextMedialIdentifierSegment"),
+              Alternate(name: "space", type: "Space"),
             ]),
             isIdentifierSegment: true
           ),
           Node(
-            name: "NonEmptyFinalIdentifierSegment",
+            name: "FinalIdentifierSegment",
             kind: .compound(children: [
-              Child(name: "leadingSpace", type: "Space", kind: .optional),
+              Child(name: "space", type: "Space", kind: .optional),
               Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
             ]),
             isIdentifierSegment: true
@@ -91,7 +98,7 @@ extension Node {
             ])
           ),
         ],
-        Node.nonEmptySeparatedList(
+        Node.separatedList(
           name: "ParagraphList",
           entryName: "text",
           entryType: "ParagraphEntry",
@@ -140,7 +147,7 @@ extension Node {
             ])
           )
         ],
-        Node.nonEmptySeparatedList(
+        Node.separatedList(
           name: "ThingNameList",
           entryName: "name",
           entryType: "ThingNameEntry",
@@ -183,7 +190,7 @@ extension Node {
     ).joined()
   )
 
-  static func nonEmptySeparatedList(
+  static func separatedList(
     name: StrictString,
     entryName: StrictString,
     entryType: StrictString,

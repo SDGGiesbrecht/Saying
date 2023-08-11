@@ -7,5 +7,6 @@ extension Node {
     case keyword(Set<StrictString>)
     case variableLeaf(allowed: Set<Unicode.Scalar>)
     case compound(children: [Node.Child])
+    case alternates([Node.Alternate])
   }
 }
