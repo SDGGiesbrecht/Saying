@@ -41,9 +41,9 @@ extension Node {
           Node(
             name: "SpacedColon",
             kind: .compound(children: [
-              Child(name: "leadingSpace", type: "Space", kind: .optional),
+              Child(name: "precedingSpace", type: "Space", kind: .optional),
               Child(name: "colon", type: "Colon", kind: .fixed),
-              Child(name: "trailingSpace", type: "Space", kind: .fixed),
+              Child(name: "followingSpace", type: "Space", kind: .fixed),
             ])
           ),
         ],
@@ -55,8 +55,33 @@ extension Node {
           separatorType: "Space",
           isIdentifierSegment: true
         ),
-
         [
+          Node(
+            name: "NonEmptyInitialIdentifierSegment",
+            kind: .compound(children: [
+              Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "followingSpace", type: "Space", kind: .optional),
+            ]),
+            isIdentifierSegment: true
+          ),
+          Node(
+            name: "NonEmptyMedialIdentifierSegment",
+            kind: .compound(children: [
+              Child(name: "leadingSpace", type: "Space", kind: .optional),
+              Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "followingSpace", type: "Space", kind: .optional),
+            ]),
+            isIdentifierSegment: true
+          ),
+          Node(
+            name: "NonEmptyFinalIdentifierSegment",
+            kind: .compound(children: [
+              Child(name: "leadingSpace", type: "Space", kind: .optional),
+              Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
+            ]),
+            isIdentifierSegment: true
+          ),
+
           Node(
             name: "ParagraphEntry",
             kind: .compound(children: [

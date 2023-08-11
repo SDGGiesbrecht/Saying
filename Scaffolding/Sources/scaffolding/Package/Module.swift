@@ -15,9 +15,9 @@ struct Module {
 
   func build() throws {
     #warning("Debugging...")
-    let source: StrictString = "paramètre: name\u{2028}(\u{2028}[\u{2028}English: Documentation.\u{2028}]\u{2028})"
-    assert((try? ParsedParameterDocumentation.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedParameterDocumentation.fastParse(source: source)?.source() == source)
+    let source: StrictString = " text"
+    assert((try? ParsedNonEmptyFinalIdentifierSegment.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedNonEmptyFinalIdentifierSegment.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {

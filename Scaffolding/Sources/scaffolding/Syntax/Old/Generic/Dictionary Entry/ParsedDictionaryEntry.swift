@@ -42,9 +42,9 @@ extension ParsedDictionaryEntry {
     let trailingSpace = definitionTokens.removeFirst()
 
     let colonNode = ParsedSpacedColon(
-      leadingSpace: leadingSpace?.asSpace,
+      precedingSpace: leadingSpace?.asSpace,
       colon: colon.asColon!,
-      trailingSpace: trailingSpace.asSpace!
+      followingSpace: trailingSpace.asSpace!
     )
 
     let termTokenArray = Array(termTokens)
