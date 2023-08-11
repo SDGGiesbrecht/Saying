@@ -188,6 +188,34 @@ extension Node {
           ),
 
           Node(
+            name: "DocumentationEntry",
+            kind: .alternates([
+              Alternate(name: "parameter", type: "ParameterDocumentation"),
+              Alternate(name: "test", type: "Test"),
+              Alternate(name: "paragraph", type: "Paragraph"),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "DocumentationList",
+          entryName: "entry",
+          entryType: "DocumentationEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak"
+        ),
+        [
+          Node(
+            name: "Documentation",
+            kind: .compound(children: [
+              Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "entries", type: "DocumentationList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+            ])
+          ),
+
+          Node(
             name: "ThingNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
