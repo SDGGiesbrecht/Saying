@@ -134,13 +134,7 @@ struct Node {
       switch kind {
       case .fixedLeaf, .keyword, .variableLeaf:
         return "  let location: Slice<UTF8Segments>"
-      case .compound(let children):
-        if children.guaranteedNonEmpty {
-          return nil
-        } else {
-          return "  let location: Slice<UTF8Segments>"
-        }
-      case .alternates:
+      case .compound, .alternates:
         return nil
       }
     }
@@ -235,13 +229,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return "    return location.base"
-    case .compound(let children):
-      if children.guaranteedNonEmpty {
-        return "    return firstChild.context"
-      } else {
-        return "    return location.base"
-      }
-    case .alternates:
+    case .compound, .alternates:
       return "    return firstChild.context"
     }
   }
@@ -250,13 +238,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return "    return location.startIndex"
-    case .compound(let children):
-      if children.guaranteedNonEmpty {
-        return "    return firstChild.startIndex"
-      } else {
-        return "    return location.startIndex"
-      }
-    case .alternates:
+    case .compound, .alternates:
       return "    return firstChild.startIndex"
     }
   }
@@ -265,13 +247,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return "    return location.endIndex"
-    case .compound(let children):
-      if children.guaranteedNonEmpty {
-        return "    return lastChild.endIndex"
-      } else {
-        return "    return location.endIndex"
-      }
-    case .alternates:
+    case .compound, .alternates:
       return "    return lastChild.endIndex"
     }
   }
@@ -280,13 +256,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return nil
-    case .compound(let children):
-      if children.guaranteedNonEmpty {
-        return "    return context[startIndex..<endIndex]"
-      } else {
-        return nil
-      }
-    case .alternates:
+    case .compound, .alternates:
       return "    return context[startIndex..<endIndex]"
     }
   }
@@ -746,29 +716,25 @@ struct Node {
     case .fixedLeaf, .keyword, .variableLeaf:
       return nil
     case .compound(let children):
-      if children.guaranteedNonEmpty {
-        let childList = last ? children.reversed() : children
-        var resolution: [StrictString] = []
-        accumulator: for child in childList {
-          switch child.kind {
-          case .fixed, .required:
-            resolution.append("\(child.name)")
-            break accumulator
-          case .optional:
-            resolution.append("\(child.name) ??")
-          case .array:
-            resolution.append("\(child.name).\(last ? "last" : "first") ??")
-          }
+      let childList = last ? children.reversed() : children
+      var resolution: [StrictString] = []
+      accumulator: for child in childList {
+        switch child.kind {
+        case .fixed, .required:
+          resolution.append("\(child.name)")
+          break accumulator
+        case .optional:
+          resolution.append("\(child.name) ??")
+        case .array:
+          resolution.append("\(child.name).\(last ? "last" : "first") ??")
         }
-        return [
-          "",
-          "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNode {",
-          "    return \(resolution.joined(separator: " "))",
-          "  }",
-        ].joined(separator: "\n")
-      } else {
-        return nil
       }
+      return [
+        "",
+        "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNode {",
+        "    return \(resolution.joined(separator: " "))",
+        "  }",
+      ].joined(separator: "\n")
     case .alternates(let alternates):
       var result: [StrictString] = [
         "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNode {",
