@@ -88,6 +88,17 @@ extension Node {
             ]),
             isIdentifierSegment: true
           ),
+
+          Node(
+            name: "Symbol",
+            kind: .compound(children: [
+              Child(name: "mark", type: "SymbolInsertionMark", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "code", type: "IdentifierComponent", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+
           Node(
             name: "Argument",
             kind: .compound(children: [

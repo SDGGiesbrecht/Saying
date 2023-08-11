@@ -29,14 +29,17 @@ struct Module {
       "Deutsch: Eine Wahrheitswert.",
       "]",
       ")",
-      "]",*/
+      "]",
       "(",
       "English: (first: truth value) and (second: truth value)",
       "Deutsch: (erste: [first]) und (zweite: [second])",
       ")",
+      "truth value",
+      "Swift: infix operator (first “¤(26)¤(26)” second)",*/
+      "¤(26)"
     ].joined(separator: "\u{2028}")
-    assert((try? ParsedActionName.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedActionName.fastParse(source: source)?.source() == source)
+    assert((try? ParsedSymbol.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedSymbol.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
