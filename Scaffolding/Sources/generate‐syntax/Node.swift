@@ -7,6 +7,8 @@ struct Node {
   let kind: Kind
   var isIdentifierSegment = false
   var isIndirect = false
+  var utilities: [StrictString] = []
+  var parsedUtilities: [StrictString] = []
 
   var lowercasedName: StrictString {
     var result = name
@@ -53,6 +55,20 @@ struct Node {
     }
     if let identifier = identifierSegmentConformance(parsed: true) {
       result.append(identifier)
+    }
+    if ¬utilities.isEmpty {
+      result.append("extension \(name) {")
+      for utility in utilities {
+        result.append(utility)
+      }
+      result.append("}")
+    }
+    if ¬parsedUtilities.isEmpty {
+      result.append("extension Parsed\(name) {")
+      for utility in parsedUtilities {
+        result.append(utility)
+      }
+      result.append("}")
     }
     return result.joined(separator: "\n\n")
   }

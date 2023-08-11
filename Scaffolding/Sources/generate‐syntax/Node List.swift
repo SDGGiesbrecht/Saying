@@ -52,7 +52,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "UninterruptedIdentifier",
-          entryName: "component",
+          entryName: "component", entryNamePlural: "components",
           entryType: "IdentifierComponent",
           separatorName: "space",
           separatorType: "Space",
@@ -160,7 +160,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "ActionArguments",
-          entryName: "argument",
+          entryName: "argument", entryNamePlural: "arguments",
           entryType: "Argument",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment"
@@ -194,7 +194,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "ParagraphList",
-          entryName: "text",
+          entryName: "text", entryNamePlural: "text",
           entryType: "ParagraphEntry",
           separatorName: "lineBreak",
           separatorType: "LineBreak"
@@ -259,7 +259,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "DocumentationList",
-          entryName: "entry",
+          entryName: "entry", entryNamePlural: "entry",
           entryType: "DocumentationEntry",
           separatorName: "lineBreak",
           separatorType: "LineBreak"
@@ -294,7 +294,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "ThingNameList",
-          entryName: "name",
+          entryName: "name", entryNamePlural: "names",
           entryType: "ThingNameEntry",
           separatorName: "lineBreak",
           separatorType: "LineBreak"
@@ -339,7 +339,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "ParameterList",
-          entryName: "parameter",
+          entryName: "parameter", entryNamePlural: "parameters",
           entryType: "Parameter",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment"
@@ -371,7 +371,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "ActionNameList",
-          entryName: "name",
+          entryName: "name", entryNamePlural: "names",
           entryType: "ActionNameEntry",
           separatorName: "lineBreak",
           separatorType: "LineBreak"
@@ -414,7 +414,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "NativeAction",
-          entryName: "component",
+          entryName: "component", entryNamePlural: "components",
           entryType: "ImplementationComponent",
           separatorName: "space",
           separatorType: "Space"
@@ -460,6 +460,14 @@ extension Node {
             ])
           ),
         ],
+
+        Node.separatedList(
+          name: "DeclarationList",
+          entryName: "declaration", entryNamePlural: "declarations",
+          entryType: "Declaration",
+          separatorName: "paragraphBreak",
+          separatorType: "ParagraphBreak"
+        ),
       ] as [[Node]]
     ).joined()
   )
@@ -467,6 +475,7 @@ extension Node {
   static func separatedList(
     name: StrictString,
     entryName: StrictString,
+    entryNamePlural: StrictString,
     entryType: StrictString,
     separatorName: StrictString,
     separatorType: StrictString,
@@ -483,7 +492,21 @@ extension Node {
           Child(name: "first", type: entryType, kind: .required),
           Child(name: "continuations", type: "\(name)Continuation", kind: .array),
         ]),
-        isIdentifierSegment: isIdentifierSegment
+        isIdentifierSegment: isIdentifierSegment,
+        utilities: [
+          [
+            "  var \(entryNamePlural): [\(entryType)] {",
+            "    return Array([[first], continuations.lazy.map({ $0.\(entryName) })].joined())",
+            "  }"
+          ].joined(separator: "\n")
+        ],
+        parsedUtilities: [
+          [
+            "  var \(entryNamePlural): [Parsed\(entryType)] {",
+            "    return Array([[first], continuations.lazy.map({ $0.\(entryName) })].joined())",
+            "  }"
+          ].joined(separator: "\n")
+        ]
       ),
     ]
   }

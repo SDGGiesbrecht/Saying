@@ -14,51 +14,23 @@ struct Module {
   }
 
   func build() throws {
-    #warning("Debugging...")
-    let source: StrictString = [
-      "action",
-      "[",
-      "[",
-      "English: Performs logical conjuction.",
-      "]",
-      "test (verify (((true) and (true)) is (true)))",
-      "parameter: first",
-      "(",
-      "[",
-      "English: A truth value.",
-      "Deutsch: Eine Wahrheitswert.",
-      "]",
-      ")",
-      "]",
-      "(",
-      "English: (first: truth value) and (second: truth value)",
-      "Deutsch: (erste: [first]) und (zweite: [second])",
-      ")",
-      "truth value",
-      "Swift: first “ ¤(26)¤(26) ” second",
-    ].joined(separator: "\u{2028}")
-    assert((try? ParsedDeclaration.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedDeclaration.fastParse(source: source)?.source() == source)
-
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {
       let loaded = try File(from: sourceFile)
       switch loaded.contents {
       case .utf8(let source):
-        let fileInterface = try InterfaceSyntax.File.parse(source: source).get()
-        for declaration in fileInterface.declarations.combinedEntries {
+        let syntax = try ParsedDeclarationList.fastParse(source: source)
+          ?? ParsedDeclarationList.diagnosticParse(source: source).get()
+        for declaration in [[syntax.first], syntax.continuations.lazy.map({ $0.declaration })].joined() {
           switch declaration {
           case .thing(let thing):
-            let names = thing.name.names.combinedEntries
-              .map({ $0.definition.identifierText() })
+            let names = thing.name.names.names
+              .map({ $0.name.identifierText() })
               .joined(separator: ", ")
-            let source = thing.deferredLines.content.combinedEntries
-              .map({ $0.source() })
-              .joined(separator: "\n  ")
-            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(names)\n \(source)")
+            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(names)")
           case .action(let action):
-            let source = action.deferredLines.content.combinedEntries
-              .map({ $0.source() })
+            let source = action.name.names.names
+              .map({ $0.name.name() })
               .joined(separator: "\n ")
             print("action (\(action.location.underlyingScalarOffsetOfStart())):\n \(source)")
           }
