@@ -6,6 +6,7 @@ struct Node {
   let name: StrictString
   let kind: Kind
   var isIdentifierSegment = false
+  var isIndirect = false
 
   var lowercasedName: StrictString {
     var result = name
@@ -78,7 +79,7 @@ struct Node {
     case .fixedLeaf, .keyword, .variableLeaf, .compound:
       return "struct"
     case .alternates:
-      return "enum"
+      return "\(isIndirect ? "indirect " : "")enum"
     }
   }
 
@@ -527,7 +528,7 @@ struct Node {
     return [
       "extension Parsed\(name) {",
       "",
-      "  enum ParseError: Error {",
+      "  \(isIndirect ? "indirect " : "")enum ParseError: Error {",
       parseErrorCases().lazy.map({ "    \($0)" }).joined(separator: "\n"),
       "  }",
       "}",

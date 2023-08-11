@@ -92,10 +92,9 @@ extension Node {
             name: "Argument",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "argument", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "argument", type: "Action", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
-            ]),
-            isIdentifierSegment: true
+            ])
           ),
         ],
         Node.separatedList(
@@ -112,8 +111,15 @@ extension Node {
               Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
               Child(name: "arguments", type: "ActionArguments", kind: .required),
               Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "Action",
+            kind: .alternates([
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+              Alternate(name: "compound", type: "CompoundAction"),
             ]),
-            isIdentifierSegment: true
+            isIndirect: true
           ),
 
           Node(
