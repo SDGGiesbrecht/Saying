@@ -7,7 +7,16 @@ protocol SyntaxNode {
 }
 
 extension SyntaxNode {
+
   func source() -> StrictString {
     return children.lazy.map({ $0.source() }).joined()
+  }
+
+  func formattedGitStyleSource() -> StrictString {
+    if self is SyntaxLeaf {
+      return source()
+    } else {
+      return children.lazy.map({ $0.formattedGitStyleSource() }).joined()
+    }
   }
 }

@@ -9,6 +9,7 @@ import Foundation
       .deletingLastPathComponent()
       .deletingLastPathComponent()
     let package = Package(location: packageRoot)
+    try package.format()
     try package.test()
   }
 }
