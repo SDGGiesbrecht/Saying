@@ -16,7 +16,7 @@ struct Module {
   func build() throws {
     #warning("Debugging...")
     let source: StrictString = [
-      /*"action",
+      "action",
       "[",
       "[",
       "English: Performs logical conjuction.",
@@ -35,11 +35,10 @@ struct Module {
       "Deutsch: (erste: [first]) und (zweite: [second])",
       ")",
       "truth value",
-      "Swift: infix operator (first “¤(26)¤(26)” second)",*/
-      "“¤(26)¤(26)”"
+      "Swift: first “ ¤(26)¤(26) ” second",
     ].joined(separator: "\u{2028}")
-    assert((try? ParsedLiteral.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedLiteral.fastParse(source: source)?.source() == source)
+    assert((try? ParsedActionDeclaration.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedActionDeclaration.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {

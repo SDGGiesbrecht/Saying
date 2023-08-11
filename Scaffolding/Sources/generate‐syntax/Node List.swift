@@ -389,11 +389,43 @@ extension Node {
           ),
 
           Node(
+            name: "ReturnValue",
+            kind: .compound(children: [
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+            ])
+          ),
+
+          Node(
             name: "ThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
               Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ImplementationComponent",
+            kind: .alternates([
+              Alternate(name: "parameter", type: "UninterruptedIdentifier"),
+              Alternate(name: "literal", type: "Literal"),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "NativeAction",
+          entryName: "component",
+          entryType: "ImplementationComponent",
+          separatorName: "space",
+          separatorType: "Space"
+        ),
+        [
+          Node(
+            name: "ActionImplementation",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "type", type: "NativeAction", kind: .required),
             ])
           ),
 
@@ -404,8 +436,20 @@ extension Node {
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
-              Child(name: "implementationLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "implementation", type: "ThingImplementation", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ActionDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ActionKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ActionName", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "returnValue", type: "ReturnValue", kind: .optional),
+              Child(name: "implementation", type: "ActionImplementation", kind: .required),
             ])
           ),
         ],
