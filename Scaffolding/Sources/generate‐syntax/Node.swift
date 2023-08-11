@@ -324,7 +324,6 @@ struct Node {
     case .compound(let children):
       var result: [StrictString] = [
         "    var remainder = remainder",
-        "    var errors: [ParseError] = []",
       ]
       for child in children {
         switch child.kind {
@@ -337,7 +336,7 @@ struct Node {
           case .fixed, .required:
             result.append(contentsOf: [
               "    case .failure(let error):",
-              "      errors.append(contentsOf: error.errors.map({ .broken\(child.uppercasedName)($0) }))",
+              "      return .failure(ErrorList(error.errors.map({ .broken\(child.uppercasedName)($0) })))",
             ])
           case .optional:
             result.append(contentsOf: [
@@ -363,9 +362,6 @@ struct Node {
         }
       }
       result.append(contentsOf: [
-        "    guard errors.isEmpty else {",
-        "      return .failure(ErrorList(errors))",
-        "    }",
         "    return .success(",
         "      Parsed\(name)(",
       ])
