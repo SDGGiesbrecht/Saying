@@ -31,8 +31,8 @@ struct Module {
           case .action(let action):
             let source = action.name.names.names
               .map({ $0.name.name() })
-              .joined(separator: "\n ")
-            print("action (\(action.location.underlyingScalarOffsetOfStart())):\n \(source)")
+              .joined(separator: ", ")
+            print("action (\(action.location.underlyingScalarOffsetOfStart())): \(source)")
           }
         }
       }
