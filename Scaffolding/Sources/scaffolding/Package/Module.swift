@@ -15,7 +15,7 @@ struct Module {
 
   func build() throws {
     #warning("Debugging...")
-    let source: StrictString = "((true) and (true)) is (true)"
+    let source: StrictString = "verify (((true) and (true)) is (true))"
     assert((try? ParsedCompoundAction.diagnosticParse(source: source).get())?.source() == source)
     assert(ParsedCompoundAction.fastParse(source: source)?.source() == source)
 
