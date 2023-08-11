@@ -251,6 +251,68 @@ extension Node {
           ),
 
           Node(
+            name: "Parameter",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "ParameterList",
+          entryName: "parameter",
+          entryType: "Parameter",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment"
+        ),
+        [
+          Node(
+            name: "CompoundSignature",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "parameters", type: "ParameterList", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "Signature",
+            kind: .alternates([
+              Alternate(name: "compound", type: "CompoundSignature"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+            ])
+          ),
+          Node(
+            name: "ActionNameEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "name", type: "Signature", kind: .required),
+            ])
+          )
+        ],
+        Node.separatedList(
+          name: "ActionNameList",
+          entryName: "name",
+          entryType: "ActionNameEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak"
+        ),
+        [
+          Node(
+            name: "ActionName",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "names", type: "ActionNameList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+
+          Node(
             name: "ThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
