@@ -116,8 +116,8 @@ extension Node {
           Node(
             name: "Action",
             kind: .alternates([
-              Alternate(name: "simple", type: "UninterruptedIdentifier"),
               Alternate(name: "compound", type: "CompoundAction"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
             ]),
             isIndirect: true
           ),
@@ -168,6 +168,22 @@ extension Node {
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "details", type: "ParameterDetails", kind: .required),
+            ])
+          ),
+          Node(
+            name: "TestDetails",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "test", type: "Action", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Test",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "TestKeyword", kind: .required),
+              Child(name: "space", type: "Space", kind: .fixed),
+              Child(name: "details", type: "TestDetails", kind: .required),
             ])
           ),
 
