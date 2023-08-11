@@ -32,7 +32,7 @@ struct Module {
       "]",*/
       "(",
       "English: (first: truth value) and (second: truth value)",
-      //"Deutsch: (erste: [first]) und (zweite: [second])",
+      "Deutsch: (erste: [first]) und (zweite: [second])",
       ")",
     ].joined(separator: "\u{2028}")
     assert((try? ParsedActionName.diagnosticParse(source: source).get())?.source() == source)

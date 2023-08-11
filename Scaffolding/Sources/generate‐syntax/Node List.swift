@@ -251,12 +251,27 @@ extension Node {
           ),
 
           Node(
+            name: "ParameterReference",
+            kind: .compound(children: [
+              Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ParameterType",
+            kind: .alternates([
+              Alternate(name: "type", type: "UninterruptedIdentifier"),
+              Alternate(name: "reference", type: "ParameterReference"),
+            ])
+          ),
+          Node(
             name: "Parameter",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ParameterType", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
