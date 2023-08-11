@@ -14,7 +14,7 @@ jobs:
       shell: bash
       run: |
         set -x
-        swift run --package-path Scaffolding
+        swift run --package-path Scaffolding scaffolding
     - name: Check generated files for mismatched states
       shell: bash
       run: |

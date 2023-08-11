@@ -19,22 +19,20 @@ struct Module {
       let loaded = try File(from: sourceFile)
       switch loaded.contents {
       case .utf8(let source):
-        let fileInterface = try InterfaceSyntax.File.parse(source: source).get()
-        for declaration in fileInterface.declarations.combinedEntries {
+        let syntax = try ParsedDeclarationList.fastParse(source: source)
+          ?? ParsedDeclarationList.diagnosticParse(source: source).get()
+        for declaration in [[syntax.first], syntax.continuations.lazy.map({ $0.declaration })].joined() {
           switch declaration {
           case .thing(let thing):
-            let names = thing.name.names.combinedEntries
-              .map({ $0.definition.text })
+            let names = thing.name.names.names
+              .map({ $0.name.identifierText() })
               .joined(separator: ", ")
-            let source = thing.deferredLines.content.combinedEntries
-              .map({ $0.source() })
-              .joined(separator: "\n  ")
-            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(names)\n \(source)")
+            print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(names)")
           case .action(let action):
-            let source = action.deferredLines.content.combinedEntries
-              .map({ $0.source() })
-              .joined(separator: "\n ")
-            print("action (\(action.location.underlyingScalarOffsetOfStart())):\n \(source)")
+            let source = action.name.names.names
+              .map({ $0.name.name() })
+              .joined(separator: ", ")
+            print("action (\(action.location.underlyingScalarOffsetOfStart())): \(source)")
           }
         }
       }

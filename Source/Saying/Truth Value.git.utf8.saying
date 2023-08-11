@@ -14,10 +14,10 @@ action
    English: Performs logical conjuction.
    Deutsch: Führt eine logische Konjunktion durch.
   ]
-  test (verify ((true) and (true)) is (true))
-  test (verify ((true) and (false)) is (false))
-  test (verify ((false) and (true)) is (false))
-  test (verify ((false) and (false)) is (false))
+  test (verify (((true) and (true)) is (true)))
+  test (verify (((true) and (false)) is (false)))
+  test (verify (((false) and (true)) is (false)))
+  test (verify (((false) and (false)) is (false)))
   parameter: first
   (
    [
@@ -41,4 +41,4 @@ action
   עברית: (ראשון: [first]) ו(שני: [second])
  )
  truth value
- Swift: infix operator (first “¤(26)¤(26)” second)
+ Swift: first “ ¤(26)¤(26) ” second
