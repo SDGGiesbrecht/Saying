@@ -36,10 +36,10 @@ struct Module {
       ")",
       "truth value",
       "Swift: infix operator (first “¤(26)¤(26)” second)",*/
-      "¤(26)"
+      "“¤(26)¤(26)”"
     ].joined(separator: "\u{2028}")
-    assert((try? ParsedSymbol.diagnosticParse(source: source).get())?.source() == source)
-    assert(ParsedSymbol.fastParse(source: source)?.source() == source)
+    assert((try? ParsedLiteral.diagnosticParse(source: source).get())?.source() == source)
+    assert(ParsedLiteral.fastParse(source: source)?.source() == source)
 
     let sourceFiles = try self.sourceFiles()
     for sourceFile in sourceFiles {

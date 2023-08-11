@@ -12,11 +12,11 @@ extension Node {
           Node(name: "ClosingParenthesis", kind: .fixedLeaf(")")),
           Node(name: "OpeningBracket", kind: .fixedLeaf("[")),
           Node(name: "ClosingBracket", kind: .fixedLeaf("]")),
+          Node(name: "LeftChevronQuotationMark", kind: .fixedLeaf("«")),
+          Node(name: "RightChevronQuotationMark", kind: .fixedLeaf("»")),
           Node(name: "SixesQuotationMark", kind: .fixedLeaf("“")),
-          Node(name: "HighNinesQuotationMark", kind: .fixedLeaf("”")),
-          Node(name: "LowNinesQuotationMark", kind: .fixedLeaf("„")),
-          Node(name: "LeftChevronsQuotationMark", kind: .fixedLeaf("«")),
-          Node(name: "RightChevronsQuotationMark", kind: .fixedLeaf("»")),
+          Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
+          Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
           Node(name: "Colon", kind: .fixedLeaf(":")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
           Node(name: "Space", kind: .fixedLeaf(" ")),
@@ -93,12 +93,59 @@ extension Node {
           ),
 
           Node(
+            name: "LiteralSegment",
+            kind: .alternates([
+              Alternate(name: "identifier", type: "IdentifierComponent"),
+              Alternate(name: "space", type: "Space"),
+              Alternate(name: "colon", type: "Colon"),
+            ])
+          ),
+          Node(
             name: "Symbol",
             kind: .compound(children: [
               Child(name: "mark", type: "SymbolInsertionMark", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "code", type: "IdentifierComponent", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "LiteralComponent",
+            kind: .alternates([
+              Alternate(name: "segment", type: "LiteralSegment"),
+              Alternate(name: "escape", type: "Symbol"),
+            ])
+          ),
+          Node(
+            name: "ChevronString",
+            kind: .compound(children: [
+              Child(name: "openingQuotationMark", type: "LeftChevronQuotationMark", kind: .fixed),
+              Child(name: "contents", type: "LiteralComponent", kind: .array),
+              Child(name: "closingQuotationMark", type: "RightChevronQuotationMark", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "SixNineString",
+            kind: .compound(children: [
+              Child(name: "openingQuotationMark", type: "SixesQuotationMark", kind: .fixed),
+              Child(name: "contents", type: "LiteralComponent", kind: .array),
+              Child(name: "closingQuotationMark", type: "NinesQuotationMark", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "LowSixString",
+            kind: .compound(children: [
+              Child(name: "openingQuotationMark", type: "LowQuotationMark", kind: .fixed),
+              Child(name: "contents", type: "LiteralComponent", kind: .array),
+              Child(name: "closingQuotationMark", type: "SixesQuotationMark", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Literal",
+            kind: .alternates([
+              Alternate(name: "sixNine", type: "SixNineString"),
+              Alternate(name: "lowSix", type: "LowSixString"),
+              Alternate(name: "chevrons", type: "ChevronString"),
             ])
           ),
 
