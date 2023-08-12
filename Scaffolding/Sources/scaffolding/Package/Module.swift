@@ -22,5 +22,8 @@ struct Module {
     for thing in module.things.sorted(by: { $0.key < $1.key }) {
       print("\(thing.key):", StrictString(thing.value.names.sorted().joined(separator: "/".scalars)))
     }
+    for action in module.actions.sorted(by: { $0.key < $1.key }) {
+      print("\(action.key):", StrictString(action.value.names.sorted().joined(separator: "/".scalars)))
+    }
   }
 }

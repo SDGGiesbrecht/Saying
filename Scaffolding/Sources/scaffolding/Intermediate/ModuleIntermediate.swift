@@ -4,6 +4,7 @@ import SDGText
 struct ModuleIntermediate {
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
+  var actions: [StrictString: ActionIntermediate] = [:]
 }
 
 extension ModuleIntermediate {
@@ -12,9 +13,15 @@ extension ModuleIntermediate {
     return identifierMapping[identifier].flatMap { things[$0] }
   }
 
+  func lookupAction(_ identifier: StrictString) -> ActionIntermediate? {
+    return identifierMapping[identifier].flatMap { actions[$0] }
+  }
+
   func lookupDeclaration(_ identifier: StrictString) -> ParsedDeclaration? {
     if let thing = lookupThing(identifier)?.declaration {
       return .thing(thing)
+    } else if let action = lookupAction(identifier)?.declaration {
+      return .action(action)
     } else {
       return nil
     }
@@ -28,14 +35,21 @@ extension ModuleIntermediate {
         let identifier = thing.names.identifier()
         for name in thing.names {
           if identifierMapping[name] ≠ nil {
-            let conflicting = lookupThing(name)
             throw ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!])
           }
           identifierMapping[name] = identifier
         }
         things[identifier] = thing
-      case .action:
-        break
+      case .action(let actionNode):
+        let action = ActionIntermediate(actionNode)
+        let identifier = action.names.identifier()
+        for name in action.names {
+          if identifierMapping[name] ≠ nil {
+            throw ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!])
+          }
+          identifierMapping[name] = identifier
+        }
+        actions[identifier] = action
       }
     }
   }

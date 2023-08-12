@@ -433,7 +433,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
-              Child(name: "type", type: "NativeAction", kind: .required),
+              Child(name: "expression", type: "NativeAction", kind: .required),
             ])
           ),
 
