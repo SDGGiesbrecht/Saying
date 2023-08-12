@@ -21,7 +21,7 @@ extension SyntaxNode {
     case .lineBreak:
       return "\n"
     default:
-      if self is ParsedSyntaxLeaf {
+      if self is SyntaxLeaf {
         return source()
       } else {
         return children.lazy.map({ $0.formattedGitStyleSource() }).joined()
