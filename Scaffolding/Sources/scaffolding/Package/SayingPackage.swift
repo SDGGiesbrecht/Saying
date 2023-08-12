@@ -1,6 +1,7 @@
 import Foundation
 
 import SDGCollections
+import SDGText
 import SDGPersistence
 
 struct Package {
@@ -11,7 +12,12 @@ struct Package {
     return location.appendingPathComponent("Source")
   }
 
-  static let ignoredFiles: Set<String> = [".DS_Store"]
+  static let ignoredDirectories: Set<String> = [
+    ".git"
+  ]
+  static let ignoredFiles: Set<String> = [
+    ".DS_Store",
+  ]
 
   func modules() throws -> [Module] {
     return try FileManager.default.contents(ofDirectory: sourceDirectory)
@@ -21,19 +27,22 @@ struct Package {
   }
 
   func files() throws -> [URL] {
-    return try FileManager.default.deepFileEnumeration(in: sourceDirectory)
+    return try FileManager.default.deepFileEnumeration(in: location)
+      .lazy.filter({ $0.path(relativeTo: location).truncated(before: "/") ∉ Package.ignoredDirectories })
       .lazy.filter({ $0.lastPathComponent ∉ Package.ignoredFiles })
       .sorted(by: { $0.path < $1.path })
   }
 
-  func format() throws {
+  func format(reportProgress: (StrictString) -> Void) throws {
     for fileURL in try files() {
+      let relativePath = fileURL.path(relativeTo: location)
       switch fileURL.sourceFormat {
       case .utf8(let gitStyle):
         switch gitStyle {
         case false:
-          break
+          reportProgress("¬\(relativePath)")
         case true:
+          reportProgress(" \(relativePath)")
           let file = try File(from: fileURL)
           let formatted = try file.formattedGitStyleSource()
           try formatted.save(to: fileURL)
