@@ -19,19 +19,19 @@ action
   test (verify (((false) and (true)) is (false)))
   test (verify (((false) and (false)) is (false)))
   parameter: first
-  (
-   [
-    English: A truth value.
-    Deutsch: Eine Wahrheitswert.
-   ]
-  )
+   (
+    [
+     English: A truth value.
+     Deutsch: Eine Wahrheitswert.
+    ]
+   )
   parameter: second
-  (
-   [
-    English: Another truth value.
-    Deutsch: Eine weitere Wahrheitswert.
-   ]
-  )
+   (
+    [
+     English: Another truth value.
+     Deutsch: Eine weitere Wahrheitswert.
+    ]
+   )
  ]
  (
   English: (first: truth value) and (second: truth value)
