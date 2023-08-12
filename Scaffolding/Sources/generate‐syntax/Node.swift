@@ -56,6 +56,9 @@ struct Node {
     if let identifier = identifierSegmentConformance(parsed: true) {
       result.append(identifier)
     }
+    result.append(contentsOf: [
+      parsedConversions()
+    ])
     if ¬utilities.isEmpty {
       result.append("extension \(name) {")
       for utility in utilities {
@@ -192,6 +195,21 @@ struct Node {
           "  }",
         ])
       }
+    }
+    if parsed {
+      result.append(contentsOf: [
+        "",
+        "  func mutableNode() -> SyntaxNode {",
+        "    return mutable()",
+        "  }",
+      ])
+    } else {
+      result.append(contentsOf: [
+        "",
+        "  func parsedNode() -> ParsedSyntaxNode {",
+        "    return parsed()",
+        "  }",
+      ])
     }
     result.append(contentsOf: [
       "}",
@@ -652,6 +670,68 @@ struct Node {
     } else {
       return nil
     }
+  }
+
+  func parsedConversions() -> StrictString {
+    var result: [StrictString] = [
+      "",
+      "extension \(name) {",
+      "  func parsed() -> Parsed\(name) {",
+      "    return Parsed\(name).fastParse(source: source())!",
+      "  }",
+      "}",
+      "",
+      "extension Parsed\(name) {",
+      "  func mutable() -> \(name) {",
+    ]
+    var arguments: [StrictString] = []
+    var isEnumeration = false
+    switch kind {
+    case .fixedLeaf:
+      break
+    case .keyword, .variableLeaf:
+      arguments.append("text: StrictString(location)")
+    case .compound(let children):
+      for child in children {
+        switch child.kind {
+        case .fixed:
+          break
+        case .required:
+          arguments.append("\(child.name): \(child.name).mutable()")
+        case .optional:
+          arguments.append("\(child.name): \(child.name)?.mutable()")
+        case .array:
+          arguments.append("\(child.name): \(child.name).map({ $0.mutable() })")
+        }
+      }
+    case .alternates(let alternates):
+      isEnumeration = true
+      result.append(contentsOf: [
+        "    switch self {",
+      ])
+      for alternate in alternates {
+        result.append(contentsOf: [
+          "    case .\(alternate.name)(let \(alternate.name)):",
+          "      return .\(alternate.name)(\(alternate.name).mutable())",
+        ])
+      }
+      result.append(contentsOf: [
+        "    }",
+      ])
+    }
+    let combinedArguments = arguments.joined(separator: ",\n      ")
+    if ¬isEnumeration {
+      result.append("    \(name)(")
+      if ¬combinedArguments.isEmpty {
+        result.append("      \(combinedArguments)")
+      }
+      result.append("    )")
+    }
+    result.append(contentsOf: [
+      "  }",
+      "}",
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func nodeKind(parsed: Bool) -> StrictString {

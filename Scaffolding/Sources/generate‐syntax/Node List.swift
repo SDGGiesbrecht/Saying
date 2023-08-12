@@ -56,6 +56,7 @@ extension Node {
           entryType: "IdentifierComponent",
           separatorName: "space",
           separatorType: "Space",
+          fixedSeparator: true,
           isIdentifierSegment: true
         ),
         [
@@ -163,7 +164,8 @@ extension Node {
           entryName: "argument", entryNamePlural: "arguments",
           entryType: "Argument",
           separatorName: "identifierSegment",
-          separatorType: "MedialIdentifierSegment"
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
         ),
         [
           Node(
@@ -197,7 +199,8 @@ extension Node {
           entryName: "text", entryNamePlural: "text",
           entryType: "ParagraphEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak"
+          separatorType: "LineBreak",
+          fixedSeparator: true
         ),
         [
           Node(
@@ -262,7 +265,8 @@ extension Node {
           entryName: "entry", entryNamePlural: "entry",
           entryType: "DocumentationEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak"
+          separatorType: "LineBreak",
+          fixedSeparator: true
         ),
         [
           Node(
@@ -297,7 +301,8 @@ extension Node {
           entryName: "name", entryNamePlural: "names",
           entryType: "ThingNameEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak"
+          separatorType: "LineBreak",
+          fixedSeparator: true
         ),
         [
           Node(
@@ -342,7 +347,8 @@ extension Node {
           entryName: "parameter", entryNamePlural: "parameters",
           entryType: "Parameter",
           separatorName: "identifierSegment",
-          separatorType: "MedialIdentifierSegment"
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
         ),
         [
           Node(
@@ -374,7 +380,8 @@ extension Node {
           entryName: "name", entryNamePlural: "names",
           entryType: "ActionNameEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak"
+          separatorType: "LineBreak",
+          fixedSeparator: true
         ),
         [
           Node(
@@ -417,7 +424,8 @@ extension Node {
           entryName: "component", entryNamePlural: "components",
           entryType: "ImplementationComponent",
           separatorName: "space",
-          separatorType: "Space"
+          separatorType: "Space",
+          fixedSeparator: true
         ),
         [
           Node(
@@ -466,7 +474,8 @@ extension Node {
           entryName: "declaration", entryNamePlural: "declarations",
           entryType: "Declaration",
           separatorName: "paragraphBreak",
-          separatorType: "ParagraphBreak"
+          separatorType: "ParagraphBreak",
+          fixedSeparator: true
         ),
       ] as [[Node]]
     ).joined()
@@ -479,11 +488,12 @@ extension Node {
     entryType: StrictString,
     separatorName: StrictString,
     separatorType: StrictString,
+    fixedSeparator: Bool,
     isIdentifierSegment: Bool = false
   ) -> [Node] {
     return [
       Node(name: "\(name)Continuation", kind: .compound(children: [
-        Child(name: separatorName, type: separatorType, kind: .required),
+        Child(name: separatorName, type: separatorType, kind: fixedSeparator ? .fixed : .required),
         Child(name: entryName, type: entryType, kind: .required),
       ])),
       Node(
