@@ -9,7 +9,13 @@ import Foundation
       .deletingLastPathComponent()
       .deletingLastPathComponent()
     let package = Package(location: packageRoot)
-    try package.format()
-    try package.test()
+
+    let arguments = ProcessInfo.processInfo.arguments.dropFirst()
+    switch arguments.first {
+    case "format":
+      try package.format(reportProgress: { print($0) })
+    default:
+      try package.test()
+    }
   }
 }

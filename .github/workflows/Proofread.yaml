@@ -1,0 +1,24 @@
+name: Proofread
+
+on: [push, pull_request]
+
+jobs:
+  Proofread:
+    name: Proofread
+    runs-on: ubuntu-20.04
+    container: swift:5.7.3-focal
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Format
+      shell: bash
+      run: |
+        set -x
+        swift run --package-path Scaffolding scaffolding fromat
+    - name: Check for formatting changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
