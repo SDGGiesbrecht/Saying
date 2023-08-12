@@ -15,23 +15,12 @@ struct Module {
 
   func build() throws {
     let sourceFiles = try self.sourceFiles()
+    var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
-      let loaded = try File(from: sourceFile)
-      let syntax = try loaded.parse()
-      for declaration in [[syntax.first], syntax.continuations.lazy.map({ $0.declaration })].joined() {
-        switch declaration {
-        case .thing(let thing):
-          let names = thing.name.names.names
-            .map({ $0.name.identifierText() })
-            .joined(separator: ", ")
-          print("thing (\(thing.location.underlyingScalarOffsetOfStart())): \(names)")
-        case .action(let action):
-          let source = action.name.names.names
-            .map({ $0.name.name() })
-            .joined(separator: ", ")
-          print("action (\(action.location.underlyingScalarOffsetOfStart())): \(source)")
-        }
-      }
+      try module.add(file: File(from: sourceFile).parse())
+    }
+    for thing in module.things.sorted(by: { $0.key < $1.key }) {
+      print("\(thing.key):", StrictString(thing.value.names.sorted().joined(separator: "/".scalars)))
     }
   }
 }
