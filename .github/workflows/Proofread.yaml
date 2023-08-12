@@ -14,7 +14,7 @@ jobs:
       shell: bash
       run: |
         set -x
-        swift run --package-path Scaffolding scaffolding fromat
+        swift run --package-path Scaffolding scaffolding format
     - name: Check for formatting changes
       shell: bash
       run: |
