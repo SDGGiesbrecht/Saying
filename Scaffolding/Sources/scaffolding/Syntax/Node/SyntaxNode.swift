@@ -4,6 +4,8 @@ protocol SyntaxNode {
   var nodeKind: SyntaxNodeKind { get }
   var children: [SyntaxNode] { get }
   func source() -> StrictString
+
+  func parsedNode() -> ParsedSyntaxNode
 }
 
 extension SyntaxNode {
@@ -13,10 +15,17 @@ extension SyntaxNode {
   }
 
   func formattedGitStyleSource() -> StrictString {
-    if self is SyntaxLeaf {
-      return source()
-    } else {
-      return children.lazy.map({ $0.formattedGitStyleSource() }).joined()
+    switch nodeKind {
+    case .paragraphBreak:
+      return "\n\n"
+    case .lineBreak:
+      return "\n"
+    default:
+      if self is ParsedSyntaxLeaf {
+        return source()
+      } else {
+        return children.lazy.map({ $0.formattedGitStyleSource() }).joined()
+      }
     }
   }
 }
