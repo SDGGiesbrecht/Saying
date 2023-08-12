@@ -1,10 +1,10 @@
-name: Source
+name: Proofread
 
 on: [push, pull_request]
 
 jobs:
-  Source:
-    name: Source
+  Proofread:
+    name: Proofread
     runs-on: ubuntu-20.04
     container: swift:5.7.3-focal
     steps:
