@@ -8,7 +8,7 @@ struct ActionIntermediate {
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
   var swift: SwiftImplementation?
-  var declaration: ParsedActionDeclaration
+  var declaration: ParsedActionDeclaration?
 }
 
 extension ActionIntermediate {

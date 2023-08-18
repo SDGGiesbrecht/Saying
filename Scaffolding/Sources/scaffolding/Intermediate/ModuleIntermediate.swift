@@ -80,4 +80,45 @@ extension ModuleIntermediate {
       }
     }
   }
+
+  mutating func addMagicSymbols() {
+    identifierMapping["verify ()"] = "verify ()"
+    actions["verify ()"] = ActionIntermediate(
+      names: [],
+      parameters: [],
+      reorderings: [:],
+      declaration: nil
+    )
+    identifierMapping["() is ()"] = "() is ()"
+    actions["() is ()"] = ActionIntermediate(
+      names: [],
+      parameters: [],
+      reorderings: [:],
+      declaration: nil
+    )
+    identifierMapping["true"] = "true"
+    actions["true"] = ActionIntermediate(
+      names: [],
+      parameters: [],
+      reorderings: [:],
+      declaration: nil
+    )
+    identifierMapping["false"] = "false"
+    actions["false"] = ActionIntermediate(
+      names: [],
+      parameters: [],
+      reorderings: [:],
+      declaration: nil
+    )
+  }
+
+  func validateReferences() throws {
+    var errors: [ActionUse.ReferenceError] = []
+    for test in tests {
+      test.action.validateReferences(module: self, errors: &errors)
+    }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
+    }
+  }
 }
