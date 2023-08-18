@@ -33,11 +33,13 @@ extension ModuleIntermediate {
     for declaration in file.declarations {
       let documentation: ParsedAttachedDocumentation?
       let parameters: Set<StrictString>
+      let namespace: [Set<StrictString>]
       switch declaration {
       case .thing(let thingNode):
         documentation = thingNode.documentation
         parameters = []
         let thing = Thing(thingNode)
+        namespace = [thing.names]
         let identifier = thing.names.identifier()
         for name in thing.names {
           if identifierMapping[name] ≠ nil {
@@ -50,6 +52,7 @@ extension ModuleIntermediate {
         documentation = actionNode.documentation
         let action = try ActionIntermediate.construct(actionNode).get()
         parameters = action.parameters.reduce(Set(), { $0 ∪ $1.names })
+        namespace = [action.names]
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
@@ -60,6 +63,7 @@ extension ModuleIntermediate {
         actions[identifier] = action
       }
       if let documentation = documentation {
+        var testIndex = 1
         for element in documentation.documentation.entries.entries {
           switch element {
           case .parameter(let parameter):
@@ -67,7 +71,8 @@ extension ModuleIntermediate {
               throw ConstructionError.parameterNotFound(parameter)
             }
           case .test(let test):
-            tests.append(TestIntermediate(test))
+            tests.append(TestIntermediate(test, location: namespace, index: testIndex))
+            testIndex += 1
           case .paragraph:
             break
           }
