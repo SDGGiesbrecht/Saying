@@ -11,6 +11,9 @@ struct Package {
   var sourceDirectory: URL {
     return location.appendingPathComponent("Source")
   }
+  var constructionDirectory: URL {
+    return location.appendingPathComponent(".Construction")
+  }
 
   static let ignoredDirectories: Set<String> = [
     ".git"
@@ -52,10 +55,19 @@ struct Package {
   }
 
   func build() throws {
-    let modules = try self.modules()
-    for module in modules {
-      try module.build()
-    }
+    try buildSwift()
+  }
+
+  func buildSwift() throws {
+    let construction = self.constructionDirectory.appendingPathComponent("Swift")
+    let source = try self.modules().lazy.map({ try $0.buildSwift() }).joined(separator: "\n\n")
+    try source.save(
+      to:
+        construction
+        .appendingPathComponent("Sources")
+        .appendingPathComponent("Products")
+        .appendingPathComponent("Source.swift")
+    )
   }
 
   func test() throws {

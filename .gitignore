@@ -4,6 +4,9 @@
 # macOS
 .DS_Store
 
+# אמירה
+.Construction
+
 # Swift
 .build
 Packages
