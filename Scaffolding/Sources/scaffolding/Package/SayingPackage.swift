@@ -45,7 +45,7 @@ struct Package {
           reportProgress(" \(relativePath)")
           let file = try File(from: fileURL)
           let formatted = try file.formattedGitStyleSource()
-          try formatted.save(to: fileURL)
+          try formatted.appending("\n").save(to: fileURL)
         }
       }
     }

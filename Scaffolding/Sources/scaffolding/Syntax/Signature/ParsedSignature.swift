@@ -20,4 +20,13 @@ extension ParsedSignature {
   func name() -> StrictString {
     return identifierSegments().lazy.map({ $0?.identifierText() ?? "" }).joined(separator: "()")
   }
+
+  func parameters() -> [ParsedParameter] {
+    switch self {
+    case .compound(let compound):
+      return compound.parameters.parameters
+    case .simple:
+      return []
+    }
+  }
 }
