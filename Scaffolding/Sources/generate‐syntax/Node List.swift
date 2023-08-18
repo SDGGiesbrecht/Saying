@@ -262,7 +262,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "DocumentationList",
-          entryName: "entry", entryNamePlural: "entry",
+          entryName: "entry", entryNamePlural: "entries",
           entryType: "DocumentationEntry",
           separatorName: "lineBreak",
           separatorType: "LineBreak",
