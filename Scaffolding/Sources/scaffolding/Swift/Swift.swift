@@ -88,11 +88,12 @@ enum Swift {
       })
     )
   }()
-  static func sanitize(identifier: StrictString) -> StrictString {
+  static func sanitize(identifier: StrictString, leading: Bool) -> StrictString {
     var result: StrictString = identifier.lazy
-      .map({ $0 ∈ identifierAllowed ∨ $0 == "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .map({ $0 ∈ identifierAllowed ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
-    if let first = result.first,
+    if leading,
+      let first = result.first,
       first ∉ identifierStart {
       result.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
