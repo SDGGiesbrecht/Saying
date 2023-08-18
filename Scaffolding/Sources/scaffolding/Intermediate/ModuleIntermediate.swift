@@ -84,30 +84,37 @@ extension ModuleIntermediate {
   mutating func addMagicSymbols() {
     identifierMapping["verify ()"] = "verify ()"
     actions["verify ()"] = ActionIntermediate(
-      names: [],
-      parameters: [],
-      reorderings: [:],
+      names: ["verify ()"],
+      parameters: [ParameterIntermediate(names: ["condition"], type: "truth value")],
+      reorderings: ["verify ()": [0]],
+      swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       declaration: nil
     )
     identifierMapping["() is ()"] = "() is ()"
     actions["() is ()"] = ActionIntermediate(
-      names: [],
-      parameters: [],
-      reorderings: [:],
+      names: ["() is ()"],
+      parameters: [
+        ParameterIntermediate(names: ["a"], type: "truth value"),
+        ParameterIntermediate(names: ["b"], type: "truth value")
+      ],
+      reorderings: ["() is ()": [0, 1]],
+      swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       declaration: nil
     )
     identifierMapping["true"] = "true"
     actions["true"] = ActionIntermediate(
-      names: [],
+      names: ["true"],
       parameters: [],
-      reorderings: [:],
+      reorderings: ["true": []],
+      swift: SwiftImplementation(reordering: [], textComponents: ["true"]),
       declaration: nil
     )
     identifierMapping["false"] = "false"
     actions["false"] = ActionIntermediate(
-      names: [],
+      names: ["false"],
       parameters: [],
-      reorderings: [:],
+      reorderings: ["false": []],
+      swift: SwiftImplementation(reordering: [], textComponents: ["false"]),
       declaration: nil
     )
   }

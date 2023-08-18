@@ -5,7 +5,7 @@ extension ModuleIntermediate {
     for test in tests {
       result.append(contentsOf: [
         "",
-        test.swiftSource()
+        test.swiftSource(module: self)
       ])
     }
     result.append(contentsOf: [
