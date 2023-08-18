@@ -41,7 +41,7 @@ extension ModuleIntermediate {
         }
         things[identifier] = thing
       case .action(let actionNode):
-        let action = ActionIntermediate(actionNode)
+        let action = try ActionIntermediate.construct(actionNode).get()
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
