@@ -4,7 +4,7 @@ import SDGText
 
 struct ActionIntermediate {
   var names: Set<StrictString>
-  var arguments: [StrictString]
+  var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
   var swift: SwiftImplementation?
@@ -53,7 +53,7 @@ extension ActionIntermediate {
         }
       }
     }
-    var arguments: [StrictString] = []
+    var parameterTypes: [StrictString] = []
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for entry in namesSyntax {
@@ -62,7 +62,7 @@ extension ActionIntermediate {
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {
         case .type(let type):
-          arguments.append(type.identifierText())
+          parameterTypes.append(type.identifierText())
           reorderings[signatureName, default: []].append(position)
         case .reference(let reference):
           var resolving = reference.name.identifierText()
@@ -77,12 +77,21 @@ extension ActionIntermediate {
           }
           if let index = parameterIndices[resolving] {
             reorderings[signatureName, default: []].append(index)
-            completeParameterIndexTable[resolving] = index
+            completeParameterIndexTable[parameter.name.identifierText()] = index
           } else {
             errors.append(.parameterNotFound(reference))
           }
         }
       }
+    }
+    let parameters = parameterTypes.enumerated().map { index, type in
+      let names = Set(
+        completeParameterIndexTable.keys
+          .lazy.filter({ name in
+            return completeParameterIndexTable[name] == index
+          })
+      )
+      return ParameterIntermediate(names: names, type: type)
     }
     var swift: SwiftImplementation?
     switch SwiftImplementation.construct(
@@ -100,7 +109,7 @@ extension ActionIntermediate {
     return .success(
       ActionIntermediate(
         names: names,
-        arguments: arguments,
+        parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValue?.type.identifierText(),
         swift: swift,

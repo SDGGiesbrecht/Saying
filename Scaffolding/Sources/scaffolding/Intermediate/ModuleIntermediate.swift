@@ -1,10 +1,12 @@
 import SDGLogic
+import SDGCollections
 import SDGText
 
 struct ModuleIntermediate {
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
+  var tests: [TestIntermedate] = []
 }
 
 extension ModuleIntermediate {
@@ -29,8 +31,12 @@ extension ModuleIntermediate {
 
   mutating func add(file: ParsedDeclarationList) throws {
     for declaration in file.declarations {
+      let documentation: ParsedAttachedDocumentation?
+      let parameters: Set<StrictString>
       switch declaration {
       case .thing(let thingNode):
+        documentation = thingNode.documentation
+        parameters = []
         let thing = Thing(thingNode)
         let identifier = thing.names.identifier()
         for name in thing.names {
@@ -41,7 +47,9 @@ extension ModuleIntermediate {
         }
         things[identifier] = thing
       case .action(let actionNode):
+        documentation = actionNode.documentation
         let action = try ActionIntermediate.construct(actionNode).get()
+        parameters = action.parameters.reduce(Set(), { $0 ∪ $1.names })
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
@@ -50,6 +58,20 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         actions[identifier] = action
+      }
+      if let documentation = documentation {
+        for element in documentation.documentation.entries.entries {
+          switch element {
+          case .parameter(let parameter):
+            if parameter.name.identifierText() ∉ parameters {
+              throw ConstructionError.parameterNotFound(parameter)
+            }
+          case .test(let test):
+            tests.append(TestIntermedate(test))
+          case .paragraph:
+            break
+          }
+        }
       }
     }
   }
