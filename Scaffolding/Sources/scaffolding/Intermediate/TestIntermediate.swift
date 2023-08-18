@@ -1,8 +1,8 @@
-struct TestIntermedate {
+struct TestIntermediate {
   var action: ActionUse
 }
 
-extension TestIntermedate {
+extension TestIntermediate {
 
   init(_ test: ParsedTest) {
     self.action = ActionUse(test.details.test)

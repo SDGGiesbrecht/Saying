@@ -6,7 +6,7 @@ struct ModuleIntermediate {
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
-  var tests: [TestIntermedate] = []
+  var tests: [TestIntermediate] = []
 }
 
 extension ModuleIntermediate {
@@ -67,7 +67,7 @@ extension ModuleIntermediate {
               throw ConstructionError.parameterNotFound(parameter)
             }
           case .test(let test):
-            tests.append(TestIntermedate(test))
+            tests.append(TestIntermediate(test))
           case .paragraph:
             break
           }
