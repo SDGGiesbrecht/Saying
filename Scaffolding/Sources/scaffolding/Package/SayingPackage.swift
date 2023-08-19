@@ -123,19 +123,19 @@ struct Package {
     ).get()
   }
 
-  func testXcode(platform: String) throws {
+  func testXcode(destination: String) throws {
     try buildSwift()
     _ = try Shell.default.run(
       command: [
         "xcrun", "xcodebuild", "build",
         "-scheme", "Package",
-        "-destination", "platform=iOS Simulator,name=iPhone 14",
+        "-destination", destination,
       ],
       in: swiftConstructionDirectory,
       reportProgress: { print($0) }
     ).get()
   }
   func testIOS() throws {
-    return try testXcode(platform: "iOS")
+    return try testXcode(destination: "platform=iOS Simulator,name=iPhone 14")
   }
 }
