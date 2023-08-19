@@ -20,16 +20,10 @@ extension SwiftImplementation {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        if textComponents.isEmpty {
-          textComponents.append("")
-        }
         if let parameterIndex = indexTable[parameter.identifierText()] {
           reordering.append(parameterIndex)
         } else {
           errors.append(.parameterNotFound(parameter))
-        }
-        if index == components.indices.last {
-          textComponents.append("")
         }
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
@@ -39,6 +33,10 @@ extension SwiftImplementation {
           textComponents.append(StrictString(literal.string))
         }
       }
+    }
+    if ¬textComponents.contains(where: { $0.contains("(") })
+      ∨ ¬textComponents.contains(where: { $0.contains(")") }) {
+      errors.append(.parenthesesMissing(components))
     }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
