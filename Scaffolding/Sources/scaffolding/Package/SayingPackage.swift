@@ -128,8 +128,8 @@ struct Package {
     _ = try Shell.default.run(
       command: [
         "xcrun", "xcodebuild", "build",
-        "-destination", "generic/platform=iOS",
         "-scheme", "Package",
+        "-destination", "platform=iOS Simulator,name=iPhone 14",
       ],
       in: swiftConstructionDirectory,
       reportProgress: { print($0) }
