@@ -17,7 +17,7 @@ jobs:
         defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
         xcodebuild -version
         swift --version
-    - name: Build scaffolding
+    - name: Test
       shell: bash
       run: |
         set -x
