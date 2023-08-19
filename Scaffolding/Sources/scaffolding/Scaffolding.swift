@@ -16,8 +16,12 @@ import Foundation
       try package.format(reportProgress: { print($0) })
     case "test‐swift":
       try package.testSwift()
+    case "test‐tvos":
+      try package.testTVOS()
     case "test‐ios":
       try package.testIOS()
+    case "test‐watchos":
+      try package.testWatchOS()
     default:
       try package.test()
     }

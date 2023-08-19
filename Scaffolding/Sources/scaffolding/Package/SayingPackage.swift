@@ -62,7 +62,7 @@ struct Package {
     try buildSwift()
   }
 
-  func buildSwift() throws {
+  func prepareSwift() throws {
     try ([
       "// swift-tools-version: 5.7",
       "",
@@ -76,6 +76,10 @@ struct Package {
       "      name: \u{22}test\u{22},",
       "      dependencies: [\u{22}Products\u{22}]",
       "    ),",
+      "    .testTarget(",
+      "      name: \u{22}WrappedTests\u{22},",
+      "      dependencies: [\u{22}Products\u{22}]",
+      "    )",
       "  ]",
       ")",
     ] as [String]).joined(separator: "\n").appending("\n")
@@ -105,6 +109,35 @@ struct Package {
           .appendingPathComponent("test")
           .appendingPathComponent("Test.swift")
       )
+    try ([
+      "import XCTest",
+      "@testable import Products",
+      "",
+      "class WrappedTests: XCTestCase {",
+      "",
+      "  func testProject() {",
+      "    Products.test()",
+      "  }",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(
+        to:
+          swiftConstructionDirectory
+          .appendingPathComponent("Tests")
+          .appendingPathComponent("WrappedTests")
+          .appendingPathComponent("WrappedTests.swift")
+      )
+  }
+
+  func buildSwift() throws {
+    try prepareSwift()
+    _ = try Shell.default.run(
+      command: [
+        "swift", "build",
+        "--package-path", swiftConstructionDirectory.path,
+      ],
+      reportProgress: { print($0) }
+    ).get()
   }
 
   func test() throws {
@@ -112,7 +145,7 @@ struct Package {
   }
 
   func testSwift() throws {
-    try buildSwift()
+    try prepareSwift()
     _ = try Shell.default.run(
       command: [
         "swift", "run",
@@ -123,19 +156,41 @@ struct Package {
     ).get()
   }
 
-  func testXcode(destination: String) throws {
-    try buildSwift()
+  func buildXcode(platform: String) throws {
+    try prepareSwift()
     _ = try Shell.default.run(
       command: [
         "xcrun", "xcodebuild", "build",
         "-scheme", "Package",
-        "-destination", destination,
+        "-destination", "generic/platform=\(platform)"
       ],
       in: swiftConstructionDirectory,
       reportProgress: { print($0) }
     ).get()
   }
+
+  func testXcode(platform: String, simulator: String) throws {
+    try buildXcode(platform: platform)
+    _ = try Shell.default.run(
+      command: [
+        "xcrun", "xcodebuild", "test",
+        "-scheme", "Package",
+        "-destination", "platform=\(platform) Simulator,name=\(simulator)"
+      ],
+      in: swiftConstructionDirectory,
+      reportProgress: { print($0) }
+    ).get()
+  }
+
   func testIOS() throws {
-    return try testXcode(destination: "platform=iOS Simulator,name=iPhone 14")
+    try testXcode(platform: "iOS", simulator: "iPhone 14")
+  }
+
+  func testTVOS() throws {
+    try testXcode(platform: "tvOS", simulator: "Apple TV")
+  }
+
+  func testWatchOS() throws {
+    try testXcode(platform: "watchOS", simulator: "Apple Watch Series 5 (40mm)")
   }
 }
