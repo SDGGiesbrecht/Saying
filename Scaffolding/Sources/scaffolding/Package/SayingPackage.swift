@@ -3,6 +3,7 @@ import Foundation
 import SDGCollections
 import SDGText
 import SDGPersistence
+import SDGExternalProcess
 
 struct Package {
 
@@ -10,6 +11,12 @@ struct Package {
 
   var sourceDirectory: URL {
     return location.appendingPathComponent("Source")
+  }
+  var constructionDirectory: URL {
+    return location.appendingPathComponent(".Construction")
+  }
+  var swiftConstructionDirectory: URL {
+    return constructionDirectory.appendingPathComponent("Swift")
   }
 
   static let ignoredDirectories: Set<String> = [
@@ -52,13 +59,67 @@ struct Package {
   }
 
   func build() throws {
-    let modules = try self.modules()
-    for module in modules {
-      try module.build()
-    }
+    try buildSwift()
+  }
+
+  func buildSwift() throws {
+    try ([
+      "// swift-tools-version: 5.7",
+      "",
+      "import PackageDescription",
+      "",
+      "let package = Package(",
+      "  name: \u{22}scaffolding\u{22},",
+      "  targets: [",
+      "    .target(name: \u{22}Products\u{22}),",
+      "    .executableTarget(",
+      "      name: \u{22}test\u{22},",
+      "      dependencies: [\u{22}Products\u{22}]",
+      "    ),",
+      "  ]",
+      ")",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: swiftConstructionDirectory.appendingPathComponent("Package.swift"))
+    let source = try self.modules().lazy.map({ try $0.buildSwift() }).joined(separator: "\n\n")
+    try source.save(
+      to:
+        swiftConstructionDirectory
+        .appendingPathComponent("Sources")
+        .appendingPathComponent("Products")
+        .appendingPathComponent("Source.swift")
+    )
+    try ([
+      "@testable import Products",
+      "",
+      "@main struct Test {",
+      "",
+      "  static func main() {",
+      "    Products.test()",
+      "  }",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(
+        to:
+          swiftConstructionDirectory
+          .appendingPathComponent("Sources")
+          .appendingPathComponent("test")
+          .appendingPathComponent("Test.swift")
+      )
   }
 
   func test() throws {
-    try build()
+    try testSwift()
+  }
+
+  func testSwift() throws {
+    try buildSwift()
+    _ = try Shell.default.run(
+      command: [
+        "swift", "run",
+        "--package-path", swiftConstructionDirectory.path,
+        "test"
+      ],
+      reportProgress: { print($0) }
+    ).get()
   }
 }

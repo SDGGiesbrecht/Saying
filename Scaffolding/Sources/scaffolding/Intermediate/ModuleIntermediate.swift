@@ -6,7 +6,7 @@ struct ModuleIntermediate {
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
-  var tests: [TestIntermedate] = []
+  var tests: [TestIntermediate] = []
 }
 
 extension ModuleIntermediate {
@@ -33,11 +33,13 @@ extension ModuleIntermediate {
     for declaration in file.declarations {
       let documentation: ParsedAttachedDocumentation?
       let parameters: Set<StrictString>
+      let namespace: [Set<StrictString>]
       switch declaration {
       case .thing(let thingNode):
         documentation = thingNode.documentation
         parameters = []
         let thing = Thing(thingNode)
+        namespace = [thing.names]
         let identifier = thing.names.identifier()
         for name in thing.names {
           if identifierMapping[name] ≠ nil {
@@ -50,6 +52,7 @@ extension ModuleIntermediate {
         documentation = actionNode.documentation
         let action = try ActionIntermediate.construct(actionNode).get()
         parameters = action.parameters.reduce(Set(), { $0 ∪ $1.names })
+        namespace = [action.names]
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
@@ -60,6 +63,7 @@ extension ModuleIntermediate {
         actions[identifier] = action
       }
       if let documentation = documentation {
+        var testIndex = 1
         for element in documentation.documentation.entries.entries {
           switch element {
           case .parameter(let parameter):
@@ -67,12 +71,61 @@ extension ModuleIntermediate {
               throw ConstructionError.parameterNotFound(parameter)
             }
           case .test(let test):
-            tests.append(TestIntermedate(test))
+            tests.append(TestIntermediate(test, location: namespace, index: testIndex))
+            testIndex += 1
           case .paragraph:
             break
           }
         }
       }
+    }
+  }
+
+  mutating func addMagicSymbols() {
+    identifierMapping["verify ()"] = "verify ()"
+    actions["verify ()"] = ActionIntermediate(
+      names: ["verify ()"],
+      parameters: [ParameterIntermediate(names: ["condition"], type: "truth value")],
+      reorderings: ["verify ()": [0]],
+      swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"]),
+      declaration: nil
+    )
+    identifierMapping["() is ()"] = "() is ()"
+    actions["() is ()"] = ActionIntermediate(
+      names: ["() is ()"],
+      parameters: [
+        ParameterIntermediate(names: ["a"], type: "truth value"),
+        ParameterIntermediate(names: ["b"], type: "truth value")
+      ],
+      reorderings: ["() is ()": [0, 1]],
+      swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
+      declaration: nil
+    )
+    identifierMapping["true"] = "true"
+    actions["true"] = ActionIntermediate(
+      names: ["true"],
+      parameters: [],
+      reorderings: ["true": []],
+      swift: SwiftImplementation(reordering: [], textComponents: ["true"]),
+      declaration: nil
+    )
+    identifierMapping["false"] = "false"
+    actions["false"] = ActionIntermediate(
+      names: ["false"],
+      parameters: [],
+      reorderings: ["false": []],
+      swift: SwiftImplementation(reordering: [], textComponents: ["false"]),
+      declaration: nil
+    )
+  }
+
+  func validateReferences() throws {
+    var errors: [ActionUse.ReferenceError] = []
+    for test in tests {
+      test.action.validateReferences(module: self, errors: &errors)
+    }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
     }
   }
 }

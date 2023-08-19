@@ -13,17 +13,18 @@ struct Module {
       .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
   }
 
-  func build() throws {
+  func build() throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
       try module.add(file: File(from: sourceFile).parse())
     }
-    for thing in module.things.sorted(by: { $0.key < $1.key }) {
-      print("\(thing.key):", StrictString(thing.value.names.sorted().joined(separator: "/".scalars)))
-    }
-    for action in module.actions.sorted(by: { $0.key < $1.key }) {
-      print("\(action.key):", StrictString(action.value.names.sorted().joined(separator: "/".scalars)))
-    }
+    module.addMagicSymbols()
+    try module.validateReferences()
+    return module
+  }
+
+  func buildSwift() throws -> String {
+    try build().buildSwift()
   }
 }

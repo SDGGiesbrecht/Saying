@@ -16,6 +16,7 @@ let package = Package(
         .product(name: "SDGCollections", package: "SDGCornerstone"),
         .product(name: "SDGText", package: "SDGCornerstone"),
         .product(name: "SDGPersistence", package: "SDGCornerstone"),
+        .product(name: "SDGExternalProcess", package: "SDGCornerstone"),
       ],
       plugins: [
         .plugin(name: "GenerateSyntax")
