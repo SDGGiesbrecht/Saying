@@ -117,4 +117,8 @@ extension ActionIntermediate {
       )
     )
   }
+
+  func coverageRegions() -> Set<StrictString> {
+    return [names.identifier()]
+  }
 }
