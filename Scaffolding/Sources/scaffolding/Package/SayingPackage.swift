@@ -69,7 +69,7 @@ struct Package {
       "import PackageDescription",
       "",
       "let package = Package(",
-      "  name: \u{22}scaffolding\u{22},",
+      "  name: \u{22}Package\u{22},",
       "  targets: [",
       "    .target(name: \u{22}Products\u{22}),",
       "    .executableTarget(",
@@ -121,5 +121,21 @@ struct Package {
       ],
       reportProgress: { print($0) }
     ).get()
+  }
+
+  func testXcode(platform: String) throws {
+    try buildSwift()
+    _ = try Shell.default.run(
+      command: [
+        "xcrun", "xcodebuild", "build",
+        "-destination", "generic/platform=iOS",
+        "-scheme", "Package",
+      ],
+      in: swiftConstructionDirectory,
+      reportProgress: { print($0) }
+    ).get()
+  }
+  func testIOS() throws {
+    return try testXcode(platform: "iOS")
   }
 }
