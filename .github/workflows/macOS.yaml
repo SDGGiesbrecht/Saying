@@ -21,4 +21,4 @@ jobs:
       shell: bash
       run: |
         set -x
-        swift run --package-path Scaffolding test‐swift
+        swift run --package-path Scaffolding scaffolding test‐swift
