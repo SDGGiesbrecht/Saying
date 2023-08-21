@@ -436,7 +436,17 @@ extension Node {
               Child(name: "expression", type: "NativeAction", kind: .required),
             ])
           ),
+        ],
+          Node.separatedList(
+            name: "ActionImplementations",
+            entryName: "implementation", entryNamePlural: "implementations",
+            entryType: "ActionImplementation",
+            separatorName: "lineBreak",
+            separatorType: "LineBreak",
+            fixedSeparator: true
+          ),
 
+        [
           Node(
             name: "ThingDeclaration",
             kind: .compound(children: [
@@ -457,7 +467,7 @@ extension Node {
               Child(name: "name", type: "ActionName", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "returnValue", type: "ReturnValue", kind: .optional),
-              Child(name: "implementation", type: "ActionImplementation", kind: .required),
+              Child(name: "implementation", type: "ActionImplementations", kind: .required),
             ])
           ),
           Node(
