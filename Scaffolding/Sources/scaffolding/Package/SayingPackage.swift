@@ -67,7 +67,8 @@ struct Package {
 
   func prepareJavaScript() throws {
     try ([
-      "console.log('Hello, world!')",
+      "console.log('Failed!');",
+      "throw new Error();",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: javaScriptConstructionDirectory.appendingPathComponent("Package.js"))
   }
