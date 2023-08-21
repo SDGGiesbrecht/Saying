@@ -15,7 +15,7 @@ jobs:
       run: |
         set -x
         swift run --package-path Scaffolding scaffolding format
-    - name: Check for formatting changes
+    - name: Check repository for changes
       shell: bash
       run: |
         set -x

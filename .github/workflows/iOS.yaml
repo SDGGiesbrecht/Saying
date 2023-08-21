@@ -22,3 +22,10 @@ jobs:
       run: |
         set -x
         swift run --package-path Scaffolding scaffolding test‐ios
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
