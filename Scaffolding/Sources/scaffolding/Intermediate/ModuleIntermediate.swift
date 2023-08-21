@@ -87,6 +87,7 @@ extension ModuleIntermediate {
       names: ["verify ()"],
       parameters: [ParameterIntermediate(names: ["condition"], type: "truth value")],
       reorderings: ["verify ()": [0]],
+      javaScript: JavaScriptImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
       swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       declaration: nil
     )
@@ -98,6 +99,7 @@ extension ModuleIntermediate {
         ParameterIntermediate(names: ["b"], type: "truth value")
       ],
       reorderings: ["() is ()": [0, 1]],
+      javaScript: JavaScriptImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       declaration: nil
     )
@@ -106,6 +108,7 @@ extension ModuleIntermediate {
       names: ["true"],
       parameters: [],
       reorderings: ["true": []],
+      javaScript: JavaScriptImplementation(reordering: [], textComponents: ["true"]),
       swift: SwiftImplementation(reordering: [], textComponents: ["true"]),
       declaration: nil
     )
@@ -114,6 +117,7 @@ extension ModuleIntermediate {
       names: ["false"],
       parameters: [],
       reorderings: ["false": []],
+      javaScript: JavaScriptImplementation(reordering: [], textComponents: ["false"]),
       swift: SwiftImplementation(reordering: [], textComponents: ["false"]),
       declaration: nil
     )

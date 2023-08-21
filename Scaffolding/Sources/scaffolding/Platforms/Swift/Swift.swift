@@ -4,7 +4,7 @@ import SDGText
 
 enum Swift {
 
-  static let identifierStart: Set<Unicode.Scalar> = {
+  static let identifierStartList: Set<Unicode.Scalar> = {
     var values: [UInt32] = []
     values.append(contentsOf: 0x41...0x5A) // A–Z
     values.append(contentsOf: 0x61...0x7A) // a–z
@@ -61,17 +61,20 @@ enum Swift {
     return Set(
       values.lazy.compactMap({ value in
         guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isDecomposableInNFKD,
-          scalar.properties.canonicalCombiningClass == .notReordered else {
+          ¬scalar.isVulnerableToNormalization else {
           return nil
         }
         return scalar
       })
     )
   }()
-  static let identifierAllowed: Set<Unicode.Scalar> = {
+  static func identifierStartAllowed(_ scalar: Unicode.Scalar) -> Bool {
+    return scalar ∈ identifierStartList
+  }
+
+  static let identifierAllowedList: Set<Unicode.Scalar> = {
     var values: [UInt32] = []
-    values.append(contentsOf: identifierStart.lazy.map({ $0.value }))
+    values.append(contentsOf: identifierStartList.lazy.map({ $0.value }))
     values.append(contentsOf: 0x30...0x39) // 0–9
     values.append(contentsOf: 0x300...0x36F)
     values.append(contentsOf: 0x1DC0...0x1DFF)
@@ -80,21 +83,24 @@ enum Swift {
     return Set(
       values.lazy.compactMap({ value in
         guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isDecomposableInNFKD,
-          scalar.properties.canonicalCombiningClass == .notReordered else {
+          ¬scalar.isVulnerableToNormalization else {
           return nil
         }
         return scalar
       })
     )
   }()
+  static func identifierAllowed(_ scalar: Unicode.Scalar) -> Bool {
+    return scalar ∈ identifierAllowedList
+  }
+  
   static func sanitize(identifier: StrictString, leading: Bool) -> StrictString {
     var result: StrictString = identifier.lazy
-      .map({ $0 ∈ identifierAllowed ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .map({ identifierAllowed($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
     if leading,
       let first = result.first,
-      first ∉ identifierStart {
+      identifierStartAllowed(first) {
       result.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }

@@ -1,37 +1,37 @@
 extension ModuleIntermediate {
 
-  func buildSwift() -> String {
+  func buildJavaScript() -> String {
     var result: [String] = [
-      "var coverageRegions: Set<String> = [",
+      "let coverageRegions = new Set([",
     ]
     for region in actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted() {
       result.append("  \u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
-      "]",
-      "func registerCoverage(_ identifier: String) {",
-      "  coverageRegions.remove(identifier)",
+      "]);",
+      "function registerCoverage(identifier) {",
+      "  coverageRegions.delete(identifier);",
       "}",
     ])
     for test in tests {
       result.append(contentsOf: [
         "",
-        test.swiftSource(module: self)
+        test.javaScriptSource(module: self)
       ])
     }
     result.append(contentsOf: [
       "",
-      "func test() {",
+      "function test() {",
     ])
     for test in tests {
       result.append(contentsOf: [
-        "  \(test.swiftCall())"
+        "  \(test.javaScriptCall())"
       ])
     }
     result.append(contentsOf: [
-      "  assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
+      "  console.assert(coverageRegions.size == 0, coverageRegions);",
       "}"
     ])
-    return result.joined(separator: "\n").appending("\n")
+    return result.joined(separator: "\n")
   }
 }
