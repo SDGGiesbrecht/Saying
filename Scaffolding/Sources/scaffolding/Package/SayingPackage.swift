@@ -15,6 +15,9 @@ struct Package {
   var constructionDirectory: URL {
     return location.appendingPathComponent(".Construction")
   }
+  var javaScriptConstructionDirectory: URL {
+    return constructionDirectory.appendingPathComponent("JavaScript")
+  }
   var swiftConstructionDirectory: URL {
     return constructionDirectory.appendingPathComponent("Swift")
   }
@@ -60,6 +63,17 @@ struct Package {
 
   func build() throws {
     try buildSwift()
+  }
+
+  func prepareJavaScript() throws {
+    try ([
+      "console.log('Hello, world!')",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: javaScriptConstructionDirectory.appendingPathComponent("Package.js"))
+  }
+
+  func buildJavaScript() throws {
+    try prepareJavaScript()
   }
 
   func prepareSwift() throws {

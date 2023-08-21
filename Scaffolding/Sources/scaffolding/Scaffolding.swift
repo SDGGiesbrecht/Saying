@@ -14,6 +14,8 @@ import Foundation
     switch arguments.first {
     case "format":
       try package.format(reportProgress: { print($0) })
+    case "build‐javascript":
+      try package.buildJavaScript()
     case "test‐swift":
       try package.testSwift()
     case "test‐tvos":
