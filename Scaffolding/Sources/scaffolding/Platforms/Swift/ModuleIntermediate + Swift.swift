@@ -5,7 +5,7 @@ extension ModuleIntermediate {
       "var coverageRegions: Set<String> = [",
     ]
     for region in actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted() {
-      result.append("\u{22}\(region)\u{22},")
+      result.append("  \u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
       "]",

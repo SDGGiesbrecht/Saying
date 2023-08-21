@@ -5,6 +5,8 @@ extension ActionIntermediate {
     case multipleTypeSignatures(ParsedSignature)
     case cyclicalParameterReference(ParsedParameter)
     case parameterNotFound(ParsedParameterReference)
+    case unknownLanguage(ParsedUninterruptedIdentifier)
+    case brokenJavaScriptImplementation(JavaScriptImplementation.ConstructionError)
     case brokenSwiftImplementation(SwiftImplementation.ConstructionError)
   }
 }

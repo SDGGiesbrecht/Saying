@@ -15,6 +15,9 @@ struct Package {
   var constructionDirectory: URL {
     return location.appendingPathComponent(".Construction")
   }
+  var javaScriptConstructionDirectory: URL {
+    return constructionDirectory.appendingPathComponent("JavaScript")
+  }
   var swiftConstructionDirectory: URL {
     return constructionDirectory.appendingPathComponent("Swift")
   }
@@ -60,6 +63,32 @@ struct Package {
 
   func build() throws {
     try buildSwift()
+  }
+
+  func prepareJavaScript() throws {
+    try ([
+      try self.modules().lazy.map({ try $0.buildJavaScript() }).joined(separator: "\n\n"),
+      "",
+      "test();",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: javaScriptConstructionDirectory.appendingPathComponent("Package.js"))
+    try ([
+      "<html>",
+      "  <head>",
+      "    <script src=\u{22}Package.js\u{22}></script>",
+      "  </head>",
+      "  <body>",
+      "    <script>",
+      "      test();",
+      "    </script>",
+      "  </body>",
+      "</html>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: javaScriptConstructionDirectory.appendingPathComponent("Test.html"))
+  }
+
+  func buildJavaScript() throws {
+    try prepareJavaScript()
   }
 
   func prepareSwift() throws {

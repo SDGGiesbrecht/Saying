@@ -7,6 +7,7 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
+  var javaScript: SwiftImplementation?
   var swift: SwiftImplementation?
   var declaration: ParsedActionDeclaration?
 }
@@ -93,15 +94,33 @@ extension ActionIntermediate {
       )
       return ParameterIntermediate(names: names, type: type)
     }
+    var javaScript: JavaScriptImplementation?
     var swift: SwiftImplementation?
-    switch SwiftImplementation.construct(
-      implementation: declaration.implementation.expression,
-      indexTable: completeParameterIndexTable
-    ) {
-    case .failure(let error):
-      errors.append(contentsOf: error.errors.map({ ConstructionError.brokenSwiftImplementation($0) }))
-    case .success(let constructed):
-      swift = constructed
+    for implementation in declaration.implementation.implementations {
+      switch implementation.language.identifierText() {
+      case "JavaScript":
+        switch JavaScriptImplementation.construct(
+          implementation: implementation.expression,
+          indexTable: completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenJavaScriptImplementation($0) }))
+        case .success(let constructed):
+          javaScript = constructed
+        }
+      case "Swift":
+        switch SwiftImplementation.construct(
+          implementation: implementation.expression,
+          indexTable: completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenSwiftImplementation($0) }))
+        case .success(let constructed):
+          swift = constructed
+        }
+      default:
+        errors.append(ConstructionError.unknownLanguage(implementation.language))
+      }
     }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -112,6 +131,7 @@ extension ActionIntermediate {
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValue?.type.identifierText(),
+        javaScript: javaScript,
         swift: swift,
         declaration: declaration
       )
