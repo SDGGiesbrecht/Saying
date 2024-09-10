@@ -41,6 +41,8 @@ jobs:
     #    path: .Construction/C♯
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v2
+      with:
+        vs-version: '[16.11,16.12)'
     - name: Test
       shell: cmd
       run: |
