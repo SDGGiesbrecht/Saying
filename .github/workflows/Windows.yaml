@@ -48,4 +48,5 @@ jobs:
       run: |
         echo on
         msbuild Construction/C♯/test.csproj -target:Test
+        dir /s /b /o:gn
         Incomplete; please fail.
