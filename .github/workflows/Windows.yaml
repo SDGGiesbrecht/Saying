@@ -30,7 +30,7 @@ jobs:
   Windows_Test:
     name: Windows (Test)
     runs-on: windows-2019
-    needs: Windows_Build
+    #needs: Windows_Build
     steps:
     - name: Check out
       uses: actions/checkout@v2
@@ -39,13 +39,11 @@ jobs:
     #  with:
     #    name: C♯
     #    path: .Construction/C♯
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.8
+    - name: Set up MSBuild
+      uses: microsoft/setup-msbuild@v2
     - name: Test
       shell: cmd
       run: |
         echo on
-        dotnet --version
+        vswhere -latest
         Incomplete; please fail.
