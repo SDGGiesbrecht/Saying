@@ -41,6 +41,8 @@ jobs:
     #    path: .Construction/C♯
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.401
     - name: Test
       shell: cmd
       run: |
