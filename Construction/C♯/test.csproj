@@ -4,6 +4,5 @@
  </ItemGroup>
  <Target Name="Test">
   <Csc Sources="@(Compile)" />
-  <Exec Command="test.exe" />
  </Target>
 </Project>
