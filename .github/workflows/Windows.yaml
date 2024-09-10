@@ -1,4 +1,4 @@
-name: Web
+name: Windows
 
 on: [push, pull_request]
 
@@ -34,11 +34,11 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v2
-    - name: Download
-      uses: actions/download-artifact@v2
-      with:
-        name: C♯
-        path: .Construction/C♯
+    #- name: Download
+    #  uses: actions/download-artifact@v2
+    #  with:
+    #    name: C♯
+    #    path: .Construction/C♯
     - name: Set up .NET
       uses: actions/setup-dotnet@v4
     - name: Test
