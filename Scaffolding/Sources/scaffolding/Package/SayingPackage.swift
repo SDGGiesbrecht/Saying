@@ -91,8 +91,8 @@ struct Package {
       "  </ItemGroup>",
       "  <Target Name=\u{22}Test\u{22}>",
       "    <Csc Sources=\u{22}@(Compile)\u{22} />",
-      "  </Project>",
-      "</html>",
+      "  </Target>",
+      "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: cSharpConstructionDirectory.appendingPathComponent("Project.csproj"))
   }
