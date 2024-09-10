@@ -3,7 +3,6 @@
   <Compile Include="test.cs" />
  </ItemGroup>
  <Target Name="Test">
-  <Message Text="Compile Filenames%(Compile.Filename)" />
   <Csc Sources="@(Compile)" />
  </Target>
 </Project>
