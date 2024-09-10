@@ -48,5 +48,5 @@ jobs:
       run: |
         echo on
         msbuild Construction/C♯/test.csproj -target:Test
-        test.exe
+        Construction/C♯/test.exe
         Incomplete; please fail.
