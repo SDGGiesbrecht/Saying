@@ -70,21 +70,17 @@ struct Package {
 
   func prepareCSharp() throws {
     try ([
-      "using System;",
+      try self.modules().lazy.map({ try $0.buildCSharp() }).joined(separator: "\n\n"),
       "",
-      //try self.modules().lazy.map({ try $0.buildJavaScript() }).joined(separator: "\n\n"),
-      //"",
       "class Test",
       "{",
-      "  static void Main()",
-      "  {",
-      //"test();",
-      "    Console.WriteLine(\u{22}Hello, world!\u{22});",
-      "  }",
+      "    static void Main()",
+      "    {",
+      "        Tests.Test();",
+      "    }",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: cSharpConstructionDirectory.appendingPathComponent("Test.cs"))
-    fatalError("The above does not test anything yet.")
     try ([
       "<Project>",
       "  <ItemGroup>",

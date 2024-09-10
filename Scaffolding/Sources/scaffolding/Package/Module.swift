@@ -24,6 +24,10 @@ struct Module {
     return module
   }
 
+  func buildCSharp() throws -> String {
+    try build().buildCSharp()
+  }
+
   func buildJavaScript() throws -> String {
     try build().buildJavaScript()
   }
