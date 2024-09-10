@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <Target Name="HelloWorld">
+  <Message Text="Hello, World!"></Message>
+ </Target>
+</Project>

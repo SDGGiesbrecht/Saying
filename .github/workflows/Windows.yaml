@@ -30,15 +30,15 @@ jobs:
   Windows_Test:
     name: Windows (Test)
     runs-on: windows-2019
-    needs: Windows_Build
+    #needs: Windows_Build
     steps:
     - name: Check out
       uses: actions/checkout@v2
     - name: Download
-      uses: actions/download-artifact@v2
-      with:
-        name: C♯
-        path: .Construction/C♯
+    #  uses: actions/download-artifact@v2
+    #  with:
+    #    name: C♯
+    #    path: .Construction/C♯
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v2
       with:
@@ -47,5 +47,5 @@ jobs:
       shell: cmd
       run: |
         echo on
-        msbuild -version
+        msbuild Construction/C♯/test.csproj
         Incomplete; please fail.
