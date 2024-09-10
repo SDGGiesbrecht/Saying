@@ -47,5 +47,5 @@ jobs:
       shell: cmd
       run: |
         echo on
-        vswhere -latest
+        msbuild -version
         Incomplete; please fail.
