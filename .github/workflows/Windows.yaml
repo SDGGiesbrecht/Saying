@@ -14,7 +14,7 @@ jobs:
       shell: bash
       run: |
         set -x
-        swift run --package-path Scaffolding scaffolding build‐windows
+        swift run --package-path Scaffolding scaffolding prepare‐c‐sharp
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
@@ -30,15 +30,15 @@ jobs:
   Windows_Test:
     name: Windows (Test)
     runs-on: windows-2019
-    #needs: Windows_Build
+    needs: Windows_Build
     steps:
     - name: Check out
       uses: actions/checkout@v2
-    #- name: Download
-    #  uses: actions/download-artifact@v2
-    #  with:
-    #    name: C♯
-    #    path: .Construction/C♯
+    - name: Download
+      uses: actions/download-artifact@v2
+      with:
+        name: C♯
+        path: .Construction/C♯
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v2
       with:
@@ -47,6 +47,7 @@ jobs:
       shell: cmd
       run: |
         echo on
-        msbuild Construction\C♯\test.csproj -target:Test
-        Construction\C♯\test.exe
+        msbuild .Construction\C♯\Project.csproj -target:Test
+        dir /s /b /o:gn
+        .Construction\C♯\test.exe
         Incomplete; please fail.

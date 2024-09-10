@@ -14,6 +14,8 @@ import Foundation
     switch arguments.first {
     case "format":
       try package.format(reportProgress: { print($0) })
+    case "prepare‐c‐sharp":
+      try package.prepareCSharp()
     case "build‐javascript":
       try package.buildJavaScript()
     case "test‐swift":

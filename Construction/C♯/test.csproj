@@ -1,8 +1,0 @@
-<Project>
- <ItemGroup>
-  <Compile Include="test.cs" />
- </ItemGroup>
- <Target Name="Test">
-  <Csc Sources="@(Compile)" />
- </Target>
-</Project>

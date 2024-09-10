@@ -15,6 +15,9 @@ struct Package {
   var constructionDirectory: URL {
     return location.appendingPathComponent(".Construction")
   }
+  var cSharpConstructionDirectory: URL {
+    return constructionDirectory.appendingPathComponent("C♯")
+  }
   var javaScriptConstructionDirectory: URL {
     return constructionDirectory.appendingPathComponent("JavaScript")
   }
@@ -63,6 +66,35 @@ struct Package {
 
   func build() throws {
     try buildSwift()
+  }
+
+  func prepareCSharp() throws {
+    try ([
+      "using System;",
+      "",
+      //try self.modules().lazy.map({ try $0.buildJavaScript() }).joined(separator: "\n\n"),
+      //"",
+      "class Test",
+      "{",
+      "  static void Main()",
+      "  {",
+      //"test();",
+      "    Console.WriteLine(\u{22}Hello, world!\u{22});",
+      "  }",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: cSharpConstructionDirectory.appendingPathComponent("Test.cs"))
+    try ([
+      "<Project>",
+      "  <ItemGroup>",
+      "    <Compile Include=\u{22}Test.cs\u{22} />",
+      "  </ItemGroup>",
+      "  <Target Name=\u{22}Test\u{22}>",
+      "    <Csc Sources=\u{22}@(Compile)\u{22} />",
+      "  </Project>",
+      "</html>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: cSharpConstructionDirectory.appendingPathComponent("Project.csproj"))
   }
 
   func prepareJavaScript() throws {
