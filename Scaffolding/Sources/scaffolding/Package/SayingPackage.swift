@@ -84,6 +84,7 @@ struct Package {
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: cSharpConstructionDirectory.appendingPathComponent("Test.cs"))
+    fatalError("The above does not test anything yet.")
     try ([
       "<Project>",
       "  <ItemGroup>",
