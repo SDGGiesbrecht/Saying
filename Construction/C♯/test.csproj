@@ -1,4 +1,4 @@
-<Project">
+<Project>
  <ItemGroup>
   <Compile Include="test.cs" />
  </ItemGroup>
