@@ -9,7 +9,6 @@ extension ActionUse {
       let lambdaType: String
       let returnPrefix: String
       if let returnValue = action.returnValue {
-        #warning("Not checked anywhere.")
         let thing = module.lookupThing(returnValue)!
         let type: StrictString
         if let cSharp = thing.cSharp {

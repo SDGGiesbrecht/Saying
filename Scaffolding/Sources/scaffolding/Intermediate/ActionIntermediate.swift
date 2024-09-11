@@ -151,6 +151,19 @@ extension ActionIntermediate {
     )
   }
 
+  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
+    for parameter in parameters {
+      let thing = parameter.type
+      if module.lookupThing(thing) == nil {
+        errors.append(.noSuchThing(thing))
+      }
+    }
+    if let thing = self.returnValue,
+       module.lookupThing(thing) == nil {
+      errors.append(.noSuchThing(thing))
+    }
+  }
+
   func coverageRegions() -> Set<StrictString> {
     return [names.identifier()]
   }

@@ -131,7 +131,10 @@ extension ModuleIntermediate {
   }
 
   func validateReferences() throws {
-    var errors: [ActionUse.ReferenceError] = []
+    var errors: [ReferenceError] = []
+    for action in actions {
+      action.value.validateReferences(module: self, errors: &errors)
+    }
     for test in tests {
       test.action.validateReferences(module: self, errors: &errors)
     }
