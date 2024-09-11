@@ -2,8 +2,8 @@ extension ModuleIntermediate {
 
   func buildCSharp() -> String {
     var result: [String] = [
+      "using System;",
       "using System.Collections.Generic;",
-      "using System.Diagnostics;",
       "using System.Linq;",
       "",
       "static class Coverage",
@@ -23,6 +23,17 @@ extension ModuleIntermediate {
       "",
       "static class Tests",
       "{",
+      "",
+      "    internal static bool Passing = true;",
+      "",
+      "    static void Assert (bool condition, string? message)",
+      "    {",
+      "        if (!condition)",
+      "        {",
+      "            Console.WriteLine(message);",
+      "            Environment.Exit(1);",
+      "        }",
+      "    }",
     ])
     for test in tests {
       result.append(contentsOf: [
@@ -40,7 +51,7 @@ extension ModuleIntermediate {
       ])
     }
     result.append(contentsOf: [
-      "        Debug.Assert(!Coverage.Regions.Any(), \u{22}{Coverage.Regions}\u{22});",
+      "        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
       "    }",
       "}",
     ])
