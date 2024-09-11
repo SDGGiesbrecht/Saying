@@ -439,6 +439,14 @@ extension Node {
           ),
         ],
           Node.separatedList(
+            name: "ThingImplementations",
+            entryName: "implementation", entryNamePlural: "implementations",
+            entryType: "ThingImplementation",
+            separatorName: "lineBreak",
+            separatorType: "LineBreak",
+            fixedSeparator: true
+          ),
+          Node.separatedList(
             name: "ActionImplementations",
             entryName: "implementation", entryNamePlural: "implementations",
             entryType: "ActionImplementation",
@@ -456,7 +464,7 @@ extension Node {
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "implementation", type: "ThingImplementation", kind: .required),
+              Child(name: "implementation", type: "ThingImplementations", kind: .required),
             ])
           ),
           Node(

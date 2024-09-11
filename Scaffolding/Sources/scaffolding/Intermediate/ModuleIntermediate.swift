@@ -38,7 +38,7 @@ extension ModuleIntermediate {
       case .thing(let thingNode):
         documentation = thingNode.documentation
         parameters = []
-        let thing = Thing(thingNode)
+        let thing = try Thing.construct(thingNode).get()
         namespace = [thing.names]
         let identifier = thing.names.identifier()
         for name in thing.names {
