@@ -1,4 +1,5 @@
 import SDGLogic
+import SDGText
 
 extension ActionUse {
   
@@ -8,8 +9,15 @@ extension ActionUse {
       let lambdaType: String
       let returnPrefix: String
       if let returnValue = action.returnValue {
-        #warning("Temporary hard‐coded bool.")
-        lambdaType = "Func<bool>"
+        #warning("Not checked anywhere.")
+        let thing = module.lookupThing(returnValue)!
+        let type: StrictString
+        if let cSharp = thing.cSharp {
+          type = cSharp
+        } else {
+          type = thing.names.identifier()
+        }
+        lambdaType = "Func<\(type)>"
         returnPrefix = "return "
       } else {
         lambdaType = "Action"
