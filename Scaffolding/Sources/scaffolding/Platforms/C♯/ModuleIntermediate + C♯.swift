@@ -15,7 +15,7 @@ extension ModuleIntermediate {
     }
     result.append(contentsOf: [
       "    };",
-      "    static void Register(string identifier)",
+      "    internal static void Register(string identifier)",
       "    {",
       "        Coverage.Regions.Remove(identifier);",
       "    }",
@@ -26,7 +26,12 @@ extension ModuleIntermediate {
       "",
       "    internal static bool Passing = true;",
       "",
-      "    static void Assert (bool condition, string message)",
+      "",
+      "    static void Assert(bool condition)",
+      "    {",
+      "        Assert(condition, \u{22}\u{22});",
+      "    }",
+      "    static void Assert(bool condition, string message)",
       "    {",
       "        if (!condition)",
       "        {",

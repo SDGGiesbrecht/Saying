@@ -3,26 +3,35 @@ import SDGLogic
 extension ActionUse {
   
   func cSharpCall(module: ModuleIntermediate) -> String {
-    #warning("Not implemented yet (see commented code).")
     let action = module.lookupAction(actionName)!
-    /*if let javaScript = action.javaScript {
-      var result = "(function(){registerCoverage(\u{22}\(JavaScript.sanitize(stringLiteral: action.names.identifier()))\u{22}); return "
-      for index in javaScript.textComponents.indices {
-        result.append(contentsOf: String(javaScript.textComponents[index]))
-        if index ≠ javaScript.textComponents.indices.last {
-          let rootIndex = javaScript.reordering[index]
+    if let cSharp = action.cSharp {
+      let lambdaType: String
+      let returnPrefix: String
+      if let returnValue = action.returnValue {
+        #warning("Temporary hard‐coded bool.")
+        lambdaType = "Func<bool>"
+        returnPrefix = "return "
+      } else {
+        lambdaType = "Action"
+        returnPrefix = ""
+      }
+      var result = "((\(lambdaType))(() => {Coverage.Register(\u{22}\(action.names.identifier())\u{22}); \(returnPrefix)"
+      for index in cSharp.textComponents.indices {
+        result.append(contentsOf: String(cSharp.textComponents[index]))
+        if index ≠ cSharp.textComponents.indices.last {
+          let rootIndex = cSharp.reordering[index]
           let reordered = action.reorderings[actionName]![rootIndex]
           let argument = arguments[reordered]
-          result.append(contentsOf: argument.javaScriptCall(module: module))
+          result.append(contentsOf: argument.cSharpCall(module: module))
         }
       }
-      result.append(contentsOf: "})()")
+      result.append(contentsOf: ";}))()")
       return result
-    } else {*/
+    } else {
       return String(action.names.identifier())
-    //}
+    }
   }
   func cSharpExpression(module: ModuleIntermediate) -> String {
-    return ""// cSharpCall(module: module).appending(";")
+    return cSharpCall(module: module).appending(";")
   }
 }

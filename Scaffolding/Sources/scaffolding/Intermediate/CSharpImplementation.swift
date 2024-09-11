@@ -1,1 +1,1 @@
-typealias JavaScriptImplementation = SwiftImplementation
+typealias CSharpImplementation = SwiftImplementation

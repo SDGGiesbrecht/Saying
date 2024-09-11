@@ -37,6 +37,7 @@ extension Node {
               values.append(0x327) // ◌̧
               values.append(contentsOf: 0x3B1...0x3C9) // α–ω
               values.append(contentsOf: 0x5D0...0x5EA) // א–ת
+              values.append(contentsOf: 0x266D...0x266F) // ♭–♯
               return Set(values.lazy.map({ Unicode.Scalar($0)! }))
             }())
           ),
