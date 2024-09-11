@@ -38,7 +38,7 @@ extension ModuleIntermediate {
       case .thing(let thingNode):
         documentation = thingNode.documentation
         parameters = []
-        let thing = Thing(thingNode)
+        let thing = try Thing.construct(thingNode).get()
         namespace = [thing.names]
         let identifier = thing.names.identifier()
         for name in thing.names {
@@ -87,6 +87,7 @@ extension ModuleIntermediate {
       names: ["verify ()"],
       parameters: [ParameterIntermediate(names: ["condition"], type: "truth value")],
       reorderings: ["verify ()": [0]],
+      cSharp: CSharpImplementation(reordering: [0], textComponents: ["Assert(", ")"]),
       javaScript: JavaScriptImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
       swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       declaration: nil
@@ -99,6 +100,8 @@ extension ModuleIntermediate {
         ParameterIntermediate(names: ["b"], type: "truth value")
       ],
       reorderings: ["() is ()": [0, 1]],
+      returnValue: "truth value",
+      cSharp: CSharpImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       javaScript: JavaScriptImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       declaration: nil
@@ -108,6 +111,8 @@ extension ModuleIntermediate {
       names: ["true"],
       parameters: [],
       reorderings: ["true": []],
+      returnValue: "truth value",
+      cSharp: CSharpImplementation(reordering: [], textComponents: ["true"]),
       javaScript: JavaScriptImplementation(reordering: [], textComponents: ["true"]),
       swift: SwiftImplementation(reordering: [], textComponents: ["true"]),
       declaration: nil
@@ -117,6 +122,8 @@ extension ModuleIntermediate {
       names: ["false"],
       parameters: [],
       reorderings: ["false": []],
+      returnValue: "truth value",
+      cSharp: CSharpImplementation(reordering: [], textComponents: ["false"]),
       javaScript: JavaScriptImplementation(reordering: [], textComponents: ["false"]),
       swift: SwiftImplementation(reordering: [], textComponents: ["false"]),
       declaration: nil
@@ -124,7 +131,10 @@ extension ModuleIntermediate {
   }
 
   func validateReferences() throws {
-    var errors: [ActionUse.ReferenceError] = []
+    var errors: [ReferenceError] = []
+    for action in actions {
+      action.value.validateReferences(module: self, errors: &errors)
+    }
     for test in tests {
       test.action.validateReferences(module: self, errors: &errors)
     }

@@ -7,7 +7,8 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var javaScript: SwiftImplementation?
+  var cSharp: CSharpImplementation?
+  var javaScript: JavaScriptImplementation?
   var swift: SwiftImplementation?
   var declaration: ParsedActionDeclaration?
 }
@@ -94,10 +95,21 @@ extension ActionIntermediate {
       )
       return ParameterIntermediate(names: names, type: type)
     }
+    var cSharp: CSharpImplementation?
     var javaScript: JavaScriptImplementation?
     var swift: SwiftImplementation?
     for implementation in declaration.implementation.implementations {
       switch implementation.language.identifierText() {
+      case "C♯":
+        switch CSharpImplementation.construct(
+          implementation: implementation.expression,
+          indexTable: completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenCSharpScriptImplementation($0) }))
+        case .success(let constructed):
+          cSharp = constructed
+        }
       case "JavaScript":
         switch JavaScriptImplementation.construct(
           implementation: implementation.expression,
@@ -131,11 +143,25 @@ extension ActionIntermediate {
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValue?.type.identifierText(),
+        cSharp: cSharp,
         javaScript: javaScript,
         swift: swift,
         declaration: declaration
       )
     )
+  }
+
+  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
+    for parameter in parameters {
+      let thing = parameter.type
+      if module.lookupThing(thing) == nil {
+        errors.append(.noSuchThing(thing))
+      }
+    }
+    if let thing = self.returnValue,
+       module.lookupThing(thing) == nil {
+      errors.append(.noSuchThing(thing))
+    }
   }
 
   func coverageRegions() -> Set<StrictString> {

@@ -1,0 +1,51 @@
+name: Windows
+
+on: [push, pull_request]
+
+jobs:
+  Windows_Build:
+    name: Windows (Build)
+    runs-on: ubuntu-20.04
+    container: swift:5.7.3-focal
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build
+      shell: bash
+      run: |
+        set -x
+        swift run --package-path Scaffolding scaffolding prepare‐c‐sharp
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: C♯
+        path: .Construction/C♯
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
+  Windows_Test:
+    name: Windows (Test)
+    runs-on: windows-2019
+    needs: Windows_Build
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Download
+      uses: actions/download-artifact@v2
+      with:
+        name: C♯
+        path: .Construction/C♯
+    - name: Set up MSBuild
+      uses: microsoft/setup-msbuild@v2
+      with:
+        vs-version: '[16.11,16.12)'
+    - name: Test
+      shell: cmd
+      run: |
+        echo on
+        msbuild .Construction\C♯\Project.csproj -target:Test
+        .Construction\C♯\Test.exe

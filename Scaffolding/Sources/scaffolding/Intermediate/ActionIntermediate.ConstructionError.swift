@@ -6,6 +6,7 @@ extension ActionIntermediate {
     case cyclicalParameterReference(ParsedParameter)
     case parameterNotFound(ParsedParameterReference)
     case unknownLanguage(ParsedUninterruptedIdentifier)
+    case brokenCSharpScriptImplementation(CSharpImplementation.ConstructionError)
     case brokenJavaScriptImplementation(JavaScriptImplementation.ConstructionError)
     case brokenSwiftImplementation(SwiftImplementation.ConstructionError)
   }

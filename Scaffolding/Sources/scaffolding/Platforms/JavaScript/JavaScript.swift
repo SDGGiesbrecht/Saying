@@ -37,7 +37,8 @@ enum JavaScript {
     )
   }()
   static func identifierAllowed(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ identifierAllowedList ∨ scalar.properties.isIDContinue
+    return (scalar ∈ identifierAllowedList ∨ scalar.properties.isIDContinue)
+      ∧ ¬scalar.isVulnerableToNormalization
   }
 
   static func sanitize(identifier: StrictString, leading: Bool) -> StrictString {
@@ -72,6 +73,7 @@ enum JavaScript {
   }()
   static func stringLiteralDisallowed(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ stringLiteralDisallowedList
+      ∧ ¬scalar.isVulnerableToNormalization
   }
   static func sanitize(stringLiteral: StrictString) -> StrictString {
     return stringLiteral.lazy
