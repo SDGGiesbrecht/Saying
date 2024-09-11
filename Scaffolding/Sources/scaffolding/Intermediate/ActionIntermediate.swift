@@ -7,7 +7,7 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var javaScript: SwiftImplementation?
+  var javaScript: JavaScriptImplementation?
   var swift: SwiftImplementation?
   var declaration: ParsedActionDeclaration?
 }
