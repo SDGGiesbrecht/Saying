@@ -26,7 +26,7 @@ extension ModuleIntermediate {
       "",
       "    internal static bool Passing = true;",
       "",
-      "    static void Assert (bool condition, string? message)",
+      "    static void Assert (bool condition, string message)",
       "    {",
       "        if (!condition)",
       "        {",
