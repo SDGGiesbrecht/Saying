@@ -1,0 +1,47 @@
+name: Ubuntu
+
+on: [push, pull_request]
+
+jobs:
+  Ubuntu_Build:
+    name: Ubuntu (Build)
+    runs-on: ubuntu-20.04
+    container: swift:5.7.3-focal
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build
+      shell: bash
+      run: |
+        set -x
+        swift run --package-path Scaffolding scaffolding prepare‐c
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: C
+        path: .Construction/C
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
+  Ubuntu_Test:
+    name: Ubuntu (Test)
+    runs-on: ubuntu-20.04
+    needs: Ubuntu_Build
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Download
+      uses: actions/download-artifact@v4
+      with:
+        name: C
+        path: .Construction/C
+    - name: Test
+      shell: cmd
+      run: |
+        set -x
+        cc .Construction/C/test.c -o:.Construction/C/test
+        .Construction/C/test
