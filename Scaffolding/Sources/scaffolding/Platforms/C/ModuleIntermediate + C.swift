@@ -1,3 +1,5 @@
+import SDGText
+
 extension ModuleIntermediate {
 
   func buildC() -> String {
@@ -16,47 +18,57 @@ extension ModuleIntermediate {
     for region in regions {
       result.append("        \u{22}\(region)\u{22},")
     }
-    #warning("Incomplete.")
     result.append(contentsOf: [
       "};",
       "void register_coverage_region(char identifier[REGION_IDENTIFIER_LENGTH]) {",
       "        for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
-      "                if (strcmp(coverage_regions[index], identifier))",
+      "                if (!strcmp(coverage_regions[index], identifier))",
       "                {",
       "                        memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
       "                }",
       "        }",
       "}",
-      "",
-      /*"    static void Assert(bool condition)",
-      "    {",
-      "        Assert(condition, \u{22}\u{22});",
-      "    }",
-      "    static void Assert(bool condition, string message)",
-      "    {",
-      "        if (!condition)",
-      "        {",
-      "            Console.WriteLine(message);",
-      "            Environment.Exit(1);",
-      "        }",
-      "    }",*/
     ])
-    #warning("Incomplete.")
-    /*for test in tests {
+    var signatures: Set<CSignature> = []
+    for (_, action) in actions {
+      signatures.insert(action.cSignature(module: self))
+    }
+    for signature in signatures.sorted() {
+      let disambiguator: StrictString = "\(signature.parameters.joined(separator: ", ")) → \(signature.returnValue)"
+      let sanitizedDisambiguator = C.sanitize(identifier: disambiguator, leading: false)
+      let signatureParameters = signature.parameters
+        .joined(separator: ", ")
+      let parametersIn = signature.parameters
+        .enumerated()
+        .lazy.map({ "\($1) _\($0 + 1)" })
+        .joined(separator: ", ")
+      let parametersOut = (0..<signature.parameters.count)
+        .lazy.map({ "_\($0 + 1)" })
+        .joined(separator: ", ")
       result.append(contentsOf: [
         "",
-        test.cSharpSource(module: self)
+        "\(signature.returnValue) register_and_execute_\(sanitizedDisambiguator)(char identifier[REGION_IDENTIFIER_LENGTH], \(signature.returnValue) (*function)(\(signatureParameters))\(parametersIn == "" ? "" : ", \(parametersIn)"))",
+        "{",
+        "        register_coverage_region(identifier);",
+        "        return function(\(parametersOut));",
+        "}",
       ])
-    }*/
+    }
+    
+    for test in tests {
+      result.append(contentsOf: [
+        "",
+        test.cSource(module: self)
+      ])
+    }
     result.append(contentsOf: [
       "",
       "void test() {",
     ])
     for test in tests {
-      #warning("Incomplete.")
-      /*result.append(contentsOf: [
-        "        \(test.cSharpCall())"
-      ])*/
+      result.append(contentsOf: [
+        "        \(test.cCall())"
+      ])
     }
     result.append(contentsOf: [
       "        bool any_remaining = false;",
