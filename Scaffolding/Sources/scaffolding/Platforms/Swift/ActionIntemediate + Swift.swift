@@ -23,7 +23,7 @@ extension ActionIntermediate {
     }) ?? ""
     return [
       "func \(name)(\(parameters))\(returnValue) {",
-      //"  \(implementation!.swiftSource(module: module))",
+      "  \(implementation!.swiftSource(context: self, module: module))",
       "}",
     ].joined(separator: "\n")
   }

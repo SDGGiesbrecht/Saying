@@ -181,6 +181,12 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
+  func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
+    return parameters.first(where: { $0.names.contains(identifier) })
+  }
+}
+
+extension ActionIntermediate {
 
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(names.identifier())"
@@ -192,13 +198,16 @@ extension ActionIntermediate {
       reorderings: reorderings,
       returnValue: returnValue,
       implementation: ActionUse(
-        actionName: "placeholder",
-        arguments: [],
-        source: nil
+        actionName: self.names.identifier(),
+        arguments: self.parameters.map({ parameter in
+          return ActionUse(
+            actionName: parameter.names.identifier(),
+            arguments: []
+          )
+        })
       ),
       isCoverageWrapper: true
     )
-    #warning("Placeholder name and arguments.")
   }
 
   func coverageRegionIdentifier() -> StrictString? {
