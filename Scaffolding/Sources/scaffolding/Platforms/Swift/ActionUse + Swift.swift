@@ -8,7 +8,7 @@ extension ActionUse {
     } else {
       let action = module.lookupAction(actionName)!
       if let swift = action.swift {
-        var result = "{registerCoverage(\u{22}\(action.names.identifier())\u{22}); return "
+        var result = ""
         for index in swift.textComponents.indices {
           result.append(contentsOf: String(swift.textComponents[index]))
           if index ≠ swift.textComponents.indices.last {
@@ -18,7 +18,7 @@ extension ActionUse {
             result.append(contentsOf: argument.swiftSource(context: context, module: module))
           }
         }
-        result.append(contentsOf: "}()")
+        result.append(contentsOf: "")
         return result
       } else {
         return String(action.names.identifier())
