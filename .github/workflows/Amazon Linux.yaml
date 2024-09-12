@@ -47,6 +47,11 @@ jobs:
     #  with:
     #    name: C
     #    path: .Construction/C
+    - name: Install GNU Compiler Collection
+      shell: bash
+      run: |
+        set -x
+        yum install --assumeyes gcc
     - name: Test
       shell: bash
       run: |
