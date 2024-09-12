@@ -9,7 +9,7 @@ jobs:
     container: swift:5.7.3-focal
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Build
       shell: bash
       run: |
@@ -40,8 +40,9 @@ jobs:
       run: |
         set -x
         yum install --assumeyes git node
+        node --version
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     #- name: Download
     #  uses: actions/download-artifact@v4
     #  with:
