@@ -19,7 +19,12 @@ extension ModuleIntermediate {
       "}",
     ])
     for actionIdentifier in actions.keys.sorted() {
-      let action = actions[actionIdentifier]
+      if let declaration = actions[actionIdentifier]?.swiftDeclaration(module: self) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
+      }
     }
     for test in tests {
       result.append(contentsOf: [
