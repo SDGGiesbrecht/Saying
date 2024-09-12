@@ -1,28 +1,26 @@
 extension ModuleIntermediate {
 
-  func buildCSharp() -> String {
-    var result: [String] = [
-      "using System;",
-      "using System.Collections.Generic;",
-      "using System.Linq;",
-      "",
-      "static class Coverage",
-      "{",
-      "    internal static HashSet<string> Regions = new HashSet<string> {",
-    ]
-    for region in actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted() {
+  func buildC() -> String {
+    var result: [String] = []
+    let regions = actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted()
+    let longestLength = regions.lazy.map({ String($0).utf8.count }).max() ?? 0
+    result.append(contentsOf: [
+      "char coverage_regions[\(regions.count)][\(longestLength)] = {",
+    ])
+    for region in regions {
       result.append("        \u{22}\(region)\u{22},")
     }
+    #warning("Incomplete.")
     result.append(contentsOf: [
-      "    };",
-      "    internal static void Register(string identifier)",
+      "};",
+      /*"    internal static void Register(string identifier)",
       "    {",
       "        Coverage.Regions.Remove(identifier);",
       "    }",
       "}",
       "",
-      "static class Tests",
-      "{",
+      "    internal static bool Passing = true;",
+      "",
       "",
       "    static void Assert(bool condition)",
       "    {",
@@ -35,26 +33,28 @@ extension ModuleIntermediate {
       "            Console.WriteLine(message);",
       "            Environment.Exit(1);",
       "        }",
-      "    }",
+      "    }",*/
     ])
-    for test in tests {
+    #warning("Incomplete.")
+    /*for test in tests {
       result.append(contentsOf: [
         "",
         test.cSharpSource(module: self)
       ])
-    }
+    }*/
     result.append(contentsOf: [
       "",
-      "    internal static void Test() {",
+      "void test() {",
     ])
     for test in tests {
-      result.append(contentsOf: [
+      #warning("Incomplete.")
+      /*result.append(contentsOf: [
         "        \(test.cSharpCall())"
-      ])
+      ])*/
     }
+    #warning("Incomplete.")
     result.append(contentsOf: [
-      "        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
-      "    }",
+      //"        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
       "}",
     ])
     return result.joined(separator: "\n").appending("\n")

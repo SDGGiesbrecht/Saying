@@ -14,10 +14,14 @@ import Foundation
     switch arguments.first {
     case "format":
       try package.format(reportProgress: { print($0) })
+    case "prepare‐c":
+      try package.prepareC()
     case "prepare‐c‐sharp":
       try package.prepareCSharp()
     case "build‐javascript":
       try package.buildJavaScript()
+    case "test‐c":
+      try package.testC()
     case "test‐swift":
       try package.testSwift()
     case "test‐tvos":
