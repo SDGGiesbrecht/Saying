@@ -3,9 +3,10 @@ extension ModuleIntermediate {
   func buildC() -> String {
     var result: [String] = []
     let regions = actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted()
+    let numberOfRegions = regions.count
     let longestLength = regions.lazy.map({ String($0).utf8.count }).max() ?? 0
     result.append(contentsOf: [
-      "char coverage_regions[\(regions.count)][\(longestLength)] = {",
+      "char coverage_regions[\(numberOfRegions)][\(longestLength)] = {",
     ])
     for region in regions {
       result.append("        \u{22}\(region)\u{22},")
@@ -13,13 +14,11 @@ extension ModuleIntermediate {
     #warning("Incomplete.")
     result.append(contentsOf: [
       "};",
-      /*"    internal static void Register(string identifier)",
-      "    {",
-      "        Coverage.Regions.Remove(identifier);",
-      "    }",
+      "void register_coverage_region(char identifier[\(longestLength)]) {",
+      //"        Coverage.Regions.Remove(identifier);",
       "}",
       "",
-      "    static void Assert(bool condition)",
+      /*"    static void Assert(bool condition)",
       "    {",
       "        Assert(condition, \u{22}\u{22});",
       "    }",
