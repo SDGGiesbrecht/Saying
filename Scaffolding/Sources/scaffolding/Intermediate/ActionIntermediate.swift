@@ -13,6 +13,7 @@ struct ActionIntermediate {
   var swift: SwiftImplementation?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
+  var isCoverageWrapper: Bool = false
 }
 
 extension ActionIntermediate {
@@ -194,7 +195,8 @@ extension ActionIntermediate {
         actionName: "placeholder",
         arguments: [],
         source: nil
-      )
+      ),
+      isCoverageWrapper: true
     )
     #warning("Placeholder name and arguments.")
   }
