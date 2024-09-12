@@ -4,7 +4,7 @@ import SDGText
 struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
-  var source: ParsedAction
+  var source: ParsedAction?
 }
 
 extension ActionUse {
@@ -22,7 +22,7 @@ extension ActionUse {
 
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
     if module.lookupAction(actionName) == nil {
-      errors.append(.noSuchAction(source))
+      errors.append(.noSuchAction(name: actionName, source: source))
     }
     for argument in arguments {
       argument.validateReferences(module: module, errors: &errors)

@@ -21,7 +21,7 @@ struct Module {
     }
     module.addMagicSymbols()
     try module.validateReferences()
-    return module
+    return module.applyingTestCoverageTracking()
   }
 
   func buildC() throws -> String {

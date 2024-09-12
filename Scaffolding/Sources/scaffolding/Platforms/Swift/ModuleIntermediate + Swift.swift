@@ -4,7 +4,7 @@ extension ModuleIntermediate {
     var result: [String] = [
       "var coverageRegions: Set<String> = [",
     ]
-    for region in actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted() {
+    for region in actions.values.lazy.compactMap({ $0.coverageRegionIdentifier() }).sorted() {
       result.append("  \u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
@@ -13,6 +13,9 @@ extension ModuleIntermediate {
       "  coverageRegions.remove(identifier)",
       "}",
     ])
+    for actionIdentifier in actions.keys.sorted() {
+      let action = actions[actionIdentifier]
+    }
     for test in tests {
       result.append(contentsOf: [
         "",

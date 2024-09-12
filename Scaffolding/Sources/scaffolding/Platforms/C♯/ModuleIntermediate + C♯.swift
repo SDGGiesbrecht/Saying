@@ -10,7 +10,7 @@ extension ModuleIntermediate {
       "{",
       "    internal static HashSet<string> Regions = new HashSet<string> {",
     ]
-    for region in actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted() {
+    for region in actions.values.lazy.compactMap({ $0.coverageRegionIdentifier() }).sorted() {
       result.append("        \u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [

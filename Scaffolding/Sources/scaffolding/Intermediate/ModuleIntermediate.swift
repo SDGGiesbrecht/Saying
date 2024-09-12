@@ -147,3 +147,19 @@ extension ModuleIntermediate {
     }
   }
 }
+
+extension ModuleIntermediate {
+
+  func applyingTestCoverageTracking() -> ModuleIntermediate {
+    var actions = self.actions
+    for (_, action) in self.actions {
+      actions[action.coverageTrackingIdentifier()] = action.wrappedToTrackCoverage()
+    }
+    return ModuleIntermediate(
+      identifierMapping: identifierMapping,
+      things: things,
+      actions: actions,
+      tests: tests
+    )
+  }
+}

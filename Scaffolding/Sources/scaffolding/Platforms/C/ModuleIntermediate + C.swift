@@ -5,7 +5,7 @@ extension ModuleIntermediate {
 
   func buildC() -> String {
     var result: [String] = []
-    let regions = actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted()
+    let regions = actions.values.lazy.compactMap({ $0.coverageRegionIdentifier() }).sorted()
     result.append(contentsOf: [
       "#include <assert.h>",
       "#include <stdbool.h>",

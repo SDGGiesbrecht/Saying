@@ -11,6 +11,7 @@ struct ActionIntermediate {
   var cSharp: CImplementation?
   var javaScript: JavaScriptImplementation?
   var swift: SwiftImplementation?
+  var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
 }
 
@@ -176,8 +177,29 @@ extension ActionIntermediate {
       errors.append(.noSuchThing(thing))
     }
   }
+}
 
-  func coverageRegions() -> Set<StrictString> {
-    return [names.identifier()]
+extension ActionIntermediate {
+
+  func coverageTrackingIdentifier() -> StrictString {
+    return "☐\(names.identifier())"
+  }
+  func wrappedToTrackCoverage() -> ActionIntermediate? {
+    return ActionIntermediate(
+      names: [coverageTrackingIdentifier()],
+      parameters: parameters,
+      reorderings: reorderings,
+      returnValue: returnValue,
+      implementation: ActionUse(
+        actionName: "placeholder",
+        arguments: [],
+        source: nil
+      )
+    )
+    #warning("Placeholder name and arguments.")
+  }
+
+  func coverageRegionIdentifier() -> StrictString? {
+    return names.identifier()
   }
 }
