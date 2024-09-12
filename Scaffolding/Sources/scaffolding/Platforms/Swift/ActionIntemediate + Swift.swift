@@ -21,9 +21,11 @@ extension ActionIntermediate {
       }
       return " -> \(identifier)"
     }) ?? ""
+    let returnKeyword = returnValue == "" ? "" : "return "
+    
     return [
       "func \(name)(\(parameters))\(returnValue) {",
-      "  \(implementation!.swiftSource(context: self, module: module))",
+      "  \(returnKeyword)\(implementation!.swiftSource(context: self, module: module))",
       "}",
     ].joined(separator: "\n")
   }
