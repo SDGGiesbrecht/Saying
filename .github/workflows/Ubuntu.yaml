@@ -40,7 +40,7 @@ jobs:
         name: C
         path: .Construction/C
     - name: Test
-      shell: cmd
+      shell: bash
       run: |
         set -x
         cc .Construction/C/test.c -o:.Construction/C/test
