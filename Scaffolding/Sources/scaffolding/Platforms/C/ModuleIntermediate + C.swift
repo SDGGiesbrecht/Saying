@@ -3,10 +3,15 @@ extension ModuleIntermediate {
   func buildC() -> String {
     var result: [String] = []
     let regions = actions.values.lazy.flatMap({ $0.coverageRegions() }).sorted()
-    let numberOfRegions = regions.count
-    let longestLength = regions.lazy.map({ String($0).utf8.count }).max() ?? 0
     result.append(contentsOf: [
-      "char coverage_regions[\(numberOfRegions)][\(longestLength)] = {",
+      "#include <assert.h>",
+      "#include <stdbool.h>",
+      "#include <stdio.h>",
+      "#include <string.h>",
+      "",
+      "#define REGION_IDENTIFIER_LENGTH \((regions.lazy.map({ String($0).utf8.count }).max() ?? 0) + 1)",
+      "#define NUMBER_OF_REGIONS \(regions.count)",
+      "char coverage_regions[NUMBER_OF_REGIONS][REGION_IDENTIFIER_LENGTH] = {",
     ])
     for region in regions {
       result.append("        \u{22}\(region)\u{22},")
@@ -14,8 +19,13 @@ extension ModuleIntermediate {
     #warning("Incomplete.")
     result.append(contentsOf: [
       "};",
-      "void register_coverage_region(char identifier[\(longestLength)]) {",
-      //"        Coverage.Regions.Remove(identifier);",
+      "void register_coverage_region(char identifier[REGION_IDENTIFIER_LENGTH]) {",
+      "        for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
+      "                if (strcmp(coverage_regions[index], identifier))",
+      "                {",
+      "                        memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
+      "                }",
+      "        }",
       "}",
       "",
       /*"    static void Assert(bool condition)",
@@ -48,9 +58,15 @@ extension ModuleIntermediate {
         "        \(test.cSharpCall())"
       ])*/
     }
-    #warning("Incomplete.")
     result.append(contentsOf: [
-      //"        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
+      "        bool any_remaining = false;",
+      "        for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
+      "                if (coverage_regions[index][0] != 0)",
+      "                {",
+      "                        any_remaining = true;",
+      "                }",
+      "        }",
+      "        assert(!any_remaining);",
       "}",
     ])
     return result.joined(separator: "\n").appending("\n")
