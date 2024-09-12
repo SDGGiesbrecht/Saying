@@ -33,7 +33,7 @@ import Foundation
     // Android: from Linux, Android Studio, Kotlin
     // (2008‐09‐23)
 
-    // Amazon Linux: MATE, Autoconf + Automake, GNU Build System, GNU Compiler Collection (gcc), C
+    // Amazon Linux: MATE, Developer Tools (GNU Compiler Collection (gcc)), C
     // (2011‐09‐26)
 
     // watchOS: from macOS, Xcode (Swift Package Manager), Swift
