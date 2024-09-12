@@ -15,6 +15,9 @@ struct Package {
   var constructionDirectory: URL {
     return location.appendingPathComponent(".Construction")
   }
+  var cConstructionDirectory: URL {
+    return constructionDirectory.appendingPathComponent("C")
+  }
   var cSharpConstructionDirectory: URL {
     return constructionDirectory.appendingPathComponent("C♯")
   }
@@ -66,6 +69,18 @@ struct Package {
 
   func build() throws {
     try buildSwift()
+  }
+
+  func prepareC() throws {
+    try ([
+      try self.modules().lazy.map({ try $0.buildC() }).joined(separator: "\n\n"),
+      "",
+      "int main() {",
+      "        test();",
+      "        return 0;",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: cConstructionDirectory.appendingPathComponent("test.c"))
   }
 
   func prepareCSharp() throws {
@@ -200,6 +215,24 @@ struct Package {
 
   func test() throws {
     try testSwift()
+  }
+  
+  func testC() throws {
+    try prepareC()
+    _ = try Shell.default.run(
+      command: [
+        "cc",
+        cConstructionDirectory.appendingPathComponent("test.c").path,
+        "-o", cConstructionDirectory.appendingPathComponent("test").path,
+      ],
+      reportProgress: { print($0) }
+    ).get()
+    _ = try Shell.default.run(
+      command: [
+        cConstructionDirectory.appendingPathComponent("test").path
+      ],
+      reportProgress: { print($0) }
+    ).get()
   }
 
   func testSwift() throws {

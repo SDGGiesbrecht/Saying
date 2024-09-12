@@ -1,10 +1,10 @@
-name: Windows
+name: Ubuntu
 
 on: [push, pull_request]
 
 jobs:
-  Windows_Build:
-    name: Windows (Build)
+  Ubuntu_Build:
+    name: Ubuntu (Build)
     runs-on: ubuntu-20.04
     container: swift:5.7.3-focal
     steps:
@@ -14,12 +14,12 @@ jobs:
       shell: bash
       run: |
         set -x
-        swift run --package-path Scaffolding scaffolding prepare‐c‐sharp
+        swift run --package-path Scaffolding scaffolding prepare‐c
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        name: C♯
-        path: .Construction/C♯
+        name: C
+        path: .Construction/C
     - name: Check repository for changes
       shell: bash
       run: |
@@ -27,25 +27,21 @@ jobs:
         git config --global --add safe.directory '*'
         git add . --intent-to-add
         git diff --exit-code
-  Windows_Test:
-    name: Windows (Test)
-    runs-on: windows-2019
-    needs: Windows_Build
+  Ubuntu_Test:
+    name: Ubuntu (Test)
+    runs-on: ubuntu-20.04
+    needs: Ubuntu_Build
     steps:
     - name: Check out
       uses: actions/checkout@v2
     - name: Download
       uses: actions/download-artifact@v4
       with:
-        name: C♯
-        path: .Construction/C♯
-    - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v2
-      with:
-        vs-version: '[16.11,16.12)'
+        name: C
+        path: .Construction/C
     - name: Test
-      shell: cmd
+      shell: bash
       run: |
-        echo on
-        msbuild .Construction\C♯\Project.csproj -target:Test
-        .Construction\C♯\Test.exe
+        set -x
+        cc .Construction/C/test.c -o .Construction/C/test
+        .Construction/C/test

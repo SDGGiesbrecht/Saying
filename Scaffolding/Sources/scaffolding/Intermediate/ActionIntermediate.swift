@@ -7,7 +7,8 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var cSharp: CSharpImplementation?
+  var c: CImplementation?
+  var cSharp: CImplementation?
   var javaScript: JavaScriptImplementation?
   var swift: SwiftImplementation?
   var declaration: ParsedActionDeclaration?
@@ -95,11 +96,22 @@ extension ActionIntermediate {
       )
       return ParameterIntermediate(names: names, type: type)
     }
+    var c: CImplementation?
     var cSharp: CSharpImplementation?
     var javaScript: JavaScriptImplementation?
     var swift: SwiftImplementation?
     for implementation in declaration.implementation.implementations {
       switch implementation.language.identifierText() {
+      case "C":
+        switch CImplementation.construct(
+          implementation: implementation.expression,
+          indexTable: completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenCScriptImplementation($0) }))
+        case .success(let constructed):
+          c = constructed
+        }
       case "C♯":
         switch CSharpImplementation.construct(
           implementation: implementation.expression,
@@ -143,6 +155,7 @@ extension ActionIntermediate {
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValue?.type.identifierText(),
+        c: c,
         cSharp: cSharp,
         javaScript: javaScript,
         swift: swift,

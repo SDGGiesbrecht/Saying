@@ -6,6 +6,7 @@ thing
   ελληνικά: αληθοτιμή
   עברית: ערך אמת
  )
+ C: bool
  C♯: bool
  Swift: Bool
 
@@ -42,6 +43,7 @@ action
   עברית: (ראשון: [first]) ו(שני: [second])
  )
  truth value
+ C: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  C♯: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  JavaScript: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(26)¤(26) ” second „¤(29)“

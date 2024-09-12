@@ -3,6 +3,7 @@ import SDGText
 
 struct Thing {
   var names: Set<StrictString>
+  var c: StrictString?
   var cSharp: StrictString?
   var swift: StrictString?
   var declaration: ParsedThingDeclaration
@@ -20,10 +21,13 @@ extension Thing {
         .lazy.map({ $0.name.identifierText() })
     )
 
+    var c: StrictString?
     var cSharp: StrictString?
     var swift: StrictString?
     for implementation in declaration.implementation.implementations {
       switch implementation.language.identifierText() {
+      case "C":
+        c = implementation.type.identifierText()
       case "C♯":
         cSharp = implementation.type.identifierText()
       case "Swift":
@@ -38,6 +42,7 @@ extension Thing {
     return .success(
       Thing(
         names: names,
+        c: c,
         cSharp: cSharp,
         swift: swift,
         declaration: declaration

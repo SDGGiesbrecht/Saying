@@ -24,6 +24,10 @@ struct Module {
     return module
   }
 
+  func buildC() throws -> String {
+    try build().buildC()
+  }
+
   func buildCSharp() throws -> String {
     try build().buildCSharp()
   }
