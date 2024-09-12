@@ -6,22 +6,6 @@ extension ActionUse {
   func cCall(module: ModuleIntermediate) -> String {
     let action = module.lookupAction(actionName)!
     if let c = action.c {
-      let lambdaType: String
-      let returnPrefix: String
-      if let returnValue = action.returnValue {
-        let thing = module.lookupThing(returnValue)!
-        let type: StrictString
-        if let c = thing.c {
-          type = c
-        } else {
-          type = thing.names.identifier()
-        }
-        lambdaType = "Func<\(type)>"
-        returnPrefix = "return "
-      } else {
-        lambdaType = "Action"
-        returnPrefix = ""
-      }
       let cSignature = action.cSignature(module: module)
       var result = "\(cSignature.registerAndExecuteName())(\u{22}\(action.names.identifier())\u{22}, "
       for index in c.textComponents.indices {
