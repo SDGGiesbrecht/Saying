@@ -43,6 +43,5 @@ jobs:
       shell: bash
       run: |
         set -x
-        ls -A
-        cc .Construction/C/test.c -o:.Construction/C/test
+        cc .Construction/C/test.c -o .Construction/C/test
         .Construction/C/test
