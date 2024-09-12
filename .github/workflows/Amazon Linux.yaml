@@ -33,7 +33,7 @@ jobs:
     container: amazonlinux:2
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
-    #needs: Amazon_Linux_Build
+    needs: Amazon_Linux_Build
     steps:
     - name: Install Git
       shell: bash
@@ -42,11 +42,11 @@ jobs:
         yum install --assumeyes git
     - name: Check out
       uses: actions/checkout@v3
-    #- name: Download
-    #  uses: actions/download-artifact@v4
-    #  with:
-    #    name: C
-    #    path: .Construction/C
+    - name: Download
+      uses: actions/download-artifact@v4
+      with:
+        name: C
+        path: .Construction/C
     - name: Install GNU Compiler Collection
       shell: bash
       run: |
