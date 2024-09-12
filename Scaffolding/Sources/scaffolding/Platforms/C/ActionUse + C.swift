@@ -22,9 +22,16 @@ extension ActionUse {
         lambdaType = "Action"
         returnPrefix = ""
       }
-      var result = ""// "((\(lambdaType))(() => {Coverage.Register(\u{22}\(action.names.identifier())\u{22}); \(returnPrefix)"
+      let cSignature = action.cSignature(module: module)
+      var result = "\(cSignature.registerAndExecuteName())(\u{22}\(action.names.identifier())\u{22}, "
       for index in c.textComponents.indices {
-        result.append(contentsOf: String(c.textComponents[index]))
+        if cSignature.equals ∨ cSignature.and ∨ cSignature.assert {
+          if index ≠ c.textComponents.startIndex ∧ index ≠ c.textComponents.indices.last {
+            result.append(contentsOf: ", ")
+          }
+        } else {
+          result.append(contentsOf: String(c.textComponents[index]))
+        }
         if index ≠ c.textComponents.indices.last {
           let rootIndex = c.reordering[index]
           let reordered = action.reorderings[actionName]![rootIndex]
@@ -32,7 +39,7 @@ extension ActionUse {
           result.append(contentsOf: argument.cCall(module: module))
         }
       }
-      //result.append(contentsOf: ";}))()")
+      result.append(contentsOf: ")")
       return result
     } else {
       return String(action.names.identifier())

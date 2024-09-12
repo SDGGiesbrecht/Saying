@@ -10,7 +10,6 @@ extension TestIntermediate {
   }
 
   func cSource(module: ModuleIntermediate) -> String {
-    #warning("Incomplete.")
     return [
       "void run_\(cIdentifier(leading: false))()",
       "{",

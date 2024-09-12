@@ -1,3 +1,4 @@
+import SDGLogic
 import SDGText
 
 extension ModuleIntermediate {
@@ -28,14 +29,42 @@ extension ModuleIntermediate {
       "                }",
       "        }",
       "}",
+      "",
+      "bool register_and_execute_bool_literal(char identifier[REGION_IDENTIFIER_LENGTH], bool _1)",
+      "{",
+      "        register_coverage_region(identifier);",
+      "        return _1;",
+      "}",
+      "",
+      "bool register_and_execute_equals(char identifier[REGION_IDENTIFIER_LENGTH], bool _1, bool _2)",
+      "{",
+      "        register_coverage_region(identifier);",
+      "        return _1 == _2;",
+      "}",
+      "",
+      "bool register_and_execute_and(char identifier[REGION_IDENTIFIER_LENGTH], bool _1, bool _2)",
+      "{",
+      "        register_coverage_region(identifier);",
+      "        return _1 && _2;",
+      "}",
+      "",
+      "void register_and_execute_assert(char identifier[REGION_IDENTIFIER_LENGTH], bool _1)",
+      "{",
+      "        register_coverage_region(identifier);",
+      "        return assert(_1);",
+      "}",
     ])
     var signatures: Set<CSignature> = []
     for (_, action) in actions {
-      signatures.insert(action.cSignature(module: self))
+      let signature = action.cSignature(module: self)
+      if ¬signature.boolLiteral,
+         ¬signature.equals,
+         ¬signature.and,
+         ¬signature.assert {
+        signatures.insert(action.cSignature(module: self))
+      }
     }
     for signature in signatures.sorted() {
-      let disambiguator: StrictString = "\(signature.parameters.joined(separator: ", ")) → \(signature.returnValue)"
-      let sanitizedDisambiguator = C.sanitize(identifier: disambiguator, leading: false)
       let signatureParameters = signature.parameters
         .joined(separator: ", ")
       let parametersIn = signature.parameters
@@ -47,7 +76,7 @@ extension ModuleIntermediate {
         .joined(separator: ", ")
       result.append(contentsOf: [
         "",
-        "\(signature.returnValue) register_and_execute_\(sanitizedDisambiguator)(char identifier[REGION_IDENTIFIER_LENGTH], \(signature.returnValue) (*function)(\(signatureParameters))\(parametersIn == "" ? "" : ", \(parametersIn)"))",
+        "\(signature.returnValue) \(signature.registerAndExecuteName())(char identifier[REGION_IDENTIFIER_LENGTH], \(signature.returnValue) (*function)(\(signatureParameters))\(parametersIn == "" ? "" : ", \(parametersIn)"))",
         "{",
         "        register_coverage_region(identifier);",
         "        return function(\(parametersOut));",
