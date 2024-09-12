@@ -7,8 +7,12 @@ extension ActionIntermediate {
       return nil
     }
     #warning("Incomplete.")
+    let name = Swift.sanitize(identifier: self.names.identifier(), leading: true)
+    let parameters = self.parameters
+      .lazy.map({ $0.swiftSource(module: module) })
+      .joined(separator: ", ")
     return [
-      "func \(Swift.sanitize(identifier: self.names.identifier(), leading: true))() {",
+      "func \(name)(\(parameters)) {",
       //"  \(implementation!.swiftSource(module: module))",
       "}",
     ].joined(separator: "\n")
