@@ -11,6 +11,6 @@ extension ParameterIntermediate {
     } else {
       typeSource = Swift.sanitize(identifier: type.names.identifier(), leading: false)
     }
-    return "\(name): \(typeSource)"
+    return "_ \(name): \(typeSource)"
   }
 }

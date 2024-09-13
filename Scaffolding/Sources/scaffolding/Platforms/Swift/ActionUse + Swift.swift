@@ -6,7 +6,7 @@ extension ActionUse {
     if let parameter = context?.lookupParameter(actionName) {
       return String(Swift.sanitize(identifier: parameter.names.identifier(), leading: false))
     } else {
-      var bareAction = module.lookupAction(actionName)!
+      let bareAction = module.lookupAction(actionName)!
       let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
       if let swift = action.swift {
         var result = ""
@@ -22,7 +22,13 @@ extension ActionUse {
         result.append(contentsOf: "")
         return result
       } else {
-        return "..."// String(action.names.identifier())
+        let name = Swift.sanitize(identifier: action.names.identifier(), leading: true)
+        let arguments = self.arguments
+          .lazy.map({ argument in
+            return argument.swiftSource(context: context, module: module)
+          })
+          .joined(separator: ", ")
+        return "\(name)(\(arguments))"
       }
     }
   }
