@@ -15,11 +15,12 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Things
+  static var isTyped: Bool { get }
   static func nativeName(of thing: Thing) -> StrictString?
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation?
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String
+  static func parameterDeclaration(name: String, type: String) -> String
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
   static func coverageRegistration(identifier: String) -> String
@@ -96,7 +97,7 @@ extension Platform {
       .joined()
     if leading,
       let first = result.scalars.first,
-      allowedAsIdentifierStart(first) {
+      ¬allowedAsIdentifierStart(first) {
       result.scalars.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
@@ -111,7 +112,7 @@ extension Platform {
 
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
-      return String(sanitize(identifier: parameter.names.identifier(), leading: false))
+      return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
       let bareAction = module.lookupAction(reference.actionName)!
       let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
@@ -155,7 +156,7 @@ extension Platform {
       if let native = nativeName(of: type) {
         returnValue = String(native)
       } else {
-        returnValue = sanitize(identifier: type.names.identifier(), leading: false)
+        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
       }
     } else {
       returnValue = emptyReturnType
@@ -224,5 +225,21 @@ extension Platform {
     }
 
     return result.joined(separator: "\n").appending("\n")
+  }
+
+  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
+    let name = sanitize(identifier: parameter.names.identifier(), leading: true)
+    if ¬isTyped {
+      return name
+    } else {
+      let type = module.lookupThing(parameter.type)!
+      let typeSource: String
+      if let native = nativeName(of: type) {
+        typeSource = String(native)
+      } else {
+        typeSource = sanitize(identifier: type.names.identifier(), leading: true)
+      }
+      return parameterDeclaration(name: name, type: typeSource)
+    }
   }
 }

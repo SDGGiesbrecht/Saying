@@ -33,6 +33,10 @@ enum JavaScript: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
+  static var isTyped: Bool {
+    return false
+  }
+
   static func nativeName(of thing: Thing) -> StrictString? {
     return nil
   }
@@ -41,8 +45,8 @@ enum JavaScript: Platform {
     return action.javaScript
   }
 
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
-    return parameter.javaScriptSource(module: module)
+  static func parameterDeclaration(name: String, type: String) -> String {
+    return name
   }
 
   static var emptyReturnType: String? {

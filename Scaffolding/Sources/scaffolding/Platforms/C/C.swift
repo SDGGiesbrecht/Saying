@@ -37,6 +37,10 @@ enum C: Platform {
     }).joined()
   }
 
+  static var isTyped: Bool {
+    return true
+  }
+
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.c
   }
@@ -45,8 +49,8 @@ enum C: Platform {
     return action.c
   }
 
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
-    return parameter.cSource(module: module)
+  static func parameterDeclaration(name: String, type: String) -> String {
+    return "\(type) \(name)"
   }
 
   static var emptyReturnType: String? {
@@ -80,7 +84,6 @@ enum C: Platform {
   }
 
   static var importsNeededByTestScaffolding: [String]? {
-    #warning("Which of these are actually used?")
     return [
       "#include <assert.h>",
       "#include <stdbool.h>",

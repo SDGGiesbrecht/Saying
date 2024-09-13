@@ -86,6 +86,10 @@ enum Swift: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
+  static var isTyped: Bool {
+    return true
+  }
+
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.swift
   }
@@ -94,8 +98,8 @@ enum Swift: Platform {
     return action.swift
   }
 
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
-    return parameter.swiftSource(module: module)
+  static func parameterDeclaration(name: String, type: String) -> String {
+    "_ \(name): \(type)"
   }
 
   static var emptyReturnType: String? {

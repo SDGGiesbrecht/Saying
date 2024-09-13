@@ -33,6 +33,10 @@ enum CSharp: Platform {
     }).joined()
   }
 
+  static var isTyped: Bool {
+    return true
+  }
+
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.cSharp
   }
@@ -41,8 +45,8 @@ enum CSharp: Platform {
     return action.cSharp
   }
 
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
-    return parameter.cSharpSource(module: module)
+  static func parameterDeclaration(name: String, type: String) -> String {
+    return "\(type) \(name)"
   }
 
   static var emptyReturnType: String? {
