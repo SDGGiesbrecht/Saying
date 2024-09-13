@@ -60,7 +60,7 @@ extension CSharp: Platform {
   static func coverageRegistration(identifier: String) -> String {
     return "        Coverage.Register(\u{22}\(identifier)\u{22});"
   }
-  static func expression(doing actionUse: ActionUse, context: ActionIntermediate, module: ModuleIntermediate) -> String {
+  static func statement(expression: ActionUse, context: ActionIntermediate, module: ModuleIntermediate) -> String {
     return actionUse.cSharpExpression(context: context, module: module)
   }
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
