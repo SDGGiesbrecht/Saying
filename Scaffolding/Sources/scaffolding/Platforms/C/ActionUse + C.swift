@@ -32,7 +32,4 @@ extension ActionUse {
       }
     }
   }
-  func cExpression(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return cCall(context: context, module: module).appending(";")
-  }
 }

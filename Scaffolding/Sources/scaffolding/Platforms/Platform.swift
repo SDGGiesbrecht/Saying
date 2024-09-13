@@ -14,7 +14,7 @@ protocol Platform {
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
   static func coverageRegistration(identifier: String) -> String
-  static func statement(expression: ActionUse, context: ActionIntermediate, module: ModuleIntermediate) -> String
+  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String
   static func actionDeclaration(
     name: String,
     parameters: String,

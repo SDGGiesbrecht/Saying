@@ -74,8 +74,8 @@ extension C: Platform {
   static func coverageRegistration(identifier: String) -> String {
     return "  register_coverage_region(\u{22}\(identifier)\u{22});"
   }
-  static func statement(expression: ActionUse, context: ActionIntermediate, module: ModuleIntermediate) -> String {
-    return actionUse.cExpression(context: context, module: module)
+  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+    return expression.cCall(context: context, module: module).appending(";")
   }
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [

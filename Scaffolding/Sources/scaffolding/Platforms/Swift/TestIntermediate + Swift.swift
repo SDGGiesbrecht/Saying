@@ -12,7 +12,7 @@ extension TestIntermediate {
   func swiftSource(module: ModuleIntermediate) -> String {
     return [
       "func run_\(swiftIdentifier(leading: false))() {",
-      "  \(action.swiftExpression(context: nil, module: module))",
+      "  \(Swift.statement(expression: action, context: nil, module: module))",
       "}"
     ].joined(separator: "\n")
   }

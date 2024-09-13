@@ -31,7 +31,4 @@ extension ActionUse {
       }
     }
   }
-  func javaScriptExpression(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return javaScriptCall(context: context, module: module).appending(";")
-  }
 }

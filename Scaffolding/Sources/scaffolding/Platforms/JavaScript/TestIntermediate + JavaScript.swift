@@ -12,7 +12,7 @@ extension TestIntermediate {
   func javaScriptSource(module: ModuleIntermediate) -> String {
     return [
       "function run_\(javaScriptIdentifier(leading: false))() {",
-      "  \(action.javaScriptExpression(context: nil, module: module))",
+      "  \(JavaScript.statement(expression: action, context: nil, module: module))",
       "}"
     ].joined(separator: "\n")
   }

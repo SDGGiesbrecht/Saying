@@ -31,7 +31,4 @@ extension ActionUse {
       }
     }
   }
-  func swiftExpression(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return swiftCall(context: context, module: module)
-  }
 }
