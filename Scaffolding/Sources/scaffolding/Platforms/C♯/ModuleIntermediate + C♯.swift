@@ -43,7 +43,8 @@ extension ModuleIntermediate {
       "    }",
     ])
     for actionIdentifier in actions.keys.sorted() {
-      if let declaration = actions[actionIdentifier]?.cSharpDeclaration(module: self) {
+      if let declaration = actions[actionIdentifier]
+        .flatMap({ CSharp.declaration(for: $0, module: self) }) {
         result.append(contentsOf: [
           "",
           declaration

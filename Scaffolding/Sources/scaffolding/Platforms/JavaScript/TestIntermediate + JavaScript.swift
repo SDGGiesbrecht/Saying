@@ -3,7 +3,7 @@ import SDGText
 
 extension TestIntermediate {
 
-  func javaScriptIdentifier(leading: Bool) -> StrictString {
+  func javaScriptIdentifier(leading: Bool) -> String {
     return location.lazy.enumerated()
       .map({ JavaScript.sanitize(identifier: $1.identifier(), leading: leading ∧ $0 == 0) })
       .joined(separator: "_")

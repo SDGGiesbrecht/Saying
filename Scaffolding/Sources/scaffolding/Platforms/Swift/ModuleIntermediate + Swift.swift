@@ -19,7 +19,8 @@ extension ModuleIntermediate {
       "}",
     ])
     for actionIdentifier in actions.keys.sorted() {
-      if let declaration = actions[actionIdentifier]?.swiftDeclaration(module: self) {
+      if let declaration = actions[actionIdentifier]
+        .flatMap({ Swift.declaration(for: $0, module: self) }) {
         result.append(contentsOf: [
           "",
           declaration

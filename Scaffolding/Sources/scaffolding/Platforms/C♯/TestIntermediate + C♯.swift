@@ -3,7 +3,7 @@ import SDGText
 
 extension TestIntermediate {
 
-  func cSharpIdentifier(leading: Bool) -> StrictString {
+  func cSharpIdentifier(leading: Bool) -> String {
     return location.lazy.enumerated()
       .map({ CSharp.sanitize(identifier: $1.identifier(), leading: leading ∧ $0 == 0) })
       .joined(separator: "_")

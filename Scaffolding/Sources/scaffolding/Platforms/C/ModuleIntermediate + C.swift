@@ -34,7 +34,8 @@ extension ModuleIntermediate {
       "}",
     ])
     for actionIdentifier in actions.keys.sorted() {
-      if let declaration = actions[actionIdentifier]?.cDeclaration(module: self) {
+      if let declaration = actions[actionIdentifier]
+        .flatMap({ C.declaration(for: $0, module: self) }) {
         result.append(contentsOf: [
           "",
           declaration

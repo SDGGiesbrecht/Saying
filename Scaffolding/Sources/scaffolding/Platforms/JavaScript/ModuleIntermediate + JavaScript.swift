@@ -19,7 +19,8 @@ extension ModuleIntermediate {
       "}",
     ])
     for actionIdentifier in actions.keys.sorted() {
-      if let declaration = actions[actionIdentifier]?.javaScriptDeclaration(module: self) {
+      if let declaration = actions[actionIdentifier]
+        .flatMap({ JavaScript.declaration(for: $0, module: self) }) {
         result.append(contentsOf: [
           "",
           declaration

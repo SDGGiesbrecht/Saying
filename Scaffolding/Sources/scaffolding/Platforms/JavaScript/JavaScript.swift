@@ -41,7 +41,7 @@ enum JavaScript {
       ∧ ¬scalar.isVulnerableToNormalization
   }
 
-  static func sanitize(identifier: StrictString, leading: Bool) -> StrictString {
+  static func sanitize(identifier: StrictString, leading: Bool) -> String {
     var result: StrictString = identifier.lazy
       .map({ identifierAllowed($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
@@ -51,7 +51,7 @@ enum JavaScript {
       result.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
-    return result
+    return String(result)
   }
 
   static let stringLiteralDisallowedList: Set<Unicode.Scalar> = {
@@ -79,5 +79,42 @@ enum JavaScript {
     return stringLiteral.lazy
       .map({ ¬stringLiteralDisallowed($0) ? "\($0)" : "\u{5C}u{\($0.hexadecimalCode)}" })
       .joined()
+  }
+}
+
+extension JavaScript: Platform {
+  static func nativeName(of thing: Thing) -> StrictString? {
+    return nil
+  }
+  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+    return action.javaScript
+  }
+  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
+    return parameter.javaScriptSource(module: module)
+  }
+  static var emptyReturnType: String? {
+    return nil
+  }
+  static func returnSection(with returnValue: String) -> String? {
+    return nil
+  }
+  static func coverageRegistration(identifier: String) -> String {
+    return "  coverageRegions.delete(\u{22}\(identifier)\u{22});"
+  }
+  static func expression(doing actionUse: ActionUse, context: ActionIntermediate, module: ModuleIntermediate) -> String {
+    return actionUse.javaScriptExpression(context: context, module: module)
+  }
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
+    var result: [String] = [
+      "function \(name)(\(parameters)) {",
+    ]
+    if let coverage = coverageRegistration {
+      result.append(coverage)
+    }
+    result.append(contentsOf: [
+      "  \(returnKeyword ?? "")\(implementation)",
+      "}",
+    ])
+    return result.joined(separator: "\n")
   }
 }

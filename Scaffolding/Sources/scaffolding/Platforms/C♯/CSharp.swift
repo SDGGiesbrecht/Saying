@@ -27,7 +27,7 @@ enum CSharp {
       ∧ ¬scalar.isVulnerableToNormalization
   }
 
-  static func sanitize(identifier: StrictString, leading: Bool) -> StrictString {
+  static func sanitize(identifier: StrictString, leading: Bool) -> String {
     var result: StrictString = identifier.lazy
       .map({ identifierAllowed($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
@@ -37,6 +37,44 @@ enum CSharp {
       result.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
-    return result
+    return String(result)
+  }
+}
+
+extension CSharp: Platform {
+  static func nativeName(of thing: Thing) -> StrictString? {
+    return thing.cSharp
+  }
+  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+    return action.cSharp
+  }
+  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
+    return parameter.cSharpSource(module: module)
+  }
+  static var emptyReturnType: String? {
+    return "void"
+  }
+  static func returnSection(with returnValue: String) -> String? {
+    return "\(returnValue)"
+  }
+  static func coverageRegistration(identifier: String) -> String {
+    return "        Coverage.Register(\u{22}\(identifier)\u{22});"
+  }
+  static func expression(doing actionUse: ActionUse, context: ActionIntermediate, module: ModuleIntermediate) -> String {
+    return actionUse.cSharpExpression(context: context, module: module)
+  }
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
+    var result: [String] = [
+      "    static \(returnSection!) \(name)(\(parameters))",
+      "    {",
+    ]
+    if let coverage = coverageRegistration {
+      result.append(coverage)
+    }
+    result.append(contentsOf: [
+      "        \(returnKeyword ?? "")\(implementation)",
+      "    }",
+    ])
+    return result.joined(separator: "\n")
   }
 }
