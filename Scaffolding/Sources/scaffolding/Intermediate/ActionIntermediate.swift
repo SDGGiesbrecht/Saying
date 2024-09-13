@@ -13,7 +13,7 @@ struct ActionIntermediate {
   var swift: SwiftImplementation?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
-  var isCoverageWrapper: Bool = false
+  var coveredIdentifier: StrictString?
 }
 
 extension ActionIntermediate {
@@ -188,26 +188,34 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
 
+  var isCoverageWrapper: Bool {
+    return coveredIdentifier ≠ nil
+  }
+
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(names.identifier())"
   }
   func wrappedToTrackCoverage() -> ActionIntermediate? {
-    return ActionIntermediate(
-      names: [coverageTrackingIdentifier()],
-      parameters: parameters,
-      reorderings: reorderings,
-      returnValue: returnValue,
-      implementation: ActionUse(
-        actionName: self.names.identifier(),
-        arguments: self.parameters.map({ parameter in
-          return ActionUse(
-            actionName: parameter.names.identifier(),
-            arguments: []
-          )
-        })
-      ),
-      isCoverageWrapper: true
-    )
+    if let coverageIdentifier = coverageRegionIdentifier() {
+      return ActionIntermediate(
+        names: [coverageTrackingIdentifier()],
+        parameters: parameters,
+        reorderings: reorderings,
+        returnValue: returnValue,
+        implementation: ActionUse(
+          actionName: self.names.identifier(),
+          arguments: self.parameters.map({ parameter in
+            return ActionUse(
+              actionName: parameter.names.identifier(),
+              arguments: []
+            )
+          })
+        ),
+        coveredIdentifier: coverageIdentifier
+      )
+    } else {
+      return nil
+    }
   }
 
   func coverageRegionIdentifier() -> StrictString? {

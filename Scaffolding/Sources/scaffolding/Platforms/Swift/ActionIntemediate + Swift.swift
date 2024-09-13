@@ -22,11 +22,17 @@ extension ActionIntermediate {
       return " -> \(identifier)"
     }) ?? ""
     let returnKeyword = returnValue == "" ? "" : "return "
-    
-    return [
+
+    var result: [String] = [
       "func \(name)(\(parameters))\(returnValue) {",
+    ]
+    if let identifier = coveredIdentifier {
+      result.append("  registerCoverage(\u{22}\(identifier)\u{22})")
+    }
+    result.append(contentsOf: [
       "  \(returnKeyword)\(implementation!.swiftSource(context: self, module: module))",
       "}",
-    ].joined(separator: "\n")
+    ])
+    return result.joined(separator: "\n")
   }
 }
