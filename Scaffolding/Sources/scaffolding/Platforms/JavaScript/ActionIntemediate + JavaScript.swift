@@ -17,7 +17,7 @@ extension ActionIntermediate {
       "function \(name)(\(parameters)) {",
     ]
     if let identifier = coveredIdentifier {
-      result.append("  coverageRegions.delete(\u{22}\(identifier)\u{22})")
+      result.append("  coverageRegions.delete(\u{22}\(identifier)\u{22});")
     }
     result.append(contentsOf: [
       "  \(returnKeyword)\(implementation!.javaScriptExpression(context: self, module: module))",
