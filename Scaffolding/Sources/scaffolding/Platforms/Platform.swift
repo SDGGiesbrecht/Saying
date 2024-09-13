@@ -167,6 +167,7 @@ extension Platform {
       .joined(separator: ", ")
 
     let returnValue: String?
+    let needsReturnKeyword: Bool
     if let specified = action.returnValue {
       let type = module.lookupThing(specified)!
       if let native = nativeName(of: type) {
@@ -174,12 +175,14 @@ extension Platform {
       } else {
         returnValue = sanitize(identifier: type.names.identifier(), leading: true)
       }
+      needsReturnKeyword = true
     } else {
       returnValue = emptyReturnType
+      needsReturnKeyword = false
     }
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
-    let returnKeyword = returnValue == nil ? "" : "return "
+    let returnKeyword = needsReturnKeyword ? "return " : ""
 
     let coverageRegistration: String?
     if let identifier = action.coveredIdentifier {
