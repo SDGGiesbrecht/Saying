@@ -129,7 +129,7 @@ extension Swift: Platform {
     return "  registerCoverage(\u{22}\(identifier)\u{22})"
   }
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return expression.swiftCall(context: context, module: module)
+    return call(to: expression, context: context, module: module)
   }
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [

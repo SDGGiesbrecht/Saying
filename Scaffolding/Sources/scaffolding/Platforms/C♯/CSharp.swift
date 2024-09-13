@@ -61,7 +61,7 @@ extension CSharp: Platform {
     return "        Coverage.Register(\u{22}\(identifier)\u{22});"
   }
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return expression.cSharpCall(context: context, module: module).appending(";")
+    return call(to: expression, context: context, module: module).appending(";")
   }
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [

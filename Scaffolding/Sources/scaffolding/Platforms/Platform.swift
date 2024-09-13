@@ -27,6 +27,36 @@ protocol Platform {
 
 extension Platform {
 
+  static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+    if let parameter = context?.lookupParameter(reference.actionName) {
+      return String(sanitize(identifier: parameter.names.identifier(), leading: false))
+    } else {
+      let bareAction = module.lookupAction(reference.actionName)!
+      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
+      if let native = nativeImplementation(of: action) {
+        var result = ""
+        for index in native.textComponents.indices {
+          result.append(contentsOf: String(native.textComponents[index]))
+          if index ≠ native.textComponents.indices.last {
+            let rootIndex = native.reordering[index]
+            let reordered = action.reorderings[reference.actionName]![rootIndex]
+            let argument = reference.arguments[reordered]
+            result.append(contentsOf: call(to: argument, context: context, module: module))
+          }
+        }
+        return result
+      } else {
+        let name = sanitize(identifier: action.names.identifier(), leading: true)
+        let arguments = reference.arguments
+          .lazy.map({ argument in
+            return call(to: argument, context: context, module: module)
+          })
+          .joined(separator: ", ")
+        return "\(name)(\(arguments))"
+      }
+    }
+  }
+
   static func declaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
