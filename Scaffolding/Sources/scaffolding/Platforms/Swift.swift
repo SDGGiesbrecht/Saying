@@ -163,11 +163,15 @@ enum Swift: Platform {
     return nil
   }
 
-  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
-    return test.swiftSource(module: module)
+  static func testSource(identifier: String, statement: String) -> [String] {
+    return [
+      "func run_\(identifier)() {",
+      "  \(statement)",
+      "}"
+    ]
   }
-  static func testCall(for test: TestIntermediate) -> String {
-    return test.swiftCall()
+  static func testCall(for identifier: String) -> String {
+    return "run_\(identifier)();"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {

@@ -110,11 +110,15 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
-    return test.javaScriptSource(module: module)
+  static func testSource(identifier: String, statement: String) -> [String] {
+    return [
+      "function run_\(identifier)() {",
+      "  \(statement)",
+      "}"
+    ]
   }
-  static func testCall(for test: TestIntermediate) -> String {
-    return test.javaScriptCall()
+  static func testCall(for identifier: String) -> String {
+    return "run_\(identifier)();"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {

@@ -2,22 +2,18 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
-enum C: Platform {
-
+enum CSharp: Platform {
+  
   static var allowsAllUnicodeIdentifiers: Bool {
-    return false
+    return true
   }
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
-    values.append(contentsOf: 0x41...0x5A) // A–Z
-    values.append(contentsOf: 0x61...0x7A) // a–z
     values.append(0x5F) // _
     return values
   }
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
-    var values: [UInt32] = []
-    values.append(contentsOf: 0x30...0x39) // 0–9
-    return values
+    return []
   }
   static var disallowedStringLiteralPoints: [UInt32] {
     var values: [UInt32] = []
@@ -42,11 +38,11 @@ enum C: Platform {
   }
 
   static func nativeName(of thing: Thing) -> StrictString? {
-    return thing.c
+    return thing.cSharp
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
-    return action.c
+    return action.cSharp
   }
 
   static func parameterDeclaration(name: String, type: String) -> String {
@@ -61,7 +57,7 @@ enum C: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  register_coverage_region(\u{22}\(identifier)\u{22});"
+    return "        Coverage.Register(\u{22}\(identifier)\u{22});"
   }
 
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
@@ -70,93 +66,101 @@ enum C: Platform {
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [
-      "\(returnSection!) \(name)(\(parameters))",
-      "{",
+      "    static \(returnSection!) \(name)(\(parameters))",
+      "    {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
     result.append(contentsOf: [
-      "  \(returnKeyword ?? "")\(implementation)",
-      "}",
+      "        \(returnKeyword ?? "")\(implementation)",
+      "    }",
     ])
     return result.joined(separator: "\n")
   }
 
   static var importsNeededByTestScaffolding: [String]? {
     return [
-      "#include <assert.h>",
-      "#include <stdbool.h>",
-      "#include <stdio.h>",
-      "#include <string.h>",
+      "using System;",
+      "using System.Collections.Generic;",
+      "using System.Linq;",
     ]
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
-    var result: [String] = []
-    result.append(contentsOf: [
-      "#define REGION_IDENTIFIER_LENGTH \((regions.lazy.map({ String($0).utf8.count }).max() ?? 0) + 1)",
-      "#define NUMBER_OF_REGIONS \(regions.count)",
-      "char coverage_regions[NUMBER_OF_REGIONS][REGION_IDENTIFIER_LENGTH] = {",
-    ])
+    var result: [String] = [
+      "static class Coverage",
+      "{",
+      "    internal static HashSet<string> Regions = new HashSet<string> {",
+    ]
     for region in regions {
       result.append("        \u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
-      "};",
+      "    };",
     ])
     return result
   }
 
   static var registerCoverageAction: [String] {
     return [
-    "void register_coverage_region(char identifier[REGION_IDENTIFIER_LENGTH])",
-    "{",
-    "        for(int index = 0; index < NUMBER_OF_REGIONS; index++)",
-    "        {",
-    "                if (!strcmp(coverage_regions[index], identifier))",
-    "                {",
-    "                        memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
-    "                }",
-    "        }",
-    "}",
+      "    internal static void Register(string identifier)",
+      "    {",
+      "        Coverage.Regions.Remove(identifier);",
+      "    }",
+      "}",
     ]
   }
-  
+
   static var actionDeclarationsContainerStart: [String]? {
-    return nil
+    return [
+      "static class Tests",
+      "{",
+      "",
+      "    static void Assert(bool condition)",
+      "    {",
+      "        Assert(condition, \u{22}\u{22});",
+      "    }",
+      "    static void Assert(bool condition, string message)",
+      "    {",
+      "        if (!condition)",
+      "        {",
+      "            Console.WriteLine(message);",
+      "            Environment.Exit(1);",
+      "        }",
+      "    }",
+    ]
   }
   static var actionDeclarationsContainerEnd: [String]? {
-    return nil
+    return [
+      "}",
+    ]
   }
 
-  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
-    return test.cSource(module: module)
+  static func testSource(identifier: String, statement: String) -> [String] {
+    return [
+      "    static void run_\(identifier)()",
+      "    {",
+      "        \(statement)",
+      "    }"
+    ]
   }
-  static func testCall(for test: TestIntermediate) -> String {
-    return test.cCall()
+  static func testCall(for identifier: String) -> String {
+    return "run_\(identifier)();"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
-      "void test() {",
+      "    internal static void Test() {",
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "        \(test)",
+        "        \(test)"
       ])
     }
     result.append(contentsOf: [
-      "",
-      "        bool any_remaining = false;",
-      "        for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
-      "                if (coverage_regions[index][0] != 0)",
-      "                {",
-      "                        any_remaining = true;",
-      "                }",
-      "        }",
-      "        assert(!any_remaining);",
-      "}",
+      "        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
+      "    }",
     ])
     return result
   }

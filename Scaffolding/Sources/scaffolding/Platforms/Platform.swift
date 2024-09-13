@@ -40,8 +40,8 @@ protocol Platform {
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
-  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String
-  static func testCall(for test: TestIntermediate) -> String
+  static func testSource(identifier: String, statement: String) -> [String]
+  static func testCall(for identifier: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
 }
 
@@ -140,6 +140,22 @@ extension Platform {
     }
   }
 
+  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
+    let name = sanitize(identifier: parameter.names.identifier(), leading: true)
+    if ¬isTyped {
+      return name
+    } else {
+      let type = module.lookupThing(parameter.type)!
+      let typeSource: String
+      if let native = nativeName(of: type) {
+        typeSource = String(native)
+      } else {
+        typeSource = sanitize(identifier: type.names.identifier(), leading: true)
+      }
+      return parameterDeclaration(name: name, type: typeSource)
+    }
+  }
+
   static func declaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
@@ -182,6 +198,12 @@ extension Platform {
     )
   }
 
+  static func identifier(for test: TestIntermediate, leading: Bool) -> String {
+    return test.location.lazy.enumerated()
+      .map({ sanitize(identifier: $1.identifier(), leading: leading ∧ $0 == 0) })
+      .joined(separator: "_")
+  }
+
   static func build(module: ModuleIntermediate) -> String {
     var result: [String] = []
     if let imports = importsNeededByTestScaffolding {
@@ -213,13 +235,11 @@ extension Platform {
       }
     }
     for test in module.tests {
-      result.append(contentsOf: [
-        "",
-        source(for: test, module: module),
-      ])
+      result.append("")
+      result.append(contentsOf: source(of: test, module: module))
     }
     result.append("")
-    result.append(contentsOf: testSummary(testCalls: module.tests.map({ testCall(for: $0) })))
+    result.append(contentsOf: testSummary(testCalls: module.tests.map({ call(test: $0) })))
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
     }
@@ -227,19 +247,14 @@ extension Platform {
     return result.joined(separator: "\n").appending("\n")
   }
 
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
-    let name = sanitize(identifier: parameter.names.identifier(), leading: true)
-    if ¬isTyped {
-      return name
-    } else {
-      let type = module.lookupThing(parameter.type)!
-      let typeSource: String
-      if let native = nativeName(of: type) {
-        typeSource = String(native)
-      } else {
-        typeSource = sanitize(identifier: type.names.identifier(), leading: true)
-      }
-      return parameterDeclaration(name: name, type: typeSource)
-    }
+  static func source(of test: TestIntermediate, module: ModuleIntermediate) -> [String] {
+    return testSource(
+      identifier: identifier(for: test, leading: false),
+      statement: statement(expression: test.action, context: nil, module: module)
+    )
+  }
+
+  static func call(test: TestIntermediate) -> String {
+    return testCall(for: identifier(for: test, leading: false))
   }
 }
