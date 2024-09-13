@@ -3,9 +3,11 @@ import SDGCollections
 import SDGText
 
 enum Swift: Platform {
-
-  #warning("Can sanitization be unified too?")
-  static let identifierStartList: Set<Unicode.Scalar> = {
+  
+  static var allowsAllUnicodeIdentifiers: Bool {
+    return false
+  }
+  static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x41...0x5A) // A–Z
     values.append(contentsOf: 0x61...0x7A) // a–z
@@ -59,54 +61,19 @@ enum Swift: Platform {
     values.append(contentsOf: 0xC0000...0xCFFFD)
     values.append(contentsOf: 0xD0000...0xDFFFD)
     values.append(contentsOf: 0xE0000...0xEFFFD)
-    return Set(
-      values.lazy.compactMap({ value in
-        guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isVulnerableToNormalization else {
-          return nil
-        }
-        return scalar
-      })
-    )
-  }()
-  static func identifierStartAllowed(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ identifierStartList
+    return values
   }
-
-  static let identifierAllowedList: Set<Unicode.Scalar> = {
+  static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     var values: [UInt32] = []
-    values.append(contentsOf: identifierStartList.lazy.map({ $0.value }))
     values.append(contentsOf: 0x30...0x39) // 0–9
     values.append(contentsOf: 0x300...0x36F)
     values.append(contentsOf: 0x1DC0...0x1DFF)
     values.append(contentsOf: 0x20D0...0x20FF)
     values.append(contentsOf: 0xFE20...0xFE2F)
-    return Set(
-      values.lazy.compactMap({ value in
-        guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isVulnerableToNormalization else {
-          return nil
-        }
-        return scalar
-      })
-    )
-  }()
-  static func identifierAllowed(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ identifierAllowedList
+    return values
   }
-  
-  static func sanitize(identifier: StrictString, leading: Bool) -> String {
-    var result: StrictString = identifier.lazy
-      .map({ identifierAllowed($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
-      .joined()
-    if leading,
-      let first = result.first,
-      identifierStartAllowed(first) {
-      result.removeFirst()
-      result.prepend(contentsOf: "_\(first.hexadecimalCode)")
-    }
-    return String(result)
-  }
+  static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>?
+  static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
 
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.swift

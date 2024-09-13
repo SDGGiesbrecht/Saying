@@ -4,55 +4,22 @@ import SDGText
 
 enum JavaScript: Platform {
 
-  static let identifierStartList: Set<Unicode.Scalar> = {
+  static var allowsAllUnicodeIdentifiers: Bool {
+    return true
+  }
+  static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x24) // $
     values.append(0x5F) // _
-    return Set(
-      values.lazy.compactMap({ value in
-        guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isVulnerableToNormalization else {
-          return nil
-        }
-        return scalar
-      })
-    )
-  }()
-  static func identifierStartAllowed(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ identifierStartList ∨ scalar.properties.isIDStart
+    return values
   }
-
-  static let identifierAllowedList: Set<Unicode.Scalar> = {
+  static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     var values: [UInt32] = []
-    values.append(0x24) // $
-    values.append(contentsOf: 0x200C...0x200D)
-    return Set(
-      values.lazy.compactMap({ value in
-        guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isVulnerableToNormalization else {
-          return nil
-        }
-        return scalar
-      })
-    )
-  }()
-  static func identifierAllowed(_ scalar: Unicode.Scalar) -> Bool {
-    return (scalar ∈ identifierAllowedList ∨ scalar.properties.isIDContinue)
-      ∧ ¬scalar.isVulnerableToNormalization
+    values.append(contentsOf: 0x200C...0x200D) // ZWNJ–ZWJ
+    return values
   }
-
-  static func sanitize(identifier: StrictString, leading: Bool) -> String {
-    var result: StrictString = identifier.lazy
-      .map({ identifierAllowed($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
-      .joined()
-    if leading,
-      let first = result.first,
-      identifierStartAllowed(first) {
-      result.removeFirst()
-      result.prepend(contentsOf: "_\(first.hexadecimalCode)")
-    }
-    return String(result)
-  }
+  static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>?
+  static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
 
   static let stringLiteralDisallowedList: Set<Unicode.Scalar> = {
     var values: [UInt32] = []

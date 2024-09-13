@@ -1,10 +1,15 @@
+import SDGControlFlow
 import SDGLogic
+import SDGCollections
 import SDGText
 
 protocol Platform {
   // Identifiers
-  static var allowedIdentifierStartCharacters: [Unicode.Scalar] { get }
-  static func sanitize(identifier: StrictString, leading: Bool) -> String
+  static var allowsAllUnicodeIdentifiers: Bool { get }
+  static var allowedIdentifierStartCharacterPoints: [UInt32] { get }
+  static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] { get }
+  static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>? { get set }
+  static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>? { get set }
 
   // Things
   static func nativeName(of thing: Thing) -> StrictString?
@@ -27,6 +32,50 @@ protocol Platform {
 }
 
 extension Platform {
+
+  static func filterUnsafe(characters: [UInt32]) -> Set<Unicode.Scalar> {
+    return Set(
+      characters.lazy.compactMap({ value in
+        guard let scalar = Unicode.Scalar(value),
+          ¬scalar.isVulnerableToNormalization else {
+          return nil
+        }
+        return scalar
+      })
+    )
+  }
+  static var allowedIdentifierStartCharacters: Set<Unicode.Scalar> {
+    return cached(in: &_allowedIdentifierStartCharactersCache) {
+      return filterUnsafe(characters: allowedIdentifierStartCharacterPoints)
+    }
+  }
+  static var allowedIdentifierContinuationCharacters: Set<Unicode.Scalar> {
+    return cached(in: &_allowedIdentifierContinuationCharactersCache) {
+      allowedIdentifierStartCharacters
+      ∪ filterUnsafe(characters: additionalAllowedIdentifierContinuationCharacterPoints)
+    }
+  }
+  static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
+    return scalar ∈ allowedIdentifierStartCharacters
+      ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart ∧ ¬scalar.isVulnerableToNormalization)
+  }
+  static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
+    return scalar ∈ allowedIdentifierContinuationCharacters
+    ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue ∧ ¬scalar.isVulnerableToNormalization)
+  }
+
+  static func sanitize(identifier: StrictString, leading: Bool) -> String {
+    var result: String = identifier.lazy
+      .map({ allowedAsIdentifierContinuation($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .joined()
+    if leading,
+      let first = result.scalars.first,
+      allowedAsIdentifierStart(first) {
+      result.scalars.removeFirst()
+      result.prepend(contentsOf: "_\(first.hexadecimalCode)")
+    }
+    return result
+  }
 
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
