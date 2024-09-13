@@ -90,8 +90,7 @@ extension ModuleIntermediate {
       c: CImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       cSharp: CSharpImplementation(reordering: [0], textComponents: ["Assert(", ")"]),
       javaScript: JavaScriptImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
-      swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"]),
-      declaration: nil
+      swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"])
     )
     identifierMapping["() is ()"] = "() is ()"
     actions["() is ()"] = ActionIntermediate(
@@ -105,8 +104,7 @@ extension ModuleIntermediate {
       c: CImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       cSharp: CSharpImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       javaScript: JavaScriptImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      declaration: nil
+      swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"])
     )
     identifierMapping["true"] = "true"
     actions["true"] = ActionIntermediate(
@@ -117,8 +115,7 @@ extension ModuleIntermediate {
       c: CImplementation(reordering: [], textComponents: ["true"]),
       cSharp: CSharpImplementation(reordering: [], textComponents: ["true"]),
       javaScript: JavaScriptImplementation(reordering: [], textComponents: ["true"]),
-      swift: SwiftImplementation(reordering: [], textComponents: ["true"]),
-      declaration: nil
+      swift: SwiftImplementation(reordering: [], textComponents: ["true"])
     )
     identifierMapping["false"] = "false"
     actions["false"] = ActionIntermediate(
@@ -129,8 +126,7 @@ extension ModuleIntermediate {
       c: CImplementation(reordering: [], textComponents: ["false"]),
       cSharp: CSharpImplementation(reordering: [], textComponents: ["false"]),
       javaScript: JavaScriptImplementation(reordering: [], textComponents: ["false"]),
-      swift: SwiftImplementation(reordering: [], textComponents: ["false"]),
-      declaration: nil
+      swift: SwiftImplementation(reordering: [], textComponents: ["false"])
     )
   }
 
@@ -145,5 +141,24 @@ extension ModuleIntermediate {
     if ¬errors.isEmpty {
       throw ErrorList(errors)
     }
+  }
+}
+
+extension ModuleIntermediate {
+
+  func applyingTestCoverageTracking() -> ModuleIntermediate {
+    var identifierMapping = self.identifierMapping
+    var actions = self.actions
+    for (_, action) in self.actions {
+      let wrappedIdentifier = action.coverageTrackingIdentifier()
+      identifierMapping[wrappedIdentifier] = wrappedIdentifier
+      actions[wrappedIdentifier] = action.wrappedToTrackCoverage()
+    }
+    return ModuleIntermediate(
+      identifierMapping: identifierMapping,
+      things: things,
+      actions: actions,
+      tests: tests
+    )
   }
 }

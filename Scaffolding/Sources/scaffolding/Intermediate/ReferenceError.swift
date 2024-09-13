@@ -2,5 +2,5 @@ import SDGText
 
 enum ReferenceError: Error {
   case noSuchThing(StrictString)
-  case noSuchAction(ParsedAction)
+  case noSuchAction(name: StrictString, source: ParsedAction?)
 }

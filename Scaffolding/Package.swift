@@ -11,6 +11,7 @@ let package = Package(
     .executableTarget(
       name: "scaffolding",
       dependencies: [
+        .product(name: "SDGControlFlow", package: "SDGCornerstone"),
         .product(name: "SDGLogic", package: "SDGCornerstone"),
         .product(name: "SDGMathematics", package: "SDGCornerstone"),
         .product(name: "SDGCollections", package: "SDGCornerstone"),
