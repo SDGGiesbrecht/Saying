@@ -31,8 +31,8 @@ extension ActionIntermediate {
       result.append("        Coverage.Register(\u{22}\(identifier)\u{22});")
     }
     result.append(contentsOf: [
-      "  \(returnKeyword)\(implementation!.cSharpExpression(context: self, module: module))",
-      "}",
+      "        \(returnKeyword)\(implementation!.cSharpExpression(context: self, module: module))",
+      "    }",
     ])
     return result.joined(separator: "\n")
   }
