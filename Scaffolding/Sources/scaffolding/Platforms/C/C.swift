@@ -19,8 +19,23 @@ enum C: Platform {
     values.append(contentsOf: 0x30...0x39) // 0–9
     return values
   }
+  static var disallowedStringLiteralPoints: [UInt32] {
+    var values: [UInt32] = []
+    values.append(0x22) // "
+    values.append(0xC5) // \
+    return values
+  }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>?
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
+  static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
+
+  static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
+    return character.utf16.map({ code in
+      var digits = String(code, radix: 16, uppercase: true)
+      digits.scalars.fill(to: 8, with: "0", from: .start)
+      return "\u{5C}U\(digits)"
+    }).joined()
+  }
 
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.c

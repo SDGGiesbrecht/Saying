@@ -72,8 +72,19 @@ enum Swift: Platform {
     values.append(contentsOf: 0xFE20...0xFE2F)
     return values
   }
+  static var disallowedStringLiteralPoints: [UInt32] {
+    var values: [UInt32] = []
+    values.append(0x22) // "
+    values.append(0x5C) // \
+    return values
+  }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>?
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
+  static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
+
+  static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
+    return "\u{5C}u{\(character.hexadecimalCode)}"
+  }
 
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.swift

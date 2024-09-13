@@ -8,8 +8,11 @@ protocol Platform {
   static var allowsAllUnicodeIdentifiers: Bool { get }
   static var allowedIdentifierStartCharacterPoints: [UInt32] { get }
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] { get }
+  static var disallowedStringLiteralPoints: [UInt32] { get }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>? { get set }
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>? { get set }
+  static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
+  static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Things
   static func nativeName(of thing: Thing) -> StrictString?
@@ -55,6 +58,14 @@ extension Platform {
       ∪ filterUnsafe(characters: additionalAllowedIdentifierContinuationCharacterPoints)
     }
   }
+  static var disallowedStringLiteralCharacters: Set<Unicode.Scalar> {
+    return cached(in: &_disallowedStringLiteralCharactersCache) {
+      return Set(
+        disallowedStringLiteralPoints
+          .lazy.compactMap({ Unicode.Scalar($0) })
+      )
+    }
+  }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ allowedIdentifierStartCharacters
       ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart ∧ ¬scalar.isVulnerableToNormalization)
@@ -62,6 +73,11 @@ extension Platform {
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ allowedIdentifierContinuationCharacters
     ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue ∧ ¬scalar.isVulnerableToNormalization)
+  }
+  static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
+    return scalar ∈ disallowedStringLiteralCharacters
+    ∨ Character(scalar).isNewline
+    ∨ scalar.isVulnerableToNormalization
   }
 
   static func sanitize(identifier: StrictString, leading: Bool) -> String {
@@ -75,6 +91,12 @@ extension Platform {
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
     return result
+  }
+
+  static func sanitize(stringLiteral: StrictString) -> String {
+    return stringLiteral.lazy
+      .map({ ¬disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
+      .joined()
   }
 
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
@@ -134,8 +156,7 @@ extension Platform {
 
     let coverageRegistration: String?
     if let identifier = action.coveredIdentifier {
-      #warning("Need to sanitize string literal.")
-      coverageRegistration = self.coverageRegistration(identifier: String(identifier))
+      coverageRegistration = self.coverageRegistration(identifier: sanitize(stringLiteral: identifier))
     } else {
       coverageRegistration = nil
     }
