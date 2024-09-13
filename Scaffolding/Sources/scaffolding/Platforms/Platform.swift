@@ -50,7 +50,7 @@ extension Platform {
     }
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
-    let returnKeyword = returnSection == nil ? "" : "return "
+    let returnKeyword = returnValue == nil ? "" : "return "
 
     let coverageRegistration: String?
     if let identifier = action.coveredIdentifier {
