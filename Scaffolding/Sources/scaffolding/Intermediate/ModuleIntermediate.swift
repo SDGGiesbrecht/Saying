@@ -147,9 +147,12 @@ extension ModuleIntermediate {
 extension ModuleIntermediate {
 
   func applyingTestCoverageTracking() -> ModuleIntermediate {
+    var identifierMapping = self.identifierMapping
     var actions = self.actions
     for (_, action) in self.actions {
-      actions[action.coverageTrackingIdentifier()] = action.wrappedToTrackCoverage()
+      let wrappedIdentifier = action.coverageTrackingIdentifier()
+      identifierMapping[wrappedIdentifier] = wrappedIdentifier
+      actions[wrappedIdentifier] = action.wrappedToTrackCoverage()
     }
     return ModuleIntermediate(
       identifierMapping: identifierMapping,

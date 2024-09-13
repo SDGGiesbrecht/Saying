@@ -6,7 +6,8 @@ extension ActionUse {
     if let parameter = context?.lookupParameter(actionName) {
       return String(Swift.sanitize(identifier: parameter.names.identifier(), leading: false))
     } else {
-      let action = module.lookupAction(actionName)!
+      var bareAction = module.lookupAction(actionName)!
+      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
       if let swift = action.swift {
         var result = ""
         for index in swift.textComponents.indices {
@@ -21,7 +22,7 @@ extension ActionUse {
         result.append(contentsOf: "")
         return result
       } else {
-        return String(action.names.identifier())
+        return "..."// String(action.names.identifier())
       }
     }
   }
