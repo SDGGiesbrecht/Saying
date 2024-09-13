@@ -78,4 +78,83 @@ enum C: Platform {
     ])
     return result.joined(separator: "\n")
   }
+
+  static var importsNeededByTestScaffolding: [String]? {
+    #warning("Which of these are actually used?")
+    return [
+      "#include <assert.h>",
+      "#include <stdbool.h>",
+      "#include <stdio.h>",
+      "#include <string.h>",
+    ]
+  }
+
+  static func coverageRegionSet(regions: [String]) -> [String] {
+    var result: [String] = []
+    result.append(contentsOf: [
+      "#define REGION_IDENTIFIER_LENGTH \((regions.lazy.map({ String($0).utf8.count }).max() ?? 0) + 1)",
+      "#define NUMBER_OF_REGIONS \(regions.count)",
+      "char coverage_regions[NUMBER_OF_REGIONS][REGION_IDENTIFIER_LENGTH] = {",
+    ])
+    for region in regions {
+      result.append("        \u{22}\(region)\u{22},")
+    }
+    result.append(contentsOf: [
+      "};",
+    ])
+    return result
+  }
+
+  static var registerCoverageAction: [String] {
+    return [
+    "void register_coverage_region(char identifier[REGION_IDENTIFIER_LENGTH])",
+    "{",
+    "        for(int index = 0; index < NUMBER_OF_REGIONS; index++)",
+    "        {",
+    "                if (!strcmp(coverage_regions[index], identifier))",
+    "                {",
+    "                        memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
+    "                }",
+    "        }",
+    "}",
+    ]
+  }
+  
+  static var actionDeclarationsContainerStart: [String]? {
+    return nil
+  }
+  static var actionDeclarationsContainerEnd: [String]? {
+    return nil
+  }
+
+  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
+    return test.cSource(module: module)
+  }
+  static func testCall(for test: TestIntermediate) -> String {
+    return test.cCall()
+  }
+
+  static func testSummary(testCalls: [String]) -> [String] {
+    var result = [
+      "void test() {",
+    ]
+    for test in testCalls {
+      result.append(contentsOf: [
+        "        \(test)",
+      ])
+    }
+    result.append(contentsOf: [
+      "",
+      "        bool any_remaining = false;",
+      "        for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
+      "                if (coverage_regions[index][0] != 0)",
+      "                {",
+      "                        any_remaining = true;",
+      "                }",
+      "        }",
+      "        assert(!any_remaining);",
+      "}",
+    ])
+    return result
+  }
 }

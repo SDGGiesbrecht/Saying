@@ -74,4 +74,85 @@ enum CSharp: Platform {
     ])
     return result.joined(separator: "\n")
   }
+
+  static var importsNeededByTestScaffolding: [String]? {
+    return [
+      "using System;",
+      "using System.Collections.Generic;",
+      "using System.Linq;",
+    ]
+  }
+
+  static func coverageRegionSet(regions: [String]) -> [String] {
+    var result: [String] = [
+      "static class Coverage",
+      "{",
+      "    internal static HashSet<string> Regions = new HashSet<string> {",
+    ]
+    for region in regions {
+      result.append("        \u{22}\(region)\u{22},")
+    }
+    result.append(contentsOf: [
+      "    };",
+    ])
+    return result
+  }
+
+  static var registerCoverageAction: [String] {
+    return [
+      "    internal static void Register(string identifier)",
+      "    {",
+      "        Coverage.Regions.Remove(identifier);",
+      "    }",
+      "}",
+    ]
+  }
+
+  static var actionDeclarationsContainerStart: [String]? {
+    return [
+      "static class Tests",
+      "{",
+      "",
+      "    static void Assert(bool condition)",
+      "    {",
+      "        Assert(condition, \u{22}\u{22});",
+      "    }",
+      "    static void Assert(bool condition, string message)",
+      "    {",
+      "        if (!condition)",
+      "        {",
+      "            Console.WriteLine(message);",
+      "            Environment.Exit(1);",
+      "        }",
+      "    }",
+    ]
+  }
+  static var actionDeclarationsContainerEnd: [String]? {
+    return [
+      "}",
+    ]
+  }
+
+  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
+    return test.cSharpSource(module: module)
+  }
+  static func testCall(for test: TestIntermediate) -> String {
+    return test.cSharpCall()
+  }
+
+  static func testSummary(testCalls: [String]) -> [String] {
+    var result = [
+      "    internal static void Test() {",
+    ]
+    for test in testCalls {
+      result.append(contentsOf: [
+        "        \(test)"
+      ])
+    }
+    result.append(contentsOf: [
+      "        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
+      "    }",
+    ])
+    return result
+  }
 }

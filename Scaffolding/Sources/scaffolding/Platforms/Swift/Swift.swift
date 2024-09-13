@@ -126,4 +126,60 @@ enum Swift: Platform {
     ])
     return result.joined(separator: "\n")
   }
+
+  static var importsNeededByTestScaffolding: [String]? {
+    return nil
+  }
+
+  static func coverageRegionSet(regions: [String]) -> [String] {
+    var result: [String] = [
+      "var coverageRegions: Set<String> = [",
+    ]
+    for region in regions {
+      result.append("  \u{22}\(region)\u{22},")
+    }
+    result.append(contentsOf: [
+      "]",
+    ])
+    return result
+  }
+
+  static var registerCoverageAction: [String] {
+    return [
+      "func registerCoverage(_ identifier: String) {",
+      "  coverageRegions.remove(identifier)",
+      "}",
+    ]
+  }
+
+  static var actionDeclarationsContainerStart: [String]? {
+    return nil
+  }
+  static var actionDeclarationsContainerEnd: [String]? {
+    return nil
+  }
+
+  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
+    return test.swiftSource(module: module)
+  }
+  static func testCall(for test: TestIntermediate) -> String {
+    return test.swiftCall()
+  }
+
+  static func testSummary(testCalls: [String]) -> [String] {
+    var result = [
+      "",
+      "func test() {",
+    ]
+    for test in testCalls {
+      result.append(contentsOf: [
+        "  \(test)",
+      ])
+    }
+    result.append(contentsOf: [
+      "  assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
+      "}"
+    ])
+    return result
+  }
 }

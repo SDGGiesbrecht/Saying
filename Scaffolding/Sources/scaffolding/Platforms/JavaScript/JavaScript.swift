@@ -73,4 +73,60 @@ enum JavaScript: Platform {
     ])
     return result.joined(separator: "\n")
   }
+
+  static var importsNeededByTestScaffolding: [String]? {
+    return nil
+  }
+
+  static func coverageRegionSet(regions: [String]) -> [String] {
+    var result: [String] = [
+      "let coverageRegions = new Set([",
+    ]
+    for region in regions {
+      result.append("  \u{22}\(region)\u{22},")
+    }
+    result.append(contentsOf: [
+      "]);",
+    ])
+    return result
+  }
+
+  static var registerCoverageAction: [String] {
+    return [
+      "function registerCoverage(identifier) {",
+      "  coverageRegions.delete(identifier);",
+      "}",
+    ]
+  }
+
+  static var actionDeclarationsContainerStart: [String]? {
+    return nil
+  }
+  static var actionDeclarationsContainerEnd: [String]? {
+    return nil
+  }
+
+  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String {
+    return test.javaScriptSource(module: module)
+  }
+  static func testCall(for test: TestIntermediate) -> String {
+    return test.javaScriptCall()
+  }
+
+  static func testSummary(testCalls: [String]) -> [String] {
+    var result = [
+      "",
+      "function test() {",
+    ]
+    for test in testCalls {
+      result.append(contentsOf: [
+        "  \(test)"
+      ])
+    }
+    result.append(contentsOf: [
+      "  console.assert(coverageRegions.size == 0, coverageRegions);",
+      "}"
+    ])
+    return result
+  }
 }

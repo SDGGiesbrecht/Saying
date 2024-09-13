@@ -25,18 +25,18 @@ struct Module {
   }
 
   func buildC() throws -> String {
-    try build().buildC()
+    try C.build(module: build())
   }
 
   func buildCSharp() throws -> String {
-    try build().buildCSharp()
+    try CSharp.build(module: build())
   }
 
   func buildJavaScript() throws -> String {
-    try build().buildJavaScript()
+    try JavaScript.build(module: build())
   }
 
   func buildSwift() throws -> String {
-    try build().buildSwift()
+    try Swift.build(module: build())
   }
 }

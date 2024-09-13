@@ -32,6 +32,16 @@ protocol Platform {
     coverageRegistration: String?,
     implementation: String
   ) -> String
+
+  // Module
+  static var importsNeededByTestScaffolding: [String]? { get }
+  static func coverageRegionSet(regions: [String]) -> [String]
+  static var registerCoverageAction: [String] { get }
+  static var actionDeclarationsContainerStart: [String]? { get }
+  static var actionDeclarationsContainerEnd: [String]? { get }
+  static func source(for test: TestIntermediate, module: ModuleIntermediate) -> String
+  static func testCall(for test: TestIntermediate) -> String
+  static func testSummary(testCalls: [String]) -> [String]
 }
 
 extension Platform {
@@ -169,5 +179,50 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation
     )
+  }
+
+  static func build(module: ModuleIntermediate) -> String {
+    var result: [String] = []
+    if let imports = importsNeededByTestScaffolding {
+      result.append(contentsOf: imports)
+    }
+    if ¬result.isEmpty {
+      result.append("")
+    }
+
+    let regions = module.actions.values
+      .lazy.filter({ ¬$0.isCoverageWrapper })
+      .lazy.compactMap({ $0.coverageRegionIdentifier() })
+      .sorted()
+      .map({ sanitize(stringLiteral: $0) })
+    result.append(contentsOf: coverageRegionSet(regions: regions))
+    result.append(contentsOf: registerCoverageAction)
+
+    if let start = actionDeclarationsContainerStart {
+      result.append("")
+      result.append(contentsOf: start)
+    }
+    for actionIdentifier in module.actions.keys.sorted() {
+      if let declaration = module.actions[actionIdentifier]
+        .flatMap({ declaration(for: $0, module: module) }) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
+      }
+    }
+    for test in module.tests {
+      result.append(contentsOf: [
+        "",
+        source(for: test, module: module),
+      ])
+    }
+    result.append("")
+    result.append(contentsOf: testSummary(testCalls: module.tests.map({ testCall(for: $0) })))
+    if let end = actionDeclarationsContainerEnd {
+      result.append(contentsOf: end)
+    }
+
+    return result.joined(separator: "\n").appending("\n")
   }
 }
