@@ -13,7 +13,7 @@ extension TestIntermediate {
     return [
       "    static void run_\(cSharpIdentifier(leading: false))()",
       "    {",
-      "        \(action.cSharpExpression(module: module))",
+      "        \(action.cSharpExpression(context: nil, module: module))",
       "    }"
     ].joined(separator: "\n")
   }

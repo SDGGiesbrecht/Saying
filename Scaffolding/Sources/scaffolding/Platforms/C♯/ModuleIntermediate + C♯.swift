@@ -42,6 +42,14 @@ extension ModuleIntermediate {
       "        }",
       "    }",
     ])
+    for actionIdentifier in actions.keys.sorted() {
+      if let declaration = actions[actionIdentifier]?.cSharpDeclaration(module: self) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
+      }
+    }
     for test in tests {
       result.append(contentsOf: [
         "",

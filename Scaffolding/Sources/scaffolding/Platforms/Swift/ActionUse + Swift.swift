@@ -2,7 +2,7 @@ import SDGLogic
 
 extension ActionUse {
 
-  func swiftSource(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+  func swiftCall(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(actionName) {
       return String(Swift.sanitize(identifier: parameter.names.identifier(), leading: false))
     } else {
@@ -16,20 +16,22 @@ extension ActionUse {
             let rootIndex = swift.reordering[index]
             let reordered = action.reorderings[actionName]![rootIndex]
             let argument = arguments[reordered]
-            result.append(contentsOf: argument.swiftSource(context: context, module: module))
+            result.append(contentsOf: argument.swiftCall(context: context, module: module))
           }
         }
-        result.append(contentsOf: "")
         return result
       } else {
         let name = Swift.sanitize(identifier: action.names.identifier(), leading: true)
         let arguments = self.arguments
           .lazy.map({ argument in
-            return argument.swiftSource(context: context, module: module)
+            return argument.swiftCall(context: context, module: module)
           })
           .joined(separator: ", ")
         return "\(name)(\(arguments))"
       }
     }
+  }
+  func swiftExpression(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+    return swiftCall(context: context, module: module)
   }
 }

@@ -3,33 +3,36 @@ import SDGText
 
 extension ActionUse {
   
-  func cCall(module: ModuleIntermediate) -> String {
-    let action = module.lookupAction(actionName)!
-    if let c = action.c {
-      let cSignature = action.cSignature(module: module)
-      var result = "\(cSignature.registerAndExecuteName())(\u{22}\(action.names.identifier())\u{22}, "
-      for index in c.textComponents.indices {
-        if cSignature.equals ∨ cSignature.and ∨ cSignature.assert {
-          if index ≠ c.textComponents.startIndex ∧ index ≠ c.textComponents.indices.last {
-            result.append(contentsOf: ", ")
-          }
-        } else {
-          result.append(contentsOf: String(c.textComponents[index]))
-        }
-        if index ≠ c.textComponents.indices.last {
-          let rootIndex = c.reordering[index]
-          let reordered = action.reorderings[actionName]![rootIndex]
-          let argument = arguments[reordered]
-          result.append(contentsOf: argument.cCall(module: module))
-        }
-      }
-      result.append(contentsOf: ")")
-      return result
+  func cCall(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+    if let parameter = context?.lookupParameter(actionName) {
+      return String(C.sanitize(identifier: parameter.names.identifier(), leading: false))
     } else {
-      return String(action.names.identifier())
+      let bareAction = module.lookupAction(actionName)!
+      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
+      if let c = action.c {
+        var result = ""
+        for index in c.textComponents.indices {
+          result.append(contentsOf: String(c.textComponents[index]))
+          if index ≠ c.textComponents.indices.last {
+            let rootIndex = c.reordering[index]
+            let reordered = action.reorderings[actionName]![rootIndex]
+            let argument = arguments[reordered]
+            result.append(contentsOf: argument.cCall(context: context, module: module))
+          }
+        }
+        return result
+      } else {
+        let name = C.sanitize(identifier: action.names.identifier(), leading: true)
+        let arguments = self.arguments
+          .lazy.map({ argument in
+            return argument.cCall(context: context, module: module)
+          })
+          .joined(separator: ", ")
+        return "\(name)(\(arguments))"
+      }
     }
   }
-  func cExpression(module: ModuleIntermediate) -> String {
-    return cCall(module: module).appending(";")
+  func cExpression(context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+    return cCall(context: context, module: module).appending(";")
   }
 }

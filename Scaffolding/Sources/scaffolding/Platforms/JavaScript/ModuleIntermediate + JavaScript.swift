@@ -18,6 +18,14 @@ extension ModuleIntermediate {
       "  coverageRegions.delete(identifier);",
       "}",
     ])
+    for actionIdentifier in actions.keys.sorted() {
+      if let declaration = actions[actionIdentifier]?.javaScriptDeclaration(module: self) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
+      }
+    }
     for test in tests {
       result.append(contentsOf: [
         "",

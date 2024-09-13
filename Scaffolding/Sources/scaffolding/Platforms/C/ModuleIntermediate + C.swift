@@ -32,61 +32,15 @@ extension ModuleIntermediate {
       "                }",
       "        }",
       "}",
-      "",
-      "bool register_and_execute_bool_literal(char identifier[REGION_IDENTIFIER_LENGTH], bool _1)",
-      "{",
-      "        register_coverage_region(identifier);",
-      "        return _1;",
-      "}",
-      "",
-      "bool register_and_execute_equals(char identifier[REGION_IDENTIFIER_LENGTH], bool _1, bool _2)",
-      "{",
-      "        register_coverage_region(identifier);",
-      "        return _1 == _2;",
-      "}",
-      "",
-      "bool register_and_execute_and(char identifier[REGION_IDENTIFIER_LENGTH], bool _1, bool _2)",
-      "{",
-      "        register_coverage_region(identifier);",
-      "        return _1 && _2;",
-      "}",
-      "",
-      "void register_and_execute_assert(char identifier[REGION_IDENTIFIER_LENGTH], bool _1)",
-      "{",
-      "        register_coverage_region(identifier);",
-      "        return assert(_1);",
-      "}",
     ])
-    var signatures: Set<CSignature> = []
-    for (_, action) in actions {
-      let signature = action.cSignature(module: self)
-      if ¬signature.boolLiteral,
-         ¬signature.equals,
-         ¬signature.and,
-         ¬signature.assert {
-        signatures.insert(action.cSignature(module: self))
+    for actionIdentifier in actions.keys.sorted() {
+      if let declaration = actions[actionIdentifier]?.cDeclaration(module: self) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
       }
     }
-    for signature in signatures.sorted() {
-      let signatureParameters = signature.parameters
-        .joined(separator: ", ")
-      let parametersIn = signature.parameters
-        .enumerated()
-        .lazy.map({ "\($1) _\($0 + 1)" })
-        .joined(separator: ", ")
-      let parametersOut = (0..<signature.parameters.count)
-        .lazy.map({ "_\($0 + 1)" })
-        .joined(separator: ", ")
-      result.append(contentsOf: [
-        "",
-        "\(signature.returnValue) \(signature.registerAndExecuteName())(char identifier[REGION_IDENTIFIER_LENGTH], \(signature.returnValue) (*function)(\(signatureParameters))\(parametersIn == "" ? "" : ", \(parametersIn)"))",
-        "{",
-        "        register_coverage_region(identifier);",
-        "        return function(\(parametersOut));",
-        "}",
-      ])
-    }
-    
     for test in tests {
       result.append(contentsOf: [
         "",

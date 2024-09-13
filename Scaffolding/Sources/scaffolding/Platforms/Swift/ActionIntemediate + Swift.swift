@@ -30,7 +30,7 @@ extension ActionIntermediate {
       result.append("  registerCoverage(\u{22}\(identifier)\u{22})")
     }
     result.append(contentsOf: [
-      "  \(returnKeyword)\(implementation!.swiftSource(context: self, module: module))",
+      "  \(returnKeyword)\(implementation!.swiftExpression(context: self, module: module))",
       "}",
     ])
     return result.joined(separator: "\n")

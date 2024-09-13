@@ -13,7 +13,7 @@ extension TestIntermediate {
     return [
       "void run_\(cIdentifier(leading: false))()",
       "{",
-      "        \(action.cExpression(module: module))",
+      "        \(action.cExpression(context: nil, module: module))",
       "}"
     ].joined(separator: "\n")
   }
