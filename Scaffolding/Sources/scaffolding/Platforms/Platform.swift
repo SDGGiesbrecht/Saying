@@ -3,6 +3,7 @@ import SDGText
 
 protocol Platform {
   // Identifiers
+  static var allowedIdentifierStartCharacters: [Unicode.Scalar] { get }
   static func sanitize(identifier: StrictString, leading: Bool) -> String
 
   // Things

@@ -2,7 +2,7 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
-enum Swift {
+enum Swift: Platform {
 
   #warning("Can sanitization be unified too?")
   static let identifierStartList: Set<Unicode.Scalar> = {
@@ -107,30 +107,34 @@ enum Swift {
     }
     return String(result)
   }
-}
 
-extension Swift: Platform {
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.swift
   }
+
   static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
     return action.swift
   }
+
   static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
     return parameter.swiftSource(module: module)
   }
+
   static var emptyReturnType: String? {
     return nil
   }
   static func returnSection(with returnValue: String) -> String? {
     return " -> \(returnValue)"
   }
+
   static func coverageRegistration(identifier: String) -> String {
     return "  registerCoverage(\u{22}\(identifier)\u{22})"
   }
+
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     return call(to: expression, context: context, module: module)
   }
+
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [
       "func \(name)(\(parameters))\(returnSection ?? "") {",

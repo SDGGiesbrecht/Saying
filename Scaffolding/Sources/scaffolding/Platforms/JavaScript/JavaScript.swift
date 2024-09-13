@@ -2,7 +2,7 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
-enum JavaScript {
+enum JavaScript: Platform {
 
   static let identifierStartList: Set<Unicode.Scalar> = {
     var values: [UInt32] = []
@@ -80,30 +80,34 @@ enum JavaScript {
       .map({ ¬stringLiteralDisallowed($0) ? "\($0)" : "\u{5C}u{\($0.hexadecimalCode)}" })
       .joined()
   }
-}
 
-extension JavaScript: Platform {
   static func nativeName(of thing: Thing) -> StrictString? {
     return nil
   }
+
   static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
     return action.javaScript
   }
+
   static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
     return parameter.javaScriptSource(module: module)
   }
+
   static var emptyReturnType: String? {
     return nil
   }
   static func returnSection(with returnValue: String) -> String? {
     return nil
   }
+
   static func coverageRegistration(identifier: String) -> String {
     return "  coverageRegions.delete(\u{22}\(identifier)\u{22});"
   }
+
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     return call(to: expression, context: context, module: module).appending(";")
   }
+
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [
       "function \(name)(\(parameters)) {",

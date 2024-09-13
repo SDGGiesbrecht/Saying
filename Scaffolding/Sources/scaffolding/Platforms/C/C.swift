@@ -2,7 +2,7 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
-enum C {
+enum C: Platform {
 
   static let identifierStartList: Set<Unicode.Scalar> = {
     var values: [UInt32] = []
@@ -53,30 +53,34 @@ enum C {
     }
     return String(result)
   }
-}
 
-extension C: Platform {
   static func nativeName(of thing: Thing) -> StrictString? {
     return thing.c
   }
+
   static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
     return action.c
   }
+
   static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
     return parameter.cSource(module: module)
   }
+
   static var emptyReturnType: String? {
     return "void"
   }
   static func returnSection(with returnValue: String) -> String? {
     return "\(returnValue)"
   }
+
   static func coverageRegistration(identifier: String) -> String {
     return "  register_coverage_region(\u{22}\(identifier)\u{22});"
   }
+
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     return call(to: expression, context: context, module: module).appending(";")
   }
+
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [
       "\(returnSection!) \(name)(\(parameters))",
