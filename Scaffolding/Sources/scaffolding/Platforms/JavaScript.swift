@@ -49,7 +49,7 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
     return action.javaScript
   }
 

@@ -51,7 +51,7 @@ enum C: Platform {
     return thing.c
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
     return action.c
   }
 

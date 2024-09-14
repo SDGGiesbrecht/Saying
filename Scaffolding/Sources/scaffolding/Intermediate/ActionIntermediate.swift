@@ -7,10 +7,11 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var c: CImplementation?
-  var cSharp: CImplementation?
-  var javaScript: JavaScriptImplementation?
-  var swift: SwiftImplementation?
+  var c: NativeImplementation?
+  var cSharp: NativeImplementation?
+  var javaScript: NativeImplementation?
+  var kotlin: NativeImplementation?
+  var swift: NativeImplementation?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
   var coveredIdentifier: StrictString?
@@ -98,54 +99,33 @@ extension ActionIntermediate {
       )
       return ParameterIntermediate(names: names, type: type)
     }
-    var c: CImplementation?
-    var cSharp: CSharpImplementation?
-    var javaScript: JavaScriptImplementation?
-    var swift: SwiftImplementation?
+    var c: NativeImplementation?
+    var cSharp: NativeImplementation?
+    var javaScript: NativeImplementation?
+    var kotlin: NativeImplementation?
+    var swift: NativeImplementation?
     for implementation in declaration.implementation.implementations {
-      switch implementation.language.identifierText() {
-      case "C":
-        switch CImplementation.construct(
-          implementation: implementation.expression,
-          indexTable: completeParameterIndexTable
-        ) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenCScriptImplementation($0) }))
-        case .success(let constructed):
+      switch NativeImplementation.construct(
+        implementation: implementation.expression,
+        indexTable: completeParameterIndexTable
+      ) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeImplementation($0) }))
+      case .success(let constructed):
+        switch implementation.language.identifierText() {
+        case "C":
           c = constructed
-        }
-      case "C♯":
-        switch CSharpImplementation.construct(
-          implementation: implementation.expression,
-          indexTable: completeParameterIndexTable
-        ) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenCSharpScriptImplementation($0) }))
-        case .success(let constructed):
+        case "C♯":
           cSharp = constructed
-        }
-      case "JavaScript":
-        switch JavaScriptImplementation.construct(
-          implementation: implementation.expression,
-          indexTable: completeParameterIndexTable
-        ) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenJavaScriptImplementation($0) }))
-        case .success(let constructed):
+        case "JavaScript":
           javaScript = constructed
-        }
-      case "Swift":
-        switch SwiftImplementation.construct(
-          implementation: implementation.expression,
-          indexTable: completeParameterIndexTable
-        ) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenSwiftImplementation($0) }))
-        case .success(let constructed):
+        case "Kotlin":
+          kotlin = constructed
+        case "Swift":
           swift = constructed
+        default:
+          errors.append(ConstructionError.unknownLanguage(implementation.language))
         }
-      default:
-        errors.append(ConstructionError.unknownLanguage(implementation.language))
       }
     }
     if ¬errors.isEmpty {
@@ -160,6 +140,7 @@ extension ActionIntermediate {
         c: c,
         cSharp: cSharp,
         javaScript: javaScript,
+        kotlin: kotlin,
         swift: swift,
         declaration: declaration
       )

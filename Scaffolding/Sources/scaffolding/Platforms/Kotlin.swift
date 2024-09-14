@@ -1,3 +1,7 @@
+import Foundation
+
+import SDGText
+
 enum Kotlin: Platform {
 
   static var directoryName: String {
@@ -45,55 +49,57 @@ enum Kotlin: Platform {
   }
 
   static var isTyped: Bool {
-    //return true
+    return true
   }
 
   static func nativeName(of thing: Thing) -> StrictString? {
-    //return thing.swift
+    return thing.kotlin
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
-    //return action.swift
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
+    return action.kotlin
   }
 
   static func parameterDeclaration(name: String, type: String) -> String {
-    //"_ \(name): \(type)"
+    "\(name): \(type)"
   }
 
   static var emptyReturnType: String? {
-    //return nil
+    return nil
   }
   static func returnSection(with returnValue: String) -> String? {
-    //return " -> \(returnValue)"
+    return ": \(returnValue)"
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    //return "  registerCoverage(\u{22}\(identifier)\u{22})"
+    return "    registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    //return call(to: expression, context: context, module: module)
+    return call(to: expression, context: context, module: module)
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
-    /*var result: [String] = [
+    var result: [String] = [
       "func \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
     result.append(contentsOf: [
-      "  \(returnKeyword ?? "")\(implementation)",
+      "    \(returnKeyword ?? "")\(implementation)",
       "}",
     ])
-    return result.joined(separator: "\n")*/
+    return result.joined(separator: "\n")
   }
 
   static var importsNeededByTestScaffolding: [String]? {
-    //return nil
+    return nil
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
+    #error("Not implemented yet.")
+    return []
     /*var result: [String] = [
       "var coverageRegions: Set<String> = [",
     ]
@@ -107,6 +113,8 @@ enum Kotlin: Platform {
   }
 
   static var registerCoverageAction: [String] {
+    #warning("Not implemented yet.")
+    return []
     /*return [
       "func registerCoverage(_ identifier: String) {",
       "  coverageRegions.remove(identifier)",
@@ -115,24 +123,26 @@ enum Kotlin: Platform {
   }
 
   static var actionDeclarationsContainerStart: [String]? {
-    //return nil
+    return nil
   }
   static var actionDeclarationsContainerEnd: [String]? {
-    //return nil
+    return nil
   }
 
   static func testSource(identifier: String, statement: String) -> [String] {
-    /*return [
+    return [
       "func run_\(identifier)() {",
-      "  \(statement)",
+      "    \(statement)",
       "}"
-    ]*/
+    ]
   }
   static func testCall(for identifier: String) -> String {
-    //return "run_\(identifier)();"
+    return "run_\(identifier)()"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
+    #warning("Not implemented yet.")
+    return []
     /*var result = [
       "",
       "func test() {",
@@ -150,14 +160,19 @@ enum Kotlin: Platform {
   }
 
   static func testEntryPoint() -> [String]? {
+    #warning("Not implemented yet.")
+    return []
     //return nil
   }
 
   static var sourceFileName: String {
+    #warning("Not implemented yet.")
+    return ""
     //return "Sources/Products/Source.swift"
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    #warning("Not implemented yet.")
     /*try ([
       "// swift-tools-version: 5.7",
       "",

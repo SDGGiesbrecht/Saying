@@ -5,6 +5,7 @@ struct Thing {
   var names: Set<StrictString>
   var c: StrictString?
   var cSharp: StrictString?
+  var kotlin: StrictString?
   var swift: StrictString?
   var declaration: ParsedThingDeclaration
 }
@@ -23,6 +24,7 @@ extension Thing {
 
     var c: StrictString?
     var cSharp: StrictString?
+    var kotlin: StrictString?
     var swift: StrictString?
     for implementation in declaration.implementation.implementations {
       switch implementation.language.identifierText() {
@@ -30,6 +32,8 @@ extension Thing {
         c = implementation.type.identifierText()
       case "C♯":
         cSharp = implementation.type.identifierText()
+      case "Kotlin":
+        kotlin = implementation.type.identifierText()
       case "Swift":
         swift = implementation.type.identifierText()
       default:
@@ -44,6 +48,7 @@ extension Thing {
         names: names,
         c: c,
         cSharp: cSharp,
+        kotlin: kotlin,
         swift: swift,
         declaration: declaration
       )
