@@ -1,8 +1,14 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum CSharp: Platform {
+
+  static var directoryName: String {
+    return "C♯"
+  }
   
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -163,5 +169,35 @@ enum CSharp: Platform {
       "    }",
     ])
     return result
+  }
+
+  static func testEntryPoint() -> [String]? {
+    return [
+      "class Test",
+      "{",
+      "    static void Main()",
+      "    {",
+      "        Tests.Test();",
+      "    }",
+      "}",
+    ]
+  }
+
+  static var sourceFileName: String {
+    return "Test.cs"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    try ([
+      "<Project>",
+      "  <ItemGroup>",
+      "    <Compile Include=\u{22}Test.cs\u{22} />",
+      "  </ItemGroup>",
+      "  <Target Name=\u{22}Test\u{22}>",
+      "    <Csc Sources=\u{22}@(Compile)\u{22} />",
+      "  </Target>",
+      "</Project>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
   }
 }

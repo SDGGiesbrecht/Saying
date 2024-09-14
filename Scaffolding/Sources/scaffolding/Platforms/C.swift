@@ -1,8 +1,14 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum C: Platform {
+
+  static var directoryName: String {
+    return "C"
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -165,4 +171,19 @@ enum C: Platform {
     ])
     return result
   }
+
+  static func testEntryPoint() -> [String]? {
+    return [
+      "int main() {",
+      "        test();",
+      "        return 0;",
+      "}",
+    ]
+  }
+
+  static var sourceFileName: String {
+    return "test.c"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {}
 }

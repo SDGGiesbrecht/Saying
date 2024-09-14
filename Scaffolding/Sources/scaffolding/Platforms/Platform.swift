@@ -1,9 +1,14 @@
+import Foundation
+
 import SDGControlFlow
 import SDGLogic
 import SDGCollections
 import SDGText
 
 protocol Platform {
+  // Miscellaneous
+  static var directoryName: String { get }
+
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
   static var allowedIdentifierStartCharacterPoints: [UInt32] { get }
@@ -43,6 +48,11 @@ protocol Platform {
   static func testSource(identifier: String, statement: String) -> [String]
   static func testCall(for identifier: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
+
+  // Package
+  static func testEntryPoint() -> [String]?
+  static var sourceFileName: String { get }
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws
 }
 
 extension Platform {
@@ -263,5 +273,26 @@ extension Platform {
 
   static func source(for module: Module) throws -> String {
     return try source(for: module.build())
+  }
+
+  static func preparedDirectory(for package: Package) -> URL {
+    return package.constructionDirectory
+      .appendingPathComponent(self.directoryName)
+  }
+
+  static func prepare(package: Package) throws {
+    let constructionDirectory = preparedDirectory(for: package)
+
+    var source: [String] = [
+      try package.modules()
+        .lazy.map({ try self.source(for: $0) })
+        .joined(separator: "\n\n")
+    ]
+    if let entryPoint = testEntryPoint() {
+      source.append("")
+      source.append(contentsOf: entryPoint)
+    }
+    try source.joined(separator: "\n").appending("\n")
+      .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
   }
 }

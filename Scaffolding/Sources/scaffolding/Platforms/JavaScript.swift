@@ -1,8 +1,14 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum JavaScript: Platform {
+
+  static var directoryName: String {
+    return "JavaScript"
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -136,5 +142,31 @@ enum JavaScript: Platform {
       "}"
     ])
     return result
+  }
+
+  static func testEntryPoint() -> [String]? {
+    return [
+      "test();",
+    ]
+  }
+
+  static var sourceFileName: String {
+    "Package.js"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    try ([
+      "<html>",
+      "  <head>",
+      "    <script src=\u{22}Package.js\u{22}></script>",
+      "  </head>",
+      "  <body>",
+      "    <script>",
+      "      test();",
+      "    </script>",
+      "  </body>",
+      "</html>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("Test.html"))
   }
 }

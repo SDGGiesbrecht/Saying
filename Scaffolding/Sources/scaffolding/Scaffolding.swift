@@ -44,11 +44,11 @@ import Foundation
     case "format":
       try package.format(reportProgress: { print($0) })
     case "prepare‐c":
-      try package.prepareC()
+      try C.prepare(package: package)
     case "prepare‐c‐sharp":
-      try package.prepareCSharp()
+      try CSharp.prepare(package: package)
     case "build‐javascript":
-      try package.buildJavaScript()
+      try JavaScript.prepare(package: package)
     case "test‐c":
       try package.testC()
     case "test‐swift":
@@ -60,7 +60,7 @@ import Foundation
     case "test‐watchos":
       try package.testWatchOS()
     default:
-      try package.test()
+      try package.testSwift()
     }
   }
 }
