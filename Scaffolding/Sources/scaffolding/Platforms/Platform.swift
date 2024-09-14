@@ -11,7 +11,9 @@ protocol Platform {
 
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
+  static var allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> { get }
   static var allowedIdentifierStartCharacterPoints: [UInt32] { get }
+  static var additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> { get }
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] { get }
   static var disallowedStringLiteralPoints: [UInt32] { get }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>? { get set }
@@ -88,12 +90,34 @@ extension Platform {
     }
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ allowedIdentifierStartCharacters
-      ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart ∧ ¬scalar.isVulnerableToNormalization)
+    return (scalar ∈ allowedIdentifierStartCharacters)
+    ∨
+    (
+      (
+        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart)
+        ∨
+        (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
+      )
+      ∧
+      (¬scalar.isVulnerableToNormalization)
+    )
   }
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ allowedIdentifierContinuationCharacters
-    ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue ∧ ¬scalar.isVulnerableToNormalization)
+    return (scalar ∈ allowedIdentifierContinuationCharacters)
+    ∨
+    (
+      (
+        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue)
+        ∨
+        (
+          scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories
+          ∨
+          scalar.properties.generalCategory ∈ additionalAllowedIdentifierContinuationGeneralCategories
+        )
+      )
+      ∧
+      (¬scalar.isVulnerableToNormalization)
+    )
   }
   static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ disallowedStringLiteralCharacters

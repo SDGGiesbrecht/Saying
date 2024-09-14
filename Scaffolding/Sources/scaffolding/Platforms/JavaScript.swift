@@ -13,12 +13,14 @@ enum JavaScript: Platform {
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
   }
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x24) // $
     values.append(0x5F) // _
     return values
   }
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x200C...0x200D) // ZWNJ–ZWJ

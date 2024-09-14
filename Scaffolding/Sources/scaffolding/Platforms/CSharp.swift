@@ -13,11 +13,13 @@ enum CSharp: Platform {
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
   }
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x5F) // _
     return values
   }
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     return []
   }
@@ -32,11 +34,9 @@ enum CSharp: Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
-    return character.utf16.map({ code in
-      var digits = String(code, radix: 16, uppercase: true)
-      digits.scalars.fill(to: 8, with: "0", from: .start)
-      return "\u{5C}U\(digits)"
-    }).joined()
+    var digits = String(character.value, radix: 16, uppercase: true)
+    digits.scalars.fill(to: 8, with: "0", from: .start)
+    return "\u{5C}U\(digits)"
   }
 
   static var isTyped: Bool {

@@ -1,88 +1,34 @@
-import Foundation
-
-import SDGLogic
-import SDGCollections
-import SDGText
-
-enum Swift: Platform {
+enum Kotlin: Platform {
 
   static var directoryName: String {
-    "Swift"
+    "Kotlin"
   }
-  
+
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
   }
-  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = [
+    .uppercaseLetter, // Lu
+    .lowercaseLetter, // Ll
+    .titlecaseLetter, // Lt
+    .modifierLetter, // Lm
+    .otherLetter, // Lo
+  ]
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
-    values.append(contentsOf: 0x41...0x5A) // A–Z
-    values.append(contentsOf: 0x61...0x7A) // a–z
     values.append(0x5F) // _
-    values.append(0xA8)
-    values.append(0xAA)
-    values.append(0xAD)
-    values.append(0xAF)
-    values.append(contentsOf: 0xB2...0xB5)
-    values.append(contentsOf: 0xB7...0xBA)
-    values.append(contentsOf: 0xBC...0xBE)
-    values.append(contentsOf: 0xC0...0xD6)
-    values.append(contentsOf: 0xD8...0xF6)
-    values.append(contentsOf: 0xF8...0xFF)
-    values.append(contentsOf: 0x100...0x2FF)
-    values.append(contentsOf: 0x370...0x167F)
-    values.append(contentsOf: 0x1681...0x180D)
-    values.append(contentsOf: 0x180F...0x1DBF)
-    values.append(contentsOf: 0x1E00...0x1FFF)
-    values.append(contentsOf: 0x200B...0x200D)
-    values.append(contentsOf: 0x202A...0x202E)
-    values.append(contentsOf: 0x203F...0x2040)
-    values.append(0x2054)
-    values.append(contentsOf: 0x2060...0x206F)
-    values.append(contentsOf: 0x2070...0x20CF)
-    values.append(contentsOf: 0x2100...0x218F)
-    values.append(contentsOf: 0x2460...0x24FF)
-    values.append(contentsOf: 0x2776...0x2793)
-    values.append(contentsOf: 0x2C00...0x2DFF)
-    values.append(contentsOf: 0x2E80...0x2FFF)
-    values.append(contentsOf: 0x3004...0x3007)
-    values.append(contentsOf: 0x3021...0x302F)
-    values.append(contentsOf: 0x3031...0x303F)
-    values.append(contentsOf: 0x3040...0xD7FF)
-    values.append(contentsOf: 0xF900...0xFD3D)
-    values.append(contentsOf: 0xFD40...0xFDCF)
-    values.append(contentsOf: 0xFDF0...0xFE1F)
-    values.append(contentsOf: 0xFE30...0xFE44)
-    values.append(contentsOf: 0xFE47...0xFFFD)
-    values.append(contentsOf: 0x10000...0x1FFFD)
-    values.append(contentsOf: 0x20000...0x2FFFD)
-    values.append(contentsOf: 0x30000...0x3FFFD)
-    values.append(contentsOf: 0x40000...0x4FFFD)
-    values.append(contentsOf: 0x50000...0x5FFFD)
-    values.append(contentsOf: 0x60000...0x6FFFD)
-    values.append(contentsOf: 0x70000...0x7FFFD)
-    values.append(contentsOf: 0x80000...0x8FFFD)
-    values.append(contentsOf: 0x90000...0x9FFFD)
-    values.append(contentsOf: 0xA0000...0xAFFFD)
-    values.append(contentsOf: 0xB0000...0xBFFFD)
-    values.append(contentsOf: 0xC0000...0xCFFFD)
-    values.append(contentsOf: 0xD0000...0xDFFFD)
-    values.append(contentsOf: 0xE0000...0xEFFFD)
     return values
   }
-  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = [
+    .decimalNumber // Nd
+  ]
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
-    var values: [UInt32] = []
-    values.append(contentsOf: 0x30...0x39) // 0–9
-    values.append(contentsOf: 0x300...0x36F)
-    values.append(contentsOf: 0x1DC0...0x1DFF)
-    values.append(contentsOf: 0x20D0...0x20FF)
-    values.append(contentsOf: 0xFE20...0xFE2F)
-    return values
+    return []
   }
   static var disallowedStringLiteralPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x22) // "
+    values.append(0x24) // $
     values.append(0x5C) // \
     return values
   }
@@ -91,42 +37,46 @@ enum Swift: Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
-    return "\u{5C}u{\(character.hexadecimalCode)}"
+    return character.utf16.map({ code in
+      var digits = String(code, radix: 16, uppercase: true)
+      digits.scalars.fill(to: 4, with: "0", from: .start)
+      return "\u{5C}u\(digits)"
+    }).joined()
   }
 
   static var isTyped: Bool {
-    return true
+    //return true
   }
 
   static func nativeName(of thing: Thing) -> StrictString? {
-    return thing.swift
+    //return thing.swift
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
-    return action.swift
+    //return action.swift
   }
 
   static func parameterDeclaration(name: String, type: String) -> String {
-    "_ \(name): \(type)"
+    //"_ \(name): \(type)"
   }
 
   static var emptyReturnType: String? {
-    return nil
+    //return nil
   }
   static func returnSection(with returnValue: String) -> String? {
-    return " -> \(returnValue)"
+    //return " -> \(returnValue)"
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  registerCoverage(\u{22}\(identifier)\u{22})"
+    //return "  registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return call(to: expression, context: context, module: module)
+    //return call(to: expression, context: context, module: module)
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
-    var result: [String] = [
+    /*var result: [String] = [
       "func \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
@@ -136,15 +86,15 @@ enum Swift: Platform {
       "  \(returnKeyword ?? "")\(implementation)",
       "}",
     ])
-    return result.joined(separator: "\n")
+    return result.joined(separator: "\n")*/
   }
 
   static var importsNeededByTestScaffolding: [String]? {
-    return nil
+    //return nil
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
-    var result: [String] = [
+    /*var result: [String] = [
       "var coverageRegions: Set<String> = [",
     ]
     for region in regions {
@@ -153,37 +103,37 @@ enum Swift: Platform {
     result.append(contentsOf: [
       "]",
     ])
-    return result
+    return result*/
   }
 
   static var registerCoverageAction: [String] {
-    return [
+    /*return [
       "func registerCoverage(_ identifier: String) {",
       "  coverageRegions.remove(identifier)",
       "}",
-    ]
+    ]*/
   }
 
   static var actionDeclarationsContainerStart: [String]? {
-    return nil
+    //return nil
   }
   static var actionDeclarationsContainerEnd: [String]? {
-    return nil
+    //return nil
   }
 
   static func testSource(identifier: String, statement: String) -> [String] {
-    return [
+    /*return [
       "func run_\(identifier)() {",
       "  \(statement)",
       "}"
-    ]
+    ]*/
   }
   static func testCall(for identifier: String) -> String {
-    return "run_\(identifier)();"
+    //return "run_\(identifier)();"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
-    var result = [
+    /*var result = [
       "",
       "func test() {",
     ]
@@ -196,19 +146,19 @@ enum Swift: Platform {
       "  assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
       "}"
     ])
-    return result
+    return result*/
   }
 
   static func testEntryPoint() -> [String]? {
-    return nil
+    //return nil
   }
 
   static var sourceFileName: String {
-    return "Sources/Products/Source.swift"
+    //return "Sources/Products/Source.swift"
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    try ([
+    /*try ([
       "// swift-tools-version: 5.7",
       "",
       "import PackageDescription",
@@ -263,6 +213,6 @@ enum Swift: Platform {
           .appendingPathComponent("Tests")
           .appendingPathComponent("WrappedTests")
           .appendingPathComponent("WrappedTests.swift")
-      )
+      )*/
   }
 }

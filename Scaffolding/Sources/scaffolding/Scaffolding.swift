@@ -47,6 +47,8 @@ import Foundation
       try C.prepare(package: package)
     case "prepare‐c‐sharp":
       try CSharp.prepare(package: package)
+    case "prepare‐kotlin":
+      try Kotlin.prepare(package: package)
     case "build‐javascript":
       try JavaScript.prepare(package: package)
     case "test‐c":
