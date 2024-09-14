@@ -73,7 +73,7 @@ struct Package {
 
   func prepareC() throws {
     try ([
-      try self.modules().lazy.map({ try $0.buildC() }).joined(separator: "\n\n"),
+      try self.modules().lazy.map({ try C.source(for: $0) }).joined(separator: "\n\n"),
       "",
       "int main() {",
       "        test();",
@@ -85,7 +85,7 @@ struct Package {
 
   func prepareCSharp() throws {
     try ([
-      try self.modules().lazy.map({ try $0.buildCSharp() }).joined(separator: "\n\n"),
+      try self.modules().lazy.map({ try CSharp.source(for: $0) }).joined(separator: "\n\n"),
       "",
       "class Test",
       "{",
@@ -111,7 +111,7 @@ struct Package {
 
   func prepareJavaScript() throws {
     try ([
-      try self.modules().lazy.map({ try $0.buildJavaScript() }).joined(separator: "\n\n"),
+      try self.modules().lazy.map({ try JavaScript.source(for: $0) }).joined(separator: "\n\n"),
       "",
       "test();",
     ] as [String]).joined(separator: "\n").appending("\n")
@@ -157,7 +157,7 @@ struct Package {
       ")",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: swiftConstructionDirectory.appendingPathComponent("Package.swift"))
-    let source = try self.modules().lazy.map({ try $0.buildSwift() }).joined(separator: "\n\n")
+    let source = try self.modules().lazy.map({ try Swift.source(for: $0) }).joined(separator: "\n\n")
     try source.save(
       to:
         swiftConstructionDirectory

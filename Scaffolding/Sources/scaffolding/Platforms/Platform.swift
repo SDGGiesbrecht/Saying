@@ -207,7 +207,18 @@ extension Platform {
       .joined(separator: "_")
   }
 
-  static func build(module: ModuleIntermediate) -> String {
+  static func source(of test: TestIntermediate, module: ModuleIntermediate) -> [String] {
+    return testSource(
+      identifier: identifier(for: test, leading: false),
+      statement: statement(expression: test.action, context: nil, module: module)
+    )
+  }
+
+  static func call(test: TestIntermediate) -> String {
+    return testCall(for: identifier(for: test, leading: false))
+  }
+
+  static func source(for module: ModuleIntermediate) -> String {
     var result: [String] = []
     if let imports = importsNeededByTestScaffolding {
       result.append(contentsOf: imports)
@@ -250,14 +261,7 @@ extension Platform {
     return result.joined(separator: "\n").appending("\n")
   }
 
-  static func source(of test: TestIntermediate, module: ModuleIntermediate) -> [String] {
-    return testSource(
-      identifier: identifier(for: test, leading: false),
-      statement: statement(expression: test.action, context: nil, module: module)
-    )
-  }
-
-  static func call(test: TestIntermediate) -> String {
-    return testCall(for: identifier(for: test, leading: false))
+  static func source(for module: Module) throws -> String {
+    return try source(for: module.build())
   }
 }
