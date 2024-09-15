@@ -30,7 +30,7 @@ import Foundation
     // iOS: from macOS, Xcode (Swift Package Manager), Swift
     // (2007‐06‐29)
 
-    // Android: from Linux, Android Studio, Kotlin
+    // Android: from Linux, Android Studio (Gradle), Kotlin
     // (2008‐09‐23)
 
     // Amazon Linux: MATE, Developer Tools (GNU Compiler Collection (gcc)), C
