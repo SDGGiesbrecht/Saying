@@ -90,6 +90,7 @@ extension ModuleIntermediate {
       c: NativeImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       cSharp: NativeImplementation(reordering: [0], textComponents: ["Assert(", ")"]),
       javaScript: NativeImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
+      kotlin: NativeImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       swift: NativeImplementation(reordering: [0], textComponents: ["assert(", ")"])
     )
     identifierMapping["() is ()"] = "() is ()"
@@ -104,6 +105,7 @@ extension ModuleIntermediate {
       c: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       cSharp: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       javaScript: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
+      kotlin: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
       swift: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"])
     )
     identifierMapping["true"] = "true"
@@ -115,6 +117,7 @@ extension ModuleIntermediate {
       c: NativeImplementation(reordering: [], textComponents: ["true"]),
       cSharp: NativeImplementation(reordering: [], textComponents: ["true"]),
       javaScript: NativeImplementation(reordering: [], textComponents: ["true"]),
+      kotlin: NativeImplementation(reordering: [], textComponents: ["true"]),
       swift: NativeImplementation(reordering: [], textComponents: ["true"])
     )
     identifierMapping["false"] = "false"
@@ -126,6 +129,7 @@ extension ModuleIntermediate {
       c: NativeImplementation(reordering: [], textComponents: ["false"]),
       cSharp: NativeImplementation(reordering: [], textComponents: ["false"]),
       javaScript: NativeImplementation(reordering: [], textComponents: ["false"]),
+      kotlin: NativeImplementation(reordering: [], textComponents: ["false"]),
       swift: NativeImplementation(reordering: [], textComponents: ["false"])
     )
   }

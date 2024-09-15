@@ -8,6 +8,7 @@ thing
  )
  C: bool
  C♯: bool
+ Kotlin: Boolean
  Swift: Bool
 
 action
@@ -46,4 +47,5 @@ action
  C: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  C♯: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  JavaScript: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
+ Kotlin: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(26)¤(26) ” second „¤(29)“

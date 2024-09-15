@@ -81,7 +81,7 @@ enum Kotlin: Platform {
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [
-      "func \(name)(\(parameters))\(returnSection ?? "") {",
+      "fun \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
@@ -98,28 +98,24 @@ enum Kotlin: Platform {
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
-    #error("Not implemented yet.")
-    return []
-    /*var result: [String] = [
-      "var coverageRegions: Set<String> = [",
+    var result: [String] = [
+      "val coverageRegions: MutableSet<String> = mutableSetOf(",
     ]
     for region in regions {
-      result.append("  \u{22}\(region)\u{22},")
+      result.append("    \u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
-      "]",
+      ")",
     ])
-    return result*/
+    return result
   }
 
   static var registerCoverageAction: [String] {
-    #warning("Not implemented yet.")
-    return []
-    /*return [
-      "func registerCoverage(_ identifier: String) {",
-      "  coverageRegions.remove(identifier)",
+    return [
+      "fun registerCoverage(identifier: String) {",
+      "    coverageRegions.remove(identifier)",
       "}",
-    ]*/
+    ]
   }
 
   static var actionDeclarationsContainerStart: [String]? {
@@ -131,7 +127,7 @@ enum Kotlin: Platform {
 
   static func testSource(identifier: String, statement: String) -> [String] {
     return [
-      "func run_\(identifier)() {",
+      "fun run_\(identifier)() {",
       "    \(statement)",
       "}"
     ]
@@ -141,34 +137,32 @@ enum Kotlin: Platform {
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
-    #warning("Not implemented yet.")
-    return []
-    /*var result = [
+    var result = [
       "",
-      "func test() {",
+      "fun test() {",
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "  \(test)",
+        "    \(test)",
       ])
     }
     result.append(contentsOf: [
-      "  assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
+      "    assert(coverageRegions.isEmpty()) { \u{22}$coverageRegions\u{22} }",
       "}"
     ])
-    return result*/
+    return result
   }
 
   static func testEntryPoint() -> [String]? {
-    #warning("Not implemented yet.")
-    return []
-    //return nil
+    return [
+      "fun main() {",
+      "    test()",
+      "}",
+    ]
   }
 
   static var sourceFileName: String {
-    #warning("Not implemented yet.")
-    return ""
-    //return "Sources/Products/Source.swift"
+    return "Test.kt"
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
