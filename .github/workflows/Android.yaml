@@ -39,14 +39,17 @@ jobs:
     #  with:
     #    name: Kotlin
     #    path: .Construction/Kotlin
-    - name: Setup Java
+    - name: Set up Java
       uses: actions/setup-java@v4
       with:
         distribution: zulu
         java-version: 17
-    - name: Setup Gradle
+    - name: Set up Gradle
       uses: gradle/actions/setup-gradle@v4
     - name: Test
       shell: bash
       run: |
         set -x
+        ls
+        cd Construction/Kotlin
+        ls
