@@ -65,3 +65,6 @@ fun test() {
 //fun main() {
 //    test()
 //}
+
+class MainActivity : AppCompatActivity() {
+}
