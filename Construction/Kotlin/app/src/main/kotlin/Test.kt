@@ -60,6 +60,6 @@ fun test() {
 }
 
 
-//fun main() {
-//    test()
-//}
+fun main() {
+    test()
+}
