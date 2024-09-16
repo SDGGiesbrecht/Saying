@@ -53,3 +53,8 @@ jobs:
         cd Construction/Kotlin
         gradle init --overwrite
         ls -AR
+    - name: Upload Result
+      uses: actions/upload-artifact@v4
+      with:
+        name: Result
+        path: .Construction/Kotlin
