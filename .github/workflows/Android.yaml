@@ -54,4 +54,5 @@ jobs:
         set -x
         cd Construction/Kotlin
         gradle wrapper
+        ./gradlew tasks
         ./gradlew run
