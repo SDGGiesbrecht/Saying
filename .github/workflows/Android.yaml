@@ -55,4 +55,5 @@ jobs:
         cd Construction/Kotlin
         gradle wrapper
         ./gradlew tasks
+        ./gradlew test
         ./gradlew check
