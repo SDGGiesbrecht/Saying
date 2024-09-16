@@ -9,3 +9,7 @@ android {
         minSdk = 21
     }
 }
+
+test {
+    useJUnitPlatform()
+}
