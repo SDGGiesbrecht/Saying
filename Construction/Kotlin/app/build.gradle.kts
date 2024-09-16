@@ -3,6 +3,10 @@ plugins {
     id("kotlin-android")
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 android {
     namespace = "com.example.test"
     compileSdk = 34
