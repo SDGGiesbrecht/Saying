@@ -50,6 +50,6 @@ jobs:
       shell: bash
       run: |
         set -x
-        ls
         cd Construction/Kotlin
-        ls
+        gradle init
+        ls -AR
