@@ -1,5 +1,3 @@
-Is this even compiling?
-
 val coverageRegions: MutableSet<String> = mutableSetOf(
     "() is ()",
     "() ו()",
@@ -65,6 +63,3 @@ fun test() {
 //fun main() {
 //    test()
 //}
-
-class MainActivity : AppCompatActivity() {
-}
