@@ -3,5 +3,7 @@ plugins {
 }
 
 android {
-  minSdk = 24
+    defaultConfig {
+        minSdk = 24
+    }
 }
