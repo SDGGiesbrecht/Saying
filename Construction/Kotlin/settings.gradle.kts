@@ -6,6 +6,11 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Test"
+dependencyResolutionManagement {
+    repositories {
+        google()
+    }
+}
 
+rootProject.name = "Test"
 include(":app")
