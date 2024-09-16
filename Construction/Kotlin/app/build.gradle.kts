@@ -10,6 +10,10 @@ android {
     }
 }
 
-test {
+dependencies {
+    testImplementation(kotlin("test"))
+}
+
+tasks.test {
     useJUnitPlatform()
 }
