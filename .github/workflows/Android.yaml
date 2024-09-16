@@ -55,5 +55,6 @@ jobs:
         cd Construction/Kotlin
         gradle wrapper
         ./gradlew tasks
-        ./gradlew test --rerun-tasks
+        ./gradlew build
+        ./gradlew test
         ./gradlew check
