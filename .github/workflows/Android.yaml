@@ -55,4 +55,4 @@ jobs:
         cd Construction/Kotlin
         gradle wrapper
         ./gradlew tasks
-        ./gradlew run
+        ./gradlew check
