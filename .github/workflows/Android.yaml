@@ -57,5 +57,6 @@ jobs:
         ./gradlew tasks
         #./gradlew sourceSets
         ./gradlew build
+        ./gradlew assembleAndroidTest
         ./gradlew test
         ./gradlew check
