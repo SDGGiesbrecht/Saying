@@ -6,6 +6,6 @@ extension ActionIntermediate {
     case cyclicalParameterReference(ParsedParameter)
     case parameterNotFound(ParsedParameterReference)
     case unknownLanguage(ParsedUninterruptedIdentifier)
-    case brokenNativeImplementation(NativeImplementation.ConstructionError)
+    case brokenNativeActionImplementation(NativeActionImplementation.ConstructionError)
   }
 }

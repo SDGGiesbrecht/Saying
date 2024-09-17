@@ -56,7 +56,7 @@ enum Kotlin: Platform {
     return thing.kotlin
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
     return action.kotlin
   }
 
