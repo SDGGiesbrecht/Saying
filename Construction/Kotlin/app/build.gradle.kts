@@ -1,8 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    //id("com.android.application")
-    id("com.android.library")
+    id("com.android.application")
     id("org.jetbrains.kotlin.android")
     //id("org.jetbrains.kotlin.jvm")
 }
@@ -16,6 +15,9 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 21
+    }
+    testOptions {
+        unitTests()
     }
 }
 
