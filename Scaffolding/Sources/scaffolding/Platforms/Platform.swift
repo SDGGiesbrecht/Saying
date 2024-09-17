@@ -318,5 +318,6 @@ extension Platform {
     }
     try source.joined(separator: "\n").appending("\n")
       .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
+    try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
   }
 }

@@ -9,7 +9,7 @@ enum Swift: Platform {
   static var directoryName: String {
     "Swift"
   }
-  
+
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
   }

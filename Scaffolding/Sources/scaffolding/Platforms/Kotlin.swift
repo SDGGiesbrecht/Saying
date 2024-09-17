@@ -167,6 +167,7 @@ enum Kotlin: Platform {
 
   static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
     #warning("Not implemented yet.")
+    #warning("Remove the checked “Construction” directory once this works.")
     /*try ([
       "// swift-tools-version: 5.7",
       "",
