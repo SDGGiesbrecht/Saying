@@ -87,10 +87,11 @@ extension ModuleIntermediate {
       names: ["verify ()"],
       parameters: [ParameterIntermediate(names: ["condition"], type: "truth value")],
       reorderings: ["verify ()": [0]],
-      c: CImplementation(reordering: [0], textComponents: ["assert(", ")"]),
-      cSharp: CSharpImplementation(reordering: [0], textComponents: ["Assert(", ")"]),
-      javaScript: JavaScriptImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
-      swift: SwiftImplementation(reordering: [0], textComponents: ["assert(", ")"])
+      c: NativeImplementation(reordering: [0], textComponents: ["assert(", ")"]),
+      cSharp: NativeImplementation(reordering: [0], textComponents: ["Assert(", ")"]),
+      javaScript: NativeImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
+      kotlin: NativeImplementation(reordering: [0], textComponents: ["assert(", ")"]),
+      swift: NativeImplementation(reordering: [0], textComponents: ["assert(", ")"])
     )
     identifierMapping["() is ()"] = "() is ()"
     actions["() is ()"] = ActionIntermediate(
@@ -101,10 +102,11 @@ extension ModuleIntermediate {
       ],
       reorderings: ["() is ()": [0, 1]],
       returnValue: "truth value",
-      c: CImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      cSharp: CSharpImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      javaScript: JavaScriptImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      swift: SwiftImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"])
+      c: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
+      cSharp: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
+      javaScript: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
+      kotlin: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
+      swift: NativeImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"])
     )
     identifierMapping["true"] = "true"
     actions["true"] = ActionIntermediate(
@@ -112,10 +114,11 @@ extension ModuleIntermediate {
       parameters: [],
       reorderings: ["true": []],
       returnValue: "truth value",
-      c: CImplementation(reordering: [], textComponents: ["true"]),
-      cSharp: CSharpImplementation(reordering: [], textComponents: ["true"]),
-      javaScript: JavaScriptImplementation(reordering: [], textComponents: ["true"]),
-      swift: SwiftImplementation(reordering: [], textComponents: ["true"])
+      c: NativeImplementation(reordering: [], textComponents: ["true"]),
+      cSharp: NativeImplementation(reordering: [], textComponents: ["true"]),
+      javaScript: NativeImplementation(reordering: [], textComponents: ["true"]),
+      kotlin: NativeImplementation(reordering: [], textComponents: ["true"]),
+      swift: NativeImplementation(reordering: [], textComponents: ["true"])
     )
     identifierMapping["false"] = "false"
     actions["false"] = ActionIntermediate(
@@ -123,10 +126,11 @@ extension ModuleIntermediate {
       parameters: [],
       reorderings: ["false": []],
       returnValue: "truth value",
-      c: CImplementation(reordering: [], textComponents: ["false"]),
-      cSharp: CSharpImplementation(reordering: [], textComponents: ["false"]),
-      javaScript: JavaScriptImplementation(reordering: [], textComponents: ["false"]),
-      swift: SwiftImplementation(reordering: [], textComponents: ["false"])
+      c: NativeImplementation(reordering: [], textComponents: ["false"]),
+      cSharp: NativeImplementation(reordering: [], textComponents: ["false"]),
+      javaScript: NativeImplementation(reordering: [], textComponents: ["false"]),
+      kotlin: NativeImplementation(reordering: [], textComponents: ["false"]),
+      swift: NativeImplementation(reordering: [], textComponents: ["false"])
     )
   }
 

@@ -1,17 +1,25 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum CSharp: Platform {
+
+  static var directoryName: String {
+    return "C♯"
+  }
   
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
   }
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x5F) // _
     return values
   }
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     return []
   }
@@ -26,11 +34,9 @@ enum CSharp: Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
-    return character.utf16.map({ code in
-      var digits = String(code, radix: 16, uppercase: true)
-      digits.scalars.fill(to: 8, with: "0", from: .start)
-      return "\u{5C}U\(digits)"
-    }).joined()
+    var digits = String(character.value, radix: 16, uppercase: true)
+    digits.scalars.fill(to: 8, with: "0", from: .start)
+    return "\u{5C}U\(digits)"
   }
 
   static var isTyped: Bool {
@@ -41,7 +47,7 @@ enum CSharp: Platform {
     return thing.cSharp
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
     return action.cSharp
   }
 
@@ -163,5 +169,35 @@ enum CSharp: Platform {
       "    }",
     ])
     return result
+  }
+
+  static func testEntryPoint() -> [String]? {
+    return [
+      "class Test",
+      "{",
+      "    static void Main()",
+      "    {",
+      "        Tests.Test();",
+      "    }",
+      "}",
+    ]
+  }
+
+  static var sourceFileName: String {
+    return "Test.cs"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    try ([
+      "<Project>",
+      "  <ItemGroup>",
+      "    <Compile Include=\u{22}Test.cs\u{22} />",
+      "  </ItemGroup>",
+      "  <Target Name=\u{22}Test\u{22}>",
+      "    <Csc Sources=\u{22}@(Compile)\u{22} />",
+      "  </Target>",
+      "</Project>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
   }
 }

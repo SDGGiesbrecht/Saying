@@ -23,20 +23,4 @@ struct Module {
     try module.validateReferences()
     return module.applyingTestCoverageTracking()
   }
-
-  func buildC() throws -> String {
-    try C.build(module: build())
-  }
-
-  func buildCSharp() throws -> String {
-    try CSharp.build(module: build())
-  }
-
-  func buildJavaScript() throws -> String {
-    try JavaScript.build(module: build())
-  }
-
-  func buildSwift() throws -> String {
-    try Swift.build(module: build())
-  }
 }

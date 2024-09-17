@@ -1,12 +1,19 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum C: Platform {
 
+  static var directoryName: String {
+    return "C"
+  }
+
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
   }
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x41...0x5A) // A–Z
@@ -14,6 +21,7 @@ enum C: Platform {
     values.append(0x5F) // _
     return values
   }
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x30...0x39) // 0–9
@@ -30,11 +38,9 @@ enum C: Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
-    return character.utf16.map({ code in
-      var digits = String(code, radix: 16, uppercase: true)
-      digits.scalars.fill(to: 8, with: "0", from: .start)
-      return "\u{5C}U\(digits)"
-    }).joined()
+    var digits = String(character.value, radix: 16, uppercase: true)
+    digits.scalars.fill(to: 8, with: "0", from: .start)
+    return "\u{5C}U\(digits)"
   }
 
   static var isTyped: Bool {
@@ -45,7 +51,7 @@ enum C: Platform {
     return thing.c
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
     return action.c
   }
 
@@ -165,4 +171,19 @@ enum C: Platform {
     ])
     return result
   }
+
+  static func testEntryPoint() -> [String]? {
+    return [
+      "int main() {",
+      "        test();",
+      "        return 0;",
+      "}",
+    ]
+  }
+
+  static var sourceFileName: String {
+    return "test.c"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {}
 }

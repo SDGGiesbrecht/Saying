@@ -30,7 +30,7 @@ import Foundation
     // iOS: from macOS, Xcode (Swift Package Manager), Swift
     // (2007‐06‐29)
 
-    // Android: from Linux, Android Studio, Kotlin
+    // Android: from Linux, Android Studio (Gradle), Kotlin
     // (2008‐09‐23)
 
     // Amazon Linux: MATE, Developer Tools (GNU Compiler Collection (gcc)), C
@@ -44,11 +44,13 @@ import Foundation
     case "format":
       try package.format(reportProgress: { print($0) })
     case "prepare‐c":
-      try package.prepareC()
+      try C.prepare(package: package)
     case "prepare‐c‐sharp":
-      try package.prepareCSharp()
+      try CSharp.prepare(package: package)
+    case "prepare‐kotlin":
+      try Kotlin.prepare(package: package)
     case "build‐javascript":
-      try package.buildJavaScript()
+      try JavaScript.prepare(package: package)
     case "test‐c":
       try package.testC()
     case "test‐swift":
@@ -60,7 +62,7 @@ import Foundation
     case "test‐watchos":
       try package.testWatchOS()
     default:
-      try package.test()
+      try package.testSwift()
     }
   }
 }

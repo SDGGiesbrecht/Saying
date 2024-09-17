@@ -1,18 +1,26 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum JavaScript: Platform {
 
+  static var directoryName: String {
+    return "JavaScript"
+  }
+
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
   }
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x24) // $
     values.append(0x5F) // _
     return values
   }
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x200C...0x200D) // ZWNJ–ZWJ
@@ -41,7 +49,7 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
     return action.javaScript
   }
 
@@ -136,5 +144,31 @@ enum JavaScript: Platform {
       "}"
     ])
     return result
+  }
+
+  static func testEntryPoint() -> [String]? {
+    return [
+      "test();",
+    ]
+  }
+
+  static var sourceFileName: String {
+    "Package.js"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    try ([
+      "<html>",
+      "  <head>",
+      "    <script src=\u{22}Package.js\u{22}></script>",
+      "  </head>",
+      "  <body>",
+      "    <script>",
+      "      test();",
+      "    </script>",
+      "  </body>",
+      "</html>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("Test.html"))
   }
 }

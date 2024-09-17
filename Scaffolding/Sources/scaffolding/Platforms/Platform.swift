@@ -1,12 +1,19 @@
+import Foundation
+
 import SDGControlFlow
 import SDGLogic
 import SDGCollections
 import SDGText
 
 protocol Platform {
+  // Miscellaneous
+  static var directoryName: String { get }
+
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
+  static var allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> { get }
   static var allowedIdentifierStartCharacterPoints: [UInt32] { get }
+  static var additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> { get }
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] { get }
   static var disallowedStringLiteralPoints: [UInt32] { get }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>? { get set }
@@ -19,7 +26,7 @@ protocol Platform {
   static func nativeName(of thing: Thing) -> StrictString?
 
   // Actions
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation?
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation?
   static func parameterDeclaration(name: String, type: String) -> String
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
@@ -43,6 +50,11 @@ protocol Platform {
   static func testSource(identifier: String, statement: String) -> [String]
   static func testCall(for identifier: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
+
+  // Package
+  static func testEntryPoint() -> [String]?
+  static var sourceFileName: String { get }
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws
 }
 
 extension Platform {
@@ -78,12 +90,34 @@ extension Platform {
     }
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ allowedIdentifierStartCharacters
-      ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart ∧ ¬scalar.isVulnerableToNormalization)
+    return (scalar ∈ allowedIdentifierStartCharacters)
+    ∨
+    (
+      (
+        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart)
+        ∨
+        (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
+      )
+      ∧
+      (¬scalar.isVulnerableToNormalization)
+    )
   }
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ allowedIdentifierContinuationCharacters
-    ∨ (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue ∧ ¬scalar.isVulnerableToNormalization)
+    return (scalar ∈ allowedIdentifierContinuationCharacters)
+    ∨
+    (
+      (
+        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue)
+        ∨
+        (
+          scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories
+          ∨
+          scalar.properties.generalCategory ∈ additionalAllowedIdentifierContinuationGeneralCategories
+        )
+      )
+      ∧
+      (¬scalar.isVulnerableToNormalization)
+    )
   }
   static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ disallowedStringLiteralCharacters
@@ -207,7 +241,18 @@ extension Platform {
       .joined(separator: "_")
   }
 
-  static func build(module: ModuleIntermediate) -> String {
+  static func source(of test: TestIntermediate, module: ModuleIntermediate) -> [String] {
+    return testSource(
+      identifier: identifier(for: test, leading: false),
+      statement: statement(expression: test.action, context: nil, module: module)
+    )
+  }
+
+  static func call(test: TestIntermediate) -> String {
+    return testCall(for: identifier(for: test, leading: false))
+  }
+
+  static func source(for module: ModuleIntermediate) -> String {
     var result: [String] = []
     if let imports = importsNeededByTestScaffolding {
       result.append(contentsOf: imports)
@@ -250,14 +295,29 @@ extension Platform {
     return result.joined(separator: "\n").appending("\n")
   }
 
-  static func source(of test: TestIntermediate, module: ModuleIntermediate) -> [String] {
-    return testSource(
-      identifier: identifier(for: test, leading: false),
-      statement: statement(expression: test.action, context: nil, module: module)
-    )
+  static func source(for module: Module) throws -> String {
+    return try source(for: module.build())
   }
 
-  static func call(test: TestIntermediate) -> String {
-    return testCall(for: identifier(for: test, leading: false))
+  static func preparedDirectory(for package: Package) -> URL {
+    return package.constructionDirectory
+      .appendingPathComponent(self.directoryName)
+  }
+
+  static func prepare(package: Package) throws {
+    let constructionDirectory = preparedDirectory(for: package)
+
+    var source: [String] = [
+      try package.modules()
+        .lazy.map({ try self.source(for: $0) })
+        .joined(separator: "\n\n")
+    ]
+    if let entryPoint = testEntryPoint() {
+      source.append("")
+      source.append(contentsOf: entryPoint)
+    }
+    try source.joined(separator: "\n").appending("\n")
+      .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
+    try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
   }
 }

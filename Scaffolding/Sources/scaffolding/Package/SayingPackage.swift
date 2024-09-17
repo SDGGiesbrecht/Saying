@@ -15,18 +15,6 @@ struct Package {
   var constructionDirectory: URL {
     return location.appendingPathComponent(".Construction")
   }
-  var cConstructionDirectory: URL {
-    return constructionDirectory.appendingPathComponent("C")
-  }
-  var cSharpConstructionDirectory: URL {
-    return constructionDirectory.appendingPathComponent("C♯")
-  }
-  var javaScriptConstructionDirectory: URL {
-    return constructionDirectory.appendingPathComponent("JavaScript")
-  }
-  var swiftConstructionDirectory: URL {
-    return constructionDirectory.appendingPathComponent("Swift")
-  }
 
   static let ignoredDirectories: Set<String> = [
     ".git"
@@ -71,176 +59,42 @@ struct Package {
     try buildSwift()
   }
 
-  func prepareC() throws {
-    try ([
-      try self.modules().lazy.map({ try $0.buildC() }).joined(separator: "\n\n"),
-      "",
-      "int main() {",
-      "        test();",
-      "        return 0;",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: cConstructionDirectory.appendingPathComponent("test.c"))
-  }
-
-  func prepareCSharp() throws {
-    try ([
-      try self.modules().lazy.map({ try $0.buildCSharp() }).joined(separator: "\n\n"),
-      "",
-      "class Test",
-      "{",
-      "    static void Main()",
-      "    {",
-      "        Tests.Test();",
-      "    }",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: cSharpConstructionDirectory.appendingPathComponent("Test.cs"))
-    try ([
-      "<Project>",
-      "  <ItemGroup>",
-      "    <Compile Include=\u{22}Test.cs\u{22} />",
-      "  </ItemGroup>",
-      "  <Target Name=\u{22}Test\u{22}>",
-      "    <Csc Sources=\u{22}@(Compile)\u{22} />",
-      "  </Target>",
-      "</Project>",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: cSharpConstructionDirectory.appendingPathComponent("Project.csproj"))
-  }
-
-  func prepareJavaScript() throws {
-    try ([
-      try self.modules().lazy.map({ try $0.buildJavaScript() }).joined(separator: "\n\n"),
-      "",
-      "test();",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: javaScriptConstructionDirectory.appendingPathComponent("Package.js"))
-    try ([
-      "<html>",
-      "  <head>",
-      "    <script src=\u{22}Package.js\u{22}></script>",
-      "  </head>",
-      "  <body>",
-      "    <script>",
-      "      test();",
-      "    </script>",
-      "  </body>",
-      "</html>",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: javaScriptConstructionDirectory.appendingPathComponent("Test.html"))
-  }
-
-  func buildJavaScript() throws {
-    try prepareJavaScript()
-  }
-
-  func prepareSwift() throws {
-    try ([
-      "// swift-tools-version: 5.7",
-      "",
-      "import PackageDescription",
-      "",
-      "let package = Package(",
-      "  name: \u{22}Package\u{22},",
-      "  targets: [",
-      "    .target(name: \u{22}Products\u{22}),",
-      "    .executableTarget(",
-      "      name: \u{22}test\u{22},",
-      "      dependencies: [\u{22}Products\u{22}]",
-      "    ),",
-      "    .testTarget(",
-      "      name: \u{22}WrappedTests\u{22},",
-      "      dependencies: [\u{22}Products\u{22}]",
-      "    )",
-      "  ]",
-      ")",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: swiftConstructionDirectory.appendingPathComponent("Package.swift"))
-    let source = try self.modules().lazy.map({ try $0.buildSwift() }).joined(separator: "\n\n")
-    try source.save(
-      to:
-        swiftConstructionDirectory
-        .appendingPathComponent("Sources")
-        .appendingPathComponent("Products")
-        .appendingPathComponent("Source.swift")
-    )
-    try ([
-      "@testable import Products",
-      "",
-      "@main struct Test {",
-      "",
-      "  static func main() {",
-      "    Products.test()",
-      "  }",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(
-        to:
-          swiftConstructionDirectory
-          .appendingPathComponent("Sources")
-          .appendingPathComponent("test")
-          .appendingPathComponent("Test.swift")
-      )
-    try ([
-      "import XCTest",
-      "@testable import Products",
-      "",
-      "class WrappedTests: XCTestCase {",
-      "",
-      "  func testProject() {",
-      "    Products.test()",
-      "  }",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(
-        to:
-          swiftConstructionDirectory
-          .appendingPathComponent("Tests")
-          .appendingPathComponent("WrappedTests")
-          .appendingPathComponent("WrappedTests.swift")
-      )
-  }
-
   func buildSwift() throws {
-    try prepareSwift()
+    try Swift.prepare(package: self)
     _ = try Shell.default.run(
       command: [
         "swift", "build",
-        "--package-path", swiftConstructionDirectory.path,
+        "--package-path", Swift.preparedDirectory(for: self).path,
       ],
       reportProgress: { print($0) }
     ).get()
   }
 
-  func test() throws {
-    try testSwift()
-  }
-  
   func testC() throws {
-    try prepareC()
+    try C.prepare(package: self)
+    let directory = C.preparedDirectory(for: self)
     _ = try Shell.default.run(
       command: [
         "cc",
-        cConstructionDirectory.appendingPathComponent("test.c").path,
-        "-o", cConstructionDirectory.appendingPathComponent("test").path,
+        directory.appendingPathComponent("test.c").path,
+        "-o", directory.appendingPathComponent("test").path,
       ],
       reportProgress: { print($0) }
     ).get()
     _ = try Shell.default.run(
       command: [
-        cConstructionDirectory.appendingPathComponent("test").path
+        directory.appendingPathComponent("test").path
       ],
       reportProgress: { print($0) }
     ).get()
   }
 
   func testSwift() throws {
-    try prepareSwift()
+    try Swift.prepare(package: self)
     _ = try Shell.default.run(
       command: [
         "swift", "run",
-        "--package-path", swiftConstructionDirectory.path,
+        "--package-path", Swift.preparedDirectory(for: self).path,
         "test"
       ],
       reportProgress: { print($0) }
@@ -248,14 +102,14 @@ struct Package {
   }
 
   func buildXcode(platform: String) throws {
-    try prepareSwift()
+    try Swift.prepare(package: self)
     _ = try Shell.default.run(
       command: [
         "xcrun", "xcodebuild", "build",
         "-scheme", "Package",
         "-destination", "generic/platform=\(platform)"
       ],
-      in: swiftConstructionDirectory,
+      in: Swift.preparedDirectory(for: self),
       reportProgress: { print($0) }
     ).get()
   }
@@ -268,7 +122,7 @@ struct Package {
         "-scheme", "Package",
         "-destination", "platform=\(platform) Simulator,name=\(simulator)"
       ],
-      in: swiftConstructionDirectory,
+      in: Swift.preparedDirectory(for: self),
       reportProgress: { print($0) }
     ).get()
   }

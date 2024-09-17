@@ -1,12 +1,19 @@
+import Foundation
+
 import SDGLogic
 import SDGCollections
 import SDGText
 
 enum Swift: Platform {
-  
+
+  static var directoryName: String {
+    "Swift"
+  }
+
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
   }
+  static let allowedIdentifierStartGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var allowedIdentifierStartCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x41...0x5A) // A–Z
@@ -63,6 +70,7 @@ enum Swift: Platform {
     values.append(contentsOf: 0xE0000...0xEFFFD)
     return values
   }
+  static let additionalAllowedIdentifierContinuationGeneralCategories: Set<Unicode.GeneralCategory> = []
   static var additionalAllowedIdentifierContinuationCharacterPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(contentsOf: 0x30...0x39) // 0–9
@@ -94,7 +102,7 @@ enum Swift: Platform {
     return thing.swift
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> SwiftImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
     return action.swift
   }
 
@@ -189,5 +197,72 @@ enum Swift: Platform {
       "}"
     ])
     return result
+  }
+
+  static func testEntryPoint() -> [String]? {
+    return nil
+  }
+
+  static var sourceFileName: String {
+    return "Sources/Products/Source.swift"
+  }
+
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    try ([
+      "// swift-tools-version: 5.7",
+      "",
+      "import PackageDescription",
+      "",
+      "let package = Package(",
+      "  name: \u{22}Package\u{22},",
+      "  targets: [",
+      "    .target(name: \u{22}Products\u{22}),",
+      "    .executableTarget(",
+      "      name: \u{22}test\u{22},",
+      "      dependencies: [\u{22}Products\u{22}]",
+      "    ),",
+      "    .testTarget(",
+      "      name: \u{22}WrappedTests\u{22},",
+      "      dependencies: [\u{22}Products\u{22}]",
+      "    )",
+      "  ]",
+      ")",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("Package.swift"))
+    try ([
+      "@testable import Products",
+      "",
+      "@main struct Test {",
+      "",
+      "  static func main() {",
+      "    Products.test()",
+      "  }",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(
+        to:
+          projectDirectory
+          .appendingPathComponent("Sources")
+          .appendingPathComponent("test")
+          .appendingPathComponent("Test.swift")
+      )
+    try ([
+      "import XCTest",
+      "@testable import Products",
+      "",
+      "class WrappedTests: XCTestCase {",
+      "",
+      "  func testProject() {",
+      "    Products.test()",
+      "  }",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(
+        to:
+          projectDirectory
+          .appendingPathComponent("Tests")
+          .appendingPathComponent("WrappedTests")
+          .appendingPathComponent("WrappedTests.swift")
+      )
   }
 }
