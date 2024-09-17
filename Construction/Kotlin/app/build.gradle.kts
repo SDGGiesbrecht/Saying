@@ -16,6 +16,7 @@ android {
     defaultConfig {
         minSdk = 21
     }
+    testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
     testOptions {
         unitTests.all {
             //useJUnitPlatform()
