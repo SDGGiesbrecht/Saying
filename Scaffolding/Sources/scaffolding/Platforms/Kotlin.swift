@@ -142,9 +142,8 @@ enum Kotlin: Platform {
       "fun test() {",
     ]
     for test in testCalls {
-      #warning("Removed to see failure.")
       result.append(contentsOf: [
-        "    //\(test)",
+        "    \(test)",
       ])
     }
     result.append(contentsOf: [
@@ -167,7 +166,6 @@ enum Kotlin: Platform {
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    #warning("Remove the checked “Construction” directory once this works.")
     try ([
       "android.useAndroidX=true",
     ] as [String]).joined(separator: "\n").appending("\n")
