@@ -1,23 +1,22 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
-    //id("com.android.application")
-    //id("org.jetbrains.kotlin.android")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    //id("org.jetbrains.kotlin.jvm")
 }
 
 kotlin {
-    jvm()
     jvmToolchain(11)
 }
 
-//android {
-//    namespace = "com.example.test"
-//    compileSdk = 34
-//    defaultConfig {
-//        minSdk = 21
-//    }
-//}
+android {
+    namespace = "com.example.test"
+    compileSdk = 34
+    defaultConfig {
+        minSdk = 21
+    }
+}
 
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.11.0"))
