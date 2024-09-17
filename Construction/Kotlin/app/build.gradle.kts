@@ -17,7 +17,9 @@ android {
         minSdk = 21
     }
     testOptions {
-        unitTests()
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 }
 
