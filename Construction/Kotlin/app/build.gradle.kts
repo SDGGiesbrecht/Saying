@@ -15,3 +15,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }
+
+dependencies {
+    //androidTestImplementation("androidx.test:runner:1.6.1")
+    androidTestImplementation("junit:junit:1.6.1")
+}
