@@ -142,8 +142,9 @@ enum Kotlin: Platform {
       "fun test() {",
     ]
     for test in testCalls {
+      #warning("Removed to see failure.")
       result.append(contentsOf: [
-        "    \(test)",
+        "    //\(test)",
       ])
     }
     result.append(contentsOf: [
@@ -162,67 +163,82 @@ enum Kotlin: Platform {
   }
 
   static var sourceFileName: String {
-    return "Test.kt"
+    return "app/src/main/kotlin/Test.kt"
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    #warning("Not implemented yet.")
     #warning("Remove the checked “Construction” directory once this works.")
-    /*try ([
-      "// swift-tools-version: 5.7",
-      "",
-      "import PackageDescription",
-      "",
-      "let package = Package(",
-      "  name: \u{22}Package\u{22},",
-      "  targets: [",
-      "    .target(name: \u{22}Products\u{22}),",
-      "    .executableTarget(",
-      "      name: \u{22}test\u{22},",
-      "      dependencies: [\u{22}Products\u{22}]",
-      "    ),",
-      "    .testTarget(",
-      "      name: \u{22}WrappedTests\u{22},",
-      "      dependencies: [\u{22}Products\u{22}]",
-      "    )",
-      "  ]",
-      ")",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("Package.swift"))
     try ([
-      "@testable import Products",
+      "android.useAndroidX=true",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
+    try ([
+      "pluginManagement {",
+      "    repositories {",
+      "        gradlePluginPortal()",
+      "        google()",
+      "        mavenCentral()",
+      "    }",
+      "}",
       "",
-      "@main struct Test {",
+      "dependencyResolutionManagement {",
+      "    repositories {",
+      "        google()",
+      "        mavenCentral()",
+      "    }",
+      "}",
       "",
-      "  static func main() {",
-      "    Products.test()",
-      "  }",
+      "rootProject.name = \u{22}Test\u{22}",
+      "include(\u{22}:app\u{22})",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("settings.gradle.kts"))
+    try ([
+      "plugins {",
+      "    id(\u{22}com.android.application\u{22}) version \u{22}8.6.0\u{22} apply false",
+      "    id(\u{22}org.jetbrains.kotlin.android\u{22}) version \u{22}2.0.20\u{22} apply false",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
-      .save(
-        to:
-          projectDirectory
-          .appendingPathComponent("Sources")
-          .appendingPathComponent("test")
-          .appendingPathComponent("Test.swift")
-      )
+      .save(to: projectDirectory.appendingPathComponent("build.gradle.kts"))
     try ([
-      "import XCTest",
-      "@testable import Products",
+      "plugins {",
+      "    id(\u{22}com.android.application\u{22})",
+      "    id(\u{22}org.jetbrains.kotlin.android\u{22})",
+      "}",
       "",
-      "class WrappedTests: XCTestCase {",
+      "kotlin {",
+      "    jvmToolchain(11)",
+      "}",
       "",
-      "  func testProject() {",
-      "    Products.test()",
-      "  }",
+      "android {",
+      "    namespace = \u{22}com.example.test\u{22}",
+      "    compileSdk = 34",
+      "    defaultConfig {",
+      "        minSdk = 21",
+      "        testInstrumentationRunner = \u{22}androidx.test.runner.AndroidJUnitRunner\u{22}",
+      "    }",
+      "}",
+      "",
+      "dependencies {",
+      "    androidTestImplementation(\u{22}androidx.test:runner:1.6.1\u{22})",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
-      .save(
-        to:
-          projectDirectory
-          .appendingPathComponent("Tests")
-          .appendingPathComponent("WrappedTests")
-          .appendingPathComponent("WrappedTests.swift")
-      )*/
+      .save(to: projectDirectory.appendingPathComponent("app/build.gradle.kts"))
+    try ([
+      "<?xml version=\u{22}1.0\u{22} encoding=\u{22}utf-8\u{22}?>",
+      "<manifest xmlns:android=\u{22}http://schemas.android.com/apk/res/android\u{22}",
+      "    xmlns:tools=\u{22}http://schemas.android.com/tools\u{22}>",
+      "</manifest>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("app/src/main/AndroidManifest.xml"))
+    try ([
+      "import org.junit.Test",
+      "",
+      "class WrappedTests {",
+      "    @Test fun testProject() {",
+      "        test()",
+      "    }",
+      "}",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.xml"))
   }
 }

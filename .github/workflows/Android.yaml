@@ -30,15 +30,15 @@ jobs:
   Android_Test:
     name: Android (Test)
     runs-on: ubuntu-20.04
-    #needs: Android_Build
+    needs: Android_Build
     steps:
     - name: Check out
       uses: actions/checkout@v2
-    #- name: Download
-    #  uses: actions/download-artifact@v4
-    #  with:
-    #    name: Kotlin
-    #    path: .Construction/Kotlin
+    - name: Download
+      uses: actions/download-artifact@v4
+      with:
+        name: Kotlin
+        path: .Construction/Kotlin
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
@@ -52,7 +52,7 @@ jobs:
       shell: bash
       run: |
         set -x
-        cd Construction/Kotlin
+        cd .Construction/Kotlin
         gradle wrapper
         ./gradlew check
         ./gradlew assembleAndroidTest
@@ -61,4 +61,4 @@ jobs:
       with:
         api-level: 24
         script: |
-          cd Construction/Kotlin ; ./gradlew connectedDebugAndroidTest
+          cd .Construction/Kotlin ; ./gradlew connectedDebugAndroidTest
