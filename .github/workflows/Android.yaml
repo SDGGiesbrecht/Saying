@@ -48,7 +48,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: "8.10"
-    - name: Test
+    - name: Prepare tests
       shell: bash
       run: |
         set -x
@@ -60,3 +60,12 @@ jobs:
         ./gradlew assembleAndroidTest
         ./gradlew test
         ./gradlew check
+    - name: Test
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        #api-level: 24
+        #arch: x86_64
+        #disable-animations: true
+        #disk-size: 6000M
+        #heap-size: 600M
+          script: ./gradlew connectedDebugAndroidTest
