@@ -69,5 +69,4 @@ jobs:
         #disk-size: 6000M
         #heap-size: 600M
         script: |
-          cd Construction/Kotlin
-          ./gradlew connectedDebugAndroidTest
+          cd Construction/Kotlin ; ./gradlew connectedDebugAndroidTest
