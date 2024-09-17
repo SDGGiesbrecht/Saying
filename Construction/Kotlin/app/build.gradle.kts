@@ -17,8 +17,8 @@ android {
         minSdk = 21
     }
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
+        unitTests.all {
+            useJUnitPlatform()
         }
     }
 }
