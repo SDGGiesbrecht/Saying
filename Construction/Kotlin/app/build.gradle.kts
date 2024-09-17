@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.android.application")
+    //id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     //id("org.jetbrains.kotlin.jvm")
 }
@@ -24,6 +25,6 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.named<Test>("test") {
-    useJUnitPlatform()
-}
+//tasks.named<Test>("test") {
+//    useJUnitPlatform()
+//}
