@@ -60,9 +60,5 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 24
-        #arch: x86_64
-        #disable-animations: true
-        #disk-size: 6000M
-        #heap-size: 600M
         script: |
           cd Construction/Kotlin ; ./gradlew connectedDebugAndroidTest
