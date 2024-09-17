@@ -239,6 +239,6 @@ enum Kotlin: Platform {
       "    }",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.xml"))
+      .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.kt"))
   }
 }
