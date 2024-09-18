@@ -1,3 +1,5 @@
+import SDGText
+
 enum FileParseError<NodeParseError>: Error
 where NodeParseError: Error {
   case brokenNode(NodeParseError)
