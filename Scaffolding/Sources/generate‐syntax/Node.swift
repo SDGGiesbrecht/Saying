@@ -428,7 +428,9 @@ struct Node {
       }
       result.append(contentsOf: [
         "        ),",
-        "        reasonsNotContinued: ErrorList(reasonsNotContinued)",
+        "        reasonsNotContinued: reasonsNotContinued",
+        "          .max(by: { $0.range.startIndex < $1.range.startIndex })",
+        "          .map({ [$0] }) ?? []",
         "      )",
         "    )",
       ])
@@ -454,7 +456,11 @@ struct Node {
         ])
       }
       result.append(contentsOf: [
-        "    return .failure(ErrorList(errors))",
+        "    return .failure(",
+        "      errors",
+        "        .max(by: { $0.range.startIndex < $1.range.startIndex })",
+        "        .map({ [$0] })!",
+        "    )",
       ])
       return result.joined(separator: "\n")
     }
