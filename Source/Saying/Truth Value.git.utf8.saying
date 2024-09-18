@@ -14,6 +14,41 @@ thing
 action
  [
   [
+   English: Performs logical negation.
+   Deutsch: Führt eine logische Negation durch.
+  ]
+  test (verify ((not (true)) is (false)))
+  test (verify ((not (false)) is (true)))
+  parameter: negand
+   (
+    [
+     English: The truth value to be negated.
+     Deutsch: Die Wahrheitswert, die negiert werden soll.
+    ]
+   )
+ ]
+ (
+  English: not (negand: truth value)
+  English +: ¬(negand: [negand]) continue here
+  Deutsch: nicht (Wert: [negand])
+  Deutsch +: ¬(Wert: [negand])
+  français : non (valeur: [negand])
+  français +: (valeur: [negand])
+  ελληνικά: όχι (τιμή: [negand])
+  ελληνικά +: (τιμή: [negand])
+  עברית: לא (ערך: [negand])
+  עברית +: ¬(ערך: [negand])
+ )
+ truth value
+ C: “¤(21)” negand
+ C♯: “¤(21)” negand
+ JavaScript: “¤(21)” negand
+ Kotlin: “¤(21)” negand
+ Swift: «¤(21)» negand
+
+action
+ [
+  [
    English: Performs logical conjuction.
    Deutsch: Führt eine logische Konjunktion durch.
   ]
