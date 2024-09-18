@@ -47,7 +47,7 @@ enum C: Platform {
     return true
   }
 
-  static func nativeName(of thing: Thing) -> StrictString? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.c
   }
 

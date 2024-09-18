@@ -23,7 +23,7 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
-  static func nativeName(of thing: Thing) -> StrictString?
+  static func nativeType(of thing: Thing) -> NativeThingImplementation?
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation?
@@ -181,7 +181,7 @@ extension Platform {
     } else {
       let type = module.lookupThing(parameter.type)!
       let typeSource: String
-      if let native = nativeName(of: type) {
+      if let native = nativeType(of: type)?.type {
         typeSource = String(native)
       } else {
         typeSource = sanitize(identifier: type.names.identifier(), leading: true)
@@ -204,7 +204,7 @@ extension Platform {
     let needsReturnKeyword: Bool
     if let specified = action.returnValue {
       let type = module.lookupThing(specified)!
-      if let native = nativeName(of: type) {
+      if let native = nativeType(of: type)?.type {
         returnValue = String(native)
       } else {
         returnValue = sanitize(identifier: type.names.identifier(), leading: true)

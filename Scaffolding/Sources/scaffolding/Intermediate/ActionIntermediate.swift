@@ -19,6 +19,15 @@ struct ActionIntermediate {
 
 extension ActionIntermediate {
 
+  static func disallowImports(
+    in implementation: ParsedActionImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if implementation.expression.importNode ≠ nil {
+      errors.append(ConstructionError.invalidImport(implementation))
+    }
+  }
+
   static func construct(
     _ declaration: ParsedActionDeclaration
   ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>> {
@@ -117,12 +126,16 @@ extension ActionIntermediate {
           c = constructed
         case "C♯":
           cSharp = constructed
+          disallowImports(in: implementation, errors: &errors)
         case "JavaScript":
           javaScript = constructed
+          disallowImports(in: implementation, errors: &errors)
         case "Kotlin":
           kotlin = constructed
+          disallowImports(in: implementation, errors: &errors)
         case "Swift":
           swift = constructed
+          disallowImports(in: implementation, errors: &errors)
         default:
           errors.append(ConstructionError.unknownLanguage(implementation.language))
         }

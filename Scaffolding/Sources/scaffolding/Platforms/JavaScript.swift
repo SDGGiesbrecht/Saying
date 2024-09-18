@@ -45,7 +45,7 @@ enum JavaScript: Platform {
     return false
   }
 
-  static func nativeName(of thing: Thing) -> StrictString? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return nil
   }
 

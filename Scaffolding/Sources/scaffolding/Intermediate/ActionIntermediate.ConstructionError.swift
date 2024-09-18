@@ -7,5 +7,6 @@ extension ActionIntermediate {
     case parameterNotFound(ParsedParameterReference)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementation.ConstructionError)
+    case invalidImport(ParsedActionImplementation)
   }
 }
