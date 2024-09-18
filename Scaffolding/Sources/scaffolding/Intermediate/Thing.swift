@@ -3,15 +3,24 @@ import SDGText
 
 struct Thing {
   var names: Set<StrictString>
-  var c: StrictString?
-  var cSharp: StrictString?
-  var kotlin: StrictString?
-  var swift: StrictString?
+  var c: NativeThingImplementation?
+  var cSharp: NativeThingImplementation?
+  var kotlin: NativeThingImplementation?
+  var swift: NativeThingImplementation?
   var declaration: ParsedThingDeclaration
 }
 
 extension Thing {
-  
+
+  static func disallowImports(
+    in implementation: ParsedThingImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if implementation.implementation.importNode ≠ nil {
+      errors.append(ConstructionError.invalidImport(implementation))
+    }
+  }
+
   static func construct(
     _ declaration: ParsedThingDeclaration
   ) -> Result<Thing, ErrorList<Thing.ConstructionError>> {
@@ -22,20 +31,24 @@ extension Thing {
         .lazy.map({ $0.name.identifierText() })
     )
 
-    var c: StrictString?
-    var cSharp: StrictString?
-    var kotlin: StrictString?
-    var swift: StrictString?
+    var c: NativeThingImplementation?
+    var cSharp: NativeThingImplementation?
+    var kotlin: NativeThingImplementation?
+    var swift: NativeThingImplementation?
     for implementation in declaration.implementation.implementations {
+      let constructed = NativeThingImplementation.construct(implementation: implementation.implementation)
       switch implementation.language.identifierText() {
       case "C":
-        c = implementation.type.identifierText()
+        c = constructed
       case "C♯":
-        cSharp = implementation.type.identifierText()
+        disallowImports(in: implementation, errors: &errors)
+        cSharp = constructed
       case "Kotlin":
-        kotlin = implementation.type.identifierText()
+        disallowImports(in: implementation, errors: &errors)
+        kotlin = constructed
       case "Swift":
-        swift = implementation.type.identifierText()
+        disallowImports(in: implementation, errors: &errors)
+        swift = constructed
       default:
         errors.append(ConstructionError.unknownLanguage(implementation.language))
       }

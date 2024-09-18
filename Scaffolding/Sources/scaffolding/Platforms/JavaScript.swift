@@ -45,11 +45,11 @@ enum JavaScript: Platform {
     return false
   }
 
-  static func nativeName(of thing: Thing) -> StrictString? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return nil
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
     return action.javaScript
   }
 
@@ -85,9 +85,13 @@ enum JavaScript: Platform {
     ])
     return result.joined(separator: "\n")
   }
+  
+  static func statementImporting(_ importTarget: String) -> String {
+    return importTarget
+  }
 
-  static var importsNeededByTestScaffolding: [String]? {
-    return nil
+  static var importsNeededByTestScaffolding: Set<String> {
+    return []
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {

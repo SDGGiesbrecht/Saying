@@ -405,11 +405,27 @@ extension Node {
           ),
 
           Node(
+            name: "NativeImport",
+            kind: .compound(children: [
+              Child(name: "space", type: "Space", kind: .required),
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "importNode", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "NativeThing",
+            kind: .compound(children: [
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "importNode", type: "NativeImport", kind: .optional),
+            ])
+          ),
+          Node(
             name: "ThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "implementation", type: "NativeThing", kind: .required),
             ])
           ),
           Node(
@@ -421,7 +437,7 @@ extension Node {
           ),
         ],
         Node.separatedList(
-          name: "NativeAction",
+          name: "NativeActionExpression",
           entryName: "component", entryNamePlural: "components",
           entryType: "ImplementationComponent",
           separatorName: "space",
@@ -429,6 +445,13 @@ extension Node {
           fixedSeparator: true
         ),
         [
+          Node(
+            name: "NativeAction",
+            kind: .compound(children: [
+              Child(name: "expression", type: "NativeActionExpression", kind: .required),
+              Child(name: "importNode", type: "NativeImport", kind: .optional),
+            ])
+          ),
           Node(
             name: "ActionImplementation",
             kind: .compound(children: [

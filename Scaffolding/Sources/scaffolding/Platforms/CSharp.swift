@@ -43,11 +43,11 @@ enum CSharp: Platform {
     return true
   }
 
-  static func nativeName(of thing: Thing) -> StrictString? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.cSharp
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
     return action.cSharp
   }
 
@@ -85,11 +85,15 @@ enum CSharp: Platform {
     return result.joined(separator: "\n")
   }
 
-  static var importsNeededByTestScaffolding: [String]? {
+  static func statementImporting(_ importTarget: String) -> String {
+    return "using \(importTarget);"
+  }
+
+  static var importsNeededByTestScaffolding: Set<String> {
     return [
-      "using System;",
-      "using System.Collections.Generic;",
-      "using System.Linq;",
+      "System",
+      "System.Collections.Generic",
+      "System.Linq",
     ]
   }
 

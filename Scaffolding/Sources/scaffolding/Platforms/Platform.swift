@@ -23,10 +23,10 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
-  static func nativeName(of thing: Thing) -> StrictString?
+  static func nativeType(of thing: Thing) -> NativeThingImplementation?
 
   // Actions
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation?
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation?
   static func parameterDeclaration(name: String, type: String) -> String
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
@@ -41,8 +41,11 @@ protocol Platform {
     implementation: String
   ) -> String
 
+  // Imports
+  static func statementImporting(_ importTarget: String) -> String
+
   // Module
-  static var importsNeededByTestScaffolding: [String]? { get }
+  static var importsNeededByTestScaffolding: Set<String> { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
@@ -181,7 +184,7 @@ extension Platform {
     } else {
       let type = module.lookupThing(parameter.type)!
       let typeSource: String
-      if let native = nativeName(of: type) {
+      if let native = nativeType(of: type)?.type {
         typeSource = String(native)
       } else {
         typeSource = sanitize(identifier: type.names.identifier(), leading: true)
@@ -204,7 +207,7 @@ extension Platform {
     let needsReturnKeyword: Bool
     if let specified = action.returnValue {
       let type = module.lookupThing(specified)!
-      if let native = nativeName(of: type) {
+      if let native = nativeType(of: type)?.type {
         returnValue = String(native)
       } else {
         returnValue = sanitize(identifier: type.names.identifier(), leading: true)
@@ -252,12 +255,30 @@ extension Platform {
     return testCall(for: identifier(for: test, leading: false))
   }
 
+  static func nativeImports(for module: ModuleIntermediate) -> Set<String> {
+    var imports: Set<String> = []
+    for thing in module.things.values {
+      if let requiredImport = nativeType(of: thing)?.requiredImport {
+        imports.insert(String(requiredImport))
+      }
+      for action in module.actions.values {
+        if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+          imports.insert(String(requiredImport))
+        }
+      }
+    }
+    return imports
+  }
+
   static func source(for module: ModuleIntermediate) -> String {
     var result: [String] = []
-    if let imports = importsNeededByTestScaffolding {
-      result.append(contentsOf: imports)
-    }
-    if ¬result.isEmpty {
+
+    var imports = nativeImports(for: module)
+    imports ∪= importsNeededByTestScaffolding
+    if ¬imports.isEmpty {
+      for importTarget in imports.sorted() {
+        result.append(statementImporting(importTarget))
+      }
       result.append("")
     }
 

@@ -7,17 +7,26 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var c: NativeImplementation?
-  var cSharp: NativeImplementation?
-  var javaScript: NativeImplementation?
-  var kotlin: NativeImplementation?
-  var swift: NativeImplementation?
+  var c: NativeActionImplementation?
+  var cSharp: NativeActionImplementation?
+  var javaScript: NativeActionImplementation?
+  var kotlin: NativeActionImplementation?
+  var swift: NativeActionImplementation?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
   var coveredIdentifier: StrictString?
 }
 
 extension ActionIntermediate {
+
+  static func disallowImports(
+    in implementation: ParsedActionImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if implementation.expression.importNode ≠ nil {
+      errors.append(ConstructionError.invalidImport(implementation))
+    }
+  }
 
   static func construct(
     _ declaration: ParsedActionDeclaration
@@ -99,30 +108,34 @@ extension ActionIntermediate {
       )
       return ParameterIntermediate(names: names, type: type)
     }
-    var c: NativeImplementation?
-    var cSharp: NativeImplementation?
-    var javaScript: NativeImplementation?
-    var kotlin: NativeImplementation?
-    var swift: NativeImplementation?
+    var c: NativeActionImplementation?
+    var cSharp: NativeActionImplementation?
+    var javaScript: NativeActionImplementation?
+    var kotlin: NativeActionImplementation?
+    var swift: NativeActionImplementation?
     for implementation in declaration.implementation.implementations {
-      switch NativeImplementation.construct(
+      switch NativeActionImplementation.construct(
         implementation: implementation.expression,
         indexTable: completeParameterIndexTable
       ) {
       case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeImplementation($0) }))
+        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
       case .success(let constructed):
         switch implementation.language.identifierText() {
         case "C":
           c = constructed
         case "C♯":
           cSharp = constructed
+          disallowImports(in: implementation, errors: &errors)
         case "JavaScript":
           javaScript = constructed
+          disallowImports(in: implementation, errors: &errors)
         case "Kotlin":
           kotlin = constructed
+          disallowImports(in: implementation, errors: &errors)
         case "Swift":
           swift = constructed
+          disallowImports(in: implementation, errors: &errors)
         default:
           errors.append(ConstructionError.unknownLanguage(implementation.language))
         }

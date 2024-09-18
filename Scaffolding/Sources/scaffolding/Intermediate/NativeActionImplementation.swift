@@ -1,18 +1,19 @@
 import SDGLogic
 import SDGText
 
-struct NativeImplementation {
+struct NativeActionImplementation {
   var reordering: [Int]
   var textComponents: [StrictString]
+  var requiredImport: StrictString?
 }
 
-extension NativeImplementation {
+extension NativeActionImplementation {
 
   static func construct(
     implementation: ParsedNativeAction,
     indexTable: [StrictString: Int]
-  ) -> Result<NativeImplementation, ErrorList<ConstructionError>> {
-    let components = implementation.components
+  ) -> Result<NativeActionImplementation, ErrorList<ConstructionError>> {
+    let components = implementation.expression.components
     var reordering: [Int] = []
     var textComponents: [StrictString] = []
     var errors: [ConstructionError] = []
@@ -38,9 +39,16 @@ extension NativeImplementation {
       ∨ ¬textComponents.contains(where: { $0.contains(")") }) {
       errors.append(.parenthesesMissing(components))
     }
+    let requiredImport = implementation.importNode?.importNode.identifierText()
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    return .success(NativeImplementation(reordering: reordering, textComponents: textComponents))
+    return .success(
+      NativeActionImplementation(
+        reordering: reordering,
+        textComponents: textComponents,
+        requiredImport: requiredImport
+      )
+    )
   }
 }

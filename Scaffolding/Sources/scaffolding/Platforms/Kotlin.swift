@@ -52,11 +52,11 @@ enum Kotlin: Platform {
     return true
   }
 
-  static func nativeName(of thing: Thing) -> StrictString? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.kotlin
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
     return action.kotlin
   }
 
@@ -93,8 +93,12 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
-  static var importsNeededByTestScaffolding: [String]? {
-    return nil
+  static func statementImporting(_ importTarget: String) -> String {
+    return importTarget
+  }
+
+  static var importsNeededByTestScaffolding: Set<String> {
+    return []
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
