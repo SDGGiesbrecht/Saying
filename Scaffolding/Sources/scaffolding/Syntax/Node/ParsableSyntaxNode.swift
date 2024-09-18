@@ -19,9 +19,8 @@ extension ParsableSyntaxNode {
     case .success(let parsed):
       remainder = remainder[parsed.result.location.endIndex...]
       guard remainder.isEmpty else {
-        let reasons = parsed.reasonsNotContinued
-        if ¬reasons.errors.isEmpty {
-          return .failure(reasons.map({ .brokenNode($0) }))
+        if let reason = parsed.reasonNotContinued {
+          return .failure([.brokenNode(reason)])
         } else {
           return .failure([.extraneousText(remainder)])
         }

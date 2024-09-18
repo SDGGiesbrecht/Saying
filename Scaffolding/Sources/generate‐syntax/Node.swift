@@ -327,7 +327,7 @@ struct Node {
         "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
         "        return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder.prefix(1)), reasonsNotContinued: []))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder.prefix(1)), reasonNotContinued: nil))",
       ].joined(separator: "\n")
     case .keyword:
       return [
@@ -340,7 +340,7 @@ struct Node {
         "    guard StrictString(slice) ∈ allowed else {",
         "      return .failure([.notA\(name)(slice)])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonsNotContinued: []))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonNotContinued: nil))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
@@ -353,7 +353,7 @@ struct Node {
         "    guard ¬range.isEmpty else {",
         "      return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonsNotContinued: []))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonNotContinued: nil))",
       ].joined(separator: "\n")
     case .compound(let children):
       var result: [StrictString] = [
@@ -384,7 +384,9 @@ struct Node {
           }
           result.append(contentsOf: [
             "    case .success(let parsed):",
-            "      reasonsNotContinued.append(contentsOf: parsed.reasonsNotContinued.errors.map({ .broken\(child.uppercasedName)($0) }))",
+            "      if let reason = parsed.reasonNotContinued {",
+            "        reasonsNotContinued.append(.broken\(child.uppercasedName)(reason))",
+            "      }",
             "      remainder = remainder[parsed.result.location.endIndex...]",
             "    }",
           ])
@@ -428,9 +430,8 @@ struct Node {
       }
       result.append(contentsOf: [
         "        ),",
-        "        reasonsNotContinued: reasonsNotContinued",
+        "        reasonNotContinued: reasonsNotContinued",
         "          .max(by: { $0.range.startIndex < $1.range.startIndex })",
-        "          .map({ [$0] }) ?? []",
         "      )",
         "    )",
       ])
@@ -449,7 +450,7 @@ struct Node {
           "      return .success(",
           "        DiagnosticParseResult<Parsed\(name)>(",
           "          result: .\(alternate.name)(parsed.result),",
-          "          reasonsNotContinued: parsed.reasonsNotContinued.map({ .broken\(alternate.uppercasedName)($0) })",
+          "          reasonNotContinued: parsed.reasonNotContinued.map({ .broken\(alternate.uppercasedName)($0) })",
           "        )",
           "      )",
           "    }",
