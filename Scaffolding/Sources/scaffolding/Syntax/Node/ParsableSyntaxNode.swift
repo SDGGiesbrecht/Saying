@@ -1,3 +1,4 @@
+import SDGLogic
 import SDGText
 
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
@@ -18,8 +19,9 @@ extension ParsableSyntaxNode {
     case .success(let parsed):
       remainder = remainder[parsed.result.location.endIndex...]
       guard remainder.isEmpty else {
-        if let errors = parsed.reasonsNotContinued {
-          return .failure(errors.map({ .brokenNode($0) }))
+        let reasons = parsed.reasonsNotContinued
+        if ¬reasons.errors.isEmpty {
+          return .failure(reasons.map({ .brokenNode($0) }))
         } else {
           return .failure([.extraneousText(remainder)])
         }

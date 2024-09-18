@@ -327,7 +327,7 @@ struct Node {
         "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
         "        return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder.prefix(1)), reasonsNotContinued: nil))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder.prefix(1)), reasonsNotContinued: []))",
       ].joined(separator: "\n")
     case .keyword:
       return [
@@ -340,7 +340,7 @@ struct Node {
         "    guard StrictString(slice) ∈ allowed else {",
         "      return .failure([.notA\(name)(slice)])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonsNotContinued: nil))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonsNotContinued: []))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
@@ -353,19 +353,13 @@ struct Node {
         "    guard ¬range.isEmpty else {",
         "      return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonsNotContinued: nil))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonsNotContinued: []))",
       ].joined(separator: "\n")
     case .compound(let children):
       var result: [StrictString] = [
         "    var remainder = remainder",
+        "    var reasonsNotContinued: [Parsed\(name).ParseError] = []",
       ]
-      let recordingPotentialErrorsFromContext = children
-        .contains(where: { $0.kind == .array ∨ $0.kind == .optional })
-      if recordingPotentialErrorsFromContext {
-        result.append(contentsOf: [
-          "    var reasonsNotContinued: [Parsed\(name).ParseError] = []",
-        ])
-      }
       for child in children {
         switch child.kind {
         case .fixed, .required, .optional:
@@ -375,10 +369,9 @@ struct Node {
           ])
           switch child.kind {
           case .fixed, .required:
-            let contextErrors = recordingPotentialErrorsFromContext ? "reasonsNotContinued + " : ""
             result.append(contentsOf: [
               "    case .failure(let error):",
-              "      return .failure(ErrorList(\(contextErrors)error.errors.map({ .broken\(child.uppercasedName)($0) })))",
+              "      return .failure(ErrorList(reasonsNotContinued + error.errors.map({ .broken\(child.uppercasedName)($0) })))",
             ])
           case .optional:
             result.append(contentsOf: [
@@ -391,6 +384,7 @@ struct Node {
           }
           result.append(contentsOf: [
             "    case .success(let parsed):",
+            "      reasonsNotContinued.append(contentsOf: parsed.reasonsNotContinued.errors.map({ .broken\(child.uppercasedName)($0) }))",
             "      remainder = remainder[parsed.result.location.endIndex...]",
             "    }",
           ])
@@ -434,17 +428,7 @@ struct Node {
       }
       result.append(contentsOf: [
         "        ),",
-      ])
-      if recordingPotentialErrorsFromContext {
-        result.append(contentsOf: [
-          "        reasonsNotContinued: ErrorList(reasonsNotContinued)",
-        ])
-      } else {
-        result.append(contentsOf: [
-          "        reasonsNotContinued: nil",
-        ])
-      }
-      result.append(contentsOf: [
+        "        reasonsNotContinued: ErrorList(reasonsNotContinued)",
         "      )",
         "    )",
       ])
@@ -463,7 +447,7 @@ struct Node {
           "      return .success(",
           "        DiagnosticParseResult<Parsed\(name)>(",
           "          result: .\(alternate.name)(parsed.result),",
-          "          reasonsNotContinued: parsed.reasonsNotContinued?.map({ .broken\(alternate.uppercasedName)($0) })",
+          "          reasonsNotContinued: parsed.reasonsNotContinued.map({ .broken\(alternate.uppercasedName)($0) })",
           "        )",
           "      )",
           "    }",
