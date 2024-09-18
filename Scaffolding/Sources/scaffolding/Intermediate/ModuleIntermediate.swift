@@ -97,21 +97,6 @@ extension ModuleIntermediate {
       kotlin: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       swift: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"])
     )
-    identifierMapping["() is ()"] = "() is ()"
-    actions["() is ()"] = ActionIntermediate(
-      names: ["() is ()"],
-      parameters: [
-        ParameterIntermediate(names: ["a"], type: "truth value"),
-        ParameterIntermediate(names: ["b"], type: "truth value")
-      ],
-      reorderings: ["() is ()": [0, 1]],
-      returnValue: "truth value",
-      c: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      cSharp: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      javaScript: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      kotlin: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      swift: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"])
-    )
     identifierMapping["true"] = "true"
     actions["true"] = ActionIntermediate(
       names: ["true"],
