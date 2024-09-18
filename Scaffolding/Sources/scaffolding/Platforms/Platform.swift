@@ -41,8 +41,11 @@ protocol Platform {
     implementation: String
   ) -> String
 
+  // Imports
+  static func statementImporting(_ importTarget: String) -> String
+
   // Module
-  static var importsNeededByTestScaffolding: [String]? { get }
+  static var importsNeededByTestScaffolding: Set<String> { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
@@ -252,12 +255,30 @@ extension Platform {
     return testCall(for: identifier(for: test, leading: false))
   }
 
+  static func nativeImports(for module: ModuleIntermediate) -> Set<String> {
+    var imports: Set<String> = []
+    for thing in module.things.values {
+      if let requiredImport = nativeType(of: thing)?.requiredImport {
+        imports.insert(String(requiredImport))
+      }
+      for action in module.actions.values {
+        if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+          imports.insert(String(requiredImport))
+        }
+      }
+    }
+    return imports
+  }
+
   static func source(for module: ModuleIntermediate) -> String {
     var result: [String] = []
-    if let imports = importsNeededByTestScaffolding {
-      result.append(contentsOf: imports)
-    }
-    if ¬result.isEmpty {
+
+    var imports = nativeImports(for: module)
+    imports ∪= importsNeededByTestScaffolding
+    if ¬imports.isEmpty {
+      for importTarget in imports.sorted() {
+        result.append(statementImporting(importTarget))
+      }
       result.append("")
     }
 

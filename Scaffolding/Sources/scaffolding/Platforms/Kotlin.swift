@@ -93,8 +93,12 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
-  static var importsNeededByTestScaffolding: [String]? {
-    return nil
+  static func statementImporting(_ importTarget: String) -> String {
+    return importTarget
+  }
+
+  static var importsNeededByTestScaffolding: Set<String> {
+    return []
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {

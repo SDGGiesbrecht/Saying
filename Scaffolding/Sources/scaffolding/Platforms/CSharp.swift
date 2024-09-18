@@ -85,11 +85,15 @@ enum CSharp: Platform {
     return result.joined(separator: "\n")
   }
 
-  static var importsNeededByTestScaffolding: [String]? {
+  static func statementImporting(_ importTarget: String) -> String {
+    return "using \(importTarget);"
+  }
+
+  static var importsNeededByTestScaffolding: Set<String> {
     return [
-      "using System;",
-      "using System.Collections.Generic;",
-      "using System.Linq;",
+      "System",
+      "System.Collections.Generic",
+      "System.Linq",
     ]
   }
 

@@ -89,12 +89,16 @@ enum C: Platform {
     return result.joined(separator: "\n")
   }
 
-  static var importsNeededByTestScaffolding: [String]? {
+  static func statementImporting(_ importTarget: String) -> String {
+    return "#include <\(importTarget).h>"
+  }
+
+  static var importsNeededByTestScaffolding: Set<String> {
     return [
-      "#include <assert.h>",
-      "#include <stdbool.h>",
-      "#include <stdio.h>",
-      "#include <string.h>",
+      "assert",
+      "stdbool",
+      "stdio",
+      "string",
     ]
   }
 
