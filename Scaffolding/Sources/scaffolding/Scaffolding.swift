@@ -70,6 +70,11 @@ import Foundation
         print(error.diagnostic)
       }
       fatalError()
+    } catch let errorList as ErrorList<ActionIntermediate.ConstructionError> {
+      for error in errorList.errors {
+        print(error.diagnostic)
+      }
+      fatalError()
     } catch let error {
       fatalError("\(error)")
     }

@@ -9,6 +9,27 @@ extension ActionIntermediate {
     case brokenNativeActionImplementation(NativeActionImplementation.ConstructionError)
     case invalidImport(ParsedActionImplementation)
 
+    var message: String {
+      switch self {
+      case .referenceInTypeSignature:
+        return defaultMessage
+      case .typeInReferenceSignature:
+        return defaultMessage
+      case .multipleTypeSignatures:
+        return defaultMessage
+      case .cyclicalParameterReference:
+        return defaultMessage
+      case .parameterNotFound:
+        return defaultMessage
+      case .unknownLanguage:
+        return defaultMessage
+      case .brokenNativeActionImplementation(let error):
+        return error.message
+      case .invalidImport:
+        return defaultMessage
+      }
+    }
+
     var range: Slice<UTF8Segments> {
       switch self {
       case .referenceInTypeSignature(let parameter):
