@@ -29,7 +29,7 @@ action
  ]
  (
   English: not (negand: truth value)
-  English +: ¬(negand: [negand]) continue here
+  English +: ¬(negand: [negand])
   Deutsch: nicht (Wert: [negand])
   Deutsch +: ¬(Wert: [negand])
   français : non (valeur: [negand])
