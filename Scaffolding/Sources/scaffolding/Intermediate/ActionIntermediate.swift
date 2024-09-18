@@ -86,7 +86,9 @@ extension ActionIntermediate {
             checked.insert(resolving)
             resolving = next
             if next ∈ checked {
-              errors.append(.cyclicalParameterReference(parameter))
+              if parameterIndices[resolving] == nil {
+                errors.append(.cyclicalParameterReference(parameter))
+              }
               break
             }
           }

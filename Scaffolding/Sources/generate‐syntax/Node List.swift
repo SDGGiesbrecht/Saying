@@ -28,15 +28,19 @@ extension Node {
             name: "IdentifierComponent",
             kind: .variableLeaf(allowed: {
               var values: [UInt32] = []
+              values.append(0x2B) // +
               values.append(0x2E) // .
               values.append(contentsOf: 0x30...0x39) // 0–9
               values.append(contentsOf: 0x41...0x5A) // A–Z
               values.append(contentsOf: 0x61...0x7A) // a–z
+              values.append(0xB1) // ±
               values.append(contentsOf: 0x300...0x302) // ◌̀–◌̂
               values.append(0x308) // ◌̈
               values.append(0x327) // ◌̧
               values.append(contentsOf: 0x3B1...0x3C9) // α–ω
               values.append(contentsOf: 0x5D0...0x5EA) // א–ת
+              values.append(contentsOf: 0x2212...0x2213) // −–∓
+              values.append(contentsOf: 0x2227...0x222A) // ∧–∪
               values.append(contentsOf: 0x266D...0x266F) // ♭–♯
               return Set(values.lazy.map({ Unicode.Scalar($0)! }))
             }())

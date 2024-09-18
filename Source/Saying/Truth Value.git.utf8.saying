@@ -38,10 +38,15 @@ action
  ]
  (
   English: (first: truth value) and (second: truth value)
+  English +: (first: [first]) ∧ (second: [second])
   Deutsch: (erste: [first]) und (zweite: [second])
+  Deutsch +: (erste: [first]) ∧ (zweite: [second])
   français : (première: [first]) et (deuxième: [second])
+  français +: (première: [first]) ∧ (deuxième: [second])
   ελληνικά: (πρώτη: [first]) και (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) ∧ (δεύτερα: [second])
   עברית: (ראשון: [first]) ו(שני: [second])
+  עברית +: (ראשון: [first]) ∧ (שני: [second])
  )
  truth value
  C: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
