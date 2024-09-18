@@ -9,6 +9,10 @@ protocol DiagnosticError: Error {
 extension DiagnosticError {
 
   var message: String {
+    return defaultMessage
+  }
+
+  var defaultMessage: String {
     let full = "\(self)"
     return full.prefix(upTo: "(").map({ String($0.contents) }) ?? full
   }
