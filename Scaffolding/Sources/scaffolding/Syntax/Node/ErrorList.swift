@@ -18,3 +18,12 @@ extension ErrorList: ExpressibleByArrayLiteral {
     self.init(elements)
   }
 }
+
+extension ErrorList: CustomStringConvertible {
+  var description: String {
+    var result = errors.map({ "\($0)" })
+    result.prepend("[")
+    result.append("]")
+    return result.joined(separator: "\n")
+  }
+}
