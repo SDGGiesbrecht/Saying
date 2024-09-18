@@ -359,7 +359,9 @@ struct Node {
       var result: [StrictString] = [
         "    var remainder = remainder",
       ]
-      if children.contains(where: { $0.kind == .array }) {
+      let recordingPotentialErrorsFromContext = children
+        .contains(where: { $0.kind == .array ∨ $0.kind == .optional })
+      if recordingPotentialErrorsFromContext {
         result.append(contentsOf: [
           "    var reasonsNotContinued: [Parsed\(name).ParseError] = []",
         ])
@@ -373,13 +375,15 @@ struct Node {
           ])
           switch child.kind {
           case .fixed, .required:
+            let contextErrors = recordingPotentialErrorsFromContext ? "reasonsNotContinued + " : ""
             result.append(contentsOf: [
               "    case .failure(let error):",
-              "      return .failure(ErrorList(error.errors.map({ .broken\(child.uppercasedName)($0) })))",
+              "      return .failure(ErrorList(\(contextErrors)error.errors.map({ .broken\(child.uppercasedName)($0) })))",
             ])
           case .optional:
             result.append(contentsOf: [
-              "    case .failure:",
+              "    case .failure(let errors):",
+              "      reasonsNotContinued.append(contentsOf: errors.map({ .broken\(child.uppercasedName)($0) }).errors)",
               "      break",
             ])
           case .array:
@@ -431,7 +435,7 @@ struct Node {
       result.append(contentsOf: [
         "        ),",
       ])
-      if children.contains(where: { $0.kind == .array }) {
+      if recordingPotentialErrorsFromContext {
         result.append(contentsOf: [
           "        reasonsNotContinued: ErrorList(reasonsNotContinued)",
         ])
@@ -615,10 +619,8 @@ struct Node {
     case .compound(let children):
       return children.compactMap { child in
         switch child.kind {
-        case .fixed, .required:
+        case .fixed, .required, .optional:
           return "case broken\(child.uppercasedName)(Parsed\(child.type).ParseError)"
-        case .optional:
-          return nil
         case .array:
           return "case broken\(child.uppercasedName)(Parsed\(child.type).ParseError)"
         }
@@ -639,15 +641,10 @@ struct Node {
       ]
     case .compound(let children):
       return children.flatMap { child in
-        switch child.kind {
-        case .fixed, .required, .array:
-          return [
-            "case .broken\(child.uppercasedName)(let error):",
-            "  return error.message",
-          ] as [StrictString]
-        case .optional:
-          return []
-        }
+        return [
+          "case .broken\(child.uppercasedName)(let error):",
+          "  return error.message",
+        ] as [StrictString]
       }
     case .alternates(let alternates):
       return alternates.flatMap { alternate in
@@ -668,15 +665,10 @@ struct Node {
       ]
     case .compound(let children):
       return children.flatMap { child in
-        switch child.kind {
-        case .fixed, .required, .array:
-          return [
-            "case .broken\(child.uppercasedName)(let error):",
-            "  return error.range",
-          ] as [StrictString]
-        case .optional:
-          return []
-        }
+        return [
+          "case .broken\(child.uppercasedName)(let error):",
+          "  return error.range",
+        ] as [StrictString]
       }
     case .alternates(let alternates):
       return alternates.flatMap { alternate in
