@@ -30,6 +30,7 @@ extension ModuleIntermediate {
   }
 
   mutating func add(file: ParsedDeclarationList) throws {
+    var errors: [ConstructionError] = []
     for declaration in file.declarations {
       let documentation: ParsedAttachedDocumentation?
       let parameters: Set<StrictString>
@@ -43,7 +44,7 @@ extension ModuleIntermediate {
         let identifier = thing.names.identifier()
         for name in thing.names {
           if identifierMapping[name] ≠ nil {
-            throw ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!])
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!]))
           }
           identifierMapping[name] = identifier
         }
@@ -56,7 +57,7 @@ extension ModuleIntermediate {
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
-            throw ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!])
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!]))
           }
           identifierMapping[name] = identifier
         }
@@ -78,6 +79,9 @@ extension ModuleIntermediate {
           }
         }
       }
+    }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
     }
   }
 
