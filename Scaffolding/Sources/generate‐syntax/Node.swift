@@ -561,9 +561,15 @@ struct Node {
       "  \(isIndirect ? "indirect " : "")enum ParseError: DiagnosticError {",
       parseErrorCases().lazy.map({ "    \($0)" }).joined(separator: "\n"),
       "",
+      "    var message: String {",
+      "      switch self {",
+      parseDiagnosticMessageCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
+      "      }",
+      "    }",
+      "",
       "    var range: Slice<UTF8Segments> {",
       "      switch self {",
-      parseErrorRangeCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
+      parseDiagnosticRangeCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
       "      }",
       "    }",
       "  }",
@@ -592,8 +598,37 @@ struct Node {
       }
     }
   }
+  
+  func parseDiagnosticMessageCases() -> [StrictString] {
+    switch kind {
+    case .fixedLeaf, .keyword, .variableLeaf:
+      return [
+        "case .notA\(name):",
+        "  return defaultMessage",
+      ]
+    case .compound(let children):
+      return children.flatMap { child in
+        switch child.kind {
+        case .fixed, .required:
+          return [
+            "case .broken\(child.uppercasedName)(let error):",
+            "  return error.message",
+          ] as [StrictString]
+        case .optional, .array:
+          return []
+        }
+      }
+    case .alternates(let alternates):
+      return alternates.flatMap { alternate in
+        return [
+          "case .broken\(alternate.uppercasedName)(let error):",
+          "  return error.message",
+        ]
+      }
+    }
+  }
 
-  func parseErrorRangeCases() -> [StrictString] {
+  func parseDiagnosticRangeCases() -> [StrictString] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return [
