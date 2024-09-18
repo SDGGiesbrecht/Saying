@@ -307,7 +307,7 @@ struct Node {
       "",
       "  static func diagnosticParseNext(",
       "    in remainder: Slice<UTF8Segments>",
-      "  ) -> Result<Parsed\(name), ErrorList<ParseError>> {",
+      "  ) -> Result<DiagnosticParseResult<Parsed\(name)>, ErrorList<ParseError>> {",
       diagnosticParseImplementation(),
       "  }",
       "",
@@ -327,7 +327,7 @@ struct Node {
         "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
         "        return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(Parsed\(name)(location: remainder.prefix(1)))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder.prefix(1)), reasonsNotContinued: nil))",
       ].joined(separator: "\n")
     case .keyword:
       return [
@@ -340,7 +340,7 @@ struct Node {
         "    guard StrictString(slice) ∈ allowed else {",
         "      return .failure([.notA\(name)(slice)])",
         "    }",
-        "    return .success(Parsed\(name)(location: slice))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonsNotContinued: nil))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
@@ -353,12 +353,17 @@ struct Node {
         "    guard ¬range.isEmpty else {",
         "      return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
-        "    return .success(Parsed\(name)(location: remainder[range]))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonsNotContinued: nil))",
       ].joined(separator: "\n")
     case .compound(let children):
       var result: [StrictString] = [
         "    var remainder = remainder",
       ]
+      if children.contains(where: { $0.kind == .array }) {
+        result.append(contentsOf: [
+          "    var reasonsNotContinued: [Parsed\(name).ParseError] = []",
+        ])
+      }
       for child in children {
         switch child.kind {
         case .fixed, .required, .optional:
@@ -382,39 +387,58 @@ struct Node {
           }
           result.append(contentsOf: [
             "    case .success(let parsed):",
-            "      remainder = remainder[parsed.location.endIndex...]",
+            "      remainder = remainder[parsed.result.location.endIndex...]",
             "    }",
           ])
         case .array:
           result.append(contentsOf: [
             "    var \(child.name): [Parsed\(child.type)] = []",
             "    while let parsed = try? Parsed\(child.type).diagnosticParseNext(in: remainder).get() {",
-            "      \(child.name).append(parsed)",
-            "      remainder = remainder[parsed.location.endIndex...]",
+            "      \(child.name).append(parsed.result)",
+            "      remainder = remainder[parsed.result.location.endIndex...]",
+            "    }",
+            "    switch Parsed\(child.type).diagnosticParseNext(in: remainder) {",
+            "    case .failure(let errors):",
+            "      reasonsNotContinued.append(contentsOf: errors.map({ .broken\(child.uppercasedName)($0) }).errors)",
+            "    case .success:",
+            "      fatalError(\u{22}If this succeeds, it should have been included in the previous iteration.\u{22})",
             "    }",
           ])
         }
       }
       result.append(contentsOf: [
         "    return .success(",
-        "      Parsed\(name)(",
+        "      DiagnosticParseResult(",
+        "        result: Parsed\(name)(",
       ])
       for childIndex in children.indices {
         let child = children[childIndex]
         switch child.kind {
         case .fixed, .required:
           result.append(contentsOf: [
-            "        \(child.name): (try? \(child.name).get())!\(childIndex == children.indices.last ? "" : ",")",
+            "          \(child.name): (try? \(child.name).get())!.result\(childIndex == children.indices.last ? "" : ",")",
           ])
         case .optional:
           result.append(contentsOf: [
-            "        \(child.name): try? \(child.name).get()\(childIndex == children.indices.last ? "" : ",")",
+            "          \(child.name): try? \(child.name).get().result\(childIndex == children.indices.last ? "" : ",")",
           ])
         case .array:
           result.append(contentsOf: [
-            "        \(child.name): \(child.name)\(childIndex == children.indices.last ? "" : ",")",
+            "          \(child.name): \(child.name)\(childIndex == children.indices.last ? "" : ",")",
           ])
         }
+      }
+      result.append(contentsOf: [
+        "        ),",
+      ])
+      if children.contains(where: { $0.kind == .array }) {
+        result.append(contentsOf: [
+          "        reasonsNotContinued: ErrorList(reasonsNotContinued)",
+        ])
+      } else {
+        result.append(contentsOf: [
+          "        reasonsNotContinued: nil",
+        ])
       }
       result.append(contentsOf: [
         "      )",
@@ -432,7 +456,12 @@ struct Node {
           "    case .failure(let error):",
           "      errors.append(contentsOf: error.errors.map({ .broken\(alternate.uppercasedName)($0) }))",
           "    case .success(let parsed):",
-          "      return .success(.\(alternate.name)(parsed))",
+          "      return .success(",
+          "        DiagnosticParseResult<Parsed\(name)>(",
+          "          result: .\(alternate.name)(parsed.result),",
+          "          reasonsNotContinued: parsed.reasonsNotContinued?.map({ .broken\(alternate.uppercasedName)($0) })",
+          "        )",
+          "      )",
           "    }",
         ])
       }
@@ -588,8 +617,10 @@ struct Node {
         switch child.kind {
         case .fixed, .required:
           return "case broken\(child.uppercasedName)(Parsed\(child.type).ParseError)"
-        case .optional, .array:
+        case .optional:
           return nil
+        case .array:
+          return "case broken\(child.uppercasedName)(Parsed\(child.type).ParseError)"
         }
       }
     case .alternates(let alternates):
@@ -609,12 +640,12 @@ struct Node {
     case .compound(let children):
       return children.flatMap { child in
         switch child.kind {
-        case .fixed, .required:
+        case .fixed, .required, .array:
           return [
             "case .broken\(child.uppercasedName)(let error):",
             "  return error.message",
           ] as [StrictString]
-        case .optional, .array:
+        case .optional:
           return []
         }
       }
@@ -638,12 +669,12 @@ struct Node {
     case .compound(let children):
       return children.flatMap { child in
         switch child.kind {
-        case .fixed, .required:
+        case .fixed, .required, .array:
           return [
             "case .broken\(child.uppercasedName)(let error):",
             "  return error.range",
           ] as [StrictString]
-        case .optional, .array:
+        case .optional:
           return []
         }
       }

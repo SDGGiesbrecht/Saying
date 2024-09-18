@@ -2,7 +2,9 @@ import SDGText
 
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
   associatedtype ParseError: DiagnosticError
-  static func diagnosticParseNext(in remainder: Slice<UTF8Segments>) -> Result<Self, ErrorList<ParseError>>
+  static func diagnosticParseNext(
+    in remainder: Slice<UTF8Segments>
+  ) -> Result<DiagnosticParseResult<Self>, ErrorList<ParseError>>
   static func fastParseNext(in remainder: Slice<UTF8Segments>) -> Self?
 }
 
@@ -14,11 +16,15 @@ extension ParsableSyntaxNode {
     case .failure(let errors):
       return .failure(errors.map({ .brokenNode($0) }))
     case .success(let parsed):
-      remainder = remainder[parsed.location.endIndex...]
+      remainder = remainder[parsed.result.location.endIndex...]
       guard remainder.isEmpty else {
-        return .failure([.extraneousText(remainder)])
+        if let errors = parsed.reasonsNotContinued {
+          return .failure(errors.map({ .brokenNode($0) }))
+        } else {
+          return .failure([.extraneousText(remainder)])
+        }
       }
-      return .success(parsed)
+      return .success(parsed.result)
     }
   }
   static func diagnosticParse(source: StrictString) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
