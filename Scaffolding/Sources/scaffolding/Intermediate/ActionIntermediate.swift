@@ -68,7 +68,7 @@ extension ActionIntermediate {
         }
       }
     }
-    var parameterTypes: [StrictString] = []
+    var parameterTypes: [ParsedUninterruptedIdentifier] = []
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for entry in namesSyntax {
@@ -77,7 +77,7 @@ extension ActionIntermediate {
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {
         case .type(let type):
-          parameterTypes.append(type.identifierText())
+          parameterTypes.append(type)
           reorderings[signatureName, default: []].append(position)
         case .reference(let reference):
           var resolving = reference.name.identifierText()
@@ -108,7 +108,7 @@ extension ActionIntermediate {
             return completeParameterIndexTable[name] == index
           })
       )
-      return ParameterIntermediate(names: names, type: type)
+      return ParameterIntermediate(names: names, type: type.identifierText(), typeDeclaration: type)
     }
     var c: NativeActionImplementation?
     var cSharp: NativeActionImplementation?
@@ -166,12 +166,12 @@ extension ActionIntermediate {
     for parameter in parameters {
       let thing = parameter.type
       if module.lookupThing(thing) == nil {
-        errors.append(.noSuchThing(thing))
+        errors.append(.noSuchThing(thing, reference: parameter.typeDeclaration!))
       }
     }
     if let thing = self.returnValue,
        module.lookupThing(thing) == nil {
-      errors.append(.noSuchThing(thing))
+      errors.append(.noSuchThing(thing, reference: self.declaration!.returnValue!.type))
     }
   }
 }

@@ -1,7 +1,7 @@
 import SDGText
 
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
-  associatedtype ParseError: Error
+  associatedtype ParseError: DiagnosticError
   static func diagnosticParseNext(in remainder: Slice<UTF8Segments>) -> Result<Self, ErrorList<ParseError>>
   static func fastParseNext(in remainder: Slice<UTF8Segments>) -> Self?
 }

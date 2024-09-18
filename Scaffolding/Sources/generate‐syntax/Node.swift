@@ -558,8 +558,14 @@ struct Node {
     return [
       "extension Parsed\(name) {",
       "",
-      "  \(isIndirect ? "indirect " : "")enum ParseError: Error {",
+      "  \(isIndirect ? "indirect " : "")enum ParseError: DiagnosticError {",
       parseErrorCases().lazy.map({ "    \($0)" }).joined(separator: "\n"),
+      "",
+      "    var range: Slice<UTF8Segments> {",
+      "      switch self {",
+      parseErrorRangeCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
+      "      }",
+      "    }",
       "  }",
       "}",
     ].joined(separator: "\n")
@@ -583,6 +589,35 @@ struct Node {
     case .alternates(let alternates):
       return alternates.map { alternate in
         return "case broken\(alternate.uppercasedName)(Parsed\(alternate.type).ParseError)"
+      }
+    }
+  }
+
+  func parseErrorRangeCases() -> [StrictString] {
+    switch kind {
+    case .fixedLeaf, .keyword, .variableLeaf:
+      return [
+        "case .notA\(name)(let location):",
+        "  return location",
+      ]
+    case .compound(let children):
+      return children.flatMap { child in
+        switch child.kind {
+        case .fixed, .required:
+          return [
+            "case .broken\(child.uppercasedName)(let error):",
+            "  return error.range",
+          ] as [StrictString]
+        case .optional, .array:
+          return []
+        }
+      }
+    case .alternates(let alternates):
+      return alternates.flatMap { alternate in
+        return [
+          "case .broken\(alternate.uppercasedName)(let error):",
+          "  return error.range",
+        ]
       }
     }
   }

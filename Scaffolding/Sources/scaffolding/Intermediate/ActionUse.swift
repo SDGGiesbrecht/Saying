@@ -22,7 +22,7 @@ extension ActionUse {
 
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
     if module.lookupAction(actionName) == nil {
-      errors.append(.noSuchAction(name: actionName, source: source))
+      errors.append(.noSuchAction(name: actionName, reference: source!))
     }
     for argument in arguments {
       argument.validateReferences(module: module, errors: &errors)

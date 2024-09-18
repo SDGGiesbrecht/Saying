@@ -1,4 +1,4 @@
-struct ErrorList<Element>: Error where Element: Error {
+struct ErrorList<Element>: Error where Element: DiagnosticError {
 
   init(_ errors: [Element]) {
     self.errors = errors
