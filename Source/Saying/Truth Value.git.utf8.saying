@@ -1,8 +1,16 @@
 thing
  (
+  español: valor de verdad
   English: truth value
+  العربية: قيمة صواب
+  português: valor de verdade
+  русский: значение истинности
   Deutsch: Wahrheitswert
+  한국어: 진릿값
   français : valeur de vérité
+  Türkçe: doğruluk değeri
+  italiano: valore di verità
+  Nederlands: waarheidswaarde
   ελληνικά: αληθοτιμή
   עברית: ערך אמת
  )
@@ -10,6 +18,121 @@ thing
  C♯: bool
  Kotlin: Boolean
  Swift: Bool
+
+action
+ [
+  [
+   español: Verdadero.
+   English: True.
+   العربية: صواب.
+   português: Verdadeiro.
+   русский: Истина.
+   Deutsch: Wahr.
+   한국어: 참.
+   français: Vrai.
+   Türkçe: Doğru.
+   italiano: Vero.
+   Nederlands: Waar.
+   ελληνικά: Αληθής.
+   עברית: אמת.
+  ]
+ ]
+ (
+  español: verdadero
+  English: true
+  العربية: صواب
+  português: verdadeiro
+  русский: истина.
+  Deutsch: wahr
+  한국어: 참
+  français : vrai
+  Türkçe: doğru
+  italiano: vero
+  Nederlands: waar
+  ελληνικά: αληθής
+  עברית: אמת
+ )
+ truth value
+ C: “¤(28)true¤(29)” (stdbool)
+ C♯: “¤(28)true¤(29)”
+ JavaScript: “¤(28)true¤(29)”
+ Kotlin: “¤(28)true¤(29)”
+ Swift: “¤(28)true¤(29)”
+
+action
+ [
+  [
+   español: Falso.
+   English: False.
+   العربية: خطأ.
+   português: Falso.
+   русский: Ложь.
+   Deutsch: Falsch.
+   한국어: 거짓.
+   français: Faux.
+   Türkçe: Yanlış.
+   italiano: Falso.
+   Nederlands: Onwaar.
+   ελληνικά: Ψευδής.
+   עברית: שקר.
+  ]
+ ]
+ (
+  español: falso
+  English: false
+  العربية: خطأ
+  português: falso
+  русский: ложь.
+  Deutsch: falsch
+  한국어: 거짓
+  français : faux
+  Türkçe: yanlış
+  italiano: falso
+  Nederlands: onwaar
+  ελληνικά: ψευδής
+  עברית: שקר
+ )
+ truth value
+ C: “¤(28)false¤(29)” (stdbool)
+ C♯: “¤(28)false¤(29)”
+ JavaScript: “¤(28)false¤(29)”
+ Kotlin: “¤(28)false¤(29)”
+ Swift: “¤(28)false¤(29)”
+
+action
+ [
+  [
+   English: Performs logical negation.
+   Deutsch: Führt eine logische Negation durch.
+  ]
+  test (verify ((not (true)) is (false)))
+  test (verify ((not (false)) is (true)))
+  parameter: negand
+   (
+    [
+     English: The truth value to be negated.
+     Deutsch: Die Wahrheitswert, die negiert werden soll.
+    ]
+   )
+ ]
+ (
+  English: not (negand: truth value)
+  English +: ¬(negand: [negand])
+  Deutsch: nicht (Wert: [negand])
+  Deutsch +: ¬(Wert: [negand])
+  français : non (valeur: [negand])
+  français +: ¬(valeur: [negand])
+  ελληνικά: όχι (τιμή: [negand])
+  ελληνικά +: ¬(τιμή: [negand])
+  עברית: לא (ערך: [negand])
+  עברית +: ¬(ערך: [negand])
+ )
+ truth value
+ C: “¤(28)¤(21)” negand “¤(29)”
+ C♯: “¤(28)¤(21)” negand “¤(29)”
+ JavaScript: “¤(28)¤(21)” negand “¤(29)”
+ Kotlin: “¤(28)¤(21)” negand “¤(29)”
+ Swift: «¤(28)¤(21)» negand “¤(29)”
 
 action
  [
@@ -38,10 +161,15 @@ action
  ]
  (
   English: (first: truth value) and (second: truth value)
+  English +: (first: [first]) ∧ (second: [second])
   Deutsch: (erste: [first]) und (zweite: [second])
+  Deutsch +: (erste: [first]) ∧ (zweite: [second])
   français : (première: [first]) et (deuxième: [second])
+  français +: (première: [first]) ∧ (deuxième: [second])
   ελληνικά: (πρώτη: [first]) και (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) ∧ (δεύτερα: [second])
   עברית: (ראשון: [first]) ו(שני: [second])
+  עברית +: (ראשון: [first]) ∧ (שני: [second])
  )
  truth value
  C: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
@@ -49,3 +177,133 @@ action
  JavaScript: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  Kotlin: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(26)¤(26) ” second „¤(29)“
+
+action
+ [
+  [
+   English: Performs logical disjunction.
+   Deutsch: Führt eine logische Disjunktion durch.
+  ]
+  test (verify (((true) or (true)) is (true)))
+  test (verify (((true) or (false)) is (true)))
+  test (verify (((false) or (true)) is (true)))
+  test (verify (((false) or (false)) is (false)))
+  parameter: first
+   (
+    [
+     English: A truth value.
+     Deutsch: Eine Wahrheitswert.
+    ]
+   )
+  parameter: second
+   (
+    [
+     English: Another truth value.
+     Deutsch: Eine weitere Wahrheitswert.
+    ]
+   )
+ ]
+ (
+  English: (first: truth value) or (second: truth value)
+  English +: (first: [first]) ∨ (second: [second])
+  Deutsch: (erste: [first]) oder (zweite: [second])
+  Deutsch +: (erste: [first]) ∨ (zweite: [second])
+  français : (première: [first]) ou (deuxième: [second])
+  français +: (première: [first]) ∨ (deuxième: [second])
+  ελληνικά: (πρώτη: [first]) ή (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) ∨ (δεύτερα: [second])
+  עברית: (ראשון: [first]) או (שני: [second])
+  עברית +: (ראשון: [first]) ∨ (שני: [second])
+ )
+ truth value
+ C: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
+ C♯: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
+ JavaScript: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
+ Kotlin: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
+ Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
+
+action
+ [
+  [
+   English: Compares two truth values for equality.
+  ]
+  test (verify (((true) is (true)) is (true)))
+  test (verify (((true) is (false)) is (false)))
+  test (verify (((false) is (true)) is (false)))
+  test (verify (((false) is (false)) is (true)))
+  parameter: first
+   (
+    [
+     English: A truth value.
+     Deutsch: Eine Wahrheitswert.
+    ]
+   )
+  parameter: second
+   (
+    [
+     English: Another truth value.
+     Deutsch: Eine weitere Wahrheitswert.
+    ]
+   )
+ ]
+ (
+  English: (first: truth value) is (second: truth value)
+  English +: (first: [first]) = (second: [second])
+  Deutsch: (erste: [first]) ist (zweite: [second])
+  Deutsch +: (erste: [first]) = (zweite: [second])
+  français : (première: [first]) est (deuxième: [second])
+  français +: (première: [first]) = (deuxième: [second])
+  ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
+  עברית: (ראשון: [first]) (שני: [second])
+  עברית +: (ראשון: [first]) = (שני: [second])
+ )
+ truth value
+ C: “¤(28)” first “ == ” second “¤(29)”
+ C♯: “¤(28)” first “ == ” second “¤(29)”
+ JavaScript: “¤(28)” first “ == ” second “¤(29)”
+ Kotlin: “¤(28)” first “ == ” second “¤(29)”
+ Swift: «¤(28)» first “ == ” second „¤(29)“
+
+action
+ [
+  [
+   English: Compares two truth values for inequality.
+  ]
+  test (verify (((true) is not (true)) is (false)))
+  test (verify (((true) is not (false)) is (true)))
+  test (verify (((false) is not (true)) is (true)))
+  test (verify (((false) is not (false)) is (false)))
+  parameter: first
+   (
+    [
+     English: A truth value.
+     Deutsch: Eine Wahrheitswert.
+    ]
+   )
+  parameter: second
+   (
+    [
+     English: Another truth value.
+     Deutsch: Eine weitere Wahrheitswert.
+    ]
+   )
+ ]
+ (
+  English: (first: truth value) is not (second: truth value)
+  English +: (first: [first]) ≠ (second: [second])
+  Deutsch: (erste: [first]) ist nicht (zweite: [second])
+  Deutsch +: (erste: [first]) ≠ (zweite: [second])
+  français : (première: [first]) n’est pas (deuxième: [second])
+  français +: (première: [first]) ≠ (deuxième: [second])
+  ελληνικά: (πρώτη: [first]) δεν είναι (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) ≠ (δεύτερα: [second])
+  עברית: (ראשון: [first]) לא (שני: [second])
+  עברית +: (ראשון: [first]) ≠ (שני: [second])
+ )
+ truth value
+ C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+ C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+ JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+ Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+ Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“

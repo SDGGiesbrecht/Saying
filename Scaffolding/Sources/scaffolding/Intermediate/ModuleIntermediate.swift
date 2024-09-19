@@ -30,6 +30,7 @@ extension ModuleIntermediate {
   }
 
   mutating func add(file: ParsedDeclarationList) throws {
+    var errors: [ConstructionError] = []
     for declaration in file.declarations {
       let documentation: ParsedAttachedDocumentation?
       let parameters: Set<StrictString>
@@ -43,7 +44,7 @@ extension ModuleIntermediate {
         let identifier = thing.names.identifier()
         for name in thing.names {
           if identifierMapping[name] ≠ nil {
-            throw ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!])
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!]))
           }
           identifierMapping[name] = identifier
         }
@@ -56,7 +57,7 @@ extension ModuleIntermediate {
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
-            throw ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!])
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!]))
           }
           identifierMapping[name] = identifier
         }
@@ -79,6 +80,9 @@ extension ModuleIntermediate {
         }
       }
     }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
+    }
   }
 
   mutating func addMagicSymbols() {
@@ -92,45 +96,6 @@ extension ModuleIntermediate {
       javaScript: NativeActionImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
       kotlin: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       swift: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"])
-    )
-    identifierMapping["() is ()"] = "() is ()"
-    actions["() is ()"] = ActionIntermediate(
-      names: ["() is ()"],
-      parameters: [
-        ParameterIntermediate(names: ["a"], type: "truth value"),
-        ParameterIntermediate(names: ["b"], type: "truth value")
-      ],
-      reorderings: ["() is ()": [0, 1]],
-      returnValue: "truth value",
-      c: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      cSharp: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      javaScript: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      kotlin: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"]),
-      swift: NativeActionImplementation(reordering: [0, 1], textComponents: ["(", " == ", ")"])
-    )
-    identifierMapping["true"] = "true"
-    actions["true"] = ActionIntermediate(
-      names: ["true"],
-      parameters: [],
-      reorderings: ["true": []],
-      returnValue: "truth value",
-      c: NativeActionImplementation(reordering: [], textComponents: ["true"], requiredImport: "stdbool"),
-      cSharp: NativeActionImplementation(reordering: [], textComponents: ["true"]),
-      javaScript: NativeActionImplementation(reordering: [], textComponents: ["true"]),
-      kotlin: NativeActionImplementation(reordering: [], textComponents: ["true"]),
-      swift: NativeActionImplementation(reordering: [], textComponents: ["true"])
-    )
-    identifierMapping["false"] = "false"
-    actions["false"] = ActionIntermediate(
-      names: ["false"],
-      parameters: [],
-      reorderings: ["false": []],
-      returnValue: "truth value",
-      c: NativeActionImplementation(reordering: [], textComponents: ["false"], requiredImport: "stdbool"),
-      cSharp: NativeActionImplementation(reordering: [], textComponents: ["false"]),
-      javaScript: NativeActionImplementation(reordering: [], textComponents: ["false"]),
-      kotlin: NativeActionImplementation(reordering: [], textComponents: ["false"]),
-      swift: NativeActionImplementation(reordering: [], textComponents: ["false"])
     )
   }
 
