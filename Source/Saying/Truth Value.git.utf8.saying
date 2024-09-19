@@ -53,11 +53,11 @@ action
   עברית: אמת
  )
  truth value
- C: “true” (stdbool)
- C♯: “true”
- JavaScript: “true”
- Kotlin: “true”
- Swift: “true”
+ C: “¤(28)true¤(29)” (stdbool)
+ C♯: “¤(28)true¤(29)”
+ JavaScript: “¤(28)true¤(29)”
+ Kotlin: “¤(28)true¤(29)”
+ Swift: “¤(28)true¤(29)”
 
 action
  [
@@ -93,11 +93,11 @@ action
   עברית: שקר
  )
  truth value
- C: “false” (stdbool)
- C♯: “false”
- JavaScript: “false”
- Kotlin: “false”
- Swift: “false”
+ C: “¤(28)false¤(29)” (stdbool)
+ C♯: “¤(28)false¤(29)”
+ JavaScript: “¤(28)false¤(29)”
+ Kotlin: “¤(28)false¤(29)”
+ Swift: “¤(28)false¤(29)”
 
 action
  [
