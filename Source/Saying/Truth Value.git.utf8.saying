@@ -1,8 +1,16 @@
 thing
  (
+  español: valor de verdad
   English: truth value
+  العربية: قيمة صواب
+  português: valor de verdade
+  русский: значение истинности
   Deutsch: Wahrheitswert
+  한국어: 진릿값
   français : valeur de vérité
+  Türkçe: doğruluk değeri
+  italiano: valore di verità
+  Nederlands: waarheidswaarde
   ελληνικά: αληθοτιμή
   עברית: ערך אמת
  )
@@ -10,6 +18,86 @@ thing
  C♯: bool
  Kotlin: Boolean
  Swift: Bool
+
+action
+ [
+  [
+   español: Verdadero.
+   English: True.
+   العربية: صواب.
+   português: Verdadeiro.
+   русский: Истина.
+   Deutsch: Wahr.
+   한국어: 참.
+   français: Vrai.
+   Türkçe: Doğru.
+   italiano: Vero.
+  Nederlands: Waar.
+   ελληνικά: Αληθής.
+   עברית: אמת.
+  ]
+ ]
+ (
+  español: verdadero
+  English: true
+  العربية: صواب
+  português: verdadeiro
+  русский: истина.
+  Deutsch: wahr
+  한국어: 참
+  français : vrai
+  Türkçe: doğru
+  italiano: vero
+  Nederlands: waar
+  ελληνικά: αληθής
+  עברית: אמת
+ )
+ truth value
+ C: “true”
+ C♯: “true”
+ JavaScript: “true”
+ Kotlin: “true”
+ Swift: “true”
+
+action
+ [
+  [
+   español: Falso.
+   English: False.
+   العربية: خطأ.
+   português: Falso.
+   русский: Ложь.
+   Deutsch: Falsch.
+   한국어: 거짓.
+   français: Faux.
+   Türkçe: Yanlış.
+   italiano: Falso.
+   Nederlands: Onwaar.
+   ελληνικά: Ψευδής.
+   עברית: שקר.
+  ]
+ ]
+ (
+  español: falso
+  English: false
+  العربية: خطأ
+  português: falso
+  русский: ложь.
+  Deutsch: falsch
+  한국어: 거짓
+  français : faux
+  Türkçe: yanlış
+  italiano: falso
+  Nederlands: onwaar
+  ελληνικά: ψευδής
+  עברית: שקר
+ )
+ truth value
+ C: “false”
+ C♯: “false”
+ JavaScript: “false”
+ Kotlin: “false”
+ Swift: “false”
 
 action
  [
@@ -206,7 +294,7 @@ action
   English +: (first: [first]) ≠ (second: [second])
   Deutsch: (erste: [first]) ist nicht (zweite: [second])
   Deutsch +: (erste: [first]) ≠ (zweite: [second])
-  français : (première: [first]) n’ est pas (deuxième: [second])
+  français : (première: [first]) n’est pas (deuxième: [second])
   français +: (première: [first]) ≠ (deuxième: [second])
   ελληνικά: (πρώτη: [first]) δεν είναι (δεύτερα: [second])
   ελληνικά +: (πρώτη: [first]) ≠ (δεύτερα: [second])

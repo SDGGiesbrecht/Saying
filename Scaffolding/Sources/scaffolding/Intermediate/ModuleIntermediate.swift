@@ -97,30 +97,6 @@ extension ModuleIntermediate {
       kotlin: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"]),
       swift: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"])
     )
-    identifierMapping["true"] = "true"
-    actions["true"] = ActionIntermediate(
-      names: ["true"],
-      parameters: [],
-      reorderings: ["true": []],
-      returnValue: "truth value",
-      c: NativeActionImplementation(reordering: [], textComponents: ["true"], requiredImport: "stdbool"),
-      cSharp: NativeActionImplementation(reordering: [], textComponents: ["true"]),
-      javaScript: NativeActionImplementation(reordering: [], textComponents: ["true"]),
-      kotlin: NativeActionImplementation(reordering: [], textComponents: ["true"]),
-      swift: NativeActionImplementation(reordering: [], textComponents: ["true"])
-    )
-    identifierMapping["false"] = "false"
-    actions["false"] = ActionIntermediate(
-      names: ["false"],
-      parameters: [],
-      reorderings: ["false": []],
-      returnValue: "truth value",
-      c: NativeActionImplementation(reordering: [], textComponents: ["false"], requiredImport: "stdbool"),
-      cSharp: NativeActionImplementation(reordering: [], textComponents: ["false"]),
-      javaScript: NativeActionImplementation(reordering: [], textComponents: ["false"]),
-      kotlin: NativeActionImplementation(reordering: [], textComponents: ["false"]),
-      swift: NativeActionImplementation(reordering: [], textComponents: ["false"])
-    )
   }
 
   func validateReferences() throws {
