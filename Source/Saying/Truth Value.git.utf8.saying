@@ -6,7 +6,7 @@ thing
   português: valor de verdade
   русский: значение истинности
   Deutsch: Wahrheitswert
-  한국어: 진릿값
+  한국어: 진릿값
   français : valeur de vérité
   Türkçe: doğruluk değeri
   italiano: valore di verità
@@ -28,11 +28,11 @@ action
    português: Verdadeiro.
    русский: Истина.
    Deutsch: Wahr.
-   한국어: 참.
+   한국어: 참.
    français: Vrai.
    Türkçe: Doğru.
    italiano: Vero.
-  Nederlands: Waar.
+   Nederlands: Waar.
    ελληνικά: Αληθής.
    עברית: אמת.
   ]
@@ -44,7 +44,7 @@ action
   português: verdadeiro
   русский: истина.
   Deutsch: wahr
-  한국어: 참
+  한국어: 참
   français : vrai
   Türkçe: doğru
   italiano: vero
@@ -64,11 +64,11 @@ action
   [
    español: Falso.
    English: False.
-   العربية: خطأ.
+   العربية: خطأ.
    português: Falso.
    русский: Ложь.
    Deutsch: Falsch.
-   한국어: 거짓.
+   한국어: 거짓.
    français: Faux.
    Türkçe: Yanlış.
    italiano: Falso.
@@ -80,11 +80,11 @@ action
  (
   español: falso
   English: false
-  العربية: خطأ
+  العربية: خطأ
   português: falso
   русский: ложь.
   Deutsch: falsch
-  한국어: 거짓
+  한국어: 거짓
   français : faux
   Türkçe: yanlış
   italiano: falso
