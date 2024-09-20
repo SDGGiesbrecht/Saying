@@ -20,12 +20,17 @@ extension ActionUse {
     source = use
   }
 
-  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
-    if module.lookupAction(actionName) == nil {
+  func validateReferences(module: ModuleIntermediate, testContext: Bool, errors: inout [ReferenceError]) {
+    if let action = module.lookupAction(actionName) {
+      if ¬testContext,
+        action.testOnlyAccess {
+        errors.append(.actionUnavailableOutsideTests(reference: source!))
+      }
+    } else {
       errors.append(.noSuchAction(name: actionName, reference: source!))
     }
     for argument in arguments {
-      argument.validateReferences(module: module, errors: &errors)
+      argument.validateReferences(module: module, testContext: testContext, errors: &errors)
     }
   }
 }
