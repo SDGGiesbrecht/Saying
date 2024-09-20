@@ -85,20 +85,6 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func addMagicSymbols() {
-    identifierMapping["verify ()"] = "verify ()"
-    actions["verify ()"] = ActionIntermediate(
-      names: ["verify ()"],
-      parameters: [ParameterIntermediate(names: ["condition"], type: "truth value")],
-      reorderings: ["verify ()": [0]],
-      c: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"], requiredImport: "assert"),
-      cSharp: NativeActionImplementation(reordering: [0], textComponents: ["Assert(", ")"]),
-      javaScript: NativeActionImplementation(reordering: [0], textComponents: ["console.assert(", ")"]),
-      kotlin: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"]),
-      swift: NativeActionImplementation(reordering: [0], textComponents: ["assert(", ")"])
-    )
-  }
-
   func validateReferences() throws {
     var errors: [ReferenceError] = []
     for action in actions {

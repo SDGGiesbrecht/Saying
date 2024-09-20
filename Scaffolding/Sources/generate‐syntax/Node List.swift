@@ -31,7 +31,7 @@ extension Node {
               values.append(contentsOf: 0x2B...0x2C) // +–,
               values.append(0x2E) // .
               values.append(contentsOf: 0x30...0x39) // 0–9
-              values.append(contentsOf: 0x3C...0x3E) // <–>
+              values.append(contentsOf: 0x3B...0x3E) // ;–>
               values.append(contentsOf: 0x41...0x5A) // A–Z
               values.append(contentsOf: 0x61...0x7A) // a–z
               values.append(0xAC) // ¬
@@ -39,8 +39,7 @@ extension Node {
               values.append(0xDF) // ß
               values.append(0x131) // ı
               values.append(contentsOf: 0x300...0x303) // ◌̀–◌̃
-              values.append(contentsOf: 0x306...0x307) // ◌̆–◌̇
-              values.append(0x308) // ◌̈
+              values.append(contentsOf: 0x306...0x308) // ◌̆–◌̈
               values.append(0x327) // ◌̧
               values.append(0x338) // ◌̸
               values.append(contentsOf: 0x391...0x3A1) // Α–Ρ
