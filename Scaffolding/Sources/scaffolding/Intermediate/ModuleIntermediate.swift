@@ -91,7 +91,7 @@ extension ModuleIntermediate {
       action.value.validateReferences(module: self, errors: &errors)
     }
     for test in tests {
-      test.action.validateReferences(module: self, errors: &errors)
+      test.action.validateReferences(module: self, testContext: true, errors: &errors)
     }
     if ¬errors.isEmpty {
       throw ErrorList(errors)
