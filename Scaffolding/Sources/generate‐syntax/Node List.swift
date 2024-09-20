@@ -22,7 +22,9 @@ extension Node {
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
-          Node(name: "TestKeyword", kind: .keyword(["test", "Test", /* test */ "δοκιμή", "בדיקה"])),
+          Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
+          Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
+          Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
           Node(name: "ParameterKeyword", kind: .keyword(["parameter", "Übergabewert", "paramètre", "παράμετρος", "פרמטר"])),
           Node(
             name: "IdentifierComponent",
@@ -215,6 +217,24 @@ extension Node {
               Alternate(name: "sixNine", type: "SixNineString"),
               Alternate(name: "lowSix", type: "LowSixString"),
               Alternate(name: "chevrons", type: "ChevronString"),
+            ])
+          ),
+          Node(
+            name: "Access",
+            kind: .compound(children: [
+              Child(name: "space", type: "Space", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "keyword", type: "ClientsKeyword", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "TestAccess",
+            kind: .compound(children: [
+              Child(name: "space", type: "Space", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "keyword", type: "TestsKeyword", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
 
@@ -550,6 +570,8 @@ extension Node {
             name: "ThingDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "ThingKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
@@ -561,6 +583,8 @@ extension Node {
             name: "ActionDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "ActionKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
