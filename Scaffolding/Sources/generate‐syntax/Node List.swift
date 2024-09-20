@@ -36,31 +36,74 @@ extension Node {
               values.append(contentsOf: 0x61...0x7A) // a–z
               values.append(0xAC) // ¬
               values.append(0xB1) // ±
-              values.append(0xDF) // ß
+              values.append(0xB7) // ·
+              values.append(0xC6) // Æ
+              values.append(0xD0) // Ð
+              values.append(contentsOf: 0xD7...0xD8) // ×–Ø
+              values.append(contentsOf: 0xDE...0xDF) // Þ–ß
+              values.append(0xE6) // æ
+              values.append(0xF0) // ð
+              values.append(contentsOf: 0xF7...0xF8) // ÷–ø
+              values.append(0xFE) // þ
+              values.append(contentsOf: 0x110...0x111) // Đ–đ
+              values.append(contentsOf: 0x126...0x127) // Ħ–ħ
               values.append(0x131) // ı
-              values.append(contentsOf: 0x300...0x303) // ◌̀–◌̃
-              values.append(contentsOf: 0x306...0x308) // ◌̆–◌̈
-              values.append(0x327) // ◌̧
+              values.append(contentsOf: 0x141...0x142) // Ł–ł
+              values.append(contentsOf: 0x152...0x153) // Œ–œ
+              values.append(0x18F) // Ə
+              values.append(0x259) // ə
+              values.append(contentsOf: 0x300...0x304) // ◌̀–◌̄
+              values.append(contentsOf: 0x306...0x30C) // ◌̆–◌̌
+              values.append(0x31B) // ◌̛
+              values.append(0x323) // ◌̣
+              values.append(contentsOf: 0x326...0x328) // ◌̦–◌̨
               values.append(0x338) // ◌̸
               values.append(contentsOf: 0x391...0x3A1) // Α–Ρ
               values.append(contentsOf: 0x3A3...0x3A9) // Σ–Ω
               values.append(contentsOf: 0x3B1...0x3C9) // α–ω
-              values.append(contentsOf: 0x410...0x418) // А–И
+              values.append(0x402) // Ђ
+              values.append(contentsOf: 0x404...0x406) // Є–І
+              values.append(contentsOf: 0x408...0x40B) // Ј–Ћ
+              values.append(contentsOf: 0x40F...0x418) // Џ–И
               values.append(contentsOf: 0x41A...0x438) // К–и
               values.append(contentsOf: 0x43A...0x44F) // к–я
+              values.append(0x452) // ђ
+              values.append(contentsOf: 0x454...0x456) // є–і
+              values.append(contentsOf: 0x458...0x45B) // ј–ћ
+              values.append(0x45F) // џ
+              values.append(contentsOf: 0x490...0x491) // Ґ–ґ
               values.append(contentsOf: 0x5D0...0x5EA) // א–ת
               values.append(0x60C) // ،
+              values.append(0x61B) // ؛
               values.append(0x621) // ء
               values.append(contentsOf: 0x627...0x63A) // ا–غ
               values.append(contentsOf: 0x641...0x64A) // ف–ي
               values.append(contentsOf: 0x653...0x655) // ◌ٓ–◌ٕ
               values.append(contentsOf: 0x660...0x669) // ٠–٩
+              values.append(0x679) // ٹ
+              values.append(0x67E) // پ
+              values.append(0x686) // چ
+              values.append(0x688) // ڈ
+              values.append(0x691) // ڑ
+              values.append(0x698) // ژ
+              values.append(0x6A9) // ک
+              values.append(0x6AF) // گ
+              values.append(0x6BA) // ں
+              values.append(0x6BE) // ھ
+              values.append(0x6C1) // ہ
+              values.append(0x6CC) // ی
+              values.append(0x6D2) // ے
+              values.append(0x6D4) // ۔
+              values.append(contentsOf: 0x6F0...0x6F9) // ۰–۹
               values.append(contentsOf: 0x1100...0x1112) // ᄀ–ᄒ
               values.append(contentsOf: 0x1161...0x1175) // ᅡ–ᅵ
               values.append(contentsOf: 0x11A8...0x11C2) // ᆨ–ᇂ
+              values.append(0x2010) // ‐
               values.append(0x2019) // ’
               values.append(contentsOf: 0x2212...0x2213) // −–∓
               values.append(contentsOf: 0x2227...0x222A) // ∧–∪
+              values.append(0x2236) // ∶
+              values.append(0x22C5) // ⋅
               values.append(contentsOf: 0x266D...0x266F) // ♭–♯
               return Set(values.lazy.map({ Unicode.Scalar($0)! }))
             }())
