@@ -7,6 +7,8 @@ struct ActionIntermediate {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
+  var clientAccess: Bool
+  var testOnlyAccess: Bool
   var c: NativeActionImplementation?
   var cSharp: NativeActionImplementation?
   var javaScript: NativeActionImplementation?
@@ -152,6 +154,8 @@ extension ActionIntermediate {
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValue?.type.identifierText(),
+        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         c: c,
         cSharp: cSharp,
         javaScript: javaScript,
@@ -162,16 +166,42 @@ extension ActionIntermediate {
     )
   }
 
+  func validate(
+    signatureType typeIdentifier: StrictString,
+    reference: ParsedUninterruptedIdentifier,
+    module: ModuleIntermediate,
+    errors: inout [ReferenceError]
+  ) {
+    if let thing = module.lookupThing(typeIdentifier) {
+      if self.clientAccess,
+        ¬thing.clientAccess {
+        errors.append(.thingAccessNarrowerThanSignature(reference: reference))
+      }
+      if ¬self.testOnlyAccess,
+        thing.testOnlyAccess {
+        errors.append(.thingUnavailableOutsideTests(reference: reference))
+      }
+    } else {
+      errors.append(.noSuchThing(typeIdentifier, reference: reference))
+    }
+  }
+
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
     for parameter in parameters {
-      let thing = parameter.type
-      if module.lookupThing(thing) == nil {
-        errors.append(.noSuchThing(thing, reference: parameter.typeDeclaration!))
-      }
+      validate(
+        signatureType: parameter.type,
+        reference: parameter.typeDeclaration,
+        module: module,
+        errors: &errors
+      )
     }
-    if let thing = self.returnValue,
-       module.lookupThing(thing) == nil {
-      errors.append(.noSuchThing(thing, reference: self.declaration!.returnValue!.type))
+    if let thing = returnValue {
+      validate(
+        signatureType: thing,
+        reference: declaration!.returnValue!.type,
+        module: module,
+        errors: &errors
+      )
     }
   }
 }
@@ -198,6 +228,8 @@ extension ActionIntermediate {
         parameters: parameters,
         reorderings: reorderings,
         returnValue: returnValue,
+        clientAccess: self.clientAccess,
+        testOnlyAccess: self.testOnlyAccess,
         implementation: ActionUse(
           actionName: self.names.identifier(),
           arguments: self.parameters.map({ parameter in

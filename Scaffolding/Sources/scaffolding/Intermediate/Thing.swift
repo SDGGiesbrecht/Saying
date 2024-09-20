@@ -3,6 +3,8 @@ import SDGText
 
 struct Thing {
   var names: Set<StrictString>
+  var clientAccess: Bool
+  var testOnlyAccess: Bool
   var c: NativeThingImplementation?
   var cSharp: NativeThingImplementation?
   var kotlin: NativeThingImplementation?
@@ -59,6 +61,8 @@ extension Thing {
     return .success(
       Thing(
         names: names,
+        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         c: c,
         cSharp: cSharp,
         kotlin: kotlin,
