@@ -1,4 +1,4 @@
-thing
+thing (public)
  (
   español: valor de verdad
   English: truth value
@@ -19,7 +19,7 @@ thing
  Kotlin: Boolean
  Swift: Bool
 
-action
+action (public)
  [
   [
    español: Verdadero.
@@ -59,7 +59,7 @@ action
  Kotlin: “¤(28)true¤(29)”
  Swift: “¤(28)true¤(29)”
 
-action
+action (public)
  [
   [
    español: Falso.
@@ -99,7 +99,7 @@ action
  Kotlin: “¤(28)false¤(29)”
  Swift: “¤(28)false¤(29)”
 
-action
+action (public)
  [
   [
    English: Performs logical negation.
@@ -134,7 +134,7 @@ action
  Kotlin: “¤(28)¤(21)” negand “¤(29)”
  Swift: «¤(28)¤(21)» negand “¤(29)”
 
-action
+action (public)
  [
   [
    English: Performs logical conjuction.
@@ -178,7 +178,7 @@ action
  Kotlin: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(26)¤(26) ” second „¤(29)“
 
-action
+action (public)
  [
   [
    English: Performs logical disjunction.
@@ -222,7 +222,7 @@ action
  Kotlin: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
 
-action
+action (public)
  [
   [
    English: Compares two truth values for equality.
@@ -265,7 +265,7 @@ action
  Kotlin: “¤(28)” first “ == ” second “¤(29)”
  Swift: «¤(28)» first “ == ” second „¤(29)“
 
-action
+action (public)
  [
   [
    English: Compares two truth values for inequality.
