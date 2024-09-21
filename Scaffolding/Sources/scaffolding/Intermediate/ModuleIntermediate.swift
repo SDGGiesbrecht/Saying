@@ -6,6 +6,7 @@ struct ModuleIntermediate {
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
+  var abilities: [StrictString: Ability] = [:]
   var tests: [TestIntermediate] = []
 }
 
@@ -67,7 +68,14 @@ extension ModuleIntermediate {
         parameters = []
         let ability = try Ability.construct(abilityNode).get()
         namespace = [ability.names]
-        #warning("Doing nothing with it yet.")
+        let identifier = ability.names.identifier()
+        for name in ability.names {
+          if identifierMapping[name] ≠ nil {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!]))
+          }
+          identifierMapping[name] = identifier
+        }
+        abilities[identifier] = ability
       }
       if let documentation = documentation {
         var testIndex = 1
