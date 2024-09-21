@@ -486,7 +486,7 @@ extension Node {
           ),
 
           Node(
-            name: "AbilityParameterDeclaration",
+            name: "AbilityParameterType",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
@@ -494,7 +494,7 @@ extension Node {
             ])
           ),
           Node(
-            name: "AbilityParameterAlias",
+            name: "AbilityParameterReference",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
@@ -506,8 +506,8 @@ extension Node {
           Node(
             name: "AbilityParameter",
             kind: .alternates([
-              Alternate(name: "declaration", type: "AbilityParameterDeclaration"),
-              Alternate(name: "alias", type: "AbilityParameterAlias"),
+              Alternate(name: "type", type: "AbilityParameterType"),
+              Alternate(name: "reference", type: "AbilityParameterReference"),
             ])
           ),
         ],
