@@ -62,6 +62,12 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         actions[identifier] = action
+      case .ability(let abilityNode):
+        documentation = abilityNode.documentation
+        parameters = []
+        let ability = try Ability.construct(abilityNode).get()
+        namespace = [ability.names]
+        #warning("Doing nothing with it yet.")
       }
       if let documentation = documentation {
         var testIndex = 1

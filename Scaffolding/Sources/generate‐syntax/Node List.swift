@@ -22,6 +22,7 @@ extension Node {
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
+          Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
@@ -594,10 +595,22 @@ extension Node {
             ])
           ),
           Node(
+            name: "AbilityDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "AbilityKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ThingName", kind: .required),
+            ])
+          ),
+          Node(
             name: "Declaration",
             kind: .alternates([
               Alternate(name: "thing", type: "ThingDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
+              Alternate(name: "ability", type: "AbilityDeclaration"),
             ])
           ),
         ],
