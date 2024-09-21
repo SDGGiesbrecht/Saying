@@ -5,36 +5,36 @@ ability (clients)
  )
  (
   requirement (clients)
-  [
    [
-    English: Compares two values for equality.
+    [
+     English: Compares two values for equality.
+    ]
+    parameter: first
+     (
+      [
+       English: A value.
+       Deutsch: Eine Wert.
+      ]
+     )
+    parameter: second
+     (
+      [
+       English: Another value.
+       Deutsch: Eine weitere Wert.
+      ]
+     )
    ]
-   parameter: first
-    (
-     [
-      English: A value.
-      Deutsch: Eine Wert.
-     ]
-    )
-   parameter: second
-    (
-     [
-      English: Another value.
-      Deutsch: Eine weitere Wert.
-     ]
-    )
-   ]
-  (
-   English: (first: thing) is (second: thing)
-   English +: (first: [first]) = (second: [second])
-   Deutsch: (erste: [first]) ist (zweite: [second])
-   Deutsch +: (erste: [first]) = (zweite: [second])
-   français : (première: [first]) est (deuxième: [second])
-   français +: (première: [first]) = (deuxième: [second])
-   ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
-   ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
-   עברית: (ראשון: [first]) (שני: [second])
-   עברית +: (ראשון: [first]) = (שני: [second])
-  )
-  truth value
+   (
+    English: (first: thing) is (second: thing)
+    English +: (first: [first]) = (second: [second])
+    Deutsch: (erste: [first]) ist (zweite: [second])
+    Deutsch +: (erste: [first]) = (zweite: [second])
+    français : (première: [first]) est (deuxième: [second])
+    français +: (première: [first]) = (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
+    עברית: (ראשון: [first]) (שני: [second])
+    עברית +: (ראשון: [first]) = (שני: [second])
+   )
+   truth value
  )
