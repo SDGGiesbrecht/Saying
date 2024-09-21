@@ -558,7 +558,14 @@ extension Node {
           ),
 
           Node(
-            name: "ReturnValue",
+            name: "ActionReturnValue",
+            kind: .compound(children: [
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "RequirementReturnValue",
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
@@ -662,8 +669,8 @@ extension Node {
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
-              Child(name: "returnValue", type: "ReturnValue", kind: .optional),
-              Child(name: "implementationLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "returnValue", type: "ActionReturnValue", kind: .optional),
               Child(name: "implementation", type: "ActionImplementations", kind: .required),
             ])
           ),
@@ -676,7 +683,7 @@ extension Node {
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
-              Child(name: "returnValue", type: "ReturnValue", kind: .optional),
+              Child(name: "returnValue", type: "RequirementReturnValue", kind: .optional),
             ])
           ),
 
