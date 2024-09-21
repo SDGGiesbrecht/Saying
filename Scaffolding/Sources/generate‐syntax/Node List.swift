@@ -22,6 +22,7 @@ extension Node {
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
+          Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
@@ -485,10 +486,82 @@ extension Node {
           ),
 
           Node(
+            name: "AbilityParameterDeclaration",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "AbilityParameterAlias",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "reference", type: "ParameterReference", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "AbilityParameter",
+            kind: .alternates([
+              Alternate(name: "declaration", type: "AbilityParameterDeclaration"),
+              Alternate(name: "alias", type: "AbilityParameterAlias"),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "AbilityParameterList",
+          entryName: "parameter", entryNamePlural: "parameters",
+          entryType: "AbilityParameter",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
+        ),
+        [
+          Node(
+            name: "AbilitySignature",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "parameters", type: "AbilityParameterList", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "AbilityNameEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "name", type: "AbilitySignature", kind: .required),
+            ])
+          )
+        ],
+        Node.separatedList(
+          name: "AbilityNameList",
+          entryName: "name", entryNamePlural: "names",
+          entryType: "AbilityNameEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak",
+          fixedSeparator: true
+        ),
+        [
+          Node(
+            name: "AbilityName",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "names", type: "AbilityNameList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+
+          Node(
             name: "ReturnValue",
             kind: .compound(children: [
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
             ])
           ),
 
@@ -589,9 +662,42 @@ extension Node {
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "returnValue", type: "ReturnValue", kind: .optional),
+              Child(name: "implementationLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "implementation", type: "ActionImplementations", kind: .required),
+            ])
+          ),
+          Node(
+            name: "RequirementDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "RequirementKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ActionName", kind: .required),
+              Child(name: "returnValue", type: "ReturnValue", kind: .optional),
+            ])
+          ),
+
+        ],
+          Node.separatedList(
+            name: "RequirementsList",
+            entryName: "requirement", entryNamePlural: "requirements",
+            entryType: "RequirementDeclaration",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreak",
+            fixedSeparator: true
+          ),
+        [
+          Node(
+            name: "Requirements",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "requirements", type: "RequirementsList", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
           Node(
@@ -602,9 +708,12 @@ extension Node {
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
-              Child(name: "name", type: "ThingName", kind: .required),
+              Child(name: "name", type: "AbilityName", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "requirements", type: "Requirements", kind: .required),
             ])
           ),
+
           Node(
             name: "Declaration",
             kind: .alternates([

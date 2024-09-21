@@ -15,10 +15,11 @@ extension Ability {
   ) -> Result<Ability, ErrorList<Ability.ConstructionError>> {
     var errors: [Ability.ConstructionError] = []
 
-    let names: Set<StrictString> = Set(
+    #warning("Not implemented yet.")
+    let names: Set<StrictString> = []/* Set(
       declaration.name.names.names
         .lazy.map({ $0.name.identifierText() })
-    )
+    )*/
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
