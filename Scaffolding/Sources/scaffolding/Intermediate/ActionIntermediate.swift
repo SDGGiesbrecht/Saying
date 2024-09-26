@@ -37,10 +37,9 @@ extension ActionIntermediate {
     var names: Set<StrictString> = []
     var parameterIndices: [StrictString: Int] = [:]
     var parameterReferences: [StrictString: StrictString] = [:]
-    let namesSyntax = declaration.name.names.names
+    let namesDictionary = declaration.name.names
     var foundTypeSignature = false
-    for entry in namesSyntax {
-      let signature = entry.name
+    for (_, signature) in namesDictionary {
       names.insert(signature.name())
       var declaresTypes: Bool?
       let parameters = signature.parameters()
@@ -73,8 +72,7 @@ extension ActionIntermediate {
     var parameterTypes: [ParsedUninterruptedIdentifier] = []
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
-    for entry in namesSyntax {
-      let signature = entry.name
+    for (_, signature) in namesDictionary {
       let signatureName = signature.name()
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {

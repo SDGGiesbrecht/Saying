@@ -478,13 +478,20 @@ extension Node {
         ),
         [
           Node(
-            name: "ActionName",
+            name: "MultipleActionNames",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "names", type: "ActionNameList", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ActionName",
+            kind: .alternates([
+              Alternate(name: "multiple", type: "MultipleActionNames"),
+              Alternate(name: "single", type: "Signature"),
             ])
           ),
 
@@ -724,12 +731,46 @@ extension Node {
             ])
           ),
 
+        ],
+          Node.separatedList(
+            name: "FulfillmentList",
+            entryName: "fulfillment", entryNamePlural: "fulfillments",
+            entryType: "ActionDeclaration",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreak",
+            fixedSeparator: true
+          ),
+        [
+          Node(
+            name: "Fulfillments",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "requirements", type: "FulfillmentList", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Application",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ApplicationKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "application", type: "AbilitySignature", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "fulfillments", type: "Fulfillments", kind: .required),
+            ])
+          ),
+
           Node(
             name: "Declaration",
             kind: .alternates([
               Alternate(name: "thing", type: "ThingDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),
+              Alternate(name: "application", type: "Application"),
             ])
           ),
         ],

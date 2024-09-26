@@ -76,6 +76,11 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         abilities[identifier] = ability
+      case .application(let application):
+        documentation = nil
+        parameters = []
+        namespace = []
+        #error("Not implemented yet.")
       }
       if let documentation = documentation {
         var testIndex = 1
