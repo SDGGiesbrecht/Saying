@@ -12,6 +12,8 @@ extension Node {
           Node(name: "ClosingParenthesis", kind: .fixedLeaf(")")),
           Node(name: "OpeningBracket", kind: .fixedLeaf("[")),
           Node(name: "ClosingBracket", kind: .fixedLeaf("]")),
+          Node(name: "OpeningBrace", kind: .fixedLeaf("{")),
+          Node(name: "ClosingBrace", kind: .fixedLeaf("}")),
           Node(name: "LeftChevronQuotationMark", kind: .fixedLeaf("«")),
           Node(name: "RightChevronQuotationMark", kind: .fixedLeaf("»")),
           Node(name: "SixesQuotationMark", kind: .fixedLeaf("“")),
@@ -700,11 +702,11 @@ extension Node {
           Node(
             name: "Requirements",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "requirements", type: "RequirementsList", kind: .optional),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
           Node(

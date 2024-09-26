@@ -1,9 +1,9 @@
 ability (clients)
  (
-  English: equation of (thing)
-  Deutsch: Vergleich von (Ding: [thing])
+  English: comparison of (thing) for equality
+  Deutsch: Vergleich von (Ding: [thing]) auf Gleichheit
  )
- (
+ {
   requirement (clients)
    [
     [
@@ -37,4 +37,4 @@ ability (clients)
     עברית +: (ראשון: [first]) = (שני: [second])
    )
    truth value
- )
+ }
