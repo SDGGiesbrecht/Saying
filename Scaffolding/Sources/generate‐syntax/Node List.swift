@@ -26,6 +26,7 @@ extension Node {
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
+          Node(name: "ApplicationKeyword", kind: .keyword(["application", "Anwendung", /* application */ "εφαρμογή", "יישום"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
