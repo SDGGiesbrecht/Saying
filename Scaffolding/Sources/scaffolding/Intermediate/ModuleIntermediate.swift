@@ -106,8 +106,32 @@ extension ModuleIntermediate {
     }
   }
 
-  func resolveApplications() {
+  func resolveApplications() throws {
+    var errors: [ReferenceError] = []
     for application in applications {
+      let identifier = application.ability
+      guard let ability = abilities[identifier] else {
+        errors.append(.noSuchAbility(name: identifier, reference: application.declaration.application))
+        continue
+      }
+      var prototypeActions = application.actions
+      var appliedActions: [ActionIntermediate] = []
+      for (_, requirement) in ability.requirements {
+        guard let provisionIndex = prototypeActions.firstIndex(where: { action in
+          return action.names.overlaps(requirement.names)
+        }) else {
+          errors.append(.unfulfilledRequirement(name: requirement.names, application.declaration))
+          continue
+        }
+        let provision = prototypeActions.remove(at: provisionIndex)
+        appliedActions.append(provision.merging(requirement: requirement))
+      }
+      for remaining in prototypeActions {
+        errors.append(.noSuchRequirement(remaining.declaration!))
+      }
+    }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
     }
   }
 

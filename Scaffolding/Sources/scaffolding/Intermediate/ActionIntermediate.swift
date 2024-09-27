@@ -109,6 +109,13 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
+  func merging(requirement: RequirementIntermediate) -> ActionIntermediate {
+    #warning("Not implemented yet.")
+    return self
+  }
+}
+
+extension ActionIntermediate {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
     return prototype.lookupParameter(identifier)
   }

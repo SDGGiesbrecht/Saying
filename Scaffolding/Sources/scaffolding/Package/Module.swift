@@ -19,7 +19,7 @@ struct Module {
     for sourceFile in sourceFiles {
       try module.add(file: File(from: sourceFile).parse())
     }
-    module.resolveApplications()
+    try module.resolveApplications()
     try module.validateReferences()
     return module.applyingTestCoverageTracking()
   }
