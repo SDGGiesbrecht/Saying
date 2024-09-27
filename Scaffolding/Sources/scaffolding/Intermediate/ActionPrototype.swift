@@ -116,21 +116,21 @@ extension ActionPrototype {
 
   func validate(
     signatureType typeIdentifier: StrictString,
-    reference: ParsedUninterruptedIdentifier,
+    reference: ParsedUninterruptedIdentifier?,
     module: ModuleIntermediate,
     errors: inout [ReferenceError]
   ) {
     if let thing = module.lookupThing(typeIdentifier) {
       if self.clientAccess,
         ¬thing.clientAccess {
-        errors.append(.thingAccessNarrowerThanSignature(reference: reference))
+        errors.append(.thingAccessNarrowerThanSignature(reference: reference!))
       }
       if ¬self.testOnlyAccess,
         thing.testOnlyAccess {
-        errors.append(.thingUnavailableOutsideTests(reference: reference))
+        errors.append(.thingUnavailableOutsideTests(reference: reference!))
       }
     } else {
-      errors.append(.noSuchThing(typeIdentifier, reference: reference))
+      errors.append(.noSuchThing(typeIdentifier, reference: reference!))
     }
   }
 
@@ -146,7 +146,7 @@ extension ActionPrototype {
     if let thing = returnValue {
       validate(
         signatureType: thing,
-        reference: declarationReturnValueType!,
+        reference: declarationReturnValueType,
         module: module,
         errors: &errors
       )

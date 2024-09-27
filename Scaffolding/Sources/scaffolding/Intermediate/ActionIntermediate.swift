@@ -25,6 +25,9 @@ struct ActionIntermediate {
   var returnValue: StrictString? {
     return prototype.returnValue
   }
+  var clientAccess: Bool {
+    return prototype.clientAccess
+  }
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
@@ -110,8 +113,27 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
   func merging(requirement: RequirementIntermediate) -> ActionIntermediate {
-    #warning("Not implemented yet.")
-    return self
+    #warning("This incorrectly assumes reorderings already use the same base.")
+    #warning("Need to verify availability.")
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names ∪ requirement.names,
+        parameters: zip(parameters, requirement.parameters).map({ $0.0.merging(requirement: $0.1) }),
+        reorderings: reorderings.mergedByOverwriting(from: requirement.reorderings),
+        returnValue: returnValue,
+        clientAccess: clientAccess,
+        testOnlyAccess: testOnlyAccess,
+        completeParameterIndexTable: [:]
+      ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
+      implementation: implementation,
+      declaration: nil,
+      coveredIdentifier: coveredIdentifier
+    )
   }
 }
 

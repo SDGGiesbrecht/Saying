@@ -106,7 +106,7 @@ extension ModuleIntermediate {
     }
   }
 
-  func resolveApplications() throws {
+  mutating func resolveApplications() throws {
     var errors: [ReferenceError] = []
     for application in applications {
       let identifier = application.ability
@@ -115,7 +115,6 @@ extension ModuleIntermediate {
         continue
       }
       var prototypeActions = application.actions
-      var appliedActions: [ActionIntermediate] = []
       for (_, requirement) in ability.requirements {
         guard let provisionIndex = prototypeActions.firstIndex(where: { action in
           return action.names.overlaps(requirement.names)
@@ -124,7 +123,12 @@ extension ModuleIntermediate {
           continue
         }
         let provision = prototypeActions.remove(at: provisionIndex)
-        appliedActions.append(provision.merging(requirement: requirement))
+        let new = provision.merging(requirement: requirement)
+        let identifier = new.names.identifier()
+        for name in new.names {
+          identifierMapping[name] = identifier
+        }
+        actions[identifier] = new
       }
       for remaining in prototypeActions {
         errors.append(.noSuchRequirement(remaining.declaration!))
