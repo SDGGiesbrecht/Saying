@@ -1,6 +1,9 @@
 import SDGLogic
+import SDGText
 
 struct ApplicationIntermediate {
+  var ability: StrictString
+  var arguments: [StrictString]
   var actions: [ActionIntermediate]
   var clientAccess: Bool
   var testOnlyAccess: Bool
@@ -27,6 +30,8 @@ extension ApplicationIntermediate {
     }
     return .success(
       ApplicationIntermediate(
+        ability: declaration.application.name(),
+        arguments: declaration.application.arguments.arguments.map({ $0.name.identifierText() }),
         actions: actions,
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,

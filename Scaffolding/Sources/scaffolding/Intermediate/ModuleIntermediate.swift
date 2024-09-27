@@ -108,7 +108,6 @@ extension ModuleIntermediate {
 
   func resolveApplications() {
     for application in applications {
-      
     }
   }
 

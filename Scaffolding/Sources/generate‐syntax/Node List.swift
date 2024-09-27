@@ -566,6 +566,24 @@ extension Node {
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
+        ],
+        Node.separatedList(
+          name: "ApplicationArgumentList",
+          entryName: "argument", entryNamePlural: "arguments",
+          entryType: "AbilityParameterType",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
+        ),
+        [
+          Node(
+            name: "ApplicationSignature",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "arguments", type: "ApplicationArgumentList", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
 
           Node(
             name: "ActionReturnValue",
@@ -758,7 +776,7 @@ extension Node {
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "application", type: "AbilitySignature", kind: .required),
+              Child(name: "application", type: "ApplicationSignature", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
