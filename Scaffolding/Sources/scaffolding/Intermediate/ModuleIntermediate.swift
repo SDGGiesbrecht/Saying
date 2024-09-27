@@ -7,6 +7,7 @@ struct ModuleIntermediate {
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
   var abilities: [StrictString: Ability] = [:]
+  var applications: [ApplicationIntermediate] = []
   var tests: [TestIntermediate] = []
 }
 
@@ -80,7 +81,8 @@ extension ModuleIntermediate {
         documentation = nil
         parameters = []
         namespace = []
-        #error("Not implemented yet.")
+        let intermediate = try ApplicationIntermediate.construct(application).get()
+        applications.append(intermediate)
       }
       if let documentation = documentation {
         var testIndex = 1
@@ -101,6 +103,12 @@ extension ModuleIntermediate {
     }
     if ¬errors.isEmpty {
       throw ErrorList(errors)
+    }
+  }
+
+  func resolveApplications() {
+    for application in applications {
+      
     }
   }
 
