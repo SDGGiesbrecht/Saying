@@ -113,8 +113,8 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
   func merging(requirement: RequirementIntermediate) -> ActionIntermediate {
-    #warning("This incorrectly assumes reorderings already use the same base.")
-    #warning("Need to verify availability.")
+    #error("This incorrectly assumes reorderings already use the same base.")
+    #error("Need to verify availability.")
     return ActionIntermediate(
       prototype: ActionPrototype(
         names: names ∪ requirement.names,
