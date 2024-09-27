@@ -159,6 +159,7 @@ extension ActionIntermediate {
           names: [coverageTrackingIdentifier()],
           parameters: prototype.parameters,
           reorderings: prototype.reorderings,
+          returnValue: prototype.returnValue,
           clientAccess: prototype.clientAccess,
           testOnlyAccess: prototype.testOnlyAccess,
           completeParameterIndexTable: prototype.completeParameterIndexTable,
