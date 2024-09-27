@@ -1,25 +1,13 @@
 extension ActionIntermediate {
   enum ConstructionError: DiagnosticError {
-    case referenceInTypeSignature(ParsedParameter)
-    case typeInReferenceSignature(ParsedParameter)
-    case multipleTypeSignatures(ParsedSignature)
-    case cyclicalParameterReference(ParsedParameter)
-    case parameterNotFound(ParsedParameterReference)
+    case brokenPrototype(ActionPrototype.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementation.ConstructionError)
     case invalidImport(ParsedActionImplementation)
 
     var message: String {
       switch self {
-      case .referenceInTypeSignature:
-        return defaultMessage
-      case .typeInReferenceSignature:
-        return defaultMessage
-      case .multipleTypeSignatures:
-        return defaultMessage
-      case .cyclicalParameterReference:
-        return defaultMessage
-      case .parameterNotFound:
+      case .brokenPrototype:
         return defaultMessage
       case .unknownLanguage:
         return defaultMessage
@@ -32,16 +20,8 @@ extension ActionIntermediate {
 
     var range: Slice<UTF8Segments> {
       switch self {
-      case .referenceInTypeSignature(let parameter):
-        return parameter.location
-      case .typeInReferenceSignature(let parameter):
-        return parameter.location
-      case .multipleTypeSignatures(let signature):
-        return signature.location
-      case .cyclicalParameterReference(let parameter):
-        return parameter.location
-      case .parameterNotFound(let reference):
-        return reference.location
+      case .brokenPrototype(let error):
+        return error.range
       case .unknownLanguage(let identifier):
         return identifier.location
       case .brokenNativeActionImplementation(let error):
