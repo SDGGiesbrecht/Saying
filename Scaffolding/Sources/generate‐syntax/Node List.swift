@@ -712,7 +712,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "requirements", type: "RequirementsList", kind: .optional),
+              Child(name: "requirements", type: "RequirementsList", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])

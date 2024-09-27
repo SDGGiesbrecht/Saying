@@ -6,8 +6,11 @@ struct Ability {
   var names: Set<StrictString>
   var parameters: [Set<StrictString>]
   var parameterReorderings: [StrictString: [Int]]
+  var identifierMapping: [StrictString: StrictString]
+  var requirements: [StrictString: RequirementIntermediate]
   var clientAccess: Bool
   var testOnlyAccess: Bool
+  var tests: [TestIntermediate]
   var declaration: ParsedAbilityDeclaration
 }
 
@@ -95,6 +98,46 @@ extension Ability {
       )
       return names
     }
+    var identifierMapping: [StrictString: StrictString] = [:]
+    var requirements: [StrictString: RequirementIntermediate] = [:]
+    var tests: [TestIntermediate] = []
+    for requirementNode in declaration.requirements.requirements.requirements {
+      let documentation = requirementNode.documentation
+      let requirement: RequirementIntermediate
+      switch RequirementIntermediate.construct(requirementNode) {
+      case .failure(let nested):
+        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
+        continue
+      case .success(let constructed):
+        requirement = constructed
+      }
+      let parameters = requirement.parameters.reduce(Set(), { $0 ∪ $1.names })
+      let namespace = [requirement.names]
+      let identifier = requirement.names.identifier()
+      for name in requirement.names {
+        if identifierMapping[name] ≠ nil {
+          errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+        }
+        identifierMapping[name] = identifier
+      }
+      requirements[identifier] = requirement
+      if let documentation = documentation {
+        var testIndex = 1
+        for element in documentation.documentation.entries.entries {
+          switch element {
+          case .parameter(let parameter):
+            if parameter.name.identifierText() ∉ parameters {
+              errors.append(ConstructionError.documentedParameterNotFound(parameter))
+            }
+          case .test(let test):
+            tests.append(TestIntermediate(test, location: namespace, index: testIndex))
+            testIndex += 1
+          case .paragraph:
+            break
+          }
+        }
+      }
+    }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -103,8 +146,11 @@ extension Ability {
         names: names,
         parameters: parameterIntermediates,
         parameterReorderings: reorderings,
+        identifierMapping: identifierMapping,
+        requirements: requirements,
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
+        tests: tests,
         declaration: declaration
       )
     )
