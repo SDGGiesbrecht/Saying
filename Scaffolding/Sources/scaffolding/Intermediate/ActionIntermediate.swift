@@ -138,7 +138,12 @@ extension ActionIntermediate {
         mergedReorderings[name] = rearranged
       }
     }
-    #warning("Need to verify availability.")
+    if clientAccess ≠ requirement.clientAccess {
+      errors.append(.mismatchedAccess(access: self.declaration!.access!))
+    }
+    if testOnlyAccess ≠ requirement.testOnlyAccess {
+      errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
+    }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
