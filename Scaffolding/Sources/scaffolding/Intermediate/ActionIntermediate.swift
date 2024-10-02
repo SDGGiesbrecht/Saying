@@ -113,12 +113,21 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
   func merging(requirement: RequirementIntermediate) -> ActionIntermediate {
-    #error("This incorrectly assumes reorderings already use the same base.")
-    #error("Need to verify availability.")
+    #warning("This incorrectly assumes reorderings already use the same base.")
+    let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
+    let nameToRequirement = requirement.reorderings[correlatedName]!
+    let nameToSelf = self.reorderings[correlatedName]!
+    let mergedParameters = self.parameters.indices.map { index in
+      let nameIndex = nameToSelf.firstIndex(of: index)!
+      let requirementIndex = nameToRequirement[nameIndex]
+      return self.parameters[index]
+        .merging(requirement: requirement.parameters[requirementIndex])
+    }
+    #warning("Need to verify availability.")
     return ActionIntermediate(
       prototype: ActionPrototype(
         names: names ∪ requirement.names,
-        parameters: zip(parameters, requirement.parameters).map({ $0.0.merging(requirement: $0.1) }),
+        parameters: mergedParameters,
         reorderings: reorderings.mergedByOverwriting(from: requirement.reorderings),
         returnValue: returnValue,
         clientAccess: clientAccess,
