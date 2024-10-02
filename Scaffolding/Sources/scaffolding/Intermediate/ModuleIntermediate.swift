@@ -123,12 +123,16 @@ extension ModuleIntermediate {
           continue
         }
         let provision = prototypeActions.remove(at: provisionIndex)
-        let new = provision.merging(requirement: requirement)
-        let identifier = new.names.identifier()
-        for name in new.names {
-          identifierMapping[name] = identifier
+        switch provision.merging(requirement: requirement) {
+        case .success(let new):
+          let identifier = new.names.identifier()
+          for name in new.names {
+            identifierMapping[name] = identifier
+          }
+          actions[identifier] = new
+        case .failure(let error):
+          errors.append(contentsOf: error.errors)
         }
-        actions[identifier] = new
       }
       for remaining in prototypeActions {
         errors.append(.noSuchRequirement(remaining.declaration!))

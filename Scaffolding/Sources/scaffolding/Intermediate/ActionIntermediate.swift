@@ -112,8 +112,8 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func merging(requirement: RequirementIntermediate) -> ActionIntermediate {
-    #warning("This incorrectly assumes reorderings already use the same base.")
+  func merging(requirement: RequirementIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
+    var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
     let nameToSelf = self.reorderings[correlatedName]!
@@ -123,25 +123,45 @@ extension ActionIntermediate {
       return self.parameters[index]
         .merging(requirement: requirement.parameters[requirementIndex])
     }
+    var mergedReorderings = self.reorderings
+    for (name, reordering) in requirement.reorderings {
+      let rearranged = reordering.map { requirementIndex in
+        let correlatedNameIndex = nameToRequirement.firstIndex(of: requirementIndex)!
+        let ownIndex = nameToSelf[correlatedNameIndex]
+        return ownIndex
+      }
+      if let existing = mergedReorderings[name] {
+        if existing ≠ rearranged {
+          errors.append(.mismatchedParameters(name: name, declaration: self.declaration!.name))
+        }
+      } else {
+        mergedReorderings[name] = rearranged
+      }
+    }
     #warning("Need to verify availability.")
-    return ActionIntermediate(
-      prototype: ActionPrototype(
-        names: names ∪ requirement.names,
-        parameters: mergedParameters,
-        reorderings: reorderings.mergedByOverwriting(from: requirement.reorderings),
-        returnValue: returnValue,
-        clientAccess: clientAccess,
-        testOnlyAccess: testOnlyAccess,
-        completeParameterIndexTable: [:]
-      ),
-      c: c,
-      cSharp: cSharp,
-      javaScript: javaScript,
-      kotlin: kotlin,
-      swift: swift,
-      implementation: implementation,
-      declaration: nil,
-      coveredIdentifier: coveredIdentifier
+    if ¬errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(
+      ActionIntermediate(
+        prototype: ActionPrototype(
+          names: names ∪ requirement.names,
+          parameters: mergedParameters,
+          reorderings: mergedReorderings,
+          returnValue: returnValue,
+          clientAccess: clientAccess,
+          testOnlyAccess: testOnlyAccess,
+          completeParameterIndexTable: [:]
+        ),
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift,
+        implementation: implementation,
+        declaration: nil,
+        coveredIdentifier: coveredIdentifier
+      )
     )
   }
 }
