@@ -26,7 +26,7 @@ extension Node {
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
-          Node(name: "ApplicationKeyword", kind: .keyword(["application", "Anwendung", /* application */ "εφαρμογή", "יישום"])),
+          Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
@@ -568,7 +568,7 @@ extension Node {
           ),
         ],
         Node.separatedList(
-          name: "ApplicationArgumentList",
+          name: "UseArgumentList",
           entryName: "argument", entryNamePlural: "arguments",
           entryType: "AbilityParameterType",
           separatorName: "identifierSegment",
@@ -577,10 +577,10 @@ extension Node {
         ),
         [
           Node(
-            name: "ApplicationSignature",
+            name: "UseSignature",
             kind: .compound(children: [
               Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
-              Child(name: "arguments", type: "ApplicationArgumentList", kind: .required),
+              Child(name: "arguments", type: "UseArgumentList", kind: .required),
               Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
             ])
           ),
@@ -770,13 +770,13 @@ extension Node {
             ])
           ),
           Node(
-            name: "Application",
+            name: "Use",
             kind: .compound(children: [
-              Child(name: "keyword", type: "ApplicationKeyword", kind: .required),
+              Child(name: "keyword", type: "UseKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "application", type: "ApplicationSignature", kind: .required),
+              Child(name: "use", type: "UseSignature", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
@@ -788,7 +788,7 @@ extension Node {
               Alternate(name: "thing", type: "ThingDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),
-              Alternate(name: "application", type: "Application"),
+              Alternate(name: "use", type: "Use"),
             ])
           ),
         ],

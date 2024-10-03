@@ -222,7 +222,7 @@ action (clients)
  Kotlin: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
 
-application (clients)
+use (clients)
  comparison of (truth value) for equality
  {
   action (clients)

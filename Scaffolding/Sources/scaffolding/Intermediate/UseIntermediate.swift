@@ -1,21 +1,21 @@
 import SDGLogic
 import SDGText
 
-struct ApplicationIntermediate {
+struct UseIntermediate {
   var ability: StrictString
   var arguments: [StrictString]
   var actions: [ActionIntermediate]
   var clientAccess: Bool
   var testOnlyAccess: Bool
-  var declaration: ParsedApplication
+  var declaration: ParsedUse
 }
 
-extension ApplicationIntermediate {
+extension UseIntermediate {
 
   static func construct(
-    _ declaration: ParsedApplication
-  ) -> Result<ApplicationIntermediate, ErrorList<ApplicationIntermediate.ConstructionError>> {
-    var errors: [ApplicationIntermediate.ConstructionError] = []
+    _ declaration: ParsedUse
+  ) -> Result<UseIntermediate, ErrorList<UseIntermediate.ConstructionError>> {
+    var errors: [UseIntermediate.ConstructionError] = []
     var actions: [ActionIntermediate] = []
     for action in declaration.fulfillments.fulfillments.fulfillments {
       switch ActionIntermediate.construct(action) {
@@ -29,9 +29,9 @@ extension ApplicationIntermediate {
       return .failure(ErrorList(errors))
     }
     return .success(
-      ApplicationIntermediate(
-        ability: declaration.application.name(),
-        arguments: declaration.application.arguments.arguments.map({ $0.name.identifierText() }),
+      UseIntermediate(
+        ability: declaration.use.name(),
+        arguments: declaration.use.arguments.arguments.map({ $0.name.identifierText() }),
         actions: actions,
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,

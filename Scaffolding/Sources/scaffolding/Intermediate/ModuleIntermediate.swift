@@ -7,7 +7,7 @@ struct ModuleIntermediate {
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
   var abilities: [StrictString: Ability] = [:]
-  var applications: [ApplicationIntermediate] = []
+  var uses: [UseIntermediate] = []
   var tests: [TestIntermediate] = []
 }
 
@@ -77,12 +77,12 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         abilities[identifier] = ability
-      case .application(let application):
+      case .use(let use):
         documentation = nil
         parameters = []
         namespace = []
-        let intermediate = try ApplicationIntermediate.construct(application).get()
-        applications.append(intermediate)
+        let intermediate = try UseIntermediate.construct(use).get()
+        uses.append(intermediate)
       }
       if let documentation = documentation {
         var testIndex = 1
@@ -106,20 +106,20 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func resolveApplications() throws {
+  mutating func resolveUses() throws {
     var errors: [ReferenceError] = []
-    for application in applications {
-      let identifier = application.ability
+    for use in uses {
+      let identifier = use.ability
       guard let ability = abilities[identifier] else {
-        errors.append(.noSuchAbility(name: identifier, reference: application.declaration.application))
+        errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
         continue
       }
-      var prototypeActions = application.actions
+      var prototypeActions = use.actions
       for (_, requirement) in ability.requirements {
         guard let provisionIndex = prototypeActions.firstIndex(where: { action in
           return action.names.overlaps(requirement.names)
         }) else {
-          errors.append(.unfulfilledRequirement(name: requirement.names, application.declaration))
+          errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue
         }
         let provision = prototypeActions.remove(at: provisionIndex)

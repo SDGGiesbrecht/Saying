@@ -3,8 +3,8 @@ import SDGText
 enum ReferenceError: DiagnosticError {
   case noSuchThing(StrictString, reference: ParsedUninterruptedIdentifier)
   case noSuchAction(name: StrictString, reference: ParsedAction)
-  case noSuchAbility(name: StrictString, reference: ParsedApplicationSignature)
-  case unfulfilledRequirement(name: Set<StrictString>, ParsedApplication)
+  case noSuchAbility(name: StrictString, reference: ParsedUseSignature)
+  case unfulfilledRequirement(name: Set<StrictString>, ParsedUse)
   case noSuchRequirement(ParsedActionDeclaration)
   case mismatchedParameters(name: StrictString, declaration: ParsedActionName)
   case mismatchedAccess(access: ParsedAccess)
@@ -19,10 +19,10 @@ enum ReferenceError: DiagnosticError {
       return identifier.location
     case .noSuchAction(_, reference: let action):
       return action.location
-    case .noSuchAbility(_, reference: let application):
-      return application.location
-    case .unfulfilledRequirement(_, let application):
-      return application.location
+    case .noSuchAbility(_, reference: let use):
+      return use.location
+    case .unfulfilledRequirement(_, let use):
+      return use.location
     case .noSuchRequirement(let declaration):
       return declaration.location
     case .mismatchedParameters(name: _, declaration: let declaration):

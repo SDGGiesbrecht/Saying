@@ -1,6 +1,6 @@
 import SDGText
 
-extension ParsedApplicationSignature {
+extension ParsedUseSignature {
 
   func identifierSegments() -> [ParsedIdentifierSegment?] {
     var result: [ParsedIdentifierSegment?] = []

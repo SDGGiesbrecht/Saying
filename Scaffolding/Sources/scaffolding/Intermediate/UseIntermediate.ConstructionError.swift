@@ -1,6 +1,6 @@
 import SDGText
 
-extension ApplicationIntermediate {
+extension UseIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenAction(ActionIntermediate.ConstructionError)
 
