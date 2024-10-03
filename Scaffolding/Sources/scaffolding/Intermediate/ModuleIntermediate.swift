@@ -6,6 +6,8 @@ struct ModuleIntermediate {
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: ActionIntermediate] = [:]
+  var abilities: [StrictString: Ability] = [:]
+  var uses: [UseIntermediate] = []
   var tests: [TestIntermediate] = []
 }
 
@@ -62,6 +64,25 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         actions[identifier] = action
+      case .ability(let abilityNode):
+        documentation = abilityNode.documentation
+        parameters = []
+        let ability = try Ability.construct(abilityNode).get()
+        namespace = [ability.names]
+        let identifier = ability.names.identifier()
+        for name in ability.names {
+          if identifierMapping[name] ≠ nil {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name)!]))
+          }
+          identifierMapping[name] = identifier
+        }
+        abilities[identifier] = ability
+      case .use(let use):
+        documentation = nil
+        parameters = []
+        namespace = []
+        let intermediate = try UseIntermediate.construct(use).get()
+        uses.append(intermediate)
       }
       if let documentation = documentation {
         var testIndex = 1
@@ -78,6 +99,43 @@ extension ModuleIntermediate {
             break
           }
         }
+      }
+    }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
+    }
+  }
+
+  mutating func resolveUses() throws {
+    var errors: [ReferenceError] = []
+    for use in uses {
+      let identifier = use.ability
+      guard let ability = abilities[identifier] else {
+        errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
+        continue
+      }
+      var prototypeActions = use.actions
+      for (_, requirement) in ability.requirements {
+        guard let provisionIndex = prototypeActions.firstIndex(where: { action in
+          return action.names.overlaps(requirement.names)
+        }) else {
+          errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
+          continue
+        }
+        let provision = prototypeActions.remove(at: provisionIndex)
+        switch provision.merging(requirement: requirement) {
+        case .success(let new):
+          let identifier = new.names.identifier()
+          for name in new.names {
+            identifierMapping[name] = identifier
+          }
+          actions[identifier] = new
+        case .failure(let error):
+          errors.append(contentsOf: error.errors)
+        }
+      }
+      for remaining in prototypeActions {
+        errors.append(.noSuchRequirement(remaining.declaration!))
       }
     }
     if ¬errors.isEmpty {

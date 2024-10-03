@@ -3,12 +3,7 @@ import SDGCollections
 import SDGText
 
 struct ActionIntermediate {
-  var names: Set<StrictString>
-  var parameters: [ParameterIntermediate]
-  var reorderings: [StrictString: [Int]]
-  var returnValue: StrictString?
-  var clientAccess: Bool
-  var testOnlyAccess: Bool
+  fileprivate var prototype: ActionPrototype
   var c: NativeActionImplementation?
   var cSharp: NativeActionImplementation?
   var javaScript: NativeActionImplementation?
@@ -17,6 +12,25 @@ struct ActionIntermediate {
   var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
   var coveredIdentifier: StrictString?
+
+  var names: Set<StrictString> {
+    return prototype.names
+  }
+  var parameters: [ParameterIntermediate] {
+    return prototype.parameters
+  }
+  var reorderings: [StrictString: [Int]] {
+    return prototype.reorderings
+  }
+  var returnValue: StrictString? {
+    return prototype.returnValue
+  }
+  var clientAccess: Bool {
+    return prototype.clientAccess
+  }
+  var testOnlyAccess: Bool {
+    return prototype.testOnlyAccess
+  }
 }
 
 extension ActionIntermediate {
@@ -34,83 +48,14 @@ extension ActionIntermediate {
     _ declaration: ParsedActionDeclaration
   ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>> {
     var errors: [ActionIntermediate.ConstructionError] = []
-    var names: Set<StrictString> = []
-    var parameterIndices: [StrictString: Int] = [:]
-    var parameterReferences: [StrictString: StrictString] = [:]
-    let namesSyntax = declaration.name.names.names
-    var foundTypeSignature = false
-    for entry in namesSyntax {
-      let signature = entry.name
-      names.insert(signature.name())
-      var declaresTypes: Bool?
-      let parameters = signature.parameters()
-      if parameters.isEmpty {
-        foundTypeSignature = true
-      }
-      for (index, parameter) in parameters.enumerated() {
-        let parameterName = parameter.name.identifierText()
-        switch parameter.type {
-        case .type:
-          if index == 0,
-            foundTypeSignature {
-            errors.append(.multipleTypeSignatures(signature))
-          }
-          if declaresTypes == false {
-            errors.append(.typeInReferenceSignature(parameter))
-          }
-          declaresTypes = true
-          foundTypeSignature = true
-          parameterIndices[parameterName] = index
-        case .reference(let reference):
-          if declaresTypes == true {
-            errors.append(.referenceInTypeSignature(parameter))
-          }
-          declaresTypes = false
-          parameterReferences[parameterName] = reference.name.identifierText()
-        }
-      }
-    }
-    var parameterTypes: [ParsedUninterruptedIdentifier] = []
-    var reorderings: [StrictString: [Int]] = [:]
-    var completeParameterIndexTable: [StrictString: Int] = parameterIndices
-    for entry in namesSyntax {
-      let signature = entry.name
-      let signatureName = signature.name()
-      for (position, parameter) in signature.parameters().enumerated() {
-        switch parameter.type {
-        case .type(let type):
-          parameterTypes.append(type)
-          reorderings[signatureName, default: []].append(position)
-        case .reference(let reference):
-          var resolving = reference.name.identifierText()
-          var checked: Set<StrictString> = []
-          while let next = parameterReferences[resolving] {
-            checked.insert(resolving)
-            resolving = next
-            if next ∈ checked {
-              if parameterIndices[resolving] == nil {
-                errors.append(.cyclicalParameterReference(parameter))
-              }
-              break
-            }
-          }
-          if let index = parameterIndices[resolving] {
-            reorderings[signatureName, default: []].append(index)
-            completeParameterIndexTable[parameter.name.identifierText()] = index
-          } else {
-            errors.append(.parameterNotFound(reference))
-          }
-        }
-      }
-    }
-    let parameters = parameterTypes.enumerated().map { index, type in
-      let names = Set(
-        completeParameterIndexTable.keys
-          .lazy.filter({ name in
-            return completeParameterIndexTable[name] == index
-          })
-      )
-      return ParameterIntermediate(names: names, type: type.identifierText(), typeDeclaration: type)
+
+    let prototype: ActionPrototype
+    switch ActionPrototype.construct(declaration) {
+    case .failure(let prototypeError):
+      errors.append(contentsOf: prototypeError.errors.map({ .brokenPrototype($0) }))
+      return .failure(ErrorList(errors))
+    case .success(let constructed):
+      prototype = constructed
     }
     var c: NativeActionImplementation?
     var cSharp: NativeActionImplementation?
@@ -120,7 +65,7 @@ extension ActionIntermediate {
     for implementation in declaration.implementation.implementations {
       switch NativeActionImplementation.construct(
         implementation: implementation.expression,
-        indexTable: completeParameterIndexTable
+        indexTable: prototype.completeParameterIndexTable
       ) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
@@ -150,12 +95,7 @@ extension ActionIntermediate {
     }
     return .success(
       ActionIntermediate(
-        names: names,
-        parameters: parameters,
-        reorderings: reorderings,
-        returnValue: declaration.returnValue?.type.identifierText(),
-        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
-        testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
+        prototype: prototype,
         c: c,
         cSharp: cSharp,
         javaScript: javaScript,
@@ -166,49 +106,74 @@ extension ActionIntermediate {
     )
   }
 
-  func validate(
-    signatureType typeIdentifier: StrictString,
-    reference: ParsedUninterruptedIdentifier,
-    module: ModuleIntermediate,
-    errors: inout [ReferenceError]
-  ) {
-    if let thing = module.lookupThing(typeIdentifier) {
-      if self.clientAccess,
-        ¬thing.clientAccess {
-        errors.append(.thingAccessNarrowerThanSignature(reference: reference))
-      }
-      if ¬self.testOnlyAccess,
-        thing.testOnlyAccess {
-        errors.append(.thingUnavailableOutsideTests(reference: reference))
-      }
-    } else {
-      errors.append(.noSuchThing(typeIdentifier, reference: reference))
-    }
-  }
-
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
-    for parameter in parameters {
-      validate(
-        signatureType: parameter.type,
-        reference: parameter.typeDeclaration,
-        module: module,
-        errors: &errors
-      )
+    prototype.validateReferences(module: module, errors: &errors)
+  }
+}
+
+extension ActionIntermediate {
+  func merging(requirement: RequirementIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
+    var errors: [ReferenceError] = []
+    let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
+    let nameToRequirement = requirement.reorderings[correlatedName]!
+    let nameToSelf = self.reorderings[correlatedName]!
+    let mergedParameters = self.parameters.indices.map { index in
+      let nameIndex = nameToSelf.firstIndex(of: index)!
+      let requirementIndex = nameToRequirement[nameIndex]
+      return self.parameters[index]
+        .merging(requirement: requirement.parameters[requirementIndex])
     }
-    if let thing = returnValue {
-      validate(
-        signatureType: thing,
-        reference: declaration!.returnValue!.type,
-        module: module,
-        errors: &errors
-      )
+    var mergedReorderings = self.reorderings
+    for (name, reordering) in requirement.reorderings {
+      let rearranged = reordering.map { requirementIndex in
+        let correlatedNameIndex = nameToRequirement.firstIndex(of: requirementIndex)!
+        let ownIndex = nameToSelf[correlatedNameIndex]
+        return ownIndex
+      }
+      if let existing = mergedReorderings[name] {
+        if existing ≠ rearranged {
+          errors.append(.mismatchedParameters(name: name, declaration: self.declaration!.name))
+        }
+      } else {
+        mergedReorderings[name] = rearranged
+      }
     }
+    if clientAccess ≠ requirement.clientAccess {
+      errors.append(.mismatchedAccess(access: self.declaration!.access!))
+    }
+    if testOnlyAccess ≠ requirement.testOnlyAccess {
+      errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
+    }
+    if ¬errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(
+      ActionIntermediate(
+        prototype: ActionPrototype(
+          names: names ∪ requirement.names,
+          parameters: mergedParameters,
+          reorderings: mergedReorderings,
+          returnValue: returnValue,
+          clientAccess: clientAccess,
+          testOnlyAccess: testOnlyAccess,
+          completeParameterIndexTable: [:]
+        ),
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift,
+        implementation: implementation,
+        declaration: nil,
+        coveredIdentifier: coveredIdentifier
+      )
+    )
   }
 }
 
 extension ActionIntermediate {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
-    return parameters.first(where: { $0.names.contains(identifier) })
+    return prototype.lookupParameter(identifier)
   }
 }
 
@@ -219,20 +184,24 @@ extension ActionIntermediate {
   }
 
   func coverageTrackingIdentifier() -> StrictString {
-    return "☐\(names.identifier())"
+    return "☐\(prototype.names.identifier())"
   }
   func wrappedToTrackCoverage() -> ActionIntermediate? {
     if let coverageIdentifier = coverageRegionIdentifier() {
       return ActionIntermediate(
-        names: [coverageTrackingIdentifier()],
-        parameters: parameters,
-        reorderings: reorderings,
-        returnValue: returnValue,
-        clientAccess: self.clientAccess,
-        testOnlyAccess: self.testOnlyAccess,
+        prototype: ActionPrototype(
+          names: [coverageTrackingIdentifier()],
+          parameters: prototype.parameters,
+          reorderings: prototype.reorderings,
+          returnValue: prototype.returnValue,
+          clientAccess: prototype.clientAccess,
+          testOnlyAccess: prototype.testOnlyAccess,
+          completeParameterIndexTable: prototype.completeParameterIndexTable,
+          declarationReturnValueType: prototype.declarationReturnValueType
+        ),
         implementation: ActionUse(
-          actionName: self.names.identifier(),
-          arguments: self.parameters.map({ parameter in
+          actionName: prototype.names.identifier(),
+          arguments: prototype.parameters.map({ parameter in
             return ActionUse(
               actionName: parameter.names.identifier(),
               arguments: []
@@ -247,6 +216,6 @@ extension ActionIntermediate {
   }
 
   func coverageRegionIdentifier() -> StrictString? {
-    return names.identifier()
+    return prototype.names.identifier()
   }
 }

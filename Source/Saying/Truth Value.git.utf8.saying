@@ -222,48 +222,24 @@ action (clients)
  Kotlin: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
 
-action (clients)
- [
-  [
-   English: Compares two truth values for equality.
-  ]
-  test (verify (((true) is (true)) is (true)))
-  test (verify (((true) is (false)) is (false)))
-  test (verify (((false) is (true)) is (false)))
-  test (verify (((false) is (false)) is (true)))
-  parameter: first
-   (
-    [
-     English: A truth value.
-     Deutsch: Eine Wahrheitswert.
-    ]
-   )
-  parameter: second
-   (
-    [
-     English: Another truth value.
-     Deutsch: Eine weitere Wahrheitswert.
-    ]
-   )
- ]
- (
-  English: (first: truth value) is (second: truth value)
-  English +: (first: [first]) = (second: [second])
-  Deutsch: (erste: [first]) ist (zweite: [second])
-  Deutsch +: (erste: [first]) = (zweite: [second])
-  français : (première: [first]) est (deuxième: [second])
-  français +: (première: [first]) = (deuxième: [second])
-  ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
-  ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
-  עברית: (ראשון: [first]) (שני: [second])
-  עברית +: (ראשון: [first]) = (שני: [second])
- )
- truth value
- C: “¤(28)” first “ == ” second “¤(29)”
- C♯: “¤(28)” first “ == ” second “¤(29)”
- JavaScript: “¤(28)” first “ == ” second “¤(29)”
- Kotlin: “¤(28)” first “ == ” second “¤(29)”
- Swift: «¤(28)» first “ == ” second „¤(29)“
+use (clients)
+ comparison of (truth value) for equality
+ {
+  action (clients)
+   [
+    test (verify (((true) is (true)) is (true)))
+    test (verify (((true) is (false)) is (false)))
+    test (verify (((false) is (true)) is (false)))
+    test (verify (((false) is (false)) is (true)))
+   ]
+   (first: truth value) is (second: truth value)
+   truth value
+   C: “¤(28)” first “ == ” second “¤(29)”
+   C♯: “¤(28)” first “ == ” second “¤(29)”
+   JavaScript: “¤(28)” first “ == ” second “¤(29)”
+   Kotlin: “¤(28)” first “ == ” second “¤(29)”
+   Swift: «¤(28)» first “ == ” second „¤(29)“
+ }
 
 action (clients)
  [
