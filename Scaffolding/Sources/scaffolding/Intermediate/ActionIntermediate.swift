@@ -13,6 +13,9 @@ struct ActionIntermediate {
   var declaration: ParsedActionDeclaration?
   var coveredIdentifier: StrictString?
 
+  var documentation: DocumentationIntermediate? {
+    return prototype.documentation
+  }
   var names: Set<StrictString> {
     return prototype.names
   }
@@ -45,12 +48,13 @@ extension ActionIntermediate {
   }
 
   static func construct(
-    _ declaration: ParsedActionDeclaration
+    _ declaration: ParsedActionDeclaration,
+    namespace: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>> {
     var errors: [ActionIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype
-    switch ActionPrototype.construct(declaration) {
+    switch ActionPrototype.construct(declaration, namespace: namespace) {
     case .failure(let prototypeError):
       errors.append(contentsOf: prototypeError.errors.map({ .brokenPrototype($0) }))
       return .failure(ErrorList(errors))
@@ -112,6 +116,7 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
+  #warning("Sink documentation into actions and requirements to enable merging (in order to detect tests).")
   func merging(requirement: RequirementIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!

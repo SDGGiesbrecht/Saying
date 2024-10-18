@@ -104,7 +104,8 @@ extension Ability {
     for requirementNode in declaration.requirements.requirements.requirements {
       let documentation = requirementNode.documentation
       let requirement: RequirementIntermediate
-      switch RequirementIntermediate.construct(requirementNode) {
+      #warning("Unknown namespace.")
+      switch RequirementIntermediate.construct(requirementNode, namespace: [["???"]]) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
         continue

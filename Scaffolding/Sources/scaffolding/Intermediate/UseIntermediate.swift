@@ -18,7 +18,8 @@ extension UseIntermediate {
     var errors: [UseIntermediate.ConstructionError] = []
     var actions: [ActionIntermediate] = []
     for action in declaration.fulfillments.fulfillments.fulfillments {
-      switch ActionIntermediate.construct(action) {
+      #warning("Unknown namespace.")
+      switch ActionIntermediate.construct(action, namespace: [["???"]]) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenAction($0) }))
       case .success(let action):

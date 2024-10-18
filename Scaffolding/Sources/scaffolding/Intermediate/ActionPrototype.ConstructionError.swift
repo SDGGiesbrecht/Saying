@@ -4,7 +4,7 @@ extension ActionPrototype {
     case typeInReferenceSignature(ParsedParameter)
     case multipleTypeSignatures(ParsedSignature)
     case cyclicalParameterReference(ParsedParameter)
-    case parameterNotFound(ParsedParameterReference)
+    case parameterNotFound(ParsedUninterruptedIdentifier)
 
     var message: String {
       switch self {

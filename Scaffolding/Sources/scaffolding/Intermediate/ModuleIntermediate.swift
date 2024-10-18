@@ -36,6 +36,7 @@ extension ModuleIntermediate {
     for declaration in file.declarations {
       let documentation: ParsedAttachedDocumentation?
       let parameters: Set<StrictString>
+      #warning("No longer used.")
       let namespace: [Set<StrictString>]
       switch declaration {
       case .thing(let thingNode):
@@ -52,10 +53,10 @@ extension ModuleIntermediate {
         }
         things[identifier] = thing
       case .action(let actionNode):
-        documentation = actionNode.documentation
-        let action = try ActionIntermediate.construct(actionNode).get()
-        parameters = action.parameters.reduce(Set(), { $0 ∪ $1.names })
-        namespace = [action.names]
+        documentation = nil
+        let action = try ActionIntermediate.construct(actionNode, namespace: []).get()
+        parameters = []
+        namespace = []
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
@@ -64,6 +65,9 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         actions[identifier] = action
+        if let documentation = action.documentation {
+          tests.append(contentsOf: documentation.tests)
+        }
       case .ability(let abilityNode):
         documentation = abilityNode.documentation
         parameters = []
