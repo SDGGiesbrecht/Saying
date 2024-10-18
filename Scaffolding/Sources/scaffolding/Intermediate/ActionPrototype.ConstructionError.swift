@@ -4,22 +4,8 @@ extension ActionPrototype {
     case typeInReferenceSignature(ParsedParameter)
     case multipleTypeSignatures(ParsedSignature)
     case cyclicalParameterReference(ParsedParameter)
-    case parameterNotFound(ParsedUninterruptedIdentifier)
-
-    var message: String {
-      switch self {
-      case .referenceInTypeSignature:
-        return defaultMessage
-      case .typeInReferenceSignature:
-        return defaultMessage
-      case .multipleTypeSignatures:
-        return defaultMessage
-      case .cyclicalParameterReference:
-        return defaultMessage
-      case .parameterNotFound:
-        return defaultMessage
-      }
-    }
+    case parameterNotFound(ParsedParameterReference)
+    case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var range: Slice<UTF8Segments> {
       switch self {
@@ -33,6 +19,8 @@ extension ActionPrototype {
         return parameter.location
       case .parameterNotFound(let reference):
         return reference.location
+      case .documentedParameterNotFound(let documentation):
+        return documentation.location
       }
     }
   }

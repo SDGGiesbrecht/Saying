@@ -9,6 +9,7 @@ struct Thing {
   var cSharp: NativeThingImplementation?
   var kotlin: NativeThingImplementation?
   var swift: NativeThingImplementation?
+  var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclaration
 }
 
@@ -24,7 +25,8 @@ extension Thing {
   }
 
   static func construct(
-    _ declaration: ParsedThingDeclaration
+    _ declaration: ParsedThingDeclaration,
+    namespace: [Set<StrictString>]
   ) -> Result<Thing, ErrorList<Thing.ConstructionError>> {
     var errors: [Thing.ConstructionError] = []
 
@@ -55,6 +57,14 @@ extension Thing {
         errors.append(ConstructionError.unknownLanguage(implementation.language))
       }
     }
+    var attachedDocumentation: DocumentationIntermediate?
+    if let documentation = declaration.documentation {
+      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      attachedDocumentation = intermediateDocumentation
+      for parameter in intermediateDocumentation.parameters {
+        errors.append(ConstructionError.documentedParameterNotFound(parameter))
+      }
+    }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -67,6 +77,7 @@ extension Thing {
         cSharp: cSharp,
         kotlin: kotlin,
         swift: swift,
+        documentation: attachedDocumentation,
         declaration: declaration
       )
     )

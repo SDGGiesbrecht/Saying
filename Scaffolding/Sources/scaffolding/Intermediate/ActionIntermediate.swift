@@ -116,7 +116,6 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  #warning("Sink documentation into actions and requirements to enable merging (in order to detect tests).")
   func merging(requirement: RequirementIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!

@@ -85,7 +85,7 @@ extension ActionPrototype {
             reorderings[signatureName, default: []].append(index)
             completeParameterIndexTable[parameter.name.identifierText()] = index
           } else {
-            errors.append(.parameterNotFound(reference.name))
+            errors.append(.parameterNotFound(reference))
           }
         }
       }
@@ -106,7 +106,7 @@ extension ActionPrototype {
       let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
       for parameter in intermediateDocumentation.parameters {
         if parameter.name.identifierText() ∉ existingParameters {
-          errors.append(ConstructionError.parameterNotFound(parameter.name))
+          errors.append(ConstructionError.documentedParameterNotFound(parameter))
         }
       }
     }
