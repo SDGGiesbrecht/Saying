@@ -85,19 +85,14 @@ extension ModuleIntermediate {
         uses.append(intermediate)
       }
       if let documentation = documentation {
-        var testIndex = 1
-        for element in documentation.documentation.entries.entries {
-          switch element {
-          case .parameter(let parameter):
-            if parameter.name.identifierText() ∉ parameters {
-              throw ConstructionError.parameterNotFound(parameter)
-            }
-          case .test(let test):
-            tests.append(TestIntermediate(test, location: namespace, index: testIndex))
-            testIndex += 1
-          case .paragraph:
-            break
+        let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace)
+        for parameter in intermediateDocumentation.parameters {
+          if parameter.name.identifierText() ∉ parameters {
+            throw ConstructionError.parameterNotFound(parameter)
           }
+        }
+        for test in intermediateDocumentation.tests {
+          tests.append(test)
         }
       }
     }
