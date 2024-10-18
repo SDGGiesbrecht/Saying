@@ -33,16 +33,11 @@ extension ModuleIntermediate {
 
   mutating func add(file: ParsedDeclarationList) throws {
     var errors: [ConstructionError] = []
+    let baseNamespace: [Set<StrictString>] = []
     for declaration in file.declarations {
-      let documentation: ParsedAttachedDocumentation?
-      let parameters: Set<StrictString>
-      let namespace: [Set<StrictString>]
       switch declaration {
       case .thing(let thingNode):
-        documentation = thingNode.documentation
-        parameters = []
-        let thing = try Thing.construct(thingNode).get()
-        namespace = [thing.names]
+        let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
         let identifier = thing.names.identifier()
         for name in thing.names {
           if identifierMapping[name] ≠ nil {
@@ -52,10 +47,7 @@ extension ModuleIntermediate {
         }
         things[identifier] = thing
       case .action(let actionNode):
-        documentation = actionNode.documentation
-        let action = try ActionIntermediate.construct(actionNode).get()
-        parameters = action.parameters.reduce(Set(), { $0 ∪ $1.names })
-        namespace = [action.names]
+        let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
         let identifier = action.names.identifier()
         for name in action.names {
           if identifierMapping[name] ≠ nil {
@@ -65,10 +57,7 @@ extension ModuleIntermediate {
         }
         actions[identifier] = action
       case .ability(let abilityNode):
-        documentation = abilityNode.documentation
-        parameters = []
-        let ability = try Ability.construct(abilityNode).get()
-        namespace = [ability.names]
+        let ability = try Ability.construct(abilityNode, namespace: baseNamespace).get()
         let identifier = ability.names.identifier()
         for name in ability.names {
           if identifierMapping[name] ≠ nil {
@@ -78,27 +67,8 @@ extension ModuleIntermediate {
         }
         abilities[identifier] = ability
       case .use(let use):
-        documentation = nil
-        parameters = []
-        namespace = []
-        let intermediate = try UseIntermediate.construct(use).get()
+        let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
         uses.append(intermediate)
-      }
-      if let documentation = documentation {
-        var testIndex = 1
-        for element in documentation.documentation.entries.entries {
-          switch element {
-          case .parameter(let parameter):
-            if parameter.name.identifierText() ∉ parameters {
-              throw ConstructionError.parameterNotFound(parameter)
-            }
-          case .test(let test):
-            tests.append(TestIntermediate(test, location: namespace, index: testIndex))
-            testIndex += 1
-          case .paragraph:
-            break
-          }
-        }
       }
     }
     if ¬errors.isEmpty {
@@ -138,6 +108,14 @@ extension ModuleIntermediate {
         errors.append(.noSuchRequirement(remaining.declaration!))
       }
     }
+
+    for documentation in [
+      things.values.lazy.compactMap({ $0.documentation }),
+      actions.values.lazy.compactMap({ $0.documentation })
+    ].joined() {
+      tests.append(contentsOf: documentation.tests)
+    }
+
     if ¬errors.isEmpty {
       throw ErrorList(errors)
     }

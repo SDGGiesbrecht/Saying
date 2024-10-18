@@ -13,12 +13,15 @@ struct UseIntermediate {
 extension UseIntermediate {
 
   static func construct(
-    _ declaration: ParsedUse
+    _ declaration: ParsedUse,
+    namespace: [Set<StrictString>]
   ) -> Result<UseIntermediate, ErrorList<UseIntermediate.ConstructionError>> {
     var errors: [UseIntermediate.ConstructionError] = []
+    let abilityName = declaration.use.name()
+    let useNamespace = namespace
     var actions: [ActionIntermediate] = []
     for action in declaration.fulfillments.fulfillments.fulfillments {
-      switch ActionIntermediate.construct(action) {
+      switch ActionIntermediate.construct(action, namespace: useNamespace) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenAction($0) }))
       case .success(let action):
@@ -30,7 +33,7 @@ extension UseIntermediate {
     }
     return .success(
       UseIntermediate(
-        ability: declaration.use.name(),
+        ability: abilityName,
         arguments: declaration.use.arguments.arguments.map({ $0.name.identifierText() }),
         actions: actions,
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,

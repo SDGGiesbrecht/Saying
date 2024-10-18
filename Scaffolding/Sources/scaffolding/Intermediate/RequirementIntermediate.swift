@@ -6,6 +6,9 @@ struct RequirementIntermediate {
   fileprivate var prototype: ActionPrototype
   var declaration: ParsedRequirementDeclaration?
 
+  var documentation: DocumentationIntermediate? {
+    return prototype.documentation
+  }
   var names: Set<StrictString> {
     return prototype.names
   }
@@ -29,12 +32,13 @@ struct RequirementIntermediate {
 extension RequirementIntermediate {
 
   static func construct(
-    _ declaration: ParsedRequirementDeclaration
+    _ declaration: ParsedRequirementDeclaration,
+    namespace: [Set<StrictString>]
   ) -> Result<RequirementIntermediate, ErrorList<RequirementIntermediate.ConstructionError>> {
     var errors: [RequirementIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype
-    switch ActionPrototype.construct(declaration) {
+    switch ActionPrototype.construct(declaration, namespace: namespace) {
     case .failure(let prototypeError):
       errors.append(contentsOf: prototypeError.errors.map({ .brokenPrototype($0) }))
       return .failure(ErrorList(errors))

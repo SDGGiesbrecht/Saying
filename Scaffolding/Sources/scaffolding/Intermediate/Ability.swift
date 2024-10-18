@@ -10,14 +10,15 @@ struct Ability {
   var requirements: [StrictString: RequirementIntermediate]
   var clientAccess: Bool
   var testOnlyAccess: Bool
-  var tests: [TestIntermediate]
+  var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
 }
 
 extension Ability {
 
   static func construct(
-    _ declaration: ParsedAbilityDeclaration
+    _ declaration: ParsedAbilityDeclaration,
+    namespace: [Set<StrictString>]
   ) -> Result<Ability, ErrorList<Ability.ConstructionError>> {
     var errors: [Ability.ConstructionError] = []
     var names: Set<StrictString> = []
@@ -100,19 +101,16 @@ extension Ability {
     }
     var identifierMapping: [StrictString: StrictString] = [:]
     var requirements: [StrictString: RequirementIntermediate] = [:]
-    var tests: [TestIntermediate] = []
+    let abilityNamespace = namespace.appending(names)
     for requirementNode in declaration.requirements.requirements.requirements {
-      let documentation = requirementNode.documentation
       let requirement: RequirementIntermediate
-      switch RequirementIntermediate.construct(requirementNode) {
+      switch RequirementIntermediate.construct(requirementNode, namespace: abilityNamespace) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
         continue
       case .success(let constructed):
         requirement = constructed
       }
-      let parameters = requirement.parameters.reduce(Set(), { $0 ∪ $1.names })
-      let namespace = [requirement.names]
       let identifier = requirement.names.identifier()
       for name in requirement.names {
         if identifierMapping[name] ≠ nil {
@@ -121,21 +119,13 @@ extension Ability {
         identifierMapping[name] = identifier
       }
       requirements[identifier] = requirement
-      if let documentation = documentation {
-        var testIndex = 1
-        for element in documentation.documentation.entries.entries {
-          switch element {
-          case .parameter(let parameter):
-            if parameter.name.identifierText() ∉ parameters {
-              errors.append(ConstructionError.documentedParameterNotFound(parameter))
-            }
-          case .test(let test):
-            tests.append(TestIntermediate(test, location: namespace, index: testIndex))
-            testIndex += 1
-          case .paragraph:
-            break
-          }
-        }
+    }
+    var attachedDocumentation: DocumentationIntermediate?
+    if let documentation = declaration.documentation {
+      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      attachedDocumentation = intermediateDocumentation
+      for parameter in intermediateDocumentation.parameters.joined() {
+        errors.append(ConstructionError.documentedParameterNotFound(parameter))
       }
     }
     if ¬errors.isEmpty {
@@ -150,7 +140,7 @@ extension Ability {
         requirements: requirements,
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
-        tests: tests,
+        documentation: attachedDocumentation,
         declaration: declaration
       )
     )

@@ -13,6 +13,9 @@ struct ActionIntermediate {
   var declaration: ParsedActionDeclaration?
   var coveredIdentifier: StrictString?
 
+  var documentation: DocumentationIntermediate? {
+    return prototype.documentation
+  }
   var names: Set<StrictString> {
     return prototype.names
   }
@@ -45,12 +48,13 @@ extension ActionIntermediate {
   }
 
   static func construct(
-    _ declaration: ParsedActionDeclaration
+    _ declaration: ParsedActionDeclaration,
+    namespace: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>> {
     var errors: [ActionIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype
-    switch ActionPrototype.construct(declaration) {
+    switch ActionPrototype.construct(declaration, namespace: namespace) {
     case .failure(let prototypeError):
       errors.append(contentsOf: prototypeError.errors.map({ .brokenPrototype($0) }))
       return .failure(ErrorList(errors))
@@ -147,6 +151,7 @@ extension ActionIntermediate {
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
+    let mergedDocumentation = documentation.merging(inherited: requirement.documentation)
     return .success(
       ActionIntermediate(
         prototype: ActionPrototype(
@@ -156,6 +161,7 @@ extension ActionIntermediate {
           returnValue: returnValue,
           clientAccess: clientAccess,
           testOnlyAccess: testOnlyAccess,
+          documentation: mergedDocumentation,
           completeParameterIndexTable: [:]
         ),
         c: c,

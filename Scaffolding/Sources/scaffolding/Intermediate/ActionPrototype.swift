@@ -9,6 +9,7 @@ struct ActionPrototype {
   var returnValue: StrictString?
   var clientAccess: Bool
   var testOnlyAccess: Bool
+  var documentation: DocumentationIntermediate?
 
   var completeParameterIndexTable: [StrictString: Int]
   var declarationReturnValueType: ParsedUninterruptedIdentifier?
@@ -17,7 +18,8 @@ struct ActionPrototype {
 extension ActionPrototype {
 
   static func construct<S>(
-    _ declaration: S
+    _ declaration: S,
+    namespace: [Set<StrictString>]
   ) -> Result<ActionPrototype, ErrorList<ActionPrototype.ConstructionError>>
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
@@ -97,6 +99,17 @@ extension ActionPrototype {
       )
       return ParameterIntermediate(names: names, type: type.identifierText(), typeDeclaration: type)
     }
+    var attachedDocumentation: DocumentationIntermediate?
+    if let documentation = declaration.documentation {
+      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      attachedDocumentation = intermediateDocumentation
+      let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
+      for parameter in intermediateDocumentation.parameters.joined() {
+        if parameter.name.identifierText() ∉ existingParameters {
+          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+        }
+      }
+    }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -108,6 +121,7 @@ extension ActionPrototype {
         returnValue: declaration.returnValueType?.identifierText(),
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
+        documentation: attachedDocumentation,
         completeParameterIndexTable: completeParameterIndexTable,
         declarationReturnValueType: declaration.returnValueType
       )
