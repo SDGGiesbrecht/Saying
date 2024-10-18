@@ -46,9 +46,6 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         things[identifier] = thing
-        if let documentation = thing.documentation {
-          tests.append(contentsOf: documentation.tests)
-        }
       case .action(let actionNode):
         let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
         let identifier = action.names.identifier()
@@ -59,9 +56,6 @@ extension ModuleIntermediate {
           identifierMapping[name] = identifier
         }
         actions[identifier] = action
-        if let documentation = action.documentation {
-          tests.append(contentsOf: documentation.tests)
-        }
       case .ability(let abilityNode):
         let ability = try Ability.construct(abilityNode, namespace: baseNamespace).get()
         let identifier = ability.names.identifier()
@@ -114,6 +108,14 @@ extension ModuleIntermediate {
         errors.append(.noSuchRequirement(remaining.declaration!))
       }
     }
+
+    for documentation in [
+      things.values.lazy.compactMap({ $0.documentation }),
+      actions.values.lazy.compactMap({ $0.documentation })
+    ].joined() {
+      tests.append(contentsOf: documentation.tests)
+    }
+
     if ¬errors.isEmpty {
       throw ErrorList(errors)
     }
