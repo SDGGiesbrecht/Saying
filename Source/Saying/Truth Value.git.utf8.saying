@@ -239,47 +239,19 @@ use (clients)
    JavaScript: “¤(28)” first “ == ” second “¤(29)”
    Kotlin: “¤(28)” first “ == ” second “¤(29)”
    Swift: «¤(28)» first “ == ” second „¤(29)“
- }
 
-action (clients)
- [
-  [
-   English: Compares two truth values for inequality.
-  ]
-  test (verify (((true) is not (true)) is (false)))
-  test (verify (((true) is not (false)) is (true)))
-  test (verify (((false) is not (true)) is (true)))
-  test (verify (((false) is not (false)) is (false)))
-  parameter: first
-   (
-    [
-     English: A truth value.
-     Deutsch: Eine Wahrheitswert.
-    ]
-   )
-  parameter: second
-   (
-    [
-     English: Another truth value.
-     Deutsch: Eine weitere Wahrheitswert.
-    ]
-   )
- ]
- (
-  English: (first: truth value) is not (second: truth value)
-  English +: (first: [first]) ≠ (second: [second])
-  Deutsch: (erste: [first]) ist nicht (zweite: [second])
-  Deutsch +: (erste: [first]) ≠ (zweite: [second])
-  français : (première: [first]) n’est pas (deuxième: [second])
-  français +: (première: [first]) ≠ (deuxième: [second])
-  ελληνικά: (πρώτη: [first]) δεν είναι (δεύτερα: [second])
-  ελληνικά +: (πρώτη: [first]) ≠ (δεύτερα: [second])
-  עברית: (ראשון: [first]) לא (שני: [second])
-  עברית +: (ראשון: [first]) ≠ (שני: [second])
- )
- truth value
- C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
- C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
- JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
- Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
- Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+  action (clients)
+   [
+    test (verify (((true) is not (true)) is (false)))
+    test (verify (((true) is not (false)) is (true)))
+    test (verify (((false) is not (true)) is (true)))
+    test (verify (((false) is not (false)) is (false)))
+   ]
+   (first: truth value) is not (second: truth value)
+   truth value
+   C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+ }
