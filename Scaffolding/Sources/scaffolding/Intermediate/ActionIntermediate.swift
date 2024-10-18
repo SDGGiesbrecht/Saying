@@ -151,6 +151,7 @@ extension ActionIntermediate {
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
+    let mergedDocumentation = documentation.merging(inherited: requirement.documentation)
     return .success(
       ActionIntermediate(
         prototype: ActionPrototype(
@@ -160,6 +161,7 @@ extension ActionIntermediate {
           returnValue: returnValue,
           clientAccess: clientAccess,
           testOnlyAccess: testOnlyAccess,
+          documentation: mergedDocumentation,
           completeParameterIndexTable: [:]
         ),
         c: c,

@@ -6,6 +6,9 @@ struct RequirementIntermediate {
   fileprivate var prototype: ActionPrototype
   var declaration: ParsedRequirementDeclaration?
 
+  var documentation: DocumentationIntermediate? {
+    return prototype.documentation
+  }
   var names: Set<StrictString> {
     return prototype.names
   }

@@ -124,7 +124,7 @@ extension Ability {
     if let documentation = declaration.documentation {
       let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
       attachedDocumentation = intermediateDocumentation
-      for parameter in intermediateDocumentation.parameters {
+      for parameter in intermediateDocumentation.parameters.joined() {
         errors.append(ConstructionError.documentedParameterNotFound(parameter))
       }
     }

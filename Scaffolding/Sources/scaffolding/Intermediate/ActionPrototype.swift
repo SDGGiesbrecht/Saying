@@ -104,7 +104,7 @@ extension ActionPrototype {
       let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
       attachedDocumentation = intermediateDocumentation
       let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
-      for parameter in intermediateDocumentation.parameters {
+      for parameter in intermediateDocumentation.parameters.joined() {
         if parameter.name.identifierText() ∉ existingParameters {
           errors.append(ConstructionError.documentedParameterNotFound(parameter))
         }

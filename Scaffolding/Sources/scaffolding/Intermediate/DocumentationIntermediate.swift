@@ -2,7 +2,7 @@ import SDGLogic
 import SDGText
 
 struct DocumentationIntermediate {
-  var parameters: [ParsedParameterDocumentation]
+  var parameters: [[ParsedParameterDocumentation]]
   var tests: [TestIntermediate]
   var declaration: ParsedDocumentation?
 }
@@ -30,9 +30,26 @@ extension DocumentationIntermediate {
     }
 
     return DocumentationIntermediate(
-      parameters: parameters,
+      parameters: [parameters],
       tests: tests,
       declaration: declaration
+    )
+  }
+}
+
+extension Optional where Wrapped == DocumentationIntermediate {
+
+  func merging(inherited: DocumentationIntermediate?) -> DocumentationIntermediate? {
+    guard let base = inherited else {
+      return self
+    }
+    guard let child = self else {
+      return base
+    }
+    return DocumentationIntermediate(
+      parameters: base.parameters.appending(contentsOf: child.parameters),
+      tests: base.tests.appending(contentsOf: child.tests),
+      declaration: nil
     )
   }
 }
