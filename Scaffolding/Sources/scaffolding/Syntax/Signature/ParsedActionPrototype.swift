@@ -16,3 +16,8 @@ extension ParsedRequirementDeclaration: ParsedActionPrototype {
     return returnValue?.type
   }
 }
+extension ParsedChoiceDeclaration: ParsedActionPrototype {
+  var returnValueType: ParsedUninterruptedIdentifier? {
+    return returnValue?.type
+  }
+}

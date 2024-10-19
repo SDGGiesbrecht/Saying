@@ -4,7 +4,7 @@ import SDGText
 
 struct RequirementIntermediate {
   fileprivate var prototype: ActionPrototype
-  var declaration: ParsedRequirementDeclaration?
+  var declaration: ParsedRequirementDeclarationPrototype?
 
   var documentation: DocumentationIntermediate? {
     return prototype.documentation
@@ -31,10 +31,11 @@ struct RequirementIntermediate {
 
 extension RequirementIntermediate {
 
-  static func construct(
-    _ declaration: ParsedRequirementDeclaration,
+  static func construct<Declaration>(
+    _ declaration: Declaration,
     namespace: [Set<StrictString>]
-  ) -> Result<RequirementIntermediate, ErrorList<RequirementIntermediate.ConstructionError>> {
+  ) -> Result<RequirementIntermediate, ErrorList<RequirementIntermediate.ConstructionError>>
+  where Declaration: ParsedRequirementDeclarationPrototype {
     var errors: [RequirementIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype

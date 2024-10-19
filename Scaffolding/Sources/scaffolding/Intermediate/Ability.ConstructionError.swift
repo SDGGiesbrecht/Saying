@@ -8,7 +8,7 @@ extension Ability {
     case cyclicalParameterReference(ParsedAbilityParameter)
     case parameterNotFound(ParsedAbilityParameterReference)
     case brokenRequirement(RequirementIntermediate.ConstructionError)
-    case redeclaredIdentifier(StrictString, [ParsedRequirementDeclaration])
+    case redeclaredIdentifier(StrictString, [ParsedRequirementDeclarationPrototype])
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var range: Slice<UTF8Segments> {

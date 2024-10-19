@@ -122,7 +122,23 @@ extension Ability {
         }
         requirements[identifier] = requirement
       case .choice(let choiceNode):
-        #warning("Not implemented yet.")
+        let requirement: RequirementIntermediate
+        switch RequirementIntermediate.construct(choiceNode, namespace: abilityNamespace) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
+          continue
+        case .success(let constructed):
+          requirement = constructed
+        }
+        let identifier = requirement.names.identifier()
+        for name in requirement.names {
+          if identifierMapping[name] ≠ nil {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+          }
+          identifierMapping[name] = identifier
+        }
+        requirements[identifier] = requirement
+        #warning("Implementation not handled yet.")
       }
     }
     var attachedDocumentation: DocumentationIntermediate?
