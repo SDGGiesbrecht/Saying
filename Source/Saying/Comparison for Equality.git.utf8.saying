@@ -38,7 +38,7 @@ ability (clients)
    )
    truth value
 
-  requirement (clients)
+  default (clients)
    [
     [
      English: Compares two truth values for inequality.
@@ -75,4 +75,7 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
+   {
+    not((first) is (second))
+   }
  }
