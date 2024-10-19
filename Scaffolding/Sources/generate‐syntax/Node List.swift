@@ -660,7 +660,6 @@ extension Node {
           Node(
             name: "SourceActionImplementation",
             kind: .compound(children: [
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "action", type: "Action", kind: .required),
@@ -688,10 +687,19 @@ extension Node {
 
         [
           Node(
-            name: "ActionImplementations",
+            name: "DualActionImplementation",
             kind: .compound(children: [
               Child(name: "native", type: "NativeActionImplementations", kind: .required),
-              Child(name: "source", type: "SourceActionImplementation", kind: .optional),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "source", type: "SourceActionImplementation", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ActionImplementations",
+            kind: .alternates([
+              Alternate(name: "source", type: "SourceActionImplementation"),
+              Alternate(name: "dual", type: "DualActionImplementation"),
+              Alternate(name: "native", type: "NativeActionImplementations"),
             ])
           ),
 

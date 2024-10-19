@@ -66,31 +66,33 @@ extension ActionIntermediate {
     var javaScript: NativeActionImplementationIntermediate?
     var kotlin: NativeActionImplementationIntermediate?
     var swift: NativeActionImplementationIntermediate?
-    for implementation in declaration.implementation.native.implementations {
-      switch NativeActionImplementationIntermediate.construct(
-        implementation: implementation.expression,
-        indexTable: prototype.completeParameterIndexTable
-      ) {
-      case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
-      case .success(let constructed):
-        switch implementation.language.identifierText() {
-        case "C":
-          c = constructed
-        case "C♯":
-          cSharp = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "JavaScript":
-          javaScript = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "Kotlin":
-          kotlin = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "Swift":
-          swift = constructed
-          disallowImports(in: implementation, errors: &errors)
-        default:
-          errors.append(ConstructionError.unknownLanguage(implementation.language))
+    if let native = declaration.implementation.native {
+      for implementation in native.implementations {
+        switch NativeActionImplementationIntermediate.construct(
+          implementation: implementation.expression,
+          indexTable: prototype.completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
+        case .success(let constructed):
+          switch implementation.language.identifierText() {
+          case "C":
+            c = constructed
+          case "C♯":
+            cSharp = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "JavaScript":
+            javaScript = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "Kotlin":
+            kotlin = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "Swift":
+            swift = constructed
+            disallowImports(in: implementation, errors: &errors)
+          default:
+            errors.append(ConstructionError.unknownLanguage(implementation.language))
+          }
         }
       }
     }
