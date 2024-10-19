@@ -282,9 +282,16 @@ extension Platform {
       result.append("")
     }
 
-    let regions = module.actions.values
+    let actionRegions: [StrictString] = module.actions.values
       .lazy.filter({ ¬$0.isCoverageWrapper })
       .lazy.compactMap({ $0.coverageRegionIdentifier() })
+    let choiceRegions: [StrictString] = module.abilities.values
+      .lazy.flatMap({ $0.defaults.values })
+      .lazy.compactMap({ $0.coverageRegionIdentifier() })
+    let regions = [
+      actionRegions,
+      choiceRegions
+    ].joined()
       .sorted()
       .map({ sanitize(stringLiteral: $0) })
     result.append(contentsOf: coverageRegionSet(regions: regions))
