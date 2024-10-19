@@ -10,7 +10,7 @@ struct ActionIntermediate {
   var kotlin: NativeActionImplementationIntermediate?
   var swift: NativeActionImplementationIntermediate?
   var implementation: ActionUse?
-  var declaration: ParsedActionDeclaration?
+  var declaration: ParsedActionDeclarationPrototype?
   var coveredIdentifier: StrictString?
 
   var documentation: DocumentationIntermediate? {
@@ -47,10 +47,11 @@ extension ActionIntermediate {
     }
   }
 
-  static func construct(
-    _ declaration: ParsedActionDeclaration,
+  static func construct<Declaration>(
+    _ declaration: Declaration,
     namespace: [Set<StrictString>]
-  ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>> {
+  ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>>
+  where Declaration: ParsedActionDeclarationPrototype {
     var errors: [ActionIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype

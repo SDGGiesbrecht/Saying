@@ -8,6 +8,7 @@ struct Ability {
   var parameterReorderings: [StrictString: [Int]]
   var identifierMapping: [StrictString: StrictString]
   var requirements: [StrictString: RequirementIntermediate]
+  var defaults: [StrictString: ActionIntermediate]
   var clientAccess: Bool
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
@@ -101,6 +102,7 @@ extension Ability {
     }
     var identifierMapping: [StrictString: StrictString] = [:]
     var requirements: [StrictString: RequirementIntermediate] = [:]
+    var defaults: [StrictString: ActionIntermediate] = [:]
     let abilityNamespace = namespace.appending(names)
     for requirementEntry in declaration.requirements.requirements.requirements {
       switch requirementEntry {
@@ -138,7 +140,15 @@ extension Ability {
           identifierMapping[name] = identifier
         }
         requirements[identifier] = requirement
-        #warning("Implementation not handled yet.")
+        let defaultImplementation: ActionIntermediate
+        switch ActionIntermediate.construct(choiceNode, namespace: abilityNamespace) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenChoice($0) }))
+          continue
+        case .success(let constructed):
+          defaultImplementation = constructed
+        }
+        defaults[identifier] = defaultImplementation
       }
     }
     var attachedDocumentation: DocumentationIntermediate?
@@ -159,6 +169,7 @@ extension Ability {
         parameterReorderings: reorderings,
         identifierMapping: identifierMapping,
         requirements: requirements,
+        defaults: defaults,
         clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,

@@ -24,7 +24,7 @@ extension ModuleIntermediate {
   func lookupDeclaration(_ identifier: StrictString) -> ParsedDeclaration? {
     if let thing = lookupThing(identifier)?.declaration {
       return .thing(thing)
-    } else if let action = lookupAction(identifier)?.declaration {
+    } else if let action = lookupAction(identifier)?.declaration as? ParsedActionDeclaration {
       return .action(action)
     } else {
       return nil
@@ -105,7 +105,7 @@ extension ModuleIntermediate {
         }
       }
       for remaining in prototypeActions {
-        errors.append(.noSuchRequirement(remaining.declaration!))
+        errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))
       }
     }
 
