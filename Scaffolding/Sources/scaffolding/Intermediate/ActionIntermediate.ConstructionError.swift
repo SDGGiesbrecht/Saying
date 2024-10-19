@@ -2,8 +2,8 @@ extension ActionIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenPrototype(ActionPrototype.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
-    case brokenNativeActionImplementation(NativeActionImplementation.ConstructionError)
-    case invalidImport(ParsedActionImplementation)
+    case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
+    case invalidImport(ParsedNativeActionImplementation)
 
     var message: String {
       switch self {

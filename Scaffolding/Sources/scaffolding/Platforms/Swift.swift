@@ -102,7 +102,7 @@ enum Swift: Platform {
     return thing.swift
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
   }
 

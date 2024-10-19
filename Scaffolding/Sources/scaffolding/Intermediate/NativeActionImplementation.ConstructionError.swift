@@ -1,4 +1,4 @@
-extension NativeActionImplementation {
+extension NativeActionImplementationIntermediate {
   enum ConstructionError: DiagnosticError {
     case literalError(LiteralIntermediate.ConstructionError)
     case parenthesesMissing(ParsedNativeActionExpression)

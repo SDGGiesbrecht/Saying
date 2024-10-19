@@ -4,11 +4,11 @@ import SDGText
 
 struct ActionIntermediate {
   fileprivate var prototype: ActionPrototype
-  var c: NativeActionImplementation?
-  var cSharp: NativeActionImplementation?
-  var javaScript: NativeActionImplementation?
-  var kotlin: NativeActionImplementation?
-  var swift: NativeActionImplementation?
+  var c: NativeActionImplementationIntermediate?
+  var cSharp: NativeActionImplementationIntermediate?
+  var javaScript: NativeActionImplementationIntermediate?
+  var kotlin: NativeActionImplementationIntermediate?
+  var swift: NativeActionImplementationIntermediate?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclaration?
   var coveredIdentifier: StrictString?
@@ -39,7 +39,7 @@ struct ActionIntermediate {
 extension ActionIntermediate {
 
   static func disallowImports(
-    in implementation: ParsedActionImplementation,
+    in implementation: ParsedNativeActionImplementation,
     errors: inout [ConstructionError]
   ) {
     if implementation.expression.importNode ≠ nil {
@@ -61,37 +61,42 @@ extension ActionIntermediate {
     case .success(let constructed):
       prototype = constructed
     }
-    var c: NativeActionImplementation?
-    var cSharp: NativeActionImplementation?
-    var javaScript: NativeActionImplementation?
-    var kotlin: NativeActionImplementation?
-    var swift: NativeActionImplementation?
+    var c: NativeActionImplementationIntermediate?
+    var cSharp: NativeActionImplementationIntermediate?
+    var javaScript: NativeActionImplementationIntermediate?
+    var kotlin: NativeActionImplementationIntermediate?
+    var swift: NativeActionImplementationIntermediate?
     for implementation in declaration.implementation.implementations {
-      switch NativeActionImplementation.construct(
-        implementation: implementation.expression,
-        indexTable: prototype.completeParameterIndexTable
-      ) {
-      case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
-      case .success(let constructed):
-        switch implementation.language.identifierText() {
-        case "C":
-          c = constructed
-        case "C♯":
-          cSharp = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "JavaScript":
-          javaScript = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "Kotlin":
-          kotlin = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "Swift":
-          swift = constructed
-          disallowImports(in: implementation, errors: &errors)
-        default:
-          errors.append(ConstructionError.unknownLanguage(implementation.language))
+      switch implementation {
+      case .native(let native):
+        switch NativeActionImplementationIntermediate.construct(
+          implementation: native.expression,
+          indexTable: prototype.completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
+        case .success(let constructed):
+          switch native.language.identifierText() {
+          case "C":
+            c = constructed
+          case "C♯":
+            cSharp = constructed
+            disallowImports(in: native, errors: &errors)
+          case "JavaScript":
+            javaScript = constructed
+            disallowImports(in: native, errors: &errors)
+          case "Kotlin":
+            kotlin = constructed
+            disallowImports(in: native, errors: &errors)
+          case "Swift":
+            swift = constructed
+            disallowImports(in: native, errors: &errors)
+          default:
+            errors.append(ConstructionError.unknownLanguage(native.language))
+          }
         }
+      case .source(let source):
+        #warning("Not implemented yet.")
       }
     }
     if ¬errors.isEmpty {

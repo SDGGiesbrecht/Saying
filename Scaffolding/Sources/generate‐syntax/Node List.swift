@@ -650,11 +650,28 @@ extension Node {
             ])
           ),
           Node(
-            name: "ActionImplementation",
+            name: "NativeActionImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
               Child(name: "expression", type: "NativeAction", kind: .required),
+            ])
+          ),
+          Node(
+            name: "SourceActionImplementation",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "test", type: "Action", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ActionImplementation",
+            kind: .alternates([
+              Alternate(name: "native", type: "NativeActionImplementation"),
+              Alternate(name: "source", type: "SourceActionImplementation"),
             ])
           ),
         ],

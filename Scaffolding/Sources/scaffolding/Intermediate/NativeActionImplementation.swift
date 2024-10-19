@@ -1,18 +1,18 @@
 import SDGLogic
 import SDGText
 
-struct NativeActionImplementation {
+struct NativeActionImplementationIntermediate {
   var reordering: [Int]
   var textComponents: [StrictString]
   var requiredImport: StrictString?
 }
 
-extension NativeActionImplementation {
+extension NativeActionImplementationIntermediate {
 
   static func construct(
     implementation: ParsedNativeAction,
     indexTable: [StrictString: Int]
-  ) -> Result<NativeActionImplementation, ErrorList<ConstructionError>> {
+  ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
     let components = implementation.expression.components
     var reordering: [Int] = []
     var textComponents: [StrictString] = []
@@ -44,7 +44,7 @@ extension NativeActionImplementation {
       return .failure(ErrorList(errors))
     }
     return .success(
-      NativeActionImplementation(
+      NativeActionImplementationIntermediate(
         reordering: reordering,
         textComponents: textComponents,
         requiredImport: requiredImport

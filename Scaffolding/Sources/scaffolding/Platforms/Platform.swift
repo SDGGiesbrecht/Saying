@@ -26,7 +26,7 @@ protocol Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
 
   // Actions
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation?
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String) -> String
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
