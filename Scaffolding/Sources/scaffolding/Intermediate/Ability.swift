@@ -102,23 +102,28 @@ extension Ability {
     var identifierMapping: [StrictString: StrictString] = [:]
     var requirements: [StrictString: RequirementIntermediate] = [:]
     let abilityNamespace = namespace.appending(names)
-    for requirementNode in declaration.requirements.requirements.requirements {
-      let requirement: RequirementIntermediate
-      switch RequirementIntermediate.construct(requirementNode, namespace: abilityNamespace) {
-      case .failure(let nested):
-        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
-        continue
-      case .success(let constructed):
-        requirement = constructed
-      }
-      let identifier = requirement.names.identifier()
-      for name in requirement.names {
-        if identifierMapping[name] ≠ nil {
-          errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+    for requirementEntry in declaration.requirements.requirements.requirements {
+      switch requirementEntry {
+      case .requirement(let requirementNode):
+        let requirement: RequirementIntermediate
+        switch RequirementIntermediate.construct(requirementNode, namespace: abilityNamespace) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
+          continue
+        case .success(let constructed):
+          requirement = constructed
         }
-        identifierMapping[name] = identifier
+        let identifier = requirement.names.identifier()
+        for name in requirement.names {
+          if identifierMapping[name] ≠ nil {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+          }
+          identifierMapping[name] = identifier
+        }
+        requirements[identifier] = requirement
+      case .choice(let choiceNode):
+        #warning("Not implemented yet.")
       }
-      requirements[identifier] = requirement
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {

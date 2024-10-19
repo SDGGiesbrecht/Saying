@@ -25,6 +25,7 @@ extension Node {
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
+          Node(name: "ChoiceKeyword", kind: .keyword(["choice", "Wahl", "choix", "επιλογή", "בחירה"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
@@ -714,12 +715,33 @@ extension Node {
               Child(name: "returnValue", type: "RequirementReturnValue", kind: .optional),
             ])
           ),
-
+          Node(
+            name: "ChoiceDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ChoiceKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ActionName", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "returnValue", type: "ActionReturnValue", kind: .optional),
+              Child(name: "implementation", type: "ActionImplementations", kind: .required),
+            ])
+          ),
+          
+          Node(
+            name: "RequirementsElement",
+            kind: .alternates([
+              Alternate(name: "requirement", type: "RequirementDeclaration"),
+              Alternate(name: "choice", type: "ChoiceDeclaration"),
+            ])
+          ),
         ],
           Node.separatedList(
             name: "RequirementsList",
             entryName: "requirement", entryNamePlural: "requirements",
-            entryType: "RequirementDeclaration",
+            entryType: "RequirementsElement",
             separatorName: "paragraphBreak",
             separatorType: "ParagraphBreak",
             fixedSeparator: true

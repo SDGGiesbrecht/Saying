@@ -38,7 +38,7 @@ ability (clients)
    )
    truth value
 
-  default (clients)
+  choice (clients)
    [
     [
      English: Compares two truth values for inequality.
