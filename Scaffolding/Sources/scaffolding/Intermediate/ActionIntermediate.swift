@@ -159,6 +159,7 @@ extension ActionIntermediate {
       ActionIntermediate(
         prototype: ActionPrototype(
           names: names ∪ requirement.names,
+          namespace: prototype.namespace,
           parameters: mergedParameters,
           reorderings: mergedReorderings,
           returnValue: returnValue,
@@ -200,6 +201,7 @@ extension ActionIntermediate {
       return ActionIntermediate(
         prototype: ActionPrototype(
           names: [coverageTrackingIdentifier()],
+          namespace: [],
           parameters: prototype.parameters,
           reorderings: prototype.reorderings,
           returnValue: prototype.returnValue,
@@ -225,6 +227,9 @@ extension ActionIntermediate {
   }
 
   func coverageRegionIdentifier() -> StrictString? {
-    return prototype.names.identifier()
+    return prototype.namespace
+      .appending(prototype.names)
+      .lazy.map({ $0.identifier() })
+      .joined(separator: ":")
   }
 }

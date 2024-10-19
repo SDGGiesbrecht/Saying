@@ -4,6 +4,7 @@ import SDGText
 
 struct ActionPrototype {
   var names: Set<StrictString>
+  var namespace: [Set<StrictString>]
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
@@ -116,6 +117,7 @@ extension ActionPrototype {
     return .success(
       ActionPrototype(
         names: names,
+        namespace: namespace,
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValueType?.identifierText(),
