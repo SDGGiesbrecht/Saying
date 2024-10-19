@@ -149,6 +149,8 @@ extension ModuleIntermediate {
       identifierMapping: identifierMapping,
       things: things,
       actions: actions,
+      abilities: abilities,
+      uses: uses,
       tests: tests
     )
   }
