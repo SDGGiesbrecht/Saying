@@ -66,37 +66,32 @@ extension ActionIntermediate {
     var javaScript: NativeActionImplementationIntermediate?
     var kotlin: NativeActionImplementationIntermediate?
     var swift: NativeActionImplementationIntermediate?
-    for implementation in declaration.implementation.implementations {
-      switch implementation {
-      case .native(let native):
-        switch NativeActionImplementationIntermediate.construct(
-          implementation: native.expression,
-          indexTable: prototype.completeParameterIndexTable
-        ) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
-        case .success(let constructed):
-          switch native.language.identifierText() {
-          case "C":
-            c = constructed
-          case "C♯":
-            cSharp = constructed
-            disallowImports(in: native, errors: &errors)
-          case "JavaScript":
-            javaScript = constructed
-            disallowImports(in: native, errors: &errors)
-          case "Kotlin":
-            kotlin = constructed
-            disallowImports(in: native, errors: &errors)
-          case "Swift":
-            swift = constructed
-            disallowImports(in: native, errors: &errors)
-          default:
-            errors.append(ConstructionError.unknownLanguage(native.language))
-          }
+    for implementation in declaration.implementation.native.implementations {
+      switch NativeActionImplementationIntermediate.construct(
+        implementation: implementation.expression,
+        indexTable: prototype.completeParameterIndexTable
+      ) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
+      case .success(let constructed):
+        switch implementation.language.identifierText() {
+        case "C":
+          c = constructed
+        case "C♯":
+          cSharp = constructed
+          disallowImports(in: implementation, errors: &errors)
+        case "JavaScript":
+          javaScript = constructed
+          disallowImports(in: implementation, errors: &errors)
+        case "Kotlin":
+          kotlin = constructed
+          disallowImports(in: implementation, errors: &errors)
+        case "Swift":
+          swift = constructed
+          disallowImports(in: implementation, errors: &errors)
+        default:
+          errors.append(ConstructionError.unknownLanguage(implementation.language))
         }
-      case .source(let source):
-        #warning("Not implemented yet.")
       }
     }
     if ¬errors.isEmpty {

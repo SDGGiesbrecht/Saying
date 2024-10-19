@@ -660,18 +660,12 @@ extension Node {
           Node(
             name: "SourceActionImplementation",
             kind: .compound(children: [
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "test", type: "Action", kind: .required),
+              Child(name: "action", type: "Action", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
-            ])
-          ),
-          Node(
-            name: "ActionImplementation",
-            kind: .alternates([
-              Alternate(name: "native", type: "NativeActionImplementation"),
-              Alternate(name: "source", type: "SourceActionImplementation"),
             ])
           ),
         ],
@@ -684,15 +678,23 @@ extension Node {
             fixedSeparator: true
           ),
           Node.separatedList(
-            name: "ActionImplementations",
+            name: "NativeActionImplementations",
             entryName: "implementation", entryNamePlural: "implementations",
-            entryType: "ActionImplementation",
+            entryType: "NativeActionImplementation",
             separatorName: "lineBreak",
             separatorType: "LineBreak",
             fixedSeparator: true
           ),
 
         [
+          Node(
+            name: "ActionImplementations",
+            kind: .compound(children: [
+              Child(name: "native", type: "NativeActionImplementations", kind: .required),
+              Child(name: "source", type: "SourceActionImplementation", kind: .optional),
+            ])
+          ),
+
           Node(
             name: "ThingDeclaration",
             kind: .compound(children: [
