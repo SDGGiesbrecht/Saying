@@ -79,3 +79,25 @@ ability (clients)
     not((first) is (second))
    }
  }
+
+thing (file)
+ (
+  English: equality example
+ )
+ C: bool (stdbool)
+ C♯: bool
+ Kotlin: Boolean
+ Swift: Bool
+
+use (file)
+ comparison of (equality example) for equality
+ {
+  action (file)
+   (first: truth value) is (second: truth value)
+   truth value
+   C: “¤(28)” first “ == ” second “¤(29)”
+   C♯: “¤(28)” first “ == ” second “¤(29)”
+   JavaScript: “¤(28)” first “ == ” second “¤(29)”
+   Kotlin: “¤(28)” first “ == ” second “¤(29)”
+   Swift: «¤(28)» first “ == ” second „¤(29)“
+ }

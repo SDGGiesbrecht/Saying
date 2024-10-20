@@ -29,6 +29,7 @@ extension Node {
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
+          Node(name: "FileKeyword", kind: .keyword(["file", "Datei", "fichier", "αρχείο", "קובץ"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
           Node(name: "ParameterKeyword", kind: .keyword(["parameter", "Übergabewert", "paramètre", "παράμετρος", "פרמטר"])),
@@ -226,11 +227,18 @@ extension Node {
             ])
           ),
           Node(
+            name: "AccessDeclaration",
+            kind: .alternates([
+              Alternate(name: "file", type: "FileKeyword"),
+              Alternate(name: "clients", type: "ClientsKeyword"),
+            ])
+          ),
+          Node(
             name: "Access",
             kind: .compound(children: [
               Child(name: "space", type: "Space", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "keyword", type: "ClientsKeyword", kind: .required),
+              Child(name: "keyword", type: "AccessDeclaration", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
