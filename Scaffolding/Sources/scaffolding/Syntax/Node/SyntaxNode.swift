@@ -23,9 +23,9 @@ extension SyntaxNode {
       return "\n\n" + StrictString(repeating: " ", count: indent)
     case .lineBreak:
       return "\n" + StrictString(repeating: " ", count: indent)
-    case .abilityDeclaration, .actionDeclaration, .parameterDocumentation, .requirementDeclaration, .thingDeclaration, .use:
+    case .abilityDeclaration, .actionDeclaration, .choiceDeclaration, .parameterDocumentation, .requirementDeclaration, .thingDeclaration, .use:
       return children.lazy.map({ $0.formattedGitStyleSource(indent: indent + 1) }).joined()
-    case .abilityName, .documentation, .multipleActionNames, .paragraph, .parameterDetails, .requirements, .thingName, .fulfillments:
+    case .abilityName, .documentation, .fulfillments, .multipleActionNames, .parameterDetails, .paragraph, .requirements, .sourceActionImplementation, .thingName:
       return [
         children.dropLast(2).map({ $0.formattedGitStyleSource(indent: indent + 1) }).joined(),
         children.suffix(2).map({ $0.formattedGitStyleSource(indent: indent) }).joined(),
