@@ -93,7 +93,7 @@ use
  comparison of (equality example) for equality
  {
   action
-   (first: truth value) is (second: truth value)
+   (first: equality example) is (second: equality example)
    truth value
    C: “¤(28)” first “ == ” second “¤(29)”
    C♯: “¤(28)” first “ == ” second “¤(29)”
