@@ -76,7 +76,7 @@ ability (clients)
    )
    truth value
    {
-    not((first) is (second))
+    not ((first) is (second))
    }
  }
 
