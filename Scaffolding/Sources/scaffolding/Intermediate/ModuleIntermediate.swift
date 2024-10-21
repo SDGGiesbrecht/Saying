@@ -86,22 +86,28 @@ extension ModuleIntermediate {
       }
       var prototypeActions = use.actions
       for (_, requirement) in ability.requirements {
-        guard let provisionIndex = prototypeActions.firstIndex(where: { action in
+        if let provisionIndex = prototypeActions.firstIndex(where: { action in
           return action.names.overlaps(requirement.names)
-        }) else {
-          errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
-          continue
-        }
-        let provision = prototypeActions.remove(at: provisionIndex)
-        switch provision.merging(requirement: requirement, useAccess: use.access) {
-        case .success(let new):
-          let identifier = new.names.identifier()
-          for name in new.names {
+        }) {
+          let provision = prototypeActions.remove(at: provisionIndex)
+          switch provision.merging(requirement: requirement, useAccess: use.access) {
+          case .success(let new):
+            let identifier = new.names.identifier()
+            for name in new.names {
+              identifierMapping[name] = identifier
+            }
+            actions[identifier] = new
+          case .failure(let error):
+            errors.append(contentsOf: error.errors)
+          }
+        } else if let provision = ability.defaults[requirement.names.identifier()] {
+          for name in provision.names {
             identifierMapping[name] = identifier
           }
-          actions[identifier] = new
-        case .failure(let error):
-          errors.append(contentsOf: error.errors)
+          actions[identifier] = provision
+        } else {
+          errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
+          continue
         }
       }
       for remaining in prototypeActions {
