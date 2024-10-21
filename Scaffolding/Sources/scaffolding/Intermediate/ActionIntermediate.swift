@@ -221,7 +221,10 @@ extension ActionIntermediate {
     )
   }
 
-  func specializing(for use: UseIntermediate, typeLookup: [StrictString: StrictString]) -> ActionIntermediate {
+  func specializing(
+    for use: UseIntermediate,
+    typeLookup: [StrictString: StrictString]
+  ) -> ActionIntermediate {
     let newParameters = parameters.map({ parameter in
       return ParameterIntermediate(
         names: parameter.names,
@@ -229,6 +232,7 @@ extension ActionIntermediate {
         typeDeclaration: parameter.typeDeclaration
       )
     })
+    let newReturnValue = returnValue.flatMap { typeLookup[$0] ?? $0 }
     let newDocumentation = documentation.flatMap({ documentation in
       return DocumentationIntermediate(
         parameters: documentation.parameters,
@@ -247,7 +251,7 @@ extension ActionIntermediate {
         namespace: prototype.namespace,
         parameters: newParameters,
         reorderings: reorderings,
-        returnValue: returnValue,
+        returnValue: newReturnValue,
         access: min(self.access, use.access),
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
         documentation: newDocumentation,
