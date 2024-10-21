@@ -136,6 +136,7 @@ extension ActionIntermediate {
 
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
     prototype.validateReferences(module: module, errors: &errors)
+    implementation?.validateReferences(module: module, testContext: false, errors: &errors)
   }
 }
 
