@@ -13,6 +13,33 @@ enum ReferenceError: DiagnosticError {
   case thingUnavailableOutsideTests(reference: ParsedUninterruptedIdentifier)
   case actionUnavailableOutsideTests(reference: ParsedAction)
 
+  var message: String {
+    switch self {
+    case .noSuchThing:
+      return defaultMessage
+    case .noSuchAction(name: let name, reference: _):
+      return "\(defaultMessage) (\(name))"
+    case .noSuchAbility:
+      return defaultMessage
+    case .unfulfilledRequirement:
+      return defaultMessage
+    case .noSuchRequirement:
+      return defaultMessage
+    case .mismatchedParameters:
+      return defaultMessage
+    case .fulfillmentAccessNarrowerThanRequirement:
+      return defaultMessage
+    case .mismatchedTestAccess:
+      return defaultMessage
+    case .thingAccessNarrowerThanSignature:
+      return defaultMessage
+    case .thingUnavailableOutsideTests:
+      return defaultMessage
+    case .actionUnavailableOutsideTests:
+      return defaultMessage
+    }
+  }
+
   var range: Slice<UTF8Segments> {
     switch self {
     case .noSuchThing(_, reference: let identifier):
