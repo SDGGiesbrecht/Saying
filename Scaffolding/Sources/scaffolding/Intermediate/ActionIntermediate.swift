@@ -36,6 +36,25 @@ struct ActionIntermediate {
   }
 }
 
+extension ActionIntermediate: Scope {
+  func lookupAction(_ identifier: StrictString) -> ActionIntermediate? {
+    guard let parameter = prototype.lookupParameter(identifier) else {
+      return nil
+    }
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: parameter.names,
+        namespace: [],
+        parameters: [],
+        reorderings: [:],
+        access: .inferred,
+        testOnlyAccess: false,
+        completeParameterIndexTable: [:]
+      )
+    )
+  }
+}
+
 extension ActionIntermediate {
 
   static func disallowImports(
@@ -136,7 +155,7 @@ extension ActionIntermediate {
 
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
     prototype.validateReferences(module: module, errors: &errors)
-    implementation?.validateReferences(module: module, testContext: false, errors: &errors)
+    implementation?.validateReferences(context: [module, self], testContext: false, errors: &errors)
   }
 }
 

@@ -11,14 +11,16 @@ struct ModuleIntermediate {
   var tests: [TestIntermediate] = []
 }
 
+extension ModuleIntermediate: Scope {
+  func lookupAction(_ identifier: StrictString) -> ActionIntermediate? {
+    return identifierMapping[identifier].flatMap { actions[$0] }
+  }
+}
+
 extension ModuleIntermediate {
 
   func lookupThing(_ identifier: StrictString) -> Thing? {
     return identifierMapping[identifier].flatMap { things[$0] }
-  }
-
-  func lookupAction(_ identifier: StrictString) -> ActionIntermediate? {
-    return identifierMapping[identifier].flatMap { actions[$0] }
   }
 
   func lookupDeclaration(_ identifier: StrictString) -> ParsedDeclaration? {
@@ -133,7 +135,7 @@ extension ModuleIntermediate {
       action.value.validateReferences(module: self, errors: &errors)
     }
     for test in tests {
-      test.action.validateReferences(module: self, testContext: true, errors: &errors)
+      test.action.validateReferences(context: [self], testContext: true, errors: &errors)
     }
     if ¬errors.isEmpty {
       throw ErrorList(errors)

@@ -1,6 +1,7 @@
 import SDGMathematics
 
 enum AccessIntermediate: OrderedEnumeration {
+  static var inferred: AccessIntermediate { .file }
   case file
   case clients
 }
@@ -15,7 +16,7 @@ extension AccessIntermediate {
         self = .clients
       }
     } else {
-      self = .file
+      self = .inferred
     }
   }
 }

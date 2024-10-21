@@ -20,8 +20,8 @@ extension ActionUse {
     source = use
   }
 
-  func validateReferences(module: ModuleIntermediate, testContext: Bool, errors: inout [ReferenceError]) {
-    if let action = module.lookupAction(actionName) {
+  func validateReferences(context: [Scope], testContext: Bool, errors: inout [ReferenceError]) {
+    if let action = context.lookupAction(actionName) {
       if ¬testContext,
         action.testOnlyAccess {
         errors.append(.actionUnavailableOutsideTests(reference: source!))
@@ -30,7 +30,7 @@ extension ActionUse {
       errors.append(.noSuchAction(name: actionName, reference: source!))
     }
     for argument in arguments {
-      argument.validateReferences(module: module, testContext: testContext, errors: &errors)
+      argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
   }
 }
