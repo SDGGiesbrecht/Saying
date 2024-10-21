@@ -230,6 +230,18 @@ extension ActionIntermediate {
         typeDeclaration: parameter.typeDeclaration
       )
     })
+    let newDocumentation = documentation.flatMap({ documentation in
+      return DocumentationIntermediate(
+        parameters: documentation.parameters,
+        tests: documentation.tests.map({ test in
+          #warning("Hard‐coded type.")
+          return TestIntermediate(
+            location: test.location.appending(["equality example"]),
+            action: test.action
+          )
+        })
+      )
+    })
     return ActionIntermediate(
       prototype: ActionPrototype(
         names: names,
@@ -238,8 +250,8 @@ extension ActionIntermediate {
         reorderings: reorderings,
         returnValue: returnValue,
         access: min(self.access, use.access),
-        testOnlyAccess: testOnlyAccess,
-        documentation: documentation,
+        testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
+        documentation: newDocumentation,
         completeParameterIndexTable: [:]
       ),
       c: c,
