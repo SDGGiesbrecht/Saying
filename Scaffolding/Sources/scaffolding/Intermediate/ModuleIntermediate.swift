@@ -86,6 +86,16 @@ extension ModuleIntermediate {
         errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
         continue
       }
+      let argumentReordering = ability.parameterReorderings[use.ability]!
+
+      var useTypes: [StrictString: StrictString] = [:]
+      for (index, argument) in use.arguments.enumerated() {
+        let parameter = ability.parameters[argumentReordering[index]]
+        for name in parameter {
+          useTypes[name] = argument
+        }
+      }
+
       var prototypeActions = use.actions
       for (_, requirement) in ability.requirements {
         if let provisionIndex = prototypeActions.firstIndex(where: { action in
@@ -106,7 +116,7 @@ extension ModuleIntermediate {
           for name in provision.names {
             identifierMapping[name] = identifier
           }
-          actions[identifier] = provision.specializing(for: use)
+          actions[identifier] = provision.specializing(for: use, typeLookup: useTypes)
         } else {
           errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue

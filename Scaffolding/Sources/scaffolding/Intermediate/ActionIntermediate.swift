@@ -221,12 +221,11 @@ extension ActionIntermediate {
     )
   }
 
-  func specializing(for use: UseIntermediate) -> ActionIntermediate {
-    #warning("Hard‐coded type.")
+  func specializing(for use: UseIntermediate, typeLookup: [StrictString: StrictString]) -> ActionIntermediate {
     let newParameters = parameters.map({ parameter in
       return ParameterIntermediate(
         names: parameter.names,
-        type: "equality example",
+        type: typeLookup[parameter.type] ?? parameter.type,
         typeDeclaration: parameter.typeDeclaration
       )
     })
