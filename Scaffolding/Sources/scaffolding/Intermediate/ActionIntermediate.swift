@@ -223,7 +223,8 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.map({ parameter in
       return ParameterIntermediate(
@@ -237,9 +238,8 @@ extension ActionIntermediate {
       return DocumentationIntermediate(
         parameters: documentation.parameters,
         tests: documentation.tests.map({ test in
-          #warning("Hard‐coded type.")
           return TestIntermediate(
-            location: test.location.appending(["equality example"]),
+            location: test.location.appending(contentsOf: canonicallyOrderedUseArguments),
             action: test.action
           )
         })

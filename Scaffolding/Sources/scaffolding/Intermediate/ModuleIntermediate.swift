@@ -89,11 +89,14 @@ extension ModuleIntermediate {
       let argumentReordering = ability.parameterReorderings[use.ability]!
 
       var useTypes: [StrictString: StrictString] = [:]
-      for (index, argument) in use.arguments.enumerated() {
-        let parameter = ability.parameters[argumentReordering[index]]
+      var canonicallyOrderedUseArguments: [Set<StrictString>] = Array(repeating: [], count: argumentReordering.count)
+      for (argumentindex, argument) in use.arguments.enumerated() {
+        let parameterIndex = argumentReordering[argumentindex]
+        let parameter = ability.parameters[parameterIndex]
         for name in parameter {
           useTypes[name] = argument
         }
+        canonicallyOrderedUseArguments[parameterIndex] = [argument]
       }
 
       var prototypeActions = use.actions
@@ -116,7 +119,11 @@ extension ModuleIntermediate {
           for name in provision.names {
             identifierMapping[name] = identifier
           }
-          actions[identifier] = provision.specializing(for: use, typeLookup: useTypes)
+          actions[identifier] = provision.specializing(
+            for: use,
+            typeLookup: useTypes,
+            canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+          )
         } else {
           errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue
