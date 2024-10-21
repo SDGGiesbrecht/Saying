@@ -106,7 +106,7 @@ extension ModuleIntermediate {
           for name in provision.names {
             identifierMapping[name] = identifier
           }
-          actions[identifier] = provision
+          actions[identifier] = provision.specializing(for: use)
         } else {
           errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue

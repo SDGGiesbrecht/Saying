@@ -220,6 +220,38 @@ extension ActionIntermediate {
       )
     )
   }
+
+  func specializing(for use: UseIntermediate) -> ActionIntermediate {
+    #warning("Hard‐coded type.")
+    let newParameters = parameters.map({ parameter in
+      return ParameterIntermediate(
+        names: parameter.names,
+        type: "equality example",
+        typeDeclaration: parameter.typeDeclaration
+      )
+    })
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: prototype.namespace,
+        parameters: newParameters,
+        reorderings: reorderings,
+        returnValue: returnValue,
+        access: min(self.access, use.access),
+        testOnlyAccess: testOnlyAccess,
+        documentation: documentation,
+        completeParameterIndexTable: [:]
+      ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
+      implementation: implementation,
+      declaration: nil,
+      coveredIdentifier: coveredIdentifier
+    )
+  }
 }
 
 extension ActionIntermediate {
