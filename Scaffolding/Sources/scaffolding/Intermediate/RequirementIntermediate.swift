@@ -21,8 +21,8 @@ struct RequirementIntermediate {
   var returnValue: StrictString? {
     return prototype.returnValue
   }
-  var clientAccess: Bool {
-    return prototype.clientAccess
+  var access: AccessIntermediate {
+    return prototype.access
   }
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess

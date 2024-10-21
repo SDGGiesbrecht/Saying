@@ -80,7 +80,7 @@ ability (clients)
    }
  }
 
-thing (file)
+thing
  (
   English: equality example
  )
@@ -89,10 +89,10 @@ thing (file)
  Kotlin: Boolean
  Swift: Bool
 
-use (file)
+use
  comparison of (equality example) for equality
  {
-  action (file)
+  action
    (first: truth value) is (second: truth value)
    truth value
    C: “¤(28)” first “ == ” second “¤(29)”

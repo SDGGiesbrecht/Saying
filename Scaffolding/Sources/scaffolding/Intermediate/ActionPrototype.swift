@@ -8,7 +8,7 @@ struct ActionPrototype {
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var clientAccess: Bool
+  var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
 
@@ -121,7 +121,7 @@ extension ActionPrototype {
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValueType?.identifierText(),
-        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
         completeParameterIndexTable: completeParameterIndexTable,
@@ -137,8 +137,7 @@ extension ActionPrototype {
     errors: inout [ReferenceError]
   ) {
     if let thing = module.lookupThing(typeIdentifier) {
-      if self.clientAccess,
-        ¬thing.clientAccess {
+      if self.access > thing.access {
         errors.append(.thingAccessNarrowerThanSignature(reference: reference!))
       }
       if ¬self.testOnlyAccess,

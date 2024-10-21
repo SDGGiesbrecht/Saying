@@ -7,7 +7,7 @@ enum ReferenceError: DiagnosticError {
   case unfulfilledRequirement(name: Set<StrictString>, ParsedUse)
   case noSuchRequirement(ParsedActionDeclaration)
   case mismatchedParameters(name: StrictString, declaration: ParsedActionName)
-  case mismatchedAccess(access: ParsedAccess)
+  case fulfillmentAccessNarrowerThanRequirement(declaration: ParsedActionName)
   case mismatchedTestAccess(testAccess: ParsedTestAccess)
   case thingAccessNarrowerThanSignature(reference: ParsedUninterruptedIdentifier)
   case thingUnavailableOutsideTests(reference: ParsedUninterruptedIdentifier)
@@ -27,8 +27,8 @@ enum ReferenceError: DiagnosticError {
       return declaration.location
     case .mismatchedParameters(name: _, declaration: let declaration):
       return declaration.location
-    case .mismatchedAccess(access: let access):
-      return access.location
+    case .fulfillmentAccessNarrowerThanRequirement(declaration: let declaration):
+      return declaration.location
     case .mismatchedTestAccess(testAccess: let testAccess):
       return testAccess.location
     case .thingAccessNarrowerThanSignature(reference: let reference):

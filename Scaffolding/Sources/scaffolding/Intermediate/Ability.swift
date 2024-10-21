@@ -9,7 +9,7 @@ struct Ability {
   var identifierMapping: [StrictString: StrictString]
   var requirements: [StrictString: RequirementIntermediate]
   var defaults: [StrictString: ActionIntermediate]
-  var clientAccess: Bool
+  var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
@@ -170,7 +170,7 @@ extension Ability {
         identifierMapping: identifierMapping,
         requirements: requirements,
         defaults: defaults,
-        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
         declaration: declaration

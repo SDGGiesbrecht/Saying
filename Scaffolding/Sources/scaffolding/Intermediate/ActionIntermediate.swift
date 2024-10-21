@@ -28,8 +28,8 @@ struct ActionIntermediate {
   var returnValue: StrictString? {
     return prototype.returnValue
   }
-  var clientAccess: Bool {
-    return prototype.clientAccess
+  var access: AccessIntermediate {
+    return prototype.access
   }
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
@@ -119,7 +119,7 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func merging(requirement: RequirementIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
+  func merging(requirement: RequirementIntermediate, useAccess: AccessIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
@@ -145,8 +145,8 @@ extension ActionIntermediate {
         mergedReorderings[name] = rearranged
       }
     }
-    if clientAccess ≠ requirement.clientAccess {
-      errors.append(.mismatchedAccess(access: self.declaration!.access!))
+    if access < min(requirement.access, useAccess) {
+      errors.append(.fulfillmentAccessNarrowerThanRequirement(declaration: self.declaration!.name))
     }
     if testOnlyAccess ≠ requirement.testOnlyAccess {
       errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
@@ -163,7 +163,7 @@ extension ActionIntermediate {
           parameters: mergedParameters,
           reorderings: mergedReorderings,
           returnValue: returnValue,
-          clientAccess: clientAccess,
+          access: access,
           testOnlyAccess: testOnlyAccess,
           documentation: mergedDocumentation,
           completeParameterIndexTable: [:]
@@ -205,7 +205,7 @@ extension ActionIntermediate {
           parameters: prototype.parameters,
           reorderings: prototype.reorderings,
           returnValue: prototype.returnValue,
-          clientAccess: prototype.clientAccess,
+          access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
           completeParameterIndexTable: prototype.completeParameterIndexTable,
           declarationReturnValueType: prototype.declarationReturnValueType

@@ -5,7 +5,7 @@ struct UseIntermediate {
   var ability: StrictString
   var arguments: [StrictString]
   var actions: [ActionIntermediate]
-  var clientAccess: Bool
+  var access: AccessIntermediate
   var testOnlyAccess: Bool
   var declaration: ParsedUse
 }
@@ -36,7 +36,7 @@ extension UseIntermediate {
         ability: abilityName,
         arguments: declaration.use.arguments.arguments.map({ $0.name.identifierText() }),
         actions: actions,
-        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         declaration: declaration
       )

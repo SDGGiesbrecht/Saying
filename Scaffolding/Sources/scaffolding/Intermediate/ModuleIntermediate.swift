@@ -93,7 +93,7 @@ extension ModuleIntermediate {
           continue
         }
         let provision = prototypeActions.remove(at: provisionIndex)
-        switch provision.merging(requirement: requirement) {
+        switch provision.merging(requirement: requirement, useAccess: use.access) {
         case .success(let new):
           let identifier = new.names.identifier()
           for name in new.names {
