@@ -1,9 +1,12 @@
+import SDGText
+
 extension ActionIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenPrototype(ActionPrototype.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeActionImplementation)
+    case missingImplementation(language: StrictString, action: ParsedActionName)
 
     var message: String {
       switch self {
@@ -15,6 +18,8 @@ extension ActionIntermediate {
         return error.message
       case .invalidImport:
         return defaultMessage
+      case .missingImplementation(let language, _):
+        return "\(defaultMessage) (\(language))"
       }
     }
 
@@ -28,6 +33,8 @@ extension ActionIntermediate {
         return error.range
       case .invalidImport(let implementation):
         return implementation.location
+      case .missingImplementation(_, action: let action):
+        return action.location
       }
     }
   }

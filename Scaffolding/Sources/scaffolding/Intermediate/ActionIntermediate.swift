@@ -97,6 +97,26 @@ extension ActionIntermediate {
         }
       }
     }
+    var implementation: ActionUse?
+    if let source = declaration.implementation.source {
+      implementation = ActionUse(source.action)
+    } else {
+      if c == nil {
+        errors.append(ConstructionError.missingImplementation(language: "C", action: declaration.name))
+      }
+      if cSharp == nil {
+        errors.append(ConstructionError.missingImplementation(language: "C♯", action: declaration.name))
+      }
+      if javaScript == nil {
+        errors.append(ConstructionError.missingImplementation(language: "JavaScript", action: declaration.name))
+      }
+      if kotlin == nil {
+        errors.append(ConstructionError.missingImplementation(language: "Kotlin", action: declaration.name))
+      }
+      if swift == nil {
+        errors.append(ConstructionError.missingImplementation(language: "Swift", action: declaration.name))
+      }
+    }
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -108,6 +128,7 @@ extension ActionIntermediate {
         javaScript: javaScript,
         kotlin: kotlin,
         swift: swift,
+        implementation: implementation,
         declaration: declaration
       )
     )
