@@ -63,7 +63,7 @@ ability (clients)
      )
    ]
    (
-    English: (first: truth value) is not (second: truth value)
+    English: (first: thing) is not (second: thing)
     English +: (first: [first]) ≠ (second: [second])
     Deutsch: (erste: [first]) ist nicht (zweite: [second])
     Deutsch +: (erste: [first]) ≠ (zweite: [second])

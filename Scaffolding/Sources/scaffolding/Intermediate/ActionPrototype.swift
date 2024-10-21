@@ -102,7 +102,13 @@ extension ActionPrototype {
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      let intermediateDocumentation = DocumentationIntermediate.construct(
+        documentation.documentation,
+        namespace: namespace
+          .appending(names)
+          //.appending(contentsOf: parameters.lazy.map({ [$0.type] }))
+      )
+      #warning("↑ Necessary?")
       attachedDocumentation = intermediateDocumentation
       let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
       for parameter in intermediateDocumentation.parameters.joined() {
