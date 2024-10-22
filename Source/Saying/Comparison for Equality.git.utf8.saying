@@ -108,7 +108,7 @@ action
  (
   English: example
  )
- truth value
+ equality example
  C: “¤(28)true¤(29)” (stdbool)
  C♯: “¤(28)true¤(29)”
  JavaScript: “¤(28)true¤(29)”
@@ -119,7 +119,7 @@ action
  (
   English: differing example
  )
- truth value
+ equality example
  C: “¤(28)false¤(29)” (stdbool)
  C♯: “¤(28)false¤(29)”
  JavaScript: “¤(28)false¤(29)”
