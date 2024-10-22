@@ -66,6 +66,15 @@ enum C: Platform {
     return "\(returnValue)"
   }
 
+  static func actionDeclarationBase(name: String, parameters: String, returnSection: String?) -> String {
+    return "\(returnSection!) \(name)(\(parameters))"
+  }
+  static var needsForwardDeclarations: Bool { true }
+  static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {
+    let base = actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection)
+    return "\(base);"
+  }
+
   static func coverageRegistration(identifier: String) -> String {
     return "  register_coverage_region(\u{22}\(identifier)\u{22});"
   }
@@ -76,7 +85,7 @@ enum C: Platform {
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
     var result: [String] = [
-      "\(returnSection!) \(name)(\(parameters))",
+      actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),
       "{",
     ]
     if let coverage = coverageRegistration {

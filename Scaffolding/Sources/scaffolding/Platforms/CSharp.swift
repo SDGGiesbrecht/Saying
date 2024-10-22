@@ -62,6 +62,11 @@ enum CSharp: Platform {
     return "\(returnValue)"
   }
 
+  static var needsForwardDeclarations: Bool { false }
+  static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {
+    return nil
+  }
+
   static func coverageRegistration(identifier: String) -> String {
     return "        Coverage.Register(\u{22}\(identifier)\u{22});"
   }

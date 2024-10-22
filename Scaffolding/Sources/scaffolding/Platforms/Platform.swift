@@ -30,6 +30,12 @@ protocol Platform {
   static func parameterDeclaration(name: String, type: String) -> String
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
+  static var needsForwardDeclarations: Bool { get }
+  static func forwardActionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?
+  ) -> String?
   static func coverageRegistration(identifier: String) -> String
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String
   static func actionDeclaration(
@@ -207,6 +213,37 @@ extension Platform {
     }
   }
 
+  static func forwardDeclaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
+    if nativeImplementation(of: action) ≠ nil {
+      return nil
+    }
+
+    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+    let parameters = action.parameters
+      .lazy.map({ source(for: $0, module: module) })
+      .joined(separator: ", ")
+
+    let returnValue: String?
+    if let specified = action.returnValue {
+      let type = module.lookupThing(specified)!
+      if let native = nativeType(of: type)?.type {
+        returnValue = String(native)
+      } else {
+        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
+      }
+    } else {
+      returnValue = emptyReturnType
+    }
+
+    let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
+
+    return forwardActionDeclaration(
+      name: name,
+      parameters: parameters,
+      returnSection: returnSection
+    )
+  }
+
   static func declaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
@@ -317,6 +354,20 @@ extension Platform {
     if let start = actionDeclarationsContainerStart {
       result.append("")
       result.append(contentsOf: start)
+    }
+    if needsForwardDeclarations {
+      for actionIdentifier in module.actions.keys.sorted() {
+        let group = module.actions[actionIdentifier]!
+        for signature in group.keys {
+          if let declaration = group[signature]
+            .flatMap({ forwardDeclaration(for: $0, module: module) }) {
+            result.append(contentsOf: [
+              "",
+              declaration
+            ])
+          }
+        }
+      }
     }
     for actionIdentifier in module.actions.keys.sorted() {
       let group = module.actions[actionIdentifier]!
