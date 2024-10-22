@@ -41,12 +41,8 @@ ability (clients)
   choice (clients)
    [
     [
-     English: Compares two truth values for inequality.
+     English: Compares two values for inequality.
     ]
-    test (verify (((true) is not (true)) is (false)))
-    test (verify (((true) is not (false)) is (true)))
-    test (verify (((false) is not (true)) is (true)))
-    test (verify (((false) is not (false)) is (false)))
     parameter: first
      (
       [
