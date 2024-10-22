@@ -63,12 +63,13 @@ extension ActionPrototype {
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for (_, signature) in namesDictionary {
+      var reordering: [Int] = []
       let signatureName = signature.name()
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {
         case .type(let type):
           parameterTypes.append(type)
-          reorderings[signatureName, default: []].append(position)
+          reordering.append(position)
         case .reference(let reference):
           var resolving = reference.name.identifierText()
           var checked: Set<StrictString> = []
@@ -83,12 +84,19 @@ extension ActionPrototype {
             }
           }
           if let index = parameterIndices[resolving] {
-            reorderings[signatureName, default: []].append(index)
+            reordering.append(index)
             completeParameterIndexTable[parameter.name.identifierText()] = index
           } else {
             errors.append(.parameterNotFound(reference))
           }
         }
+      }
+      let existingReordering = reorderings[signatureName]
+      if existingReordering == nil
+        ∨ existingReordering == reordering {
+        reorderings[signatureName] = reordering
+      } else {
+        errors.append(.rearrangedParameters(signature))
       }
     }
     let parameters = parameterTypes.enumerated().map { index, type in
@@ -106,9 +114,7 @@ extension ActionPrototype {
         documentation.documentation,
         namespace: namespace
           .appending(names)
-          //.appending(contentsOf: parameters.lazy.map({ [$0.type] }))
       )
-      #warning("↑ Necessary?")
       attachedDocumentation = intermediateDocumentation
       let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
       for parameter in intermediateDocumentation.parameters.joined() {
@@ -178,5 +184,12 @@ extension ActionPrototype {
 extension ActionPrototype {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
     return parameters.first(where: { $0.names.contains(identifier) })
+  }
+
+  func signature(orderedFor name: StrictString) -> [StrictString] {
+    guard let reordering = reorderings[name] else {
+      return []
+    }
+    return reordering.map({ parameters[$0].type })
   }
 }

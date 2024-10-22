@@ -21,7 +21,9 @@ extension ActionUse {
   }
 
   func validateReferences(context: [Scope], testContext: Bool, errors: inout [ReferenceError]) {
-    if let action = context.lookupAction(actionName) {
+    #warning("Dummy signature; no type lookup yet.")
+    let signature = Array(repeating: "truth value" as StrictString, count: arguments.count)
+    if let action = context.lookupAction(actionName, signature: signature) {
       if ¬testContext,
         action.testOnlyAccess {
         errors.append(.actionUnavailableOutsideTests(reference: source!))

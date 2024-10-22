@@ -147,12 +147,27 @@ extension Platform {
       .joined()
   }
 
+  static func disambiguatedIdentifier(for action: ActionIntermediate) -> StrictString {
+    let identifier = action.names.identifier()
+    return [identifier]
+      .appending(contentsOf: action.signature(orderedFor: identifier))
+      .joined(separator: ":")
+  }
+
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
-      let bareAction = module.lookupAction(reference.actionName)!
-      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
+      #warning("Dummy signature; no type lookup yet.")
+      let signature: [StrictString]
+      if (context?.parameters ?? []).contains(where: { $0.type == "equality example" }),
+        reference.arguments.count == 2 {
+        signature = Array(repeating: "equality example" as StrictString, count: reference.arguments.count)
+      } else {
+        signature = Array(repeating: "truth value" as StrictString, count: reference.arguments.count)
+      }
+      let bareAction = module.lookupAction(reference.actionName, signature: signature)!
+      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature)!
       if let native = nativeImplementation(of: action) {
         var result = ""
         for index in native.textComponents.indices {
@@ -166,7 +181,7 @@ extension Platform {
         }
         return result
       } else {
-        let name = sanitize(identifier: action.names.identifier(), leading: true)
+        let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
         let arguments = reference.arguments
           .lazy.map({ argument in
             return call(to: argument, context: context, module: module)
@@ -198,7 +213,7 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(identifier: action.names.identifier(), leading: true)
+    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
     let parameters = action.parameters
       .lazy.map({ source(for: $0, module: module) })
       .joined(separator: ", ")
@@ -261,9 +276,11 @@ extension Platform {
       if let requiredImport = nativeType(of: thing)?.requiredImport {
         imports.insert(String(requiredImport))
       }
-      for action in module.actions.values {
-        if let requiredImport = nativeImplementation(of: action)?.requiredImport {
-          imports.insert(String(requiredImport))
+      for group in module.actions.values {
+        for action in group.values {
+          if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+            imports.insert(String(requiredImport))
+          }
         }
       }
     }
@@ -283,6 +300,7 @@ extension Platform {
     }
 
     let actionRegions: [StrictString] = module.actions.values
+      .lazy.map({ $0.values }).joined()
       .lazy.filter({ ¬$0.isCoverageWrapper })
       .lazy.compactMap({ $0.coverageRegionIdentifier() })
     let choiceRegions: [StrictString] = module.abilities.values
@@ -302,12 +320,15 @@ extension Platform {
       result.append(contentsOf: start)
     }
     for actionIdentifier in module.actions.keys.sorted() {
-      if let declaration = module.actions[actionIdentifier]
-        .flatMap({ declaration(for: $0, module: module) }) {
-        result.append(contentsOf: [
-          "",
-          declaration
-        ])
+      let group = module.actions[actionIdentifier]!
+      for signature in group.keys {
+        if let declaration = group[signature]
+          .flatMap({ declaration(for: $0, module: module) }) {
+          result.append(contentsOf: [
+            "",
+            declaration
+          ])
+        }
       }
     }
     for test in module.tests {

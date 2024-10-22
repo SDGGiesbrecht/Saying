@@ -37,7 +37,7 @@ struct ActionIntermediate {
 }
 
 extension ActionIntermediate: Scope {
-  func lookupAction(_ identifier: StrictString) -> ActionIntermediate? {
+  func lookupAction(_ identifier: StrictString, signature: [StrictString]) -> ActionIntermediate? {
     guard let parameter = prototype.lookupParameter(identifier) else {
       return nil
     }
@@ -273,6 +273,10 @@ extension ActionIntermediate {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
     return prototype.lookupParameter(identifier)
   }
+
+  func signature(orderedFor name: StrictString) -> [StrictString] {
+    return prototype.signature(orderedFor: name)
+  }
 }
 
 extension ActionIntermediate {
@@ -284,14 +288,18 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(prototype.names.identifier())"
   }
+  func coverageTrackingReordering() -> [Int] {
+    return reorderings[prototype.names.identifier()]!
+  }
   func wrappedToTrackCoverage() -> ActionIntermediate? {
     if let coverageIdentifier = coverageRegionIdentifier() {
+      let newName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
-          names: [coverageTrackingIdentifier()],
+          names: [newName],
           namespace: [],
           parameters: prototype.parameters,
-          reorderings: prototype.reorderings,
+          reorderings: [newName: coverageTrackingReordering()],
           returnValue: prototype.returnValue,
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
