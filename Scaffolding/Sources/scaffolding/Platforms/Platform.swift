@@ -160,8 +160,7 @@ extension Platform {
     } else {
       #warning("Dummy signature; no type lookup yet.")
       let signature: [StrictString]
-      if (context?.parameters ?? []).contains(where: { $0.type == "equality example" }),
-        reference.arguments.count == 2 {
+      if reference.arguments.contains(where: { $0.actionName.contains("example") }) {
         signature = Array(repeating: "equality example" as StrictString, count: reference.arguments.count)
       } else {
         signature = Array(repeating: "truth value" as StrictString, count: reference.arguments.count)
