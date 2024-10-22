@@ -77,6 +77,12 @@ ability (clients)
  }
 
 thing
+ [
+  test (verify ((example) is (example)))
+  test (verify (((example) is (differing example)) is (false)))
+  test (verify ((example) is not (differing example)))
+  test (verify (((example) is not (example)) is (false)))
+ ]
  (
   English: equality example
  )
