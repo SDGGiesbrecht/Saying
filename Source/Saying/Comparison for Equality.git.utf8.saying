@@ -97,3 +97,25 @@ use
    Kotlin: “¤(28)” first “ == ” second “¤(29)”
    Swift: «¤(28)» first “ == ” second „¤(29)“
  }
+
+action
+ (
+  English: example
+ )
+ truth value
+ C: “¤(28)true¤(29)” (stdbool)
+ C♯: “¤(28)true¤(29)”
+ JavaScript: “¤(28)true¤(29)”
+ Kotlin: “¤(28)true¤(29)”
+ Swift: “¤(28)true¤(29)”
+
+action
+ (
+  English: differing example
+ )
+ truth value
+ C: “¤(28)false¤(29)” (stdbool)
+ C♯: “¤(28)false¤(29)”
+ JavaScript: “¤(28)false¤(29)”
+ Kotlin: “¤(28)false¤(29)”
+ Swift: “¤(28)false¤(29)”
