@@ -37,7 +37,11 @@ struct ActionIntermediate {
 }
 
 extension ActionIntermediate: Scope {
-  func lookupAction(_ identifier: StrictString, signature: [StrictString]) -> ActionIntermediate? {
+  func lookupAction(
+    _ identifier: StrictString,
+    signature: [StrictString],
+    specifiedReturnValue: StrictString??
+  ) -> ActionIntermediate? {
     guard let parameter = prototype.lookupParameter(identifier) else {
       return nil
     }

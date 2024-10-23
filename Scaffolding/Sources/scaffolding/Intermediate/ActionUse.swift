@@ -31,7 +31,8 @@ extension ActionUse {
     }
     if let parameter = context?.lookupParameter(actionName) {
       resolvedResultType = parameter.type
-    } else if let action = module.lookupAction(actionName, signature: signature) {
+      #warning("Not checking for specified type.")
+    } else if let action = module.lookupAction(actionName, signature: signature, specifiedReturnValue: nil) {
       resolvedResultType = action.returnValue
     }
     #warning("Debugging...")
@@ -53,8 +54,9 @@ extension ActionUse {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
     let signature = arguments.compactMap({ $0.resolvedResultType })
+    #warning("Not checking for specified type.")
     if signature.count == arguments.count,
-      let action = context.lookupAction(actionName, signature: signature) {
+      let action = context.lookupAction(actionName, signature: signature, specifiedReturnValue: nil) {
       if ¬testContext,
         action.testOnlyAccess {
         errors.append(.actionUnavailableOutsideTests(reference: source!))

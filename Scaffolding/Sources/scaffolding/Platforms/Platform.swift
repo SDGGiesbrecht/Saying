@@ -165,8 +165,10 @@ extension Platform {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType! })
-      let bareAction = module.lookupAction(reference.actionName, signature: signature)!
-      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature)!
+      #warning("Not checking for specified type.")
+      let specifiedReturn: StrictString?? = nil
+      let bareAction = module.lookupAction(reference.actionName, signature: signature, specifiedReturnValue: specifiedReturn)!
+      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature, specifiedReturnValue: specifiedReturn)!
       if let native = nativeImplementation(of: action) {
         var result = ""
         for index in native.textComponents.indices {
@@ -307,9 +309,11 @@ extension Platform {
         imports.insert(String(requiredImport))
       }
       for group in module.actions.values {
-        for action in group.values {
-          if let requiredImport = nativeImplementation(of: action)?.requiredImport {
-            imports.insert(String(requiredImport))
+        for returnOverloads in group.values {
+          for action in returnOverloads.values {
+            if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+              imports.insert(String(requiredImport))
+            }
           }
         }
       }
@@ -330,6 +334,7 @@ extension Platform {
     }
 
     let actionRegions: [StrictString] = module.actions.values
+      .lazy.map({ $0.values }).joined()
       .lazy.map({ $0.values }).joined()
       .lazy.filter({ ¬$0.isCoverageWrapper })
       .lazy.compactMap({ $0.coverageRegionIdentifier() })
@@ -353,12 +358,15 @@ extension Platform {
       for actionIdentifier in module.actions.keys.sorted() {
         let group = module.actions[actionIdentifier]!
         for signature in group.keys {
-          if let declaration = group[signature]
-            .flatMap({ forwardDeclaration(for: $0, module: module) }) {
-            result.append(contentsOf: [
-              "",
-              declaration
-            ])
+          let returnOverloads = group[signature]!
+          for returnType in returnOverloads.keys {
+            if let declaration = returnOverloads[returnType]
+              .flatMap({ forwardDeclaration(for: $0, module: module) }) {
+              result.append(contentsOf: [
+                "",
+                declaration
+              ])
+            }
           }
         }
       }
@@ -366,12 +374,15 @@ extension Platform {
     for actionIdentifier in module.actions.keys.sorted() {
       let group = module.actions[actionIdentifier]!
       for signature in group.keys {
-        if let declaration = group[signature]
-          .flatMap({ declaration(for: $0, module: module) }) {
-          result.append(contentsOf: [
-            "",
-            declaration
-          ])
+        let returnOverloads = group[signature]!
+        for returnType in returnOverloads.keys {
+          if let declaration = returnOverloads[returnType]
+            .flatMap({ declaration(for: $0, module: module) }) {
+            result.append(contentsOf: [
+              "",
+              declaration
+            ])
+          }
         }
       }
     }
