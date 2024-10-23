@@ -28,7 +28,7 @@ extension ActionUse {
   ) {
     for index in arguments.indices {
       #warning("Explicit typing should be looked up here.")
-      let specifiedArgumentReturnValue: StrictString?? = arguments[index].actionName == "example" ? "equality example" : nil
+      let specifiedArgumentReturnValue: StrictString?? = arguments[index].actionName == "example" ? "equality example" : arguments[index].actionName == "differing example" ? "equality example" : nil
       arguments[index].resolveTypes(
         context: context,
         module: module,
