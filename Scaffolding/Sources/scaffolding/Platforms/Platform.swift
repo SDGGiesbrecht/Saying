@@ -342,10 +342,10 @@ extension Platform {
     let choiceRegions: [StrictString] = module.abilities.values
       .lazy.flatMap({ $0.defaults.values })
       .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
-    let regions = [
+    let regions = Set([
       actionRegions,
       choiceRegions
-    ].joined()
+    ].joined())
       .sorted()
       .map({ sanitize(stringLiteral: $0) })
     result.append(contentsOf: coverageRegionSet(regions: regions))

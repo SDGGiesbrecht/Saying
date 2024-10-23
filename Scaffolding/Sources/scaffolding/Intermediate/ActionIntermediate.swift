@@ -11,6 +11,7 @@ struct ActionIntermediate {
   var swift: NativeActionImplementationIntermediate?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclarationPrototype?
+  var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
   var documentation: DocumentationIntermediate? {
@@ -60,12 +61,24 @@ extension ActionIntermediate: Scope {
 }
 
 extension ActionIntermediate {
-  func globallyUniqueIdentifier(module: ModuleIntermediate) -> StrictString {
+  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
     let identifier = names.identifier()
     return [identifier]
-      .appending(contentsOf: signature(orderedFor: identifier).map({ module.resolve(identifier: $0) }))
-      .appending(returnValue.flatMap({ module.resolve(identifier: $0) }) ?? "")
-      .joined(separator: ":")
+      .appending(contentsOf: signature(orderedFor: identifier))
+      .appending(returnValue ?? "")
+  }
+  func resolve(
+    globallyUniqueIdentifierComponents: [StrictString],
+    module: ModuleIntermediate) -> StrictString {
+    return globallyUniqueIdentifierComponents
+        .lazy.map({ module.resolve(identifier: $0) })
+        .joined(separator: ":")
+  }
+  func globallyUniqueIdentifier(module: ModuleIntermediate) -> StrictString {
+    return resolve(
+      globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
+      module: module
+    )
   }
 }
 
@@ -230,6 +243,7 @@ extension ActionIntermediate {
         swift: swift,
         implementation: implementation,
         declaration: nil,
+        originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier
       )
     )
@@ -278,6 +292,7 @@ extension ActionIntermediate {
       swift: swift,
       implementation: implementation,
       declaration: nil,
+      originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
     )
   }
@@ -331,6 +346,7 @@ extension ActionIntermediate {
           }),
           resolvedResultType: returnValue
         ),
+        originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier
       )
     } else {
@@ -342,7 +358,13 @@ extension ActionIntermediate {
     let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
       .joined(separator: ":")
-    return [namespace, globallyUniqueIdentifier(module: module)]
+    let identifier: StrictString
+    if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
+      identifier = resolve(globallyUniqueIdentifierComponents: inherited, module: module)
+    } else {
+      identifier = globallyUniqueIdentifier(module: module)
+    }
+    return [namespace, identifier]
       .joined(separator: ":")
   }
 }
