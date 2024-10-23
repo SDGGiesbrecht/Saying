@@ -319,7 +319,7 @@ extension ActionIntermediate {
               resolvedResultType: parameter.type
             )
           }),
-          resolvedResultType: implementation?.resolvedResultType
+          resolvedResultType: returnValue
         ),
         coveredIdentifier: coverageIdentifier
       )

@@ -165,10 +165,18 @@ extension Platform {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType!! })
-      #warning("Not checking for specified type.")
-      let specifiedReturn: StrictString?? = reference.actionName == "example" ? "equality example" : nil
-      let bareAction = module.lookupAction(reference.actionName, signature: signature, specifiedReturnValue: specifiedReturn)!
-      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature, specifiedReturnValue: specifiedReturn)!
+      let bareAction = module.lookupAction(
+        reference.actionName,
+        signature: signature,
+        specifiedReturnValue: reference.resolvedResultType
+      )!
+      let action = (context?.isCoverageWrapper ?? false)
+        ? bareAction
+        : module.lookupAction(
+          bareAction.coverageTrackingIdentifier(),
+          signature: signature,
+          specifiedReturnValue: reference.resolvedResultType
+        )!
       if let native = nativeImplementation(of: action) {
         var result = ""
         for index in native.textComponents.indices {
