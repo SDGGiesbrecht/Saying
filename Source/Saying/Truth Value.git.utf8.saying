@@ -261,4 +261,11 @@ use (clients)
    {
     true
    }
+
+  action (clients)
+   differing example
+   truth value
+   {
+    false
+   }
  }

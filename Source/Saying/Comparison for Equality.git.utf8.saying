@@ -83,6 +83,15 @@ ability (clients)
    ]
    example
    thing
+
+  requirement (clients)
+   [
+    [
+     English: A separate example instance which differs from the main example.
+    ]
+   ]
+   differing example
+   thing
  }
 
 thing
@@ -120,13 +129,13 @@ use
    JavaScript: “¤(28)true¤(29)”
    Kotlin: “¤(28)true¤(29)”
    Swift: “¤(28)true¤(29)”
- }
 
-action
- differing example
- equality example
- C: “¤(28)false¤(29)” (stdbool)
- C♯: “¤(28)false¤(29)”
- JavaScript: “¤(28)false¤(29)”
- Kotlin: “¤(28)false¤(29)”
- Swift: “¤(28)false¤(29)”
+  action
+   differing example
+   equality example
+   C: “¤(28)false¤(29)” (stdbool)
+   C♯: “¤(28)false¤(29)”
+   JavaScript: “¤(28)false¤(29)”
+   Kotlin: “¤(28)false¤(29)”
+   Swift: “¤(28)false¤(29)”
+ }
