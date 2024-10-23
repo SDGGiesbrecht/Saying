@@ -9,6 +9,8 @@ ability (clients)
     [
      English: Compares two values for equality.
     ]
+    test (verify ((thing: example) is (thing: example)))
+    test (verify (((thing: example) is (thing: differing example)) is (false)))
     parameter: first
      (
       [
@@ -43,6 +45,8 @@ ability (clients)
     [
      English: Compares two values for inequality.
     ]
+    test (verify ((thing: example) is not (thing: differing example)))
+    test (verify (((thing: example) is not (thing: example)) is (false)))
     parameter: first
      (
       [
@@ -74,15 +78,27 @@ ability (clients)
    {
     not ((first) is (second))
    }
+
+  requirement (clients)
+   [
+    [
+     English: An arbitrary example instance intended for use in tests.
+    ]
+   ]
+   example
+   thing
+
+  requirement (clients)
+   [
+    [
+     English: A separate example instance which differs from the main example.
+    ]
+   ]
+   differing example
+   thing
  }
 
 thing
- [
-  test (verify ((example) is (example)))
-  test (verify (((example) is (differing example)) is (false)))
-  test (verify ((example) is not (differing example)))
-  test (verify (((example) is not (example)) is (false)))
- ]
  (
   English: equality example
  )
@@ -102,26 +118,22 @@ use
    JavaScript: “¤(28)” first “ == ” second “¤(29)”
    Kotlin: “¤(28)” first “ == ” second “¤(29)”
    Swift: «¤(28)» first “ == ” second „¤(29)“
+
+  action
+   example
+   equality example
+   C: “¤(28)true¤(29)” (stdbool)
+   C♯: “¤(28)true¤(29)”
+   JavaScript: “¤(28)true¤(29)”
+   Kotlin: “¤(28)true¤(29)”
+   Swift: “¤(28)true¤(29)”
+
+  action
+   differing example
+   equality example
+   C: “¤(28)false¤(29)” (stdbool)
+   C♯: “¤(28)false¤(29)”
+   JavaScript: “¤(28)false¤(29)”
+   Kotlin: “¤(28)false¤(29)”
+   Swift: “¤(28)false¤(29)”
  }
-
-action
- (
-  English: example
- )
- equality example
- C: “¤(28)true¤(29)” (stdbool)
- C♯: “¤(28)true¤(29)”
- JavaScript: “¤(28)true¤(29)”
- Kotlin: “¤(28)true¤(29)”
- Swift: “¤(28)true¤(29)”
-
-action
- (
-  English: differing example
- )
- equality example
- C: “¤(28)false¤(29)” (stdbool)
- C♯: “¤(28)false¤(29)”
- JavaScript: “¤(28)false¤(29)”
- Kotlin: “¤(28)false¤(29)”
- Swift: “¤(28)false¤(29)”

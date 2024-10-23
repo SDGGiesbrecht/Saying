@@ -254,4 +254,18 @@ use (clients)
    JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
    Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
    Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+
+  action (clients)
+   example
+   truth value
+   {
+    true
+   }
+
+  action (clients)
+   differing example
+   truth value
+   {
+    false
+   }
  }

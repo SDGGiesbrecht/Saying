@@ -153,20 +153,23 @@ extension Platform {
       .joined()
   }
 
-  static func disambiguatedIdentifier(for action: ActionIntermediate) -> StrictString {
-    let identifier = action.names.identifier()
-    return [identifier]
-      .appending(contentsOf: action.signature(orderedFor: identifier))
-      .joined(separator: ":")
-  }
-
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
-      let signature = reference.arguments.map({ $0.resolvedResultType! })
-      let bareAction = module.lookupAction(reference.actionName, signature: signature)!
-      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature)!
+      let signature = reference.arguments.map({ $0.resolvedResultType!! })
+      let bareAction = module.lookupAction(
+        reference.actionName,
+        signature: signature,
+        specifiedReturnValue: reference.resolvedResultType
+      )!
+      let action = (context?.isCoverageWrapper ?? false)
+        ? bareAction
+        : module.lookupAction(
+          bareAction.coverageTrackingIdentifier(),
+          signature: signature,
+          specifiedReturnValue: reference.resolvedResultType
+        )!
       if let native = nativeImplementation(of: action) {
         var result = ""
         for index in native.textComponents.indices {
@@ -180,7 +183,7 @@ extension Platform {
         }
         return result
       } else {
-        let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+        let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
         let arguments = reference.arguments
           .lazy.map({ argument in
             return call(to: argument, context: context, module: module)
@@ -212,7 +215,7 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+    let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
     let parameters = action.parameters
       .lazy.map({ source(for: $0, module: module) })
       .joined(separator: ", ")
@@ -243,7 +246,7 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+    let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
     let parameters = action.parameters
       .lazy.map({ source(for: $0, module: module) })
       .joined(separator: ", ")
@@ -307,9 +310,11 @@ extension Platform {
         imports.insert(String(requiredImport))
       }
       for group in module.actions.values {
-        for action in group.values {
-          if let requiredImport = nativeImplementation(of: action)?.requiredImport {
-            imports.insert(String(requiredImport))
+        for returnOverloads in group.values {
+          for action in returnOverloads.values {
+            if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+              imports.insert(String(requiredImport))
+            }
           }
         }
       }
@@ -331,15 +336,16 @@ extension Platform {
 
     let actionRegions: [StrictString] = module.actions.values
       .lazy.map({ $0.values }).joined()
+      .lazy.map({ $0.values }).joined()
       .lazy.filter({ ¬$0.isCoverageWrapper })
-      .lazy.compactMap({ $0.coverageRegionIdentifier() })
+      .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
     let choiceRegions: [StrictString] = module.abilities.values
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.compactMap({ $0.coverageRegionIdentifier() })
-    let regions = [
+      .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
+    let regions = Set([
       actionRegions,
       choiceRegions
-    ].joined()
+    ].joined())
       .sorted()
       .map({ sanitize(stringLiteral: $0) })
     result.append(contentsOf: coverageRegionSet(regions: regions))
@@ -353,12 +359,15 @@ extension Platform {
       for actionIdentifier in module.actions.keys.sorted() {
         let group = module.actions[actionIdentifier]!
         for signature in group.keys {
-          if let declaration = group[signature]
-            .flatMap({ forwardDeclaration(for: $0, module: module) }) {
-            result.append(contentsOf: [
-              "",
-              declaration
-            ])
+          let returnOverloads = group[signature]!
+          for returnType in returnOverloads.keys {
+            if let declaration = returnOverloads[returnType]
+              .flatMap({ forwardDeclaration(for: $0, module: module) }) {
+              result.append(contentsOf: [
+                "",
+                declaration
+              ])
+            }
           }
         }
       }
@@ -366,12 +375,15 @@ extension Platform {
     for actionIdentifier in module.actions.keys.sorted() {
       let group = module.actions[actionIdentifier]!
       for signature in group.keys {
-        if let declaration = group[signature]
-          .flatMap({ declaration(for: $0, module: module) }) {
-          result.append(contentsOf: [
-            "",
-            declaration
-          ])
+        let returnOverloads = group[signature]!
+        for returnType in returnOverloads.keys {
+          if let declaration = returnOverloads[returnType]
+            .flatMap({ declaration(for: $0, module: module) }) {
+            result.append(contentsOf: [
+              "",
+              declaration
+            ])
+          }
         }
       }
     }

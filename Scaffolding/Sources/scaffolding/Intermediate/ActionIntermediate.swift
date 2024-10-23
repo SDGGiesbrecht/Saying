@@ -11,6 +11,7 @@ struct ActionIntermediate {
   var swift: NativeActionImplementationIntermediate?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclarationPrototype?
+  var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
   var documentation: DocumentationIntermediate? {
@@ -37,7 +38,11 @@ struct ActionIntermediate {
 }
 
 extension ActionIntermediate: Scope {
-  func lookupAction(_ identifier: StrictString, signature: [StrictString]) -> ActionIntermediate? {
+  func lookupAction(
+    _ identifier: StrictString,
+    signature: [StrictString],
+    specifiedReturnValue: StrictString??
+  ) -> ActionIntermediate? {
     guard let parameter = prototype.lookupParameter(identifier) else {
       return nil
     }
@@ -51,6 +56,28 @@ extension ActionIntermediate: Scope {
         testOnlyAccess: false,
         completeParameterIndexTable: [:]
       )
+    )
+  }
+}
+
+extension ActionIntermediate {
+  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
+    let identifier = names.identifier()
+    return [identifier]
+      .appending(contentsOf: signature(orderedFor: identifier))
+      .appending(returnValue ?? "")
+  }
+  func resolve(
+    globallyUniqueIdentifierComponents: [StrictString],
+    module: ModuleIntermediate) -> StrictString {
+    return globallyUniqueIdentifierComponents
+        .lazy.map({ module.resolve(identifier: $0) })
+        .joined(separator: ":")
+  }
+  func globallyUniqueIdentifier(module: ModuleIntermediate) -> StrictString {
+    return resolve(
+      globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
+      module: module
     )
   }
 }
@@ -160,7 +187,12 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func merging(requirement: RequirementIntermediate, useAccess: AccessIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
+  func merging(
+    requirement: RequirementIntermediate,
+    useAccess: AccessIntermediate,
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
+  ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
@@ -195,7 +227,11 @@ extension ActionIntermediate {
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    let mergedDocumentation = documentation.merging(inherited: requirement.documentation)
+    let mergedDocumentation = documentation.merging(
+      inherited: requirement.documentation,
+      typeLookup: typeLookup,
+      canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+    )
     return .success(
       ActionIntermediate(
         prototype: ActionPrototype(
@@ -216,6 +252,7 @@ extension ActionIntermediate {
         swift: swift,
         implementation: implementation,
         declaration: nil,
+        originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier
       )
     )
@@ -235,14 +272,9 @@ extension ActionIntermediate {
     })
     let newReturnValue = returnValue.flatMap { typeLookup[$0] ?? $0 }
     let newDocumentation = documentation.flatMap({ documentation in
-      return DocumentationIntermediate(
-        parameters: documentation.parameters,
-        tests: documentation.tests.map({ test in
-          return TestIntermediate(
-            location: test.location.appending(contentsOf: canonicallyOrderedUseArguments),
-            action: test.action
-          )
-        })
+      return documentation.specializing(
+        typeLookup: typeLookup,
+        canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
       )
     })
     return ActionIntermediate(
@@ -264,6 +296,7 @@ extension ActionIntermediate {
       swift: swift,
       implementation: implementation,
       declaration: nil,
+      originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
     )
   }
@@ -291,8 +324,8 @@ extension ActionIntermediate {
   func coverageTrackingReordering() -> [Int] {
     return reorderings[prototype.names.identifier()]!
   }
-  func wrappedToTrackCoverage() -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier() {
+  func wrappedToTrackCoverage(module: ModuleIntermediate) -> ActionIntermediate? {
+    if let coverageIdentifier = coverageRegionIdentifier(module: module) {
       let newName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
@@ -315,8 +348,9 @@ extension ActionIntermediate {
               resolvedResultType: parameter.type
             )
           }),
-          resolvedResultType: implementation?.resolvedResultType
+          resolvedResultType: returnValue
         ),
+        originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier
       )
     } else {
@@ -324,10 +358,17 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier() -> StrictString? {
-    return prototype.namespace
-      .appending(prototype.names)
+  func coverageRegionIdentifier(module: ModuleIntermediate) -> StrictString? {
+    let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
+      .joined(separator: ":")
+    let identifier: StrictString
+    if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
+      identifier = resolve(globallyUniqueIdentifierComponents: inherited, module: module)
+    } else {
+      identifier = globallyUniqueIdentifier(module: module)
+    }
+    return [namespace, identifier]
       .joined(separator: ":")
   }
 }
