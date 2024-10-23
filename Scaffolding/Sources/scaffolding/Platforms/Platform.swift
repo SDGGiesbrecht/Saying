@@ -153,14 +153,6 @@ extension Platform {
       .joined()
   }
 
-  static func disambiguatedIdentifier(for action: ActionIntermediate) -> StrictString {
-    let identifier = action.names.identifier()
-    return [identifier]
-      .appending(contentsOf: action.signature(orderedFor: identifier))
-      .appending(action.returnValue ?? "")
-      .joined(separator: ":")
-  }
-
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
@@ -191,7 +183,7 @@ extension Platform {
         }
         return result
       } else {
-        let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+        let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
         let arguments = reference.arguments
           .lazy.map({ argument in
             return call(to: argument, context: context, module: module)
@@ -223,7 +215,7 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+    let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
     let parameters = action.parameters
       .lazy.map({ source(for: $0, module: module) })
       .joined(separator: ", ")
@@ -254,7 +246,7 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+    let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
     let parameters = action.parameters
       .lazy.map({ source(for: $0, module: module) })
       .joined(separator: ", ")
@@ -346,10 +338,10 @@ extension Platform {
       .lazy.map({ $0.values }).joined()
       .lazy.map({ $0.values }).joined()
       .lazy.filter({ ¬$0.isCoverageWrapper })
-      .lazy.compactMap({ $0.coverageRegionIdentifier() })
+      .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
     let choiceRegions: [StrictString] = module.abilities.values
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.compactMap({ $0.coverageRegionIdentifier() })
+      .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
     let regions = [
       actionRegions,
       choiceRegions

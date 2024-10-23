@@ -12,6 +12,10 @@ struct ModuleIntermediate {
 }
 
 extension ModuleIntermediate: Scope {
+  func resolve(identifier: StrictString) -> StrictString {
+    return identifierMapping[identifier] ?? identifier
+  }
+
   func lookupAction(
     _ identifier: StrictString,
     signature: [StrictString],
@@ -193,9 +197,9 @@ extension ModuleIntermediate {
     var newActions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
-        let resolvedSignature = signature.map({ identifierMapping[$0] ?? $0 })
+        let resolvedSignature = signature.map({ resolve(identifier: $0) })
         for (overload, action) in returnOverloads {
-          let resolvedReturn = overload.flatMap({ identifierMapping[$0] ?? $0 })
+          let resolvedReturn = overload.flatMap({ resolve(identifier: $0 ) })
           newActions[actionName, default: [:]][resolvedSignature, default: [:]][resolvedReturn] = action
         }
       }
@@ -250,12 +254,12 @@ extension ModuleIntermediate {
     for group in self.actions.values {
       for returnOverloads in group.values {
         for action in returnOverloads.values {
-          if let wrapped = action.wrappedToTrackCoverage() {
+          if let wrapped = action.wrappedToTrackCoverage(module: self) {
             let identifier = wrapped.names.identifier()
             identifierMapping[identifier] = identifier
             let wrappedSignature = wrapped.signature(orderedFor: identifier)
-              .map({ identifierMapping[$0] ?? $0 })
-            let wrappedReturn = wrapped.returnValue.flatMap { identifierMapping[$0] ?? $0 }
+              .map({ resolve(identifier: $0) })
+            let wrappedReturn = wrapped.returnValue.flatMap { resolve(identifier: $0) }
             actions[identifier, default: [:]][wrappedSignature, default: [:]][wrappedReturn] = wrapped
           }
         }

@@ -60,6 +60,16 @@ extension ActionIntermediate: Scope {
 }
 
 extension ActionIntermediate {
+  func globallyUniqueIdentifier(module: ModuleIntermediate) -> StrictString {
+    let identifier = names.identifier()
+    return [identifier]
+      .appending(contentsOf: signature(orderedFor: identifier).map({ module.resolve(identifier: $0) }))
+      .appending(returnValue.flatMap({ module.resolve(identifier: $0) }) ?? "")
+      .joined(separator: ":")
+  }
+}
+
+extension ActionIntermediate {
 
   static func disallowImports(
     in implementation: ParsedNativeActionImplementation,
@@ -295,8 +305,8 @@ extension ActionIntermediate {
   func coverageTrackingReordering() -> [Int] {
     return reorderings[prototype.names.identifier()]!
   }
-  func wrappedToTrackCoverage() -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier() {
+  func wrappedToTrackCoverage(module: ModuleIntermediate) -> ActionIntermediate? {
+    if let coverageIdentifier = coverageRegionIdentifier(module: module) {
       let newName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
@@ -328,10 +338,11 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier() -> StrictString? {
-    return prototype.namespace
-      .appending(prototype.names)
+  func coverageRegionIdentifier(module: ModuleIntermediate) -> StrictString? {
+    let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
+      .joined(separator: ":")
+    return [namespace, globallyUniqueIdentifier(module: module)]
       .joined(separator: ":")
   }
 }
