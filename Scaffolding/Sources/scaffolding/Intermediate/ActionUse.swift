@@ -33,8 +33,13 @@ extension ActionUse {
     specifiedReturnValue: StrictString??
   ) {
     for index in arguments.indices {
-      #warning("Explicit typing should be looked up here.")
-      let specifiedArgumentReturnValue: StrictString?? = arguments[index].actionName == "example" ? "equality example" : arguments[index].actionName == "differing example" ? "equality example" : nil
+      let specifiedArgumentReturnValue: StrictString??
+      switch arguments[index].specifiedResultType {
+      case .some(let specified):
+        specifiedArgumentReturnValue = .some(.some(specified))
+      case .none:
+        specifiedArgumentReturnValue = .none
+      }
       arguments[index].resolveTypes(
         context: context,
         module: module,
