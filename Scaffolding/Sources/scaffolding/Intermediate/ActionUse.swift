@@ -5,6 +5,7 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
   var source: ParsedAction?
+  var specifiedResultType: StrictString?
   var resolvedResultType: StrictString??
 }
 
@@ -19,6 +20,11 @@ extension ActionUse {
       arguments = []
     }
     source = use
+  }
+
+  init(_ use: ParsedAnnotatedAction) {
+    self = ActionUse(use.action)
+    specifiedResultType = use.type?.type.identifierText()
   }
 
   mutating func resolveTypes(

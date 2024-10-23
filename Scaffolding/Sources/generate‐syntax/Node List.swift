@@ -256,7 +256,7 @@ extension Node {
             name: "Argument",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "argument", type: "Action", kind: .required),
+              Child(name: "argument", type: "AnnotatedAction", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
@@ -279,12 +279,26 @@ extension Node {
             ])
           ),
           Node(
+            name: "TypeAnnotation",
+            kind: .compound(children: [
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "SpacedColon", kind: .required),
+            ])
+          ),
+          Node(
             name: "Action",
             kind: .alternates([
               Alternate(name: "compound", type: "CompoundAction"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
             ]),
             isIndirect: true
+          ),
+          Node(
+            name: "AnnotatedAction",
+            kind: .compound(children: [
+              Child(name: "type", type: "TypeAnnotation", kind: .optional),
+              Child(name: "action", type: "Action", kind: .required),
+            ])
           ),
 
           Node(
