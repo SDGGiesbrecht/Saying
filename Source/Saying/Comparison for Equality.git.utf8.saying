@@ -38,15 +38,11 @@ ability (clients)
    )
    truth value
 
-  requirement (clients)
+  choice (clients)
    [
     [
-     English: Compares two truth values for inequality.
+     English: Compares two values for inequality.
     ]
-    test (verify (((true) is not (true)) is (false)))
-    test (verify (((true) is not (false)) is (true)))
-    test (verify (((false) is not (true)) is (true)))
-    test (verify (((false) is not (false)) is (false)))
     parameter: first
      (
       [
@@ -63,7 +59,7 @@ ability (clients)
      )
    ]
    (
-    English: (first: truth value) is not (second: truth value)
+    English: (first: thing) is not (second: thing)
     English +: (first: [first]) ≠ (second: [second])
     Deutsch: (erste: [first]) ist nicht (zweite: [second])
     Deutsch +: (erste: [first]) ≠ (zweite: [second])
@@ -75,4 +71,57 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
+   {
+    not ((first) is (second))
+   }
  }
+
+thing
+ [
+  test (verify ((example) is (example)))
+  test (verify (((example) is (differing example)) is (false)))
+  test (verify ((example) is not (differing example)))
+  test (verify (((example) is not (example)) is (false)))
+ ]
+ (
+  English: equality example
+ )
+ C: bool (stdbool)
+ C♯: bool
+ Kotlin: Boolean
+ Swift: Bool
+
+use
+ comparison of (equality example) for equality
+ {
+  action
+   (first: equality example) is (second: equality example)
+   truth value
+   C: “¤(28)” first “ == ” second “¤(29)”
+   C♯: “¤(28)” first “ == ” second “¤(29)”
+   JavaScript: “¤(28)” first “ == ” second “¤(29)”
+   Kotlin: “¤(28)” first “ == ” second “¤(29)”
+   Swift: «¤(28)» first “ == ” second „¤(29)“
+ }
+
+action
+ (
+  English: example
+ )
+ equality example
+ C: “¤(28)true¤(29)” (stdbool)
+ C♯: “¤(28)true¤(29)”
+ JavaScript: “¤(28)true¤(29)”
+ Kotlin: “¤(28)true¤(29)”
+ Swift: “¤(28)true¤(29)”
+
+action
+ (
+  English: differing example
+ )
+ equality example
+ C: “¤(28)false¤(29)” (stdbool)
+ C♯: “¤(28)false¤(29)”
+ JavaScript: “¤(28)false¤(29)”
+ Kotlin: “¤(28)false¤(29)”
+ Swift: “¤(28)false¤(29)”

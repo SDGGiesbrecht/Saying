@@ -4,10 +4,11 @@ import SDGText
 
 struct ActionPrototype {
   var names: Set<StrictString>
+  var namespace: [Set<StrictString>]
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
   var returnValue: StrictString?
-  var clientAccess: Bool
+  var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
 
@@ -62,12 +63,13 @@ extension ActionPrototype {
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for (_, signature) in namesDictionary {
+      var reordering: [Int] = []
       let signatureName = signature.name()
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {
         case .type(let type):
           parameterTypes.append(type)
-          reorderings[signatureName, default: []].append(position)
+          reordering.append(position)
         case .reference(let reference):
           var resolving = reference.name.identifierText()
           var checked: Set<StrictString> = []
@@ -82,12 +84,19 @@ extension ActionPrototype {
             }
           }
           if let index = parameterIndices[resolving] {
-            reorderings[signatureName, default: []].append(index)
+            reordering.append(index)
             completeParameterIndexTable[parameter.name.identifierText()] = index
           } else {
             errors.append(.parameterNotFound(reference))
           }
         }
+      }
+      let existingReordering = reorderings[signatureName]
+      if existingReordering == nil
+        ∨ existingReordering == reordering {
+        reorderings[signatureName] = reordering
+      } else {
+        errors.append(.rearrangedParameters(signature))
       }
     }
     let parameters = parameterTypes.enumerated().map { index, type in
@@ -101,7 +110,11 @@ extension ActionPrototype {
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      let intermediateDocumentation = DocumentationIntermediate.construct(
+        documentation.documentation,
+        namespace: namespace
+          .appending(names)
+      )
       attachedDocumentation = intermediateDocumentation
       let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
       for parameter in intermediateDocumentation.parameters.joined() {
@@ -116,10 +129,11 @@ extension ActionPrototype {
     return .success(
       ActionPrototype(
         names: names,
+        namespace: namespace,
         parameters: parameters,
         reorderings: reorderings,
         returnValue: declaration.returnValueType?.identifierText(),
-        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
         completeParameterIndexTable: completeParameterIndexTable,
@@ -135,8 +149,7 @@ extension ActionPrototype {
     errors: inout [ReferenceError]
   ) {
     if let thing = module.lookupThing(typeIdentifier) {
-      if self.clientAccess,
-        ¬thing.clientAccess {
+      if self.access > thing.access {
         errors.append(.thingAccessNarrowerThanSignature(reference: reference!))
       }
       if ¬self.testOnlyAccess,
@@ -171,5 +184,12 @@ extension ActionPrototype {
 extension ActionPrototype {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
     return parameters.first(where: { $0.names.contains(identifier) })
+  }
+
+  func signature(orderedFor name: StrictString) -> [StrictString] {
+    guard let reordering = reorderings[name] else {
+      return []
+    }
+    return reordering.map({ parameters[$0].type })
   }
 }

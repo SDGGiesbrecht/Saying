@@ -4,13 +4,13 @@ import SDGText
 
 struct ActionIntermediate {
   fileprivate var prototype: ActionPrototype
-  var c: NativeActionImplementation?
-  var cSharp: NativeActionImplementation?
-  var javaScript: NativeActionImplementation?
-  var kotlin: NativeActionImplementation?
-  var swift: NativeActionImplementation?
+  var c: NativeActionImplementationIntermediate?
+  var cSharp: NativeActionImplementationIntermediate?
+  var javaScript: NativeActionImplementationIntermediate?
+  var kotlin: NativeActionImplementationIntermediate?
+  var swift: NativeActionImplementationIntermediate?
   var implementation: ActionUse?
-  var declaration: ParsedActionDeclaration?
+  var declaration: ParsedActionDeclarationPrototype?
   var coveredIdentifier: StrictString?
 
   var documentation: DocumentationIntermediate? {
@@ -28,18 +28,37 @@ struct ActionIntermediate {
   var returnValue: StrictString? {
     return prototype.returnValue
   }
-  var clientAccess: Bool {
-    return prototype.clientAccess
+  var access: AccessIntermediate {
+    return prototype.access
   }
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
 }
 
+extension ActionIntermediate: Scope {
+  func lookupAction(_ identifier: StrictString, signature: [StrictString]) -> ActionIntermediate? {
+    guard let parameter = prototype.lookupParameter(identifier) else {
+      return nil
+    }
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: parameter.names,
+        namespace: [],
+        parameters: [],
+        reorderings: [:],
+        access: .inferred,
+        testOnlyAccess: false,
+        completeParameterIndexTable: [:]
+      )
+    )
+  }
+}
+
 extension ActionIntermediate {
 
   static func disallowImports(
-    in implementation: ParsedActionImplementation,
+    in implementation: ParsedNativeActionImplementation,
     errors: inout [ConstructionError]
   ) {
     if implementation.expression.importNode ≠ nil {
@@ -47,10 +66,11 @@ extension ActionIntermediate {
     }
   }
 
-  static func construct(
-    _ declaration: ParsedActionDeclaration,
+  static func construct<Declaration>(
+    _ declaration: Declaration,
     namespace: [Set<StrictString>]
-  ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>> {
+  ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>>
+  where Declaration: ParsedActionDeclarationPrototype {
     var errors: [ActionIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype
@@ -61,37 +81,59 @@ extension ActionIntermediate {
     case .success(let constructed):
       prototype = constructed
     }
-    var c: NativeActionImplementation?
-    var cSharp: NativeActionImplementation?
-    var javaScript: NativeActionImplementation?
-    var kotlin: NativeActionImplementation?
-    var swift: NativeActionImplementation?
-    for implementation in declaration.implementation.implementations {
-      switch NativeActionImplementation.construct(
-        implementation: implementation.expression,
-        indexTable: prototype.completeParameterIndexTable
-      ) {
-      case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
-      case .success(let constructed):
-        switch implementation.language.identifierText() {
-        case "C":
-          c = constructed
-        case "C♯":
-          cSharp = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "JavaScript":
-          javaScript = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "Kotlin":
-          kotlin = constructed
-          disallowImports(in: implementation, errors: &errors)
-        case "Swift":
-          swift = constructed
-          disallowImports(in: implementation, errors: &errors)
-        default:
-          errors.append(ConstructionError.unknownLanguage(implementation.language))
+    var c: NativeActionImplementationIntermediate?
+    var cSharp: NativeActionImplementationIntermediate?
+    var javaScript: NativeActionImplementationIntermediate?
+    var kotlin: NativeActionImplementationIntermediate?
+    var swift: NativeActionImplementationIntermediate?
+    if let native = declaration.implementation.native {
+      for implementation in native.implementations {
+        switch NativeActionImplementationIntermediate.construct(
+          implementation: implementation.expression,
+          indexTable: prototype.completeParameterIndexTable
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
+        case .success(let constructed):
+          switch implementation.language.identifierText() {
+          case "C":
+            c = constructed
+          case "C♯":
+            cSharp = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "JavaScript":
+            javaScript = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "Kotlin":
+            kotlin = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "Swift":
+            swift = constructed
+            disallowImports(in: implementation, errors: &errors)
+          default:
+            errors.append(ConstructionError.unknownLanguage(implementation.language))
+          }
         }
+      }
+    }
+    var implementation: ActionUse?
+    if let source = declaration.implementation.source {
+      implementation = ActionUse(source.action)
+    } else {
+      if c == nil {
+        errors.append(ConstructionError.missingImplementation(language: "C", action: declaration.name))
+      }
+      if cSharp == nil {
+        errors.append(ConstructionError.missingImplementation(language: "C♯", action: declaration.name))
+      }
+      if javaScript == nil {
+        errors.append(ConstructionError.missingImplementation(language: "JavaScript", action: declaration.name))
+      }
+      if kotlin == nil {
+        errors.append(ConstructionError.missingImplementation(language: "Kotlin", action: declaration.name))
+      }
+      if swift == nil {
+        errors.append(ConstructionError.missingImplementation(language: "Swift", action: declaration.name))
       }
     }
     if ¬errors.isEmpty {
@@ -105,6 +147,7 @@ extension ActionIntermediate {
         javaScript: javaScript,
         kotlin: kotlin,
         swift: swift,
+        implementation: implementation,
         declaration: declaration
       )
     )
@@ -112,11 +155,12 @@ extension ActionIntermediate {
 
   func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
     prototype.validateReferences(module: module, errors: &errors)
+    implementation?.validateReferences(context: [module, self], testContext: false, errors: &errors)
   }
 }
 
 extension ActionIntermediate {
-  func merging(requirement: RequirementIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
+  func merging(requirement: RequirementIntermediate, useAccess: AccessIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
@@ -142,8 +186,8 @@ extension ActionIntermediate {
         mergedReorderings[name] = rearranged
       }
     }
-    if clientAccess ≠ requirement.clientAccess {
-      errors.append(.mismatchedAccess(access: self.declaration!.access!))
+    if access < min(requirement.access, useAccess) {
+      errors.append(.fulfillmentAccessNarrowerThanRequirement(declaration: self.declaration!.name))
     }
     if testOnlyAccess ≠ requirement.testOnlyAccess {
       errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
@@ -156,10 +200,11 @@ extension ActionIntermediate {
       ActionIntermediate(
         prototype: ActionPrototype(
           names: names ∪ requirement.names,
+          namespace: prototype.namespace,
           parameters: mergedParameters,
           reorderings: mergedReorderings,
           returnValue: returnValue,
-          clientAccess: clientAccess,
+          access: access,
           testOnlyAccess: testOnlyAccess,
           documentation: mergedDocumentation,
           completeParameterIndexTable: [:]
@@ -175,11 +220,62 @@ extension ActionIntermediate {
       )
     )
   }
+
+  func specializing(
+    for use: UseIntermediate,
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
+  ) -> ActionIntermediate {
+    let newParameters = parameters.map({ parameter in
+      return ParameterIntermediate(
+        names: parameter.names,
+        type: typeLookup[parameter.type] ?? parameter.type,
+        typeDeclaration: parameter.typeDeclaration
+      )
+    })
+    let newReturnValue = returnValue.flatMap { typeLookup[$0] ?? $0 }
+    let newDocumentation = documentation.flatMap({ documentation in
+      return DocumentationIntermediate(
+        parameters: documentation.parameters,
+        tests: documentation.tests.map({ test in
+          return TestIntermediate(
+            location: test.location.appending(contentsOf: canonicallyOrderedUseArguments),
+            action: test.action
+          )
+        })
+      )
+    })
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: prototype.namespace,
+        parameters: newParameters,
+        reorderings: reorderings,
+        returnValue: newReturnValue,
+        access: min(self.access, use.access),
+        testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
+        documentation: newDocumentation,
+        completeParameterIndexTable: [:]
+      ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
+      implementation: implementation,
+      declaration: nil,
+      coveredIdentifier: coveredIdentifier
+    )
+  }
 }
 
 extension ActionIntermediate {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
     return prototype.lookupParameter(identifier)
+  }
+
+  func signature(orderedFor name: StrictString) -> [StrictString] {
+    return prototype.signature(orderedFor: name)
   }
 }
 
@@ -192,15 +288,20 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(prototype.names.identifier())"
   }
+  func coverageTrackingReordering() -> [Int] {
+    return reorderings[prototype.names.identifier()]!
+  }
   func wrappedToTrackCoverage() -> ActionIntermediate? {
     if let coverageIdentifier = coverageRegionIdentifier() {
+      let newName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
-          names: [coverageTrackingIdentifier()],
+          names: [newName],
+          namespace: [],
           parameters: prototype.parameters,
-          reorderings: prototype.reorderings,
+          reorderings: [newName: coverageTrackingReordering()],
           returnValue: prototype.returnValue,
-          clientAccess: prototype.clientAccess,
+          access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
           completeParameterIndexTable: prototype.completeParameterIndexTable,
           declarationReturnValueType: prototype.declarationReturnValueType
@@ -210,9 +311,11 @@ extension ActionIntermediate {
           arguments: prototype.parameters.map({ parameter in
             return ActionUse(
               actionName: parameter.names.identifier(),
-              arguments: []
+              arguments: [],
+              resolvedResultType: parameter.type
             )
-          })
+          }),
+          resolvedResultType: implementation?.resolvedResultType
         ),
         coveredIdentifier: coverageIdentifier
       )
@@ -222,6 +325,9 @@ extension ActionIntermediate {
   }
 
   func coverageRegionIdentifier() -> StrictString? {
-    return prototype.names.identifier()
+    return prototype.namespace
+      .appending(prototype.names)
+      .lazy.map({ $0.identifier() })
+      .joined(separator: ":")
   }
 }

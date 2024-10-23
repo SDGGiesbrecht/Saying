@@ -49,7 +49,7 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.javaScript
   }
 
@@ -61,6 +61,11 @@ enum JavaScript: Platform {
     return nil
   }
   static func returnSection(with returnValue: String) -> String? {
+    return nil
+  }
+
+  static var needsForwardDeclarations: Bool { false }
+  static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {
     return nil
   }
 

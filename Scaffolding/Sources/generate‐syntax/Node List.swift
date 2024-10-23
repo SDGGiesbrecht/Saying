@@ -25,9 +25,11 @@ extension Node {
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
+          Node(name: "ChoiceKeyword", kind: .keyword(["choice", "Wahl", "choix", "επιλογή", "בחירה"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
+          Node(name: "FileKeyword", kind: .keyword(["file", "Datei", "fichier", "αρχείο", "קובץ"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
           Node(name: "ParameterKeyword", kind: .keyword(["parameter", "Übergabewert", "paramètre", "παράμετρος", "פרמטר"])),
@@ -225,11 +227,18 @@ extension Node {
             ])
           ),
           Node(
+            name: "AccessDeclaration",
+            kind: .alternates([
+              Alternate(name: "file", type: "FileKeyword"),
+              Alternate(name: "clients", type: "ClientsKeyword"),
+            ])
+          ),
+          Node(
             name: "Access",
             kind: .compound(children: [
               Child(name: "space", type: "Space", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "keyword", type: "ClientsKeyword", kind: .required),
+              Child(name: "keyword", type: "AccessDeclaration", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
@@ -649,11 +658,21 @@ extension Node {
             ])
           ),
           Node(
-            name: "ActionImplementation",
+            name: "NativeActionImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "SpacedColon", kind: .required),
               Child(name: "expression", type: "NativeAction", kind: .required),
+            ])
+          ),
+          Node(
+            name: "SourceActionImplementation",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "action", type: "Action", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
         ],
@@ -666,15 +685,32 @@ extension Node {
             fixedSeparator: true
           ),
           Node.separatedList(
-            name: "ActionImplementations",
+            name: "NativeActionImplementations",
             entryName: "implementation", entryNamePlural: "implementations",
-            entryType: "ActionImplementation",
+            entryType: "NativeActionImplementation",
             separatorName: "lineBreak",
             separatorType: "LineBreak",
             fixedSeparator: true
           ),
 
         [
+          Node(
+            name: "DualActionImplementation",
+            kind: .compound(children: [
+              Child(name: "native", type: "NativeActionImplementations", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "source", type: "SourceActionImplementation", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ActionImplementations",
+            kind: .alternates([
+              Alternate(name: "source", type: "SourceActionImplementation"),
+              Alternate(name: "dual", type: "DualActionImplementation"),
+              Alternate(name: "native", type: "NativeActionImplementations"),
+            ])
+          ),
+
           Node(
             name: "ThingDeclaration",
             kind: .compound(children: [
@@ -714,12 +750,33 @@ extension Node {
               Child(name: "returnValue", type: "RequirementReturnValue", kind: .optional),
             ])
           ),
-
+          Node(
+            name: "ChoiceDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ChoiceKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ActionName", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "returnValue", type: "ActionReturnValue", kind: .optional),
+              Child(name: "implementation", type: "ActionImplementations", kind: .required),
+            ])
+          ),
+          
+          Node(
+            name: "RequirementsElement",
+            kind: .alternates([
+              Alternate(name: "requirement", type: "RequirementDeclaration"),
+              Alternate(name: "choice", type: "ChoiceDeclaration"),
+            ])
+          ),
         ],
           Node.separatedList(
             name: "RequirementsList",
             entryName: "requirement", entryNamePlural: "requirements",
-            entryType: "RequirementDeclaration",
+            entryType: "RequirementsElement",
             separatorName: "paragraphBreak",
             separatorType: "ParagraphBreak",
             fixedSeparator: true

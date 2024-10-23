@@ -8,7 +8,8 @@ struct Ability {
   var parameterReorderings: [StrictString: [Int]]
   var identifierMapping: [StrictString: StrictString]
   var requirements: [StrictString: RequirementIntermediate]
-  var clientAccess: Bool
+  var defaults: [StrictString: ActionIntermediate]
+  var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
@@ -101,24 +102,54 @@ extension Ability {
     }
     var identifierMapping: [StrictString: StrictString] = [:]
     var requirements: [StrictString: RequirementIntermediate] = [:]
+    var defaults: [StrictString: ActionIntermediate] = [:]
     let abilityNamespace = namespace.appending(names)
-    for requirementNode in declaration.requirements.requirements.requirements {
-      let requirement: RequirementIntermediate
-      switch RequirementIntermediate.construct(requirementNode, namespace: abilityNamespace) {
-      case .failure(let nested):
-        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
-        continue
-      case .success(let constructed):
-        requirement = constructed
-      }
-      let identifier = requirement.names.identifier()
-      for name in requirement.names {
-        if identifierMapping[name] ≠ nil {
-          errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+    for requirementEntry in declaration.requirements.requirements.requirements {
+      switch requirementEntry {
+      case .requirement(let requirementNode):
+        let requirement: RequirementIntermediate
+        switch RequirementIntermediate.construct(requirementNode, namespace: abilityNamespace) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
+          continue
+        case .success(let constructed):
+          requirement = constructed
         }
-        identifierMapping[name] = identifier
+        let identifier = requirement.names.identifier()
+        for name in requirement.names {
+          if identifierMapping[name] ≠ nil {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+          }
+          identifierMapping[name] = identifier
+        }
+        requirements[identifier] = requirement
+      case .choice(let choiceNode):
+        let requirement: RequirementIntermediate
+        switch RequirementIntermediate.construct(choiceNode, namespace: abilityNamespace) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
+          continue
+        case .success(let constructed):
+          requirement = constructed
+        }
+        let identifier = requirement.names.identifier()
+        for name in requirement.names {
+          if identifierMapping[name] ≠ nil {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+          }
+          identifierMapping[name] = identifier
+        }
+        requirements[identifier] = requirement
+        let defaultImplementation: ActionIntermediate
+        switch ActionIntermediate.construct(choiceNode, namespace: abilityNamespace) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenChoice($0) }))
+          continue
+        case .success(let constructed):
+          defaultImplementation = constructed
+        }
+        defaults[identifier] = defaultImplementation
       }
-      requirements[identifier] = requirement
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
@@ -138,7 +169,8 @@ extension Ability {
         parameterReorderings: reorderings,
         identifierMapping: identifierMapping,
         requirements: requirements,
-        clientAccess: declaration.access?.keyword is ParsedClientsKeyword,
+        defaults: defaults,
+        access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
         declaration: declaration

@@ -26,10 +26,16 @@ protocol Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
 
   // Actions
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation?
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String) -> String
   static var emptyReturnType: String? { get }
   static func returnSection(with returnValue: String) -> String?
+  static var needsForwardDeclarations: Bool { get }
+  static func forwardActionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?
+  ) -> String?
   static func coverageRegistration(identifier: String) -> String
   static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String
   static func actionDeclaration(
@@ -147,12 +153,20 @@ extension Platform {
       .joined()
   }
 
+  static func disambiguatedIdentifier(for action: ActionIntermediate) -> StrictString {
+    let identifier = action.names.identifier()
+    return [identifier]
+      .appending(contentsOf: action.signature(orderedFor: identifier))
+      .joined(separator: ":")
+  }
+
   static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
-      let bareAction = module.lookupAction(reference.actionName)!
-      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier())!
+      let signature = reference.arguments.map({ $0.resolvedResultType! })
+      let bareAction = module.lookupAction(reference.actionName, signature: signature)!
+      let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature)!
       if let native = nativeImplementation(of: action) {
         var result = ""
         for index in native.textComponents.indices {
@@ -166,7 +180,7 @@ extension Platform {
         }
         return result
       } else {
-        let name = sanitize(identifier: action.names.identifier(), leading: true)
+        let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
         let arguments = reference.arguments
           .lazy.map({ argument in
             return call(to: argument, context: context, module: module)
@@ -193,12 +207,43 @@ extension Platform {
     }
   }
 
+  static func forwardDeclaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
+    if nativeImplementation(of: action) ≠ nil {
+      return nil
+    }
+
+    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
+    let parameters = action.parameters
+      .lazy.map({ source(for: $0, module: module) })
+      .joined(separator: ", ")
+
+    let returnValue: String?
+    if let specified = action.returnValue {
+      let type = module.lookupThing(specified)!
+      if let native = nativeType(of: type)?.type {
+        returnValue = String(native)
+      } else {
+        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
+      }
+    } else {
+      returnValue = emptyReturnType
+    }
+
+    let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
+
+    return forwardActionDeclaration(
+      name: name,
+      parameters: parameters,
+      returnSection: returnSection
+    )
+  }
+
   static func declaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
     }
 
-    let name = sanitize(identifier: action.names.identifier(), leading: true)
+    let name = sanitize(identifier: disambiguatedIdentifier(for: action), leading: true)
     let parameters = action.parameters
       .lazy.map({ source(for: $0, module: module) })
       .joined(separator: ", ")
@@ -261,9 +306,11 @@ extension Platform {
       if let requiredImport = nativeType(of: thing)?.requiredImport {
         imports.insert(String(requiredImport))
       }
-      for action in module.actions.values {
-        if let requiredImport = nativeImplementation(of: action)?.requiredImport {
-          imports.insert(String(requiredImport))
+      for group in module.actions.values {
+        for action in group.values {
+          if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+            imports.insert(String(requiredImport))
+          }
         }
       }
     }
@@ -282,9 +329,17 @@ extension Platform {
       result.append("")
     }
 
-    let regions = module.actions.values
+    let actionRegions: [StrictString] = module.actions.values
+      .lazy.map({ $0.values }).joined()
       .lazy.filter({ ¬$0.isCoverageWrapper })
       .lazy.compactMap({ $0.coverageRegionIdentifier() })
+    let choiceRegions: [StrictString] = module.abilities.values
+      .lazy.flatMap({ $0.defaults.values })
+      .lazy.compactMap({ $0.coverageRegionIdentifier() })
+    let regions = [
+      actionRegions,
+      choiceRegions
+    ].joined()
       .sorted()
       .map({ sanitize(stringLiteral: $0) })
     result.append(contentsOf: coverageRegionSet(regions: regions))
@@ -294,13 +349,30 @@ extension Platform {
       result.append("")
       result.append(contentsOf: start)
     }
+    if needsForwardDeclarations {
+      for actionIdentifier in module.actions.keys.sorted() {
+        let group = module.actions[actionIdentifier]!
+        for signature in group.keys {
+          if let declaration = group[signature]
+            .flatMap({ forwardDeclaration(for: $0, module: module) }) {
+            result.append(contentsOf: [
+              "",
+              declaration
+            ])
+          }
+        }
+      }
+    }
     for actionIdentifier in module.actions.keys.sorted() {
-      if let declaration = module.actions[actionIdentifier]
-        .flatMap({ declaration(for: $0, module: module) }) {
-        result.append(contentsOf: [
-          "",
-          declaration
-        ])
+      let group = module.actions[actionIdentifier]!
+      for signature in group.keys {
+        if let declaration = group[signature]
+          .flatMap({ declaration(for: $0, module: module) }) {
+          result.append(contentsOf: [
+            "",
+            declaration
+          ])
+        }
       }
     }
     for test in module.tests {

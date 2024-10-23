@@ -20,6 +20,8 @@ struct Module {
       try module.add(file: File(from: sourceFile).parse())
     }
     try module.resolveUses()
+    module.resolveTypeIdentifiers()
+    module.resolveTypes()
     try module.validateReferences()
     return module.applyingTestCoverageTracking()
   }

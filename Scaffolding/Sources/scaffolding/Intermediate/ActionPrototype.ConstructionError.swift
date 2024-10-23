@@ -5,6 +5,7 @@ extension ActionPrototype {
     case multipleTypeSignatures(ParsedSignature)
     case cyclicalParameterReference(ParsedParameter)
     case parameterNotFound(ParsedParameterReference)
+    case rearrangedParameters(ParsedSignature)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var range: Slice<UTF8Segments> {
@@ -19,6 +20,8 @@ extension ActionPrototype {
         return parameter.location
       case .parameterNotFound(let reference):
         return reference.location
+      case .rearrangedParameters(let signature):
+        return signature.location
       case .documentedParameterNotFound(let documentation):
         return documentation.location
       }

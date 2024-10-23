@@ -102,7 +102,7 @@ enum Swift: Platform {
     return thing.swift
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
   }
 
@@ -115,6 +115,11 @@ enum Swift: Platform {
   }
   static func returnSection(with returnValue: String) -> String? {
     return " -> \(returnValue)"
+  }
+
+  static var needsForwardDeclarations: Bool { false }
+  static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {
+    return nil
   }
 
   static func coverageRegistration(identifier: String) -> String {

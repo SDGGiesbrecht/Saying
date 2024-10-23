@@ -47,7 +47,7 @@ enum CSharp: Platform {
     return thing.cSharp
   }
 
-  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementation? {
+  static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.cSharp
   }
 
@@ -60,6 +60,11 @@ enum CSharp: Platform {
   }
   static func returnSection(with returnValue: String) -> String? {
     return "\(returnValue)"
+  }
+
+  static var needsForwardDeclarations: Bool { false }
+  static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {
+    return nil
   }
 
   static func coverageRegistration(identifier: String) -> String {
