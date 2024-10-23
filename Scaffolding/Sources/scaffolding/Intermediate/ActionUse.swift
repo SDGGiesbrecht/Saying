@@ -34,6 +34,18 @@ extension ActionUse {
     } else if let action = module.lookupAction(actionName, signature: signature) {
       resolvedResultType = action.returnValue
     }
+    #warning("Debugging...")
+    if source?.source() == "example" {
+      print(actionName)
+      print(signature)
+      print(resolvedResultType)
+    }
+    if source?.source() == "(example) is (example)" {
+      print(actionName)
+      print(signature)
+      print(resolvedResultType)
+      fatalError()
+    }
   }
 
   func validateReferences(context: [Scope], testContext: Bool, errors: inout [ReferenceError]) {

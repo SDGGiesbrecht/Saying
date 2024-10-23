@@ -24,7 +24,15 @@ extension ModuleIntermediate: Scope {
       }
       mappedSignature.append(mappedElement)
     }
-    return group[mappedSignature]
+    let result = group[mappedSignature]
+    #warning("Debugging...")
+    if identifier == "example",
+      result?.returnValue == "truth value" {
+      print(mappedIdentifier, mappedSignature)
+      print(group.keys)
+      fatalError()
+    }
+    return result
   }
 }
 
@@ -64,7 +72,8 @@ extension ModuleIntermediate {
         let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
         let identifier = action.names.identifier()
         for name in action.names {
-          if identifierMapping[name] ≠ nil {
+          if identifierMapping[name] ≠ nil,
+            identifierMapping[name] ≠ identifier {
             errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name, signature: action.signature(orderedFor: name))!]))
           }
           identifierMapping[name] = identifier
