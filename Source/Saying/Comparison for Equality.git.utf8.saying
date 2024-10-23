@@ -96,10 +96,10 @@ ability (clients)
 
 thing
  [
-  test (verify ((example) is (example)))
-  test (verify (((example) is (differing example)) is (false)))
-  test (verify ((example) is not (differing example)))
-  test (verify (((example) is not (example)) is (false)))
+  test (verify ((thing: example) is (thing: example)))
+  test (verify (((thing: example) is (thing: differing example)) is (false)))
+  test (verify ((thing: example) is not (thing: differing example)))
+  test (verify (((thing: example) is not (thing: example)) is (false)))
  ]
  (
   English: equality example
