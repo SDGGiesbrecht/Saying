@@ -255,3 +255,10 @@ use (clients)
    Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
    Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
  }
+
+action (clients)
+ example
+ truth value
+ {
+  true
+ }
