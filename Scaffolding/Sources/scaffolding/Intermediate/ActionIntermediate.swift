@@ -187,7 +187,12 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func merging(requirement: RequirementIntermediate, useAccess: AccessIntermediate) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
+  func merging(
+    requirement: RequirementIntermediate,
+    useAccess: AccessIntermediate,
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
+  ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
@@ -222,7 +227,11 @@ extension ActionIntermediate {
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    let mergedDocumentation = documentation.merging(inherited: requirement.documentation)
+    let mergedDocumentation = documentation.merging(
+      inherited: requirement.documentation,
+      typeLookup: typeLookup,
+      canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+    )
     return .success(
       ActionIntermediate(
         prototype: ActionPrototype(
@@ -263,14 +272,9 @@ extension ActionIntermediate {
     })
     let newReturnValue = returnValue.flatMap { typeLookup[$0] ?? $0 }
     let newDocumentation = documentation.flatMap({ documentation in
-      return DocumentationIntermediate(
-        parameters: documentation.parameters,
-        tests: documentation.tests.map({ test in
-          return TestIntermediate(
-            location: test.location.appending(contentsOf: canonicallyOrderedUseArguments),
-            action: test.action
-          )
-        })
+      return documentation.specializing(
+        typeLookup: typeLookup,
+        canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
       )
     })
     return ActionIntermediate(

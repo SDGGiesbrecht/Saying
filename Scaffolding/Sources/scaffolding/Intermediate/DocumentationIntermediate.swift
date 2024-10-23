@@ -37,10 +37,33 @@ extension DocumentationIntermediate {
   }
 }
 
+extension DocumentationIntermediate {
+  func specializing(
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
+  ) -> DocumentationIntermediate {
+    return DocumentationIntermediate(
+      parameters: parameters,
+      tests: tests.map({ test in
+        return test.specializing(
+          typeLookup: typeLookup,
+          canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+        )
+      })
+    )
+  }
+}
 extension Optional where Wrapped == DocumentationIntermediate {
 
-  func merging(inherited: DocumentationIntermediate?) -> DocumentationIntermediate? {
-    guard let base = inherited else {
+  func merging(
+    inherited: DocumentationIntermediate?,
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
+  ) -> DocumentationIntermediate? {
+    guard let base = inherited?.specializing(
+      typeLookup: typeLookup,
+      canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+    ) else {
       return self
     }
     guard let child = self else {

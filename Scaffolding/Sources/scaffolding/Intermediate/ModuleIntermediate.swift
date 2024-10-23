@@ -145,7 +145,12 @@ extension ModuleIntermediate {
           return action.names.overlaps(requirement.names)
         }) {
           let provision = prototypeActions.remove(at: provisionIndex)
-          switch provision.merging(requirement: requirement, useAccess: use.access) {
+          switch provision.merging(
+            requirement: requirement,
+            useAccess: use.access,
+            typeLookup: useTypes,
+            canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+          ) {
           case .success(let new):
             let identifier = new.names.identifier()
             for name in new.names {

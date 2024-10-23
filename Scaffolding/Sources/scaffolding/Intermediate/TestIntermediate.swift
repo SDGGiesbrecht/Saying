@@ -12,3 +12,16 @@ extension TestIntermediate {
     self.action = ActionUse(test.details.test)
   }
 }
+
+extension TestIntermediate {
+
+  func specializing(
+    typeLookup: [StrictString: StrictString],
+    canonicallyOrderedUseArguments: [Set<StrictString>]
+  ) -> TestIntermediate {
+    return TestIntermediate(
+      location: location.appending(contentsOf: canonicallyOrderedUseArguments),
+      action: action.specializing(typeLookup: typeLookup)
+    )
+  }
+}

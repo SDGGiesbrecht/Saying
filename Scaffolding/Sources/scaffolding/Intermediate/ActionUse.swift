@@ -87,3 +87,17 @@ extension ActionUse {
     }
   }
 }
+
+extension ActionUse {
+
+  func specializing(
+    typeLookup: [StrictString: StrictString]
+  ) -> ActionUse {
+    return ActionUse(
+      actionName: actionName,
+      arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
+      source: source,
+      explicitResultType: explicitResultType.flatMap({ typeLookup[$0] ?? $0 })
+    )
+  }
+}
