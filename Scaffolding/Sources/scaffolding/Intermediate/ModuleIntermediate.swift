@@ -33,32 +33,11 @@ extension ModuleIntermediate: Scope {
     }
     switch specifiedReturnValue {
     case .some(.some(let value)):
-      #warning("Debugging...")
-      if identifier == "example" {
-        print(mappedIdentifier, mappedSignature)
-        print(returnOverloads.keys)
-        print("some")
-        fatalError()
-      }
       let mappedReturn = identifierMapping[value]
       return returnOverloads[mappedReturn]
     case .some(.none):
-      #warning("Debugging...")
-      if identifier == "example" {
-        print(mappedIdentifier, mappedSignature)
-        print(returnOverloads.keys)
-        print("void")
-        fatalError()
-      }
       return returnOverloads[.none]
     case .none:
-      #warning("Debugging...")
-      if identifier == "example" {
-        print(mappedIdentifier, mappedSignature)
-        print(returnOverloads.keys)
-        print("inferring")
-        fatalError()
-      }
       if returnOverloads.count == 1 {
         return returnOverloads.values.first
       } else {

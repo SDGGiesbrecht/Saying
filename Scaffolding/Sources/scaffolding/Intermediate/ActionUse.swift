@@ -29,23 +29,12 @@ extension ActionUse {
     guard signature.count == arguments.count else {
       return // aborting due to failure deeper down
     }
+    #warning("Hard‐coded return type.")
+    let returnType: StrictString?? = actionName == "example" ? "equality example" : nil
     if let parameter = context?.lookupParameter(actionName) {
       resolvedResultType = parameter.type
-      #warning("Not checking for specified type.")
-    } else if let action = module.lookupAction(actionName, signature: signature, specifiedReturnValue: nil) {
+    } else if let action = module.lookupAction(actionName, signature: signature, specifiedReturnValue: returnType) {
       resolvedResultType = action.returnValue
-    }
-    #warning("Debugging...")
-    if source?.source() == "example" {
-      print(actionName)
-      print(signature)
-      print(resolvedResultType)
-    }
-    if source?.source() == "(example) is (example)" {
-      print(actionName)
-      print(signature)
-      print(resolvedResultType)
-      fatalError()
     }
   }
 
@@ -54,9 +43,10 @@ extension ActionUse {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
     let signature = arguments.compactMap({ $0.resolvedResultType })
-    #warning("Not checking for specified type.")
+    #warning("Hard‐coded return type.")
+    let returnType: StrictString?? = actionName == "example" ? "equality example" : nil
     if signature.count == arguments.count,
-      let action = context.lookupAction(actionName, signature: signature, specifiedReturnValue: nil) {
+      let action = context.lookupAction(actionName, signature: signature, specifiedReturnValue: returnType) {
       if ¬testContext,
         action.testOnlyAccess {
         errors.append(.actionUnavailableOutsideTests(reference: source!))
