@@ -157,6 +157,7 @@ extension Platform {
     let identifier = action.names.identifier()
     return [identifier]
       .appending(contentsOf: action.signature(orderedFor: identifier))
+      .appending(action.returnValue ?? "")
       .joined(separator: ":")
   }
 
