@@ -74,6 +74,15 @@ ability (clients)
    {
     not ((first) is (second))
    }
+
+  requirement (clients)
+   [
+    [
+     English: An arbitrary example instance intended for use in tests.
+    ]
+   ]
+   example
+   thing
  }
 
 thing
@@ -102,16 +111,16 @@ use
    JavaScript: “¤(28)” first “ == ” second “¤(29)”
    Kotlin: “¤(28)” first “ == ” second “¤(29)”
    Swift: «¤(28)» first “ == ” second „¤(29)“
- }
 
-action
- example
- equality example
- C: “¤(28)true¤(29)” (stdbool)
- C♯: “¤(28)true¤(29)”
- JavaScript: “¤(28)true¤(29)”
- Kotlin: “¤(28)true¤(29)”
- Swift: “¤(28)true¤(29)”
+  action
+   example
+   equality example
+   C: “¤(28)true¤(29)” (stdbool)
+   C♯: “¤(28)true¤(29)”
+   JavaScript: “¤(28)true¤(29)”
+   Kotlin: “¤(28)true¤(29)”
+   Swift: “¤(28)true¤(29)”
+ }
 
 action
  differing example
