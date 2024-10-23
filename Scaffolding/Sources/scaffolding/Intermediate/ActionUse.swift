@@ -5,7 +5,7 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
   var source: ParsedAction?
-  var specifiedResultType: StrictString?
+  var explicitResultType: StrictString?
   var resolvedResultType: StrictString??
 }
 
@@ -24,7 +24,7 @@ extension ActionUse {
 
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
-    specifiedResultType = use.type?.type.identifierText()
+    explicitResultType = use.type?.type.identifierText()
   }
 
   mutating func resolveTypes(
@@ -33,17 +33,17 @@ extension ActionUse {
     specifiedReturnValue: StrictString??
   ) {
     for index in arguments.indices {
-      let specifiedArgumentReturnValue: StrictString??
-      switch arguments[index].specifiedResultType {
+      let explicitArgumentReturnValue: StrictString??
+      switch arguments[index].explicitResultType {
       case .some(let specified):
-        specifiedArgumentReturnValue = .some(.some(specified))
+        explicitArgumentReturnValue = .some(.some(specified))
       case .none:
-        specifiedArgumentReturnValue = .none
+        explicitArgumentReturnValue = .none
       }
       arguments[index].resolveTypes(
         context: context,
         module: module,
-        specifiedReturnValue: specifiedArgumentReturnValue
+        specifiedReturnValue: explicitArgumentReturnValue
       )
     }
     switch specifiedReturnValue {
