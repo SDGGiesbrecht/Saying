@@ -62,10 +62,11 @@ extension ActionUse {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
     let signature = arguments.compactMap({ $0.resolvedResultType }).compactMap({ $0 })
-    #warning("Hard‐coded return type.")
-    let returnType: StrictString?? = actionName == "example" ? "equality example" : nil
     if signature.count == arguments.count,
-      let action = context.lookupAction(actionName, signature: signature, specifiedReturnValue: returnType) {
+      let action = context.lookupAction(
+        actionName,
+        signature: signature,
+        specifiedReturnValue: resolvedResultType) {
       if ¬testContext,
         action.testOnlyAccess {
         errors.append(.actionUnavailableOutsideTests(reference: source!))
