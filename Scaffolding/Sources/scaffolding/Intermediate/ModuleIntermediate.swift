@@ -209,14 +209,18 @@ extension ModuleIntermediate {
       for (signature, returnOverloads) in group {
         for (overload, action) in returnOverloads {
           var modified = action
-          modified.implementation?.resolveTypes(context: action, module: self)
+          modified.implementation?.resolveTypes(
+            context: action,
+            module: self,
+            specifiedReturnValue: action.returnValue
+          )
           newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
         }
       }
     }
     actions = newActions
     for index in tests.indices {
-      tests[index].action.resolveTypes(context: nil, module: self)
+      tests[index].action.resolveTypes(context: nil, module: self, specifiedReturnValue: .none)
     }
   }
 

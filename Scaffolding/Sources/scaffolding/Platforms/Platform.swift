@@ -164,7 +164,7 @@ extension Platform {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
-      let signature = reference.arguments.map({ $0.resolvedResultType! })
+      let signature = reference.arguments.map({ $0.resolvedResultType!! })
       #warning("Not checking for specified type.")
       let specifiedReturn: StrictString?? = reference.actionName == "example" ? "equality example" : nil
       let bareAction = module.lookupAction(reference.actionName, signature: signature, specifiedReturnValue: specifiedReturn)!
