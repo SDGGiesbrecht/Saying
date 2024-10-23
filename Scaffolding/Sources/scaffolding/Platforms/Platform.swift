@@ -164,13 +164,7 @@ extension Platform {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
     } else {
-      #warning("Dummy signature; no type lookup yet.")
-      let signature: [StrictString]
-      if reference.arguments.contains(where: { $0.actionName.contains("example") }) {
-        signature = Array(repeating: "equality example" as StrictString, count: reference.arguments.count)
-      } else {
-        signature = Array(repeating: "truth value" as StrictString, count: reference.arguments.count)
-      }
+      let signature = reference.arguments.map({ $0.resolvedResultType! })
       let bareAction = module.lookupAction(reference.actionName, signature: signature)!
       let action = (context?.isCoverageWrapper ?? false) ? bareAction : module.lookupAction(bareAction.coverageTrackingIdentifier(), signature: signature)!
       if let native = nativeImplementation(of: action) {

@@ -311,9 +311,11 @@ extension ActionIntermediate {
           arguments: prototype.parameters.map({ parameter in
             return ActionUse(
               actionName: parameter.names.identifier(),
-              arguments: []
+              arguments: [],
+              resolvedResultType: parameter.type
             )
-          })
+          }),
+          resolvedResultType: implementation?.resolvedResultType
         ),
         coveredIdentifier: coverageIdentifier
       )
