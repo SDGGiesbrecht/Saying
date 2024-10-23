@@ -163,7 +163,7 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func resolveTypes() {
+  mutating func resolveTypeIdentifiers() {
     var newActions: [StrictString: [[StrictString]: ActionIntermediate]] = [:]
     for (actionName, group) in actions {
       for (signature, action) in group {
@@ -172,6 +172,21 @@ extension ModuleIntermediate {
       }
     }
     actions = newActions
+  }
+
+  mutating func resolveTypes() {
+    var newActions: [StrictString: [[StrictString]: ActionIntermediate]] = [:]
+    for (actionName, group) in actions {
+      for (signature, action) in group {
+        var modified = action
+        modified.implementation?.resolveTypes(context: action, module: self)
+        newActions[actionName, default: [:]][signature] = modified
+      }
+    }
+    actions = newActions
+    for index in tests.indices {
+      tests[index].action.resolveTypes(context: nil, module: self)
+    }
   }
 
   func validateReferences() throws {

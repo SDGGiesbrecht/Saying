@@ -5,6 +5,7 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
   var source: ParsedAction?
+  var resolvedResultType: StrictString?
 }
 
 extension ActionUse {
@@ -20,19 +21,34 @@ extension ActionUse {
     source = use
   }
 
+  mutating func resolveTypes(context: ActionIntermediate?, module: ModuleIntermediate) {
+    for index in arguments.indices {
+      arguments[index].resolveTypes(context: context, module: module)
+    }
+    let signature = arguments.compactMap({ $0.resolvedResultType })
+    guard signature.count == arguments.count else {
+      return // aborting due to failure deeper down
+    }
+    if let parameter = context?.lookupParameter(actionName) {
+      resolvedResultType = parameter.type
+    } else if let action = module.lookupAction(actionName, signature: signature) {
+      resolvedResultType = action.returnValue
+    }
+  }
+
   func validateReferences(context: [Scope], testContext: Bool, errors: inout [ReferenceError]) {
-    #warning("Dummy signature; no type lookup yet.")
-    let signature = Array(repeating: "truth value" as StrictString, count: arguments.count)
-    if let action = context.lookupAction(actionName, signature: signature) {
+    for argument in arguments {
+      argument.validateReferences(context: context, testContext: testContext, errors: &errors)
+    }
+    let signature = arguments.compactMap({ $0.resolvedResultType })
+    if signature.count == arguments.count,
+      let action = context.lookupAction(actionName, signature: signature) {
       if ¬testContext,
         action.testOnlyAccess {
         errors.append(.actionUnavailableOutsideTests(reference: source!))
       }
     } else {
       errors.append(.noSuchAction(name: actionName, reference: source!))
-    }
-    for argument in arguments {
-      argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
   }
 }
