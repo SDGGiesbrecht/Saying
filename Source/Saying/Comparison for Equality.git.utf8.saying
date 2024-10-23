@@ -105,9 +105,7 @@ use
  }
 
 action
- (
-  English: example
- )
+ example
  equality example
  C: “¤(28)true¤(29)” (stdbool)
  C♯: “¤(28)true¤(29)”
@@ -116,9 +114,7 @@ action
  Swift: “¤(28)true¤(29)”
 
 action
- (
-  English: differing example
- )
+ differing example
  equality example
  C: “¤(28)false¤(29)” (stdbool)
  C♯: “¤(28)false¤(29)”
