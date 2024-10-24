@@ -105,6 +105,19 @@ extension Node {
               values.append(0x6D2) // ے
               values.append(0x6D4) // ۔
               values.append(contentsOf: 0x6F0...0x6F9) // ۰–۹
+              values.append(contentsOf: 0x901...0x903) // ◌ँ–◌ः
+              values.append(contentsOf: 0x905...0x90B) // अ–ऋ
+              values.append(contentsOf: 0x90F...0x910) // ए–ऐ
+              values.append(contentsOf: 0x913...0x928) // ओ–न
+              values.append(contentsOf: 0x92A...0x930) // प–र
+              values.append(0x932) // ल
+              values.append(contentsOf: 0x935...0x939) // व–ह
+              values.append(0x93C) // ◌़
+              values.append(contentsOf: 0x93E...0x943) // ◌ा–◌ृ
+              values.append(contentsOf: 0x947...0x948) // ◌े–◌ै
+              values.append(contentsOf: 0x94B...0x94D) // ◌ो–◌्
+              values.append(0x964) // ।
+              values.append(contentsOf: 0x966...0x96F) // ०–९
               values.append(contentsOf: 0x1100...0x1112) // ᄀ–ᄒ
               values.append(contentsOf: 0x1161...0x1175) // ᅡ–ᅵ
               values.append(contentsOf: 0x11A8...0x11C2) // ᆨ–ᇂ
