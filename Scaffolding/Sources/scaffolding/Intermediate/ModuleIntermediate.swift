@@ -3,6 +3,7 @@ import SDGCollections
 import SDGText
 
 struct ModuleIntermediate {
+  var languages: Set<StrictString> = []
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
@@ -78,7 +79,10 @@ extension ModuleIntermediate {
     for declaration in file.declarations {
       switch declaration {
       case .language(let languageNode):
-        #warning("Ignoring.")
+        if AccessIntermediate(languageNode.access) < .clients {
+          errors.append(ConstructionError.restrictedLanguage(languageNode))
+        }
+        languages.insert(languageNode.name.identifierText())
       case .thing(let thingNode):
         let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
         let identifier = thing.names.identifier()
