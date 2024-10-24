@@ -22,6 +22,7 @@ extension Node {
           Node(name: "Colon", kind: .fixedLeaf(":")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
           Node(name: "Space", kind: .fixedLeaf(" ")),
+          Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
@@ -726,6 +727,15 @@ extension Node {
           ),
 
           Node(
+            name: "LanguageDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "LanguageKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+          Node(
             name: "ThingDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "ThingKeyword", kind: .required),
@@ -856,6 +866,7 @@ extension Node {
           Node(
             name: "Declaration",
             kind: .alternates([
+              Alternate(name: "language", type: "LanguageDeclaration"),
               Alternate(name: "thing", type: "ThingDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),

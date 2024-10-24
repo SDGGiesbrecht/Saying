@@ -77,6 +77,8 @@ extension ModuleIntermediate {
     let baseNamespace: [Set<StrictString>] = []
     for declaration in file.declarations {
       switch declaration {
+      case .language(let languageNode):
+        #warning("Ignoring.")
       case .thing(let thingNode):
         let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
         let identifier = thing.names.identifier()
