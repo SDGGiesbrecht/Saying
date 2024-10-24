@@ -10,6 +10,7 @@ struct ModuleIntermediate {
   var abilities: [StrictString: Ability] = [:]
   var uses: [UseIntermediate] = []
   var tests: [TestIntermediate] = []
+  var languageNodes: [ParsedUninterruptedIdentifier] = []
 }
 
 extension ModuleIntermediate: Scope {
@@ -74,6 +75,7 @@ extension ModuleIntermediate {
   }
 
   mutating func add(file: ParsedDeclarationList) throws {
+    languageNodes.append(contentsOf: file.findAllLanguageReferences())
     var errors: [ConstructionError] = []
     let baseNamespace: [Set<StrictString>] = []
     for declaration in file.declarations {
@@ -250,6 +252,15 @@ extension ModuleIntermediate {
     }
     for test in tests {
       test.action.validateReferences(context: [self], testContext: true, errors: &errors)
+    }
+    for language in languageNodes {
+      var identifier = language.identifierText()
+      if identifier.hasSuffix(" +") {
+        identifier.removeLast(2)
+      }
+      if identifier ∉ languages {
+        errors.append(.noSuchLanguage(language))
+      }
     }
     if ¬errors.isEmpty {
       throw ErrorList(errors)
