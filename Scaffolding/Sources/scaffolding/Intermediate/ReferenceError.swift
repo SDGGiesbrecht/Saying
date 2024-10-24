@@ -12,6 +12,7 @@ enum ReferenceError: DiagnosticError {
   case thingAccessNarrowerThanSignature(reference: ParsedUninterruptedIdentifier)
   case thingUnavailableOutsideTests(reference: ParsedUninterruptedIdentifier)
   case actionUnavailableOutsideTests(reference: ParsedAction)
+  case noSuchLanguage(ParsedUninterruptedIdentifier)
 
   var message: String {
     switch self {
@@ -36,6 +37,8 @@ enum ReferenceError: DiagnosticError {
     case .thingUnavailableOutsideTests:
       return defaultMessage
     case .actionUnavailableOutsideTests:
+      return defaultMessage
+    case .noSuchLanguage:
       return defaultMessage
     }
   }
@@ -64,6 +67,8 @@ enum ReferenceError: DiagnosticError {
       return reference.location
     case .actionUnavailableOutsideTests(reference: let reference):
       return reference.location
+    case .noSuchLanguage(let language):
+      return language.location
     }
   }
 }

@@ -3,12 +3,14 @@ import SDGCollections
 import SDGText
 
 struct ModuleIntermediate {
+  var languages: Set<StrictString> = []
   var identifierMapping: [StrictString: StrictString] = [:]
   var things: [StrictString: Thing] = [:]
   var actions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
   var abilities: [StrictString: Ability] = [:]
   var uses: [UseIntermediate] = []
   var tests: [TestIntermediate] = []
+  var languageNodes: [ParsedUninterruptedIdentifier] = []
 }
 
 extension ModuleIntermediate: Scope {
@@ -73,10 +75,16 @@ extension ModuleIntermediate {
   }
 
   mutating func add(file: ParsedDeclarationList) throws {
+    languageNodes.append(contentsOf: file.findAllLanguageReferences())
     var errors: [ConstructionError] = []
     let baseNamespace: [Set<StrictString>] = []
     for declaration in file.declarations {
       switch declaration {
+      case .language(let languageNode):
+        if AccessIntermediate(languageNode.access) < .clients {
+          errors.append(ConstructionError.restrictedLanguage(languageNode))
+        }
+        languages.insert(languageNode.name.identifierText())
       case .thing(let thingNode):
         let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
         let identifier = thing.names.identifier()
@@ -244,6 +252,15 @@ extension ModuleIntermediate {
     }
     for test in tests {
       test.action.validateReferences(context: [self], testContext: true, errors: &errors)
+    }
+    for language in languageNodes {
+      var identifier = language.identifierText()
+      if identifier.hasSuffix(" +") {
+        identifier.removeLast(2)
+      }
+      if identifier ∉ languages {
+        errors.append(.noSuchLanguage(language))
+      }
     }
     if ¬errors.isEmpty {
       throw ErrorList(errors)
