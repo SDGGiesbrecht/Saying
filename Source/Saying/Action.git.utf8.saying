@@ -1,6 +1,6 @@
 action
  (
-  English: do (act on (): (truth value) truth value)
+  English: do (act on (): (truth value) → truth value)
   Deutsch: (auf () wirken: [act on ()]) tun
  )
  truth value
