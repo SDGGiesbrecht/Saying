@@ -54,7 +54,7 @@ extension Ability {
             errors.append(.referenceInTypeSignature(parameter))
           }
           declaresTypes = false
-          parameterReferences[parameterName] = reference.reference.name.identifierText()
+          parameterReferences[parameterName] = reference.reference.name.name()
         }
       }
     }

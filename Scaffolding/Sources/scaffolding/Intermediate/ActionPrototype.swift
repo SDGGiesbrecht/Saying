@@ -37,9 +37,9 @@ extension ActionPrototype {
         foundTypeSignature = true
       }
       for (index, parameter) in parameters.enumerated() {
-        let parameterName = parameter.name.identifierText()
+        let parameterName = parameter.name.name()
         switch parameter.type {
-        case .type:
+        case .type, .action:
           if index == 0,
             foundTypeSignature {
             errors.append(.multipleTypeSignatures(signature))
@@ -55,7 +55,7 @@ extension ActionPrototype {
             errors.append(.referenceInTypeSignature(parameter))
           }
           declaresTypes = false
-          parameterReferences[parameterName] = reference.name.identifierText()
+          parameterReferences[parameterName] = reference.name.name()
         }
       }
     }
@@ -70,8 +70,10 @@ extension ActionPrototype {
         case .type(let type):
           parameterTypes.append(type)
           reordering.append(position)
+        case .action(let action):
+          #warning("Not implemented yet.")
         case .reference(let reference):
-          var resolving = reference.name.identifierText()
+          var resolving = reference.name.name()
           var checked: Set<StrictString> = []
           while let next = parameterReferences[resolving] {
             checked.insert(resolving)
@@ -85,7 +87,7 @@ extension ActionPrototype {
           }
           if let index = parameterIndices[resolving] {
             reordering.append(index)
-            completeParameterIndexTable[parameter.name.identifierText()] = index
+            completeParameterIndexTable[parameter.name.name()] = index
           } else {
             errors.append(.parameterNotFound(reference))
           }
