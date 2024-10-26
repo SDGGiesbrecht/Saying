@@ -94,12 +94,14 @@ struct Node {
   }
 
   func typeKeyword() -> StrictString {
+    let keyword: StrictString
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf, .compound:
       return "struct"
     case .alternates:
-      return "\(isIndirect ? "indirect " : "")enum"
+      return "enum"
     }
+    return "\(isIndirect ? "indirect " : "")\(keyword)"
   }
 
   func childrenProperties(parsed: Bool) -> [StrictString] {
