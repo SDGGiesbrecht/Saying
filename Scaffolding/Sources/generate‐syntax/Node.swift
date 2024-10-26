@@ -97,9 +97,9 @@ struct Node {
     let keyword: StrictString
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf, .compound:
-      return "struct"
+      keyword = "struct"
     case .alternates:
-      return "enum"
+      keyword = "enum"
     }
     return "\(isIndirect ? "indirect " : "")\(keyword)"
   }
