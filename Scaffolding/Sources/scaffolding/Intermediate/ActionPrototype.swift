@@ -7,7 +7,7 @@ struct ActionPrototype {
   var namespace: [Set<StrictString>]
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
-  var returnValue: StrictString?
+  var returnValue: TypeReference?
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
@@ -59,7 +59,7 @@ extension ActionPrototype {
         }
       }
     }
-    var parameterTypes: [ParsedUninterruptedIdentifier] = []
+    var parameterTypes: [TypeReference] = []
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for (_, signature) in namesDictionary {
@@ -68,7 +68,7 @@ extension ActionPrototype {
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {
         case .type(let type):
-          parameterTypes.append(type)
+          parameterTypes.append(TypeReference(type))
           reordering.append(position)
         case .action(let action):
           #warning("Not implemented yet.")
@@ -108,7 +108,7 @@ extension ActionPrototype {
             return completeParameterIndexTable[name] == index
           })
       )
-      return ParameterIntermediate(names: names, type: type.identifierText(), typeDeclaration: type)
+      return ParameterIntermediate(names: names, type: type)
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
@@ -134,7 +134,7 @@ extension ActionPrototype {
         namespace: namespace,
         parameters: parameters,
         reorderings: reorderings,
-        returnValue: declaration.returnValueType?.identifierText(),
+        returnValue: declaration.returnValueType.map({ TypeReference($0) }),
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
@@ -145,21 +145,20 @@ extension ActionPrototype {
   }
 
   func validate(
-    signatureType typeIdentifier: StrictString,
-    reference: ParsedUninterruptedIdentifier?,
+    signatureType type: TypeReference,
     module: ModuleIntermediate,
     errors: inout [ReferenceError]
   ) {
-    if let thing = module.lookupThing(typeIdentifier) {
+    if let thing = module.lookupThing(type.identifier) {
       if self.access > thing.access {
-        errors.append(.thingAccessNarrowerThanSignature(reference: reference!))
+        errors.append(.thingAccessNarrowerThanSignature(reference: type.syntaxNode))
       }
       if ¬self.testOnlyAccess,
         thing.testOnlyAccess {
-        errors.append(.thingUnavailableOutsideTests(reference: reference!))
+        errors.append(.thingUnavailableOutsideTests(reference: type.syntaxNode))
       }
     } else {
-      errors.append(.noSuchThing(typeIdentifier, reference: reference!))
+      errors.append(.noSuchThing(type.identifier, reference: type.syntaxNode))
     }
   }
 
@@ -167,7 +166,6 @@ extension ActionPrototype {
     for parameter in parameters {
       validate(
         signatureType: parameter.type,
-        reference: parameter.typeDeclaration,
         module: module,
         errors: &errors
       )
@@ -175,7 +173,6 @@ extension ActionPrototype {
     if let thing = returnValue {
       validate(
         signatureType: thing,
-        reference: declarationReturnValueType,
         module: module,
         errors: &errors
       )
@@ -188,7 +185,7 @@ extension ActionPrototype {
     return parameters.first(where: { $0.names.contains(identifier) })
   }
 
-  func signature(orderedFor name: StrictString) -> [StrictString] {
+  func signature(orderedFor name: StrictString) -> [TypeReference] {
     guard let reordering = reorderings[name] else {
       return []
     }

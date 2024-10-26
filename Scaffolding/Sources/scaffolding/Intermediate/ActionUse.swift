@@ -5,8 +5,8 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
   var source: ParsedAction?
-  var explicitResultType: StrictString?
-  var resolvedResultType: StrictString??
+  var explicitResultType: TypeReference?
+  var resolvedResultType: TypeReference??
 }
 
 extension ActionUse {
@@ -24,16 +24,16 @@ extension ActionUse {
 
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
-    explicitResultType = use.type?.type.identifierText()
+    explicitResultType = use.type.map({ TypeReference($0.type) })
   }
 
   mutating func resolveTypes(
     context: ActionIntermediate?,
     module: ModuleIntermediate,
-    specifiedReturnValue: StrictString??
+    specifiedReturnValue: TypeReference??
   ) {
     for index in arguments.indices {
-      let explicitArgumentReturnValue: StrictString??
+      let explicitArgumentReturnValue: TypeReference??
       switch arguments[index].explicitResultType {
       case .some(let specified):
         explicitArgumentReturnValue = .some(.some(specified))
@@ -52,8 +52,7 @@ extension ActionUse {
     case .some(.none):
       resolvedResultType = .none
     case .none:
-      let signature = arguments.compactMap({ $0.resolvedResultType }).compactMap({ $0 })
-      guard signature.count == arguments.count else {
+      guard let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }) else {
         return // aborting due to failure deeper down
       }
       if let parameter = context?.lookupParameter(actionName) {
@@ -72,8 +71,7 @@ extension ActionUse {
     for argument in arguments {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
-    let signature = arguments.compactMap({ $0.resolvedResultType }).compactMap({ $0 })
-    if signature.count == arguments.count,
+    if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
       let action = context.lookupAction(
         actionName,
         signature: signature,
@@ -91,13 +89,13 @@ extension ActionUse {
 extension ActionUse {
 
   func specializing(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: TypeReference]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
       source: source,
-      explicitResultType: explicitResultType.flatMap({ typeLookup[$0] ?? $0 })
+      explicitResultType: explicitResultType.flatMap({ typeLookup[$0.identifier] ?? $0 })
     )
   }
 }

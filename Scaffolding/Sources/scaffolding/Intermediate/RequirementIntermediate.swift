@@ -18,7 +18,7 @@ struct RequirementIntermediate {
   var reorderings: [StrictString: [Int]] {
     return prototype.reorderings
   }
-  var returnValue: StrictString? {
+  var returnValue: TypeReference? {
     return prototype.returnValue
   }
   var access: AccessIntermediate {

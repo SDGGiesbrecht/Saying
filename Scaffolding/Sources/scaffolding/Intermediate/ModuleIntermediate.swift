@@ -20,8 +20,8 @@ extension ModuleIntermediate: Scope {
 
   func lookupAction(
     _ identifier: StrictString,
-    signature: [StrictString],
-    specifiedReturnValue: StrictString??
+    signature: [TypeReference],
+    specifiedReturnValue: TypeReference??
   ) -> ActionIntermediate? {
     guard let mappedIdentifier = identifierMapping[identifier],
       let group = actions[mappedIdentifier] else {
@@ -29,7 +29,7 @@ extension ModuleIntermediate: Scope {
     }
     var mappedSignature: [StrictString] = []
     for element in signature {
-      guard let mappedElement = identifierMapping[element] else {
+      guard let mappedElement = identifierMapping[element.identifier] else {
         return nil
       }
       mappedSignature.append(mappedElement)
@@ -39,7 +39,7 @@ extension ModuleIntermediate: Scope {
     }
     switch specifiedReturnValue {
     case .some(.some(let value)):
-      let mappedReturn = identifierMapping[value]
+      let mappedReturn = identifierMapping[value.identifier]
       return returnOverloads[mappedReturn]
     case .some(.none):
       return returnOverloads[.none]
@@ -61,13 +61,14 @@ extension ModuleIntermediate {
 
   func lookupDeclaration(
     _ identifier: StrictString,
-    signature: [StrictString],
-    specifiedReturnValue: StrictString??
+    signature: [TypeReference?],
+    specifiedReturnValue: TypeReference??
   ) -> ParsedDeclaration? {
-    if signature == [],
+    if signature.isEmpty,
       let thing = lookupThing(identifier)?.declaration {
       return .thing(thing)
-    } else if let action = lookupAction(identifier, signature: signature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
+    } else if let fullSignature = signature.mapAll({ $0 }),
+      let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
       return .action(action)
     } else {
       return nil
@@ -105,13 +106,13 @@ extension ModuleIntermediate {
           }
           identifierMapping[name] = identifier
         }
-        actions[identifier, default: [:]][action.signature(orderedFor: identifier), default: [:]][action.returnValue] = action
+        actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.identifier}), default: [:]][action.returnValue?.identifier] = action
       case .ability(let abilityNode):
         let ability = try Ability.construct(abilityNode, namespace: baseNamespace).get()
         let identifier = ability.names.identifier()
         for name in ability.names {
           if identifierMapping[name] ≠ nil {
-            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name, signature: ability.parameters.map({ _ in "" }), specifiedReturnValue: nil)!]))
+            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name, signature: ability.parameters.map({ _ in nil }), specifiedReturnValue: nil)!]))
           }
           identifierMapping[name] = identifier
         }
@@ -136,7 +137,7 @@ extension ModuleIntermediate {
       }
       let argumentReordering = ability.parameterReorderings[use.ability]!
 
-      var useTypes: [StrictString: StrictString] = [:]
+      var useTypes: [StrictString: TypeReference] = [:]
       var canonicallyOrderedUseArguments: [Set<StrictString>] = Array(repeating: [], count: argumentReordering.count)
       for (argumentindex, argument) in use.arguments.enumerated() {
         let parameterIndex = argumentReordering[argumentindex]
@@ -144,7 +145,7 @@ extension ModuleIntermediate {
         for name in parameter {
           useTypes[name] = argument
         }
-        canonicallyOrderedUseArguments[parameterIndex] = [argument]
+        canonicallyOrderedUseArguments[parameterIndex] = [argument.identifier]
       }
 
       var prototypeActions = use.actions
@@ -164,7 +165,7 @@ extension ModuleIntermediate {
             for name in new.names {
               identifierMapping[name] = identifier
             }
-            actions[identifier, default: [:]][new.signature(orderedFor: identifier), default: [:]][new.returnValue] = new
+            actions[identifier, default: [:]][new.signature(orderedFor: identifier).map({ $0.identifier }), default: [:]][new.returnValue?.identifier] = new
           case .failure(let error):
             errors.append(contentsOf: error.errors)
           }
@@ -178,7 +179,7 @@ extension ModuleIntermediate {
             typeLookup: useTypes,
             canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
           )
-          actions[identifier, default: [:]][specialized.signature(orderedFor: identifier), default: [:]][specialized.returnValue] = specialized
+          actions[identifier, default: [:]][specialized.signature(orderedFor: identifier).map({ $0.identifier }), default: [:]][specialized.returnValue?.identifier] = specialized
         } else {
           errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue
@@ -280,8 +281,8 @@ extension ModuleIntermediate {
             let identifier = wrapped.names.identifier()
             identifierMapping[identifier] = identifier
             let wrappedSignature = wrapped.signature(orderedFor: identifier)
-              .map({ resolve(identifier: $0) })
-            let wrappedReturn = wrapped.returnValue.flatMap { resolve(identifier: $0) }
+              .map({ resolve(identifier: $0.identifier) })
+            let wrappedReturn = wrapped.returnValue.flatMap { resolve(identifier: $0.identifier) }
             actions[identifier, default: [:]][wrappedSignature, default: [:]][wrappedReturn] = wrapped
           }
         }

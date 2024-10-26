@@ -199,7 +199,7 @@ extension Platform {
     if ¬isTyped {
       return name
     } else {
-      let type = module.lookupThing(parameter.type)!
+      let type = module.lookupThing(parameter.type.identifier)!
       let typeSource: String
       if let native = nativeType(of: type)?.type {
         typeSource = String(native)
@@ -222,7 +222,7 @@ extension Platform {
 
     let returnValue: String?
     if let specified = action.returnValue {
-      let type = module.lookupThing(specified)!
+      let type = module.lookupThing(specified.identifier)!
       if let native = nativeType(of: type)?.type {
         returnValue = String(native)
       } else {
@@ -254,7 +254,7 @@ extension Platform {
     let returnValue: String?
     let needsReturnKeyword: Bool
     if let specified = action.returnValue {
-      let type = module.lookupThing(specified)!
+      let type = module.lookupThing(specified.identifier)!
       if let native = nativeType(of: type)?.type {
         returnValue = String(native)
       } else {

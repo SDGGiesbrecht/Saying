@@ -26,7 +26,7 @@ struct ActionIntermediate {
   var reorderings: [StrictString: [Int]] {
     return prototype.reorderings
   }
-  var returnValue: StrictString? {
+  var returnValue: TypeReference? {
     return prototype.returnValue
   }
   var access: AccessIntermediate {
@@ -40,8 +40,8 @@ struct ActionIntermediate {
 extension ActionIntermediate: Scope {
   func lookupAction(
     _ identifier: StrictString,
-    signature: [StrictString],
-    specifiedReturnValue: StrictString??
+    signature: [TypeReference],
+    specifiedReturnValue: TypeReference??
   ) -> ActionIntermediate? {
     guard let parameter = prototype.lookupParameter(identifier) else {
       return nil
@@ -64,8 +64,8 @@ extension ActionIntermediate {
   func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
     let identifier = names.identifier()
     return [identifier]
-      .appending(contentsOf: signature(orderedFor: identifier))
-      .appending(returnValue ?? "")
+      .appending(contentsOf: signature(orderedFor: identifier).lazy.map({ $0.identifier }))
+      .appending(returnValue?.identifier ?? "")
   }
   func resolve(
     globallyUniqueIdentifierComponents: [StrictString],
@@ -190,7 +190,7 @@ extension ActionIntermediate {
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
-    typeLookup: [StrictString: StrictString],
+    typeLookup: [StrictString: TypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
@@ -260,17 +260,16 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: StrictString],
+    typeLookup: [StrictString: TypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.map({ parameter in
       return ParameterIntermediate(
         names: parameter.names,
-        type: typeLookup[parameter.type] ?? parameter.type,
-        typeDeclaration: parameter.typeDeclaration
+        type: typeLookup[parameter.type.identifier] ?? parameter.type
       )
     })
-    let newReturnValue = returnValue.flatMap { typeLookup[$0] ?? $0 }
+    let newReturnValue = returnValue.flatMap { typeLookup[$0.identifier] ?? $0 }
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
@@ -307,7 +306,7 @@ extension ActionIntermediate {
     return prototype.lookupParameter(identifier)
   }
 
-  func signature(orderedFor name: StrictString) -> [StrictString] {
+  func signature(orderedFor name: StrictString) -> [TypeReference] {
     return prototype.signature(orderedFor: name)
   }
 }
