@@ -14,6 +14,6 @@ extension ParsedTypeReference {
 
 extension ParsedTypeReference {
   var key: TypeReference {
-    return TypeReference(identifier: identifier)
+    return .simple(identifier)
   }
 }

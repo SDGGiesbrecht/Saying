@@ -1,12 +1,14 @@
 import SDGText
 
-struct TypeReference: Hashable {
-  var identifier: StrictString
+enum TypeReference: Hashable {
+  case simple(StrictString)
 }
 
 extension TypeReference {
   func resolving(fromReferenceDictionary dictionary: ReferenceDictionary) -> TypeReference {
-    let newIdentifier = dictionary.resolve(identifier: identifier)
-    return TypeReference(identifier: newIdentifier)
+    switch self {
+    case .simple(let identifier):
+      return .simple(dictionary.resolve(identifier: identifier))
+    }
   }
 }
