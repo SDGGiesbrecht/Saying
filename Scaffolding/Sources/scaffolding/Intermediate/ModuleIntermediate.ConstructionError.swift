@@ -4,15 +4,15 @@ extension ModuleIntermediate {
 
   enum ConstructionError: DiagnosticError {
     case restrictedLanguage(ParsedLanguageDeclaration)
-    case redeclaredIdentifier(StrictString, [ParsedDeclaration])
+    case redeclaredIdentifier(ReferenceDictionary.RedeclaredIdentifierError)
     case parameterNotFound(ParsedParameterDocumentation)
 
     var range: Slice<UTF8Segments> {
       switch self {
       case .restrictedLanguage(let declaration):
         return declaration.access?.location ?? declaration.name.location
-      case .redeclaredIdentifier(_, let declarations):
-        return declarations.first!.location
+      case .redeclaredIdentifier(let error):
+        return error.range
       case .parameterNotFound(let parameter):
         return parameter.location
       }
@@ -22,8 +22,8 @@ extension ModuleIntermediate {
       switch self {
       case .restrictedLanguage:
         return defaultMessage
-      case .redeclaredIdentifier(let identifier, _):
-        return defaultMessage + "(\(identifier))"
+      case .redeclaredIdentifier(let error):
+        return error.message
       case .parameterNotFound:
         return defaultMessage
       }

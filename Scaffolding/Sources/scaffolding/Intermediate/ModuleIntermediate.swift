@@ -3,77 +3,13 @@ import SDGCollections
 import SDGText
 
 struct ModuleIntermediate {
-  var languages: Set<StrictString> = []
-  var identifierMapping: [StrictString: StrictString] = [:]
-  var things: [StrictString: Thing] = [:]
-  var actions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
-  var abilities: [StrictString: Ability] = [:]
+  var referenceDictionary = ReferenceDictionary()
   var uses: [UseIntermediate] = []
   var tests: [TestIntermediate] = []
   var languageNodes: [ParsedUninterruptedIdentifier] = []
 }
 
-extension ModuleIntermediate: Scope {
-  func resolve(identifier: StrictString) -> StrictString {
-    return identifierMapping[identifier] ?? identifier
-  }
-
-  func lookupAction(
-    _ identifier: StrictString,
-    signature: [TypeReference],
-    specifiedReturnValue: TypeReference??
-  ) -> ActionIntermediate? {
-    guard let mappedIdentifier = identifierMapping[identifier],
-      let group = actions[mappedIdentifier] else {
-      return nil
-    }
-    var mappedSignature: [StrictString] = []
-    for element in signature {
-      guard let mappedElement = identifierMapping[element.identifier] else {
-        return nil
-      }
-      mappedSignature.append(mappedElement)
-    }
-    guard let returnOverloads = group[mappedSignature] else {
-      return nil
-    }
-    switch specifiedReturnValue {
-    case .some(.some(let value)):
-      let mappedReturn = identifierMapping[value.identifier]
-      return returnOverloads[mappedReturn]
-    case .some(.none):
-      return returnOverloads[.none]
-    case .none:
-      if returnOverloads.count == 1 {
-        return returnOverloads.values.first
-      } else {
-        return nil
-      }
-    }
-  }
-}
-
 extension ModuleIntermediate {
-
-  func lookupThing(_ identifier: StrictString) -> Thing? {
-    return identifierMapping[identifier].flatMap { things[$0] }
-  }
-
-  func lookupDeclaration(
-    _ identifier: StrictString,
-    signature: [TypeReference?],
-    specifiedReturnValue: TypeReference??
-  ) -> ParsedDeclaration? {
-    if signature.isEmpty,
-      let thing = lookupThing(identifier)?.declaration {
-      return .thing(thing)
-    } else if let fullSignature = signature.mapAll({ $0 }),
-      let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
-      return .action(action)
-    } else {
-      return nil
-    }
-  }
 
   mutating func add(file: ParsedDeclarationList) throws {
     languageNodes.append(contentsOf: file.findAllLanguageReferences())
@@ -85,38 +21,16 @@ extension ModuleIntermediate {
         if AccessIntermediate(languageNode.access) < .clients {
           errors.append(ConstructionError.restrictedLanguage(languageNode))
         }
-        languages.insert(languageNode.name.identifierText())
+        referenceDictionary.add(language: languageNode.name.identifierText())
       case .thing(let thingNode):
         let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
-        let identifier = thing.names.identifier()
-        for name in thing.names {
-          if identifierMapping[name] ≠ nil {
-            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name, signature: [], specifiedReturnValue: nil)!]))
-          }
-          identifierMapping[name] = identifier
-        }
-        things[identifier] = thing
+        errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
       case .action(let actionNode):
         let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
-        let identifier = action.names.identifier()
-        for name in action.names {
-          if identifierMapping[name] ≠ nil,
-            identifierMapping[name] ≠ identifier {
-            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name, signature: action.signature(orderedFor: name), specifiedReturnValue: action.returnValue)!]))
-          }
-          identifierMapping[name] = identifier
-        }
-        actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.identifier}), default: [:]][action.returnValue?.identifier] = action
+        errors.append(contentsOf: referenceDictionary.add(action: action).map({ .redeclaredIdentifier($0) }))
       case .ability(let abilityNode):
         let ability = try Ability.construct(abilityNode, namespace: baseNamespace).get()
-        let identifier = ability.names.identifier()
-        for name in ability.names {
-          if identifierMapping[name] ≠ nil {
-            errors.append(ConstructionError.redeclaredIdentifier(name, [declaration, lookupDeclaration(name, signature: ability.parameters.map({ _ in nil }), specifiedReturnValue: nil)!]))
-          }
-          identifierMapping[name] = identifier
-        }
-        abilities[identifier] = ability
+        errors.append(contentsOf: referenceDictionary.add(ability: ability).map({ .redeclaredIdentifier($0) }))
       case .use(let use):
         let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
         uses.append(intermediate)
@@ -131,7 +45,7 @@ extension ModuleIntermediate {
     var errors: [ReferenceError] = []
     for use in uses {
       let identifier = use.ability
-      guard let ability = abilities[identifier] else {
+      guard let ability = referenceDictionary.lookupAbility(identifier: identifier) else {
         errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
         continue
       }
@@ -161,25 +75,17 @@ extension ModuleIntermediate {
             canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
           ) {
           case .success(let new):
-            let identifier = new.names.identifier()
-            for name in new.names {
-              identifierMapping[name] = identifier
-            }
-            actions[identifier, default: [:]][new.signature(orderedFor: identifier).map({ $0.identifier }), default: [:]][new.returnValue?.identifier] = new
+            _ = referenceDictionary.add(action: new)
           case .failure(let error):
             errors.append(contentsOf: error.errors)
           }
         } else if let provision = ability.defaults[requirement.names.identifier()] {
-          let identifier = provision.names.identifier()
-          for name in provision.names {
-            identifierMapping[name] = identifier
-          }
           let specialized = provision.specializing(
             for: use,
             typeLookup: useTypes,
             canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
           )
-          actions[identifier, default: [:]][specialized.signature(orderedFor: identifier).map({ $0.identifier }), default: [:]][specialized.returnValue?.identifier] = specialized
+          _ = referenceDictionary.add(action: specialized)
         } else {
           errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue
@@ -191,13 +97,8 @@ extension ModuleIntermediate {
     }
 
     for documentation in [
-      things.values.lazy.compactMap({ $0.documentation }) as [DocumentationIntermediate],
-      actions.values
-        .lazy.map({ $0.values })
-        .joined()
-        .lazy.map({ $0.values })
-        .joined()
-        .compactMap({ $0.documentation }) as [DocumentationIntermediate]
+      referenceDictionary.allThings().lazy.compactMap({ $0.documentation }),
+      referenceDictionary.allActions().lazy.compactMap({ $0.documentation })
     ].joined() {
       tests.append(contentsOf: documentation.tests)
     }
@@ -208,58 +109,28 @@ extension ModuleIntermediate {
   }
 
   mutating func resolveTypeIdentifiers() {
-    var newActions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
-    for (actionName, group) in actions {
-      for (signature, returnOverloads) in group {
-        let resolvedSignature = signature.map({ resolve(identifier: $0) })
-        for (overload, action) in returnOverloads {
-          let resolvedReturn = overload.flatMap({ resolve(identifier: $0 ) })
-          newActions[actionName, default: [:]][resolvedSignature, default: [:]][resolvedReturn] = action
-        }
-      }
-    }
-    actions = newActions
+    referenceDictionary.resolveTypeIdentifiers()
   }
 
   mutating func resolveTypes() {
-    var newActions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
-    for (actionName, group) in actions {
-      for (signature, returnOverloads) in group {
-        for (overload, action) in returnOverloads {
-          var modified = action
-          modified.implementation?.resolveTypes(
-            context: action,
-            module: self,
-            specifiedReturnValue: action.returnValue
-          )
-          newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
-        }
-      }
-    }
-    actions = newActions
+    referenceDictionary.resolveTypes()
     for index in tests.indices {
-      tests[index].action.resolveTypes(context: nil, module: self, specifiedReturnValue: .none)
+      tests[index].action.resolveTypes(context: nil, referenceDictionary: referenceDictionary, specifiedReturnValue: .none)
     }
   }
 
   func validateReferences() throws {
     var errors: [ReferenceError] = []
-    for group in actions.values {
-      for returnOverloads in group.values {
-        for action in returnOverloads.values {
-          action.validateReferences(module: self, errors: &errors)
-        }
-      }
-    }
+    referenceDictionary.validateReferencesAsModule(errors: &errors)
     for test in tests {
-      test.action.validateReferences(context: [self], testContext: true, errors: &errors)
+      test.action.validateReferences(context: [referenceDictionary], testContext: true, errors: &errors)
     }
     for language in languageNodes {
       var identifier = language.identifierText()
       if identifier.hasSuffix(" +") {
         identifier.removeLast(2)
       }
-      if identifier ∉ languages {
+      if ¬referenceDictionary.languageIsKnown(identifier) {
         errors.append(.noSuchLanguage(language))
       }
     }
@@ -272,27 +143,8 @@ extension ModuleIntermediate {
 extension ModuleIntermediate {
 
   func applyingTestCoverageTracking() -> ModuleIntermediate {
-    var identifierMapping = self.identifierMapping
-    var actions = self.actions
-    for group in self.actions.values {
-      for returnOverloads in group.values {
-        for action in returnOverloads.values {
-          if let wrapped = action.wrappedToTrackCoverage(module: self) {
-            let identifier = wrapped.names.identifier()
-            identifierMapping[identifier] = identifier
-            let wrappedSignature = wrapped.signature(orderedFor: identifier)
-              .map({ resolve(identifier: $0.identifier) })
-            let wrappedReturn = wrapped.returnValue.flatMap { resolve(identifier: $0.identifier) }
-            actions[identifier, default: [:]][wrappedSignature, default: [:]][wrappedReturn] = wrapped
-          }
-        }
-      }
-    }
     return ModuleIntermediate(
-      identifierMapping: identifierMapping,
-      things: things,
-      actions: actions,
-      abilities: abilities,
+      referenceDictionary: referenceDictionary.applyingTestCoverageTracking(),
       uses: uses,
       tests: tests
     )

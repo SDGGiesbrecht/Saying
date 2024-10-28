@@ -29,7 +29,7 @@ extension ActionUse {
 
   mutating func resolveTypes(
     context: ActionIntermediate?,
-    module: ModuleIntermediate,
+    referenceDictionary: ReferenceDictionary,
     specifiedReturnValue: TypeReference??
   ) {
     for index in arguments.indices {
@@ -42,7 +42,7 @@ extension ActionUse {
       }
       arguments[index].resolveTypes(
         context: context,
-        module: module,
+        referenceDictionary: referenceDictionary,
         specifiedReturnValue: explicitArgumentReturnValue
       )
     }
@@ -57,7 +57,7 @@ extension ActionUse {
       }
       if let parameter = context?.lookupParameter(actionName) {
         resolvedResultType = parameter.type
-      } else if let action = module.lookupAction(
+      } else if let action = referenceDictionary.lookupAction(
         actionName,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue
@@ -67,7 +67,11 @@ extension ActionUse {
     }
   }
 
-  func validateReferences(context: [Scope], testContext: Bool, errors: inout [ReferenceError]) {
+  func validateReferences(
+    context: [ReferenceDictionary],
+    testContext: Bool,
+    errors: inout [ReferenceError]
+  ) {
     for argument in arguments {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }

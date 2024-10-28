@@ -37,26 +37,9 @@ struct ActionIntermediate {
   }
 }
 
-extension ActionIntermediate: Scope {
-  func lookupAction(
-    _ identifier: StrictString,
-    signature: [TypeReference],
-    specifiedReturnValue: TypeReference??
-  ) -> ActionIntermediate? {
-    guard let parameter = prototype.lookupParameter(identifier) else {
-      return nil
-    }
-    return ActionIntermediate(
-      prototype: ActionPrototype(
-        names: parameter.names,
-        namespace: [],
-        parameters: [],
-        reorderings: [:],
-        access: .inferred,
-        testOnlyAccess: false,
-        completeParameterIndexTable: [:]
-      )
-    )
+extension ActionIntermediate {
+  func parameterReferenceDictionary() -> ReferenceDictionary {
+    return prototype.parameterReferenceDictionary()
   }
 }
 
@@ -67,17 +50,20 @@ extension ActionIntermediate {
       .appending(contentsOf: signature(orderedFor: identifier).lazy.map({ $0.identifier }))
       .appending(returnValue?.identifier ?? "")
   }
+
   func resolve(
     globallyUniqueIdentifierComponents: [StrictString],
-    module: ModuleIntermediate) -> StrictString {
+    referenceDictionary: ReferenceDictionary
+  ) -> StrictString {
     return globallyUniqueIdentifierComponents
-        .lazy.map({ module.resolve(identifier: $0) })
+        .lazy.map({ referenceDictionary.resolve(identifier: $0) })
         .joined(separator: ":")
   }
-  func globallyUniqueIdentifier(module: ModuleIntermediate) -> StrictString {
+
+  func globallyUniqueIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString {
     return resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
-      module: module
+      referenceDictionary: referenceDictionary
     )
   }
 }
@@ -91,6 +77,20 @@ extension ActionIntermediate {
     if implementation.expression.importNode ≠ nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
+  }
+
+  static func parameterStub(names: Set<StrictString>) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: [],
+        parameters: [],
+        reorderings: [:],
+        access: .inferred,
+        testOnlyAccess: false,
+        completeParameterIndexTable: [:]
+      )
+    )
   }
 
   static func construct<Declaration>(
@@ -180,9 +180,16 @@ extension ActionIntermediate {
     )
   }
 
-  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
-    prototype.validateReferences(module: module, errors: &errors)
-    implementation?.validateReferences(context: [module, self], testContext: false, errors: &errors)
+  func validateReferences(moduleReferenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
+    prototype.validateReferences(
+      referenceDictionary: moduleReferenceDictionary,
+      errors: &errors
+    )
+    implementation?.validateReferences(
+      context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
+      testContext: false,
+      errors: &errors
+    )
   }
 }
 
@@ -323,8 +330,8 @@ extension ActionIntermediate {
   func coverageTrackingReordering() -> [Int] {
     return reorderings[prototype.names.identifier()]!
   }
-  func wrappedToTrackCoverage(module: ModuleIntermediate) -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier(module: module) {
+  func wrappedToTrackCoverage(referenceDictionary: ReferenceDictionary) -> ActionIntermediate? {
+    if let coverageIdentifier = coverageRegionIdentifier(referenceDictionary: referenceDictionary) {
       let newName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
@@ -357,15 +364,15 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier(module: ModuleIntermediate) -> StrictString? {
+  func coverageRegionIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString? {
     let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
       .joined(separator: ":")
     let identifier: StrictString
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
-      identifier = resolve(globallyUniqueIdentifierComponents: inherited, module: module)
+      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceDictionary: referenceDictionary)
     } else {
-      identifier = globallyUniqueIdentifier(module: module)
+      identifier = globallyUniqueIdentifier(referenceDictionary: referenceDictionary)
     }
     return [namespace, identifier]
       .joined(separator: ":")

@@ -11,7 +11,8 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
-
+  
+  #warning("What are these for?")
   var completeParameterIndexTable: [StrictString: Int]
   var declarationReturnValueType: ParsedUninterruptedIdentifier?
 }
@@ -146,10 +147,10 @@ extension ActionPrototype {
 
   func validate(
     signatureType type: TypeReference,
-    module: ModuleIntermediate,
+    referenceDictionary: ReferenceDictionary,
     errors: inout [ReferenceError]
   ) {
-    if let thing = module.lookupThing(type.identifier) {
+    if let thing = referenceDictionary.lookupThing(type.identifier) {
       if self.access > thing.access {
         errors.append(.thingAccessNarrowerThanSignature(reference: type.syntaxNode))
       }
@@ -162,18 +163,18 @@ extension ActionPrototype {
     }
   }
 
-  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
+  func validateReferences(referenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
     for parameter in parameters {
       validate(
         signatureType: parameter.type,
-        module: module,
+        referenceDictionary: referenceDictionary,
         errors: &errors
       )
     }
     if let thing = returnValue {
       validate(
         signatureType: thing,
-        module: module,
+        referenceDictionary: referenceDictionary,
         errors: &errors
       )
     }
@@ -183,6 +184,14 @@ extension ActionPrototype {
 extension ActionPrototype {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
     return parameters.first(where: { $0.names.contains(identifier) })
+  }
+
+  func parameterReferenceDictionary() -> ReferenceDictionary {
+    var result = ReferenceDictionary()
+    for parameter in parameters {
+      _ = result.add(action: ActionIntermediate.parameterStub(names: parameter.names))
+    }
+    return result
   }
 
   func signature(orderedFor name: StrictString) -> [TypeReference] {
