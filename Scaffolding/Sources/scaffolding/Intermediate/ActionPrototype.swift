@@ -181,8 +181,13 @@ extension ActionPrototype {
             type: parameter
           )
         })
-        #warning("Not implemented yet.")
-        reorderings = [:]
+        #warning("Static placeholders.")
+        let placeholderReordering = Array(0..<parameterParameters.count)
+        var stubReorderings: [StrictString: [Int]] = [:]
+        for name in parameter.names {
+          stubReorderings[name] = placeholderReordering
+        }
+        reorderings = stubReorderings
         returnValue = parameterReturnValue
       }
       _ = result.add(action: ActionIntermediate.parameterAction(
