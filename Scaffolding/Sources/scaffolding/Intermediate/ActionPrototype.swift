@@ -36,7 +36,8 @@ extension ActionPrototype {
       for (index, parameter) in parameters.enumerated() {
         let parameterName = parameter.name.name()
         switch parameter.type {
-        case .type, .action:
+        #warning("Disabled.")
+        case .type/*, .action*/:
           if index == 0,
             foundTypeSignature {
             errors.append(.multipleTypeSignatures(signature))
@@ -67,9 +68,10 @@ extension ActionPrototype {
         case .type(let type):
           parameterTypes.append(ParsedTypeReference(type))
           reordering.append(position)
-        case .action(let action):
+        #warning("Disbabled")
+        /*case .action(let action):
           parameterTypes.append(ParsedTypeReference(action))
-          reordering.append(position)
+          reordering.append(position)*/
         case .reference(let reference):
           var resolving = reference.name.name()
           var checked: Set<StrictString> = []

@@ -10,7 +10,8 @@ extension ParsedTypeReference {
   init(_ identifier: ParsedUninterruptedIdentifier) {
     self = .simple(SimpleTypeReference(identifier))
   }
-  init(_ action: ParsedActionType) {
+  #warning("Disabled.")
+  /*init(_ action: ParsedActionType) {
     self = .action(
       parameters: action.parameters.parameters.map({ parameter in
         switch parameter.type {
@@ -25,7 +26,7 @@ extension ParsedTypeReference {
       }),
       returnValue: ParsedTypeReference(action.returnType)
     )
-  }
+  }*/
 }
 
 extension ParsedTypeReference {

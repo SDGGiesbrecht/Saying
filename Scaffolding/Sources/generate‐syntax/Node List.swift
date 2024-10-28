@@ -21,8 +21,6 @@ extension Node {
           Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
           Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
-          Node(name: "RightArrow", kind: .fixedLeaf("→")),
-          Node(name: "LeftArrow", kind: .fixedLeaf("←")),
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
@@ -139,21 +137,6 @@ extension Node {
             kind: .compound(children: [
               Child(name: "precedingSpace", type: "Space", kind: .optional),
               Child(name: "colon", type: "ColonCharacter", kind: .fixed),
-              Child(name: "followingSpace", type: "Space", kind: .fixed),
-            ])
-          ),
-          Node(
-            name: "YieldCharacter",
-            kind: .alternates([
-              Alternate(name: "right", type: "RightArrow"),
-              Alternate(name: "left", type: "LeftArrow"),
-            ])
-          ),
-          Node(
-            name: "Yield",
-            kind: .compound(children: [
-              Child(name: "precedingSpace", type: "Space", kind: .fixed),
-              Child(name: "yield", type: "YieldCharacter", kind: .required),
               Child(name: "followingSpace", type: "Space", kind: .fixed),
             ])
           ),
@@ -472,25 +455,9 @@ extension Node {
             ])
           ),
           Node(
-            name: "ActionType",
-            kind: .compound(children: [
-              Child(name: "parameters", type: "UnnamedParameterList", kind: .required),
-              Child(name: "yield", type: "Yield", kind: .required),
-              Child(name: "returnType", type: "UninterruptedIdentifier", kind: .required),
-            ])
-          ),
-          Node(
-            name: "UnnamedParameterType",
-            kind: .alternates([
-              Alternate(name: "type", type: "UninterruptedIdentifier"),
-              Alternate(name: "action", type: "ActionType"),
-            ])
-          ),
-          Node(
             name: "ParameterType",
             kind: .alternates([
               Alternate(name: "type", type: "UninterruptedIdentifier"),
-              Alternate(name: "action", type: "ActionType"),
               Alternate(name: "reference", type: "ParameterReference"),
             ]),
             isIndirect: true
@@ -528,14 +495,6 @@ extension Node {
             ])
           ),
           Node(
-            name: "UnnamedParameter",
-            kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "type", type: "ParameterType", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
-            ])
-          ),
-          Node(
             name: "Parameter",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
@@ -546,14 +505,6 @@ extension Node {
             ])
           ),
         ],
-        Node.separatedList(
-          name: "UnnamedParameterList",
-          entryName: "parameter", entryNamePlural: "parameters",
-          entryType: "UnnamedParameter",
-          separatorName: "space",
-          separatorType: "Space",
-          fixedSeparator: true
-        ),
         Node.separatedList(
           name: "ParameterList",
           entryName: "parameter", entryNamePlural: "parameters",
