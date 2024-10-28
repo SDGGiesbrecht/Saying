@@ -1,6 +1,5 @@
 import SDGText
 
-#warning("Rename back to “TypeReference”.")
 struct ParsedTypeReference {
   var identifier: StrictString
   var syntaxNode: ParsedUninterruptedIdentifier

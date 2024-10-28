@@ -1,6 +1,5 @@
 import SDGText
 
-#warning("Rename to “Type”.")
 struct TypeReference: Hashable {
   var identifier: StrictString
 }
