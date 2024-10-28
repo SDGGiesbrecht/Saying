@@ -239,9 +239,7 @@ extension ReferenceDictionary {
         _ = new.add(action: wrapped)
       }
     }
-    #warning("Are either of these necessary?")
     new.resolveTypeIdentifiers()
-    new.resolveTypes()
     return new
   }
 }
