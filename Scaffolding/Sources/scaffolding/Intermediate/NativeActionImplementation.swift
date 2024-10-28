@@ -1,4 +1,5 @@
 import SDGLogic
+import SDGCollections
 import SDGText
 
 struct NativeActionImplementationIntermediate {
@@ -10,8 +11,8 @@ struct NativeActionImplementationIntermediate {
 extension NativeActionImplementationIntermediate {
 
   static func construct(
-    implementation: ParsedNativeAction,
-    indexTable: [StrictString: Int]
+    prototype: ActionPrototype,
+    implementation: ParsedNativeAction
   ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
     let components = implementation.expression.components
     var reordering: [Int] = []
@@ -21,7 +22,8 @@ extension NativeActionImplementationIntermediate {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        if let parameterIndex = indexTable[parameter.identifierText()] {
+        let identifier = parameter.identifierText()
+        if let parameterIndex = prototype.parameters.firstIndex(where: { identifier ∈ $0.names }) {
           reordering.append(parameterIndex)
         } else {
           errors.append(.parameterNotFound(parameter))

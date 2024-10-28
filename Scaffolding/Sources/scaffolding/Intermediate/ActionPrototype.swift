@@ -11,9 +11,8 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
-  
+
   #warning("What are these for?")
-  var completeParameterIndexTable: [StrictString: Int]
   var declarationReturnValueType: ParsedUninterruptedIdentifier?
 }
 
@@ -139,7 +138,6 @@ extension ActionPrototype {
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
-        completeParameterIndexTable: completeParameterIndexTable,
         declarationReturnValueType: declaration.returnValueType
       )
     )

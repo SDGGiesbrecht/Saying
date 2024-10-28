@@ -87,8 +87,7 @@ extension ActionIntermediate {
         parameters: [],
         reorderings: [:],
         access: .inferred,
-        testOnlyAccess: false,
-        completeParameterIndexTable: [:]
+        testOnlyAccess: false
       )
     )
   }
@@ -116,8 +115,8 @@ extension ActionIntermediate {
     if let native = declaration.implementation.native {
       for implementation in native.implementations {
         switch NativeActionImplementationIntermediate.construct(
-          implementation: implementation.expression,
-          indexTable: prototype.completeParameterIndexTable
+          prototype: prototype,
+          implementation: implementation.expression
         ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
@@ -249,8 +248,7 @@ extension ActionIntermediate {
           returnValue: returnValue,
           access: access,
           testOnlyAccess: testOnlyAccess,
-          documentation: mergedDocumentation,
-          completeParameterIndexTable: [:]
+          documentation: mergedDocumentation
         ),
         c: c,
         cSharp: cSharp,
@@ -292,8 +290,7 @@ extension ActionIntermediate {
         returnValue: newReturnValue,
         access: min(self.access, use.access),
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
-        documentation: newDocumentation,
-        completeParameterIndexTable: [:]
+        documentation: newDocumentation
       ),
       c: c,
       cSharp: cSharp,
@@ -342,7 +339,6 @@ extension ActionIntermediate {
           returnValue: prototype.returnValue,
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
-          completeParameterIndexTable: prototype.completeParameterIndexTable,
           declarationReturnValueType: prototype.declarationReturnValueType
         ),
         implementation: ActionUse(
