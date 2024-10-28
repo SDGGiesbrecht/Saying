@@ -79,14 +79,19 @@ extension ActionIntermediate {
     }
   }
 
-  static func parameterStub(names: Set<StrictString>, type: ParsedTypeReference) -> ActionIntermediate {
+  static func parameterAction(
+    names: Set<StrictString>,
+    parameters: [ParameterIntermediate],
+    reorderings: [StrictString: [Int]],
+    returnValue: ParsedTypeReference?
+  ) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
         names: names,
         namespace: [],
-        parameters: [],
-        reorderings: [:],
-        returnValue: type,
+        parameters: parameters,
+        reorderings: reorderings,
+        returnValue: returnValue,
         access: .inferred,
         testOnlyAccess: false
       )

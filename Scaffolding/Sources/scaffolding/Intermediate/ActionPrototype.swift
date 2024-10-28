@@ -166,7 +166,31 @@ extension ActionPrototype {
   func parameterReferenceDictionary() -> ReferenceDictionary {
     var result = ReferenceDictionary()
     for parameter in parameters {
-      _ = result.add(action: ActionIntermediate.parameterStub(names: parameter.names, type: parameter.type))
+      let parameters: [ParameterIntermediate]
+      let reorderings: [StrictString: [Int]]
+      let returnValue: ParsedTypeReference?
+      switch parameter.type {
+      case .simple:
+        parameters = []
+        reorderings = [:]
+        returnValue = parameter.type
+      case .action(parameters: let parameterParameters, returnValue: let parameterReturnValue):
+        parameters = parameterParameters.map({ parameter in
+          return ParameterIntermediate(
+            names: [],
+            type: parameter
+          )
+        })
+        #warning("Not implemented yet.")
+        reorderings = [:]
+        returnValue = parameterReturnValue
+      }
+      _ = result.add(action: ActionIntermediate.parameterAction(
+        names: parameter.names,
+        parameters: parameters,
+        reorderings: reorderings,
+        returnValue: returnValue
+      ))
     }
     return result
   }
