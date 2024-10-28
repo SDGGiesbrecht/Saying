@@ -3,7 +3,7 @@ import SDGText
 
 struct ParameterIntermediate {
   var names: Set<StrictString>
-  var type: TypeReference
+  var type: ParsedTypeReference
 }
 
 extension ParameterIntermediate {

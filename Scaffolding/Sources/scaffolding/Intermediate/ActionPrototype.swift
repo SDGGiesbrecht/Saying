@@ -7,7 +7,7 @@ struct ActionPrototype {
   var namespace: [Set<StrictString>]
   var parameters: [ParameterIntermediate]
   var reorderings: [StrictString: [Int]]
-  var returnValue: TypeReference?
+  var returnValue: ParsedTypeReference?
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
@@ -56,7 +56,7 @@ extension ActionPrototype {
         }
       }
     }
-    var parameterTypes: [TypeReference] = []
+    var parameterTypes: [ParsedTypeReference] = []
     var reorderings: [StrictString: [Int]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for (_, signature) in namesDictionary {
@@ -65,7 +65,7 @@ extension ActionPrototype {
       for (position, parameter) in signature.parameters().enumerated() {
         switch parameter.type {
         case .type(let type):
-          parameterTypes.append(TypeReference(type))
+          parameterTypes.append(ParsedTypeReference(type))
           reordering.append(position)
         case .action(let action):
           #warning("Not implemented yet.")
@@ -131,7 +131,7 @@ extension ActionPrototype {
         namespace: namespace,
         parameters: parameters,
         reorderings: reorderings,
-        returnValue: declaration.returnValueType.map({ TypeReference($0) }),
+        returnValue: declaration.returnValueType.map({ ParsedTypeReference($0) }),
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation
@@ -140,7 +140,7 @@ extension ActionPrototype {
   }
 
   func validate(
-    signatureType type: TypeReference,
+    signatureType type: ParsedTypeReference,
     referenceDictionary: ReferenceDictionary,
     errors: inout [ReferenceError]
   ) {
@@ -183,12 +183,12 @@ extension ActionPrototype {
   func parameterReferenceDictionary() -> ReferenceDictionary {
     var result = ReferenceDictionary()
     for parameter in parameters {
-      _ = result.add(action: ActionIntermediate.parameterStub(names: parameter.names))
+      _ = result.add(action: ActionIntermediate.parameterStub(names: parameter.names, type: parameter.type))
     }
     return result
   }
 
-  func signature(orderedFor name: StrictString) -> [TypeReference] {
+  func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
     guard let reordering = reorderings[name] else {
       return []
     }

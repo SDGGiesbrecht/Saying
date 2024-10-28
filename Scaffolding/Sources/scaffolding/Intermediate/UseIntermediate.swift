@@ -3,7 +3,7 @@ import SDGText
 
 struct UseIntermediate {
   var ability: StrictString
-  var arguments: [TypeReference]
+  var arguments: [ParsedTypeReference]
   var actions: [ActionIntermediate]
   var access: AccessIntermediate
   var testOnlyAccess: Bool
@@ -34,7 +34,7 @@ extension UseIntermediate {
     return .success(
       UseIntermediate(
         ability: abilityName,
-        arguments: declaration.use.arguments.arguments.map({ TypeReference($0.name) }),
+        arguments: declaration.use.arguments.arguments.map({ ParsedTypeReference($0.name) }),
         actions: actions,
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,

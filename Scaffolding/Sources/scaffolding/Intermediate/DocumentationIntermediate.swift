@@ -39,7 +39,7 @@ extension DocumentationIntermediate {
 
 extension DocumentationIntermediate {
   func specializing(
-    typeLookup: [StrictString: TypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
@@ -57,7 +57,7 @@ extension Optional where Wrapped == DocumentationIntermediate {
 
   func merging(
     inherited: DocumentationIntermediate?,
-    typeLookup: [StrictString: TypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> DocumentationIntermediate? {
     guard let base = inherited?.specializing(

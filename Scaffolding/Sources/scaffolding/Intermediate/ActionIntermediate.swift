@@ -26,7 +26,7 @@ struct ActionIntermediate {
   var reorderings: [StrictString: [Int]] {
     return prototype.reorderings
   }
-  var returnValue: TypeReference? {
+  var returnValue: ParsedTypeReference? {
     return prototype.returnValue
   }
   var access: AccessIntermediate {
@@ -79,13 +79,14 @@ extension ActionIntermediate {
     }
   }
 
-  static func parameterStub(names: Set<StrictString>) -> ActionIntermediate {
+  static func parameterStub(names: Set<StrictString>, type: ParsedTypeReference) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
         names: names,
         namespace: [],
         parameters: [],
         reorderings: [:],
+        returnValue: type,
         access: .inferred,
         testOnlyAccess: false
       )
@@ -196,7 +197,7 @@ extension ActionIntermediate {
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
-    typeLookup: [StrictString: TypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
@@ -265,7 +266,7 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: TypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.map({ parameter in
@@ -310,7 +311,7 @@ extension ActionIntermediate {
     return prototype.lookupParameter(identifier)
   }
 
-  func signature(orderedFor name: StrictString) -> [TypeReference] {
+  func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
     return prototype.signature(orderedFor: name)
   }
 }

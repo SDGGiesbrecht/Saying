@@ -6,7 +6,7 @@ struct ReferenceDictionary {
   private var languages: Set<StrictString>
   private var identifierMapping: [StrictString: StrictString]
   private var things: [StrictString: Thing]
-  private var actions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]]
+  private var actions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
   private var abilities: [StrictString: Ability]
 }
 
@@ -39,14 +39,14 @@ extension ReferenceDictionary {
 
   func lookupDeclaration(
     _ identifier: StrictString,
-    signature: [TypeReference?],
-    specifiedReturnValue: TypeReference??
+    signature: [ParsedTypeReference?],
+    specifiedReturnValue: ParsedTypeReference??
   ) -> ParsedDeclaration? {
     if signature.isEmpty,
-       let thing = lookupThing(identifier)?.declaration {
+      let thing = lookupThing(identifier)?.declaration {
       return .thing(thing)
     } else if let fullSignature = signature.mapAll({ $0 }),
-              let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
+      let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
       return .action(action)
     } else {
       return nil
@@ -88,32 +88,26 @@ extension ReferenceDictionary {
       }
       identifierMapping[name] = identifier
     }
-    actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.identifier}), default: [:]][action.returnValue?.identifier] = action
+    actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = action
     return errors
   }
 
   func lookupAction(
     _ identifier: StrictString,
-    signature: [TypeReference],
-    specifiedReturnValue: TypeReference??
+    signature: [ParsedTypeReference],
+    specifiedReturnValue: ParsedTypeReference??
   ) -> ActionIntermediate? {
     guard let mappedIdentifier = identifierMapping[identifier],
       let group = actions[mappedIdentifier] else {
       return nil
     }
-    var mappedSignature: [StrictString] = []
-    for element in signature {
-      guard let mappedElement = identifierMapping[element.identifier] else {
-        return nil
-      }
-      mappedSignature.append(mappedElement)
-    }
+    let mappedSignature = signature.map({ $0.key.resolving(fromReferenceDictionary: self) })
     guard let returnOverloads = group[mappedSignature] else {
       return nil
     }
     switch specifiedReturnValue {
     case .some(.some(let value)):
-      let mappedReturn = identifierMapping[value.identifier]
+      let mappedReturn = value.key.resolving(fromReferenceDictionary: self)
       return returnOverloads[mappedReturn]
     case .some(.none):
       return returnOverloads[.none]
@@ -127,7 +121,7 @@ extension ReferenceDictionary {
   }
 
   func allActions(sorted: Bool = false) -> [ActionIntermediate] {
-    var result =
+    let result =
     actions.values
       .lazy.map({ $0.values })
       .joined()
@@ -147,8 +141,8 @@ extension ReferenceDictionary {
 extension Array where Element == ReferenceDictionary {
   func lookupAction(
     _ identifier: StrictString,
-    signature: [TypeReference],
-    specifiedReturnValue: TypeReference??
+    signature: [ParsedTypeReference],
+    specifiedReturnValue: ParsedTypeReference??
   ) -> ActionIntermediate? {
     for scope in reversed() {
       if let found = scope.lookupAction(
@@ -188,12 +182,12 @@ extension ReferenceDictionary {
 
 extension ReferenceDictionary {
   mutating func resolveTypeIdentifiers() {
-    var newActions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
+    var newActions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
-        let resolvedSignature = signature.map({ resolve(identifier: $0) })
+        let resolvedSignature = signature.map({ $0.resolving(fromReferenceDictionary: self) })
         for (overload, action) in returnOverloads {
-          let resolvedReturn = overload.flatMap({ resolve(identifier: $0 ) })
+          let resolvedReturn = overload.flatMap({ $0.resolving(fromReferenceDictionary: self) })
           newActions[actionName, default: [:]][resolvedSignature, default: [:]][resolvedReturn] = action
         }
       }
@@ -202,7 +196,7 @@ extension ReferenceDictionary {
   }
 
   mutating func resolveTypes() {
-    var newActions: [StrictString: [[StrictString]: [StrictString?: ActionIntermediate]]] = [:]
+    var newActions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
         for (overload, action) in returnOverloads {

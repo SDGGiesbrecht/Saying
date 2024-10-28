@@ -5,8 +5,8 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
   var source: ParsedAction?
-  var explicitResultType: TypeReference?
-  var resolvedResultType: TypeReference??
+  var explicitResultType: ParsedTypeReference?
+  var resolvedResultType: ParsedTypeReference??
 }
 
 extension ActionUse {
@@ -24,16 +24,16 @@ extension ActionUse {
 
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
-    explicitResultType = use.type.map({ TypeReference($0.type) })
+    explicitResultType = use.type.map({ ParsedTypeReference($0.type) })
   }
 
   mutating func resolveTypes(
     context: ActionIntermediate?,
     referenceDictionary: ReferenceDictionary,
-    specifiedReturnValue: TypeReference??
+    specifiedReturnValue: ParsedTypeReference??
   ) {
     for index in arguments.indices {
-      let explicitArgumentReturnValue: TypeReference??
+      let explicitArgumentReturnValue: ParsedTypeReference??
       switch arguments[index].explicitResultType {
       case .some(let specified):
         explicitArgumentReturnValue = .some(.some(specified))
@@ -93,7 +93,7 @@ extension ActionUse {
 extension ActionUse {
 
   func specializing(
-    typeLookup: [StrictString: TypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,
