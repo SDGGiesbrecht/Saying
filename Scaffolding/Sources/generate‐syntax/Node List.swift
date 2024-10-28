@@ -498,7 +498,7 @@ extension Node {
             name: "Parameter",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "name", type: "ParameterName", kind: .required),
+              Child(name: "name", type: "Signature", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "type", type: "ParameterType", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
@@ -527,7 +527,8 @@ extension Node {
             kind: .alternates([
               Alternate(name: "compound", type: "CompoundSignature"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
-            ])
+            ]),
+            isIndirect: true
           ),
           Node(
             name: "ActionNameEntry",
