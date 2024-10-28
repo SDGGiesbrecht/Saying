@@ -312,8 +312,8 @@ extension Node {
           Node(
             name: "TypeAnnotation",
             kind: .compound(children: [
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
             ])
           ),
           Node(
@@ -327,8 +327,8 @@ extension Node {
           Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
-              Child(name: "type", type: "TypeAnnotation", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
+              Child(name: "type", type: "TypeAnnotation", kind: .optional),
             ])
           ),
 
