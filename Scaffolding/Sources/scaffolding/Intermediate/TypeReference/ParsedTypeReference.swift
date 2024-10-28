@@ -10,6 +10,22 @@ extension ParsedTypeReference {
   init(_ identifier: ParsedUninterruptedIdentifier) {
     self = .simple(SimpleTypeReference(identifier))
   }
+  init(_ action: ParsedActionType) {
+    self = .action(
+      parameters: action.parameters.parameters.map({ parameter in
+        switch parameter.type {
+        case .type(let type):
+          return ParsedTypeReference(type)
+        case .action(let action):
+          return ParsedTypeReference(action)
+        case .reference:
+          #warning("The syntax should not allow this.")
+          fatalError()
+        }
+      }),
+      returnValue: ParsedTypeReference(action.returnType)
+    )
+  }
 }
 
 extension ParsedTypeReference {
@@ -86,9 +102,8 @@ extension ParsedTypeReference {
     case .simple(let simple):
       return [simple.identifier]
     case .action(parameters: let parameters, returnValue: let returnValue):
-      var result: [StrictString] = ["(", "("]
+      var result: [StrictString] = ["("]
       result.append(contentsOf: parameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
-      result.append(")")
       result.append(contentsOf: returnValue.unresolvedGloballyUniqueIdentifierComponents())
       result.append(")")
       return result

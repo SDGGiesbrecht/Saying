@@ -68,7 +68,8 @@ extension ActionPrototype {
           parameterTypes.append(ParsedTypeReference(type))
           reordering.append(position)
         case .action(let action):
-          #warning("Not implemented yet.")
+          parameterTypes.append(ParsedTypeReference(action))
+          reordering.append(position)
         case .reference(let reference):
           var resolving = reference.name.name()
           var checked: Set<StrictString> = []
