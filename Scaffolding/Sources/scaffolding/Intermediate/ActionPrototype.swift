@@ -11,9 +11,6 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
-
-  #warning("What are these for?")
-  var declarationReturnValueType: ParsedUninterruptedIdentifier?
 }
 
 extension ActionPrototype {
@@ -137,8 +134,7 @@ extension ActionPrototype {
         returnValue: declaration.returnValueType.map({ TypeReference($0) }),
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
-        documentation: attachedDocumentation,
-        declarationReturnValueType: declaration.returnValueType
+        documentation: attachedDocumentation
       )
     )
   }

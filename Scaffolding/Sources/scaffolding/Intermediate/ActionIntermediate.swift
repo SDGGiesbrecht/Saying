@@ -338,8 +338,7 @@ extension ActionIntermediate {
           reorderings: [newName: coverageTrackingReordering()],
           returnValue: prototype.returnValue,
           access: prototype.access,
-          testOnlyAccess: prototype.testOnlyAccess,
-          declarationReturnValueType: prototype.declarationReturnValueType
+          testOnlyAccess: prototype.testOnlyAccess
         ),
         implementation: ActionUse(
           actionName: prototype.names.identifier(),
