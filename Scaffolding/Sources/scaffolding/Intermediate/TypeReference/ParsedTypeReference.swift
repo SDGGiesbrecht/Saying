@@ -1,8 +1,9 @@
 import SDGLogic
 import SDGText
 
-enum ParsedTypeReference {
+indirect enum ParsedTypeReference {
   case simple(SimpleTypeReference)
+  case action(parameters: [ParsedTypeReference], returnValue: ParsedTypeReference?)
 }
 
 extension ParsedTypeReference {
@@ -16,6 +17,8 @@ extension ParsedTypeReference {
     switch self {
     case .simple(let simple):
       return .simple(simple.identifier)
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      return .action(parameters: parameters.map({ $0.key }), returnValue: returnValue.map({ $0.key }))
     }
   }
 }
@@ -29,6 +32,11 @@ extension ParsedTypeReference {
       } else {
         return self
       }
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      return .action(
+        parameters: parameters.map({ $0.specializing(typeLookup: typeLookup) }),
+        returnValue: returnValue.map({ $0.specializing(typeLookup: typeLookup) })
+      )
     }
   }
 }
@@ -53,6 +61,21 @@ extension ParsedTypeReference {
       } else {
         errors.append(.noSuchThing(simple.identifier, reference: simple.syntaxNode))
       }
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      for parameter in parameters {
+        parameter.validateReferences(
+          requiredAccess: requiredAccess,
+          allowTestOnlyAccess: allowTestOnlyAccess,
+          referenceDictionary: referenceDictionary,
+          errors: &errors
+        )
+      }
+      returnValue?.validateReferences(
+        requiredAccess: requiredAccess,
+        allowTestOnlyAccess: allowTestOnlyAccess,
+        referenceDictionary: referenceDictionary,
+        errors: &errors
+      )
     }
   }
 }
@@ -62,6 +85,13 @@ extension ParsedTypeReference {
     switch self {
     case .simple(let simple):
       return [simple.identifier]
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      var result: [StrictString] = ["(", "("]
+      result.append(contentsOf: parameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
+      result.append(")")
+      result.append(contentsOf: returnValue.unresolvedGloballyUniqueIdentifierComponents())
+      result.append(")")
+      return result
     }
   }
 }
