@@ -47,8 +47,8 @@ extension ActionIntermediate {
   func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
     let identifier = names.identifier()
     return [identifier]
-      .appending(contentsOf: signature(orderedFor: identifier).lazy.map({ $0.identifier }))
-      .appending(returnValue?.identifier ?? "")
+      .appending(contentsOf: signature(orderedFor: identifier).lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
+      .appending(contentsOf: returnValue.unresolvedGloballyUniqueIdentifierComponents())
   }
 
   func resolve(
@@ -197,7 +197,7 @@ extension ActionIntermediate {
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
+    typeLookup: [StrictString: SimpleTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
@@ -266,16 +266,16 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
+    typeLookup: [StrictString: SimpleTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.map({ parameter in
       return ParameterIntermediate(
         names: parameter.names,
-        type: typeLookup[parameter.type.identifier] ?? parameter.type
+        type: parameter.type.specializing(typeLookup: typeLookup)
       )
     })
-    let newReturnValue = returnValue.flatMap { typeLookup[$0.identifier] ?? $0 }
+    let newReturnValue = returnValue.flatMap { $0.specializing(typeLookup: typeLookup) }
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,

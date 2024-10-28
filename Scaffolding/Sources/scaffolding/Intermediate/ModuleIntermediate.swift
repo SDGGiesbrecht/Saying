@@ -51,7 +51,7 @@ extension ModuleIntermediate {
       }
       let argumentReordering = ability.parameterReorderings[use.ability]!
 
-      var useTypes: [StrictString: ParsedTypeReference] = [:]
+      var useTypes: [StrictString: SimpleTypeReference] = [:]
       var canonicallyOrderedUseArguments: [Set<StrictString>] = Array(repeating: [], count: argumentReordering.count)
       for (argumentindex, argument) in use.arguments.enumerated() {
         let parameterIndex = argumentReordering[argumentindex]

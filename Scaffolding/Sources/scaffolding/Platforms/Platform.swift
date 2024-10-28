@@ -157,6 +157,18 @@ extension Platform {
       .joined()
   }
 
+  static func source(for type: ParsedTypeReference, referenceDictionary: ReferenceDictionary) -> String {
+    switch type {
+    case .simple(let simple):
+      let type = referenceDictionary.lookupThing(simple.identifier)!
+      if let native = nativeType(of: type)?.type {
+        return String(native)
+      } else {
+        return sanitize(identifier: type.names.identifier(), leading: true)
+      }
+    }
+  }
+
   static func call(to reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
       return String(sanitize(identifier: parameter.names.identifier(), leading: true))
@@ -198,18 +210,15 @@ extension Platform {
     }
   }
 
-  static func source(for parameter: ParameterIntermediate, referenceDictionary: ReferenceDictionary) -> String {
+  static func source(
+    for parameter: ParameterIntermediate,
+    referenceDictionary: ReferenceDictionary
+  ) -> String {
     let name = sanitize(identifier: parameter.names.identifier(), leading: true)
     if ¬isTyped {
       return name
     } else {
-      let type = referenceDictionary.lookupThing(parameter.type.identifier)!
-      let typeSource: String
-      if let native = nativeType(of: type)?.type {
-        typeSource = String(native)
-      } else {
-        typeSource = sanitize(identifier: type.names.identifier(), leading: true)
-      }
+      let typeSource = source(for: parameter.type, referenceDictionary: referenceDictionary)
       return parameterDeclaration(name: name, type: typeSource)
     }
   }
@@ -232,12 +241,7 @@ extension Platform {
 
     let returnValue: String?
     if let specified = action.returnValue {
-      let type = referenceDictionary.lookupThing(specified.identifier)!
-      if let native = nativeType(of: type)?.type {
-        returnValue = String(native)
-      } else {
-        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
-      }
+      returnValue = source(for: specified, referenceDictionary: referenceDictionary)
     } else {
       returnValue = emptyReturnType
     }
@@ -270,12 +274,7 @@ extension Platform {
     let returnValue: String?
     let needsReturnKeyword: Bool
     if let specified = action.returnValue {
-      let type = referenceDictionary.lookupThing(specified.identifier)!
-      if let native = nativeType(of: type)?.type {
-        returnValue = String(native)
-      } else {
-        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
-      }
+      returnValue = source(for: specified, referenceDictionary: referenceDictionary)
       needsReturnKeyword = true
     } else {
       returnValue = emptyReturnType

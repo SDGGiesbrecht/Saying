@@ -139,39 +139,21 @@ extension ActionPrototype {
     )
   }
 
-  func validate(
-    signatureType type: ParsedTypeReference,
-    referenceDictionary: ReferenceDictionary,
-    errors: inout [ReferenceError]
-  ) {
-    if let thing = referenceDictionary.lookupThing(type.identifier) {
-      if self.access > thing.access {
-        errors.append(.thingAccessNarrowerThanSignature(reference: type.syntaxNode))
-      }
-      if ¬self.testOnlyAccess,
-        thing.testOnlyAccess {
-        errors.append(.thingUnavailableOutsideTests(reference: type.syntaxNode))
-      }
-    } else {
-      errors.append(.noSuchThing(type.identifier, reference: type.syntaxNode))
-    }
-  }
-
   func validateReferences(referenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
     for parameter in parameters {
-      validate(
-        signatureType: parameter.type,
+      parameter.type.validateReferences(
+        requiredAccess: access,
+        allowTestOnlyAccess: testOnlyAccess,
         referenceDictionary: referenceDictionary,
         errors: &errors
       )
     }
-    if let thing = returnValue {
-      validate(
-        signatureType: thing,
-        referenceDictionary: referenceDictionary,
-        errors: &errors
-      )
-    }
+    returnValue?.validateReferences(
+      requiredAccess: access,
+      allowTestOnlyAccess: testOnlyAccess,
+      referenceDictionary: referenceDictionary,
+      errors: &errors
+    )
   }
 }
 
