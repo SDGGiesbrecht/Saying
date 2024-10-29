@@ -27,8 +27,7 @@ extension ActionPrototype {
       getEntryName: { $0.name() },
       getParameters: { $0.parameters() },
       getParameterName: { $0.name.name() },
-      getDefinitionOrReference: { $0.type },
-      parseDefinition: { ParsedTypeReference($0) },
+      getDefinitionOrReference: { $0.definitionOrReference },
       constructParameter: { ParameterIntermediate(names: $0, type: $1) }
     ) {
     case .failure(let interpolationError):

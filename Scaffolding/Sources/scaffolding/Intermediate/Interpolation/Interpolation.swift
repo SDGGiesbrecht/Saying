@@ -26,8 +26,7 @@ extension Interpolation {
     getEntryName: (Entries.Element) -> StrictString,
     getParameters: (Entries.Element) -> [ParameterNode],
     getParameterName: (ParameterNode) -> StrictString,
-    getDefinitionOrReference: (ParameterNode) -> ParsedParameterType,
-    parseDefinition: (ParsedUninterruptedIdentifier) -> ParameterDefinition,
+    getDefinitionOrReference: (ParameterNode) -> DefinitionOrReference<ParameterDefinition>,
     constructParameter: (
       _ names: Set<StrictString>,
       _ definition: ParameterDefinition
@@ -47,7 +46,7 @@ extension Interpolation {
       for (index, parameter) in parameters.enumerated() {
         let parameterName = getParameterName(parameter)
         switch getDefinitionOrReference(parameter) {
-        case .type:
+        case .definition:
           if index == 0,
             foundDefinitionEntry {
             errors.append(.multipleParameterDefinitionSets(entry))
@@ -75,8 +74,8 @@ extension Interpolation {
       let entryName = getEntryName(entry)
       for (position, parameter) in getParameters(entry).enumerated() {
         switch getDefinitionOrReference(parameter) {
-        case .type(let definition):
-          parameterDefinitions.append(parseDefinition(definition))
+        case .definition(let definition):
+          parameterDefinitions.append(definition)
           reordering.append(position)
         #warning("Disbabled")
         /*case .action(let action):

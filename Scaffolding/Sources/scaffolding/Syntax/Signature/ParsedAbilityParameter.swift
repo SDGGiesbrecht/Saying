@@ -8,4 +8,13 @@ extension ParsedAbilityParameter {
       return reference.name
     }
   }
+
+  var definitionOrReference: DefinitionOrReference<Void> {
+    switch self {
+    case .type:
+      return .definition(())
+    case .reference(let reference):
+      return .reference(reference.reference)
+    }
+  }
 }

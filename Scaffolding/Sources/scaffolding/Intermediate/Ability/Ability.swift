@@ -28,16 +28,7 @@ extension Ability {
       getEntryName: { $0.name.name() },
       getParameters: { $0.name.parameters.parameters },
       getParameterName: { $0.name.identifierText() },
-      getDefinitionOrReference: { parameter in
-        switch parameter {
-        case .type(let type):
-          #warning("Unused; just satisfying enumeration.")
-          return ParsedParameterType.type(type.name)
-        case .reference(let reference):
-          return ParsedParameterType.reference(reference.reference)
-        }
-      },
-      parseDefinition: { _ in },
+      getDefinitionOrReference: { $0.definitionOrReference },
       constructParameter: { names, _ in AbilityParameterIntermediate(names: names) }
     ) {
     case .failure(let interpolationError):
