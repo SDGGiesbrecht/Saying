@@ -10,23 +10,6 @@ extension ParsedTypeReference {
   init(_ identifier: ParsedUninterruptedIdentifier) {
     self = .simple(SimpleTypeReference(identifier))
   }
-  #warning("Disabled.")
-  /*init(_ action: ParsedActionType) {
-    self = .action(
-      parameters: action.parameters.parameters.map({ parameter in
-        switch parameter.type {
-        case .type(let type):
-          return ParsedTypeReference(type)
-        case .action(let action):
-          return ParsedTypeReference(action)
-        case .reference:
-          #warning("The syntax should not allow this.")
-          fatalError()
-        }
-      }),
-      returnValue: ParsedTypeReference(action.returnType)
-    )
-  }*/
 }
 
 extension ParsedTypeReference {
