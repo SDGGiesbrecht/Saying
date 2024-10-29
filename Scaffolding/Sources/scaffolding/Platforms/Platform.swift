@@ -167,8 +167,8 @@ extension Platform {
         return sanitize(identifier: type.names.identifier(), leading: true)
       }
     case .action(parameters: let parameters, returnValue: let returnValue):
-      #warning("Not implemented yet.")
-      return "???"
+      #warning("Hard coded.")
+      return "(Bool) -> Bool"
     }
   }
 
