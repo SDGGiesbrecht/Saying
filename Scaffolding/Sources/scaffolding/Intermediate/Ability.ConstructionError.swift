@@ -3,8 +3,6 @@ import SDGText
 extension Ability {
   enum ConstructionError: DiagnosticError {
     case brokenParameterInterpolation(Interpolation<AbilityParameterIntermediate>.ConstructionError)
-    #warning("Dead?")
-    case parameterNotFound(ParsedAbilityParameterReference)
     case brokenRequirement(RequirementIntermediate.ConstructionError)
     case brokenChoice(ActionIntermediate.ConstructionError)
     case redeclaredIdentifier(StrictString, [ParsedRequirementDeclarationPrototype])
@@ -14,8 +12,6 @@ extension Ability {
       switch self {
       case .brokenParameterInterpolation(let error):
         return error.range
-      case .parameterNotFound(let reference):
-        return reference.location
       case .brokenRequirement(let error):
         return error.range
       case .brokenChoice(let error):
@@ -31,8 +27,6 @@ extension Ability {
       switch self {
       case .brokenParameterInterpolation(let error):
         return error.message
-      case .parameterNotFound:
-        return defaultMessage
       case .brokenRequirement:
         return defaultMessage
       case .brokenChoice:
