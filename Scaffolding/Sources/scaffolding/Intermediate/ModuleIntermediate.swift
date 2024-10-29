@@ -49,18 +49,17 @@ extension ModuleIntermediate {
         errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
         continue
       }
-      let argumentReordering = ability.parameterReorderings[use.ability]!
-
+      
       var useTypes: [StrictString: SimpleTypeReference] = [:]
-      var canonicallyOrderedUseArguments: [Set<StrictString>] = Array(repeating: [], count: argumentReordering.count)
-      for (argumentindex, argument) in use.arguments.enumerated() {
-        let parameterIndex = argumentReordering[argumentindex]
-        let parameter = ability.parameters[parameterIndex]
-        for name in parameter {
+      for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
+        let argument = use.arguments[index]
+        for name in parameter.names {
           useTypes[name] = argument
         }
-        canonicallyOrderedUseArguments[parameterIndex] = [argument.identifier]
       }
+      let specializationNamespace: [Set<StrictString>] = ability.parameters
+        .ordered(for: ability.names.identifier())
+        .map { [useTypes[$0.names.identifier()]!.identifier] }
 
       var prototypeActions = use.actions
       for (_, requirement) in ability.requirements {
@@ -72,7 +71,7 @@ extension ModuleIntermediate {
             requirement: requirement,
             useAccess: use.access,
             typeLookup: useTypes,
-            canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+            specializationNamespace: specializationNamespace
           ) {
           case .success(let new):
             _ = referenceDictionary.add(action: new)
@@ -83,7 +82,7 @@ extension ModuleIntermediate {
           let specialized = provision.specializing(
             for: use,
             typeLookup: useTypes,
-            canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+            specializationNamespace: specializationNamespace
           )
           _ = referenceDictionary.add(action: specialized)
         } else {

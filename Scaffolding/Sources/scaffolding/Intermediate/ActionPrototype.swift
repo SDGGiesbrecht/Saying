@@ -20,9 +20,8 @@ extension ActionPrototype {
   ) -> Result<ActionPrototype, ErrorList<ActionPrototype.ConstructionError>>
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
-    var names: Set<StrictString> = []
-    let parameters: Interpolation<ParameterIntermediate>
     let namesDictionary = declaration.name.names
+    let parameters: Interpolation<ParameterIntermediate>
     switch Interpolation.construct(
       entries: namesDictionary.values,
       getEntryName: { $0.name() },
@@ -38,6 +37,7 @@ extension ActionPrototype {
     case .success(let constructed):
       parameters = constructed
     }
+    var names: Set<StrictString> = []
     for (_, signature) in namesDictionary {
       names.insert(signature.name())
     }

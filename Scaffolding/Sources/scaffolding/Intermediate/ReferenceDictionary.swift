@@ -163,7 +163,7 @@ extension ReferenceDictionary {
     let identifier = ability.names.identifier()
     for name in ability.names {
       if identifierMapping[name] ≠ nil {
-        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .ability(ability.declaration), conflictingDeclarations: [lookupDeclaration(name, signature: ability.parameters.map({ _ in nil }), specifiedReturnValue: nil)!]))
+        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .ability(ability.declaration), conflictingDeclarations: [lookupDeclaration(name, signature: ability.parameters.ordered(for: name).map({ _ in nil }), specifiedReturnValue: nil)!]))
       }
       identifierMapping[name] = identifier
     }

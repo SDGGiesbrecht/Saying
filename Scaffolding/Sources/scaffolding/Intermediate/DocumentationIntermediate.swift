@@ -40,14 +40,14 @@ extension DocumentationIntermediate {
 extension DocumentationIntermediate {
   func specializing(
     typeLookup: [StrictString: SimpleTypeReference],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    specializationNamespace: [Set<StrictString>]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
       parameters: parameters,
       tests: tests.map({ test in
         return test.specializing(
           typeLookup: typeLookup,
-          canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+          specializationNamespace: specializationNamespace
         )
       })
     )
@@ -58,11 +58,11 @@ extension Optional where Wrapped == DocumentationIntermediate {
   func merging(
     inherited: DocumentationIntermediate?,
     typeLookup: [StrictString: SimpleTypeReference],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    specializationNamespace: [Set<StrictString>]
   ) -> DocumentationIntermediate? {
     guard let base = inherited?.specializing(
       typeLookup: typeLookup,
-      canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+      specializationNamespace: specializationNamespace
     ) else {
       return self
     }

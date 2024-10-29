@@ -2,10 +2,8 @@ import SDGText
 
 extension Ability {
   enum ConstructionError: DiagnosticError {
-    case referenceInTypeSignature(ParsedAbilityParameter)
-    case typeInReferenceSignature(ParsedAbilityParameter)
-    case multipleTypeSignatures(ParsedAbilitySignature)
-    case cyclicalParameterReference(ParsedAbilityParameter)
+    case brokenParameterInterpolation(Interpolation<AbilityParameterIntermediate>.ConstructionError)
+    #warning("Dead?")
     case parameterNotFound(ParsedAbilityParameterReference)
     case brokenRequirement(RequirementIntermediate.ConstructionError)
     case brokenChoice(ActionIntermediate.ConstructionError)
@@ -14,14 +12,8 @@ extension Ability {
 
     var range: Slice<UTF8Segments> {
       switch self {
-      case .referenceInTypeSignature(let parameter):
-        return parameter.location
-      case .typeInReferenceSignature(let parameter):
-        return parameter.location
-      case .multipleTypeSignatures(let signature):
-        return signature.location
-      case .cyclicalParameterReference(let parameter):
-        return parameter.location
+      case .brokenParameterInterpolation(let error):
+        return error.range
       case .parameterNotFound(let reference):
         return reference.location
       case .brokenRequirement(let error):
@@ -37,14 +29,8 @@ extension Ability {
 
     var message: String {
       switch self {
-      case .referenceInTypeSignature:
-        return defaultMessage
-      case .typeInReferenceSignature:
-        return defaultMessage
-      case .multipleTypeSignatures:
-        return defaultMessage
-      case .cyclicalParameterReference:
-        return defaultMessage
+      case .brokenParameterInterpolation(let error):
+        return error.message
       case .parameterNotFound:
         return defaultMessage
       case .brokenRequirement:

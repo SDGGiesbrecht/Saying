@@ -203,7 +203,7 @@ extension ActionIntermediate {
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
     typeLookup: [StrictString: SimpleTypeReference],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    specializationNamespace: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let mergedParameters: Interpolation<ParameterIntermediate>
@@ -229,7 +229,7 @@ extension ActionIntermediate {
     let mergedDocumentation = documentation.merging(
       inherited: requirement.documentation,
       typeLookup: typeLookup,
-      canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+      specializationNamespace: specializationNamespace
     )
     return .success(
       ActionIntermediate(
@@ -258,7 +258,7 @@ extension ActionIntermediate {
   func specializing(
     for use: UseIntermediate,
     typeLookup: [StrictString: SimpleTypeReference],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    specializationNamespace: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in
       return ParameterIntermediate(
@@ -270,7 +270,7 @@ extension ActionIntermediate {
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
-        canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+        specializationNamespace: specializationNamespace
       )
     })
     return ActionIntermediate(
