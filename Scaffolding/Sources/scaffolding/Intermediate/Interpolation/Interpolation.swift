@@ -27,8 +27,11 @@ extension Interpolation {
     getParameters: (Entries.Element) -> [ParameterNode],
     getParameterName: (ParameterNode) -> StrictString,
     getDefinitionOrReference: (ParameterNode) -> DefinitionOrReference<ParameterDefinition>,
+    getNestedSignature: (ParameterNode) -> ParsedSignature?,
+    getNestedParameters: (ParsedSignature) -> [ParameterNode],
     constructParameter: (
       _ names: Set<StrictString>,
+      _ nestedParameters: Interpolation?,
       _ definition: ParameterDefinition
     ) -> InterpolationParameter
   ) -> Result<Interpolation, ErrorList<ConstructionError>>
@@ -68,15 +71,20 @@ extension Interpolation {
     }
     var parameterDefinitions: [ParameterDefinition] = []
     var reorderings: [StrictString: [Int]] = [:]
+    var nestedSignatures: [Int: [ParsedSignature]] = [:]
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for entry in entries {
       var reordering: [Int] = []
       let entryName = getEntryName(entry)
       for (position, parameter) in getParameters(entry).enumerated() {
+        let nestedSignature = getNestedSignature(parameter)
         switch getDefinitionOrReference(parameter) {
         case .definition(let definition):
           parameterDefinitions.append(definition)
           reordering.append(position)
+          if let nested = nestedSignature {
+            nestedSignatures[position, default: []].append(nested)
+          }
         case .reference(let reference):
           var resolving = reference.name.name()
           var checked: Set<StrictString> = []
@@ -93,6 +101,9 @@ extension Interpolation {
           if let index = parameterIndices[resolving] {
             reordering.append(index)
             completeParameterIndexTable[getParameterName(parameter)] = index
+            if let nested = nestedSignature {
+              nestedSignatures[index, default: []].append(nested)
+            }
           } else {
             errors.append(.parameterNotFound(reference))
           }
@@ -113,7 +124,28 @@ extension Interpolation {
             return completeParameterIndexTable[name] == index
           })
       )
-      return constructParameter(names, definition)
+      var nestedParemeters: Interpolation?
+      if let nested = nestedSignatures[index] {
+        switch Interpolation.construct(
+          entries: nested,
+          getEntryName: { $0.name() },
+          getParameters: getNestedParameters,
+          getParameterName: getParameterName,
+          getDefinitionOrReference: getDefinitionOrReference,
+          getNestedSignature: getNestedSignature,
+          getNestedParameters: getNestedParameters,
+          constructParameter: constructParameter
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors)
+        case .success(let constructed):
+          nestedParemeters = constructed
+        }
+      }
+      return constructParameter(names, nestedParemeters, definition)
+    }
+    if ¬errors.isEmpty {
+      return .failure(ErrorList(errors))
     }
     return .success(Interpolation(parameters: parameters, reorderings: reorderings))
   }

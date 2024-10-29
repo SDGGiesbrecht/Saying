@@ -29,7 +29,9 @@ extension Ability {
       getParameters: { $0.name.parameters.parameters },
       getParameterName: { $0.name.identifierText() },
       getDefinitionOrReference: { $0.definitionOrReference },
-      constructParameter: { names, _ in AbilityParameterIntermediate(names: names) }
+      getNestedSignature: { _ in nil },
+      getNestedParameters: { _ in [] },
+      constructParameter: { names, _, _ in AbilityParameterIntermediate(names: names) }
     ) {
     case .failure(let interpolationError):
       errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))

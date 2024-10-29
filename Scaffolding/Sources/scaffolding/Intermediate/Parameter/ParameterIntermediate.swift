@@ -2,11 +2,22 @@ import SDGCollections
 import SDGText
 
 struct ParameterIntermediate {
-  var names: Set<StrictString>
-  var type: ParsedTypeReference
+  private(set) var names: Set<StrictString>
+  private(set) var type: ParsedTypeReference
 }
 
 extension ParameterIntermediate: InterpolationParameterProtocol {}
+
+extension ParameterIntermediate {
+  init(
+    names: Set<StrictString>,
+    nestedParameters: Interpolation<ParameterIntermediate>?,
+    returnValue: ParsedTypeReference
+  ) {
+    #warning("Not implemented yet.")
+    fatalError()
+  }
+}
 
 extension ParameterIntermediate {
   func merging(requirement: ParameterIntermediate) -> ParameterIntermediate {
