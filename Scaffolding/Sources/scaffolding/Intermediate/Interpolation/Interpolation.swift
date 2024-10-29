@@ -77,10 +77,6 @@ extension Interpolation {
         case .definition(let definition):
           parameterDefinitions.append(definition)
           reordering.append(position)
-        #warning("Disbabled")
-        /*case .action(let action):
-          parameterDefinitions.append(ParsedTypeReference(action))
-          reordering.append(position)*/
         case .reference(let reference):
           var resolving = reference.name.name()
           var checked: Set<StrictString> = []
