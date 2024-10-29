@@ -261,9 +261,10 @@ extension ActionIntermediate {
     specializationNamespace: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in
-      return ParameterIntermediate(
-        names: parameter.names,
-        type: parameter.type.specializing(typeLookup: typeLookup)
+      return parameter.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
       )
     })
     let newReturnValue = returnValue.flatMap { $0.specializing(typeLookup: typeLookup) }
