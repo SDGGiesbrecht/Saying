@@ -190,13 +190,14 @@ extension Platform {
           specifiedReturnValue: reference.resolvedResultType
         )!
       if let native = nativeImplementation(of: action) {
+        let usedParameters = action.parameters.ordered(for: reference.actionName)
         var result = ""
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
           if index ≠ native.textComponents.indices.last {
-            let rootIndex = native.reordering[index]
-            let reordered = action.reorderings[reference.actionName]![rootIndex]
-            let argument = reference.arguments[reordered]
+            let name = native.parameters[index].name
+            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+            let argument = reference.arguments[argumentIndex]
             result.append(contentsOf: call(to: argument, context: context, referenceDictionary: referenceDictionary))
           }
         }
@@ -238,7 +239,7 @@ extension Platform {
       identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
       leading: true
     )
-    let parameters = action.parameters
+    let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
       .joined(separator: ", ")
 
@@ -270,7 +271,7 @@ extension Platform {
       identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
       leading: true
     )
-    let parameters = action.parameters
+    let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
       .joined(separator: ", ")
 

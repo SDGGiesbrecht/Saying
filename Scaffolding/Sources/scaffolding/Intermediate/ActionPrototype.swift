@@ -5,8 +5,7 @@ import SDGText
 struct ActionPrototype {
   var names: Set<StrictString>
   var namespace: [Set<StrictString>]
-  var parameters: [ParameterIntermediate]
-  var reorderings: [StrictString: [Int]]
+  var parameters: Interpolation<ParameterIntermediate>
   var returnValue: ParsedTypeReference?
   var access: AccessIntermediate
   var testOnlyAccess: Bool
@@ -22,93 +21,25 @@ extension ActionPrototype {
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
     var names: Set<StrictString> = []
-    var parameterIndices: [StrictString: Int] = [:]
-    var parameterReferences: [StrictString: StrictString] = [:]
+    let parameters: Interpolation<ParameterIntermediate>
     let namesDictionary = declaration.name.names
-    var foundTypeSignature = false
+    switch Interpolation.construct(
+      entries: namesDictionary.values,
+      getEntryName: { $0.name() },
+      getParameters: { $0.parameters() },
+      getParameterName: { $0.name.name() },
+      getDefinitionOrReference: { $0.type },
+      parseDefinition: { ParsedTypeReference($0) },
+      constructParameter: { ParameterIntermediate(names: $0, type: $1) }
+    ) {
+    case .failure(let interpolationError):
+      errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))
+      return .failure(ErrorList(errors))
+    case .success(let constructed):
+      parameters = constructed
+    }
     for (_, signature) in namesDictionary {
       names.insert(signature.name())
-      var declaresTypes: Bool?
-      let parameters = signature.parameters()
-      if parameters.isEmpty {
-        foundTypeSignature = true
-      }
-      for (index, parameter) in parameters.enumerated() {
-        let parameterName = parameter.name.name()
-        switch parameter.type {
-        #warning("Disabled.")
-        case .type/*, .action*/:
-          if index == 0,
-            foundTypeSignature {
-            errors.append(.multipleTypeSignatures(signature))
-          }
-          if declaresTypes == false {
-            errors.append(.typeInReferenceSignature(parameter))
-          }
-          declaresTypes = true
-          foundTypeSignature = true
-          parameterIndices[parameterName] = index
-        case .reference(let reference):
-          if declaresTypes == true {
-            errors.append(.referenceInTypeSignature(parameter))
-          }
-          declaresTypes = false
-          parameterReferences[parameterName] = reference.name.name()
-        }
-      }
-    }
-    var parameterTypes: [ParsedTypeReference] = []
-    var reorderings: [StrictString: [Int]] = [:]
-    var completeParameterIndexTable: [StrictString: Int] = parameterIndices
-    for (_, signature) in namesDictionary {
-      var reordering: [Int] = []
-      let signatureName = signature.name()
-      for (position, parameter) in signature.parameters().enumerated() {
-        switch parameter.type {
-        case .type(let type):
-          parameterTypes.append(ParsedTypeReference(type))
-          reordering.append(position)
-        #warning("Disbabled")
-        /*case .action(let action):
-          parameterTypes.append(ParsedTypeReference(action))
-          reordering.append(position)*/
-        case .reference(let reference):
-          var resolving = reference.name.name()
-          var checked: Set<StrictString> = []
-          while let next = parameterReferences[resolving] {
-            checked.insert(resolving)
-            resolving = next
-            if next ∈ checked {
-              if parameterIndices[resolving] == nil {
-                errors.append(.cyclicalParameterReference(parameter))
-              }
-              break
-            }
-          }
-          if let index = parameterIndices[resolving] {
-            reordering.append(index)
-            completeParameterIndexTable[parameter.name.name()] = index
-          } else {
-            errors.append(.parameterNotFound(reference))
-          }
-        }
-      }
-      let existingReordering = reorderings[signatureName]
-      if existingReordering == nil
-        ∨ existingReordering == reordering {
-        reorderings[signatureName] = reordering
-      } else {
-        errors.append(.rearrangedParameters(signature))
-      }
-    }
-    let parameters = parameterTypes.enumerated().map { index, type in
-      let names = Set(
-        completeParameterIndexTable.keys
-          .lazy.filter({ name in
-            return completeParameterIndexTable[name] == index
-          })
-      )
-      return ParameterIntermediate(names: names, type: type)
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
@@ -118,7 +49,7 @@ extension ActionPrototype {
           .appending(names)
       )
       attachedDocumentation = intermediateDocumentation
-      let existingParameters = parameters.reduce(Set(), { $0 ∪ $1.names })
+      let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0 ∪ $1.names })
       for parameter in intermediateDocumentation.parameters.joined() {
         if parameter.name.identifierText() ∉ existingParameters {
           errors.append(ConstructionError.documentedParameterNotFound(parameter))
@@ -133,7 +64,6 @@ extension ActionPrototype {
         names: names,
         namespace: namespace,
         parameters: parameters,
-        reorderings: reorderings,
         returnValue: declaration.returnValueType.map({ ParsedTypeReference($0) }),
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
@@ -143,7 +73,7 @@ extension ActionPrototype {
   }
 
   func validateReferences(referenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
-    for parameter in parameters {
+    for parameter in parameters.inAnyOrder {
       parameter.type.validateReferences(
         requiredAccess: access,
         allowTestOnlyAccess: testOnlyAccess,
@@ -162,22 +92,22 @@ extension ActionPrototype {
 
 extension ActionPrototype {
   func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
-    return parameters.first(where: { $0.names.contains(identifier) })
+    return parameters.parameter(named: identifier)
   }
 
   func parameterReferenceDictionary() -> ReferenceDictionary {
     var result = ReferenceDictionary()
-    for parameter in parameters {
-      let parameters: [ParameterIntermediate]
-      let reorderings: [StrictString: [Int]]
+    for parameter in parameters.inAnyOrder {
+      let parameters: Interpolation<ParameterIntermediate>
       let returnValue: ParsedTypeReference?
       switch parameter.type {
       case .simple:
-        parameters = []
-        reorderings = [:]
+        parameters = .empty(names: parameter.names)
         returnValue = parameter.type
       case .action(parameters: let parameterParameters, returnValue: let parameterReturnValue):
-        parameters = parameterParameters.map({ parameter in
+        #warning("Not implemented yet.")
+        parameters = .empty(names: parameter.names)
+        /*parameters = parameterParameters.map({ parameter in
           return ParameterIntermediate(
             names: [],
             type: parameter
@@ -189,13 +119,12 @@ extension ActionPrototype {
         for name in parameter.names {
           stubReorderings[name] = placeholderReordering
         }
-        reorderings = stubReorderings
+        reorderings = stubReorderings*/
         returnValue = parameterReturnValue
       }
       _ = result.add(action: ActionIntermediate.parameterAction(
         names: parameter.names,
         parameters: parameters,
-        reorderings: reorderings,
         returnValue: returnValue
       ))
     }
@@ -203,9 +132,6 @@ extension ActionPrototype {
   }
 
   func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
-    guard let reordering = reorderings[name] else {
-      return []
-    }
-    return reordering.map({ parameters[$0].type })
+    return parameters.ordered(for: name).map({ $0.type })
   }
 }

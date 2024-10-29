@@ -1,27 +1,12 @@
 extension ActionPrototype {
   enum ConstructionError: DiagnosticError {
-    case referenceInTypeSignature(ParsedParameter)
-    case typeInReferenceSignature(ParsedParameter)
-    case multipleTypeSignatures(ParsedSignature)
-    case cyclicalParameterReference(ParsedParameter)
-    case parameterNotFound(ParsedParameterReference)
-    case rearrangedParameters(ParsedSignature)
+    case brokenParameterInterpolation(Interpolation<ParameterIntermediate>.ConstructionError)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var range: Slice<UTF8Segments> {
       switch self {
-      case .referenceInTypeSignature(let parameter):
-        return parameter.location
-      case .typeInReferenceSignature(let parameter):
-        return parameter.location
-      case .multipleTypeSignatures(let signature):
-        return signature.location
-      case .cyclicalParameterReference(let parameter):
-        return parameter.location
-      case .parameterNotFound(let reference):
-        return reference.location
-      case .rearrangedParameters(let signature):
-        return signature.location
+      case .brokenParameterInterpolation(let error):
+        return error.range
       case .documentedParameterNotFound(let documentation):
         return documentation.location
       }

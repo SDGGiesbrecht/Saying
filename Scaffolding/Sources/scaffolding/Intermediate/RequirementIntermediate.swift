@@ -12,11 +12,8 @@ struct RequirementIntermediate {
   var names: Set<StrictString> {
     return prototype.names
   }
-  var parameters: [ParameterIntermediate] {
+  var parameters: Interpolation<ParameterIntermediate> {
     return prototype.parameters
-  }
-  var reorderings: [StrictString: [Int]] {
-    return prototype.reorderings
   }
   var returnValue: ParsedTypeReference? {
     return prototype.returnValue

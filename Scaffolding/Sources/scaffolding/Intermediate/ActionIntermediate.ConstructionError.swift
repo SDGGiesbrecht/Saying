@@ -5,6 +5,7 @@ extension ActionIntermediate {
     case brokenPrototype(ActionPrototype.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
+    case parameterNotFound(ParsedUninterruptedIdentifier)
     case invalidImport(ParsedNativeActionImplementation)
     case missingImplementation(language: StrictString, action: ParsedActionName)
 
@@ -20,6 +21,8 @@ extension ActionIntermediate {
         return defaultMessage
       case .missingImplementation(let language, _):
         return "\(defaultMessage) (\(language))"
+      case .parameterNotFound:
+        return defaultMessage
       }
     }
 
@@ -35,6 +38,8 @@ extension ActionIntermediate {
         return implementation.location
       case .missingImplementation(_, action: let action):
         return action.location
+      case .parameterNotFound(let identifier):
+        return identifier.location
       }
     }
   }

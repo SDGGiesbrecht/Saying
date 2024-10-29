@@ -6,6 +6,8 @@ struct ParameterIntermediate {
   var type: ParsedTypeReference
 }
 
+extension ParameterIntermediate: InterpolationParameterProtocol {}
+
 extension ParameterIntermediate {
   func merging(requirement: ParameterIntermediate) -> ParameterIntermediate {
     return ParameterIntermediate(

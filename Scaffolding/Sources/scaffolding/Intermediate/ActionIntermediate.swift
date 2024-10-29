@@ -20,11 +20,8 @@ struct ActionIntermediate {
   var names: Set<StrictString> {
     return prototype.names
   }
-  var parameters: [ParameterIntermediate] {
+  var parameters: Interpolation<ParameterIntermediate> {
     return prototype.parameters
-  }
-  var reorderings: [StrictString: [Int]] {
-    return prototype.reorderings
   }
   var returnValue: ParsedTypeReference? {
     return prototype.returnValue
@@ -81,8 +78,7 @@ extension ActionIntermediate {
 
   static func parameterAction(
     names: Set<StrictString>,
-    parameters: [ParameterIntermediate],
-    reorderings: [StrictString: [Int]],
+    parameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference?
   ) -> ActionIntermediate {
     return ActionIntermediate(
@@ -90,7 +86,6 @@ extension ActionIntermediate {
         names: names,
         namespace: [],
         parameters: parameters,
-        reorderings: reorderings,
         returnValue: returnValue,
         access: .inferred,
         testOnlyAccess: false
@@ -127,6 +122,11 @@ extension ActionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
+          for parameterReference in constructed.parameters {
+            if prototype.parameters.parameter(named: parameterReference.name) == nil {
+              errors.append(.parameterNotFound(parameterReference.syntaxNode))
+            }
+          }
           switch implementation.language.identifierText() {
           case "C":
             c = constructed
@@ -206,29 +206,16 @@ extension ActionIntermediate {
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
-    let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
-    let nameToRequirement = requirement.reorderings[correlatedName]!
-    let nameToSelf = self.reorderings[correlatedName]!
-    let mergedParameters = self.parameters.indices.map { index in
-      let nameIndex = nameToSelf.firstIndex(of: index)!
-      let requirementIndex = nameToRequirement[nameIndex]
-      return self.parameters[index]
-        .merging(requirement: requirement.parameters[requirementIndex])
-    }
-    var mergedReorderings = self.reorderings
-    for (name, reordering) in requirement.reorderings {
-      let rearranged = reordering.map { requirementIndex in
-        let correlatedNameIndex = nameToRequirement.firstIndex(of: requirementIndex)!
-        let ownIndex = nameToSelf[correlatedNameIndex]
-        return ownIndex
-      }
-      if let existing = mergedReorderings[name] {
-        if existing ≠ rearranged {
-          errors.append(.mismatchedParameters(name: name, declaration: self.declaration!.name))
-        }
-      } else {
-        mergedReorderings[name] = rearranged
-      }
+    let mergedParameters: Interpolation<ParameterIntermediate>
+    switch parameters.merging(
+      requirement: requirement.parameters,
+      provisionDeclarationName: self.declaration!.name
+    ) {
+    case .failure(let error):
+      errors.append(contentsOf: error.errors)
+      return .failure(ErrorList(errors))
+    case .success(let parameters):
+      mergedParameters = parameters
     }
     if access < min(requirement.access, useAccess) {
       errors.append(.fulfillmentAccessNarrowerThanRequirement(declaration: self.declaration!.name))
@@ -250,7 +237,6 @@ extension ActionIntermediate {
           names: names ∪ requirement.names,
           namespace: prototype.namespace,
           parameters: mergedParameters,
-          reorderings: mergedReorderings,
           returnValue: returnValue,
           access: access,
           testOnlyAccess: testOnlyAccess,
@@ -274,7 +260,7 @@ extension ActionIntermediate {
     typeLookup: [StrictString: SimpleTypeReference],
     canonicallyOrderedUseArguments: [Set<StrictString>]
   ) -> ActionIntermediate {
-    let newParameters = parameters.map({ parameter in
+    let newParameters = parameters.mappingParameters({ parameter in
       return ParameterIntermediate(
         names: parameter.names,
         type: parameter.type.specializing(typeLookup: typeLookup)
@@ -292,7 +278,6 @@ extension ActionIntermediate {
         names: names,
         namespace: prototype.namespace,
         parameters: newParameters,
-        reorderings: reorderings,
         returnValue: newReturnValue,
         access: min(self.access, use.access),
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
@@ -330,25 +315,22 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(prototype.names.identifier())"
   }
-  func coverageTrackingReordering() -> [Int] {
-    return reorderings[prototype.names.identifier()]!
-  }
   func wrappedToTrackCoverage(referenceDictionary: ReferenceDictionary) -> ActionIntermediate? {
     if let coverageIdentifier = coverageRegionIdentifier(referenceDictionary: referenceDictionary) {
-      let newName = coverageTrackingIdentifier()
+      let baseName = names.identifier()
+      let wrapperName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
-          names: [newName],
+          names: [wrapperName],
           namespace: [],
-          parameters: prototype.parameters,
-          reorderings: [newName: coverageTrackingReordering()],
+          parameters: prototype.parameters.removingOtherNamesAnd(replacing: baseName, with: wrapperName),
           returnValue: prototype.returnValue,
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess
         ),
         implementation: ActionUse(
-          actionName: prototype.names.identifier(),
-          arguments: prototype.parameters.map({ parameter in
+          actionName: baseName,
+          arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
             return ActionUse(
               actionName: parameter.names.identifier(),
               arguments: [],
