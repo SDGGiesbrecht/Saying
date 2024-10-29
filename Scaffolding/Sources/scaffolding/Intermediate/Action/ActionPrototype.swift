@@ -105,29 +105,14 @@ extension ActionPrototype {
       case .simple:
         parameters = .empty(names: parameter.names)
         returnValue = parameter.type
+        _ = result.add(action: ActionIntermediate.parameterAction(
+          names: parameter.names,
+          parameters: parameters,
+          returnValue: returnValue
+        ))
       case .action(parameters: let parameterParameters, returnValue: let parameterReturnValue):
-        #warning("Not implemented yet.")
-        parameters = .empty(names: parameter.names)
-        /*parameters = parameterParameters.map({ parameter in
-          return ParameterIntermediate(
-            names: [],
-            type: parameter
-          )
-        })
-        #warning("Static placeholders.")
-        let placeholderReordering = Array(0..<parameterParameters.count)
-        var stubReorderings: [StrictString: [Int]] = [:]
-        for name in parameter.names {
-          stubReorderings[name] = placeholderReordering
-        }
-        reorderings = stubReorderings*/
-        returnValue = parameterReturnValue
+        _ = result.add(action: parameter.action)
       }
-      _ = result.add(action: ActionIntermediate.parameterAction(
-        names: parameter.names,
-        parameters: parameters,
-        returnValue: returnValue
-      ))
     }
     return result
   }
