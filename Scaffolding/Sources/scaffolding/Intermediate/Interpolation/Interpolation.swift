@@ -10,17 +10,6 @@ where InterpolationParameter: InterpolationParameterProtocol {
 
 extension Interpolation {
 
-  static func empty(names: Set<StrictString>) -> Interpolation {
-    var reorderings: [StrictString: [Int]] = [:]
-    for name in names {
-      reorderings[name] = []
-    }
-    return Interpolation(
-      parameters: [],
-      reorderings: reorderings
-    )
-  }
-
   static func construct<Entries, ParameterNode, ParameterDefinition>(
     entries: Entries,
     getEntryName: (Entries.Element) -> StrictString,

@@ -99,20 +99,7 @@ extension ActionPrototype {
   func parameterReferenceDictionary() -> ReferenceDictionary {
     var result = ReferenceDictionary()
     for parameter in parameters.inAnyOrder {
-      let parameters: Interpolation<ParameterIntermediate>
-      let returnValue: ParsedTypeReference?
-      switch parameter.type {
-      case .simple:
-        parameters = .empty(names: parameter.names)
-        returnValue = parameter.type
-        _ = result.add(action: ActionIntermediate.parameterAction(
-          names: parameter.names,
-          parameters: parameters,
-          returnValue: returnValue
-        ))
-      case .action(parameters: let parameterParameters, returnValue: let parameterReturnValue):
-        _ = result.add(action: parameter.action)
-      }
+      _ = result.add(action: parameter.action)
     }
     return result
   }

@@ -18,7 +18,6 @@ extension ParameterIntermediate {
     let actionParameters = nestedParameters.ordered(for: names.identifier())
     let type: ParsedTypeReference
     if actionParameters.isEmpty {
-      #warning("Is this special case necessary?")
       type = returnValue
     } else {
       type = .action(
