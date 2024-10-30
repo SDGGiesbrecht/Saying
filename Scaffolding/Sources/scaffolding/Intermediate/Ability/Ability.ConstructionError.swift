@@ -2,11 +2,7 @@ import SDGText
 
 extension Ability {
   enum ConstructionError: DiagnosticError {
-    case referenceInTypeSignature(ParsedAbilityParameter)
-    case typeInReferenceSignature(ParsedAbilityParameter)
-    case multipleTypeSignatures(ParsedAbilitySignature)
-    case cyclicalParameterReference(ParsedAbilityParameter)
-    case parameterNotFound(ParsedAbilityParameterReference)
+    case brokenParameterInterpolation(Interpolation<AbilityParameterIntermediate>.ConstructionError)
     case brokenRequirement(RequirementIntermediate.ConstructionError)
     case brokenChoice(ActionIntermediate.ConstructionError)
     case redeclaredIdentifier(StrictString, [ParsedRequirementDeclarationPrototype])
@@ -14,16 +10,8 @@ extension Ability {
 
     var range: Slice<UTF8Segments> {
       switch self {
-      case .referenceInTypeSignature(let parameter):
-        return parameter.location
-      case .typeInReferenceSignature(let parameter):
-        return parameter.location
-      case .multipleTypeSignatures(let signature):
-        return signature.location
-      case .cyclicalParameterReference(let parameter):
-        return parameter.location
-      case .parameterNotFound(let reference):
-        return reference.location
+      case .brokenParameterInterpolation(let error):
+        return error.range
       case .brokenRequirement(let error):
         return error.range
       case .brokenChoice(let error):
@@ -37,16 +25,8 @@ extension Ability {
 
     var message: String {
       switch self {
-      case .referenceInTypeSignature:
-        return defaultMessage
-      case .typeInReferenceSignature:
-        return defaultMessage
-      case .multipleTypeSignatures:
-        return defaultMessage
-      case .cyclicalParameterReference:
-        return defaultMessage
-      case .parameterNotFound:
-        return defaultMessage
+      case .brokenParameterInterpolation(let error):
+        return error.message
       case .brokenRequirement:
         return defaultMessage
       case .brokenChoice:

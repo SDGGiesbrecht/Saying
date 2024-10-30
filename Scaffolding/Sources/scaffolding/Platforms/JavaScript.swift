@@ -48,6 +48,12 @@ enum JavaScript: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return nil
   }
+  static func actionType(parameters: String, returnValue: String) -> String {
+    return ""
+  }
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
+    return nil
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.javaScript
@@ -56,9 +62,15 @@ enum JavaScript: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     return name
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    return name
+  }
 
   static var emptyReturnType: String? {
     return nil
+  }
+  static var emptyReturnTypeForActionType: String {
+    return ""
   }
   static func returnSection(with returnValue: String) -> String? {
     return nil
@@ -73,8 +85,8 @@ enum JavaScript: Platform {
     return "  coverageRegions.delete(\u{22}\(identifier)\u{22});"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return call(to: expression, context: context, module: module).appending(";")
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+    return call(to: expression, context: context, referenceDictionary: referenceDictionary).appending(";")
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {

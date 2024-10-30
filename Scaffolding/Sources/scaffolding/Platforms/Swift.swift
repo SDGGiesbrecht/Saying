@@ -101,6 +101,12 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.swift
   }
+  static func actionType(parameters: String, returnValue: String) -> String {
+    return "(\(parameters)) -> \(returnValue)"
+  }
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
+    return nil
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
@@ -109,9 +115,15 @@ enum Swift: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     "_ \(name): \(type)"
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+  }
 
   static var emptyReturnType: String? {
     return nil
+  }
+  static var emptyReturnTypeForActionType: String {
+    return "Void"
   }
   static func returnSection(with returnValue: String) -> String? {
     return " -> \(returnValue)"
@@ -126,8 +138,8 @@ enum Swift: Platform {
     return "  registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return call(to: expression, context: context, module: module)
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+    return call(to: expression, context: context, referenceDictionary: referenceDictionary)
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {

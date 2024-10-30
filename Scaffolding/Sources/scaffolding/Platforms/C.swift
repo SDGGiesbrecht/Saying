@@ -50,6 +50,12 @@ enum C: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.c
   }
+  static func actionType(parameters: String, returnValue: String) -> String {
+    return "\(returnValue) (*)(\(parameters))"
+  }
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
+    return nil
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.c
@@ -58,8 +64,14 @@ enum C: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     return "\(type) \(name)"
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    "\(returnValue) (*\(name))(\(parameters))"
+  }
 
   static var emptyReturnType: String? {
+    return emptyReturnTypeForActionType
+  }
+  static var emptyReturnTypeForActionType: String {
     return "void"
   }
   static func returnSection(with returnValue: String) -> String? {
@@ -79,8 +91,8 @@ enum C: Platform {
     return "  register_coverage_region(\u{22}\(identifier)\u{22});"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return call(to: expression, context: context, module: module).appending(";")
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+    return call(to: expression, context: context, referenceDictionary: referenceDictionary).appending(";")
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {

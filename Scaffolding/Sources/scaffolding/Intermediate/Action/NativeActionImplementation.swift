@@ -1,31 +1,28 @@
 import SDGLogic
+import SDGCollections
 import SDGText
 
 struct NativeActionImplementationIntermediate {
-  var reordering: [Int]
   var textComponents: [StrictString]
+  var parameters: [NativeActionImplementationParameter]
   var requiredImport: StrictString?
 }
 
 extension NativeActionImplementationIntermediate {
 
   static func construct(
-    implementation: ParsedNativeAction,
-    indexTable: [StrictString: Int]
+    prototype: ActionPrototype,
+    implementation: ParsedNativeAction
   ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
     let components = implementation.expression.components
-    var reordering: [Int] = []
     var textComponents: [StrictString] = []
+    var parameters: [NativeActionImplementationParameter] = []
     var errors: [ConstructionError] = []
     for index in components.indices {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        if let parameterIndex = indexTable[parameter.identifierText()] {
-          reordering.append(parameterIndex)
-        } else {
-          errors.append(.parameterNotFound(parameter))
-        }
+        parameters.append(NativeActionImplementationParameter(parameter))
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
         case .failure(let error):
@@ -45,8 +42,8 @@ extension NativeActionImplementationIntermediate {
     }
     return .success(
       NativeActionImplementationIntermediate(
-        reordering: reordering,
         textComponents: textComponents,
+        parameters: parameters,
         requiredImport: requiredImport
       )
     )

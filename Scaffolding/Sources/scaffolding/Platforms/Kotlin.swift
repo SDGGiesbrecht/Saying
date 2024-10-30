@@ -55,6 +55,16 @@ enum Kotlin: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.kotlin
   }
+  static func actionType(parameters: String, returnValue: String) -> String {
+    return "(\(parameters)) -> \(returnValue)"
+  }
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
+    if isVariable {
+      return nil
+    } else {
+      return "::"
+    }
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.kotlin
@@ -63,9 +73,15 @@ enum Kotlin: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     "\(name): \(type)"
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    "\(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+  }
 
   static var emptyReturnType: String? {
     return nil
+  }
+  static var emptyReturnTypeForActionType: String {
+    return "Unit"
   }
   static func returnSection(with returnValue: String) -> String? {
     return ": \(returnValue)"
@@ -80,8 +96,8 @@ enum Kotlin: Platform {
     return "    registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return call(to: expression, context: context, module: module)
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+    return call(to: expression, context: context, referenceDictionary: referenceDictionary)
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {

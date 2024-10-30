@@ -5,8 +5,8 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
   var source: ParsedAction?
-  var explicitResultType: StrictString?
-  var resolvedResultType: StrictString??
+  var explicitResultType: ParsedTypeReference?
+  var resolvedResultType: ParsedTypeReference??
 }
 
 extension ActionUse {
@@ -16,6 +16,8 @@ extension ActionUse {
     switch use {
     case .compound(let compound):
       arguments = compound.arguments.arguments.map { ActionUse($0.argument) }
+    case .reference:
+      arguments = []
     case .simple:
       arguments = []
     }
@@ -24,16 +26,16 @@ extension ActionUse {
 
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
-    explicitResultType = use.type?.type.identifierText()
+    explicitResultType = use.type.map({ ParsedTypeReference($0.type) })
   }
 
   mutating func resolveTypes(
     context: ActionIntermediate?,
-    module: ModuleIntermediate,
-    specifiedReturnValue: StrictString??
+    referenceDictionary: ReferenceDictionary,
+    specifiedReturnValue: ParsedTypeReference??
   ) {
     for index in arguments.indices {
-      let explicitArgumentReturnValue: StrictString??
+      let explicitArgumentReturnValue: ParsedTypeReference??
       switch arguments[index].explicitResultType {
       case .some(let specified):
         explicitArgumentReturnValue = .some(.some(specified))
@@ -42,7 +44,7 @@ extension ActionUse {
       }
       arguments[index].resolveTypes(
         context: context,
-        module: module,
+        referenceDictionary: referenceDictionary,
         specifiedReturnValue: explicitArgumentReturnValue
       )
     }
@@ -52,13 +54,12 @@ extension ActionUse {
     case .some(.none):
       resolvedResultType = .none
     case .none:
-      let signature = arguments.compactMap({ $0.resolvedResultType }).compactMap({ $0 })
-      guard signature.count == arguments.count else {
+      guard let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }) else {
         return // aborting due to failure deeper down
       }
       if let parameter = context?.lookupParameter(actionName) {
         resolvedResultType = parameter.type
-      } else if let action = module.lookupAction(
+      } else if let action = referenceDictionary.lookupAction(
         actionName,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue
@@ -68,12 +69,15 @@ extension ActionUse {
     }
   }
 
-  func validateReferences(context: [Scope], testContext: Bool, errors: inout [ReferenceError]) {
+  func validateReferences(
+    context: [ReferenceDictionary],
+    testContext: Bool,
+    errors: inout [ReferenceError]
+  ) {
     for argument in arguments {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
-    let signature = arguments.compactMap({ $0.resolvedResultType }).compactMap({ $0 })
-    if signature.count == arguments.count,
+    if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
       let action = context.lookupAction(
         actionName,
         signature: signature,
@@ -91,13 +95,23 @@ extension ActionUse {
 extension ActionUse {
 
   func specializing(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: SimpleTypeReference]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
       source: source,
-      explicitResultType: explicitResultType.flatMap({ typeLookup[$0] ?? $0 })
+      explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) })
     )
+  }
+}
+
+extension ActionUse {
+  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool {
+    return arguments.isEmpty
+      ∧ name.contains("(")
+  }
+  var isReferenceNotCall: Bool {
+    return ActionUse.isReferenceNotCall(name: actionName, arguments: arguments)
   }
 }

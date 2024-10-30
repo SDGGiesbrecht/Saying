@@ -20,13 +20,10 @@ struct ActionIntermediate {
   var names: Set<StrictString> {
     return prototype.names
   }
-  var parameters: [ParameterIntermediate] {
+  var parameters: Interpolation<ParameterIntermediate> {
     return prototype.parameters
   }
-  var reorderings: [StrictString: [Int]] {
-    return prototype.reorderings
-  }
-  var returnValue: StrictString? {
+  var returnValue: ParsedTypeReference? {
     return prototype.returnValue
   }
   var access: AccessIntermediate {
@@ -37,47 +34,48 @@ struct ActionIntermediate {
   }
 }
 
-extension ActionIntermediate: Scope {
-  func lookupAction(
-    _ identifier: StrictString,
-    signature: [StrictString],
-    specifiedReturnValue: StrictString??
-  ) -> ActionIntermediate? {
-    guard let parameter = prototype.lookupParameter(identifier) else {
-      return nil
-    }
-    return ActionIntermediate(
-      prototype: ActionPrototype(
-        names: parameter.names,
-        namespace: [],
-        parameters: [],
-        reorderings: [:],
-        access: .inferred,
-        testOnlyAccess: false,
-        completeParameterIndexTable: [:]
-      )
-    )
+extension ActionIntermediate {
+  func parameterReferenceDictionary() -> ReferenceDictionary {
+    return prototype.parameterReferenceDictionary()
   }
 }
 
 extension ActionIntermediate {
   func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
     let identifier = names.identifier()
+    let signature = signature(orderedFor: identifier)
+    let resolvedParameters: [ParsedTypeReference]
+    let resolvedReturnValue: ParsedTypeReference?
+    if ActionUse.isReferenceNotCall(name: identifier, arguments: signature) {
+      switch returnValue {
+      case .simple, .none:
+        fatalError("A real action reference would produce an action.")
+      case .action(parameters: let parameters, returnValue: let returnValue):
+        resolvedParameters = parameters
+        resolvedReturnValue = returnValue
+      }
+    } else {
+      resolvedParameters = signature
+      resolvedReturnValue = self.returnValue
+    }
     return [identifier]
-      .appending(contentsOf: signature(orderedFor: identifier))
-      .appending(returnValue ?? "")
+      .appending(contentsOf: resolvedParameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
+      .appending(contentsOf: resolvedReturnValue.unresolvedGloballyUniqueIdentifierComponents())
   }
+
   func resolve(
     globallyUniqueIdentifierComponents: [StrictString],
-    module: ModuleIntermediate) -> StrictString {
+    referenceDictionary: ReferenceDictionary
+  ) -> StrictString {
     return globallyUniqueIdentifierComponents
-        .lazy.map({ module.resolve(identifier: $0) })
+        .lazy.map({ referenceDictionary.resolve(identifier: $0) })
         .joined(separator: ":")
   }
-  func globallyUniqueIdentifier(module: ModuleIntermediate) -> StrictString {
+
+  func globallyUniqueIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString {
     return resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
-      module: module
+      referenceDictionary: referenceDictionary
     )
   }
 }
@@ -91,6 +89,23 @@ extension ActionIntermediate {
     if implementation.expression.importNode ≠ nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
+  }
+
+  static func parameterAction(
+    names: Set<StrictString>,
+    parameters: Interpolation<ParameterIntermediate>,
+    returnValue: ParsedTypeReference?
+  ) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: [],
+        parameters: parameters,
+        returnValue: returnValue,
+        access: .inferred,
+        testOnlyAccess: false
+      )
+    )
   }
 
   static func construct<Declaration>(
@@ -116,12 +131,17 @@ extension ActionIntermediate {
     if let native = declaration.implementation.native {
       for implementation in native.implementations {
         switch NativeActionImplementationIntermediate.construct(
-          implementation: implementation.expression,
-          indexTable: prototype.completeParameterIndexTable
+          prototype: prototype,
+          implementation: implementation.expression
         ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
+          for parameterReference in constructed.parameters {
+            if prototype.parameters.parameter(named: parameterReference.name) == nil {
+              errors.append(.parameterNotFound(parameterReference.syntaxNode))
+            }
+          }
           switch implementation.language.identifierText() {
           case "C":
             c = constructed
@@ -180,9 +200,16 @@ extension ActionIntermediate {
     )
   }
 
-  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
-    prototype.validateReferences(module: module, errors: &errors)
-    implementation?.validateReferences(context: [module, self], testContext: false, errors: &errors)
+  func validateReferences(moduleReferenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
+    prototype.validateReferences(
+      referenceDictionary: moduleReferenceDictionary,
+      errors: &errors
+    )
+    implementation?.validateReferences(
+      context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
+      testContext: false,
+      errors: &errors
+    )
   }
 }
 
@@ -190,33 +217,20 @@ extension ActionIntermediate {
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
-    typeLookup: [StrictString: StrictString],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    typeLookup: [StrictString: SimpleTypeReference],
+    specializationNamespace: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
-    let correlatedName = self.names.first(where: { requirement.names.contains($0) })!
-    let nameToRequirement = requirement.reorderings[correlatedName]!
-    let nameToSelf = self.reorderings[correlatedName]!
-    let mergedParameters = self.parameters.indices.map { index in
-      let nameIndex = nameToSelf.firstIndex(of: index)!
-      let requirementIndex = nameToRequirement[nameIndex]
-      return self.parameters[index]
-        .merging(requirement: requirement.parameters[requirementIndex])
-    }
-    var mergedReorderings = self.reorderings
-    for (name, reordering) in requirement.reorderings {
-      let rearranged = reordering.map { requirementIndex in
-        let correlatedNameIndex = nameToRequirement.firstIndex(of: requirementIndex)!
-        let ownIndex = nameToSelf[correlatedNameIndex]
-        return ownIndex
-      }
-      if let existing = mergedReorderings[name] {
-        if existing ≠ rearranged {
-          errors.append(.mismatchedParameters(name: name, declaration: self.declaration!.name))
-        }
-      } else {
-        mergedReorderings[name] = rearranged
-      }
+    let mergedParameters: Interpolation<ParameterIntermediate>
+    switch parameters.merging(
+      requirement: requirement.parameters,
+      provisionDeclarationName: self.declaration!.name
+    ) {
+    case .failure(let error):
+      errors.append(contentsOf: error.errors)
+      return .failure(ErrorList(errors))
+    case .success(let parameters):
+      mergedParameters = parameters
     }
     if access < min(requirement.access, useAccess) {
       errors.append(.fulfillmentAccessNarrowerThanRequirement(declaration: self.declaration!.name))
@@ -230,7 +244,7 @@ extension ActionIntermediate {
     let mergedDocumentation = documentation.merging(
       inherited: requirement.documentation,
       typeLookup: typeLookup,
-      canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+      specializationNamespace: specializationNamespace
     )
     return .success(
       ActionIntermediate(
@@ -238,12 +252,10 @@ extension ActionIntermediate {
           names: names ∪ requirement.names,
           namespace: prototype.namespace,
           parameters: mergedParameters,
-          reorderings: mergedReorderings,
           returnValue: returnValue,
           access: access,
           testOnlyAccess: testOnlyAccess,
-          documentation: mergedDocumentation,
-          completeParameterIndexTable: [:]
+          documentation: mergedDocumentation
         ),
         c: c,
         cSharp: cSharp,
@@ -260,21 +272,21 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: StrictString],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    typeLookup: [StrictString: SimpleTypeReference],
+    specializationNamespace: [Set<StrictString>]
   ) -> ActionIntermediate {
-    let newParameters = parameters.map({ parameter in
-      return ParameterIntermediate(
-        names: parameter.names,
-        type: typeLookup[parameter.type] ?? parameter.type,
-        typeDeclaration: parameter.typeDeclaration
+    let newParameters = parameters.mappingParameters({ parameter in
+      return parameter.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
       )
     })
-    let newReturnValue = returnValue.flatMap { typeLookup[$0] ?? $0 }
+    let newReturnValue = returnValue.flatMap { $0.specializing(typeLookup: typeLookup) }
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
-        canonicallyOrderedUseArguments: canonicallyOrderedUseArguments
+        specializationNamespace: specializationNamespace
       )
     })
     return ActionIntermediate(
@@ -282,12 +294,10 @@ extension ActionIntermediate {
         names: names,
         namespace: prototype.namespace,
         parameters: newParameters,
-        reorderings: reorderings,
         returnValue: newReturnValue,
         access: min(self.access, use.access),
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
-        documentation: newDocumentation,
-        completeParameterIndexTable: [:]
+        documentation: newDocumentation
       ),
       c: c,
       cSharp: cSharp,
@@ -307,8 +317,25 @@ extension ActionIntermediate {
     return prototype.lookupParameter(identifier)
   }
 
-  func signature(orderedFor name: StrictString) -> [StrictString] {
+  func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
     return prototype.signature(orderedFor: name)
+  }
+}
+
+extension ActionIntermediate {
+  func asReference() -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: .action(
+          parameters: parameters.ordered(for: names.identifier()).map({ $0.type }),
+          returnValue: returnValue),
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    )
   }
 }
 
@@ -321,27 +348,22 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(prototype.names.identifier())"
   }
-  func coverageTrackingReordering() -> [Int] {
-    return reorderings[prototype.names.identifier()]!
-  }
-  func wrappedToTrackCoverage(module: ModuleIntermediate) -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier(module: module) {
-      let newName = coverageTrackingIdentifier()
+  func wrappedToTrackCoverage(referenceDictionary: ReferenceDictionary) -> ActionIntermediate? {
+    if let coverageIdentifier = coverageRegionIdentifier(referenceDictionary: referenceDictionary) {
+      let baseName = names.identifier()
+      let wrapperName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
-          names: [newName],
+          names: [wrapperName],
           namespace: [],
-          parameters: prototype.parameters,
-          reorderings: [newName: coverageTrackingReordering()],
+          parameters: prototype.parameters.removingOtherNamesAnd(replacing: baseName, with: wrapperName),
           returnValue: prototype.returnValue,
           access: prototype.access,
-          testOnlyAccess: prototype.testOnlyAccess,
-          completeParameterIndexTable: prototype.completeParameterIndexTable,
-          declarationReturnValueType: prototype.declarationReturnValueType
+          testOnlyAccess: prototype.testOnlyAccess
         ),
         implementation: ActionUse(
-          actionName: prototype.names.identifier(),
-          arguments: prototype.parameters.map({ parameter in
+          actionName: baseName,
+          arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
             return ActionUse(
               actionName: parameter.names.identifier(),
               arguments: [],
@@ -358,15 +380,15 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier(module: ModuleIntermediate) -> StrictString? {
+  func coverageRegionIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString? {
     let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
       .joined(separator: ":")
     let identifier: StrictString
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
-      identifier = resolve(globallyUniqueIdentifierComponents: inherited, module: module)
+      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceDictionary: referenceDictionary)
     } else {
-      identifier = globallyUniqueIdentifier(module: module)
+      identifier = globallyUniqueIdentifier(referenceDictionary: referenceDictionary)
     }
     return [namespace, identifier]
       .joined(separator: ":")

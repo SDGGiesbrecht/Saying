@@ -16,11 +16,11 @@ extension TestIntermediate {
 extension TestIntermediate {
 
   func specializing(
-    typeLookup: [StrictString: StrictString],
-    canonicallyOrderedUseArguments: [Set<StrictString>]
+    typeLookup: [StrictString: SimpleTypeReference],
+    specializationNamespace: [Set<StrictString>]
   ) -> TestIntermediate {
     return TestIntermediate(
-      location: location.appending(contentsOf: canonicallyOrderedUseArguments),
+      location: location.appending(contentsOf: specializationNamespace),
       action: action.specializing(typeLookup: typeLookup)
     )
   }

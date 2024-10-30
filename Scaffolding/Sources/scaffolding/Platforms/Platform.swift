@@ -24,11 +24,15 @@ protocol Platform {
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
+  static func actionType(parameters: String, returnValue: String) -> String
+  static func actionReferencePrefix(isVariable: Bool) -> String?
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String) -> String
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
   static var emptyReturnType: String? { get }
+  static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String) -> String?
   static var needsForwardDeclarations: Bool { get }
   static func forwardActionDeclaration(
@@ -37,7 +41,11 @@ protocol Platform {
     returnSection: String?
   ) -> String?
   static func coverageRegistration(identifier: String) -> String
-  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String
+  static func statement(
+    expression: ActionUse,
+    context: ActionIntermediate?,
+    referenceDictionary: ReferenceDictionary
+  ) -> String
   static func actionDeclaration(
     name: String,
     parameters: String,
@@ -153,40 +161,79 @@ extension Platform {
       .joined()
   }
 
-  static func call(to reference: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
+  static func source(for type: ParsedTypeReference, referenceDictionary: ReferenceDictionary) -> String {
+    switch type {
+    case .simple(let simple):
+      let type = referenceDictionary.lookupThing(simple.identifier)!
+      if let native = nativeType(of: type)?.type {
+        return String(native)
+      } else {
+        return sanitize(identifier: type.names.identifier(), leading: true)
+      }
+    case .action(parameters: let actionParameters, returnValue: let actionReturn):
+      return actionType(
+        parameters: actionParameters
+          .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+          .joined(separator: ", "),
+        returnValue:
+          actionReturn.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+            ?? emptyReturnTypeForActionType
+      )
+    }
+  }
+
+  static func call(to reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
-      return String(sanitize(identifier: parameter.names.identifier(), leading: true))
+      switch parameter.type {
+      case .simple:
+        return String(sanitize(identifier: parameter.names.identifier(), leading: true))
+      case .action:
+        return call(to: parameter.action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: parameter.names.identifier())
+      }
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType!! })
-      let bareAction = module.lookupAction(
+      let bareAction = referenceDictionary.lookupAction(
         reference.actionName,
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
       let action = (context?.isCoverageWrapper ?? false)
         ? bareAction
-        : module.lookupAction(
+        : referenceDictionary.lookupAction(
           bareAction.coverageTrackingIdentifier(),
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      if let native = nativeImplementation(of: action) {
-        var result = ""
-        for index in native.textComponents.indices {
-          result.append(contentsOf: String(native.textComponents[index]))
-          if index ≠ native.textComponents.indices.last {
-            let rootIndex = native.reordering[index]
-            let reordered = action.reorderings[reference.actionName]![rootIndex]
-            let argument = reference.arguments[reordered]
-            result.append(contentsOf: call(to: argument, context: context, module: module))
-          }
+      return call(to: action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: nil)
+    }
+  }
+  static func call(to action: ActionIntermediate, reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary, parameterName: StrictString?) -> String {
+    if let native = nativeImplementation(of: action) {
+      let usedParameters = action.parameters.ordered(for: reference.actionName)
+      var result = ""
+      for index in native.textComponents.indices {
+        result.append(contentsOf: String(native.textComponents[index]))
+        if index ≠ native.textComponents.indices.last {
+          let name = native.parameters[index].name
+          let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+          let argument = reference.arguments[argumentIndex]
+          result.append(contentsOf: call(to: argument, context: context, referenceDictionary: referenceDictionary))
         }
-        return result
+      }
+      return result
+    } else {
+      let name = sanitize(
+        identifier: parameterName
+          ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+        leading: true
+      )
+      if reference.isReferenceNotCall {
+        let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
+        return "\(prefix)\(name)"
       } else {
-        let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
         let arguments = reference.arguments
           .lazy.map({ argument in
-            return call(to: argument, context: context, module: module)
+            return call(to: argument, context: context, referenceDictionary: referenceDictionary)
           })
           .joined(separator: ", ")
         return "\(name)(\(arguments))"
@@ -194,40 +241,56 @@ extension Platform {
     }
   }
 
-  static func source(for parameter: ParameterIntermediate, module: ModuleIntermediate) -> String {
+  static func source(
+    for parameter: ParameterIntermediate,
+    referenceDictionary: ReferenceDictionary
+  ) -> String {
     let name = sanitize(identifier: parameter.names.identifier(), leading: true)
     if ¬isTyped {
       return name
     } else {
-      let type = module.lookupThing(parameter.type)!
-      let typeSource: String
-      if let native = nativeType(of: type)?.type {
-        typeSource = String(native)
-      } else {
-        typeSource = sanitize(identifier: type.names.identifier(), leading: true)
+      switch parameter.type {
+      case .simple:
+        let typeSource = source(for: parameter.type, referenceDictionary: referenceDictionary)
+        return parameterDeclaration(name: name, type: typeSource)
+      case .action(parameters: let actionParameters, returnValue: let actionReturn):
+        let parameters = actionParameters
+          .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+          .joined(separator: ", ")
+        let returnValue: String
+        if let specified = actionReturn {
+          returnValue = source(for: specified, referenceDictionary: referenceDictionary)
+        } else {
+          returnValue = emptyReturnTypeForActionType
+        }
+        return parameterDeclaration(
+          name: name,
+          parameters: parameters,
+          returnValue: returnValue
+        )
       }
-      return parameterDeclaration(name: name, type: typeSource)
     }
   }
 
-  static func forwardDeclaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
+  static func forwardDeclaration(
+    for action: ActionIntermediate,
+    referenceDictionary: ReferenceDictionary
+  ) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
     }
 
-    let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
-    let parameters = action.parameters
-      .lazy.map({ source(for: $0, module: module) })
+    let name = sanitize(
+      identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+      leading: true
+    )
+    let parameters = action.parameters.ordered(for: action.names.identifier())
+      .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
       .joined(separator: ", ")
 
     let returnValue: String?
     if let specified = action.returnValue {
-      let type = module.lookupThing(specified)!
-      if let native = nativeType(of: type)?.type {
-        returnValue = String(native)
-      } else {
-        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
-      }
+      returnValue = source(for: specified, referenceDictionary: referenceDictionary)
     } else {
       returnValue = emptyReturnType
     }
@@ -241,25 +304,26 @@ extension Platform {
     )
   }
 
-  static func declaration(for action: ActionIntermediate, module: ModuleIntermediate) -> String? {
+  static func declaration(
+    for action: ActionIntermediate,
+    referenceDictionary: ReferenceDictionary
+  ) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
     }
 
-    let name = sanitize(identifier: action.globallyUniqueIdentifier(module: module), leading: true)
-    let parameters = action.parameters
-      .lazy.map({ source(for: $0, module: module) })
+    let name = sanitize(
+      identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+      leading: true
+    )
+    let parameters = action.parameters.ordered(for: action.names.identifier())
+      .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
       .joined(separator: ", ")
 
     let returnValue: String?
     let needsReturnKeyword: Bool
     if let specified = action.returnValue {
-      let type = module.lookupThing(specified)!
-      if let native = nativeType(of: type)?.type {
-        returnValue = String(native)
-      } else {
-        returnValue = sanitize(identifier: type.names.identifier(), leading: true)
-      }
+      returnValue = source(for: specified, referenceDictionary: referenceDictionary)
       needsReturnKeyword = true
     } else {
       returnValue = emptyReturnType
@@ -275,7 +339,11 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
-    let implementation = statement(expression: action.implementation!, context: action, module: module)
+    let implementation = statement(
+      expression: action.implementation!,
+      context: action,
+      referenceDictionary: referenceDictionary
+    )
     return actionDeclaration(
       name: name,
       parameters: parameters,
@@ -292,10 +360,10 @@ extension Platform {
       .joined(separator: "_")
   }
 
-  static func source(of test: TestIntermediate, module: ModuleIntermediate) -> [String] {
+  static func source(of test: TestIntermediate, referenceDictionary: ReferenceDictionary) -> [String] {
     return testSource(
       identifier: identifier(for: test, leading: false),
-      statement: statement(expression: test.action, context: nil, module: module)
+      statement: statement(expression: test.action, context: nil, referenceDictionary: referenceDictionary)
     )
   }
 
@@ -303,20 +371,16 @@ extension Platform {
     return testCall(for: identifier(for: test, leading: false))
   }
 
-  static func nativeImports(for module: ModuleIntermediate) -> Set<String> {
+  static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<String> {
     var imports: Set<String> = []
-    for thing in module.things.values {
+    for thing in referenceDictionary.allThings() {
       if let requiredImport = nativeType(of: thing)?.requiredImport {
         imports.insert(String(requiredImport))
       }
-      for group in module.actions.values {
-        for returnOverloads in group.values {
-          for action in returnOverloads.values {
-            if let requiredImport = nativeImplementation(of: action)?.requiredImport {
-              imports.insert(String(requiredImport))
-            }
-          }
-        }
+    }
+    for action in referenceDictionary.allActions() {
+      if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+        imports.insert(String(requiredImport))
       }
     }
     return imports
@@ -325,7 +389,7 @@ extension Platform {
   static func source(for module: ModuleIntermediate) -> String {
     var result: [String] = []
 
-    var imports = nativeImports(for: module)
+    var imports = nativeImports(for: module.referenceDictionary)
     imports ∪= importsNeededByTestScaffolding
     if ¬imports.isEmpty {
       for importTarget in imports.sorted() {
@@ -334,14 +398,13 @@ extension Platform {
       result.append("")
     }
 
-    let actionRegions: [StrictString] = module.actions.values
-      .lazy.map({ $0.values }).joined()
-      .lazy.map({ $0.values }).joined()
+    let referenceDictionary = module.referenceDictionary
+    let actionRegions: [StrictString] = referenceDictionary.allActions()
       .lazy.filter({ ¬$0.isCoverageWrapper })
-      .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
-    let choiceRegions: [StrictString] = module.abilities.values
+      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceDictionary: referenceDictionary) })
+    let choiceRegions: [StrictString] = referenceDictionary.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.compactMap({ $0.coverageRegionIdentifier(module: module) })
+      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceDictionary: referenceDictionary) })
     let regions = Set([
       actionRegions,
       choiceRegions
@@ -355,41 +418,28 @@ extension Platform {
       result.append("")
       result.append(contentsOf: start)
     }
+    let allActions = referenceDictionary.allActions(sorted: true)
     if needsForwardDeclarations {
-      for actionIdentifier in module.actions.keys.sorted() {
-        let group = module.actions[actionIdentifier]!
-        for signature in group.keys {
-          let returnOverloads = group[signature]!
-          for returnType in returnOverloads.keys {
-            if let declaration = returnOverloads[returnType]
-              .flatMap({ forwardDeclaration(for: $0, module: module) }) {
-              result.append(contentsOf: [
-                "",
-                declaration
-              ])
-            }
-          }
+      for action in allActions {
+        if let declaration = forwardDeclaration(for: action, referenceDictionary: referenceDictionary) {
+          result.append(contentsOf: [
+            "",
+            declaration
+          ])
         }
       }
     }
-    for actionIdentifier in module.actions.keys.sorted() {
-      let group = module.actions[actionIdentifier]!
-      for signature in group.keys {
-        let returnOverloads = group[signature]!
-        for returnType in returnOverloads.keys {
-          if let declaration = returnOverloads[returnType]
-            .flatMap({ declaration(for: $0, module: module) }) {
-            result.append(contentsOf: [
-              "",
-              declaration
-            ])
-          }
-        }
+    for action in allActions {
+      if let declaration = self.declaration(for: action, referenceDictionary: referenceDictionary) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
       }
     }
     for test in module.tests {
       result.append("")
-      result.append(contentsOf: source(of: test, module: module))
+      result.append(contentsOf: source(of: test, referenceDictionary: referenceDictionary))
     }
     result.append("")
     result.append(contentsOf: testSummary(testCalls: module.tests.map({ call(test: $0) })))

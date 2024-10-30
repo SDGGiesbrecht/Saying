@@ -14,6 +14,14 @@ extension Action {
       }
       result.append(compound.finalIdentifierSegment)
       return result
+    case .reference(let reference):
+      var result: [IdentifierSegment?] = []
+      result.append(reference.initialIdentifierSegment)
+      for continuation in reference.arguments.continuations {
+        result.append(continuation.identifierSegment)
+      }
+      result.append(reference.finalIdentifierSegment)
+      return result
     }
   }
 

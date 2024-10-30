@@ -1,6 +1,6 @@
 import SDGText
 
-extension ParsedAction {
+extension ParsedParameterName {
 
   func identifierSegments() -> [ParsedIdentifierSegment?] {
     switch self {
@@ -9,18 +9,10 @@ extension ParsedAction {
     case .compound(let compound):
       var result: [ParsedIdentifierSegment?] = []
       result.append(compound.initialIdentifierSegment)
-      for continuation in compound.arguments.continuations {
+      for continuation in compound.parameters.continuations {
         result.append(continuation.identifierSegment)
       }
       result.append(compound.finalIdentifierSegment)
-      return result
-    case .reference(let reference):
-      var result: [ParsedIdentifierSegment?] = []
-      result.append(reference.initialIdentifierSegment)
-      for continuation in reference.arguments.continuations {
-        result.append(continuation.identifierSegment)
-      }
-      result.append(reference.finalIdentifierSegment)
       return result
     }
   }

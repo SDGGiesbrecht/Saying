@@ -19,7 +19,7 @@ extension Node {
           Node(name: "SixesQuotationMark", kind: .fixedLeaf("“")),
           Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
           Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
-          Node(name: "Colon", kind: .fixedLeaf(":")),
+          Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
@@ -133,10 +133,10 @@ extension Node {
           ),
 
           Node(
-            name: "SpacedColon",
+            name: "Colon",
             kind: .compound(children: [
               Child(name: "precedingSpace", type: "Space", kind: .optional),
-              Child(name: "colon", type: "Colon", kind: .fixed),
+              Child(name: "colon", type: "ColonCharacter", kind: .fixed),
               Child(name: "followingSpace", type: "Space", kind: .fixed),
             ])
           ),
@@ -189,7 +189,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "identifier", type: "IdentifierComponent"),
               Alternate(name: "space", type: "Space"),
-              Alternate(name: "colon", type: "Colon"),
+              Alternate(name: "colon", type: "ColonCharacter"),
             ])
           ),
           Node(
@@ -274,11 +274,26 @@ extension Node {
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
+          Node(
+            name: "EmptyArgument",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
         ],
         Node.separatedList(
           name: "ActionArguments",
           entryName: "argument", entryNamePlural: "arguments",
           entryType: "Argument",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
+        ),
+        Node.separatedList(
+          name: "EmptyActionArguments",
+          entryName: "argument", entryNamePlural: "arguments",
+          entryType: "EmptyArgument",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment",
           fixedSeparator: false
@@ -293,16 +308,25 @@ extension Node {
             ])
           ),
           Node(
+            name: "ActionReference",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "arguments", type: "EmptyActionArguments", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
             name: "TypeAnnotation",
             kind: .compound(children: [
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
             ])
           ),
           Node(
             name: "Action",
             kind: .alternates([
               Alternate(name: "compound", type: "CompoundAction"),
+              Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
             ]),
             isIndirect: true
@@ -310,8 +334,8 @@ extension Node {
           Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
-              Child(name: "type", type: "TypeAnnotation", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
+              Child(name: "type", type: "TypeAnnotation", kind: .optional),
             ])
           ),
 
@@ -319,7 +343,7 @@ extension Node {
             name: "ParagraphEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "text", type: "UninterruptedIdentifier", kind: .required),
             ])
           ),
@@ -358,7 +382,7 @@ extension Node {
             name: "ParameterDocumentation",
             kind: .compound(children: [
               Child(name: "keyword", type: "ParameterKeyword", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "details", type: "ParameterDetails", kind: .required),
@@ -421,7 +445,7 @@ extension Node {
             name: "ThingNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
             ])
           )
@@ -450,7 +474,7 @@ extension Node {
             name: "ParameterReference",
             kind: .compound(children: [
               Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
-              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "name", type: "ParameterName", kind: .required),
               Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
             ])
           ),
@@ -459,14 +483,47 @@ extension Node {
             kind: .alternates([
               Alternate(name: "type", type: "UninterruptedIdentifier"),
               Alternate(name: "reference", type: "ParameterReference"),
+            ]),
+            isIndirect: true
+          ),
+          Node(
+            name: "EmptyParameter",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "NameParameterList",
+          entryName: "parameter", entryNamePlural: "parameters",
+          entryType: "EmptyParameter",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
+        ),
+        [
+          Node(
+            name: "CompoundParameterName",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "parameters", type: "NameParameterList", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "ParameterName",
+            kind: .alternates([
+              Alternate(name: "compound", type: "CompoundParameterName"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
             ])
           ),
           Node(
             name: "Parameter",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "name", type: "Signature", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "type", type: "ParameterType", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
@@ -494,13 +551,14 @@ extension Node {
             kind: .alternates([
               Alternate(name: "compound", type: "CompoundSignature"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
-            ])
+            ]),
+            isIndirect: true
           ),
           Node(
             name: "ActionNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "name", type: "Signature", kind: .required),
             ])
           )
@@ -545,7 +603,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "reference", type: "ParameterReference", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
@@ -579,7 +637,7 @@ extension Node {
             name: "AbilityNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "name", type: "AbilitySignature", kind: .required),
             ])
           )
@@ -657,7 +715,7 @@ extension Node {
             name: "ThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "implementation", type: "NativeThing", kind: .required),
             ])
           ),
@@ -689,7 +747,7 @@ extension Node {
             name: "NativeActionImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "SpacedColon", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "expression", type: "NativeAction", kind: .required),
             ])
           ),

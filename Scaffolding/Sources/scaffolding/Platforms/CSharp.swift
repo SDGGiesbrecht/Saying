@@ -46,6 +46,16 @@ enum CSharp: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.cSharp
   }
+  static func actionType(parameters: String, returnValue: String) -> String {
+    if returnValue == emptyReturnTypeForActionType {
+      return "Action<\(parameters)>"
+    } else {
+      return "Func<\(parameters), \(returnValue)>"
+    }
+  }
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
+    return nil
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.cSharp
@@ -54,8 +64,14 @@ enum CSharp: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     return "\(type) \(name)"
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
+  }
 
   static var emptyReturnType: String? {
+    return emptyReturnTypeForActionType
+  }
+  static var emptyReturnTypeForActionType: String {
     return "void"
   }
   static func returnSection(with returnValue: String) -> String? {
@@ -71,8 +87,8 @@ enum CSharp: Platform {
     return "        Coverage.Register(\u{22}\(identifier)\u{22});"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, module: ModuleIntermediate) -> String {
-    return call(to: expression, context: context, module: module).appending(";")
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+    return call(to: expression, context: context, referenceDictionary: referenceDictionary).appending(";")
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {

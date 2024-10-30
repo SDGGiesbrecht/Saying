@@ -12,13 +12,10 @@ struct RequirementIntermediate {
   var names: Set<StrictString> {
     return prototype.names
   }
-  var parameters: [ParameterIntermediate] {
+  var parameters: Interpolation<ParameterIntermediate> {
     return prototype.parameters
   }
-  var reorderings: [StrictString: [Int]] {
-    return prototype.reorderings
-  }
-  var returnValue: StrictString? {
+  var returnValue: ParsedTypeReference? {
     return prototype.returnValue
   }
   var access: AccessIntermediate {
@@ -57,8 +54,8 @@ extension RequirementIntermediate {
     )
   }
 
-  func validateReferences(module: ModuleIntermediate, errors: inout [ReferenceError]) {
-    prototype.validateReferences(module: module, errors: &errors)
+  func validateReferences(referenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
+    prototype.validateReferences(referenceDictionary: referenceDictionary, errors: &errors)
   }
 }
 
