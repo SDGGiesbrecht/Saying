@@ -51,7 +51,7 @@ enum JavaScript: Platform {
   static func actionType(parameters: String, returnValue: String) -> String {
     return ""
   }
-  static var actionReferencePrefix: String? {
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
     return nil
   }
 

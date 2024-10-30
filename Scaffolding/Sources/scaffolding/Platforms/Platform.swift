@@ -25,7 +25,7 @@ protocol Platform {
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
   static func actionType(parameters: String, returnValue: String) -> String
-  static var actionReferencePrefix: String? { get }
+  static func actionReferencePrefix(isVariable: Bool) -> String?
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -188,7 +188,7 @@ extension Platform {
       case .simple:
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
       case .action:
-        return call(to: parameter.action, reference: reference, context: context, referenceDictionary: referenceDictionary, nameOverride: parameter.names.identifier())
+        return call(to: parameter.action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: parameter.names.identifier())
       }
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType!! })
@@ -204,10 +204,10 @@ extension Platform {
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      return call(to: action, reference: reference, context: context, referenceDictionary: referenceDictionary, nameOverride: nil)
+      return call(to: action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: nil)
     }
   }
-  static func call(to action: ActionIntermediate, reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary, nameOverride: StrictString?) -> String {
+  static func call(to action: ActionIntermediate, reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary, parameterName: StrictString?) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
       var result = ""
@@ -223,12 +223,12 @@ extension Platform {
       return result
     } else {
       let name = sanitize(
-        identifier: nameOverride
+        identifier: parameterName
           ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
         leading: true
       )
       if reference.isReferenceNotCall {
-        let prefix = actionReferencePrefix ?? ""
+        let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
         return "\(prefix)\(name)"
       } else {
         let arguments = reference.arguments

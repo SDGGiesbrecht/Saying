@@ -58,8 +58,12 @@ enum Kotlin: Platform {
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }
-  static var actionReferencePrefix: String? {
-    return "::"
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
+    if isVariable {
+      return nil
+    } else {
+      return "::"
+    }
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

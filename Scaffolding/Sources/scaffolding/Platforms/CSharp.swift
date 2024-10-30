@@ -53,7 +53,7 @@ enum CSharp: Platform {
       return "Func<\(parameters), \(returnValue)>"
     }
   }
-  static var actionReferencePrefix: String? {
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
     return nil
   }
 

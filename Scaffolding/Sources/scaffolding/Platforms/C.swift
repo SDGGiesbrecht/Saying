@@ -53,7 +53,7 @@ enum C: Platform {
   static func actionType(parameters: String, returnValue: String) -> String {
     return "\(returnValue) (*)(\(parameters))"
   }
-  static var actionReferencePrefix: String? {
+  static func actionReferencePrefix(isVariable: Bool) -> String? {
     return nil
   }
 
