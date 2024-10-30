@@ -1,7 +1,7 @@
 action
  [
   test (verify ((do (not ())) is (false)))
-  test (verify ((auf (nicht ()) wirken) ist (falsch)))
+  test (verify (((nicht ()) tun) ist (falsch)))
  ]
  (
   English: do (act on (thing: truth value): truth value)

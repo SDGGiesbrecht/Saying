@@ -274,11 +274,26 @@ extension Node {
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
+          Node(
+            name: "EmptyArgument",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
         ],
         Node.separatedList(
           name: "ActionArguments",
           entryName: "argument", entryNamePlural: "arguments",
           entryType: "Argument",
+          separatorName: "identifierSegment",
+          separatorType: "MedialIdentifierSegment",
+          fixedSeparator: false
+        ),
+        Node.separatedList(
+          name: "EmptyActionArguments",
+          entryName: "argument", entryNamePlural: "arguments",
+          entryType: "EmptyArgument",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment",
           fixedSeparator: false
@@ -293,6 +308,14 @@ extension Node {
             ])
           ),
           Node(
+            name: "ActionReference",
+            kind: .compound(children: [
+              Child(name: "initialIdentifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "arguments", type: "EmptyActionArguments", kind: .required),
+              Child(name: "finalIdentifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
             name: "TypeAnnotation",
             kind: .compound(children: [
               Child(name: "colon", type: "Colon", kind: .required),
@@ -303,6 +326,7 @@ extension Node {
             name: "Action",
             kind: .alternates([
               Alternate(name: "compound", type: "CompoundAction"),
+              Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
             ]),
             isIndirect: true
