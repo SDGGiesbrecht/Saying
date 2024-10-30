@@ -25,6 +25,7 @@ protocol Platform {
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
   static func actionType(parameters: String, returnValue: String) -> String
+  static var actionReferencePrefix: String? { get }
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -227,7 +228,8 @@ extension Platform {
         leading: true
       )
       if reference.isReferenceNotCall {
-        return name
+        let prefix = actionReferencePrefix ?? ""
+        return "\(prefix)\(name)"
       } else {
         let arguments = reference.arguments
           .lazy.map({ argument in

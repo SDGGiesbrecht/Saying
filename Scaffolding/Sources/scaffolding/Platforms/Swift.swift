@@ -104,6 +104,9 @@ enum Swift: Platform {
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }
+  static var actionReferencePrefix: String? {
+    return nil
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift

@@ -53,6 +53,9 @@ enum CSharp: Platform {
       return "Func<\(parameters), \(returnValue)>"
     }
   }
+  static var actionReferencePrefix: String? {
+    return nil
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.cSharp
