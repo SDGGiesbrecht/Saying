@@ -67,7 +67,7 @@ enum Kotlin: Platform {
     "\(name): \(type)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
-    "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+    "\(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
 
   static var emptyReturnType: String? {
