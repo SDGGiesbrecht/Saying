@@ -217,12 +217,16 @@ extension Platform {
           ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
         leading: true
       )
-      let arguments = reference.arguments
-        .lazy.map({ argument in
-          return call(to: argument, context: context, referenceDictionary: referenceDictionary)
-        })
-        .joined(separator: ", ")
-      return "\(name)(\(arguments))"
+      if reference.isReferenceNotCall {
+        return name
+      } else {
+        let arguments = reference.arguments
+          .lazy.map({ argument in
+            return call(to: argument, context: context, referenceDictionary: referenceDictionary)
+          })
+          .joined(separator: ", ")
+        return "\(name)(\(arguments))"
+      }
     }
   }
 

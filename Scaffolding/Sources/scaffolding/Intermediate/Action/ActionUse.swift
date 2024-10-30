@@ -103,3 +103,10 @@ extension ActionUse {
     )
   }
 }
+
+extension ActionUse {
+  var isReferenceNotCall: Bool {
+    return arguments.isEmpty
+      ∧ actionName.contains("(")
+  }
+}
