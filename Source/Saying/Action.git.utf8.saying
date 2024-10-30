@@ -11,3 +11,15 @@ action
  {
   act on (true)
  }
+
+action
+ [
+  test (verify ((very indirectly do (do ())) is (false)))
+ ]
+ (
+  English: very indirectly do (indirectly do (act on (thing: truth value): truth value): truth value)
+ )
+ truth value
+ {
+  indirectly do (not ())
+ }

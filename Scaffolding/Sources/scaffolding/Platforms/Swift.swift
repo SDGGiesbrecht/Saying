@@ -101,6 +101,9 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.swift
   }
+  static func actionType(parameters: String, returnValue: String) -> String {
+    return "(\(parameters)) -> \(returnValue)"
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
@@ -110,7 +113,7 @@ enum Swift: Platform {
     "_ \(name): \(type)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
-    "_ \(name): (\(parameters)) -> \(returnValue)"
+    "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
 
   static var emptyReturnType: String? {
