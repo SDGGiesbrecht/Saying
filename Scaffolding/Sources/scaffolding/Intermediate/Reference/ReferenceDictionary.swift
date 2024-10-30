@@ -92,6 +92,18 @@ extension ReferenceDictionary {
     return errors
   }
 
+  func referenceActions(
+    from overloads: [[TypeReference] : [TypeReference? : ActionIntermediate]]
+  ) -> [TypeReference? : ActionIntermediate] {
+    var result: [TypeReference?: ActionIntermediate] = [:]
+    for (signature, returnOverloads) in overloads {
+      for (returnValue, action) in returnOverloads {
+        let actionType = TypeReference.action(parameters: signature, returnValue: returnValue)
+        result[actionType] = action.asReference()
+      }
+    }
+    return result
+  }
   func lookupAction(
     _ identifier: StrictString,
     signature: [ParsedTypeReference],
@@ -102,8 +114,15 @@ extension ReferenceDictionary {
       return nil
     }
     let mappedSignature = signature.map({ $0.key.resolving(fromReferenceDictionary: self) })
-    guard let returnOverloads = group[mappedSignature] else {
-      return nil
+    let returnOverloads: [TypeReference?: ActionIntermediate]
+    if ActionUse.isReferenceNotCall(name: identifier, arguments: mappedSignature) {
+      returnOverloads = referenceActions(from: group)
+    } else {
+      if let overloads = group[mappedSignature] {
+        returnOverloads = overloads
+      } else {
+        return nil
+      }
     }
     switch specifiedReturnValue {
     case .some(.some(let value)):

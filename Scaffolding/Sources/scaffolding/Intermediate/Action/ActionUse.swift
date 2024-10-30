@@ -107,8 +107,11 @@ extension ActionUse {
 }
 
 extension ActionUse {
-  var isReferenceNotCall: Bool {
+  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool {
     return arguments.isEmpty
-      ∧ actionName.contains("(")
+      ∧ name.contains("(")
+  }
+  var isReferenceNotCall: Bool {
+    return ActionUse.isReferenceNotCall(name: actionName, arguments: arguments)
   }
 }

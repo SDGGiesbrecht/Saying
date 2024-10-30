@@ -308,6 +308,24 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
+  func asReference() -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: .action(
+          parameters: parameters.ordered(for: names.identifier()).map({ $0.type }),
+          returnValue: returnValue),
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    )
+    #warning("No implementation to pass it anywhere?")
+  }
+}
+
+extension ActionIntermediate {
 
   var isCoverageWrapper: Bool {
     return coveredIdentifier ≠ nil

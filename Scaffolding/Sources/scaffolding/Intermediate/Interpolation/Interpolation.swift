@@ -10,6 +10,10 @@ where InterpolationParameter: InterpolationParameterProtocol {
 
 extension Interpolation {
 
+  static var none: Interpolation {
+    return Interpolation(parameters: [], reorderings: [:])
+  }
+
   static func construct<Entries, ParameterNode, ParameterDefinition>(
     entries: Entries,
     getEntryName: (Entries.Element) -> StrictString,
