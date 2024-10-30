@@ -59,7 +59,7 @@ enum C: Platform {
     return "\(type) \(name)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
-    ""
+    "\(returnValue) (*\(name))(\(parameters))"
   }
 
   static var emptyReturnType: String? {
