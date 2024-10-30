@@ -48,9 +48,6 @@ enum JavaScript: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return nil
   }
-  static func actionType(parameters: String, returnSection: String?) -> String {
-    return ""
-  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.javaScript
@@ -59,9 +56,15 @@ enum JavaScript: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     return name
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    ""
+  }
 
   static var emptyReturnType: String? {
     return nil
+  }
+  static var emptyReturnTypeForActionType: String {
+    return ""
   }
   static func returnSection(with returnValue: String) -> String? {
     return nil

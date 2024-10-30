@@ -54,15 +54,18 @@ enum C: Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.c
   }
-  static func actionType(parameters: String, returnSection: String?) -> String {
-    return ""
-  }
 
   static func parameterDeclaration(name: String, type: String) -> String {
     return "\(type) \(name)"
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    ""
+  }
 
   static var emptyReturnType: String? {
+    return emptyReturnTypeForActionType
+  }
+  static var emptyReturnTypeForActionType: String {
     return "void"
   }
   static func returnSection(with returnValue: String) -> String? {

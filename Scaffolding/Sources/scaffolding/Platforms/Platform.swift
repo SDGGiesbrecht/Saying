@@ -24,12 +24,13 @@ protocol Platform {
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
-  static func actionType(parameters: String, returnSection: String?) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String) -> String
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
   static var emptyReturnType: String? { get }
+  static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String) -> String?
   static var needsForwardDeclarations: Bool { get }
   static func forwardActionDeclaration(
@@ -168,20 +169,8 @@ extension Platform {
         return sanitize(identifier: type.names.identifier(), leading: true)
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
-      let parameters = actionParameters
-        .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
-        .joined(separator: ", ")
-      let returnValue: String?
-      if let specified = actionReturn {
-        returnValue = source(for: specified, referenceDictionary: referenceDictionary)
-      } else {
-        returnValue = emptyReturnType
-      }
-      let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
-      return actionType(
-        parameters: parameters,
-        returnSection: returnSection
-      )
+      #warning("Not implemented yet.")
+      return ""
     }
   }
 
@@ -251,8 +240,26 @@ extension Platform {
     if ¬isTyped {
       return name
     } else {
-      let typeSource = source(for: parameter.type, referenceDictionary: referenceDictionary)
-      return parameterDeclaration(name: name, type: typeSource)
+      switch parameter.type {
+      case .simple(let simple):
+        let typeSource = source(for: parameter.type, referenceDictionary: referenceDictionary)
+        return parameterDeclaration(name: name, type: typeSource)
+      case .action(parameters: let actionParameters, returnValue: let actionReturn):
+        let parameters = actionParameters
+          .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+          .joined(separator: ", ")
+        let returnValue: String
+        if let specified = actionReturn {
+          returnValue = source(for: specified, referenceDictionary: referenceDictionary)
+        } else {
+          returnValue = emptyReturnTypeForActionType
+        }
+        return parameterDeclaration(
+          name: name,
+          parameters: parameters,
+          returnValue: returnValue
+        )
+      }
     }
   }
 

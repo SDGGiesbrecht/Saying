@@ -46,9 +46,6 @@ enum CSharp: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.cSharp
   }
-  static func actionType(parameters: String, returnSection: String?) -> String {
-    return ""
-  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.cSharp
@@ -57,8 +54,14 @@ enum CSharp: Platform {
   static func parameterDeclaration(name: String, type: String) -> String {
     return "\(type) \(name)"
   }
+  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+    ""
+  }
 
   static var emptyReturnType: String? {
+    return emptyReturnTypeForActionType
+  }
+  static var emptyReturnTypeForActionType: String {
     return "void"
   }
   static func returnSection(with returnValue: String) -> String? {
