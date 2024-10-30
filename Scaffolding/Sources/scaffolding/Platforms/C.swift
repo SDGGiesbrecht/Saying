@@ -54,6 +54,9 @@ enum C: Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.c
   }
+  static func actionType(parameters: String, returnSection: String?) -> String {
+    return ""
+  }
 
   static func parameterDeclaration(name: String, type: String) -> String {
     return "\(type) \(name)"

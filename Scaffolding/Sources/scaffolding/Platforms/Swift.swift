@@ -101,6 +101,9 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.swift
   }
+  static func actionType(parameters: String, returnSection: String?) -> String {
+    return "(\(parameters))\(returnSection ?? " -> Void")"
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift

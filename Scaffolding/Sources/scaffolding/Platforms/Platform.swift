@@ -24,6 +24,7 @@ protocol Platform {
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
+  static func actionType(parameters: String, returnSection: String?) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -166,9 +167,21 @@ extension Platform {
       } else {
         return sanitize(identifier: type.names.identifier(), leading: true)
       }
-    case .action(parameters: let parameters, returnValue: let returnValue):
-      #warning("Hard coded.")
-      return "(Bool) -> Bool"
+    case .action(parameters: let actionParameters, returnValue: let actionReturn):
+      let parameters = actionParameters
+        .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+        .joined(separator: ", ")
+      let returnValue: String?
+      if let specified = actionReturn {
+        returnValue = source(for: specified, referenceDictionary: referenceDictionary)
+      } else {
+        returnValue = emptyReturnType
+      }
+      let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
+      return actionType(
+        parameters: parameters,
+        returnSection: returnSection
+      )
     }
   }
 

@@ -55,6 +55,9 @@ enum Kotlin: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.kotlin
   }
+  static func actionType(parameters: String, returnSection: String?) -> String {
+    return ""
+  }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.kotlin
