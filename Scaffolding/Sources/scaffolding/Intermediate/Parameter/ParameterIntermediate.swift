@@ -45,7 +45,6 @@ extension ParameterIntermediate {
       type: type,
       action: action
     )
-    #warning("Does action need merging? (Implementation will not call requirement names, but does external code need to know about the action?)")
   }
   func specializing(
     for use: UseIntermediate,

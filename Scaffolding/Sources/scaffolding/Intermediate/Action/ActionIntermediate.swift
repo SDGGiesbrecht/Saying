@@ -43,9 +43,24 @@ extension ActionIntermediate {
 extension ActionIntermediate {
   func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
     let identifier = names.identifier()
+    let signature = signature(orderedFor: identifier)
+    let resolvedParameters: [ParsedTypeReference]
+    let resolvedReturnValue: ParsedTypeReference?
+    if ActionUse.isReferenceNotCall(name: identifier, arguments: signature) {
+      switch returnValue {
+      case .simple, .none:
+        fatalError("A real action reference would produce an action.")
+      case .action(parameters: let parameters, returnValue: let returnValue):
+        resolvedParameters = parameters
+        resolvedReturnValue = returnValue
+      }
+    } else {
+      resolvedParameters = signature
+      resolvedReturnValue = self.returnValue
+    }
     return [identifier]
-      .appending(contentsOf: signature(orderedFor: identifier).lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
-      .appending(contentsOf: returnValue.unresolvedGloballyUniqueIdentifierComponents())
+      .appending(contentsOf: resolvedParameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
+      .appending(contentsOf: resolvedReturnValue.unresolvedGloballyUniqueIdentifierComponents())
   }
 
   func resolve(
@@ -321,7 +336,6 @@ extension ActionIntermediate {
         testOnlyAccess: testOnlyAccess
       )
     )
-    #warning("No implementation to pass it anywhere?")
   }
 }
 
