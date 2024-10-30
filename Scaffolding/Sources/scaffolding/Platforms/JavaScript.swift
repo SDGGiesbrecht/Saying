@@ -57,7 +57,7 @@ enum JavaScript: Platform {
     return name
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
-    ""
+    return name
   }
 
   static var emptyReturnType: String? {

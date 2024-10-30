@@ -55,7 +55,11 @@ enum CSharp: Platform {
     return "\(type) \(name)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
-    ""
+    if returnValue == emptyReturnTypeForActionType {
+      return "Action<\(parameters)> \(name)"
+    } else {
+      return "Func<\(parameters), \(returnValue)> \(name)"
+    }
   }
 
   static var emptyReturnType: String? {
