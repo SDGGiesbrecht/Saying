@@ -174,7 +174,12 @@ extension Platform {
 
   static func call(to reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
-      return String(sanitize(identifier: parameter.names.identifier(), leading: true))
+      switch parameter.type {
+      case .simple:
+        return String(sanitize(identifier: parameter.names.identifier(), leading: true))
+      case .action:
+        return call(to: parameter.action, reference: reference, context: context, referenceDictionary: referenceDictionary, nameOverride: parameter.names.identifier())
+      }
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType!! })
       let bareAction = referenceDictionary.lookupAction(
@@ -189,28 +194,35 @@ extension Platform {
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      if let native = nativeImplementation(of: action) {
-        let usedParameters = action.parameters.ordered(for: reference.actionName)
-        var result = ""
-        for index in native.textComponents.indices {
-          result.append(contentsOf: String(native.textComponents[index]))
-          if index ≠ native.textComponents.indices.last {
-            let name = native.parameters[index].name
-            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
-            let argument = reference.arguments[argumentIndex]
-            result.append(contentsOf: call(to: argument, context: context, referenceDictionary: referenceDictionary))
-          }
+      return call(to: action, reference: reference, context: context, referenceDictionary: referenceDictionary, nameOverride: nil)
+    }
+  }
+  static func call(to action: ActionIntermediate, reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary, nameOverride: StrictString?) -> String {
+    if let native = nativeImplementation(of: action) {
+      let usedParameters = action.parameters.ordered(for: reference.actionName)
+      var result = ""
+      for index in native.textComponents.indices {
+        result.append(contentsOf: String(native.textComponents[index]))
+        if index ≠ native.textComponents.indices.last {
+          let name = native.parameters[index].name
+          let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+          let argument = reference.arguments[argumentIndex]
+          result.append(contentsOf: call(to: argument, context: context, referenceDictionary: referenceDictionary))
         }
-        return result
-      } else {
-        let name = sanitize(identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary), leading: true)
-        let arguments = reference.arguments
-          .lazy.map({ argument in
-            return call(to: argument, context: context, referenceDictionary: referenceDictionary)
-          })
-          .joined(separator: ", ")
-        return "\(name)(\(arguments))"
       }
+      return result
+    } else {
+      let name = sanitize(
+        identifier: nameOverride
+          ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+        leading: true
+      )
+      let arguments = reference.arguments
+        .lazy.map({ argument in
+          return call(to: argument, context: context, referenceDictionary: referenceDictionary)
+        })
+        .joined(separator: ", ")
+      return "\(name)(\(arguments))"
     }
   }
 
