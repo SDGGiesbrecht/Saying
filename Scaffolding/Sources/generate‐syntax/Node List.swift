@@ -20,6 +20,8 @@ extension Node {
           Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
           Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
           Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
+          Node(name: "RightArrow", kind: .fixedLeaf("→")),
+          Node(name: "LeftArrow", kind: .fixedLeaf("←")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
@@ -138,6 +140,20 @@ extension Node {
               Child(name: "precedingSpace", type: "Space", kind: .optional),
               Child(name: "colon", type: "ColonCharacter", kind: .fixed),
               Child(name: "followingSpace", type: "Space", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "YieldArrowCharacter",
+            kind: .alternates([
+              Alternate(name: "right", type: "RightArrow"),
+              Alternate(name: "left", type: "LeftArrow"),
+            ])
+          ),
+          Node(
+            name: "YieldArrow",
+            kind: .compound(children: [
+              Child(name: "arrow", type: "YieldArrowCharacter", kind: .required),
+              Child(name: "space", type: "Space", kind: .fixed),
             ])
           ),
         ],
@@ -319,6 +335,7 @@ extension Node {
             name: "TypeAnnotation",
             kind: .compound(children: [
               Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
             ])
           ),
@@ -471,6 +488,13 @@ extension Node {
           ),
 
           Node(
+            name: "ParameterType",
+            kind: .compound(children: [
+              Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
+              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+          Node(
             name: "ParameterReference",
             kind: .compound(children: [
               Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
@@ -479,9 +503,9 @@ extension Node {
             ])
           ),
           Node(
-            name: "ParameterType",
+            name: "ParameterTypeOrReference",
             kind: .alternates([
-              Alternate(name: "type", type: "UninterruptedIdentifier"),
+              Alternate(name: "type", type: "ParameterType"),
               Alternate(name: "reference", type: "ParameterReference"),
             ]),
             isIndirect: true
@@ -524,7 +548,7 @@ extension Node {
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "name", type: "Signature", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "type", type: "ParameterType", kind: .required),
+              Child(name: "type", type: "ParameterTypeOrReference", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),

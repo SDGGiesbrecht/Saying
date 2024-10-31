@@ -23,3 +23,15 @@ action
  {
   indirectly do (not ())
  }
+
+action
+ [
+  test (verify (do query (true: → truth value)))
+ ]
+ (
+  English: do query (query: → truth value)
+ )
+ truth value
+ {
+  query
+ }
