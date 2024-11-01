@@ -11,6 +11,7 @@ struct ActionIntermediate {
   var swift: NativeActionImplementationIntermediate?
   var implementation: ActionUse?
   var declaration: ParsedActionDeclarationPrototype?
+  var isReferenceWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
@@ -46,8 +47,7 @@ extension ActionIntermediate {
     let signature = signature(orderedFor: identifier)
     let resolvedParameters: [ParsedTypeReference]
     let resolvedReturnValue: ParsedTypeReference?
-    if ActionUse.isReferenceNotCall(name: identifier, arguments: signature) == true {
-      #warning("Not sure if this handles nil correctly.")
+    if isReferenceWrapper {
       switch returnValue {
       case .simple, .none:
         fatalError("A real action reference would produce an action.")
@@ -335,7 +335,8 @@ extension ActionIntermediate {
           returnValue: returnValue),
         access: access,
         testOnlyAccess: testOnlyAccess
-      )
+      ),
+      isReferenceWrapper: true
     )
   }
 }
