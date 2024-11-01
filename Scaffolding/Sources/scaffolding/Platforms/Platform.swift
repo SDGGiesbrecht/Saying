@@ -182,7 +182,11 @@ extension Platform {
     }
   }
 
-  static func call(to reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+  static func call(
+    to reference: ActionUse,
+    context: ActionIntermediate?,
+    referenceDictionary: ReferenceDictionary
+  ) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
       if parameter.passAction.returnValue?.key.resolving(fromReferenceDictionary: referenceDictionary)
         == reference.resolvedResultType!?.key.resolving(fromReferenceDictionary: referenceDictionary) {
@@ -210,10 +214,22 @@ extension Platform {
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      return call(to: action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: nil)
+      return call(
+        to: action,
+        reference: reference,
+        context: context,
+        referenceDictionary: referenceDictionary,
+        parameterName: nil
+      )
     }
   }
-  static func call(to action: ActionIntermediate, reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary, parameterName: StrictString?) -> String {
+  static func call(
+    to action: ActionIntermediate,
+    reference: ActionUse,
+    context: ActionIntermediate?,
+    referenceDictionary: ReferenceDictionary,
+    parameterName: StrictString?
+  ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
       var result = ""
