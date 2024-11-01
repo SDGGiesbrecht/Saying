@@ -184,12 +184,17 @@ extension Platform {
 
   static func call(to reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
-      #warning("This does not look right.")
-      switch parameter.type {
-      case .simple:
+      if parameter.passAction.returnValue?.key.resolving(fromReferenceDictionary: referenceDictionary)
+        == reference.resolvedResultType!?.key.resolving(fromReferenceDictionary: referenceDictionary) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
-      case .action:
-        return call(to: parameter.executeAction!, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: parameter.names.identifier())
+      } else {
+        return call(
+          to: parameter.executeAction!,
+          reference: reference,
+          context: context,
+          referenceDictionary: referenceDictionary,
+          parameterName: parameter.names.identifier()
+        )
       }
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType!! })
