@@ -26,7 +26,12 @@ extension ActionUse {
 
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
-    explicitResultType = use.type.map({ ParsedTypeReference($0.type) })
+    let type = use.type.map({ ParsedTypeReference($0.type) })
+    if use.type?.yieldArrow ≠ nil {
+      explicitResultType = .action(parameters: [], returnValue: type)
+    } else {
+      explicitResultType = type
+    }
   }
 
   mutating func resolveTypes(
