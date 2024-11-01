@@ -114,29 +114,33 @@ extension ReferenceDictionary {
       return nil
     }
     let mappedSignature = signature.map({ $0.key.resolving(fromReferenceDictionary: self) })
-    let returnOverloads: [TypeReference?: ActionIntermediate]
-    if ActionUse.isReferenceNotCall(name: identifier, arguments: mappedSignature) {
-      returnOverloads = referenceActions(from: group)
-    } else {
-      if let overloads = group[mappedSignature] {
-        returnOverloads = overloads
-      } else {
-        return nil
-      }
-    }
-    switch specifiedReturnValue {
-    case .some(.some(let value)):
-      let mappedReturn = value.key.resolving(fromReferenceDictionary: self)
-      return returnOverloads[mappedReturn]
-    case .some(.none):
-      return returnOverloads[.none]
+    let returnOverloads: [() -> [TypeReference?: ActionIntermediate]]
+    switch ActionUse.isReferenceNotCall(name: identifier, arguments: mappedSignature) {
+    case .some(true):
+      returnOverloads = [{ referenceActions(from: group) }]
+    case .some(false):
+      returnOverloads = [{ group[mappedSignature] ?? [:] }]
     case .none:
-      if returnOverloads.count == 1 {
-        return returnOverloads.values.first
-      } else {
-        return nil
+      returnOverloads = [{ group[mappedSignature] ?? [:] }, { referenceActions(from: group) }]
+    }
+    for set in returnOverloads.lazy.map({ $0() }) {
+      switch specifiedReturnValue {
+      case .some(.some(let value)):
+        let mappedReturn = value.key.resolving(fromReferenceDictionary: self)
+        if let result = set[mappedReturn] {
+          return result
+        }
+      case .some(.none):
+        if let result = set[.none] {
+          return result
+        }
+      case .none:
+        if set.count == 1 {
+          return set.values.first
+        }
       }
     }
+    return nil
   }
 
   func allActions(sorted: Bool = false) -> [ActionIntermediate] {

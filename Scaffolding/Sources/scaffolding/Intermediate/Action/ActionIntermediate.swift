@@ -46,7 +46,8 @@ extension ActionIntermediate {
     let signature = signature(orderedFor: identifier)
     let resolvedParameters: [ParsedTypeReference]
     let resolvedReturnValue: ParsedTypeReference?
-    if ActionUse.isReferenceNotCall(name: identifier, arguments: signature) {
+    if ActionUse.isReferenceNotCall(name: identifier, arguments: signature) == true {
+      #warning("Not sure if this handles nil correctly.")
       switch returnValue {
       case .simple, .none:
         fatalError("A real action reference would produce an action.")

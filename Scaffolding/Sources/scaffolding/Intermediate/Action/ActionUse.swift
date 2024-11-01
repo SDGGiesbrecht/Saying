@@ -112,11 +112,18 @@ extension ActionUse {
 }
 
 extension ActionUse {
-  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool {
-    return arguments.isEmpty
-      ∧ name.contains("(")
+  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool? {
+    if arguments.isEmpty {
+      if name.contains("(") {
+        return true
+      } else {
+        return nil
+      }
+    } else {
+      return false
+    }
   }
-  var isReferenceNotCall: Bool {
+  var isReferenceNotCall: Bool? {
     return ActionUse.isReferenceNotCall(name: actionName, arguments: arguments)
   }
 }

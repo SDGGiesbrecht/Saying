@@ -228,7 +228,8 @@ extension Platform {
           ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
         leading: true
       )
-      if reference.isReferenceNotCall {
+      if reference.isReferenceNotCall == true {
+        #warning("Not sure if this handles nil correctly.")
         let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
         return "\(prefix)\(name)"
       } else {
