@@ -10,6 +10,13 @@ extension ParsedTypeReference {
   init(_ identifier: ParsedUninterruptedIdentifier) {
     self = .simple(SimpleTypeReference(identifier))
   }
+  init(_ node: ParsedParameterType) {
+    if node.yieldArrow == nil {
+      self.init(node.type)
+    } else {
+      self = .action(parameters: [], returnValue: ParsedTypeReference(node.type))
+    }
+  }
 }
 
 extension ParsedTypeReference {

@@ -182,13 +182,23 @@ extension Platform {
     }
   }
 
-  static func call(to reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
+  static func call(
+    to reference: ActionUse,
+    context: ActionIntermediate?,
+    referenceDictionary: ReferenceDictionary
+  ) -> String {
     if let parameter = context?.lookupParameter(reference.actionName) {
-      switch parameter.type {
-      case .simple:
+      if parameter.passAction.returnValue?.key.resolving(fromReferenceDictionary: referenceDictionary)
+        == reference.resolvedResultType!?.key.resolving(fromReferenceDictionary: referenceDictionary) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
-      case .action:
-        return call(to: parameter.action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: parameter.names.identifier())
+      } else {
+        return call(
+          to: parameter.executeAction!,
+          reference: reference,
+          context: context,
+          referenceDictionary: referenceDictionary,
+          parameterName: parameter.names.identifier()
+        )
       }
     } else {
       let signature = reference.arguments.map({ $0.resolvedResultType!! })
@@ -204,10 +214,22 @@ extension Platform {
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      return call(to: action, reference: reference, context: context, referenceDictionary: referenceDictionary, parameterName: nil)
+      return call(
+        to: action,
+        reference: reference,
+        context: context,
+        referenceDictionary: referenceDictionary,
+        parameterName: nil
+      )
     }
   }
-  static func call(to action: ActionIntermediate, reference: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary, parameterName: StrictString?) -> String {
+  static func call(
+    to action: ActionIntermediate,
+    reference: ActionUse,
+    context: ActionIntermediate?,
+    referenceDictionary: ReferenceDictionary,
+    parameterName: StrictString?
+  ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
       var result = ""
@@ -227,7 +249,7 @@ extension Platform {
           ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
         leading: true
       )
-      if reference.isReferenceNotCall {
+      if action.isReferenceWrapper {
         let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
         return "\(prefix)\(name)"
       } else {
@@ -437,12 +459,13 @@ extension Platform {
         ])
       }
     }
-    for test in module.tests {
+    let allTests = module.allTests(sorted: true)
+    for test in allTests {
       result.append("")
       result.append(contentsOf: source(of: test, referenceDictionary: referenceDictionary))
     }
     result.append("")
-    result.append(contentsOf: testSummary(testCalls: module.tests.map({ call(test: $0) })))
+    result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
     }

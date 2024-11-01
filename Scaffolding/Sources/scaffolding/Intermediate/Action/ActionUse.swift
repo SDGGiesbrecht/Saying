@@ -26,7 +26,12 @@ extension ActionUse {
 
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
-    explicitResultType = use.type.map({ ParsedTypeReference($0.type) })
+    let type = use.type.map({ ParsedTypeReference($0.type) })
+    if use.type?.yieldArrow ≠ nil {
+      explicitResultType = .action(parameters: [], returnValue: type)
+    } else {
+      explicitResultType = type
+    }
   }
 
   mutating func resolveTypes(
@@ -107,11 +112,15 @@ extension ActionUse {
 }
 
 extension ActionUse {
-  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool {
-    return arguments.isEmpty
-      ∧ name.contains("(")
-  }
-  var isReferenceNotCall: Bool {
-    return ActionUse.isReferenceNotCall(name: actionName, arguments: arguments)
+  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool? {
+    if arguments.isEmpty {
+      if name.contains("(") {
+        return true
+      } else {
+        return nil
+      }
+    } else {
+      return false
+    }
   }
 }

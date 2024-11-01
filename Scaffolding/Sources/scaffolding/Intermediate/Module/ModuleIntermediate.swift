@@ -10,6 +10,20 @@ struct ModuleIntermediate {
 }
 
 extension ModuleIntermediate {
+  func allTests(sorted: Bool = false) -> [TestIntermediate] {
+    if ¬sorted {
+      return tests
+    } else {
+      var dictionary: [StrictString: TestIntermediate] = [:]
+      for entry in tests {
+        dictionary[entry.location.map({ $0.identifier() }).joined(separator: ":")] = entry
+      }
+      return dictionary.keys.sorted().map({ dictionary[$0]! })
+    }
+  }
+}
+
+extension ModuleIntermediate {
 
   mutating func add(file: ParsedDeclarationList) throws {
     languageNodes.append(contentsOf: file.findAllLanguageReferences())
