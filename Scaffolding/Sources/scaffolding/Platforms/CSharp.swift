@@ -50,7 +50,11 @@ enum CSharp: Platform {
     if returnValue == emptyReturnTypeForActionType {
       return "Action<\(parameters)>"
     } else {
-      return "Func<\(parameters), \(returnValue)>"
+      if parameters.isEmpty {
+        return "Func<\(returnValue)>"
+      } else {
+        return "Func<\(parameters), \(returnValue)>"
+      }
     }
   }
   static func actionReferencePrefix(isVariable: Bool) -> String? {
