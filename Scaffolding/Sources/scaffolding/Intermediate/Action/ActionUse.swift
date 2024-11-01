@@ -123,7 +123,4 @@ extension ActionUse {
       return false
     }
   }
-  var isReferenceNotCall: Bool? {
-    return ActionUse.isReferenceNotCall(name: actionName, arguments: arguments)
-  }
 }
