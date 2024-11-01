@@ -459,12 +459,13 @@ extension Platform {
         ])
       }
     }
-    for test in module.tests {
+    let allTests = module.allTests(sorted: true)
+    for test in allTests {
       result.append("")
       result.append(contentsOf: source(of: test, referenceDictionary: referenceDictionary))
     }
     result.append("")
-    result.append(contentsOf: testSummary(testCalls: module.tests.map({ call(test: $0) })))
+    result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
     }
