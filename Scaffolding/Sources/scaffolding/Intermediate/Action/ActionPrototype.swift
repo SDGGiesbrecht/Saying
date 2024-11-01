@@ -99,7 +99,10 @@ extension ActionPrototype {
   func parameterReferenceDictionary() -> ReferenceDictionary {
     var result = ReferenceDictionary()
     for parameter in parameters.inAnyOrder {
-      _ = result.add(action: parameter.action)
+      _ = result.add(action: parameter.passAction)
+      if let execute = parameter.executeAction {
+        _ = result.add(action: execute)
+      }
     }
     return result
   }

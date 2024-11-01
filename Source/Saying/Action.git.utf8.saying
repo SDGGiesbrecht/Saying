@@ -4,7 +4,7 @@ action
   test (verify (((nicht ()) tun) ist (falsch)))
  ]
  (
-  English: do (act on (thing: truth value): truth value)
+  English: do (act on (thing: truth value): → truth value)
   Deutsch: (auf (Ding: [thing]) wirken: [act on ()]) tun
  )
  truth value
@@ -17,7 +17,7 @@ action
   test (verify ((very indirectly do (do ())) is (false)))
  ]
  (
-  English: very indirectly do (indirectly do (act on (thing: truth value): truth value): truth value)
+  English: very indirectly do (indirectly do (act on (thing: truth value): → truth value): → truth value)
  )
  truth value
  {

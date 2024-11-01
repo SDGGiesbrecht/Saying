@@ -4,7 +4,8 @@ import SDGText
 struct ParameterIntermediate {
   var names: Set<StrictString>
   var type: ParsedTypeReference
-  var action: ActionIntermediate
+  var passAction: ActionIntermediate
+  var executeAction: ActionIntermediate?
 }
 
 extension ParameterIntermediate: InterpolationParameterProtocol {}
@@ -16,24 +17,32 @@ extension ParameterIntermediate {
     returnValue: ParsedTypeReference
   ) {
     let actionParameters = nestedParameters.ordered(for: names.identifier())
-    let type: ParsedTypeReference
-    if actionParameters.isEmpty {
-      type = returnValue
-    } else {
-      type = .action(
+    let passedType: ParsedTypeReference
+    var executeAction: ActionIntermediate?
+    switch returnValue {
+    case .simple:
+      passedType = returnValue
+    case .action(parameters: _, returnValue: let actionReturn):
+      passedType = .action(
         parameters: actionParameters.map({ $0.type }),
-        returnValue: returnValue
+        returnValue: actionReturn
+      )
+      executeAction = .parameterAction(
+        names: names,
+        parameters: nestedParameters,
+        returnValue: actionReturn
       )
     }
-    let action: ActionIntermediate = .parameterAction(
+    let passAction: ActionIntermediate = .parameterAction(
       names: names,
-      parameters: nestedParameters,
-      returnValue: returnValue
+      parameters: .none,
+      returnValue: passedType
     )
     self.init(
       names: names,
-      type: type,
-      action: action
+      type: passedType,
+      passAction: passAction,
+      executeAction: executeAction
     )
   }
 }
@@ -43,7 +52,8 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names ∪ requirement.names,
       type: type,
-      action: action
+      passAction: passAction,
+      executeAction: executeAction
     )
   }
   func specializing(
@@ -54,7 +64,12 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type.specializing(typeLookup: typeLookup),
-      action: action.specializing(
+      passAction: passAction.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      executeAction: executeAction?.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
