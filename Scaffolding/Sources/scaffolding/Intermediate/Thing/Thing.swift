@@ -40,7 +40,14 @@ extension Thing {
     var kotlin: NativeThingImplementation?
     var swift: NativeThingImplementation?
     for implementation in declaration.implementation.implementations {
-      let constructed = NativeThingImplementation.construct(implementation: implementation.implementation)
+      let constructed: NativeThingImplementation
+      switch NativeThingImplementation.construct(implementation: implementation.implementation) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ .brokenNativeImplementation($0) }))
+        continue
+      case .success(let result):
+        constructed = result
+      }
       switch implementation.language.identifierText() {
       case "C":
         c = constructed

@@ -10,14 +10,15 @@ extension NativeThingImplementation {
 
   static func construct(
     implementation: ParsedNativeThing
-  ) -> NativeThingImplementation {
+  ) -> Result<NativeThingImplementation, ErrorList<ConstructionError>> {
+    var errors: [ConstructionError] = []
     var textComponents: [StrictString] = []
     for component in implementation.type.components {
       switch component {
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
         case .failure(let error):
-          #warning("Not implemented yet.")
+          errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
         case .success(let literal):
           textComponents.append(StrictString(literal.string))
         }
@@ -27,9 +28,12 @@ extension NativeThingImplementation {
     }
     #warning("Dropping parameters, etc.")
     let type = textComponents.joined()
-    return NativeThingImplementation(
+    if ¬errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(NativeThingImplementation(
       type: type,
       requiredImport: implementation.importNode?.importNode.identifierText()
-    )
+    ))
   }
 }
