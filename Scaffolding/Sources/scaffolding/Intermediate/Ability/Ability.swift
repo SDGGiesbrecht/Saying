@@ -47,7 +47,7 @@ extension Ability {
     var requirements: [StrictString: RequirementIntermediate] = [:]
     var defaults: [StrictString: ActionIntermediate] = [:]
     let abilityNamespace = namespace.appending(names)
-    for requirementEntry in declaration.requirements.requirements.requirements {
+    for requirementEntry in declaration.requirements.requirements?.requirements.requirements ?? [] {
       switch requirementEntry {
       case .requirement(let requirementNode):
         let requirement: RequirementIntermediate
