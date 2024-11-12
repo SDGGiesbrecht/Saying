@@ -49,8 +49,9 @@ extension ModuleIntermediate {
         let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
         uses.append(intermediate)
       case .extensionSyntax(let extensionSyntax):
-        let intermediate = try ExtensionIntermediate.construct(extensionSyntax).get()
+        let intermediate = try ExtensionIntermediate.construct(extensionSyntax, namespace: baseNamespace).get()
         #warning("Not implemented yet.")
+        print("Module is dropping constructed extension.")
       }
     }
     if ¬errors.isEmpty {

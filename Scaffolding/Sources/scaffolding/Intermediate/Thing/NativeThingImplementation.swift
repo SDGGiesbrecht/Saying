@@ -24,6 +24,7 @@ extension NativeThingImplementation {
         }
       case .parameter(let parameter):
         #warning("Not implemented yet.")
+        print("Native thing is dropping parameter.")
       }
     }
     #warning("Dropping parameters, etc.")
