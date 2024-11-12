@@ -165,8 +165,12 @@ extension Platform {
     switch type {
     case .simple(let simple):
       let type = referenceDictionary.lookupThing(simple.identifier)!
-      if let native = nativeType(of: type)?.type {
-        return String(native)
+      if let native = nativeType(of: type) {
+        #warning("Not implemented yet.")
+        if !native.parameters.isEmpty {
+          print("Platform dropping generic types.")
+        }
+        return String(native.textComponents.joined())
       } else {
         return sanitize(identifier: type.names.identifier(), leading: true)
       }
