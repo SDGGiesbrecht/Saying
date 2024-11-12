@@ -14,10 +14,10 @@ thing (clients)
   ελληνικά: αληθοτιμή
   עברית: ערך אמת
  )
- C: bool (stdbool)
- C♯: bool
- Kotlin: Boolean
- Swift: Bool
+ C: “bool” (stdbool)
+ C♯: “bool”
+ Kotlin: “Boolean”
+ Swift: “Bool”
 
 action (clients)
  [

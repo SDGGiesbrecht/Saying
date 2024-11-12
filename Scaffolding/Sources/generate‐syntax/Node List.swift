@@ -721,6 +721,13 @@ extension Node {
           ),
 
           Node(
+            name: "ImplementationComponent",
+            kind: .alternates([
+              Alternate(name: "parameter", type: "UninterruptedIdentifier"),
+              Alternate(name: "literal", type: "Literal"),
+            ])
+          ),
+          Node(
             name: "NativeImport",
             kind: .compound(children: [
               Child(name: "space", type: "Space", kind: .required),
@@ -729,29 +736,15 @@ extension Node {
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
-          Node(
-            name: "NativeThing",
-            kind: .compound(children: [
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "importNode", type: "NativeImport", kind: .optional),
-            ])
-          ),
-          Node(
-            name: "ThingImplementation",
-            kind: .compound(children: [
-              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "implementation", type: "NativeThing", kind: .required),
-            ])
-          ),
-          Node(
-            name: "ImplementationComponent",
-            kind: .alternates([
-              Alternate(name: "parameter", type: "UninterruptedIdentifier"),
-              Alternate(name: "literal", type: "Literal"),
-            ])
-          ),
         ],
+        Node.separatedList(
+          name: "NativeThingReference",
+          entryName: "component", entryNamePlural: "components",
+          entryType: "ImplementationComponent",
+          separatorName: "space",
+          separatorType: "Space",
+          fixedSeparator: true
+        ),
         Node.separatedList(
           name: "NativeActionExpression",
           entryName: "component", entryNamePlural: "components",
@@ -762,10 +755,25 @@ extension Node {
         ),
         [
           Node(
+            name: "NativeThing",
+            kind: .compound(children: [
+              Child(name: "type", type: "NativeThingReference", kind: .required),
+              Child(name: "importNode", type: "NativeImport", kind: .optional),
+            ])
+          ),
+          Node(
             name: "NativeAction",
             kind: .compound(children: [
               Child(name: "expression", type: "NativeActionExpression", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "ThingImplementation",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "implementation", type: "NativeThing", kind: .required),
             ])
           ),
           Node(

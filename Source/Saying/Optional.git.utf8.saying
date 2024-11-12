@@ -8,4 +8,9 @@ ability (clients)
 extension
  optional (thing)
  {
+  thing (clients)
+   (
+    English: optional
+   )
+   Swift: thing “¤(3F)”
  }

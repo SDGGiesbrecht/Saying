@@ -102,10 +102,10 @@ thing
  (
   English: equality example
  )
- C: bool (stdbool)
- C♯: bool
- Kotlin: Boolean
- Swift: Bool
+ C: “bool” (stdbool)
+ C♯: “bool”
+ Kotlin: “Boolean”
+ Swift: “Bool”
 
 use
  comparison of (equality example) for equality
