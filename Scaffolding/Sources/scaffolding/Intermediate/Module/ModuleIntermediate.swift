@@ -5,6 +5,7 @@ import SDGText
 struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary()
   var uses: [UseIntermediate] = []
+  var extensions: [ExtensionIntermediate] = []
   var tests: [TestIntermediate] = []
   var languageNodes: [ParsedUninterruptedIdentifier] = []
 }
@@ -50,8 +51,7 @@ extension ModuleIntermediate {
         uses.append(intermediate)
       case .extensionSyntax(let extensionSyntax):
         let intermediate = try ExtensionIntermediate.construct(extensionSyntax, namespace: baseNamespace).get()
-        #warning("Not implemented yet.")
-        print("Module is dropping constructed extension.")
+        extensions.append(intermediate)
       }
     }
     if ¬errors.isEmpty {

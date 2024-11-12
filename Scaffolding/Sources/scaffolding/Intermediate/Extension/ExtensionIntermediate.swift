@@ -4,6 +4,7 @@ import SDGText
 struct ExtensionIntermediate {
   var ability: StrictString
   var arguments: [SimpleTypeReference]
+  var things: [Thing]
   var declaration: ParsedExtensionSyntax
 }
 
@@ -16,6 +17,7 @@ extension ExtensionIntermediate {
     var errors: [ExtensionIntermediate.ConstructionError] = []
     let abilityName = declaration.ability.name()
     let extensionNamespace = namespace
+    var things: [Thing] = []
     for provision in declaration.provisions.provisions?.provisions.provisions ?? [] {
       switch provision {
       case .thing(let thing):
@@ -23,8 +25,7 @@ extension ExtensionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ .brokenThing($0) }))
         case .success(let result):
-          #warning("Not implemented yet. (Reference dictionary, like in module?)")
-          print("Extension is dropping constructed thing.")
+          things.append(result)
         }
       }
     }
@@ -35,6 +36,7 @@ extension ExtensionIntermediate {
       ExtensionIntermediate(
         ability: abilityName,
         arguments: declaration.ability.parameters.parameters.map({ SimpleTypeReference($0.name) }),
+        things: things,
         declaration: declaration
       )
     )
