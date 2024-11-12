@@ -49,6 +49,7 @@ extension ModuleIntermediate {
         let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
         uses.append(intermediate)
       case .extensionSyntax(let extensionSyntax):
+        let intermediate = try ExtensionIntermediate.construct(extensionSyntax).get()
         #warning("Not implemented yet.")
       }
     }

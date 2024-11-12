@@ -998,7 +998,7 @@ extension Node {
           Node(
             name: "ProvisionListSection",
             kind: .compound(children: [
-              Child(name: "fulfillments", type: "ProvisionList", kind: .required),
+              Child(name: "provisions", type: "ProvisionList", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
             ])
           ),
