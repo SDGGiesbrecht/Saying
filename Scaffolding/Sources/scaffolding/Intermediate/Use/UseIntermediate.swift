@@ -20,7 +20,7 @@ extension UseIntermediate {
     let abilityName = declaration.use.name()
     let useNamespace = namespace
     var actions: [ActionIntermediate] = []
-    for action in declaration.fulfillments.fulfillments.fulfillments {
+    for action in declaration.fulfillments.fulfillments?.fulfillments.fulfillments ?? [] {
       switch ActionIntermediate.construct(action, namespace: useNamespace) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenAction($0) }))

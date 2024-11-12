@@ -942,12 +942,18 @@ extension Node {
           ),
         [
           Node(
+            name: "FulfillmentListSection",
+            kind: .compound(children: [
+              Child(name: "fulfillments", type: "FulfillmentList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+            ])
+          ),
+          Node(
             name: "Fulfillments",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "fulfillments", type: "FulfillmentList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "fulfillments", type: "FulfillmentListSection", kind: .optional),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
