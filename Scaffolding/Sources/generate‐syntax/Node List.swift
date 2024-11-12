@@ -31,6 +31,7 @@ extension Node {
           Node(name: "ChoiceKeyword", kind: .keyword(["choice", "Wahl", "choix", "επιλογή", "בחירה"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
+          Node(name: "ExtensionKeyword", kind: .keyword(["extension", "Erweiterung", /* extension */ "επέκταση", "הרחבה"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "FileKeyword", kind: .keyword(["file", "Datei", "fichier", "αρχείο", "קובץ"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
@@ -969,6 +970,49 @@ extension Node {
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
           ),
+          
+          Node(
+            name: "Provision",
+            kind: .alternates([
+              Alternate(name: "thing", type: "ThingDeclaration"),
+            ])
+          ),
+        ],
+          Node.separatedList(
+            name: "ProvisionList",
+            entryName: "provision", entryNamePlural: "provisions",
+            entryType: "Provision",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreak",
+            fixedSeparator: true
+          ),
+        [
+          Node(
+            name: "ProvisionListSection",
+            kind: .compound(children: [
+              Child(name: "fulfillments", type: "ProvisionList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Provisions",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "provisions", type: "ProvisionListSection", kind: .optional),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ExtensionSyntax",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ExtensionKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "ability", type: "AbilitySignature", kind: .required),
+              Child(name: "abilityLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "provisions", type: "Provisions", kind: .required),
+            ])
+          ),
 
           Node(
             name: "Declaration",
@@ -978,6 +1022,7 @@ extension Node {
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),
               Alternate(name: "use", type: "Use"),
+              Alternate(name: "extensionSyntax", type: "ExtensionSyntax"),
             ])
           ),
         ],

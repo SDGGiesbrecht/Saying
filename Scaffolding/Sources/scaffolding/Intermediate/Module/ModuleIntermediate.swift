@@ -48,6 +48,8 @@ extension ModuleIntermediate {
       case .use(let use):
         let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
         uses.append(intermediate)
+      case .extensionSyntax(let extensionSyntax):
+        #warning("Not implemented yet.")
       }
     }
     if ¬errors.isEmpty {

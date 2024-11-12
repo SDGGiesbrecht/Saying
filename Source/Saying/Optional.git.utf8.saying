@@ -4,3 +4,8 @@ ability (clients)
  )
  {
  }
+
+extension
+ optional (thing)
+ {
+ }
