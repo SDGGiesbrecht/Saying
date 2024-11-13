@@ -44,4 +44,11 @@ jobs:
       shell: bash
       run: |
         set -x
-        node .Construction/JavaScript/Package.js
+        node .Construction/JavaScript/Package.js 2>Errors
+        if [ $? -eq 0 -a ! -s Errors ]
+        then
+          echo "Succeeded."
+        else
+          cat Errors
+          exit 1
+        fi
