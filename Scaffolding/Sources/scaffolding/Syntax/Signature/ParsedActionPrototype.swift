@@ -3,21 +3,21 @@ protocol ParsedActionPrototype: ParsedSyntaxNode {
   var testAccess: ParsedTestAccess? { get }
   var documentation: ParsedAttachedDocumentation? { get }
   var name: ParsedActionName { get }
-  var returnValueType: ParsedUninterruptedIdentifier? { get }
+  var returnValueType: ParsedThingReference? { get }
 }
 
 extension ParsedActionDeclaration: ParsedActionPrototype {
-  var returnValueType: ParsedUninterruptedIdentifier? {
+  var returnValueType: ParsedThingReference? {
     return returnValue?.type
   }
 }
 extension ParsedRequirementDeclaration: ParsedActionPrototype {
-  var returnValueType: ParsedUninterruptedIdentifier? {
+  var returnValueType: ParsedThingReference? {
     return returnValue?.type
   }
 }
 extension ParsedChoiceDeclaration: ParsedActionPrototype {
-  var returnValueType: ParsedUninterruptedIdentifier? {
+  var returnValueType: ParsedThingReference? {
     return returnValue?.type
   }
 }

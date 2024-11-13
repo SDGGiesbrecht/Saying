@@ -722,7 +722,7 @@ extension Node {
           Node(
             name: "ActionReturnValue",
             kind: .compound(children: [
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
             ])
           ),
@@ -730,7 +730,7 @@ extension Node {
             name: "RequirementReturnValue",
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),
 
