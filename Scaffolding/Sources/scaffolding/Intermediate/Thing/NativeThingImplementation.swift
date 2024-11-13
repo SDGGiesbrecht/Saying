@@ -40,3 +40,21 @@ extension NativeThingImplementation {
     ))
   }
 }
+
+extension NativeThingImplementation {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> NativeThingImplementation {
+    let mappedParameters = parameters.map({ parameter in
+      return NativeThingImplementationParameter(
+        name: typeLookup[parameter.name] ?? parameter.name,
+        syntaxNode: parameter.syntaxNode
+      )
+    })
+    return NativeThingImplementation(
+      textComponents: textComponents,
+      parameters: mappedParameters,
+      requiredImport: requiredImport
+    )
+  }
+}

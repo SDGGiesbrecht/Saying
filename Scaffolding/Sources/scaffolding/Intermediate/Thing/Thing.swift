@@ -120,16 +120,15 @@ extension Thing {
       let identifier = parameter.names.identifier()
       return AbilityParameterIntermediate(names: [typeLookup[identifier]!])
     })
-    #warning("Need to map parameters of native implementations too.")
     return Thing(
       names: names,
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
-      c: c,
-      cSharp: cSharp,
-      kotlin: kotlin,
-      swift: swift,
+      c: c?.resolvingExtensionContext(typeLookup: typeLookup),
+      cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
+      kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
+      swift: swift?.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation,
       declaration: declaration
     )
