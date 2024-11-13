@@ -57,7 +57,7 @@ extension ParsedTypeReference {
   ) {
     switch self {
     case .simple(let simple):
-      if let thing = referenceDictionary.lookupThing(simple.identifier) {
+      if let thing = referenceDictionary.lookupThing(simple.identifier, components: []) {
         if requiredAccess > thing.access {
           errors.append(.thingAccessNarrowerThanSignature(reference: simple.syntaxNode))
         }

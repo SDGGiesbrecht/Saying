@@ -164,7 +164,7 @@ extension Platform {
   static func source(for type: ParsedTypeReference, referenceDictionary: ReferenceDictionary) -> String {
     switch type {
     case .simple(let simple):
-      let type = referenceDictionary.lookupThing(simple.identifier)!
+      let type = referenceDictionary.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
         #warning("Not implemented yet.")
         if !native.parameters.isEmpty {

@@ -5,7 +5,7 @@ import SDGText
 struct ReferenceDictionary {
   private var languages: Set<StrictString>
   private var identifierMapping: [StrictString: StrictString]
-  private var things: [StrictString: Thing]
+  private var things: [StrictString: [[TypeReference]: Thing]]
   private var actions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
   private var abilities: [StrictString: Ability]
 }
@@ -43,7 +43,7 @@ extension ReferenceDictionary {
     specifiedReturnValue: ParsedTypeReference??
   ) -> ParsedDeclaration? {
     if signature.isEmpty,
-      let thing = lookupThing(identifier)?.declaration {
+      let thing = lookupThing(identifier, components: [])?.declaration {
       return .thing(thing)
     } else if let fullSignature = signature.mapAll({ $0 }),
       let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
@@ -59,21 +59,33 @@ extension ReferenceDictionary {
     var errors: [RedeclaredIdentifierError] = []
     let identifier = thing.names.identifier()
     for name in thing.names {
-      if identifierMapping[name] ≠ nil {
+      if identifierMapping[name] ≠ nil,
+        identifierMapping[name] ≠ identifier {
         errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .thing(thing.declaration), conflictingDeclarations: [lookupDeclaration(name, signature: [], specifiedReturnValue: nil)!]))
       }
       identifierMapping[name] = identifier
     }
-    things[identifier] = thing
+    let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
+      .map({ .simple($0.names.identifier()) })
+    things[identifier, default: [:]][parameters] = thing
     return errors
   }
 
-  func lookupThing(_ identifier: StrictString) -> Thing? {
-    return identifierMapping[identifier].flatMap { things[$0] }
+  func lookupThing(_ identifier: StrictString, components: [TypeReference]) -> Thing? {
+    guard let mappedIdentifier = identifierMapping[identifier],
+      let group = things[mappedIdentifier] else {
+      return nil
+    }
+    let mappedComponents = components.map({ $0.resolving(fromReferenceDictionary: self) })
+    return group[mappedComponents]
   }
 
   func allThings() -> [Thing] {
-    return Array(things.values)
+    let result =
+    things.values
+      .lazy.map({ $0.values })
+      .joined()
+    return Array(result)
   }
 }
 
