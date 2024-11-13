@@ -190,7 +190,8 @@ extension Platform {
         }
         return result
       } else {
-        fatalError("Only native types are implemented so far.")
+        // Only native types are implemented so far, so this is only reachable for untyped target languages.
+        return ""
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
