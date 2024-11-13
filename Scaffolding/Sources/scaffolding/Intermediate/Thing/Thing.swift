@@ -114,11 +114,25 @@ extension Thing {
 extension Thing {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: StrictString]
   ) -> Thing {
-    #warning("Not implemented yet.")
-    print("Thing not actually resolving components. (Also not sure all parameters are necessary.)")
-    return self
+    let mappedParameters = parameters.mappingParameters({ parameter in
+      let identifier = parameter.names.identifier()
+      return AbilityParameterIntermediate(names: [typeLookup[identifier]!])
+    })
+    #warning("Need to map parameters of native implementations too.")
+    return Thing(
+      names: names,
+      parameters: mappedParameters,
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      c: c,
+      cSharp: cSharp,
+      kotlin: kotlin,
+      swift: swift,
+      documentation: documentation,
+      declaration: declaration
+    )
   }
 
   func specializing(

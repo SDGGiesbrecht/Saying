@@ -68,12 +68,10 @@ extension ModuleIntermediate {
         continue
       }
 
-      var extensionTypes: [StrictString: SimpleTypeReference] = [:]
+      var extensionTypes: [StrictString: StrictString] = [:]
       for (index, parameter) in ability.parameters.ordered(for: extensionBlock.ability).enumerated() {
         let argument = extensionBlock.arguments[index]
-        for name in parameter.names {
-          extensionTypes[name] = argument
-        }
+        extensionTypes[argument.identifier] = parameter.names.identifier()
       }
 
       for thing in extensionBlock.things {

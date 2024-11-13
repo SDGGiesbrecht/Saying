@@ -184,7 +184,8 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       )
     )
   }
-
+}
+extension Interpolation {
   func mappingParameters(_ transform: (InterpolationParameter) -> InterpolationParameter) -> Interpolation {
     var copy = self
     copy.parameters = copy.parameters.map(transform)
