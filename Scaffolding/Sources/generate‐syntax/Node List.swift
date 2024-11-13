@@ -927,16 +927,16 @@ extension Node {
           Node(
             name: "RequirementsListSection",
             kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "requirements", type: "RequirementsList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
             ])
           ),
           Node(
             name: "Requirements",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "requirements", type: "RequirementsListSection", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
@@ -967,16 +967,16 @@ extension Node {
           Node(
             name: "FulfillmentListSection",
             kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "fulfillments", type: "FulfillmentList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
             ])
           ),
           Node(
             name: "Fulfillments",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "fulfillments", type: "FulfillmentListSection", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
@@ -1012,16 +1012,16 @@ extension Node {
           Node(
             name: "ProvisionListSection",
             kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "provisions", type: "ProvisionList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
             ])
           ),
           Node(
             name: "Provisions",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "provisions", type: "ProvisionListSection", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
