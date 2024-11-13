@@ -135,12 +135,30 @@ extension Thing {
   }
 
   func specializing(
-    for use: UseIntermediate,
     typeLookup: [StrictString: SimpleTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> Thing {
-    #warning("Not implemented yet.")
-    print("Thing not actually specializing. (Also not sure all parameters are necessary.)")
-    return self
+    let mappedParameters = parameters.mappingParameters({ parameter in
+      let identifier = parameter.names.identifier()
+      return AbilityParameterIntermediate(names: [typeLookup[identifier]!.identifier])
+    })
+    let newDocumentation = documentation.flatMap({ documentation in
+      return documentation.specializing(
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      )
+    })
+    return Thing(
+      names: names,
+      parameters: mappedParameters,
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      c: c?.specializing(typeLookup: typeLookup),
+      cSharp: cSharp?.specializing(typeLookup: typeLookup),
+      kotlin: kotlin?.specializing(typeLookup: typeLookup),
+      swift: swift?.specializing(typeLookup: typeLookup),
+      documentation: newDocumentation,
+      declaration: declaration
+    )
   }
 }

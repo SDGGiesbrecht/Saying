@@ -144,7 +144,6 @@ extension ModuleIntermediate {
       }
       for thing in ability.provisionThings {
         let specialized = thing.specializing(
-          for: use,
           typeLookup: useTypes,
           specializationNamespace: specializationNamespace
         )
