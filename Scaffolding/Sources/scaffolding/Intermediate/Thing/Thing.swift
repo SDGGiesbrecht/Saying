@@ -100,4 +100,14 @@ extension Thing {
     print("Thing not actually resolving components. (Also not sure all parameters are necessary.)")
     return self
   }
+
+  func specializing(
+    for use: UseIntermediate,
+    typeLookup: [StrictString: SimpleTypeReference],
+    specializationNamespace: [Set<StrictString>]
+  ) -> Thing {
+    #warning("Not implemented yet.")
+    print("Thing not actually specializing. (Also not sure all parameters are necessary.)")
+    return self
+  }
 }

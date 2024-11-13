@@ -144,6 +144,14 @@ extension ModuleIntermediate {
           continue
         }
       }
+      for thing in ability.provisionThings {
+        let specialized = thing.specializing(
+          for: use,
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace
+        )
+        _ = referenceDictionary.add(thing: specialized)
+      }
       for remaining in prototypeActions {
         errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))
       }

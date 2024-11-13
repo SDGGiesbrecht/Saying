@@ -8,7 +8,6 @@ struct Ability {
   var identifierMapping: [StrictString: StrictString]
   var requirements: [StrictString: RequirementIntermediate]
   var defaults: [StrictString: ActionIntermediate]
-  #warning("Provisions aren’t used anywhere yet.")
   var provisionThings: [Thing]
   var access: AccessIntermediate
   var testOnlyAccess: Bool
