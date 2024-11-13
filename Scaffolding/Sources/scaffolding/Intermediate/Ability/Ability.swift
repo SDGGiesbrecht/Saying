@@ -8,6 +8,8 @@ struct Ability {
   var identifierMapping: [StrictString: StrictString]
   var requirements: [StrictString: RequirementIntermediate]
   var defaults: [StrictString: ActionIntermediate]
+  #warning("Provisions aren’t used anywhere yet.")
+  var provisionThings: [Thing]
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
@@ -112,6 +114,7 @@ extension Ability {
         identifierMapping: identifierMapping,
         requirements: requirements,
         defaults: defaults,
+        provisionThings: [],
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,

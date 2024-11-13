@@ -90,3 +90,14 @@ extension Thing {
     )
   }
 }
+
+extension Thing {
+
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: SimpleTypeReference]
+  ) -> Thing {
+    #warning("Not implemented yet.")
+    print("Thing not actually resolving components. (Also not sure all parameters are necessary.)")
+    return self
+  }
+}

@@ -75,44 +75,19 @@ extension ModuleIntermediate {
           extensionTypes[name] = argument
         }
       }
-      let specializationNamespace: [Set<StrictString>] = ability.parameters
-        .ordered(for: ability.names.identifier())
-        .map { [extensionTypes[$0.names.identifier()]!.identifier] }
 
-      #warning("Not implemented yet.")
-      print("Extension resolution not registering provisions.")
-      /*var prototypeActions = use.actions
-      for (_, requirement) in ability.requirements {
-        if let provisionIndex = prototypeActions.firstIndex(where: { action in
-          return action.names.overlaps(requirement.names)
-        }) {
-          let provision = prototypeActions.remove(at: provisionIndex)
-          switch provision.merging(
-            requirement: requirement,
-            useAccess: use.access,
-            typeLookup: useTypes,
-            specializationNamespace: specializationNamespace
-          ) {
-          case .success(let new):
-            _ = referenceDictionary.add(action: new)
-          case .failure(let error):
-            errors.append(contentsOf: error.errors)
+      for thing in extensionBlock.things {
+        referenceDictionary.modifyAbility(
+          identifier: ability.names.identifier(),
+          transformation: { ability in
+            ability.provisionThings.append(
+              thing.resolvingExtensionContext(
+                typeLookup: extensionTypes
+              )
+            )
           }
-        } else if let provision = ability.defaults[requirement.names.identifier()] {
-          let specialized = provision.specializing(
-            for: use,
-            typeLookup: useTypes,
-            specializationNamespace: specializationNamespace
-          )
-          _ = referenceDictionary.add(action: specialized)
-        } else {
-          errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
-          continue
-        }
+        )
       }
-      for remaining in prototypeActions {
-        errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))
-      }*/
     }
 
     if ¬errors.isEmpty {

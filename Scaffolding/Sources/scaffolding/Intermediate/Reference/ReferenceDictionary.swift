@@ -197,6 +197,10 @@ extension ReferenceDictionary {
   func lookupAbility(identifier: StrictString) -> Ability? {
     return abilities[resolve(identifier: identifier)]
   }
+  mutating func modifyAbility(identifier: StrictString, transformation: (inout Ability) -> Void) {
+    let realIdentifier = identifierMapping[identifier] ?? identifier
+    transformation(&abilities[realIdentifier]!)
+  }
 
   func allAbilities() -> [Ability] {
     return Array(abilities.values)
