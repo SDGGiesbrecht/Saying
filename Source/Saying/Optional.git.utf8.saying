@@ -16,6 +16,9 @@ extension
  }
 
 action
+ [
+  test (verify (accept optional (optional truth value)))
+ ]
  (
   English: accept optional (thing: optional (truth value))
  )
