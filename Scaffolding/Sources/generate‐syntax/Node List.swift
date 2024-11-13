@@ -496,10 +496,17 @@ extension Node {
           ),
 
           Node(
+            name: "ThingReference",
+            kind: .alternates([
+              Alternate(name: "compound", type: "UseSignature"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+            ])
+          ),
+          Node(
             name: "ParameterType",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),
           Node(

@@ -12,5 +12,14 @@ extension
    (
     English: optional (thing)
    )
-   Swift: thing “¤(3F)”
+   Swift: “” thing “¤(3F)”
+ }
+
+action
+ (
+  English: accept optional (thing: optional (truth value))
+ )
+ truth value
+ {
+  true
  }

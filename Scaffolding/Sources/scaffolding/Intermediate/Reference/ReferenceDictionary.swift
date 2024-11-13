@@ -221,6 +221,15 @@ extension ReferenceDictionary {
 
 extension ReferenceDictionary {
   mutating func resolveTypeIdentifiers() {
+    var newThings: [StrictString: [[TypeReference]: Thing]] = [:]
+    for (thingName, group) in things {
+      for (signature, thing) in group {
+        let resolvedSignature = signature.map({ $0.resolving(fromReferenceDictionary: self) })
+        newThings[thingName, default: [:]][resolvedSignature] = thing
+      }
+    }
+    things = newThings
+    
     var newActions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {

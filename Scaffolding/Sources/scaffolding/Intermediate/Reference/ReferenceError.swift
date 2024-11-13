@@ -1,7 +1,7 @@
 import SDGText
 
 enum ReferenceError: DiagnosticError {
-  case noSuchThing(StrictString, reference: ParsedUninterruptedIdentifier)
+  case noSuchThing(StrictString, reference: ParsedThingReferenceProtocol)
   case noSuchAction(name: StrictString, reference: ParsedAction)
   case noSuchAbility(name: StrictString, reference: ParsedAbilityReferenceProtocol)
   case unfulfilledRequirement(name: Set<StrictString>, ParsedUse)
@@ -9,8 +9,8 @@ enum ReferenceError: DiagnosticError {
   case mismatchedParameters(name: StrictString, declaration: ParsedActionName)
   case fulfillmentAccessNarrowerThanRequirement(declaration: ParsedActionName)
   case mismatchedTestAccess(testAccess: ParsedTestAccess)
-  case thingAccessNarrowerThanSignature(reference: ParsedUninterruptedIdentifier)
-  case thingUnavailableOutsideTests(reference: ParsedUninterruptedIdentifier)
+  case thingAccessNarrowerThanSignature(reference: ParsedThingReferenceProtocol)
+  case thingUnavailableOutsideTests(reference: ParsedThingReferenceProtocol)
   case actionUnavailableOutsideTests(reference: ParsedAction)
   case noSuchLanguage(ParsedUninterruptedIdentifier)
 

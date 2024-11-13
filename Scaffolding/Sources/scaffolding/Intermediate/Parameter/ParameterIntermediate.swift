@@ -20,7 +20,7 @@ extension ParameterIntermediate {
     let passedType: ParsedTypeReference
     var executeAction: ActionIntermediate?
     switch returnValue {
-    case .simple:
+    case .simple, .compound:
       passedType = returnValue
     case .action(parameters: _, returnValue: let actionReturn):
       passedType = .action(
