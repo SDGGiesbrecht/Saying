@@ -3,6 +3,7 @@ import SDGText
 
 struct Thing {
   var names: Set<StrictString>
+  var parameters: Interpolation<AbilityParameterIntermediate>
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var c: NativeThingImplementation?
@@ -30,10 +31,28 @@ extension Thing {
   ) -> Result<Thing, ErrorList<Thing.ConstructionError>> {
     var errors: [Thing.ConstructionError] = []
 
-    let names: Set<StrictString> = Set(
-      declaration.name.names.names
-        .lazy.map({ $0.name.identifierText() })
-    )
+    let namesSyntax = declaration.name.names.names
+    let parameters: Interpolation<AbilityParameterIntermediate>
+    switch Interpolation.construct(
+      entries: declaration.name.names.names,
+      getEntryName: { $0.name.name() },
+      getParameters: { $0.name.parameters?.parameters ?? [] },
+      getParameterName: { $0.name.identifierText() },
+      getDefinitionOrReference: { $0.definitionOrReference },
+      getNestedSignature: { _ in nil },
+      getNestedParameters: { _ in [] },
+      constructParameter: { names, _, _ in AbilityParameterIntermediate(names: names) }
+    ) {
+    case .failure(let interpolationError):
+      errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))
+      return .failure(ErrorList(errors))
+    case .success(let constructed):
+      parameters = constructed
+    }
+    var names: Set<StrictString> = []
+    for name in namesSyntax {
+      names.insert(name.name.name())
+    }
 
     var c: NativeThingImplementation?
     var cSharp: NativeThingImplementation?
@@ -78,6 +97,7 @@ extension Thing {
     return .success(
       Thing(
         names: names,
+        parameters: parameters,
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         c: c,

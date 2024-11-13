@@ -10,7 +10,7 @@ extension
  {
   thing (clients)
    (
-    English: optional
+    English: optional (thing)
    )
    Swift: thing “¤(3F)”
  }

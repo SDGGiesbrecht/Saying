@@ -460,11 +460,18 @@ extension Node {
           ),
 
           Node(
+            name: "ThingSignature",
+            kind: .alternates([
+              Alternate(name: "compound", type: "AbilitySignature"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+            ])
+          ),
+          Node(
             name: "ThingNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "name", type: "ThingSignature", kind: .required),
             ])
           )
         ],
