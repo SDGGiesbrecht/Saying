@@ -255,7 +255,7 @@ extension ReferenceDictionary {
               implementation[index].resolveTypes(
                 context: action,
                 referenceDictionary: self,
-                specifiedReturnValue: action.returnValue
+                specifiedReturnValue: index == implementation.indices.last ? .some(action.returnValue) : .some(.none)
               )
             }
           }
