@@ -15,6 +15,9 @@ struct ActionIntermediate {
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
+  var isFlow: Bool {
+    return prototype.isFlow
+  }
   var documentation: DocumentationIntermediate? {
     return prototype.documentation
   }
@@ -99,6 +102,7 @@ extension ActionIntermediate {
   ) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: false,
         names: names,
         namespace: [],
         parameters: parameters,
@@ -227,6 +231,7 @@ extension ActionIntermediate {
     })
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: isFlow,
         names: names,
         namespace: prototype.namespace,
         parameters: newParameters,
@@ -282,6 +287,7 @@ extension ActionIntermediate {
     return .success(
       ActionIntermediate(
         prototype: ActionPrototype(
+          isFlow: isFlow,
           names: names ∪ requirement.names,
           namespace: prototype.namespace,
           parameters: mergedParameters,
@@ -324,6 +330,7 @@ extension ActionIntermediate {
     })
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: isFlow,
         names: names,
         namespace: prototype.namespace,
         parameters: newParameters,
@@ -359,6 +366,7 @@ extension ActionIntermediate {
   func asReference() -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: false,
         names: names,
         namespace: [],
         parameters: .none,
@@ -388,6 +396,7 @@ extension ActionIntermediate {
       let wrapperName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
+          isFlow: isFlow,
           names: [wrapperName],
           namespace: [],
           parameters: prototype.parameters.removingOtherNamesAnd(replacing: baseName, with: wrapperName),
