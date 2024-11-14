@@ -40,8 +40,7 @@ extension StatementListIntermediate {
         errors: &errors
       )
       for new in statement.localActions() {
-        #warning("Dropping errors.")
-        _ = local.add(action: new)
+        errors.append(contentsOf: local.add(action: new).map({ .redeclaredLocalIdentifier(error: $0) }))
       }
     }
   }
