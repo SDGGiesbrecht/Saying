@@ -997,6 +997,7 @@ extension Node {
             name: "Provision",
             kind: .alternates([
               Alternate(name: "thing", type: "ThingDeclaration"),
+              Alternate(name: "action", type: "ActionDeclaration"),
             ])
           ),
         ],

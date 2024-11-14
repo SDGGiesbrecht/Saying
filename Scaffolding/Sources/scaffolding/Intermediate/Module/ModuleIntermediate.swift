@@ -67,6 +67,7 @@ extension ModuleIntermediate {
         errors.append(.noSuchAbility(name: identifier, reference: extensionBlock.declaration.ability))
         continue
       }
+      let abilityIdentifier = ability.names.identifier()
 
       var extensionTypes: [StrictString: StrictString] = [:]
       for (index, parameter) in ability.parameters.ordered(for: extensionBlock.ability).enumerated() {
@@ -76,12 +77,20 @@ extension ModuleIntermediate {
 
       for thing in extensionBlock.things {
         referenceDictionary.modifyAbility(
-          identifier: ability.names.identifier(),
+          identifier: abilityIdentifier,
           transformation: { ability in
             ability.provisionThings.append(
-              thing.resolvingExtensionContext(
-                typeLookup: extensionTypes
-              )
+              thing.resolvingExtensionContext(typeLookup: extensionTypes)
+            )
+          }
+        )
+      }
+      for action in extensionBlock.actions {
+        referenceDictionary.modifyAbility(
+          identifier: abilityIdentifier,
+          transformation: { ability in
+            ability.provisionActions.append(
+              action.resolvingExtensionContext(typeLookup: extensionTypes)
             )
           }
         )
@@ -148,6 +157,14 @@ extension ModuleIntermediate {
           specializationNamespace: specializationNamespace
         )
         _ = referenceDictionary.add(thing: specialized)
+      }
+      for action in ability.provisionActions {
+        let specialized = action.specializing(
+          for: use,
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace
+        )
+        _ = referenceDictionary.add(action: specialized)
       }
       for remaining in prototypeActions {
         errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))

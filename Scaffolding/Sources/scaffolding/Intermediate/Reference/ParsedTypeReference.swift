@@ -45,6 +45,31 @@ extension ParsedTypeReference {
 }
 
 extension ParsedTypeReference {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> ParsedTypeReference {
+    switch self {
+    case .simple(let simple):
+      if let found = typeLookup[simple.identifier] {
+        var modified = simple
+        modified.identifier = found
+        return .simple(modified)
+      } else {
+        return self
+      }
+    case .compound(identifier: let identifier, components: let components):
+      return .compound(
+        identifier: identifier,
+        components: components.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+      )
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      return .action(
+        parameters: parameters.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+        returnValue: returnValue.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+      )
+    }
+  }
+
   func specializing(typeLookup: [StrictString: SimpleTypeReference]) -> ParsedTypeReference {
     switch self {
     case .simple(let simple):

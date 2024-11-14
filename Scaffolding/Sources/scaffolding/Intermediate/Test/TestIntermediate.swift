@@ -14,6 +14,14 @@ extension TestIntermediate {
 }
 
 extension TestIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> TestIntermediate {
+    return TestIntermediate(
+      location: location,
+      action: action.resolvingExtensionContext(typeLookup: typeLookup)
+    )
+  }
 
   func specializing(
     typeLookup: [StrictString: SimpleTypeReference],
