@@ -4,6 +4,7 @@ import SDGText
 struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
+  var isNew: Bool
   var source: ParsedAction?
   var explicitResultType: ParsedTypeReference?
   var resolvedResultType: ParsedTypeReference??
@@ -14,15 +15,18 @@ extension ActionUse {
   init(_ use: ParsedAction) {
     actionName = use.name()
     switch use {
-    case .new(let new):
-      #warning("Not implemented yet.")
+    case .new:
       arguments = []
+      isNew = true
     case .compound(let compound):
       arguments = compound.arguments.arguments.map { ActionUse($0.argument) }
+      isNew = false
     case .reference:
       arguments = []
+      isNew = false
     case .simple:
       arguments = []
+      isNew = false
     }
     source = use
   }
@@ -107,6 +111,7 @@ extension ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      isNew: isNew,
       source: source,
       explicitResultType: explicitResultType
         .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
@@ -119,6 +124,7 @@ extension ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
+      isNew: isNew,
       source: source,
       explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) })
     )

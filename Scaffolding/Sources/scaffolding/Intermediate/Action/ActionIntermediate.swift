@@ -403,9 +403,11 @@ extension ActionIntermediate {
             return ActionUse(
               actionName: parameter.names.identifier(),
               arguments: [],
+              isNew: false,
               resolvedResultType: parameter.type
             )
           }),
+          isNew: false,
           resolvedResultType: returnValue
         )],
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
