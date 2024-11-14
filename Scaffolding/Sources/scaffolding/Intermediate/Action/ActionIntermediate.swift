@@ -9,7 +9,7 @@ struct ActionIntermediate {
   var javaScript: NativeActionImplementationIntermediate?
   var kotlin: NativeActionImplementationIntermediate?
   var swift: NativeActionImplementationIntermediate?
-  var implementation: ActionUse?
+  var implementation: [ActionUse]?
   var declaration: ParsedActionDeclarationPrototype?
   var isReferenceWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
@@ -164,10 +164,9 @@ extension ActionIntermediate {
         }
       }
     }
-    var implementation: ActionUse?
+    var implementation: [ActionUse]?
     if let source = declaration.implementation.source {
-      #warning("Not implemented yet.")
-      //implementation = ActionUse(source.action)
+      implementation = source.statements.statements.map { ActionUse($0) }
     } else {
       if c == nil {
         errors.append(ConstructionError.missingImplementation(language: "C", action: declaration.name))
@@ -207,11 +206,13 @@ extension ActionIntermediate {
       referenceDictionary: moduleReferenceDictionary,
       errors: &errors
     )
-    implementation?.validateReferences(
-      context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
-      testContext: false,
-      errors: &errors
-    )
+    for statement in implementation ?? [] {
+      statement.validateReferences(
+        context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
+        testContext: false,
+        errors: &errors
+      )
+    }
   }
 }
 
@@ -396,7 +397,7 @@ extension ActionIntermediate {
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess
         ),
-        implementation: ActionUse(
+        implementation: [ActionUse(
           actionName: baseName,
           arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
             return ActionUse(
@@ -406,7 +407,7 @@ extension ActionIntermediate {
             )
           }),
           resolvedResultType: returnValue
-        ),
+        )],
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier
       )

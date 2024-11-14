@@ -100,17 +100,22 @@ enum Kotlin: Platform {
     return call(to: expression, context: context, referenceDictionary: referenceDictionary)
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
       "fun \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
-    result.append(contentsOf: [
-      "    \(returnKeyword ?? "")\(implementation)",
-      "}",
-    ])
+    for statement in implementation.dropLast() {
+      #warning("Not implemented yet.")
+    }
+    if let last = implementation.last {
+      result.append(contentsOf: [
+        "    \(returnKeyword ?? "")\(last)",
+        "}",
+      ])
+    }
     return result.joined(separator: "\n")
   }
 

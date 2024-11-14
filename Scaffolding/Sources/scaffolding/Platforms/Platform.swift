@@ -52,7 +52,7 @@ protocol Platform {
     returnSection: String?,
     returnKeyword: String?,
     coverageRegistration: String?,
-    implementation: String
+    implementation: [String]
   ) -> String
 
   // Imports
@@ -384,11 +384,13 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
-    let implementation = statement(
-      expression: action.implementation!,
-      context: action,
-      referenceDictionary: referenceDictionary
-    )
+    let implementation = action.implementation!.map({ entry in
+      return statement(
+        expression: entry,
+        context: action,
+        referenceDictionary: referenceDictionary
+      )
+    })
     return actionDeclaration(
       name: name,
       parameters: parameters,
