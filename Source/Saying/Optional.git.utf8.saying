@@ -30,6 +30,42 @@ extension
    JavaScript: “¤(28)null¤(29)”
    Kotlin: “¤(28)null¤(29)”
    Swift: “¤(28)nil¤(29)”
+
+  action (clients)
+   [
+    test (verify (not ((none) exists)))
+   ]
+   (
+    English: (thing: optional (thing)) exists
+    Deutsch: (Ding: [thing]) da ist
+    français : (chose: [thing]) existe
+    ελληνικά: υπάρχει (πράγμα: [thing])
+    עברית: יש (דבר: [thing])
+   )
+   truth value
+   C: “¤(28)” thing “¤(29) ¤(21)= NULL” (stddef)
+   C♯: “¤(28)” thing “¤(29) ¤(21)= null”
+   JavaScript: “¤(28)” thing “¤(29) ¤(21)== null”
+   Kotlin: “¤(28)” thing “¤(29) ¤(21)= null”
+   Swift: “¤(28)” thing “¤(29) ¤(21)= nil”
+
+  action (clients)
+   [
+    test (verify ((none) does not exist))
+   ]
+   (
+    English: (thing: optional (thing)) does not exist
+    Deutsch: (Ding: [thing]) nicht da ist
+    français : (chose: [thing]) n’ existe pas
+    ελληνικά: δεν υπάρχει (πράγμα: [thing])
+    עברית: אין (דבר: [thing])
+   )
+   truth value
+   C: “¤(28)” thing “¤(29) == NULL” (stddef)
+   C♯: “¤(28)” thing “¤(29) == null”
+   JavaScript: “¤(28)” thing “¤(29) === null”
+   Kotlin: “¤(28)” thing “¤(29) == null”
+   Swift: “¤(28)” thing “¤(29) == nil”
  }
 
 action
