@@ -5,6 +5,7 @@ import SDGText
 struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary()
   var uses: [UseIntermediate] = []
+  var extensions: [ExtensionIntermediate] = []
   var tests: [TestIntermediate] = []
   var languageNodes: [ParsedUninterruptedIdentifier] = []
 }
@@ -48,8 +49,45 @@ extension ModuleIntermediate {
       case .use(let use):
         let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
         uses.append(intermediate)
+      case .extensionSyntax(let extensionSyntax):
+        let intermediate = try ExtensionIntermediate.construct(extensionSyntax, namespace: baseNamespace).get()
+        extensions.append(intermediate)
       }
     }
+    if ¬errors.isEmpty {
+      throw ErrorList(errors)
+    }
+  }
+
+  mutating func resolveExtensions() throws {
+    var errors: [ReferenceError] = []
+    for extensionBlock in extensions {
+      let identifier = extensionBlock.ability
+      guard let ability = referenceDictionary.lookupAbility(identifier: identifier) else {
+        errors.append(.noSuchAbility(name: identifier, reference: extensionBlock.declaration.ability))
+        continue
+      }
+
+      var extensionTypes: [StrictString: StrictString] = [:]
+      for (index, parameter) in ability.parameters.ordered(for: extensionBlock.ability).enumerated() {
+        let argument = extensionBlock.arguments[index]
+        extensionTypes[argument.identifier] = parameter.names.identifier()
+      }
+
+      for thing in extensionBlock.things {
+        referenceDictionary.modifyAbility(
+          identifier: ability.names.identifier(),
+          transformation: { ability in
+            ability.provisionThings.append(
+              thing.resolvingExtensionContext(
+                typeLookup: extensionTypes
+              )
+            )
+          }
+        )
+      }
+    }
+
     if ¬errors.isEmpty {
       throw ErrorList(errors)
     }
@@ -103,6 +141,13 @@ extension ModuleIntermediate {
           errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
           continue
         }
+      }
+      for thing in ability.provisionThings {
+        let specialized = thing.specializing(
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace
+        )
+        _ = referenceDictionary.add(thing: specialized)
       }
       for remaining in prototypeActions {
         errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))

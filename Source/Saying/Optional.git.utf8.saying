@@ -1,0 +1,42 @@
+ability (clients)
+ (
+  English: optional (thing)
+ )
+ {
+ }
+
+extension
+ optional (thing)
+ {
+  thing (clients)
+   (
+    English: optional (thing)
+   )
+   C: “” thing “¤(2A)”
+   C♯: “” thing “¤(3F)”
+   Kotlin: “” thing “¤(3F)”
+   Swift: “” thing “¤(3F)”
+ }
+
+action
+ [
+  test (verify (accept optional (optional truth value)))
+ ]
+ (
+  English: accept optional (thing: optional (truth value))
+ )
+ truth value
+ {
+  true
+ }
+
+action
+ (
+  English: optional truth value
+ )
+ optional (truth value)
+ C: “¤(28)¤(26)¤(28)bool¤(29)¤(7B)true¤(7D)¤(29)” (stdbool)
+ C♯: “¤(28)true¤(29)”
+ JavaScript: “¤(28)true¤(29)”
+ Kotlin: “¤(28)true¤(29)”
+ Swift: “¤(28)true¤(29)”

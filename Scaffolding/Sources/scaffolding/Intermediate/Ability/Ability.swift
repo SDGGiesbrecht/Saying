@@ -8,6 +8,7 @@ struct Ability {
   var identifierMapping: [StrictString: StrictString]
   var requirements: [StrictString: RequirementIntermediate]
   var defaults: [StrictString: ActionIntermediate]
+  var provisionThings: [Thing]
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
@@ -47,7 +48,7 @@ extension Ability {
     var requirements: [StrictString: RequirementIntermediate] = [:]
     var defaults: [StrictString: ActionIntermediate] = [:]
     let abilityNamespace = namespace.appending(names)
-    for requirementEntry in declaration.requirements.requirements.requirements {
+    for requirementEntry in declaration.requirements.requirements?.requirements.requirements ?? [] {
       switch requirementEntry {
       case .requirement(let requirementNode):
         let requirement: RequirementIntermediate
@@ -112,6 +113,7 @@ extension Ability {
         identifierMapping: identifierMapping,
         requirements: requirements,
         defaults: defaults,
+        provisionThings: [],
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,

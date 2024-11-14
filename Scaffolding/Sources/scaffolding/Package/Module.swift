@@ -19,6 +19,7 @@ struct Module {
     for sourceFile in sourceFiles {
       try module.add(file: File(from: sourceFile).parse())
     }
+    try module.resolveExtensions()
     try module.resolveUses()
     module.resolveTypeIdentifiers()
     module.resolveTypes()

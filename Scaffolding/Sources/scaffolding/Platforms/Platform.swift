@@ -164,11 +164,34 @@ extension Platform {
   static func source(for type: ParsedTypeReference, referenceDictionary: ReferenceDictionary) -> String {
     switch type {
     case .simple(let simple):
-      let type = referenceDictionary.lookupThing(simple.identifier)!
-      if let native = nativeType(of: type)?.type {
-        return String(native)
+      let type = referenceDictionary.lookupThing(simple.identifier, components: [])!
+      if let native = nativeType(of: type) {
+        return String(native.textComponents.joined())
       } else {
         return sanitize(identifier: type.names.identifier(), leading: true)
+      }
+    case .compound(identifier: let identifier, components: let components):
+      let usedName = identifier.name()
+      let type = referenceDictionary.lookupThing(
+        identifier.name(),
+        components: components.map({ $0.key })
+      )!
+      if let native = nativeType(of: type) {
+        let usedParameters = type.parameters.ordered(for: usedName)
+        var result = ""
+        for index in native.textComponents.indices {
+          result.append(contentsOf: String(native.textComponents[index]))
+          if index ≠ native.textComponents.indices.last {
+            let name = native.parameters[index].name
+            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+            let argument = components[argumentIndex]
+            result.append(contentsOf: source(for: argument, referenceDictionary: referenceDictionary))
+          }
+        }
+        return result
+      } else {
+        // Only native types are implemented so far, so this is only reachable for untyped target languages.
+        return ""
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
@@ -272,7 +295,7 @@ extension Platform {
       return name
     } else {
       switch parameter.type {
-      case .simple:
+      case .simple, .compound:
         let typeSource = source(for: parameter.type, referenceDictionary: referenceDictionary)
         return parameterDeclaration(name: name, type: typeSource)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):

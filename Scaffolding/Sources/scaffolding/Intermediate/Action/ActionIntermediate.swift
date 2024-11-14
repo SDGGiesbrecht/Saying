@@ -49,7 +49,7 @@ extension ActionIntermediate {
     let resolvedReturnValue: ParsedTypeReference?
     if isReferenceWrapper {
       switch returnValue {
-      case .simple, .none:
+      case .simple, .compound, .none:
         fatalError("A real action reference would produce an action.")
       case .action(parameters: let parameters, returnValue: let returnValue):
         resolvedParameters = parameters

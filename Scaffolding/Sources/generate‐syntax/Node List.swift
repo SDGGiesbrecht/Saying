@@ -31,6 +31,7 @@ extension Node {
           Node(name: "ChoiceKeyword", kind: .keyword(["choice", "Wahl", "choix", "επιλογή", "בחירה"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
+          Node(name: "ExtensionKeyword", kind: .keyword(["extension", "Erweiterung", /* extension */ "επέκταση", "הרחבה"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "FileKeyword", kind: .keyword(["file", "Datei", "fichier", "αρχείο", "קובץ"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
@@ -459,11 +460,18 @@ extension Node {
           ),
 
           Node(
+            name: "ThingSignature",
+            kind: .alternates([
+              Alternate(name: "compound", type: "AbilitySignature"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+            ])
+          ),
+          Node(
             name: "ThingNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "name", type: "ThingSignature", kind: .required),
             ])
           )
         ],
@@ -488,10 +496,17 @@ extension Node {
           ),
 
           Node(
+            name: "ThingReference",
+            kind: .alternates([
+              Alternate(name: "compound", type: "UseSignature"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+            ])
+          ),
+          Node(
             name: "ParameterType",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),
           Node(
@@ -707,7 +722,7 @@ extension Node {
           Node(
             name: "ActionReturnValue",
             kind: .compound(children: [
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
             ])
           ),
@@ -715,10 +730,17 @@ extension Node {
             name: "RequirementReturnValue",
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),
 
+          Node(
+            name: "ImplementationComponent",
+            kind: .alternates([
+              Alternate(name: "parameter", type: "UninterruptedIdentifier"),
+              Alternate(name: "literal", type: "Literal"),
+            ])
+          ),
           Node(
             name: "NativeImport",
             kind: .compound(children: [
@@ -728,29 +750,15 @@ extension Node {
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
             ])
           ),
-          Node(
-            name: "NativeThing",
-            kind: .compound(children: [
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "importNode", type: "NativeImport", kind: .optional),
-            ])
-          ),
-          Node(
-            name: "ThingImplementation",
-            kind: .compound(children: [
-              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "implementation", type: "NativeThing", kind: .required),
-            ])
-          ),
-          Node(
-            name: "ImplementationComponent",
-            kind: .alternates([
-              Alternate(name: "parameter", type: "UninterruptedIdentifier"),
-              Alternate(name: "literal", type: "Literal"),
-            ])
-          ),
         ],
+        Node.separatedList(
+          name: "NativeThingReference",
+          entryName: "component", entryNamePlural: "components",
+          entryType: "ImplementationComponent",
+          separatorName: "space",
+          separatorType: "Space",
+          fixedSeparator: true
+        ),
         Node.separatedList(
           name: "NativeActionExpression",
           entryName: "component", entryNamePlural: "components",
@@ -761,10 +769,25 @@ extension Node {
         ),
         [
           Node(
+            name: "NativeThing",
+            kind: .compound(children: [
+              Child(name: "type", type: "NativeThingReference", kind: .required),
+              Child(name: "importNode", type: "NativeImport", kind: .optional),
+            ])
+          ),
+          Node(
             name: "NativeAction",
             kind: .compound(children: [
               Child(name: "expression", type: "NativeActionExpression", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "ThingImplementation",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "implementation", type: "NativeThing", kind: .required),
             ])
           ),
           Node(
@@ -902,11 +925,17 @@ extension Node {
           ),
         [
           Node(
+            name: "RequirementsListSection",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "requirements", type: "RequirementsList", kind: .required),
+            ])
+          ),
+          Node(
             name: "Requirements",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "requirements", type: "RequirementsList", kind: .required),
+              Child(name: "requirements", type: "RequirementsListSection", kind: .optional),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
@@ -936,11 +965,17 @@ extension Node {
           ),
         [
           Node(
+            name: "FulfillmentListSection",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "fulfillments", type: "FulfillmentList", kind: .required),
+            ])
+          ),
+          Node(
             name: "Fulfillments",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "fulfillments", type: "FulfillmentList", kind: .required),
+              Child(name: "fulfillments", type: "FulfillmentListSection", kind: .optional),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
@@ -957,6 +992,49 @@ extension Node {
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
           ),
+          
+          Node(
+            name: "Provision",
+            kind: .alternates([
+              Alternate(name: "thing", type: "ThingDeclaration"),
+            ])
+          ),
+        ],
+          Node.separatedList(
+            name: "ProvisionList",
+            entryName: "provision", entryNamePlural: "provisions",
+            entryType: "Provision",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreak",
+            fixedSeparator: true
+          ),
+        [
+          Node(
+            name: "ProvisionListSection",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "provisions", type: "ProvisionList", kind: .required),
+            ])
+          ),
+          Node(
+            name: "Provisions",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "provisions", type: "ProvisionListSection", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ExtensionSyntax",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "ExtensionKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "ability", type: "AbilitySignature", kind: .required),
+              Child(name: "abilityLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "provisions", type: "Provisions", kind: .required),
+            ])
+          ),
 
           Node(
             name: "Declaration",
@@ -966,6 +1044,7 @@ extension Node {
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),
               Alternate(name: "use", type: "Use"),
+              Alternate(name: "extensionSyntax", type: "ExtensionSyntax"),
             ])
           ),
         ],
