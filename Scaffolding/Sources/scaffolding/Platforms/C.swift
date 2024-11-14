@@ -104,7 +104,9 @@ enum C: Platform {
       result.append(coverage)
     }
     for statement in implementation.dropLast() {
-      #warning("Not implemented yet.")
+      result.append(contentsOf: [
+        "  \(statement)",
+      ])
     }
     if let last = implementation.last {
       result.append(contentsOf: [
