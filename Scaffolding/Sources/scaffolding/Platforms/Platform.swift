@@ -384,7 +384,7 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
-    let implementation = action.implementation!.map({ entry in
+    let implementation = action.implementation!.statements.map({ entry in
       return statement(
         expression: entry,
         context: action,

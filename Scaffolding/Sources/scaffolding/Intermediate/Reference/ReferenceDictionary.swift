@@ -249,16 +249,11 @@ extension ReferenceDictionary {
       for (signature, returnOverloads) in group {
         for (overload, action) in returnOverloads {
           var modified = action
-          if var implementation = modified.implementation {
-            defer { modified.implementation = implementation }
-            for index in implementation.indices {
-              implementation[index].resolveTypes(
-                context: action,
-                referenceDictionary: self,
-                specifiedReturnValue: index == implementation.indices.last ? .some(action.returnValue) : .some(.none)
-              )
-            }
-          }
+          modified.implementation?.resolveTypes(
+            context: action,
+            referenceDictionary: self,
+            finalReturnValue: action.returnValue
+          )
           newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
         }
       }
