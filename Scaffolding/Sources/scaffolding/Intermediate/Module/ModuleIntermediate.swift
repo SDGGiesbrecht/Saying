@@ -161,6 +161,14 @@ extension ModuleIntermediate {
         )
         _ = referenceDictionary.add(thing: specialized)
       }
+      for action in ability.provisionActions {
+        let specialized = action.specializing(
+          for: use,
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace
+        )
+        _ = referenceDictionary.add(action: specialized)
+      }
       for remaining in prototypeActions {
         errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))
       }
