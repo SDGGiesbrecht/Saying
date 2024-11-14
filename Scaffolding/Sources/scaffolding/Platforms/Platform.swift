@@ -241,7 +241,7 @@ extension Platform {
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
-      let action = (context?.isCoverageWrapper ?? false)
+      let action = (context?.isCoverageWrapper ?? false ∨ bareAction.isFlow)
         ? bareAction
         : referenceLookup.lookupAction(
           bareAction.coverageTrackingIdentifier(),
