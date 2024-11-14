@@ -4,8 +4,6 @@ extension ParsedAction {
 
   func identifierSegments() -> [ParsedIdentifierSegment?] {
     switch self {
-    case .new(let new):
-      return [new.name]
     case .simple(let simple):
       return [simple]
     case .compound(let compound):

@@ -349,16 +349,8 @@ extension Node {
             ])
           ),
           Node(
-            name: "NewAction",
-            kind: .compound(children: [
-              Child(name: "bullet", type: "Bullet", kind: .required),
-              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
-            ])
-          ),
-          Node(
             name: "Action",
             kind: .alternates([
-              Alternate(name: "new", type: "NewAction"),
               Alternate(name: "compound", type: "CompoundAction"),
               Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
@@ -368,6 +360,7 @@ extension Node {
           Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
+              Child(name: "bullet", type: "Bullet", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
               Child(name: "type", type: "TypeAnnotation", kind: .optional),
             ])

@@ -4,8 +4,8 @@ import SDGText
 struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUse]
-  var isNew: Bool
   var source: ParsedAction?
+  var isNew: Bool
   var explicitResultType: ParsedTypeReference?
   var resolvedResultType: ParsedTypeReference??
 }
@@ -15,20 +15,15 @@ extension ActionUse {
   init(_ use: ParsedAction) {
     actionName = use.name()
     switch use {
-    case .new:
-      arguments = []
-      isNew = true
     case .compound(let compound):
       arguments = compound.arguments.arguments.map { ActionUse($0.argument) }
-      isNew = false
     case .reference:
       arguments = []
-      isNew = false
     case .simple:
       arguments = []
-      isNew = false
     }
     source = use
+    isNew = false
   }
 
   init(_ use: ParsedAnnotatedAction) {
@@ -39,6 +34,7 @@ extension ActionUse {
     } else {
       explicitResultType = type
     }
+    isNew = use.bullet ≠ nil
   }
 
   mutating func resolveTypes(
@@ -89,17 +85,19 @@ extension ActionUse {
     for argument in arguments {
       argument.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
-    if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
-      let action = context.lookupAction(
-        actionName,
-        signature: signature,
-        specifiedReturnValue: resolvedResultType) {
-      if ¬testContext,
-        action.testOnlyAccess {
-        errors.append(.actionUnavailableOutsideTests(reference: source!))
+    if ¬isNew {
+      if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
+         let action = context.lookupAction(
+          actionName,
+          signature: signature,
+          specifiedReturnValue: resolvedResultType) {
+        if ¬testContext,
+           action.testOnlyAccess {
+          errors.append(.actionUnavailableOutsideTests(reference: source!))
+        }
+      } else {
+        errors.append(.noSuchAction(name: actionName, reference: source!))
       }
-    } else {
-      errors.append(.noSuchAction(name: actionName, reference: source!))
     }
   }
 }
@@ -111,8 +109,8 @@ extension ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
-      isNew: isNew,
       source: source,
+      isNew: isNew,
       explicitResultType: explicitResultType
         .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
     )
@@ -124,8 +122,8 @@ extension ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
-      isNew: isNew,
       source: source,
+      isNew: isNew,
       explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) })
     )
   }
