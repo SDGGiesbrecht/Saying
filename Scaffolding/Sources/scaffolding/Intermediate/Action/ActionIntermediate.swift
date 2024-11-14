@@ -215,6 +215,38 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> ActionIntermediate {
+    let newParameters = parameters.mappingParameters({ parameter in
+      return parameter.resolvingExtensionContext(typeLookup: typeLookup)
+    })
+    let newReturnValue = returnValue.flatMap { $0.resolvingExtensionContext(typeLookup: typeLookup) }
+    let newDocumentation = documentation.flatMap({ documentation in
+      return documentation.resolvingExtensionContext(typeLookup: typeLookup)
+    })
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        names: names,
+        namespace: prototype.namespace,
+        parameters: newParameters,
+        returnValue: newReturnValue,
+        access: access,
+        testOnlyAccess: testOnlyAccess,
+        documentation: newDocumentation
+      ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
+      implementation: implementation,
+      declaration: declaration,
+      originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
+      coveredIdentifier: coveredIdentifier
+    )
+  }
+
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,

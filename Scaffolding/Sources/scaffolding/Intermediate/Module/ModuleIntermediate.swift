@@ -80,9 +80,7 @@ extension ModuleIntermediate {
           identifier: abilityIdentifier,
           transformation: { ability in
             ability.provisionThings.append(
-              thing.resolvingExtensionContext(
-                typeLookup: extensionTypes
-              )
+              thing.resolvingExtensionContext(typeLookup: extensionTypes)
             )
           }
         )
@@ -91,9 +89,8 @@ extension ModuleIntermediate {
         referenceDictionary.modifyAbility(
           identifier: abilityIdentifier,
           transformation: { ability in
-            #warning("Not resolving extension context yet.")
             ability.provisionActions.append(
-              action
+              action.resolvingExtensionContext(typeLookup: extensionTypes)
             )
           }
         )

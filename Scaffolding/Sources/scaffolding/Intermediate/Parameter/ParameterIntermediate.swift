@@ -48,6 +48,16 @@ extension ParameterIntermediate {
 }
 
 extension ParameterIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> ParameterIntermediate {
+    return ParameterIntermediate(
+      names: names,
+      type: type.resolvingExtensionContext(typeLookup: typeLookup),
+      passAction: passAction.resolvingExtensionContext(typeLookup: typeLookup),
+      executeAction: executeAction?.resolvingExtensionContext(typeLookup: typeLookup)
+    )
+  }
   func merging(requirement: ParameterIntermediate) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: names ∪ requirement.names,

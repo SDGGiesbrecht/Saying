@@ -38,6 +38,16 @@ extension DocumentationIntermediate {
 }
 
 extension DocumentationIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> DocumentationIntermediate {
+    return DocumentationIntermediate(
+      parameters: parameters,
+      tests: tests.map({ test in
+        return test.resolvingExtensionContext(typeLookup: typeLookup)
+      })
+    )
+  }
   func specializing(
     typeLookup: [StrictString: SimpleTypeReference],
     specializationNamespace: [Set<StrictString>]
