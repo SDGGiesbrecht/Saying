@@ -28,3 +28,29 @@ extension
    Kotlin: “var ” storage “ = ¤(28)” value “¤(29)”
    Swift: “var ” storage “ = ¤(28)” value “¤(29)”
  }
+
+action
+ [
+  test (verify (create and use storage))
+ ]
+ (
+  English: create and use storage
+ )
+ truth value
+ {
+  let (storage) be (true)
+  storage
+ }
+
+action
+ [
+  test (verify (create and use changeable storage))
+ ]
+ (
+  English: create and use changeable storage
+ )
+ truth value
+ {
+  let (storage) start as (true)
+  storage
+ }
