@@ -28,6 +28,7 @@ extension Node {
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
+          Node(name: "FlowKeyword", kind: .keyword(["flow", "Ablauf", "déroulement", "ροή", "זרימה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
           Node(name: "ChoiceKeyword", kind: .keyword(["choice", "Wahl", "choix", "επιλογή", "בחירה"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
@@ -886,9 +887,16 @@ extension Node {
             ])
           ),
           Node(
+            name: "ActionLikeKeyword",
+            kind: .alternates([
+              Alternate(name: "action", type: "ActionKeyword"),
+              Alternate(name: "flow", type: "FlowKeyword"),
+            ])
+          ),
+          Node(
             name: "ActionDeclaration",
             kind: .compound(children: [
-              Child(name: "keyword", type: "ActionKeyword", kind: .required),
+              Child(name: "keyword", type: "ActionLikeKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),

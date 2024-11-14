@@ -8,7 +8,7 @@ ability (clients)
 extension
  storage of (thing)
  {
-  action (clients)
+  flow (clients)
    (
     English: let (storage: thing) be (value: thing)
    )
@@ -18,7 +18,7 @@ extension
    Kotlin: “val ” storage “ = ¤(28)” value “¤(29)”
    Swift: “let ” storage “ = ¤(28)” value “¤(29)”
 
-  action (clients)
+  flow (clients)
    (
     English: let (storage: thing) start as (value: thing)
    )
