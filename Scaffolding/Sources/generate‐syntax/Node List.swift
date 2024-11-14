@@ -20,6 +20,7 @@ extension Node {
           Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
           Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
           Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
+          Node(name: "BulletCharacter", kind: .fixedLeaf("•")),
           Node(name: "RightArrow", kind: .fixedLeaf("→")),
           Node(name: "LeftArrow", kind: .fixedLeaf("←")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
@@ -140,6 +141,13 @@ extension Node {
             kind: .compound(children: [
               Child(name: "precedingSpace", type: "Space", kind: .optional),
               Child(name: "colon", type: "ColonCharacter", kind: .fixed),
+              Child(name: "followingSpace", type: "Space", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Bullet",
+            kind: .compound(children: [
+              Child(name: "bullet", type: "BulletCharacter", kind: .fixed),
               Child(name: "followingSpace", type: "Space", kind: .fixed),
             ])
           ),
@@ -341,8 +349,16 @@ extension Node {
             ])
           ),
           Node(
+            name: "NewAction",
+            kind: .compound(children: [
+              Child(name: "bullet", type: "Bullet", kind: .required),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+          Node(
             name: "Action",
             kind: .alternates([
+              Alternate(name: "new", type: "NewAction"),
               Alternate(name: "compound", type: "CompoundAction"),
               Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),

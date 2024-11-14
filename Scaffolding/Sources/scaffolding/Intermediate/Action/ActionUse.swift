@@ -14,6 +14,9 @@ extension ActionUse {
   init(_ use: ParsedAction) {
     actionName = use.name()
     switch use {
+    case .new(let new):
+      #warning("Not implemented yet.")
+      arguments = []
     case .compound(let compound):
       arguments = compound.arguments.arguments.map { ActionUse($0.argument) }
     case .reference:

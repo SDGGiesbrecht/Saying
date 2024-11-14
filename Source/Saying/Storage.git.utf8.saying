@@ -38,7 +38,7 @@ action
  )
  truth value
  {
-  let (storage) be (true)
+  let (• storage) be (true)
   storage
  }
 
@@ -51,6 +51,6 @@ action
  )
  truth value
  {
-  let (storage) start as (true)
+  let (• storage) start as (true)
   storage
  }
