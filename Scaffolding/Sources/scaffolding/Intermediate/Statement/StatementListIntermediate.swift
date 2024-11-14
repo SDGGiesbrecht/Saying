@@ -4,8 +4,7 @@ struct StatementListIntermediate {
 
 extension StatementListIntermediate {
   init(_ statements: ParsedStatementList) {
-    let constructedStatements = statements.statements.map { ActionUse($0) }
-    self.statements = constructedStatements
+    self.statements = statements.statements.map { ActionUse($0) }
   }
 }
 
