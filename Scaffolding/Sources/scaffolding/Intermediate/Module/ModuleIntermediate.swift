@@ -67,6 +67,7 @@ extension ModuleIntermediate {
         errors.append(.noSuchAbility(name: identifier, reference: extensionBlock.declaration.ability))
         continue
       }
+      let abilityIdentifier = ability.names.identifier()
 
       var extensionTypes: [StrictString: StrictString] = [:]
       for (index, parameter) in ability.parameters.ordered(for: extensionBlock.ability).enumerated() {
@@ -76,12 +77,23 @@ extension ModuleIntermediate {
 
       for thing in extensionBlock.things {
         referenceDictionary.modifyAbility(
-          identifier: ability.names.identifier(),
+          identifier: abilityIdentifier,
           transformation: { ability in
             ability.provisionThings.append(
               thing.resolvingExtensionContext(
                 typeLookup: extensionTypes
               )
+            )
+          }
+        )
+      }
+      for action in extensionBlock.actions {
+        referenceDictionary.modifyAbility(
+          identifier: abilityIdentifier,
+          transformation: { ability in
+            #warning("Not resolving extension context yet.")
+            ability.provisionActions.append(
+              action
             )
           }
         )
