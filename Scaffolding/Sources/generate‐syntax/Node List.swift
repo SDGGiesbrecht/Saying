@@ -798,12 +798,22 @@ extension Node {
               Child(name: "expression", type: "NativeAction", kind: .required),
             ])
           ),
+        ],
+          Node.separatedList(
+            name: "StatementList",
+            entryName: "statement", entryNamePlural: "statements",
+            entryType: "Action",
+            separatorName: "lineBreak",
+            separatorType: "LineBreak",
+            fixedSeparator: true
+          ),
+        [
           Node(
             name: "SourceActionImplementation",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "action", type: "Action", kind: .required),
+              Child(name: "statements", type: "StatementList", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])

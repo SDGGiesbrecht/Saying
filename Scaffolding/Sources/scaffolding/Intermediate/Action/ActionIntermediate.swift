@@ -166,7 +166,8 @@ extension ActionIntermediate {
     }
     var implementation: ActionUse?
     if let source = declaration.implementation.source {
-      implementation = ActionUse(source.action)
+      #warning("Not implemented yet.")
+      //implementation = ActionUse(source.action)
     } else {
       if c == nil {
         errors.append(ConstructionError.missingImplementation(language: "C", action: declaration.name))
