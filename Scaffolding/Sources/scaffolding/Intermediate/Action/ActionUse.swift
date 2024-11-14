@@ -36,7 +36,19 @@ extension ActionUse {
     }
     isNew = use.bullet ≠ nil
   }
+}
 
+extension ActionUse {
+  func localActions() -> [ActionIntermediate] {
+    if isNew {
+      return [.parameterAction(names: [actionName], parameters: .none, returnValue: explicitResultType)]
+    } else {
+      return arguments.flatMap { $0.localActions() }
+    }
+  }
+}
+
+extension ActionUse {
   mutating func resolveTypes(
     context: ActionIntermediate?,
     referenceDictionary: ReferenceDictionary,
