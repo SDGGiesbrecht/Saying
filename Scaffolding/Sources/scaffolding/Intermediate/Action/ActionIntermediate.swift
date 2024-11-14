@@ -66,17 +66,17 @@ extension ActionIntermediate {
 
   func resolve(
     globallyUniqueIdentifierComponents: [StrictString],
-    referenceDictionary: ReferenceDictionary
+    referenceLookup: [ReferenceDictionary]
   ) -> StrictString {
     return globallyUniqueIdentifierComponents
-        .lazy.map({ referenceDictionary.resolve(identifier: $0) })
+        .lazy.map({ referenceLookup.resolve(identifier: $0) })
         .joined(separator: ":")
   }
 
-  func globallyUniqueIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString {
+  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString {
     return resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
-      referenceDictionary: referenceDictionary
+      referenceLookup: referenceLookup
     )
   }
 }
@@ -382,8 +382,8 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(prototype.names.identifier())"
   }
-  func wrappedToTrackCoverage(referenceDictionary: ReferenceDictionary) -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier(referenceDictionary: referenceDictionary) {
+  func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate? {
+    if let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
       let baseName = names.identifier()
       let wrapperName = coverageTrackingIdentifier()
       return ActionIntermediate(
@@ -420,15 +420,15 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString? {
+  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString? {
     let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
       .joined(separator: ":")
     let identifier: StrictString
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
-      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceDictionary: referenceDictionary)
+      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceLookup: referenceLookup)
     } else {
-      identifier = globallyUniqueIdentifier(referenceDictionary: referenceDictionary)
+      identifier = globallyUniqueIdentifier(referenceLookup: referenceLookup)
     }
     return [namespace, identifier]
       .joined(separator: ":")

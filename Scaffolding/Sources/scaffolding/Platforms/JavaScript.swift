@@ -85,8 +85,8 @@ enum JavaScript: Platform {
     return "  coverageRegions.delete(\u{22}\(identifier)\u{22});"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
-    return call(to: expression, context: context, referenceDictionary: referenceDictionary).appending(";")
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceLookup: [ReferenceDictionary]) -> String {
+    return call(to: expression, context: context, referenceLookup: referenceLookup).appending(";")
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {

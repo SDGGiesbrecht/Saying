@@ -138,8 +138,8 @@ enum Swift: Platform {
     return "  registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
-    return call(to: expression, context: context, referenceDictionary: referenceDictionary)
+  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceLookup: [ReferenceDictionary]) -> String {
+    return call(to: expression, context: context, referenceLookup: referenceLookup)
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
