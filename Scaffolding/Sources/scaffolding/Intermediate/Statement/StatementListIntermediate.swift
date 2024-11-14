@@ -1,13 +1,11 @@
 struct StatementListIntermediate {
   var statements: [ActionUse]
-  var localActions: [ActionIntermediate]
 }
 
 extension StatementListIntermediate {
   init(_ statements: ParsedStatementList) {
     let constructedStatements = statements.statements.map { ActionUse($0) }
     self.statements = constructedStatements
-    self.localActions = constructedStatements.flatMap { $0.localActions() }
   }
 }
 

@@ -410,8 +410,7 @@ extension ActionIntermediate {
               isNew: false,
               resolvedResultType: returnValue
             )
-          ],
-          localActions: []
+          ]
         ),
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier
