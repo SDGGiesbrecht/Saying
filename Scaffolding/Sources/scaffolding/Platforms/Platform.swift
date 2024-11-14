@@ -44,6 +44,7 @@ protocol Platform {
   static func statement(
     expression: ActionUse,
     context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary]
   ) -> String
   static func actionDeclaration(
@@ -208,9 +209,19 @@ extension Platform {
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary]
   ) -> String {
-    if let parameter = context?.lookupParameter(reference.actionName) {
+    let signature = reference.arguments.map({ $0.resolvedResultType!! })
+    if reference.isNew {
+      return String(sanitize(identifier: reference.actionName, leading: true))
+    } else if let local = localLookup.lookupAction(
+      reference.actionName,
+      signature: signature,
+      specifiedReturnValue: reference.resolvedResultType
+    ) {
+      return String(sanitize(identifier: local.names.identifier(), leading: true))
+    } else if let parameter = context?.lookupParameter(reference.actionName) {
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
@@ -219,12 +230,12 @@ extension Platform {
           to: parameter.executeAction!,
           reference: reference,
           context: context,
+          localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier()
         )
       }
     } else {
-      let signature = reference.arguments.map({ $0.resolvedResultType!! })
       let bareAction = referenceLookup.lookupAction(
         reference.actionName,
         signature: signature,
@@ -241,6 +252,7 @@ extension Platform {
         to: action,
         reference: reference,
         context: context,
+        localLookup: localLookup,
         referenceLookup: referenceLookup,
         parameterName: nil
       )
@@ -250,6 +262,7 @@ extension Platform {
     to action: ActionIntermediate,
     reference: ActionUse,
     context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
     parameterName: StrictString?
   ) -> String {
@@ -262,7 +275,14 @@ extension Platform {
           let name = native.parameters[index].name
           let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
           let argument = reference.arguments[argumentIndex]
-          result.append(contentsOf: call(to: argument, context: context, referenceLookup: referenceLookup))
+          result.append(
+            contentsOf: call(
+              to: argument,
+              context: context,
+              localLookup: localLookup,
+              referenceLookup: referenceLookup
+            )
+          )
         }
       }
       return result
@@ -278,7 +298,12 @@ extension Platform {
       } else {
         let arguments = reference.arguments
           .lazy.map({ argument in
-            return call(to: argument, context: context, referenceLookup: referenceLookup)
+            return call(
+              to: argument,
+              context: context,
+              localLookup: localLookup,
+              referenceLookup: referenceLookup
+            )
           })
           .joined(separator: ", ")
         return "\(name)(\(arguments))"
@@ -390,6 +415,7 @@ extension Platform {
       let result = statement(
         expression: entry,
         context: action,
+        localLookup: locals,
         referenceLookup: nonLocalReferenceLookup.appending(locals)
       )
       for local in entry.localActions() {
@@ -416,7 +442,12 @@ extension Platform {
   static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
     return testSource(
       identifier: identifier(for: test, leading: false),
-      statement: statement(expression: test.action, context: nil, referenceLookup: referenceLookup)
+      statement: statement(
+        expression: test.action,
+        context: nil,
+        localLookup: ReferenceDictionary(),
+        referenceLookup: referenceLookup
+      )
     )
   }
 

@@ -96,8 +96,18 @@ enum Kotlin: Platform {
     return "    registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceLookup: [ReferenceDictionary]) -> String {
-    return call(to: expression, context: context, referenceLookup: referenceLookup)
+  static func statement(
+    expression: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
+    return call(
+      to: expression,
+      context: context,
+      localLookup: localLookup,
+      referenceLookup: referenceLookup
+    )
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
