@@ -504,7 +504,7 @@ extension Platform {
     }
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
-      for action in allActions {
+      for action in allActions where ¬action.isFlow {
         if let declaration = forwardDeclaration(for: action, referenceLookup: [moduleReferenceLookup]) {
           result.append(contentsOf: [
             "",
@@ -513,7 +513,7 @@ extension Platform {
         }
       }
     }
-    for action in allActions {
+    for action in allActions where ¬action.isFlow {
       if let declaration = self.declaration(for: action, externalReferenceLookup: [moduleReferenceLookup]) {
         result.append(contentsOf: [
           "",

@@ -391,8 +391,7 @@ extension ActionIntermediate {
     return "☐\(prototype.names.identifier())"
   }
   func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate? {
-    if ¬isFlow,
-      let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
+    if let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
       let baseName = names.identifier()
       let wrapperName = coverageTrackingIdentifier()
       return ActionIntermediate(
