@@ -282,17 +282,23 @@ extension Platform {
       for index in native.textComponents.indices {
         result.append(contentsOf: String(native.textComponents[index]))
         if index ≠ native.textComponents.indices.last {
-          let name = native.parameters[index].name
-          let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
-          let argument = reference.arguments[argumentIndex]
-          result.append(
-            contentsOf: call(
-              to: argument,
-              context: context,
-              localLookup: localLookup,
-              referenceLookup: referenceLookup
+          let parameter = native.parameters[index]
+          if let type = parameter.typeInstead {
+            let typeSource = source(for: ParsedTypeReference.simple(type), referenceLookup: referenceLookup)
+            result.append(contentsOf: typeSource)
+          } else {
+            let name = parameter.name
+            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+            let argument = reference.arguments[argumentIndex]
+            result.append(
+              contentsOf: call(
+                to: argument,
+                context: context,
+                localLookup: localLookup,
+                referenceLookup: referenceLookup
+              )
             )
-          )
+          }
         }
       }
       return result
