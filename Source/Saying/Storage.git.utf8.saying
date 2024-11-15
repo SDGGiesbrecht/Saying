@@ -27,6 +27,16 @@ extension
    JavaScript: “let ” storage “ = ¤(28)” value “¤(29)”
    Kotlin: “var ” storage “ = ¤(28)” value “¤(29)”
    Swift: “var ” storage “ = ¤(28)” value “¤(29)”
+
+  flow (clients)
+   (
+    English: change (storage: thing) to (value: thing)
+   )
+   C: “” storage “ = ¤(28)” value “¤(29)”
+   C♯: “” storage “ = ¤(28)” value “¤(29)”
+   JavaScript: “” storage “ = ¤(28)” value “¤(29)”
+   Kotlin: “” storage “ = ¤(28)” value “¤(29)”
+   Swift: “” storage “ = ¤(28)” value “¤(29)”
  }
 
 action
@@ -51,6 +61,7 @@ action
  )
  truth value
  {
-  let (• storage: truth value) start as (true)
+  let (• storage: truth value) start as (false)
+  change (storage) to (true)
   storage
  }
