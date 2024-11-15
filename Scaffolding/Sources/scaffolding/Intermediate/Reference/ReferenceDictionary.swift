@@ -33,8 +33,11 @@ extension ReferenceDictionary {
 }
 
 extension ReferenceDictionary {
+  func resolveIfKnown(identifier: StrictString) -> StrictString? {
+    return identifierMapping[identifier]
+  }
   func resolve(identifier: StrictString) -> StrictString {
-    return identifierMapping[identifier] ?? identifier
+    return resolveIfKnown(identifier: identifier) ?? identifier
   }
 
   func lookupDeclaration(
@@ -51,6 +54,16 @@ extension ReferenceDictionary {
     } else {
       return nil
     }
+  }
+}
+extension Array where Element == ReferenceDictionary {
+  func resolve(identifier: StrictString) -> StrictString {
+    for scope in reversed() {
+      if let found = scope.resolveIfKnown(identifier: identifier) {
+        return found
+      }
+    }
+    return identifier
   }
 }
 
@@ -76,7 +89,7 @@ extension ReferenceDictionary {
       let group = things[mappedIdentifier] else {
       return nil
     }
-    let mappedComponents = components.map({ $0.resolving(fromReferenceDictionary: self) })
+    let mappedComponents = components.map({ $0.resolving(fromReferenceLookup: [self]) })
     return group[mappedComponents]
   }
 
@@ -86,6 +99,16 @@ extension ReferenceDictionary {
       .lazy.map({ $0.values })
       .joined()
     return Array(result)
+  }
+}
+extension Array where Element == ReferenceDictionary {
+  func lookupThing(_ identifier: StrictString, components: [TypeReference]) -> Thing? {
+    for scope in reversed() {
+      if let found = scope.lookupThing(identifier, components: components) {
+        return found
+      }
+    }
+    return nil
   }
 }
 
@@ -125,7 +148,7 @@ extension ReferenceDictionary {
       let group = actions[mappedIdentifier] else {
       return nil
     }
-    let mappedSignature = signature.map({ $0.key.resolving(fromReferenceDictionary: self) })
+    let mappedSignature = signature.map({ $0.key.resolving(fromReferenceLookup: [self]) })
     let returnOverloads: [() -> [TypeReference?: ActionIntermediate]]
     switch ActionUse.isReferenceNotCall(name: identifier, arguments: mappedSignature) {
     case .some(true):
@@ -138,7 +161,7 @@ extension ReferenceDictionary {
     for set in returnOverloads.lazy.map({ $0() }) {
       switch specifiedReturnValue {
       case .some(.some(let value)):
-        let mappedReturn = value.key.resolving(fromReferenceDictionary: self)
+        let mappedReturn = value.key.resolving(fromReferenceLookup: [self])
         if let result = set[mappedReturn] {
           return result
         }
@@ -167,7 +190,7 @@ extension ReferenceDictionary {
     } else {
       var dictionary: [StrictString: ActionIntermediate] = [:]
       for entry in result {
-        dictionary[entry.globallyUniqueIdentifier(referenceDictionary: self)] = entry
+        dictionary[entry.globallyUniqueIdentifier(referenceLookup: [self])] = entry
       }
       return dictionary.keys.sorted().map({ dictionary[$0]! })
     }
@@ -224,7 +247,7 @@ extension ReferenceDictionary {
     var newThings: [StrictString: [[TypeReference]: Thing]] = [:]
     for (thingName, group) in things {
       for (signature, thing) in group {
-        let resolvedSignature = signature.map({ $0.resolving(fromReferenceDictionary: self) })
+        let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: [self]) })
         newThings[thingName, default: [:]][resolvedSignature] = thing
       }
     }
@@ -233,9 +256,9 @@ extension ReferenceDictionary {
     var newActions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
-        let resolvedSignature = signature.map({ $0.resolving(fromReferenceDictionary: self) })
+        let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: [self]) })
         for (overload, action) in returnOverloads {
-          let resolvedReturn = overload.flatMap({ $0.resolving(fromReferenceDictionary: self) })
+          let resolvedReturn = overload.flatMap({ $0.resolving(fromReferenceLookup: [self]) })
           newActions[actionName, default: [:]][resolvedSignature, default: [:]][resolvedReturn] = action
         }
       }
@@ -252,7 +275,7 @@ extension ReferenceDictionary {
           modified.implementation?.resolveTypes(
             context: action,
             referenceDictionary: self,
-            specifiedReturnValue: action.returnValue
+            finalReturnValue: action.returnValue
           )
           newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
         }
@@ -277,7 +300,7 @@ extension ReferenceDictionary {
   func applyingTestCoverageTracking() -> ReferenceDictionary {
     var new = self
     for action in allActions() {
-      if let wrapped = action.wrappedToTrackCoverage(referenceDictionary: self) {
+      if let wrapped = action.wrappedToTrackCoverage(referenceLookup: [self]) {
         _ = new.add(action: wrapped)
       }
     }

@@ -9,12 +9,15 @@ struct ActionIntermediate {
   var javaScript: NativeActionImplementationIntermediate?
   var kotlin: NativeActionImplementationIntermediate?
   var swift: NativeActionImplementationIntermediate?
-  var implementation: ActionUse?
+  var implementation: StatementListIntermediate?
   var declaration: ParsedActionDeclarationPrototype?
   var isReferenceWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
+  var isFlow: Bool {
+    return prototype.isFlow
+  }
   var documentation: DocumentationIntermediate? {
     return prototype.documentation
   }
@@ -32,6 +35,9 @@ struct ActionIntermediate {
   }
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
+  }
+  func allNativeImplementations() -> [NativeActionImplementationIntermediate] {
+    return [c, cSharp, javaScript, kotlin, swift].compactMap({ $0 })
   }
 }
 
@@ -66,17 +72,17 @@ extension ActionIntermediate {
 
   func resolve(
     globallyUniqueIdentifierComponents: [StrictString],
-    referenceDictionary: ReferenceDictionary
+    referenceLookup: [ReferenceDictionary]
   ) -> StrictString {
     return globallyUniqueIdentifierComponents
-        .lazy.map({ referenceDictionary.resolve(identifier: $0) })
+        .lazy.map({ referenceLookup.resolve(identifier: $0) })
         .joined(separator: ":")
   }
 
-  func globallyUniqueIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString {
+  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString {
     return resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
-      referenceDictionary: referenceDictionary
+      referenceLookup: referenceLookup
     )
   }
 }
@@ -99,6 +105,7 @@ extension ActionIntermediate {
   ) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: false,
         names: names,
         namespace: [],
         parameters: parameters,
@@ -138,11 +145,6 @@ extension ActionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
-          for parameterReference in constructed.parameters {
-            if prototype.parameters.parameter(named: parameterReference.name) == nil {
-              errors.append(.parameterNotFound(parameterReference.syntaxNode))
-            }
-          }
           switch implementation.language.identifierText() {
           case "C":
             c = constructed
@@ -164,9 +166,9 @@ extension ActionIntermediate {
         }
       }
     }
-    var implementation: ActionUse?
+    var implementation: StatementListIntermediate?
     if let source = declaration.implementation.source {
-      implementation = ActionUse(source.action)
+      implementation = StatementListIntermediate(source.statements)
     } else {
       if c == nil {
         errors.append(ConstructionError.missingImplementation(language: "C", action: declaration.name))
@@ -206,6 +208,22 @@ extension ActionIntermediate {
       referenceDictionary: moduleReferenceDictionary,
       errors: &errors
     )
+    for native in allNativeImplementations() {
+      for parameterReference in native.parameters {
+        if let typeInstead = parameterReference.typeInstead {
+          ParsedTypeReference.simple(typeInstead).validateReferences(
+            requiredAccess: access,
+            allowTestOnlyAccess: testOnlyAccess,
+            referenceDictionary: moduleReferenceDictionary,
+            errors: &errors
+          )
+        } else {
+          if prototype.parameters.parameter(named: parameterReference.name) == nil {
+            errors.append(.noSuchParameter(parameterReference.syntaxNode))
+          }
+        }
+      }
+    }
     implementation?.validateReferences(
       context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
       testContext: false,
@@ -227,6 +245,7 @@ extension ActionIntermediate {
     })
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: isFlow,
         names: names,
         namespace: prototype.namespace,
         parameters: newParameters,
@@ -282,6 +301,7 @@ extension ActionIntermediate {
     return .success(
       ActionIntermediate(
         prototype: ActionPrototype(
+          isFlow: isFlow,
           names: names ∪ requirement.names,
           namespace: prototype.namespace,
           parameters: mergedParameters,
@@ -322,8 +342,15 @@ extension ActionIntermediate {
         specializationNamespace: specializationNamespace
       )
     })
+    var nativeImplementationTypeLookup = typeLookup
+    for parameter in newParameters.inAnyOrder {
+      for name in parameter.names {
+        nativeImplementationTypeLookup[name] = nil
+      }
+    }
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: isFlow,
         names: names,
         namespace: prototype.namespace,
         parameters: newParameters,
@@ -332,11 +359,11 @@ extension ActionIntermediate {
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
         documentation: newDocumentation
       ),
-      c: c,
-      cSharp: cSharp,
-      javaScript: javaScript,
-      kotlin: kotlin,
-      swift: swift,
+      c: c?.specializing(typeLookup: nativeImplementationTypeLookup),
+      cSharp: cSharp?.specializing(typeLookup: nativeImplementationTypeLookup),
+      javaScript: javaScript?.specializing(typeLookup: nativeImplementationTypeLookup),
+      kotlin: kotlin?.specializing(typeLookup: nativeImplementationTypeLookup),
+      swift: swift?.specializing(typeLookup: nativeImplementationTypeLookup),
       implementation: implementation,
       declaration: nil,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
@@ -359,6 +386,7 @@ extension ActionIntermediate {
   func asReference() -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
+        isFlow: false,
         names: names,
         namespace: [],
         parameters: .none,
@@ -382,12 +410,13 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> StrictString {
     return "☐\(prototype.names.identifier())"
   }
-  func wrappedToTrackCoverage(referenceDictionary: ReferenceDictionary) -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier(referenceDictionary: referenceDictionary) {
+  func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate? {
+    if let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
       let baseName = names.identifier()
       let wrapperName = coverageTrackingIdentifier()
       return ActionIntermediate(
         prototype: ActionPrototype(
+          isFlow: isFlow,
           names: [wrapperName],
           namespace: [],
           parameters: prototype.parameters.removingOtherNamesAnd(replacing: baseName, with: wrapperName),
@@ -395,16 +424,22 @@ extension ActionIntermediate {
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess
         ),
-        implementation: ActionUse(
-          actionName: baseName,
-          arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
-            return ActionUse(
-              actionName: parameter.names.identifier(),
-              arguments: [],
-              resolvedResultType: parameter.type
+        implementation: StatementListIntermediate(
+          statements: [
+            ActionUse(
+              actionName: baseName,
+              arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
+                return ActionUse(
+                  actionName: parameter.names.identifier(),
+                  arguments: [],
+                  isNew: false,
+                  resolvedResultType: parameter.type
+                )
+              }),
+              isNew: false,
+              resolvedResultType: returnValue
             )
-          }),
-          resolvedResultType: returnValue
+          ]
         ),
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier
@@ -414,15 +449,15 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier(referenceDictionary: ReferenceDictionary) -> StrictString? {
+  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString? {
     let namespace = prototype.namespace
       .lazy.map({ $0.identifier() })
       .joined(separator: ":")
     let identifier: StrictString
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
-      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceDictionary: referenceDictionary)
+      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceLookup: referenceLookup)
     } else {
-      identifier = globallyUniqueIdentifier(referenceDictionary: referenceDictionary)
+      identifier = globallyUniqueIdentifier(referenceLookup: referenceLookup)
     }
     return [namespace, identifier]
       .joined(separator: ":")

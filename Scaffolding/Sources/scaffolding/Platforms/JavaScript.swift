@@ -9,6 +9,9 @@ enum JavaScript: Platform {
   static var directoryName: String {
     return "JavaScript"
   }
+  static var indent: String {
+    return "  "
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -82,24 +85,41 @@ enum JavaScript: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  coverageRegions.delete(\u{22}\(identifier)\u{22});"
+    return "coverageRegions.delete(\u{22}\(identifier)\u{22});"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
-    return call(to: expression, context: context, referenceDictionary: referenceDictionary).appending(";")
+  static func statement(
+    expression: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
+    return call(
+      to: expression,
+      context: context,
+      localLookup: localLookup,
+      referenceLookup: referenceLookup
+    ).appending(";")
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
       "function \(name)(\(parameters)) {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
-    result.append(contentsOf: [
-      "  \(returnKeyword ?? "")\(implementation)",
-      "}",
-    ])
+    for statement in implementation.dropLast() {
+      result.append(contentsOf: [
+        "\(indent)\(statement)",
+      ])
+    }
+    if let last = implementation.last {
+      result.append(contentsOf: [
+        "\(indent)\(returnKeyword ?? "")\(last)",
+        "}",
+      ])
+    }
     return result.joined(separator: "\n")
   }
   
@@ -116,7 +136,7 @@ enum JavaScript: Platform {
       "let coverageRegions = new Set([",
     ]
     for region in regions {
-      result.append("  \u{22}\(region)\u{22},")
+      result.append("\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
       "]);",
@@ -127,7 +147,7 @@ enum JavaScript: Platform {
   static var registerCoverageAction: [String] {
     return [
       "function registerCoverage(identifier) {",
-      "  coverageRegions.delete(identifier);",
+      "\(indent)coverageRegions.delete(identifier);",
       "}",
     ]
   }
@@ -142,7 +162,7 @@ enum JavaScript: Platform {
   static func testSource(identifier: String, statement: String) -> [String] {
     return [
       "function run_\(identifier)() {",
-      "  \(statement)",
+      "\(indent)\(statement)",
       "}"
     ]
   }
@@ -157,11 +177,11 @@ enum JavaScript: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "  \(test)"
+        "\(indent)\(test)"
       ])
     }
     result.append(contentsOf: [
-      "  console.assert(coverageRegions.size == 0, coverageRegions);",
+      "\(indent)console.assert(coverageRegions.size == 0, coverageRegions);",
       "}"
     ])
     return result

@@ -223,6 +223,11 @@ action (clients)
  Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
 
 use (clients)
+ storage of (truth value)
+ {
+ }
+
+use (clients)
  optional (truth value)
  {
  }

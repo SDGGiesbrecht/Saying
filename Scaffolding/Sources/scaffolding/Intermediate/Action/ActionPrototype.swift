@@ -3,6 +3,7 @@ import SDGCollections
 import SDGText
 
 struct ActionPrototype {
+  var isFlow: Bool
   var names: Set<StrictString>
   var namespace: [Set<StrictString>]
   var parameters: Interpolation<ParameterIntermediate>
@@ -62,6 +63,7 @@ extension ActionPrototype {
     }
     return .success(
       ActionPrototype(
+        isFlow: declaration.isFlow,
         names: names,
         namespace: namespace,
         parameters: parameters,

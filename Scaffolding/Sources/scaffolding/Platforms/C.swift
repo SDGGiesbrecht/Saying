@@ -9,6 +9,9 @@ enum C: Platform {
   static var directoryName: String {
     return "C"
   }
+  static var indent: String {
+    return "        "
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -88,14 +91,24 @@ enum C: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  register_coverage_region(\u{22}\(identifier)\u{22});"
+    return "register_coverage_region(\u{22}\(identifier)\u{22});"
   }
 
-  static func statement(expression: ActionUse, context: ActionIntermediate?, referenceDictionary: ReferenceDictionary) -> String {
-    return call(to: expression, context: context, referenceDictionary: referenceDictionary).appending(";")
+  static func statement(
+    expression: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
+    return call(
+      to: expression,
+      context: context,
+      localLookup: localLookup,
+      referenceLookup: referenceLookup
+    ).appending(";")
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: String) -> String {
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),
       "{",
@@ -103,10 +116,17 @@ enum C: Platform {
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
-    result.append(contentsOf: [
-      "  \(returnKeyword ?? "")\(implementation)",
-      "}",
-    ])
+    for statement in implementation.dropLast() {
+      result.append(contentsOf: [
+        "\(indent)\(statement)",
+      ])
+    }
+    if let last = implementation.last {
+      result.append(contentsOf: [
+        "\(indent)\(returnKeyword ?? "")\(last)",
+        "}",
+      ])
+    }
     return result.joined(separator: "\n")
   }
 
@@ -131,7 +151,7 @@ enum C: Platform {
       "char coverage_regions[NUMBER_OF_REGIONS][REGION_IDENTIFIER_LENGTH] = {",
     ])
     for region in regions {
-      result.append("        \u{22}\(region)\u{22},")
+      result.append("\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
       "};",
@@ -143,13 +163,13 @@ enum C: Platform {
     return [
     "void register_coverage_region(char identifier[REGION_IDENTIFIER_LENGTH])",
     "{",
-    "        for(int index = 0; index < NUMBER_OF_REGIONS; index++)",
-    "        {",
-    "                if (!strcmp(coverage_regions[index], identifier))",
-    "                {",
-    "                        memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
-    "                }",
-    "        }",
+    "\(indent)for(int index = 0; index < NUMBER_OF_REGIONS; index++)",
+    "\(indent){",
+    "\(indent)\(indent)if (!strcmp(coverage_regions[index], identifier))",
+    "\(indent)\(indent){",
+    "\(indent)\(indent)\(indent)memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
+    "\(indent)\(indent)}",
+    "\(indent)}",
     "}",
     ]
   }
@@ -165,7 +185,7 @@ enum C: Platform {
     return [
       "void run_\(identifier)()",
       "{",
-      "        \(statement)",
+      "\(indent)\(statement)",
       "}"
     ]
   }
@@ -179,19 +199,19 @@ enum C: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "        \(test)",
+        "\(indent)\(test)",
       ])
     }
     result.append(contentsOf: [
       "",
-      "        bool any_remaining = false;",
-      "        for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
-      "                if (coverage_regions[index][0] != 0)",
-      "                {",
-      "                        any_remaining = true;",
-      "                }",
-      "        }",
-      "        assert(!any_remaining);",
+      "\(indent)bool any_remaining = false;",
+      "\(indent)for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
+      "\(indent)\(indent)if (coverage_regions[index][0] != 0)",
+      "\(indent)\(indent){",
+      "\(indent)\(indent)\(indent)any_remaining = true;",
+      "\(indent)\(indent)}",
+      "\(indent)}",
+      "\(indent)assert(!any_remaining);",
       "}",
     ])
     return result
@@ -200,8 +220,8 @@ enum C: Platform {
   static func testEntryPoint() -> [String]? {
     return [
       "int main() {",
-      "        test();",
-      "        return 0;",
+      "\(indent)test();",
+      "\(indent)return 0;",
       "}",
     ]
   }

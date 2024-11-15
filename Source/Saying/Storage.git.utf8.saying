@@ -1,0 +1,67 @@
+ability (clients)
+ (
+  English: storage of (thing)
+ )
+ {
+ }
+
+extension
+ storage of (thing)
+ {
+  flow (clients)
+   (
+    English: let (storage: thing) be (value: thing)
+   )
+   C: “const ” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   C♯: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   JavaScript: “const ” storage “ = ¤(28)” value “¤(29)”
+   Kotlin: “val ” storage “: ” thing “ = ¤(28)” value “¤(29)”
+   Swift: “let ” storage “: ” thing “ = ¤(28)” value “¤(29)”
+
+  flow (clients)
+   (
+    English: let (storage: thing) start as (value: thing)
+   )
+   C: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   C♯: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   JavaScript: “let ” storage “ = ¤(28)” value “¤(29)”
+   Kotlin: “var ” storage “: ” thing “ = ¤(28)” value “¤(29)”
+   Swift: “var ” storage “: ” thing “ = ¤(28)” value “¤(29)”
+
+  flow (clients)
+   (
+    English: change (storage: thing) to (value: thing)
+   )
+   C: “” storage “ = ¤(28)” value “¤(29)”
+   C♯: “” storage “ = ¤(28)” value “¤(29)”
+   JavaScript: “” storage “ = ¤(28)” value “¤(29)”
+   Kotlin: “” storage “ = ¤(28)” value “¤(29)”
+   Swift: “” storage “ = ¤(28)” value “¤(29)”
+ }
+
+action
+ [
+  test (verify (create and use storage))
+ ]
+ (
+  English: create and use storage
+ )
+ truth value
+ {
+  let (• storage: truth value) be (true)
+  storage
+ }
+
+action
+ [
+  test (verify (create and use changeable storage))
+ ]
+ (
+  English: create and use changeable storage
+ )
+ truth value
+ {
+  let (• storage: truth value) start as (false)
+  change (storage) to (true)
+  storage
+ }

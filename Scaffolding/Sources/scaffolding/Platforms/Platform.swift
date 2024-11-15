@@ -8,6 +8,7 @@ import SDGText
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
+  static var indent: String { get }
 
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
@@ -44,7 +45,8 @@ protocol Platform {
   static func statement(
     expression: ActionUse,
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary]
   ) -> String
   static func actionDeclaration(
     name: String,
@@ -52,7 +54,7 @@ protocol Platform {
     returnSection: String?,
     returnKeyword: String?,
     coverageRegistration: String?,
-    implementation: String
+    implementation: [String]
   ) -> String
 
   // Imports
@@ -161,10 +163,10 @@ extension Platform {
       .joined()
   }
 
-  static func source(for type: ParsedTypeReference, referenceDictionary: ReferenceDictionary) -> String {
+  static func source(for type: ParsedTypeReference, referenceLookup: [ReferenceDictionary]) -> String {
     switch type {
     case .simple(let simple):
-      let type = referenceDictionary.lookupThing(simple.identifier, components: [])!
+      let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
         return String(native.textComponents.joined())
       } else {
@@ -172,7 +174,7 @@ extension Platform {
       }
     case .compound(identifier: let identifier, components: let components):
       let usedName = identifier.name()
-      let type = referenceDictionary.lookupThing(
+      let type = referenceLookup.lookupThing(
         identifier.name(),
         components: components.map({ $0.key })
       )!
@@ -185,7 +187,7 @@ extension Platform {
             let name = native.parameters[index].name
             let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
             let argument = components[argumentIndex]
-            result.append(contentsOf: source(for: argument, referenceDictionary: referenceDictionary))
+            result.append(contentsOf: source(for: argument, referenceLookup: referenceLookup))
           }
         }
         return result
@@ -196,10 +198,10 @@ extension Platform {
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
         parameters: actionParameters
-          .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+          .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
           .joined(separator: ", "),
         returnValue:
-          actionReturn.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+          actionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
             ?? emptyReturnTypeForActionType
       )
     }
@@ -208,49 +210,70 @@ extension Platform {
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary]
   ) -> String {
-    if let parameter = context?.lookupParameter(reference.actionName) {
-      if parameter.passAction.returnValue?.key.resolving(fromReferenceDictionary: referenceDictionary)
-        == reference.resolvedResultType!?.key.resolving(fromReferenceDictionary: referenceDictionary) {
+    let signature = reference.arguments.map({ $0.resolvedResultType!! })
+    if reference.isNew {
+      return String(sanitize(identifier: reference.actionName, leading: true))
+    } else if let local = localLookup.lookupAction(
+      reference.actionName,
+      signature: signature,
+      specifiedReturnValue: reference.resolvedResultType
+    ) {
+      return String(sanitize(identifier: local.names.identifier(), leading: true))
+    } else if let parameter = context?.lookupParameter(reference.actionName) {
+      if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
+        == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
       } else {
         return call(
           to: parameter.executeAction!,
           reference: reference,
           context: context,
-          referenceDictionary: referenceDictionary,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier()
         )
       }
     } else {
-      let signature = reference.arguments.map({ $0.resolvedResultType!! })
-      let bareAction = referenceDictionary.lookupAction(
+      let bareAction = referenceLookup.lookupAction(
         reference.actionName,
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
       let action = (context?.isCoverageWrapper ?? false)
         ? bareAction
-        : referenceDictionary.lookupAction(
+        : referenceLookup.lookupAction(
           bareAction.coverageTrackingIdentifier(),
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      return call(
-        to: action,
-        reference: reference,
-        context: context,
-        referenceDictionary: referenceDictionary,
-        parameterName: nil
-      )
+      var result: [String] = [
+        call(
+          to: bareAction.isFlow ? bareAction : action,
+          reference: reference,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          parameterName: nil
+        )
+      ]
+      if bareAction.isFlow,
+        let coveredIdentifier = action.coveredIdentifier {
+        result.prepend(
+          coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
+        )
+      }
+      return result.joined(separator: "\n\(indent)")
     }
   }
   static func call(
     to action: ActionIntermediate,
     reference: ActionUse,
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary,
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
     parameterName: StrictString?
   ) -> String {
     if let native = nativeImplementation(of: action) {
@@ -259,17 +282,30 @@ extension Platform {
       for index in native.textComponents.indices {
         result.append(contentsOf: String(native.textComponents[index]))
         if index ≠ native.textComponents.indices.last {
-          let name = native.parameters[index].name
-          let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
-          let argument = reference.arguments[argumentIndex]
-          result.append(contentsOf: call(to: argument, context: context, referenceDictionary: referenceDictionary))
+          let parameter = native.parameters[index]
+          if let type = parameter.typeInstead {
+            let typeSource = source(for: ParsedTypeReference.simple(type), referenceLookup: referenceLookup)
+            result.append(contentsOf: typeSource)
+          } else {
+            let name = parameter.name
+            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+            let argument = reference.arguments[argumentIndex]
+            result.append(
+              contentsOf: call(
+                to: argument,
+                context: context,
+                localLookup: localLookup,
+                referenceLookup: referenceLookup
+              )
+            )
+          }
         }
       }
       return result
     } else {
       let name = sanitize(
         identifier: parameterName
-          ?? action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+          ?? action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
         leading: true
       )
       if action.isReferenceWrapper {
@@ -278,7 +314,12 @@ extension Platform {
       } else {
         let arguments = reference.arguments
           .lazy.map({ argument in
-            return call(to: argument, context: context, referenceDictionary: referenceDictionary)
+            return call(
+              to: argument,
+              context: context,
+              localLookup: localLookup,
+              referenceLookup: referenceLookup
+            )
           })
           .joined(separator: ", ")
         return "\(name)(\(arguments))"
@@ -288,7 +329,7 @@ extension Platform {
 
   static func source(
     for parameter: ParameterIntermediate,
-    referenceDictionary: ReferenceDictionary
+    referenceLookup: [ReferenceDictionary]
   ) -> String {
     let name = sanitize(identifier: parameter.names.identifier(), leading: true)
     if ¬isTyped {
@@ -296,15 +337,15 @@ extension Platform {
     } else {
       switch parameter.type {
       case .simple, .compound:
-        let typeSource = source(for: parameter.type, referenceDictionary: referenceDictionary)
+        let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
         return parameterDeclaration(name: name, type: typeSource)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
         let parameters = actionParameters
-          .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+          .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
           .joined(separator: ", ")
         let returnValue: String
         if let specified = actionReturn {
-          returnValue = source(for: specified, referenceDictionary: referenceDictionary)
+          returnValue = source(for: specified, referenceLookup: referenceLookup)
         } else {
           returnValue = emptyReturnTypeForActionType
         }
@@ -319,23 +360,23 @@ extension Platform {
 
   static func forwardDeclaration(
     for action: ActionIntermediate,
-    referenceDictionary: ReferenceDictionary
+    referenceLookup: [ReferenceDictionary]
   ) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
     }
 
     let name = sanitize(
-      identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+      identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
       leading: true
     )
     let parameters = action.parameters.ordered(for: action.names.identifier())
-      .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+      .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
       .joined(separator: ", ")
 
     let returnValue: String?
     if let specified = action.returnValue {
-      returnValue = source(for: specified, referenceDictionary: referenceDictionary)
+      returnValue = source(for: specified, referenceLookup: referenceLookup)
     } else {
       returnValue = emptyReturnType
     }
@@ -351,24 +392,24 @@ extension Platform {
 
   static func declaration(
     for action: ActionIntermediate,
-    referenceDictionary: ReferenceDictionary
+    externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
     if nativeImplementation(of: action) ≠ nil {
       return nil
     }
 
     let name = sanitize(
-      identifier: action.globallyUniqueIdentifier(referenceDictionary: referenceDictionary),
+      identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
     let parameters = action.parameters.ordered(for: action.names.identifier())
-      .lazy.map({ source(for: $0, referenceDictionary: referenceDictionary) })
+      .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
 
     let returnValue: String?
     let needsReturnKeyword: Bool
     if let specified = action.returnValue {
-      returnValue = source(for: specified, referenceDictionary: referenceDictionary)
+      returnValue = source(for: specified, referenceLookup: externalReferenceLookup)
       needsReturnKeyword = true
     } else {
       returnValue = emptyReturnType
@@ -380,15 +421,24 @@ extension Platform {
 
     let coverageRegistration: String?
     if let identifier = action.coveredIdentifier {
-      coverageRegistration = self.coverageRegistration(identifier: sanitize(stringLiteral: identifier))
+      coverageRegistration = "\(indent)\(self.coverageRegistration(identifier: sanitize(stringLiteral: identifier)))"
     } else {
       coverageRegistration = nil
     }
-    let implementation = statement(
-      expression: action.implementation!,
-      context: action,
-      referenceDictionary: referenceDictionary
-    )
+    var locals = ReferenceDictionary()
+    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary())
+    let implementation = action.implementation!.statements.map({ entry in
+      let result = statement(
+        expression: entry,
+        context: action,
+        localLookup: locals,
+        referenceLookup: nonLocalReferenceLookup.appending(locals)
+      )
+      for local in entry.localActions() {
+        _ = locals.add(action: local)
+      }
+      return result
+    })
     return actionDeclaration(
       name: name,
       parameters: parameters,
@@ -405,10 +455,15 @@ extension Platform {
       .joined(separator: "_")
   }
 
-  static func source(of test: TestIntermediate, referenceDictionary: ReferenceDictionary) -> [String] {
+  static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
     return testSource(
       identifier: identifier(for: test, leading: false),
-      statement: statement(expression: test.action, context: nil, referenceDictionary: referenceDictionary)
+      statement: statement(
+        expression: test.action,
+        context: nil,
+        localLookup: ReferenceDictionary(),
+        referenceLookup: referenceLookup
+      )
     )
   }
 
@@ -443,13 +498,13 @@ extension Platform {
       result.append("")
     }
 
-    let referenceDictionary = module.referenceDictionary
-    let actionRegions: [StrictString] = referenceDictionary.allActions()
+    let moduleReferenceLookup = module.referenceDictionary
+    let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ ¬$0.isCoverageWrapper })
-      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceDictionary: referenceDictionary) })
-    let choiceRegions: [StrictString] = referenceDictionary.allAbilities()
+      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceLookup: [moduleReferenceLookup]) })
+    let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceDictionary: referenceDictionary) })
+      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceLookup: [moduleReferenceLookup]) })
     let regions = Set([
       actionRegions,
       choiceRegions
@@ -463,10 +518,10 @@ extension Platform {
       result.append("")
       result.append(contentsOf: start)
     }
-    let allActions = referenceDictionary.allActions(sorted: true)
+    let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
-      for action in allActions {
-        if let declaration = forwardDeclaration(for: action, referenceDictionary: referenceDictionary) {
+      for action in allActions where ¬action.isFlow {
+        if let declaration = forwardDeclaration(for: action, referenceLookup: [moduleReferenceLookup]) {
           result.append(contentsOf: [
             "",
             declaration
@@ -474,8 +529,8 @@ extension Platform {
         }
       }
     }
-    for action in allActions {
-      if let declaration = self.declaration(for: action, referenceDictionary: referenceDictionary) {
+    for action in allActions where ¬action.isFlow {
+      if let declaration = self.declaration(for: action, externalReferenceLookup: [moduleReferenceLookup]) {
         result.append(contentsOf: [
           "",
           declaration
@@ -485,7 +540,7 @@ extension Platform {
     let allTests = module.allTests(sorted: true)
     for test in allTests {
       result.append("")
-      result.append(contentsOf: source(of: test, referenceDictionary: referenceDictionary))
+      result.append(contentsOf: source(of: test, referenceLookup: [moduleReferenceLookup]))
     }
     result.append("")
     result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))

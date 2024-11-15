@@ -49,3 +49,15 @@ extension NativeActionImplementationIntermediate {
     )
   }
 }
+
+extension NativeActionImplementationIntermediate {
+  func specializing(
+    typeLookup: [StrictString: SimpleTypeReference]
+  ) -> NativeActionImplementationIntermediate {
+    return NativeActionImplementationIntermediate(
+      textComponents: textComponents,
+      parameters: parameters.map({ $0.specializing(typeLookup: typeLookup) }),
+      requiredImport: requiredImport
+    )
+  }
+}
