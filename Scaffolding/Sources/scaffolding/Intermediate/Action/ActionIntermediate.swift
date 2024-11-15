@@ -210,8 +210,17 @@ extension ActionIntermediate {
     )
     for native in allNativeImplementations() {
       for parameterReference in native.parameters {
-        if prototype.parameters.parameter(named: parameterReference.name) == nil {
-          errors.append(.noSuchParameter(parameterReference.syntaxNode))
+        if let typeInstead = parameterReference.typeInstead {
+          ParsedTypeReference.simple(typeInstead).validateReferences(
+            requiredAccess: access,
+            allowTestOnlyAccess: testOnlyAccess,
+            referenceDictionary: moduleReferenceDictionary,
+            errors: &errors
+          )
+        } else {
+          if prototype.parameters.parameter(named: parameterReference.name) == nil {
+            errors.append(.noSuchParameter(parameterReference.syntaxNode))
+          }
         }
       }
     }
@@ -333,6 +342,12 @@ extension ActionIntermediate {
         specializationNamespace: specializationNamespace
       )
     })
+    var nativeImplementationTypeLookup = typeLookup
+    for parameter in newParameters.inAnyOrder {
+      for name in parameter.names {
+        nativeImplementationTypeLookup[name] = nil
+      }
+    }
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: isFlow,
@@ -344,11 +359,11 @@ extension ActionIntermediate {
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
         documentation: newDocumentation
       ),
-      c: c,
-      cSharp: cSharp,
-      javaScript: javaScript,
-      kotlin: kotlin,
-      swift: swift,
+      c: c?.specializing(typeLookup: nativeImplementationTypeLookup),
+      cSharp: cSharp?.specializing(typeLookup: nativeImplementationTypeLookup),
+      javaScript: javaScript?.specializing(typeLookup: nativeImplementationTypeLookup),
+      kotlin: kotlin?.specializing(typeLookup: nativeImplementationTypeLookup),
+      swift: swift?.specializing(typeLookup: nativeImplementationTypeLookup),
       implementation: implementation,
       declaration: nil,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
