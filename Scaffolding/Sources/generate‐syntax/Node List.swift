@@ -211,6 +211,41 @@ extension Node {
           ),
 
           Node(
+            name: "DocumentationReference",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "identifier", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "DocumentationTextSegment",
+            kind: .alternates([
+              Alternate(name: "identifierCharacters", type: "IdentifierComponent"),
+              Alternate(name: "openingParenthesis", type: "OpeningParenthesis"),
+              Alternate(name: "closingParenthesis", type: "ClosingParenthesis"),
+              Alternate(name: "reference", type: "DocumentationReference")
+            ])
+          ),
+          Node(
+            name: "DocumentationTextSpan",
+            kind: .compound(children: [
+              Child(name: "first", type: "DocumentationTextSegment", kind: .required),
+              Child(name: "continuations", type: "DocumentationTextSegment", kind: .array),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "DocumentationText",
+          entryName: "segment", entryNamePlural: "segments",
+          entryType: "DocumentationTextSpan",
+          separatorName: "space",
+          separatorType: "Space",
+          fixedSeparator: true
+        ),
+
+        [
+          Node(
             name: "LiteralSegment",
             kind: .alternates([
               Alternate(name: "identifier", type: "IdentifierComponent"),
@@ -372,7 +407,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "text", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "text", type: "DocumentationText", kind: .required),
             ])
           ),
         ],
