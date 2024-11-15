@@ -13,7 +13,7 @@ extension
     English: let (storage: thing) be (value: thing)
    )
    C: “const ” thing “ ” storage “ = ¤(28)” value “¤(29)”
-   C♯: “const ” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   C♯: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
    JavaScript: “const ” storage “ = ¤(28)” value “¤(29)”
    Kotlin: “val ” storage “: ” thing “ = ¤(28)” value “¤(29)”
    Swift: “let ” storage “: ” thing “ = ¤(28)” value “¤(29)”
