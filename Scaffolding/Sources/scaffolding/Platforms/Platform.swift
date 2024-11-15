@@ -242,7 +242,7 @@ extension Platform {
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
-      let action = (context?.isCoverageWrapper ?? false ∨ bareAction.isFlow)
+      let action = (context?.isCoverageWrapper ?? false)
         ? bareAction
         : referenceLookup.lookupAction(
           bareAction.coverageTrackingIdentifier(),
@@ -251,7 +251,7 @@ extension Platform {
         )!
       var result: [String] = [
         call(
-          to: action,
+          to: bareAction.isFlow ? bareAction : action,
           reference: reference,
           context: context,
           localLookup: localLookup,
@@ -259,9 +259,10 @@ extension Platform {
           parameterName: nil
         )
       ]
-      if bareAction.isFlow {
+      if bareAction.isFlow,
+        let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
-          coverageRegistration(identifier: sanitize(stringLiteral: "..."))
+          coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
         )
       }
       return result.joined(separator: "\n\(indent)")
