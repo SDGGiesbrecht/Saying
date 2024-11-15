@@ -111,12 +111,12 @@ enum JavaScript: Platform {
     }
     for statement in implementation.dropLast() {
       result.append(contentsOf: [
-        "  \(statement)",
+        "\(indent)\(statement)",
       ])
     }
     if let last = implementation.last {
       result.append(contentsOf: [
-        "  \(returnKeyword ?? "")\(last)",
+        "\(indent)\(returnKeyword ?? "")\(last)",
         "}",
       ])
     }
@@ -136,7 +136,7 @@ enum JavaScript: Platform {
       "let coverageRegions = new Set([",
     ]
     for region in regions {
-      result.append("  \u{22}\(region)\u{22},")
+      result.append("\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
       "]);",
@@ -147,7 +147,7 @@ enum JavaScript: Platform {
   static var registerCoverageAction: [String] {
     return [
       "function registerCoverage(identifier) {",
-      "  coverageRegions.delete(identifier);",
+      "\(indent)coverageRegions.delete(identifier);",
       "}",
     ]
   }
@@ -162,7 +162,7 @@ enum JavaScript: Platform {
   static func testSource(identifier: String, statement: String) -> [String] {
     return [
       "function run_\(identifier)() {",
-      "  \(statement)",
+      "\(indent)\(statement)",
       "}"
     ]
   }
@@ -177,11 +177,11 @@ enum JavaScript: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "  \(test)"
+        "\(indent)\(test)"
       ])
     }
     result.append(contentsOf: [
-      "  console.assert(coverageRegions.size == 0, coverageRegions);",
+      "\(indent)console.assert(coverageRegions.size == 0, coverageRegions);",
       "}"
     ])
     return result

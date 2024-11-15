@@ -164,12 +164,12 @@ enum Swift: Platform {
     }
     for statement in implementation.dropLast() {
       result.append(contentsOf: [
-        "  \(statement)",
+        "\(indent)\(statement)",
       ])
     }
     if let last = implementation.last {
       result.append(contentsOf: [
-        "  \(returnKeyword ?? "")\(last)",
+        "\(indent)\(returnKeyword ?? "")\(last)",
         "}",
       ])
     }
@@ -189,7 +189,7 @@ enum Swift: Platform {
       "var coverageRegions: Set<String> = [",
     ]
     for region in regions {
-      result.append("  \u{22}\(region)\u{22},")
+      result.append("\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
       "]",
@@ -200,7 +200,7 @@ enum Swift: Platform {
   static var registerCoverageAction: [String] {
     return [
       "func registerCoverage(_ identifier: String) {",
-      "  coverageRegions.remove(identifier)",
+      "\(indent)coverageRegions.remove(identifier)",
       "}",
     ]
   }
@@ -215,7 +215,7 @@ enum Swift: Platform {
   static func testSource(identifier: String, statement: String) -> [String] {
     return [
       "func run_\(identifier)() {",
-      "  \(statement)",
+      "\(indent)\(statement)",
       "}"
     ]
   }
@@ -230,11 +230,11 @@ enum Swift: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "  \(test)",
+        "\(indent)\(test)",
       ])
     }
     result.append(contentsOf: [
-      "  assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
+      "\(indent)assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
       "}"
     ])
     return result
@@ -255,18 +255,18 @@ enum Swift: Platform {
       "import PackageDescription",
       "",
       "let package = Package(",
-      "  name: \u{22}Package\u{22},",
-      "  targets: [",
-      "    .target(name: \u{22}Products\u{22}),",
-      "    .executableTarget(",
-      "      name: \u{22}test\u{22},",
-      "      dependencies: [\u{22}Products\u{22}]",
-      "    ),",
-      "    .testTarget(",
-      "      name: \u{22}WrappedTests\u{22},",
-      "      dependencies: [\u{22}Products\u{22}]",
-      "    )",
-      "  ]",
+      "\(indent)name: \u{22}Package\u{22},",
+      "\(indent)targets: [",
+      "\(indent)\(indent).target(name: \u{22}Products\u{22}),",
+      "\(indent)\(indent).executableTarget(",
+      "\(indent)\(indent)\(indent)name: \u{22}test\u{22},",
+      "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+      "\(indent)\(indent)),",
+      "\(indent)\(indent).testTarget(",
+      "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
+      "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+      "\(indent)\(indent))",
+      "\(indent)]",
       ")",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Package.swift"))
@@ -275,9 +275,9 @@ enum Swift: Platform {
       "",
       "@main struct Test {",
       "",
-      "  static func main() {",
-      "    Products.test()",
-      "  }",
+      "\(indent)static func main() {",
+      "\(indent)\(indent)Products.test()",
+      "\(indent)}",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(
@@ -293,9 +293,9 @@ enum Swift: Platform {
       "",
       "class WrappedTests: XCTestCase {",
       "",
-      "  func testProject() {",
-      "    Products.test()",
-      "  }",
+      "\(indent)func testProject() {",
+      "\(indent)\(indent)Products.test()",
+      "\(indent)}",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(

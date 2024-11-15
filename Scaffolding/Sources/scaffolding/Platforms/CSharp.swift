@@ -10,7 +10,7 @@ enum CSharp: Platform {
     return "C♯"
   }
   static var indent: String {
-    return "        "
+    return "    "
   }
   
   static var allowsAllUnicodeIdentifiers: Bool {
@@ -110,21 +110,21 @@ enum CSharp: Platform {
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
-      "    static \(returnSection!) \(name)(\(parameters))",
-      "    {",
+      "\(indent)static \(returnSection!) \(name)(\(parameters))",
+      "\(indent){",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
     for statement in implementation.dropLast() {
       result.append(contentsOf: [
-        "        \(statement)",
+        "\(indent)\(indent)\(statement)",
       ])
     }
     if let last = implementation.last {
       result.append(contentsOf: [
-        "        \(returnKeyword ?? "")\(last)",
-        "    }",
+        "\(indent)\(indent)\(returnKeyword ?? "")\(last)",
+        "\(indent)}",
       ])
     }
     return result.joined(separator: "\n")
@@ -146,23 +146,23 @@ enum CSharp: Platform {
     var result: [String] = [
       "static class Coverage",
       "{",
-      "    internal static HashSet<string> Regions = new HashSet<string> {",
+      "\(indent)internal static HashSet<string> Regions = new HashSet<string> {",
     ]
     for region in regions {
-      result.append("        \u{22}\(region)\u{22},")
+      result.append("\(indent)\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
-      "    };",
+      "\(indent)};",
     ])
     return result
   }
 
   static var registerCoverageAction: [String] {
     return [
-      "    internal static void Register(string identifier)",
-      "    {",
-      "        Coverage.Regions.Remove(identifier);",
-      "    }",
+      "\(indent)internal static void Register(string identifier)",
+      "\(indent){",
+      " \(indent)\(indent)Coverage.Regions.Remove(identifier);",
+      "\(indent)}",
       "}",
     ]
   }
@@ -172,14 +172,14 @@ enum CSharp: Platform {
       "static class Tests",
       "{",
       "",
-      "    static void Assert(bool condition, string message)",
-      "    {",
-      "        if (!condition)",
-      "        {",
-      "            Console.WriteLine(message);",
-      "            Environment.Exit(1);",
-      "        }",
-      "    }",
+      "\(indent)static void Assert(bool condition, string message)",
+      "\(indent){",
+      "\(indent)\(indent)if (!condition)",
+      "\(indent)\(indent){",
+      "\(indent)\(indent)\(indent)Console.WriteLine(message);",
+      "\(indent)\(indent)\(indent)Environment.Exit(1);",
+      "\(indent)\(indent)}",
+      "\(indent)}",
     ]
   }
   static var actionDeclarationsContainerEnd: [String]? {
@@ -190,10 +190,10 @@ enum CSharp: Platform {
 
   static func testSource(identifier: String, statement: String) -> [String] {
     return [
-      "    static void run_\(identifier)()",
-      "    {",
-      "        \(statement)",
-      "    }"
+      "\(indent)static void run_\(identifier)()",
+      "\(indent){",
+      "\(indent)\(indent)\(statement)",
+      "\(indent)}"
     ]
   }
   static func testCall(for identifier: String) -> String {
@@ -202,16 +202,16 @@ enum CSharp: Platform {
 
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
-      "    internal static void Test() {",
+      "\(indent)internal static void Test() {",
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "        \(test)"
+        "\(indent)\(indent)\(test)"
       ])
     }
     result.append(contentsOf: [
-      "        Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
-      "    }",
+      "\(indent)\(indent)Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
+      "\(indent)}",
     ])
     return result
   }
@@ -220,10 +220,10 @@ enum CSharp: Platform {
     return [
       "class Test",
       "{",
-      "    static void Main()",
-      "    {",
-      "        Tests.Test();",
-      "    }",
+      "\(indent)static void Main()",
+      "\(indent){",
+      "\(indent)\(indent)Tests.Test();",
+      "\(indent)}",
       "}",
     ]
   }

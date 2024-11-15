@@ -122,12 +122,12 @@ enum Kotlin: Platform {
     }
     for statement in implementation.dropLast() {
       result.append(contentsOf: [
-        "    \(statement)",
+        "\(indent)\(statement)",
       ])
     }
     if let last = implementation.last {
       result.append(contentsOf: [
-        "    \(returnKeyword ?? "")\(last)",
+        "\(indent)\(returnKeyword ?? "")\(last)",
         "}",
       ])
     }
@@ -147,7 +147,7 @@ enum Kotlin: Platform {
       "val coverageRegions: MutableSet<String> = mutableSetOf(",
     ]
     for region in regions {
-      result.append("    \u{22}\(region)\u{22},")
+      result.append("\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
       ")",
@@ -158,7 +158,7 @@ enum Kotlin: Platform {
   static var registerCoverageAction: [String] {
     return [
       "fun registerCoverage(identifier: String) {",
-      "    coverageRegions.remove(identifier)",
+      "\(indent)coverageRegions.remove(identifier)",
       "}",
     ]
   }
@@ -173,7 +173,7 @@ enum Kotlin: Platform {
   static func testSource(identifier: String, statement: String) -> [String] {
     return [
       "fun run_\(identifier)() {",
-      "    \(statement)",
+      "\(indent)\(statement)",
       "}"
     ]
   }
@@ -188,11 +188,11 @@ enum Kotlin: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "    \(test)",
+        "\(indent)\(test)",
       ])
     }
     result.append(contentsOf: [
-      "    assert(coverageRegions.isEmpty()) { \u{22}$coverageRegions\u{22} }",
+      "\(indent)assert(coverageRegions.isEmpty()) { \u{22}$coverageRegions\u{22} }",
       "}"
     ])
     return result
@@ -201,7 +201,7 @@ enum Kotlin: Platform {
   static func testEntryPoint() -> [String]? {
     return [
       "fun main() {",
-      "    test()",
+      "\(indent)test()",
       "}",
     ]
   }
@@ -217,18 +217,18 @@ enum Kotlin: Platform {
       .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
     try ([
       "pluginManagement {",
-      "    repositories {",
-      "        gradlePluginPortal()",
-      "        google()",
-      "        mavenCentral()",
-      "    }",
+      "\(indent)repositories {",
+      "\(indent)\(indent)gradlePluginPortal()",
+      "\(indent)\(indent)google()",
+      "\(indent)\(indent)mavenCentral()",
+      "\(indent)}",
       "}",
       "",
       "dependencyResolutionManagement {",
-      "    repositories {",
-      "        google()",
-      "        mavenCentral()",
-      "    }",
+      "\(indent)repositories {",
+      "\(indent)\(indent)google()",
+      "\(indent)\(indent)mavenCentral()",
+      "\(indent)}",
       "}",
       "",
       "rootProject.name = \u{22}Test\u{22}",
@@ -237,39 +237,39 @@ enum Kotlin: Platform {
       .save(to: projectDirectory.appendingPathComponent("settings.gradle.kts"))
     try ([
       "plugins {",
-      "    id(\u{22}com.android.application\u{22}) version \u{22}8.6.0\u{22} apply false",
-      "    id(\u{22}org.jetbrains.kotlin.android\u{22}) version \u{22}2.0.20\u{22} apply false",
+      "\(indent)id(\u{22}com.android.application\u{22}) version \u{22}8.6.0\u{22} apply false",
+      "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22}) version \u{22}2.0.20\u{22} apply false",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("build.gradle.kts"))
     try ([
       "plugins {",
-      "    id(\u{22}com.android.application\u{22})",
-      "    id(\u{22}org.jetbrains.kotlin.android\u{22})",
+      "\(indent)id(\u{22}com.android.application\u{22})",
+      "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22})",
       "}",
       "",
       "kotlin {",
-      "    jvmToolchain(11)",
+      "\(indent)jvmToolchain(11)",
       "}",
       "",
       "android {",
-      "    namespace = \u{22}com.example.test\u{22}",
-      "    compileSdk = 34",
-      "    defaultConfig {",
-      "        minSdk = 21",
-      "        testInstrumentationRunner = \u{22}androidx.test.runner.AndroidJUnitRunner\u{22}",
-      "    }",
+      "\(indent)namespace = \u{22}com.example.test\u{22}",
+      "\(indent)compileSdk = 34",
+      "\(indent)defaultConfig {",
+      "\(indent)\(indent)minSdk = 21",
+      "\(indent)\(indent)testInstrumentationRunner = \u{22}androidx.test.runner.AndroidJUnitRunner\u{22}",
+      "\(indent)}",
       "}",
       "",
       "dependencies {",
-      "    androidTestImplementation(\u{22}androidx.test:runner:1.6.1\u{22})",
+      "\(indent)androidTestImplementation(\u{22}androidx.test:runner:1.6.1\u{22})",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("app/build.gradle.kts"))
     try ([
       "<?xml version=\u{22}1.0\u{22} encoding=\u{22}utf-8\u{22}?>",
       "<manifest xmlns:android=\u{22}http://schemas.android.com/apk/res/android\u{22}",
-      "    xmlns:tools=\u{22}http://schemas.android.com/tools\u{22}>",
+      "\(indent)xmlns:tools=\u{22}http://schemas.android.com/tools\u{22}>",
       "</manifest>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("app/src/main/AndroidManifest.xml"))
@@ -277,9 +277,9 @@ enum Kotlin: Platform {
       "import org.junit.Test",
       "",
       "class WrappedTests {",
-      "    @Test fun testProject() {",
-      "        test()",
-      "    }",
+      "\(indent)@Test fun testProject() {",
+      "\(indent)\(indent)test()",
+      "\(indent)}",
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.kt"))
