@@ -16,7 +16,7 @@ extension
    C♯: “const type ” storage “ = ¤(28)” value “¤(29)”
    JavaScript: “const ” storage “ = ¤(28)” value “¤(29)”
    Kotlin: “val ” storage “ = ¤(28)” value “¤(29)”
-   Swift: “let ” storage “ = ¤(28)” value “¤(29)”
+   Swift: “let ” storage “: ” thing “ = ¤(28)” value “¤(29)”
 
   flow (clients)
    (
