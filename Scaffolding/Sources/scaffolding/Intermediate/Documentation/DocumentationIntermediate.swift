@@ -111,7 +111,12 @@ extension DocumentationIntermediate {
               break
             case .reference(let reference):
               let identifier = reference.identifier
-              errors.append(.noSuchIdentifier(identifier))
+              if referenceLookup.lookupAction(
+                identifier.identifierText(),
+                signature: [],
+                specifiedReturnValue: .none) == nil {
+                errors.append(.noSuchIdentifier(identifier))
+              }
             }
           }
         }
