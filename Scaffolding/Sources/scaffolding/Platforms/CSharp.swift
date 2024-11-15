@@ -9,6 +9,9 @@ enum CSharp: Platform {
   static var directoryName: String {
     return "C♯"
   }
+  static var indent: String {
+    return "        "
+  }
   
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -88,7 +91,7 @@ enum CSharp: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "        Coverage.Register(\u{22}\(identifier)\u{22});"
+    return "Coverage.Register(\u{22}\(identifier)\u{22});"
   }
 
   static func statement(

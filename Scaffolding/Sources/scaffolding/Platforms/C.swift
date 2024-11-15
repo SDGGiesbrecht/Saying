@@ -9,6 +9,9 @@ enum C: Platform {
   static var directoryName: String {
     return "C"
   }
+  static var indent: String {
+    return "        "
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -88,7 +91,7 @@ enum C: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  register_coverage_region(\u{22}\(identifier)\u{22});"
+    return "register_coverage_region(\u{22}\(identifier)\u{22});"
   }
 
   static func statement(

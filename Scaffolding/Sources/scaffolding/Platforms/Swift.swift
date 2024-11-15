@@ -9,6 +9,9 @@ enum Swift: Platform {
   static var directoryName: String {
     "Swift"
   }
+  static var indent: String {
+    return "  "
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -135,7 +138,7 @@ enum Swift: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  registerCoverage(\u{22}\(identifier)\u{22})"
+    return "registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
   static func statement(

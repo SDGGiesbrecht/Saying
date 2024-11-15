@@ -8,6 +8,7 @@ import SDGText
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
+  static var indent: String { get }
 
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
@@ -248,14 +249,22 @@ extension Platform {
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
-      return call(
-        to: action,
-        reference: reference,
-        context: context,
-        localLookup: localLookup,
-        referenceLookup: referenceLookup,
-        parameterName: nil
-      )
+      var result: [String] = [
+        call(
+          to: action,
+          reference: reference,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          parameterName: nil
+        )
+      ]
+      if bareAction.isFlow {
+        result.prepend(
+          coverageRegistration(identifier: sanitize(stringLiteral: "..."))
+        )
+      }
+      return result.joined(separator: "\n\(indent)")
     }
   }
   static func call(
@@ -405,7 +414,7 @@ extension Platform {
 
     let coverageRegistration: String?
     if let identifier = action.coveredIdentifier {
-      coverageRegistration = self.coverageRegistration(identifier: sanitize(stringLiteral: identifier))
+      coverageRegistration = "\(indent)\(self.coverageRegistration(identifier: sanitize(stringLiteral: identifier)))"
     } else {
       coverageRegistration = nil
     }

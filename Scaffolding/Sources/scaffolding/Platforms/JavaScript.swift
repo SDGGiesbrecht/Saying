@@ -9,6 +9,9 @@ enum JavaScript: Platform {
   static var directoryName: String {
     return "JavaScript"
   }
+  static var indent: String {
+    return "  "
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -82,7 +85,7 @@ enum JavaScript: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "  coverageRegions.delete(\u{22}\(identifier)\u{22});"
+    return "coverageRegions.delete(\u{22}\(identifier)\u{22});"
   }
 
   static func statement(
