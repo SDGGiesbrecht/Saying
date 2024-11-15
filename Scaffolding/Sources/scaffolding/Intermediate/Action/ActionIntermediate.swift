@@ -36,6 +36,9 @@ struct ActionIntermediate {
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
+  func allNativeImplementations() -> [NativeActionImplementationIntermediate] {
+    return [c, cSharp, javaScript, kotlin, swift].compactMap({ $0 })
+  }
 }
 
 extension ActionIntermediate {
@@ -142,11 +145,6 @@ extension ActionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
-          for parameterReference in constructed.parameters {
-            if prototype.parameters.parameter(named: parameterReference.name) == nil {
-              errors.append(.parameterNotFound(parameterReference.syntaxNode))
-            }
-          }
           switch implementation.language.identifierText() {
           case "C":
             c = constructed
@@ -210,6 +208,13 @@ extension ActionIntermediate {
       referenceDictionary: moduleReferenceDictionary,
       errors: &errors
     )
+    for native in allNativeImplementations() {
+      for parameterReference in native.parameters {
+        if prototype.parameters.parameter(named: parameterReference.name) == nil {
+          errors.append(.noSuchParameter(parameterReference.syntaxNode))
+        }
+      }
+    }
     implementation?.validateReferences(
       context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
       testContext: false,

@@ -5,6 +5,7 @@ extension ActionIntermediate {
     case brokenPrototype(ActionPrototype.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
+    #warning("Is this dead?")
     case parameterNotFound(ParsedUninterruptedIdentifier)
     case invalidImport(ParsedNativeActionImplementation)
     case missingImplementation(language: StrictString, action: ParsedActionName)
