@@ -237,7 +237,7 @@ extension Node {
         ],
         Node.separatedList(
           name: "DocumentationText",
-          entryName: "segment", entryNamePlural: "segments",
+          entryName: "span", entryNamePlural: "spans",
           entryType: "DocumentationTextSpan",
           separatorName: "space",
           separatorType: "Space",

@@ -2,6 +2,7 @@ import SDGLogic
 import SDGText
 
 struct DocumentationIntermediate {
+  var paragraphs: [ParsedParagraph]
   var parameters: [[ParsedParameterDocumentation]]
   var tests: [TestIntermediate]
   var declaration: ParsedDocumentation?
@@ -14,6 +15,7 @@ extension DocumentationIntermediate {
     namespace: [Set<StrictString>]
   ) -> DocumentationIntermediate {
 
+    var paragraphs: [ParsedParagraph] = []
     var parameters: [ParsedParameterDocumentation] = []
     var testIndex = 1
     var tests: [TestIntermediate] = []
@@ -24,12 +26,13 @@ extension DocumentationIntermediate {
       case .test(let test):
         tests.append(TestIntermediate(test, location: namespace, index: testIndex))
         testIndex += 1
-      case .paragraph:
-        break
+      case .paragraph(let paragraph):
+        paragraphs.append(paragraph)
       }
     }
 
     return DocumentationIntermediate(
+      paragraphs: paragraphs,
       parameters: [parameters],
       tests: tests,
       declaration: declaration
@@ -42,6 +45,7 @@ extension DocumentationIntermediate {
     typeLookup: [StrictString: StrictString]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
+      paragraphs: paragraphs,
       parameters: parameters,
       tests: tests.map({ test in
         return test.resolvingExtensionContext(typeLookup: typeLookup)
@@ -53,6 +57,7 @@ extension DocumentationIntermediate {
     specializationNamespace: [Set<StrictString>]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
+      paragraphs: paragraphs,
       parameters: parameters,
       tests: tests.map({ test in
         return test.specializing(
@@ -80,9 +85,37 @@ extension Optional where Wrapped == DocumentationIntermediate {
       return base
     }
     return DocumentationIntermediate(
+      paragraphs: base.paragraphs.appending(contentsOf: child.paragraphs),
       parameters: base.parameters.appending(contentsOf: child.parameters),
       tests: base.tests.appending(contentsOf: child.tests),
       declaration: nil
     )
+  }
+}
+
+extension DocumentationIntermediate {
+  func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
+    var paragraphs: [ParsedParagraph] = []
+    for paragraph in self.paragraphs {
+      paragraphs.append(paragraph)
+    }
+    for parameter in parameters.lazy.flatMap({ $0 }) {
+      paragraphs.append(parameter.details.paragraph)
+    }
+    for paragraph in paragraphs {
+      for languageEntry in paragraph.paragraphs.text {
+        for span in languageEntry.text.spans {
+          for segment in [span.first].appending(contentsOf: span.continuations) {
+            switch segment {
+            case .identifierCharacters, .openingParenthesis, .closingParenthesis:
+              break
+            case .reference(let reference):
+              let identifier = reference.identifier
+              errors.append(.noSuchIdentifier(identifier))
+            }
+          }
+        }
+      }
+    }
   }
 }
