@@ -224,9 +224,14 @@ extension ActionIntermediate {
         }
       }
     }
+    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary()]
     implementation?.validateReferences(
-      context: [moduleReferenceDictionary, self.parameterReferenceDictionary()],
+      context: externalAndParameters,
       testContext: false,
+      errors: &errors
+    )
+    documentation?.validateReferences(
+      referenceLookup: externalAndParameters,
       errors: &errors
     )
   }

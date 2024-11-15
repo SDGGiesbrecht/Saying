@@ -285,12 +285,14 @@ extension ReferenceDictionary {
   }
 
   func validateReferencesAsModule(errors: inout [ReferenceError]) {
-    for group in actions.values {
-      for returnOverloads in group.values {
-        for action in returnOverloads.values {
-          action.validateReferences(moduleReferenceDictionary: self, errors: &errors)
-        }
-      }
+    for thing in allThings() {
+      thing.documentation?.validateReferences(referenceLookup: [self], errors: &errors)
+    }
+    for action in allActions() {
+      action.validateReferences(moduleReferenceDictionary: self, errors: &errors)
+    }
+    for ability in allAbilities() {
+      ability.documentation?.validateReferences(referenceLookup: [self], errors: &errors)
     }
   }
 }

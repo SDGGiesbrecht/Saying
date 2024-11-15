@@ -1,0 +1,14 @@
+action
+ [
+  [
+   English: Some examples of characters that should be available to documentation include (parentheses). It should also be possible to refer to a parameter {parameter of this action} and to a global action {none}.
+  ]
+  test (verify (hold some documentation that refers to a parameter (true)))
+ ]
+ (
+  English: hold some documentation that refers to a parameter (parameter of this action: truth value)
+ )
+ truth value
+ {
+  parameter of this action
+ }

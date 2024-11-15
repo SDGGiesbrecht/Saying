@@ -15,6 +15,7 @@ enum ReferenceError: DiagnosticError {
   case redeclaredLocalIdentifier(error: ReferenceDictionary.RedeclaredIdentifierError)
   case noSuchParameter(ParsedUninterruptedIdentifier)
   case noSuchLanguage(ParsedUninterruptedIdentifier)
+  case noSuchIdentifier(ParsedUninterruptedIdentifier)
 
   var message: String {
     switch self {
@@ -45,6 +46,8 @@ enum ReferenceError: DiagnosticError {
     case .noSuchParameter:
       return defaultMessage
     case .noSuchLanguage:
+      return defaultMessage
+    case .noSuchIdentifier:
       return defaultMessage
     }
   }
@@ -79,6 +82,8 @@ enum ReferenceError: DiagnosticError {
       return parameter.location
     case .noSuchLanguage(let language):
       return language.location
+    case .noSuchIdentifier(let identifier):
+      return identifier.location
     }
   }
 }
