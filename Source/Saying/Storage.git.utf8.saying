@@ -12,20 +12,20 @@ extension
    (
     English: let (storage: thing) be (value: thing)
    )
-   C: “const type ” storage “ = ¤(28)” value “¤(29)”
-   C♯: “const type ” storage “ = ¤(28)” value “¤(29)”
+   C: “const ” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   C♯: “const ” thing “ ” storage “ = ¤(28)” value “¤(29)”
    JavaScript: “const ” storage “ = ¤(28)” value “¤(29)”
-   Kotlin: “val ” storage “ = ¤(28)” value “¤(29)”
+   Kotlin: “val ” storage “: ” thing “ = ¤(28)” value “¤(29)”
    Swift: “let ” storage “: ” thing “ = ¤(28)” value “¤(29)”
 
   flow (clients)
    (
     English: let (storage: thing) start as (value: thing)
    )
-   C: “type ” storage “ = ¤(28)” value “¤(29)”
-   C♯: “type ” storage “ = ¤(28)” value “¤(29)”
+   C: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
+   C♯: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
    JavaScript: “let ” storage “ = ¤(28)” value “¤(29)”
-   Kotlin: “var ” storage “ = ¤(28)” value “¤(29)”
+   Kotlin: “var ” storage “: ” thing “ = ¤(28)” value “¤(29)”
    Swift: “var ” storage “: ” thing “ = ¤(28)” value “¤(29)”
 
   flow (clients)
