@@ -1,0 +1,15 @@
+action
+ [
+  test (verify ((true) triggers if))
+  test (verify (not ((false) triggers if)))
+ ]
+ (
+  English: (condition: truth value) triggers if
+ )
+ truth value
+ {
+  if (condition), {
+   return (true)
+  }
+  return (false)
+ }
