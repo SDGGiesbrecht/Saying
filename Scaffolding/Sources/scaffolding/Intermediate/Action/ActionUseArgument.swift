@@ -81,9 +81,8 @@ extension ActionUseArgument {
     switch self {
     case .action(let action):
       return .action(action.resolvingExtensionContext(typeLookup: typeLookup))
-    case .flow:
-      #warning("Not implemented yet.")
-      return self
+    case .flow(let statements):
+      return .flow(statements.resolvingExtensionContext(typeLookup: typeLookup))
     }
   }
 
@@ -93,9 +92,8 @@ extension ActionUseArgument {
     switch self {
     case .action(let action):
       return .action(action.specializing(typeLookup: typeLookup))
-    case .flow:
-      #warning("Not implemented yet.")
-      return self
+    case .flow(let statements):
+      return .flow(statements.specializing(typeLookup: typeLookup))
     }
   }
 }

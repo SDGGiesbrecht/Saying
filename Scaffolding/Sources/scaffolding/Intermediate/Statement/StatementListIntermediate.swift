@@ -1,3 +1,5 @@
+import SDGText
+
 struct StatementListIntermediate {
   var statements: [StatementIntermediate]
 }
@@ -43,5 +45,23 @@ extension StatementListIntermediate {
         errors.append(contentsOf: local.add(action: new).map({ .redeclaredLocalIdentifier(error: $0) }))
       }
     }
+  }
+}
+
+extension StatementListIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> StatementListIntermediate {
+    return StatementListIntermediate(
+      statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+    )
+  }
+
+  func specializing(
+    typeLookup: [StrictString: SimpleTypeReference]
+  ) -> StatementListIntermediate {
+    return StatementListIntermediate(
+      statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
+    )
   }
 }
