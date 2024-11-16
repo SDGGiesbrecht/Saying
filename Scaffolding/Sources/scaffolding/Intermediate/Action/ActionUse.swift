@@ -3,7 +3,7 @@ import SDGText
 
 struct ActionUse {
   var actionName: StrictString
-  var arguments: [ActionUse]
+  var arguments: [ActionUseArgument]
   var source: ParsedAction?
   var isNew: Bool
   var explicitResultType: ParsedTypeReference?
@@ -19,10 +19,10 @@ extension ActionUse {
       arguments = compound.arguments.arguments.map { argument in
         switch argument {
         case .passed(let passed):
-          return ActionUse(passed.argument)
+          return .action(ActionUse(passed.argument))
         case .flow(let flow):
-          #warning("Not implemented yet.")
-          fatalError("Not implemented yet.")
+          #warning("Dropping statements.")
+          return .flow
         }
       }
     case .reference:

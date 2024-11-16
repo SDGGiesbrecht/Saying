@@ -290,14 +290,19 @@ extension Platform {
             let name = parameter.name
             let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
             let argument = reference.arguments[argumentIndex]
-            result.append(
-              contentsOf: call(
-                to: argument,
-                context: context,
-                localLookup: localLookup,
-                referenceLookup: referenceLookup
+            switch argument {
+            case .action(let actionArgument):
+              result.append(
+                contentsOf: call(
+                  to: actionArgument,
+                  context: context,
+                  localLookup: localLookup,
+                  referenceLookup: referenceLookup
+                )
               )
-            )
+            case .flow:
+              #warning("Not implemented yet.")
+            }
           }
         }
       }
@@ -314,12 +319,18 @@ extension Platform {
       } else {
         let arguments = reference.arguments
           .lazy.map({ argument in
-            return call(
-              to: argument,
-              context: context,
-              localLookup: localLookup,
-              referenceLookup: referenceLookup
-            )
+            switch argument {
+            case .action(let actionArgument):
+              return call(
+                to: actionArgument,
+                context: context,
+                localLookup: localLookup,
+                referenceLookup: referenceLookup
+              )
+            case .flow:
+              #warning("Not implemented yet.")
+              return ""
+            }
           })
           .joined(separator: ", ")
         return "\(name)(\(arguments))"

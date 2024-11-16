@@ -434,11 +434,13 @@ extension ActionIntermediate {
             ActionUse(
               actionName: baseName,
               arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
-                return ActionUse(
-                  actionName: parameter.names.identifier(),
-                  arguments: [],
-                  isNew: false,
-                  resolvedResultType: parameter.type
+                return .action(
+                  ActionUse(
+                    actionName: parameter.names.identifier(),
+                    arguments: [],
+                    isNew: false,
+                    resolvedResultType: parameter.type
+                  )
                 )
               }),
               isNew: false,
