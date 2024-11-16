@@ -472,4 +472,21 @@ extension ActionIntermediate {
     return [namespace, identifier]
       .joined(separator: ":")
   }
+
+  func allCoverageRegionIdentifiers(referenceLookup: [ReferenceDictionary]) -> [StrictString] {
+    var result: [StrictString] = []
+    if let base = coverageRegionIdentifier(referenceLookup: referenceLookup) {
+      result.append(base)
+      for entry in 0 ..< countCoverageSubregions() {
+        result.append("\(base):{\((entry + 1).inDigits())}")
+      }
+    }
+    return result
+  }
+
+  func countCoverageSubregions() -> Int {
+    var count: Int = 0
+    implementation?.countCoverageSubregions(count: &count)
+    return count
+  }
 }

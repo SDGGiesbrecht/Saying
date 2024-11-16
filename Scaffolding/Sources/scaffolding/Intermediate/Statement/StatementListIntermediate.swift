@@ -65,3 +65,11 @@ extension StatementListIntermediate {
     )
   }
 }
+
+extension StatementListIntermediate {
+  func countCoverageSubregions(count: inout Int) {
+    for statement in statements {
+      statement.countCoverageSubregions(count: &count)
+    }
+  }
+}

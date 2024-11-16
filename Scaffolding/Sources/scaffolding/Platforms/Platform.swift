@@ -528,14 +528,13 @@ extension Platform {
       result.append("")
     }
 
-    #warning("This does not find statement arguments yet.")
     let moduleReferenceLookup = module.referenceDictionary
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ ¬$0.isCoverageWrapper })
-      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceLookup: [moduleReferenceLookup]) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.compactMap({ $0.coverageRegionIdentifier(referenceLookup: [moduleReferenceLookup]) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
     let regions = Set([
       actionRegions,
       choiceRegions

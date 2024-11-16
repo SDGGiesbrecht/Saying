@@ -163,3 +163,11 @@ extension ActionUse {
     }
   }
 }
+
+extension ActionUse {
+  func countCoverageSubregions(count: inout Int) {
+    for argument in arguments {
+      argument.countCoverageSubregions(count: &count)
+    }
+  }
+}

@@ -97,3 +97,15 @@ extension ActionUseArgument {
     }
   }
 }
+
+extension ActionUseArgument {
+  func countCoverageSubregions(count: inout Int) {
+    switch self {
+    case .action:
+      break
+    case .flow(let statements):
+      count += 1
+      statements.countCoverageSubregions(count: &count)
+    }
+  }
+}
