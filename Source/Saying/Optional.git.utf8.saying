@@ -77,7 +77,7 @@ action
  )
  truth value
  {
-  true
+  ← true
  }
 
 action

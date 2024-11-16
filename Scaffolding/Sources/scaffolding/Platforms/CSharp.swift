@@ -98,17 +98,21 @@ enum CSharp: Platform {
     expression: ActionUse,
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentfier: StrictString?,
+    coverageRegionCounter: inout Int
   ) -> String {
     return call(
       to: expression,
       context: context,
       localLookup: localLookup,
-      referenceLookup: referenceLookup
+      referenceLookup: referenceLookup,
+      contextCoverageIdentfier: contextCoverageIdentfier,
+      coverageRegionCounter: &coverageRegionCounter
     ).appending(";")
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
       "\(indent)static \(returnSection!) \(name)(\(parameters))",
       "\(indent){",
@@ -116,17 +120,14 @@ enum CSharp: Platform {
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
-    for statement in implementation.dropLast() {
+    for statement in implementation {
       result.append(contentsOf: [
         "\(indent)\(indent)\(statement)",
       ])
     }
-    if let last = implementation.last {
-      result.append(contentsOf: [
-        "\(indent)\(indent)\(returnKeyword ?? "")\(last)",
-        "\(indent)}",
-      ])
-    }
+    result.append(contentsOf: [
+      "\(indent)}",
+    ])
     return result.joined(separator: "\n")
   }
 

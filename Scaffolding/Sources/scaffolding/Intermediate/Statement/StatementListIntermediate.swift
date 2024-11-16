@@ -1,10 +1,12 @@
+import SDGText
+
 struct StatementListIntermediate {
-  var statements: [ActionUse]
+  var statements: [StatementIntermediate]
 }
 
 extension StatementListIntermediate {
   init(_ statements: ParsedStatementList) {
-    self.statements = statements.statements.map { ActionUse($0) }
+    self.statements = statements.statements.map { StatementIntermediate($0) }
   }
 }
 
@@ -19,7 +21,7 @@ extension StatementListIntermediate {
       statements[index].resolveTypes(
         context: context,
         referenceDictionary: adjustedReferences,
-        specifiedReturnValue: index == statements.indices.last ? .some(finalReturnValue) : .some(.none)
+        finalReturnValue: finalReturnValue
       )
       for new in statements[index].localActions() {
         _ = adjustedReferences.add(action: new)
@@ -42,6 +44,32 @@ extension StatementListIntermediate {
       for new in statement.localActions() {
         errors.append(contentsOf: local.add(action: new).map({ .redeclaredLocalIdentifier(error: $0) }))
       }
+    }
+  }
+}
+
+extension StatementListIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> StatementListIntermediate {
+    return StatementListIntermediate(
+      statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+    )
+  }
+
+  func specializing(
+    typeLookup: [StrictString: SimpleTypeReference]
+  ) -> StatementListIntermediate {
+    return StatementListIntermediate(
+      statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
+    )
+  }
+}
+
+extension StatementListIntermediate {
+  func countCoverageSubregions(count: inout Int) {
+    for statement in statements {
+      statement.countCoverageSubregions(count: &count)
     }
   }
 }

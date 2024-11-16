@@ -32,6 +32,8 @@ extension ParameterIntermediate {
         parameters: nestedParameters,
         returnValue: actionReturn
       )
+    case .statements:
+      passedType = .statements
     }
     let passAction: ActionIntermediate = .parameterAction(
       names: names,

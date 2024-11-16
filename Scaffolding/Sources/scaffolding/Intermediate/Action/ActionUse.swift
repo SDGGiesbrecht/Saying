@@ -3,7 +3,7 @@ import SDGText
 
 struct ActionUse {
   var actionName: StrictString
-  var arguments: [ActionUse]
+  var arguments: [ActionUseArgument]
   var source: ParsedAction?
   var isNew: Bool
   var explicitResultType: ParsedTypeReference?
@@ -16,7 +16,14 @@ extension ActionUse {
     actionName = use.name()
     switch use {
     case .compound(let compound):
-      arguments = compound.arguments.arguments.map { ActionUse($0.argument) }
+      arguments = compound.arguments.arguments.map { argument in
+        switch argument {
+        case .passed(let passed):
+          return .action(ActionUse(passed.argument))
+        case .flow(let flow):
+          return .flow(StatementListIntermediate(flow.statements))
+        }
+      }
     case .reference:
       arguments = []
     case .simple:
@@ -52,7 +59,8 @@ extension ActionUse {
   mutating func resolveTypes(
     context: ActionIntermediate?,
     referenceDictionary: ReferenceDictionary,
-    specifiedReturnValue: ParsedTypeReference??
+    specifiedReturnValue: ParsedTypeReference??,
+    finalReturnValue: ParsedTypeReference?
   ) {
     for index in arguments.indices {
       let explicitArgumentReturnValue: ParsedTypeReference??
@@ -65,7 +73,8 @@ extension ActionUse {
       arguments[index].resolveTypes(
         context: context,
         referenceDictionary: referenceDictionary,
-        specifiedReturnValue: explicitArgumentReturnValue
+        specifiedReturnValue: explicitArgumentReturnValue,
+        finalReturnValue: finalReturnValue
       )
     }
     switch specifiedReturnValue {
@@ -151,6 +160,14 @@ extension ActionUse {
       }
     } else {
       return false
+    }
+  }
+}
+
+extension ActionUse {
+  func countCoverageSubregions(count: inout Int) {
+    for argument in arguments {
+      argument.countCoverageSubregions(count: &count)
     }
   }
 }

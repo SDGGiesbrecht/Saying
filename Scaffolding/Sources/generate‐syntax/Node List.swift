@@ -166,6 +166,22 @@ extension Node {
               Child(name: "space", type: "Space", kind: .fixed),
             ])
           ),
+
+          Node(
+            name: "EmptyParentheses",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "EmptyBraces",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+
         ],
         Node.separatedList(
           name: "UninterruptedIdentifier",
@@ -328,7 +344,7 @@ extension Node {
           ),
 
           Node(
-            name: "Argument",
+            name: "PassedArgument",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "argument", type: "AnnotatedAction", kind: .required),
@@ -340,6 +356,23 @@ extension Node {
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "FlowArgument",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "statements", type: "StatementList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Argument",
+            kind: .alternates([
+              Alternate(name: "passed", type: "PassedArgument"),
+              Alternate(name: "flow", type: "FlowArgument"),
             ])
           ),
         ],
@@ -548,10 +581,17 @@ extension Node {
             ])
           ),
           Node(
-            name: "ParameterType",
+            name: "ConcreteParameterType",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "type", type: "ThingReference", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ParameterType",
+            kind: .alternates([
+              Alternate(name: "type", type: "ConcreteParameterType"),
+              Alternate(name: "statements", type: "EmptyBraces"),
             ])
           ),
           Node(
@@ -570,18 +610,11 @@ extension Node {
             ]),
             isIndirect: true
           ),
-          Node(
-            name: "EmptyParameter",
-            kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
-            ])
-          ),
         ],
         Node.separatedList(
           name: "NameParameterList",
           entryName: "parameter", entryNamePlural: "parameters",
-          entryType: "EmptyParameter",
+          entryType: "EmptyParentheses",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment",
           fixedSeparator: false
@@ -843,11 +876,18 @@ extension Node {
               Child(name: "expression", type: "NativeAction", kind: .required),
             ])
           ),
+          Node(
+            name: "Statement",
+            kind: .compound(children: [
+              Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
+              Child(name: "action", type: "Action", kind: .required),
+            ])
+          ),
         ],
           Node.separatedList(
             name: "StatementList",
             entryName: "statement", entryNamePlural: "statements",
-            entryType: "Action",
+            entryType: "Statement",
             separatorName: "lineBreak",
             separatorType: "LineBreak",
             fixedSeparator: true

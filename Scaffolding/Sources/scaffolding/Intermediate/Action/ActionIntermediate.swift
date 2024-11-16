@@ -55,7 +55,7 @@ extension ActionIntermediate {
     let resolvedReturnValue: ParsedTypeReference?
     if isReferenceWrapper {
       switch returnValue {
-      case .simple, .compound, .none:
+      case .simple, .compound, .statements, .none:
         fatalError("A real action reference would produce an action.")
       case .action(parameters: let parameters, returnValue: let returnValue):
         resolvedParameters = parameters
@@ -431,18 +431,23 @@ extension ActionIntermediate {
         ),
         implementation: StatementListIntermediate(
           statements: [
-            ActionUse(
-              actionName: baseName,
-              arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
-                return ActionUse(
-                  actionName: parameter.names.identifier(),
-                  arguments: [],
-                  isNew: false,
-                  resolvedResultType: parameter.type
-                )
-              }),
-              isNew: false,
-              resolvedResultType: returnValue
+            StatementIntermediate(
+              isReturn: returnValue != nil,
+              action: ActionUse(
+                actionName: baseName,
+                arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
+                  return .action(
+                    ActionUse(
+                      actionName: parameter.names.identifier(),
+                      arguments: [],
+                      isNew: false,
+                      resolvedResultType: parameter.type
+                    )
+                  )
+                }),
+                isNew: false,
+                resolvedResultType: returnValue
+              )
             )
           ]
         ),
@@ -466,5 +471,22 @@ extension ActionIntermediate {
     }
     return [namespace, identifier]
       .joined(separator: ":")
+  }
+
+  func allCoverageRegionIdentifiers(referenceLookup: [ReferenceDictionary]) -> [StrictString] {
+    var result: [StrictString] = []
+    if let base = coverageRegionIdentifier(referenceLookup: referenceLookup) {
+      result.append(base)
+      for entry in 0 ..< countCoverageSubregions() {
+        result.append("\(base):{\((entry + 1).inDigits())}")
+      }
+    }
+    return result
+  }
+
+  func countCoverageSubregions() -> Int {
+    var count: Int = 0
+    implementation?.countCoverageSubregions(count: &count)
+    return count
   }
 }

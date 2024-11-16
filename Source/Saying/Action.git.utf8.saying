@@ -9,7 +9,7 @@ action
  )
  truth value
  {
-  act on (true)
+  ← act on (true)
  }
 
 action
@@ -21,7 +21,7 @@ action
  )
  truth value
  {
-  indirectly do (not ())
+  ← indirectly do (not ())
  }
 
 action
@@ -33,5 +33,5 @@ action
  )
  truth value
  {
-  query
+  ← query
  }

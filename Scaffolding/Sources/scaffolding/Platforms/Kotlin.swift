@@ -103,34 +103,35 @@ enum Kotlin: Platform {
     expression: ActionUse,
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentfier: StrictString?,
+    coverageRegionCounter: inout Int
   ) -> String {
     return call(
       to: expression,
       context: context,
       localLookup: localLookup,
-      referenceLookup: referenceLookup
+      referenceLookup: referenceLookup,
+      contextCoverageIdentfier: contextCoverageIdentfier,
+      coverageRegionCounter: &coverageRegionCounter
     )
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, returnKeyword: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
       "fun \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
-    for statement in implementation.dropLast() {
+    for statement in implementation {
       result.append(contentsOf: [
         "\(indent)\(statement)",
       ])
     }
-    if let last = implementation.last {
-      result.append(contentsOf: [
-        "\(indent)\(returnKeyword ?? "")\(last)",
-        "}",
-      ])
-    }
+    result.append(contentsOf: [
+      "}",
+    ])
     return result.joined(separator: "\n")
   }
 

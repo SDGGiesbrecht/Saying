@@ -4,6 +4,7 @@ indirect enum TypeReference: Hashable {
   case simple(StrictString)
   case compound(identifier: StrictString, components: [TypeReference])
   case action(parameters: [TypeReference], returnValue: TypeReference?)
+  case statements
 }
 
 extension TypeReference {
@@ -21,6 +22,8 @@ extension TypeReference {
         parameters: parameters.map({ $0.resolving(fromReferenceLookup: referenceLookup) }),
         returnValue: returnValue.map({ $0.resolving(fromReferenceLookup: referenceLookup) })
       )
+    case .statements:
+      return .statements
     }
   }
 }

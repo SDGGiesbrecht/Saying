@@ -1,0 +1,29 @@
+flow (clients)
+ (
+  English: if (condition: truth value), (consequence: {})
+  Deutsch: wenn (Bedingung: [condition]), (Folge: [consequence])
+  français: si (condition: [condition]), (conséquence: [consequence])
+  ελληνικά: αν (όρος: [condition]), (επακόλουθο: [consequence])
+  עברית: אם (תנאי: [condition]), (תוצאה: [consequence])
+ )
+ C: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
+ C♯: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
+ JavaScript: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
+ Kotlin: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
+ Swift: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
+
+action
+ [
+  test (verify ((true) triggers if))
+  test (verify (not ((false) triggers if)))
+ ]
+ (
+  English: (condition: truth value) triggers if
+ )
+ truth value
+ {
+  if (condition), {
+   ← true
+  }
+  ← false
+ }

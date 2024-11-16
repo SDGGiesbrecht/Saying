@@ -49,7 +49,7 @@ action
  truth value
  {
   let (• storage: truth value) be (true)
-  storage
+  ← storage
  }
 
 action
@@ -63,5 +63,5 @@ action
  {
   let (• storage: truth value) start as (false)
   change (storage) to (true)
-  storage
+  ← storage
  }
