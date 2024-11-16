@@ -328,7 +328,7 @@ extension Node {
           ),
 
           Node(
-            name: "Argument",
+            name: "PassedArgument",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "argument", type: "AnnotatedAction", kind: .required),
@@ -340,6 +340,23 @@ extension Node {
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
               Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "FlowArgument",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "argument", type: "AnnotatedAction", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "Argument",
+            kind: .alternates([
+              Alternate(name: "passed", type: "PassedArgument"),
+              Alternate(name: "flow", type: "FlowArgument"),
             ])
           ),
         ],

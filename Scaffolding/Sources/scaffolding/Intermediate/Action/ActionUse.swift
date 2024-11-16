@@ -16,7 +16,15 @@ extension ActionUse {
     actionName = use.name()
     switch use {
     case .compound(let compound):
-      arguments = compound.arguments.arguments.map { ActionUse($0.argument) }
+      arguments = compound.arguments.arguments.map { argument in
+        switch argument {
+        case .passed(let passed):
+          return ActionUse(passed.argument)
+        case .flow(let flow):
+          #warning("Not implemented yet.")
+          fatalError("Not implemented yet.")
+        }
+      }
     case .reference:
       arguments = []
     case .simple:
