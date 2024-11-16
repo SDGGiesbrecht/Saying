@@ -2,7 +2,7 @@ import SDGText
 
 enum ActionUseArgument {
   case action(ActionUse)
-  case flow
+  case flow(StatementListIntermediate)
 }
 
 extension ActionUseArgument {
@@ -77,7 +77,7 @@ extension ActionUseArgument {
       return .action(action.resolvingExtensionContext(typeLookup: typeLookup))
     case .flow:
       #warning("Not implemented yet.")
-      return .flow
+      return self
     }
   }
 
@@ -89,7 +89,7 @@ extension ActionUseArgument {
       return .action(action.specializing(typeLookup: typeLookup))
     case .flow:
       #warning("Not implemented yet.")
-      return .flow
+      return self
     }
   }
 }

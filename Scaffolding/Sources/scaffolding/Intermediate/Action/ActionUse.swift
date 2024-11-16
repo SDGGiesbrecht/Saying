@@ -21,8 +21,7 @@ extension ActionUse {
         case .passed(let passed):
           return .action(ActionUse(passed.argument))
         case .flow(let flow):
-          #warning("Dropping statements.")
-          return .flow
+          return .flow(StatementListIntermediate(flow.statements))
         }
       }
     case .reference:
