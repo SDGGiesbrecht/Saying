@@ -46,7 +46,9 @@ protocol Platform {
     expression: ActionUse,
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentfier: StrictString?,
+    coverageRegionCounter: inout Int
   ) -> String
   static func actionDeclaration(
     name: String,
@@ -212,7 +214,9 @@ extension Platform {
     to reference: ActionUse,
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentfier: StrictString?,
+    coverageRegionCounter: inout Int
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if reference.isNew {
@@ -234,7 +238,9 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
-          parameterName: parameter.names.identifier()
+          parameterName: parameter.names.identifier(),
+          contextCoverageIdentfier: contextCoverageIdentfier,
+          coverageRegionCounter: &coverageRegionCounter
         )
       }
     } else {
@@ -257,7 +263,9 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
-          parameterName: nil
+          parameterName: nil,
+          contextCoverageIdentfier: contextCoverageIdentfier,
+          coverageRegionCounter: &coverageRegionCounter
         )
       ]
       if bareAction.isFlow,
@@ -275,7 +283,9 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
-    parameterName: StrictString?
+    parameterName: StrictString?,
+    contextCoverageIdentfier: StrictString?,
+    coverageRegionCounter: inout Int
   ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
@@ -298,30 +308,37 @@ extension Platform {
                   to: actionArgument,
                   context: context,
                   localLookup: localLookup,
-                  referenceLookup: referenceLookup
+                  referenceLookup: referenceLookup,
+                  contextCoverageIdentfier: contextCoverageIdentfier,
+                  coverageRegionCounter: &coverageRegionCounter
                 )
               )
             case .flow(let statements):
               result.append("\n")
-              result.append(
-                contentsOf: statements.statements
-                  .lazy.map({ statement in
-                    var entry = ""
-                    if statement.isReturn {
-                      entry.prepend(contentsOf: "return ")
-                    }
-                    entry.append(
-                      contentsOf: self.statement(
-                        expression: statement.action,
-                        context: context,
-                        localLookup: localLookup,
-                        referenceLookup: referenceLookup
-                      )
-                    )
-                    return entry
-                  }).joined(separator: "\n")
-              )
+              coverageRegionCounter += 1
+              if let coverage = contextCoverageIdentfier {
+                let appendedIdentifier: StrictString = "\(coverage):{\(coverageRegionCounter.inDigits())}"
+                result.append(self.coverageRegistration(identifier: sanitize(stringLiteral: appendedIdentifier)))
+              }
               result.append("\n")
+              for statement in statements.statements {
+                var entry = ""
+                if statement.isReturn {
+                  entry.prepend(contentsOf: "return ")
+                }
+                entry.append(
+                  contentsOf: self.statement(
+                    expression: statement.action,
+                    context: context,
+                    localLookup: localLookup,
+                    referenceLookup: referenceLookup,
+                    contextCoverageIdentfier: contextCoverageIdentfier,
+                    coverageRegionCounter: &coverageRegionCounter
+                  )
+                )
+                result.append(contentsOf: entry)
+                result.append("\n")
+              }
             }
           }
         }
@@ -337,21 +354,25 @@ extension Platform {
         let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
         return "\(prefix)\(name)"
       } else {
-        let arguments = reference.arguments
-          .lazy.map({ argument in
-            switch argument {
-            case .action(let actionArgument):
-              return call(
+        var argumentsArray: [String] = []
+        for argument in reference.arguments {
+          switch argument {
+          case .action(let actionArgument):
+            argumentsArray.append(
+              call(
                 to: actionArgument,
                 context: context,
                 localLookup: localLookup,
-                referenceLookup: referenceLookup
+                referenceLookup: referenceLookup,
+                contextCoverageIdentfier: contextCoverageIdentfier,
+                coverageRegionCounter: &coverageRegionCounter
               )
-            case .flow:
-              fatalError("Statement parameters are only supported in native implementations (so far).")
-            }
-          })
-          .joined(separator: ", ")
+            )
+          case .flow:
+            fatalError("Statement parameters are only supported in native implementations (so far).")
+          }
+        }
+        let arguments = argumentsArray.joined(separator: ", ")
         return "\(name)(\(arguments))"
       }
     }
@@ -455,12 +476,15 @@ extension Platform {
     }
     var locals = ReferenceDictionary()
     let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary())
+    var coverageRegionCounter = 0
     let implementation = action.implementation!.statements.map({ entry in
       var result = statement(
         expression: entry.action,
         context: action,
         localLookup: locals,
-        referenceLookup: nonLocalReferenceLookup.appending(locals)
+        referenceLookup: nonLocalReferenceLookup.appending(locals),
+        contextCoverageIdentfier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
+        coverageRegionCounter: &coverageRegionCounter
       )
       if entry.isReturn {
         result.prepend(contentsOf: "return ")
@@ -486,13 +510,16 @@ extension Platform {
   }
 
   static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
+    var coverageRegionCounter = 0
     return testSource(
       identifier: identifier(for: test, leading: false),
       statement: statement(
         expression: test.statement.action,
         context: nil,
         localLookup: ReferenceDictionary(),
-        referenceLookup: referenceLookup
+        referenceLookup: referenceLookup,
+        contextCoverageIdentfier: nil,
+        coverageRegionCounter: &coverageRegionCounter
       )
     )
   }

@@ -145,13 +145,17 @@ enum Swift: Platform {
     expression: ActionUse,
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentfier: StrictString?,
+    coverageRegionCounter: inout Int
   ) -> String {
     return call(
       to: expression,
       context: context,
       localLookup: localLookup,
-      referenceLookup: referenceLookup
+      referenceLookup: referenceLookup,
+      contextCoverageIdentfier: contextCoverageIdentfier,
+      coverageRegionCounter: &coverageRegionCounter
     )
   }
 
