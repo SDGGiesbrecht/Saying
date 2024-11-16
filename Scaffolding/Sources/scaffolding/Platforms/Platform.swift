@@ -301,8 +301,27 @@ extension Platform {
                   referenceLookup: referenceLookup
                 )
               )
-            case .flow:
-              #warning("Not implemented yet.")
+            case .flow(let statements):
+              result.append("\n")
+              result.append(
+                contentsOf: statements.statements
+                  .lazy.map({ statement in
+                    var entry = ""
+                    if statement.isReturn {
+                      entry.prepend(contentsOf: "return ")
+                    }
+                    entry.append(
+                      contentsOf: self.statement(
+                        expression: statement.action,
+                        context: context,
+                        localLookup: localLookup,
+                        referenceLookup: referenceLookup
+                      )
+                    )
+                    return entry
+                  }).joined(separator: "\n")
+              )
+              result.append("\n")
             }
           }
         }
@@ -329,8 +348,7 @@ extension Platform {
                 referenceLookup: referenceLookup
               )
             case .flow:
-              #warning("Not implemented yet.")
-              return ""
+              fatalError("Statement parameters are only supported in native implementations (so far).")
             }
           })
           .joined(separator: ", ")
