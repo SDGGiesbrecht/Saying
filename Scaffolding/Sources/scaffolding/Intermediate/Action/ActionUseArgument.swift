@@ -68,8 +68,8 @@ extension ActionUseArgument {
     switch self {
     case .action(let action):
       action.validateReferences(context: context, testContext: testContext, errors: &errors)
-    case .flow:
-      #warning("Not implemented yet.")
+    case .flow(let statements):
+      statements.validateReferences(context: context, testContext: testContext, errors: &errors)
     }
   }
 }
