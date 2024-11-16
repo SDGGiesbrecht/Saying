@@ -166,6 +166,22 @@ extension Node {
               Child(name: "space", type: "Space", kind: .fixed),
             ])
           ),
+
+          Node(
+            name: "EmptyParentheses",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "EmptyBraces",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+
         ],
         Node.separatedList(
           name: "UninterruptedIdentifier",
@@ -565,10 +581,17 @@ extension Node {
             ])
           ),
           Node(
-            name: "ParameterType",
+            name: "ConcreteParameterType",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "type", type: "ThingReference", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ParameterType",
+            kind: .alternates([
+              Alternate(name: "type", type: "ConcreteParameterType"),
+              Alternate(name: "statements", type: "EmptyBraces"),
             ])
           ),
           Node(
@@ -587,18 +610,11 @@ extension Node {
             ]),
             isIndirect: true
           ),
-          Node(
-            name: "EmptyParameter",
-            kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
-            ])
-          ),
         ],
         Node.separatedList(
           name: "NameParameterList",
           entryName: "parameter", entryNamePlural: "parameters",
-          entryType: "EmptyParameter",
+          entryType: "EmptyParentheses",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment",
           fixedSeparator: false

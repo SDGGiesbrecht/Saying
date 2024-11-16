@@ -203,6 +203,8 @@ extension Platform {
           actionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
             ?? emptyReturnTypeForActionType
       )
+    case .statements:
+      fatalError("Statements have no platform type.")
     }
   }
 
@@ -364,6 +366,8 @@ extension Platform {
           parameters: parameters,
           returnValue: returnValue
         )
+      case .statements:
+        fatalError("Statements have no platform type.")
       }
     }
   }
@@ -506,6 +510,7 @@ extension Platform {
       result.append("")
     }
 
+    #warning("This does not find statement arguments yet.")
     let moduleReferenceLookup = module.referenceDictionary
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ ¬$0.isCoverageWrapper })

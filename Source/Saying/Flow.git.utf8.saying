@@ -2,9 +2,9 @@ flow (clients)
  (
   English: if (condition: truth value), (consequence: {})
   Deutsch: wenn (Bedingung: [condition]), (Folge: [consequence])
-  Français: si (condition: [condition]), {conséquence: [consequence]}
-  Ελληνικά: αν (όρος: [condition]), {επακόλουθο: [consequence]}
-  עברית: אם (תנאי: [condtion]), {תוצאה: [consequence]}
+  français: si (condition: [condition]), (conséquence: [consequence])
+  ελληνικά: αν (όρος: [condition]), (επακόλουθο: [consequence])
+  עברית: אם (תנאי: [condition]), (תוצאה: [consequence])
  )
  C: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
  C♯: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”

@@ -5,6 +5,7 @@ indirect enum ParsedTypeReference {
   case simple(SimpleTypeReference)
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])
   case action(parameters: [ParsedTypeReference], returnValue: ParsedTypeReference?)
+  case statements
 }
 
 extension ParsedTypeReference {
@@ -23,10 +24,15 @@ extension ParsedTypeReference {
     }
   }
   init(_ node: ParsedParameterType) {
-    if node.yieldArrow == nil {
-      self.init(node.type)
-    } else {
-      self = .action(parameters: [], returnValue: ParsedTypeReference(node.type))
+    switch node {
+    case .type(let typeNode):
+      if typeNode.yieldArrow == nil {
+        self.init(typeNode.type)
+      } else {
+        self = .action(parameters: [], returnValue: ParsedTypeReference(typeNode.type))
+      }
+    case .statements:
+      self = .statements
     }
   }
 }
@@ -40,6 +46,8 @@ extension ParsedTypeReference {
       return .compound(identifier: identifier.name(), components: components.map({ $0.key }))
     case .action(parameters: let parameters, returnValue: let returnValue):
       return .action(parameters: parameters.map({ $0.key }), returnValue: returnValue.map({ $0.key }))
+    case .statements:
+      return .statements
     }
   }
 }
@@ -67,6 +75,8 @@ extension ParsedTypeReference {
         parameters: parameters.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
         returnValue: returnValue.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
       )
+    case .statements:
+      return .statements
     }
   }
 
@@ -88,6 +98,8 @@ extension ParsedTypeReference {
         parameters: parameters.map({ $0.specializing(typeLookup: typeLookup) }),
         returnValue: returnValue.map({ $0.specializing(typeLookup: typeLookup) })
       )
+    case .statements:
+      return .statements
     }
   }
 }
@@ -150,6 +162,8 @@ extension ParsedTypeReference {
         referenceDictionary: referenceDictionary,
         errors: &errors
       )
+    case .statements:
+      break
     }
   }
 }
@@ -171,6 +185,8 @@ extension ParsedTypeReference {
       result.append(contentsOf: returnValue.unresolvedGloballyUniqueIdentifierComponents())
       result.append("))")
       return result
+    case .statements:
+      return ["{}"]
     }
   }
 }
