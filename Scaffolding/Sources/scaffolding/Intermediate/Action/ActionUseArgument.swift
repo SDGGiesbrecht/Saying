@@ -39,18 +39,24 @@ extension ActionUseArgument {
   mutating func resolveTypes(
     context: ActionIntermediate?,
     referenceDictionary: ReferenceDictionary,
-    specifiedReturnValue: ParsedTypeReference??
+    specifiedReturnValue: ParsedTypeReference??,
+    finalReturnValue: ParsedTypeReference?
   ) {
     switch self {
     case .action(var action):
       action.resolveTypes(
         context: context,
         referenceDictionary: referenceDictionary,
-        specifiedReturnValue: specifiedReturnValue
+        specifiedReturnValue: specifiedReturnValue,
+        finalReturnValue: finalReturnValue
       )
       self = .action(action)
-    case .flow:
-      #warning("Not implemented yet.")
+    case .flow(var statements):
+      statements.resolveTypes(
+        context: context,
+        referenceDictionary: referenceDictionary,
+        finalReturnValue: finalReturnValue
+      )
     }
   }
 

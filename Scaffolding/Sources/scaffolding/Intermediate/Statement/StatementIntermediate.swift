@@ -27,7 +27,8 @@ extension StatementIntermediate {
     action.resolveTypes(
       context: context,
       referenceDictionary: referenceDictionary,
-      specifiedReturnValue: isReturn ? .some(finalReturnValue) : .some(.none)
+      specifiedReturnValue: isReturn ? .some(finalReturnValue) : .some(.none),
+      finalReturnValue: finalReturnValue
     )
   }
 

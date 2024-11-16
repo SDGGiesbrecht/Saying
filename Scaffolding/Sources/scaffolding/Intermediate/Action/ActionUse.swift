@@ -59,7 +59,8 @@ extension ActionUse {
   mutating func resolveTypes(
     context: ActionIntermediate?,
     referenceDictionary: ReferenceDictionary,
-    specifiedReturnValue: ParsedTypeReference??
+    specifiedReturnValue: ParsedTypeReference??,
+    finalReturnValue: ParsedTypeReference?
   ) {
     for index in arguments.indices {
       let explicitArgumentReturnValue: ParsedTypeReference??
@@ -72,7 +73,8 @@ extension ActionUse {
       arguments[index].resolveTypes(
         context: context,
         referenceDictionary: referenceDictionary,
-        specifiedReturnValue: explicitArgumentReturnValue
+        specifiedReturnValue: explicitArgumentReturnValue,
+        finalReturnValue: finalReturnValue
       )
     }
     switch specifiedReturnValue {
