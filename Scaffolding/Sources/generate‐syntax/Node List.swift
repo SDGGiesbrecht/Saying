@@ -860,11 +860,18 @@ extension Node {
               Child(name: "expression", type: "NativeAction", kind: .required),
             ])
           ),
+          Node(
+            name: "Statement",
+            kind: .compound(children: [
+              Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
+              Child(name: "action", type: "Action", kind: .required),
+            ])
+          ),
         ],
           Node.separatedList(
             name: "StatementList",
             entryName: "statement", entryNamePlural: "statements",
-            entryType: "Action",
+            entryType: "Statement",
             separatorName: "lineBreak",
             separatorType: "LineBreak",
             fixedSeparator: true

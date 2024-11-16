@@ -2,14 +2,17 @@ import SDGText
 
 struct TestIntermediate {
   var location: [Set<StrictString>]
-  var action: ActionUse
+  var statement: StatementIntermediate
 }
 
 extension TestIntermediate {
 
   init(_ test: ParsedTest, location: [Set<StrictString>], index: Int) {
     self.location = location.appending([index.inDigits()])
-    self.action = ActionUse(test.details.test)
+    self.statement = StatementIntermediate(
+      isReturn: false,
+      action: ActionUse(test.details.test)
+    )
   }
 }
 
@@ -19,7 +22,7 @@ extension TestIntermediate {
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location,
-      action: action.resolvingExtensionContext(typeLookup: typeLookup)
+      statement: statement.resolvingExtensionContext(typeLookup: typeLookup)
     )
   }
 
@@ -29,7 +32,7 @@ extension TestIntermediate {
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location.appending(contentsOf: specializationNamespace),
-      action: action.specializing(typeLookup: typeLookup)
+      statement: statement.specializing(typeLookup: typeLookup)
     )
   }
 }

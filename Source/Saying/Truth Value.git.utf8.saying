@@ -269,13 +269,13 @@ use (clients)
    example
    truth value
    {
-    true
+    ← true
    }
 
   action (clients)
    differing example
    truth value
    {
-    false
+    ← false
    }
  }

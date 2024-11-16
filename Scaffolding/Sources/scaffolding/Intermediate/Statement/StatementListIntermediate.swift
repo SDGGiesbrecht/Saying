@@ -1,10 +1,10 @@
 struct StatementListIntermediate {
-  var statements: [ActionUse]
+  var statements: [StatementIntermediate]
 }
 
 extension StatementListIntermediate {
   init(_ statements: ParsedStatementList) {
-    self.statements = statements.statements.map { ActionUse($0) }
+    self.statements = statements.statements.map { StatementIntermediate($0) }
   }
 }
 
@@ -19,7 +19,7 @@ extension StatementListIntermediate {
       statements[index].resolveTypes(
         context: context,
         referenceDictionary: adjustedReferences,
-        specifiedReturnValue: index == statements.indices.last ? .some(finalReturnValue) : .some(.none)
+        finalReturnValue: finalReturnValue
       )
       for new in statements[index].localActions() {
         _ = adjustedReferences.add(action: new)

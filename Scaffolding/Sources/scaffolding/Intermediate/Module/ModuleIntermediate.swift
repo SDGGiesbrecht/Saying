@@ -190,7 +190,7 @@ extension ModuleIntermediate {
   mutating func resolveTypes() {
     referenceDictionary.resolveTypes()
     for index in tests.indices {
-      tests[index].action.resolveTypes(context: nil, referenceDictionary: referenceDictionary, specifiedReturnValue: .none)
+      tests[index].statement.resolveTypes(context: nil, referenceDictionary: referenceDictionary, finalReturnValue: .none)
     }
   }
 
@@ -198,7 +198,7 @@ extension ModuleIntermediate {
     var errors: [ReferenceError] = []
     referenceDictionary.validateReferencesAsModule(errors: &errors)
     for test in tests {
-      test.action.validateReferences(context: [referenceDictionary], testContext: true, errors: &errors)
+      test.statement.validateReferences(context: [referenceDictionary], testContext: true, errors: &errors)
     }
     for language in languageNodes {
       var identifier = language.identifierText()

@@ -431,20 +431,23 @@ extension ActionIntermediate {
         ),
         implementation: StatementListIntermediate(
           statements: [
-            ActionUse(
-              actionName: baseName,
-              arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
-                return .action(
-                  ActionUse(
-                    actionName: parameter.names.identifier(),
-                    arguments: [],
-                    isNew: false,
-                    resolvedResultType: parameter.type
+            StatementIntermediate(
+              isReturn: returnValue != nil,
+              action: ActionUse(
+                actionName: baseName,
+                arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
+                  return .action(
+                    ActionUse(
+                      actionName: parameter.names.identifier(),
+                      arguments: [],
+                      isNew: false,
+                      resolvedResultType: parameter.type
+                    )
                   )
-                )
-              }),
-              isNew: false,
-              resolvedResultType: returnValue
+                }),
+                isNew: false,
+                resolvedResultType: returnValue
+              )
             )
           ]
         ),

@@ -52,7 +52,6 @@ protocol Platform {
     name: String,
     parameters: String,
     returnSection: String?,
-    returnKeyword: String?,
     coverageRegistration: String?,
     implementation: [String]
   ) -> String
@@ -418,17 +417,13 @@ extension Platform {
       .joined(separator: ", ")
 
     let returnValue: String?
-    let needsReturnKeyword: Bool
     if let specified = action.returnValue {
       returnValue = source(for: specified, referenceLookup: externalReferenceLookup)
-      needsReturnKeyword = true
     } else {
       returnValue = emptyReturnType
-      needsReturnKeyword = false
     }
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
-    let returnKeyword = needsReturnKeyword ? "return " : ""
 
     let coverageRegistration: String?
     if let identifier = action.coveredIdentifier {
@@ -439,12 +434,15 @@ extension Platform {
     var locals = ReferenceDictionary()
     let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary())
     let implementation = action.implementation!.statements.map({ entry in
-      let result = statement(
-        expression: entry,
+      var result = statement(
+        expression: entry.action,
         context: action,
         localLookup: locals,
         referenceLookup: nonLocalReferenceLookup.appending(locals)
       )
+      if entry.isReturn {
+        result.prepend(contentsOf: "return ")
+      }
       for local in entry.localActions() {
         _ = locals.add(action: local)
       }
@@ -454,7 +452,6 @@ extension Platform {
       name: name,
       parameters: parameters,
       returnSection: returnSection,
-      returnKeyword: returnKeyword,
       coverageRegistration: coverageRegistration,
       implementation: implementation
     )
@@ -470,7 +467,7 @@ extension Platform {
     return testSource(
       identifier: identifier(for: test, leading: false),
       statement: statement(
-        expression: test.action,
+        expression: test.statement.action,
         context: nil,
         localLookup: ReferenceDictionary(),
         referenceLookup: referenceLookup
