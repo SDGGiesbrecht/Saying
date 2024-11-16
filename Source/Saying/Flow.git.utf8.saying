@@ -9,7 +9,7 @@ action
  truth value
  {
   if (condition), {
-   return (true)
+   answer (true)
   }
-  return (false)
+  answer (false)
  }
