@@ -11,7 +11,7 @@ extension ActionUseArgument {
     case .action(let action):
       return action.explicitResultType
     case .flow:
-      return nil
+      return .statements
     }
   }
   var resolvedResultType: ParsedTypeReference?? {
@@ -19,7 +19,7 @@ extension ActionUseArgument {
     case .action(let action):
       return action.resolvedResultType
     case .flow:
-      return .some(.none)
+      return .statements
     }
   }
 }
