@@ -93,7 +93,7 @@ enum JavaScript: Platform {
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentfier: StrictString?,
+    contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
   ) -> String {
     return call(
@@ -101,7 +101,7 @@ enum JavaScript: Platform {
       context: context,
       localLookup: localLookup,
       referenceLookup: referenceLookup,
-      contextCoverageIdentfier: contextCoverageIdentfier,
+      contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter
     ).appending(";")
   }

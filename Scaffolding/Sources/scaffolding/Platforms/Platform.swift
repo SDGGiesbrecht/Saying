@@ -47,7 +47,7 @@ protocol Platform {
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentfier: StrictString?,
+    contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
   ) -> String
   static func actionDeclaration(
@@ -215,7 +215,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentfier: StrictString?,
+    contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
@@ -239,7 +239,7 @@ extension Platform {
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier(),
-          contextCoverageIdentfier: contextCoverageIdentfier,
+          contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter
         )
       }
@@ -264,7 +264,7 @@ extension Platform {
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: nil,
-          contextCoverageIdentfier: contextCoverageIdentfier,
+          contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter
         )
       ]
@@ -284,7 +284,7 @@ extension Platform {
     localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
     parameterName: StrictString?,
-    contextCoverageIdentfier: StrictString?,
+    contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
   ) -> String {
     if let native = nativeImplementation(of: action) {
@@ -309,34 +309,29 @@ extension Platform {
                   context: context,
                   localLookup: localLookup,
                   referenceLookup: referenceLookup,
-                  contextCoverageIdentfier: contextCoverageIdentfier,
+                  contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter
                 )
               )
             case .flow(let statements):
               result.append("\n")
               coverageRegionCounter += 1
-              if let coverage = contextCoverageIdentfier {
+              if let coverage = contextCoverageIdentifier {
                 let appendedIdentifier: StrictString = "\(coverage):{\(coverageRegionCounter.inDigits())}"
                 result.append(self.coverageRegistration(identifier: sanitize(stringLiteral: appendedIdentifier)))
               }
               result.append("\n")
               for statement in statements.statements {
-                var entry = ""
-                if statement.isReturn {
-                  entry.prepend(contentsOf: "return ")
-                }
-                entry.append(
-                  contentsOf: self.statement(
-                    expression: statement.action,
+                result.append(
+                  source(
+                    for: statement,
                     context: context,
                     localLookup: localLookup,
                     referenceLookup: referenceLookup,
-                    contextCoverageIdentfier: contextCoverageIdentfier,
+                    contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter
                   )
                 )
-                result.append(contentsOf: entry)
                 result.append("\n")
               }
             }
@@ -364,7 +359,7 @@ extension Platform {
                 context: context,
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
-                contextCoverageIdentfier: contextCoverageIdentfier,
+                contextCoverageIdentifier: contextCoverageIdentifier,
                 coverageRegionCounter: &coverageRegionCounter
               )
             )
@@ -376,6 +371,31 @@ extension Platform {
         return "\(name)(\(arguments))"
       }
     }
+  }
+
+  static func source(
+    for statement: StatementIntermediate,
+    context: ActionIntermediate?,
+    localLookup: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentifier: StrictString?,
+    coverageRegionCounter: inout Int
+  ) -> String {
+    var entry = ""
+    if statement.isReturn {
+      entry.prepend(contentsOf: "return ")
+    }
+    entry.append(
+      contentsOf: self.statement(
+        expression: statement.action,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter
+      )
+    )
+    return entry
   }
 
   static func source(
@@ -478,17 +498,14 @@ extension Platform {
     let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary())
     var coverageRegionCounter = 0
     let implementation = action.implementation!.statements.map({ entry in
-      var result = statement(
-        expression: entry.action,
+      let result = source(
+        for: entry,
         context: action,
         localLookup: locals,
         referenceLookup: nonLocalReferenceLookup.appending(locals),
-        contextCoverageIdentfier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
+        contextCoverageIdentifier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
         coverageRegionCounter: &coverageRegionCounter
       )
-      if entry.isReturn {
-        result.prepend(contentsOf: "return ")
-      }
       for local in entry.localActions() {
         _ = locals.add(action: local)
       }
@@ -518,7 +535,7 @@ extension Platform {
         context: nil,
         localLookup: ReferenceDictionary(),
         referenceLookup: referenceLookup,
-        contextCoverageIdentfier: nil,
+        contextCoverageIdentifier: nil,
         coverageRegionCounter: &coverageRegionCounter
       )
     )
