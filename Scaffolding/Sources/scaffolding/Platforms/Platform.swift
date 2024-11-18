@@ -210,6 +210,19 @@ extension Platform {
     }
   }
 
+  static func flowCoverageRegistration(
+    contextCoverageIdentifier: StrictString?,
+    coverageRegionCounter: inout Int
+  ) -> String? {
+    coverageRegionCounter += 1
+    if let coverage = contextCoverageIdentifier {
+      let appendedIdentifier: StrictString = "\(coverage):{\(coverageRegionCounter.inDigits())}"
+      return "\n\(self.coverageRegistration(identifier: sanitize(stringLiteral: appendedIdentifier)))"
+    } else {
+      return nil
+    }
+  }
+
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
@@ -314,11 +327,11 @@ extension Platform {
                 )
               )
             case .flow(let statements):
-              result.append("\n")
-              coverageRegionCounter += 1
-              if let coverage = contextCoverageIdentifier {
-                let appendedIdentifier: StrictString = "\(coverage):{\(coverageRegionCounter.inDigits())}"
-                result.append(self.coverageRegistration(identifier: sanitize(stringLiteral: appendedIdentifier)))
+              if let coverage = flowCoverageRegistration(
+                contextCoverageIdentifier: contextCoverageIdentifier,
+                coverageRegionCounter: &coverageRegionCounter
+              ) {
+                result.append(coverage)
               }
               result.append("\n")
               for statement in statements.statements {
@@ -385,6 +398,7 @@ extension Platform {
     if statement.isReturn {
       entry.prepend(contentsOf: "return ")
     }
+    let before = coverageRegionCounter
     entry.append(
       contentsOf: self.statement(
         expression: statement.action,
@@ -395,6 +409,13 @@ extension Platform {
         coverageRegionCounter: &coverageRegionCounter
       )
     )
+    if coverageRegionCounter ≠ before,
+       let coverage = flowCoverageRegistration(
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter
+       ) {
+      entry.append(coverage)
+    }
     return entry
   }
 
