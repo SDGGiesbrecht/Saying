@@ -104,7 +104,7 @@ enum Kotlin: Platform {
     context: ActionIntermediate?,
     localLookup: ReferenceDictionary,
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentfier: StrictString?,
+    contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
   ) -> String {
     return call(
@@ -112,7 +112,7 @@ enum Kotlin: Platform {
       context: context,
       localLookup: localLookup,
       referenceLookup: referenceLookup,
-      contextCoverageIdentfier: contextCoverageIdentfier,
+      contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter
     )
   }
