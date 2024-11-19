@@ -74,7 +74,7 @@ extension
    C: “if ¤(28)” optional “¤(29) ¤(7B) ” thing “ ” unwrapped “ = ¤(2A)” optional “; ” consequence “¤(7D)”
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
    JavaScript: “let ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
-   Kotlin: “val ” unwrapped “ = ¤(28)” optional “¤(29); if ” unwrapped “ ¤(21)= null ¤(7B)” consequence “¤(7D)”
+   Kotlin: “val ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
    Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
  }
 
