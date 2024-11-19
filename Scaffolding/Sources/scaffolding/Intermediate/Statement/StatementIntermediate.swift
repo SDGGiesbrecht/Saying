@@ -67,7 +67,7 @@ extension StatementIntermediate {
 
 extension StatementIntermediate {
   func countCoverageSubregions(count: inout Int) {
-    var before = count
+    let before = count
     action.countCoverageSubregions(count: &count)
     if count != before {
       count += 1 // afterward (since could have returned)

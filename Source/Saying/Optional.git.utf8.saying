@@ -66,11 +66,21 @@ extension
    JavaScript: “¤(28)” thing “¤(29) === null”
    Kotlin: “¤(28)” thing “¤(29) == null”
    Swift: “¤(28)” thing “¤(29) == nil”
+
+  flow (clients)
+   (
+    English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
+   )
+   C: “if ¤(28)” optional “¤(29) ¤(7B) ” thing “ ” unwrapped “ = ¤(2A)” optional “; ” consequence “¤(7D)”
+   C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
+   JavaScript: “let ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
+   Kotlin: “val ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
+   Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
  }
 
 action
  [
-  test (verify (accept optional (optional truth value)))
+  test (verify (accept optional (optional true value)))
  ]
  (
   English: accept optional (thing: optional (truth value))
@@ -82,11 +92,27 @@ action
 
 action
  (
-  English: optional truth value
+  English: optional true value
  )
  optional (truth value)
- C: “¤(28)¤(26)¤(28)bool¤(29)¤(7B)true¤(7D)¤(29)” (stdbool)
+ C: “¤(28)¤(28)bool¤(2A)¤(29) ¤(22)1¤(22)¤(29)” (stdbool)
  C♯: “¤(28)true¤(29)”
  JavaScript: “¤(28)true¤(29)”
  Kotlin: “¤(28)true¤(29)”
  Swift: “¤(28)true¤(29)”
+
+action
+ [
+  test (verify (unwrapping (optional true value) works))
+  test (verify (not (unwrapping (none) works)))
+ ]
+ (
+  English: unwrapping (optional: optional (truth value)) works
+ )
+ truth value
+ {
+  if (optional) exists, unwrap it as (• unwrapped: truth value), {
+   ← unwrapped
+  }
+  ← false
+ }

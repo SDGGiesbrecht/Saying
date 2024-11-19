@@ -45,7 +45,7 @@ protocol Platform {
   static func statement(
     expression: ActionUse,
     context: ActionIntermediate?,
-    localLookup: ReferenceDictionary,
+    localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
@@ -226,7 +226,7 @@ extension Platform {
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
-    localLookup: ReferenceDictionary,
+    localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
@@ -294,7 +294,7 @@ extension Platform {
     to action: ActionIntermediate,
     reference: ActionUse,
     context: ActionIntermediate?,
-    localLookup: ReferenceDictionary,
+    localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     parameterName: StrictString?,
     contextCoverageIdentifier: StrictString?,
@@ -303,6 +303,7 @@ extension Platform {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
       var result = ""
+      var local = ReferenceDictionary()
       for index in native.textComponents.indices {
         result.append(contentsOf: String(native.textComponents[index]))
         if index ≠ native.textComponents.indices.last {
@@ -320,7 +321,7 @@ extension Platform {
                 contentsOf: call(
                   to: actionArgument,
                   context: context,
-                  localLookup: localLookup,
+                  localLookup: localLookup.appending(local),
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter
@@ -339,7 +340,7 @@ extension Platform {
                   source(
                     for: statement,
                     context: context,
-                    localLookup: localLookup,
+                    localLookup: localLookup.appending(local),
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter
@@ -347,6 +348,9 @@ extension Platform {
                 )
                 result.append("\n")
               }
+            }
+            for new in argument.localActions() {
+              _ = local.add(action: new)
             }
           }
         }
@@ -389,7 +393,7 @@ extension Platform {
   static func source(
     for statement: StatementIntermediate,
     context: ActionIntermediate?,
-    localLookup: ReferenceDictionary,
+    localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
@@ -522,7 +526,7 @@ extension Platform {
       let result = source(
         for: entry,
         context: action,
-        localLookup: locals,
+        localLookup: [locals],
         referenceLookup: nonLocalReferenceLookup.appending(locals),
         contextCoverageIdentifier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
         coverageRegionCounter: &coverageRegionCounter
@@ -554,7 +558,7 @@ extension Platform {
       statement: statement(
         expression: test.statement.action,
         context: nil,
-        localLookup: ReferenceDictionary(),
+        localLookup: [],
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: nil,
         coverageRegionCounter: &coverageRegionCounter
