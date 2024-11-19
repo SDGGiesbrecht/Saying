@@ -95,7 +95,7 @@ action
   English: optional true value
  )
  optional (truth value)
- C: “¤(28)¤(26)¤(28)bool¤(29)¤(7B)true¤(7D)¤(29)” (stdbool)
+ C: “¤(28)¤(28)bool¤(2A)¤(29) ¤(22)1¤(22)¤(29)” (stdbool)
  C♯: “¤(28)true¤(29)”
  JavaScript: “¤(28)true¤(29)”
  Kotlin: “¤(28)true¤(29)”
