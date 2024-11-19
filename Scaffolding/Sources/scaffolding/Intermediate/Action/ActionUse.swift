@@ -103,8 +103,16 @@ extension ActionUse {
     testContext: Bool,
     errors: inout [ReferenceError]
   ) {
+    var local = ReferenceDictionary()
     for argument in arguments {
-      argument.validateReferences(context: context, testContext: testContext, errors: &errors)
+      argument.validateReferences(
+        context: context.appending(local),
+        testContext: testContext,
+        errors: &errors
+      )
+      for new in argument.localActions() {
+        errors.append(contentsOf: local.add(action: new).map({ .redeclaredLocalIdentifier(error: $0) }))
+      }
     }
     if ¬isNew {
       if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),

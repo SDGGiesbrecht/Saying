@@ -144,7 +144,7 @@ enum Swift: Platform {
   static func statement(
     expression: ActionUse,
     context: ActionIntermediate?,
-    localLookup: ReferenceDictionary,
+    localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
