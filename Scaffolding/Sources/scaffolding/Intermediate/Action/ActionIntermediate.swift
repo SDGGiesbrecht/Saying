@@ -211,7 +211,7 @@ extension ActionIntermediate {
     for native in allNativeImplementations() {
       for parameterReference in native.parameters {
         if let typeInstead = parameterReference.typeInstead {
-          ParsedTypeReference.simple(typeInstead).validateReferences(
+          typeInstead.validateReferences(
             requiredAccess: access,
             allowTestOnlyAccess: testOnlyAccess,
             referenceDictionary: moduleReferenceDictionary,
@@ -274,7 +274,7 @@ extension ActionIntermediate {
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
-    typeLookup: [StrictString: SimpleTypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
@@ -330,7 +330,7 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: SimpleTypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in

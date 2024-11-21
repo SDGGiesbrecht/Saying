@@ -146,7 +146,7 @@ extension ActionUse {
   }
 
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,

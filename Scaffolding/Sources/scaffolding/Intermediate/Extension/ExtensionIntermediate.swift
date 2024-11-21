@@ -6,6 +6,7 @@ struct ExtensionIntermediate {
   var arguments: [SimpleTypeReference]
   var things: [Thing]
   var actions: [ActionIntermediate]
+  var uses: [UseIntermediate]
   var declaration: ParsedExtensionSyntax
 }
 
@@ -20,6 +21,7 @@ extension ExtensionIntermediate {
     let extensionNamespace = namespace
     var things: [Thing] = []
     var actions: [ActionIntermediate] = []
+    var uses: [UseIntermediate] = []
     for provision in declaration.provisions.provisions?.provisions.provisions ?? [] {
       switch provision {
       case .thing(let thing):
@@ -36,6 +38,13 @@ extension ExtensionIntermediate {
         case .success(let result):
           actions.append(result)
         }
+      case .use(let use):
+        switch UseIntermediate.construct(use, namespace: extensionNamespace) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ .brokenUse($0) }))
+        case .success(let result):
+          uses.append(result)
+        }
       }
     }
     if ¬errors.isEmpty {
@@ -47,6 +56,7 @@ extension ExtensionIntermediate {
         arguments: declaration.ability.parameters.parameters.map({ SimpleTypeReference($0.name) }),
         things: things,
         actions: actions,
+        uses: uses,
         declaration: declaration
       )
     )

@@ -70,7 +70,7 @@ extension ParameterIntermediate {
   }
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: SimpleTypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> ParameterIntermediate {
     return ParameterIntermediate(

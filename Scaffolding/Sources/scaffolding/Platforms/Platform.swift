@@ -174,21 +174,17 @@ extension Platform {
         return sanitize(identifier: type.names.identifier(), leading: true)
       }
     case .compound(identifier: let identifier, components: let components):
-      let usedName = identifier.name()
       let type = referenceLookup.lookupThing(
         identifier.name(),
         components: components.map({ $0.key })
       )!
       if let native = nativeType(of: type) {
-        let usedParameters = type.parameters.ordered(for: usedName)
         var result = ""
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
           if index ≠ native.textComponents.indices.last {
-            let name = native.parameters[index].name
-            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
-            let argument = components[argumentIndex]
-            result.append(contentsOf: source(for: argument, referenceLookup: referenceLookup))
+            let type = native.parameters[index].resolvedType!
+            result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
           }
         }
         return result
@@ -309,7 +305,7 @@ extension Platform {
         if index ≠ native.textComponents.indices.last {
           let parameter = native.parameters[index]
           if let type = parameter.typeInstead {
-            let typeSource = source(for: ParsedTypeReference.simple(type), referenceLookup: referenceLookup)
+            let typeSource = source(for: type, referenceLookup: referenceLookup)
             result.append(contentsOf: typeSource)
           } else {
             let name = parameter.name

@@ -17,6 +17,11 @@ extension
    Kotlin: “” thing “¤(3F)”
    Swift: “” thing “¤(3F)”
 
+  use (clients)
+   storage of (optional (thing))
+   {
+   }
+
   action (clients)
    (
     English: none
@@ -115,4 +120,18 @@ action
    ← unwrapped
   }
   ← false
+ }
+
+action
+ [
+  test (verify (using optional storage works))
+ ]
+ (
+  English: using optional storage works
+ )
+ truth value
+ {
+  let (• storage: optional (truth value)) start as (optional true value)
+  change (storage) to (none)
+  ← (storage) does not exist
  }

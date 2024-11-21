@@ -27,7 +27,7 @@ extension TestIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> TestIntermediate {
     return TestIntermediate(

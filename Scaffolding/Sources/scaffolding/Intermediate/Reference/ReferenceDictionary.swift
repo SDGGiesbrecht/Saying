@@ -79,7 +79,7 @@ extension ReferenceDictionary {
       identifierMapping[name] = identifier
     }
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
-      .map({ .simple($0.names.identifier()) })
+      .map({ $0.resolvedType!.key })
     things[identifier, default: [:]][parameters] = thing
     return errors
   }

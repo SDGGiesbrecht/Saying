@@ -3,7 +3,7 @@ import SDGText
 
 struct Thing {
   var names: Set<StrictString>
-  var parameters: Interpolation<AbilityParameterIntermediate>
+  var parameters: Interpolation<ThingParameterIntermediate>
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var c: NativeThingImplementation?
@@ -32,7 +32,7 @@ extension Thing {
     var errors: [Thing.ConstructionError] = []
 
     let namesSyntax = declaration.name.names.names
-    let parameters: Interpolation<AbilityParameterIntermediate>
+    let parameters: Interpolation<ThingParameterIntermediate>
     switch Interpolation.construct(
       entries: declaration.name.names.names,
       getEntryName: { $0.name.name() },
@@ -41,7 +41,7 @@ extension Thing {
       getDefinitionOrReference: { $0.definitionOrReference },
       getNestedSignature: { _ in nil },
       getNestedParameters: { _ in [] },
-      constructParameter: { names, _, _ in AbilityParameterIntermediate(names: names) }
+      constructParameter: { names, _, _ in ThingParameterIntermediate(names: names) }
     ) {
     case .failure(let interpolationError):
       errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))
@@ -118,7 +118,7 @@ extension Thing {
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters({ parameter in
       let identifier = parameter.names.identifier()
-      return AbilityParameterIntermediate(names: [typeLookup[identifier]!])
+      return ThingParameterIntermediate(names: [typeLookup[identifier]!])
     })
     return Thing(
       names: names,
@@ -135,13 +135,10 @@ extension Thing {
   }
 
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference],
+    typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> Thing {
-    let mappedParameters = parameters.mappingParameters({ parameter in
-      let identifier = parameter.names.identifier()
-      return AbilityParameterIntermediate(names: [typeLookup[identifier]!.identifier])
-    })
+    let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,

@@ -95,6 +95,16 @@ extension ModuleIntermediate {
           }
         )
       }
+      for use in extensionBlock.uses {
+        referenceDictionary.modifyAbility(
+          identifier: abilityIdentifier,
+          transformation: { ability in
+            ability.provisionUses.append(
+              use.resolvingExtensionContext(typeLookup: extensionTypes)
+            )
+          }
+        )
+      }
     }
 
     if ¬errors.isEmpty {
@@ -105,70 +115,7 @@ extension ModuleIntermediate {
   mutating func resolveUses() throws {
     var errors: [ReferenceError] = []
     for use in uses {
-      let identifier = use.ability
-      guard let ability = referenceDictionary.lookupAbility(identifier: identifier) else {
-        errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
-        continue
-      }
-      
-      var useTypes: [StrictString: SimpleTypeReference] = [:]
-      for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
-        let argument = use.arguments[index]
-        for name in parameter.names {
-          useTypes[name] = argument
-        }
-      }
-      let specializationNamespace: [Set<StrictString>] = ability.parameters
-        .ordered(for: ability.names.identifier())
-        .map { [useTypes[$0.names.identifier()]!.identifier] }
-
-      var prototypeActions = use.actions
-      for (_, requirement) in ability.requirements {
-        if let provisionIndex = prototypeActions.firstIndex(where: { action in
-          return action.names.overlaps(requirement.names)
-        }) {
-          let provision = prototypeActions.remove(at: provisionIndex)
-          switch provision.merging(
-            requirement: requirement,
-            useAccess: use.access,
-            typeLookup: useTypes,
-            specializationNamespace: specializationNamespace
-          ) {
-          case .success(let new):
-            _ = referenceDictionary.add(action: new)
-          case .failure(let error):
-            errors.append(contentsOf: error.errors)
-          }
-        } else if let provision = ability.defaults[requirement.names.identifier()] {
-          let specialized = provision.specializing(
-            for: use,
-            typeLookup: useTypes,
-            specializationNamespace: specializationNamespace
-          )
-          _ = referenceDictionary.add(action: specialized)
-        } else {
-          errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
-          continue
-        }
-      }
-      for thing in ability.provisionThings {
-        let specialized = thing.specializing(
-          typeLookup: useTypes,
-          specializationNamespace: specializationNamespace
-        )
-        _ = referenceDictionary.add(thing: specialized)
-      }
-      for action in ability.provisionActions {
-        let specialized = action.specializing(
-          for: use,
-          typeLookup: useTypes,
-          specializationNamespace: specializationNamespace
-        )
-        _ = referenceDictionary.add(action: specialized)
-      }
-      for remaining in prototypeActions {
-        errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))
-      }
+      resolve(use, errors: &errors)
     }
 
     for documentation in [
@@ -180,6 +127,83 @@ extension ModuleIntermediate {
 
     if ¬errors.isEmpty {
       throw ErrorList(errors)
+    }
+  }
+  mutating func resolve(_ use: UseIntermediate, errors: inout [ReferenceError]) {
+    let identifier = use.ability
+    guard let ability = referenceDictionary.lookupAbility(identifier: identifier) else {
+      errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
+      return
+    }
+
+    var useTypes: [StrictString: ParsedTypeReference] = [:]
+    for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
+      let argument = use.arguments[index]
+      for name in parameter.names {
+        useTypes[name] = argument
+      }
+    }
+    let specializationNamespace: [Set<StrictString>] = ability.parameters
+      .ordered(for: ability.names.identifier())
+      .flatMap({ parameter in
+        let components: [StrictString] = useTypes[parameter.names.identifier()]!
+          .unresolvedGloballyUniqueIdentifierComponents()
+        return components.map({ Set([$0]) })
+      })
+
+    var prototypeActions = use.actions
+    for (_, requirement) in ability.requirements {
+      if let provisionIndex = prototypeActions.firstIndex(where: { action in
+        return action.names.overlaps(requirement.names)
+      }) {
+        let provision = prototypeActions.remove(at: provisionIndex)
+        switch provision.merging(
+          requirement: requirement,
+          useAccess: use.access,
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace
+        ) {
+        case .success(let new):
+          _ = referenceDictionary.add(action: new)
+        case .failure(let error):
+          errors.append(contentsOf: error.errors)
+        }
+      } else if let provision = ability.defaults[requirement.names.identifier()] {
+        let specialized = provision.specializing(
+          for: use,
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace
+        )
+        _ = referenceDictionary.add(action: specialized)
+      } else {
+        errors.append(.unfulfilledRequirement(name: requirement.names, use.declaration))
+        continue
+      }
+    }
+    for remaining in prototypeActions {
+      errors.append(.noSuchRequirement(remaining.declaration! as! ParsedActionDeclaration))
+    }
+
+    for thing in ability.provisionThings {
+      let specialized = thing.specializing(
+        typeLookup: useTypes,
+        specializationNamespace: specializationNamespace
+      )
+      _ = referenceDictionary.add(thing: specialized)
+    }
+    for action in ability.provisionActions {
+      let specialized = action.specializing(
+        for: use,
+        typeLookup: useTypes,
+        specializationNamespace: specializationNamespace
+      )
+      _ = referenceDictionary.add(action: specialized)
+    }
+    for use in ability.provisionUses {
+      resolve(
+        use.specializing(typeLookup: useTypes, specializationNamespace: specializationNamespace),
+        errors: &errors
+      )
     }
   }
 

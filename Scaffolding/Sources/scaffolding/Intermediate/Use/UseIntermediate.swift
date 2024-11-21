@@ -3,7 +3,7 @@ import SDGText
 
 struct UseIntermediate {
   var ability: StrictString
-  var arguments: [SimpleTypeReference]
+  var arguments: [ParsedTypeReference]
   var actions: [ActionIntermediate]
   var access: AccessIntermediate
   var testOnlyAccess: Bool
@@ -34,12 +34,41 @@ extension UseIntermediate {
     return .success(
       UseIntermediate(
         ability: abilityName,
-        arguments: declaration.use.arguments.arguments.map({ SimpleTypeReference($0.name) }),
+        arguments: declaration.use.arguments.arguments.map({ ParsedTypeReference($0.name) }),
         actions: actions,
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         declaration: declaration
       )
+    )
+  }
+}
+
+extension UseIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> UseIntermediate {
+    return UseIntermediate(
+      ability: ability,
+      arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      actions: actions.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      declaration: declaration
+    )
+  }
+
+  func specializing(
+    typeLookup: [StrictString: ParsedTypeReference],
+    specializationNamespace: [Set<StrictString>]
+  ) -> UseIntermediate {
+    return UseIntermediate(
+      ability: ability,
+      arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
+      actions: actions.map({ $0.specializing(for: self, typeLookup: typeLookup, specializationNamespace: specializationNamespace) }),
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      declaration: declaration
     )
   }
 }

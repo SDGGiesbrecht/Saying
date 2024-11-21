@@ -3,7 +3,7 @@ import SDGText
 struct NativeActionImplementationParameter {
   var name: StrictString
   var syntaxNode: ParsedUninterruptedIdentifier
-  var typeInstead: SimpleTypeReference?
+  var typeInstead: ParsedTypeReference?
 }
 
 extension NativeActionImplementationParameter {
@@ -16,12 +16,12 @@ extension NativeActionImplementationParameter {
 
 extension NativeActionImplementationParameter {
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeActionImplementationParameter {
     return NativeActionImplementationParameter(
       name: name,
       syntaxNode: syntaxNode,
-      typeInstead: typeLookup[typeInstead?.identifier ?? name]
+      typeInstead: typeLookup[name] ?? typeInstead?.specializing(typeLookup: typeLookup)
     )
   }
 }
