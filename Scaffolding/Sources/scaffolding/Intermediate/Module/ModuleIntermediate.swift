@@ -114,8 +114,13 @@ extension ModuleIntermediate {
       var useTypes: [StrictString: SimpleTypeReference] = [:]
       for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
         let argument = use.arguments[index]
-        for name in parameter.names {
-          useTypes[name] = argument
+        switch argument {
+        case .simple(let simple):
+          for name in parameter.names {
+            useTypes[name] = simple
+          }
+        case .compound, .action, .statements:
+          #warning("Not implemented yet.")
         }
       }
       let specializationNamespace: [Set<StrictString>] = ability.parameters

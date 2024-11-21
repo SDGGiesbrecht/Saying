@@ -578,7 +578,8 @@ extension Node {
             kind: .alternates([
               Alternate(name: "compound", type: "UseSignature"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
-            ])
+            ]),
+            isIndirect: true
           ),
           Node(
             name: "ConcreteParameterType",
@@ -716,6 +717,14 @@ extension Node {
             ])
           ),
           Node(
+            name: "UseArgumentType",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "name", type: "ThingReference", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+          Node(
             name: "AbilityParameterReference",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
@@ -782,7 +791,7 @@ extension Node {
         Node.separatedList(
           name: "UseArgumentList",
           entryName: "argument", entryNamePlural: "arguments",
-          entryType: "AbilityParameterType",
+          entryType: "UseArgumentType",
           separatorName: "identifierSegment",
           separatorType: "MedialIdentifierSegment",
           fixedSeparator: false
@@ -1100,6 +1109,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "thing", type: "ThingDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
+              Alternate(name: "use", type: "Use"),
             ])
           ),
         ],

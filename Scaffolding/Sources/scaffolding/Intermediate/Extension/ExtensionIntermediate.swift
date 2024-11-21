@@ -36,6 +36,8 @@ extension ExtensionIntermediate {
         case .success(let result):
           actions.append(result)
         }
+      case .use(let use):
+        #warning("Not implemented yet.")
       }
     }
     if ¬errors.isEmpty {
