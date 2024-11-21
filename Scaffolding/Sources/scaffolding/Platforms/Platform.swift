@@ -174,13 +174,11 @@ extension Platform {
         return sanitize(identifier: type.names.identifier(), leading: true)
       }
     case .compound(identifier: let identifier, components: let components):
-      let usedName = identifier.name()
       let type = referenceLookup.lookupThing(
         identifier.name(),
         components: components.map({ $0.key })
       )!
       if let native = nativeType(of: type) {
-        let usedParameters = type.parameters.ordered(for: usedName)
         var result = ""
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
