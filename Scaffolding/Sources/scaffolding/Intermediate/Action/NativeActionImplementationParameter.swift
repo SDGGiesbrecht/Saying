@@ -18,20 +18,10 @@ extension NativeActionImplementationParameter {
   func specializing(
     typeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeActionImplementationParameter {
-    let lookupName: StrictString
-    switch typeInstead {
-    case .simple(let simple):
-      lookupName = simple.identifier
-    case .compound, .action, .statements:
-      #warning("Not implemented yet.")
-      lookupName = ""
-    case .none:
-      lookupName = name
-    }
     return NativeActionImplementationParameter(
       name: name,
       syntaxNode: syntaxNode,
-      typeInstead: typeLookup[lookupName]
+      typeInstead: typeLookup[name] ?? typeInstead?.specializing(typeLookup: typeLookup)
     )
   }
 }
