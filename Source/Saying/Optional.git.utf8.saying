@@ -121,3 +121,17 @@ action
   }
   ← false
  }
+
+action
+ [
+  test (verify (using optional storage works))
+ ]
+ (
+  English: using optional storage works
+ )
+ truth value
+ {
+   let (• storage: optional (truth value)) start as (optional true value)
+   change (storage) to (none)
+   ← (storage) does not exist
+ }

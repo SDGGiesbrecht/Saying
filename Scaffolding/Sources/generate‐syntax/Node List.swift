@@ -414,7 +414,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
-              Child(name: "type", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),
           Node(
