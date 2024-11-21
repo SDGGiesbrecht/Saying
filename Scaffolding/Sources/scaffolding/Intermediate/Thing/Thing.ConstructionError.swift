@@ -2,7 +2,7 @@ import SDGText
 
 extension Thing {
   enum ConstructionError: DiagnosticError {
-    case brokenParameterInterpolation(Interpolation<AbilityParameterIntermediate>.ConstructionError)
+    case brokenParameterInterpolation(Interpolation<ThingParameterIntermediate>.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeImplementation(NativeThingImplementation.ConstructionError)
     case invalidImport(ParsedThingImplementation)
