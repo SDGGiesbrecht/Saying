@@ -309,7 +309,7 @@ extension Platform {
         if index ≠ native.textComponents.indices.last {
           let parameter = native.parameters[index]
           if let type = parameter.typeInstead {
-            let typeSource = source(for: ParsedTypeReference.simple(type), referenceLookup: referenceLookup)
+            let typeSource = source(for: type, referenceLookup: referenceLookup)
             result.append(contentsOf: typeSource)
           } else {
             let name = parameter.name

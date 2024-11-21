@@ -111,21 +111,20 @@ extension ModuleIntermediate {
         continue
       }
       
-      var useTypes: [StrictString: SimpleTypeReference] = [:]
+      var useTypes: [StrictString: ParsedTypeReference] = [:]
       for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
         let argument = use.arguments[index]
-        switch argument {
-        case .simple(let simple):
-          for name in parameter.names {
-            useTypes[name] = simple
-          }
-        case .compound, .action, .statements:
-          #warning("Not implemented yet.")
+        for name in parameter.names {
+          useTypes[name] = argument
         }
       }
       let specializationNamespace: [Set<StrictString>] = ability.parameters
         .ordered(for: ability.names.identifier())
-        .map { [useTypes[$0.names.identifier()]!.identifier] }
+        .flatMap({ parameter in
+          let components: [StrictString] = useTypes[parameter.names.identifier()]!
+            .unresolvedGloballyUniqueIdentifierComponents()
+          return components.map({ Set([$0]) })
+        })
 
       var prototypeActions = use.actions
       for (_, requirement) in ability.requirements {

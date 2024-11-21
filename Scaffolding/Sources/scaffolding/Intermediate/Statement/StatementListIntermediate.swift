@@ -58,7 +58,7 @@ extension StatementListIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> StatementListIntermediate {
     return StatementListIntermediate(
       statements: statements.map({ $0.specializing(typeLookup: typeLookup) })

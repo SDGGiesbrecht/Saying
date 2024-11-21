@@ -80,11 +80,11 @@ extension ParsedTypeReference {
     }
   }
 
-  func specializing(typeLookup: [StrictString: SimpleTypeReference]) -> ParsedTypeReference {
+  func specializing(typeLookup: [StrictString: ParsedTypeReference]) -> ParsedTypeReference {
     switch self {
     case .simple(let simple):
       if let found = typeLookup[simple.identifier] {
-        return .simple(found)
+        return found
       } else {
         return self
       }

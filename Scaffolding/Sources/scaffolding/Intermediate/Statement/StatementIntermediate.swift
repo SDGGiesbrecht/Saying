@@ -56,7 +56,7 @@ extension StatementIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> StatementIntermediate {
     return StatementIntermediate(
       isReturn: isReturn,

@@ -52,7 +52,7 @@ extension NativeActionImplementationIntermediate {
 
 extension NativeActionImplementationIntermediate {
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
       textComponents: textComponents,

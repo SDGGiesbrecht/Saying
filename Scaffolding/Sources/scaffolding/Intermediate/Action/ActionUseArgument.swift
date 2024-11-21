@@ -87,7 +87,7 @@ extension ActionUseArgument {
   }
 
   func specializing(
-    typeLookup: [StrictString: SimpleTypeReference]
+    typeLookup: [StrictString: ParsedTypeReference]
   ) -> ActionUseArgument {
     switch self {
     case .action(let action):
