@@ -3,6 +3,7 @@ import SDGText
 struct NativeThingImplementationParameter {
   var name: StrictString
   var syntaxNode: ParsedUninterruptedIdentifier
+  var resolvedType: ParsedTypeReference?
 }
 
 extension NativeThingImplementationParameter {
@@ -16,19 +17,10 @@ extension NativeThingImplementationParameter {
   func specializing(
     typeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeThingImplementationParameter {
-    let newName: StrictString
-    switch typeLookup[name] {
-    case .simple(let simple):
-      newName = simple.identifier
-    case .compound, .action, .statements:
-      #warning("Not implemented yet.")
-      newName = ""
-    case .none:
-      newName = name
-    }
     return NativeThingImplementationParameter(
-      name: newName,
-      syntaxNode: syntaxNode
+      name: name,
+      syntaxNode: syntaxNode,
+      resolvedType: typeLookup[name] ?? resolvedType?.specializing(typeLookup: typeLookup)
     )
   }
 }

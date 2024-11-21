@@ -185,10 +185,8 @@ extension Platform {
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
           if index ≠ native.textComponents.indices.last {
-            let name = native.parameters[index].name
-            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
-            let argument = components[argumentIndex]
-            result.append(contentsOf: source(for: argument, referenceLookup: referenceLookup))
+            let type = native.parameters[index].resolvedType!
+            result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
           }
         }
         return result
