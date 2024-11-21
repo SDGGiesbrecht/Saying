@@ -62,22 +62,7 @@ extension NativeThingImplementation {
   func specializing(
     typeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeThingImplementation {
-    let mappedParameters = parameters.map({ parameter in
-      let newName: StrictString
-      switch typeLookup[parameter.name] {
-      case .simple(let simple):
-        newName = simple.identifier
-      case .compound, .action, .statements:
-        #warning("Not implemented yet.")
-        newName = ""
-      case .none:
-        newName = parameter.name
-      }
-      return NativeThingImplementationParameter(
-        name: newName,
-        syntaxNode: parameter.syntaxNode
-      )
-    })
+    let mappedParameters = parameters.map { $0.specializing(typeLookup: typeLookup) }
     return NativeThingImplementation(
       textComponents: textComponents,
       parameters: mappedParameters,
