@@ -96,7 +96,14 @@ extension ModuleIntermediate {
         )
       }
       for use in extensionBlock.uses {
-        uses.append(use.resolvingExtensionContext(typeLookup: extensionTypes))
+        referenceDictionary.modifyAbility(
+          identifier: abilityIdentifier,
+          transformation: { ability in
+            ability.provisionUses.append(
+              use.resolvingExtensionContext(typeLookup: extensionTypes)
+            )
+          }
+        )
       }
     }
 

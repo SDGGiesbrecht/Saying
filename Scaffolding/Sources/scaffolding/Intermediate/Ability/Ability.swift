@@ -10,6 +10,7 @@ struct Ability {
   var defaults: [StrictString: ActionIntermediate]
   var provisionThings: [Thing]
   var provisionActions: [ActionIntermediate]
+  var provisionUses: [UseIntermediate]
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
@@ -116,6 +117,7 @@ extension Ability {
         defaults: defaults,
         provisionThings: [],
         provisionActions: [],
+        provisionUses: [],
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
