@@ -2,6 +2,7 @@ import SDGText
 
 struct ThingParameterIntermediate {
   var names: Set<StrictString>
+  var resolvedType: ParsedTypeReference?
 }
 
 extension ThingParameterIntermediate: InterpolationParameterProtocol {}
@@ -11,14 +12,9 @@ extension ThingParameterIntermediate {
     typeLookup: [StrictString: ParsedTypeReference]
   ) -> ThingParameterIntermediate {
     let identifier = names.identifier()
-    let newName: StrictString
-    switch typeLookup[identifier] {
-    case .simple(let simple):
-      newName = simple.identifier
-    case .compound, .action, .statements, .none:
-#warning("Not implemented yet.")
-      newName = ""
-    }
-    return ThingParameterIntermediate(names: [newName])
+    return ThingParameterIntermediate(
+      names: names,
+      resolvedType: typeLookup[identifier] ?? resolvedType?.specializing(typeLookup: typeLookup)
+    )
   }
 }
