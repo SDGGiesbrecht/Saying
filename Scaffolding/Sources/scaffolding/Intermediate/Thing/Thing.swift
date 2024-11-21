@@ -138,18 +138,7 @@ extension Thing {
     typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> Thing {
-    let mappedParameters = parameters.mappingParameters({ parameter in
-      let identifier = parameter.names.identifier()
-      let newName: StrictString
-      switch typeLookup[identifier] {
-      case .simple(let simple):
-        newName = simple.identifier
-      case .compound, .action, .statements, .none:
-        #warning("Not implemented yet.")
-        newName = ""
-      }
-      return ThingParameterIntermediate(names: [newName])
-    })
+    let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
