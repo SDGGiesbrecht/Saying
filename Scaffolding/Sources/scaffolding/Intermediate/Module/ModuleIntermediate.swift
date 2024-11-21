@@ -95,6 +95,9 @@ extension ModuleIntermediate {
           }
         )
       }
+      for use in extensionBlock.uses {
+        uses.append(use.resolvingExtensionContext(typeLookup: extensionTypes))
+      }
     }
 
     if ¬errors.isEmpty {

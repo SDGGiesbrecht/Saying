@@ -43,3 +43,18 @@ extension UseIntermediate {
     )
   }
 }
+
+extension UseIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> UseIntermediate {
+    return UseIntermediate(
+      ability: ability,
+      arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      actions: actions.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      declaration: declaration
+    )
+  }
+}
