@@ -131,7 +131,7 @@ action
  )
  truth value
  {
-   let (• storage: optional (truth value)) start as (optional true value)
-   change (storage) to (none)
-   ← (storage) does not exist
+  let (• storage: optional (truth value)) start as (optional true value)
+  change (storage) to (none)
+  ← (storage) does not exist
  }
