@@ -57,4 +57,18 @@ extension UseIntermediate {
       declaration: declaration
     )
   }
+
+  func specializing(
+    typeLookup: [StrictString: ParsedTypeReference],
+    specializationNamespace: [Set<StrictString>]
+  ) -> UseIntermediate {
+    return UseIntermediate(
+      ability: ability,
+      arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
+      actions: actions.map({ $0.specializing(for: self, typeLookup: typeLookup, specializationNamespace: specializationNamespace) }),
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      declaration: declaration
+    )
+  }
 }

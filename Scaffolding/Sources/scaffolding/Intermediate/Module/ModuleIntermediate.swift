@@ -199,6 +199,12 @@ extension ModuleIntermediate {
       )
       _ = referenceDictionary.add(action: specialized)
     }
+    for use in ability.provisionUses {
+      resolve(
+        use.specializing(typeLookup: useTypes, specializationNamespace: specializationNamespace),
+        errors: &errors
+      )
+    }
   }
 
   mutating func resolveTypeIdentifiers() {
