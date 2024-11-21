@@ -17,6 +17,11 @@ extension
    Kotlin: “” thing “¤(3F)”
    Swift: “” thing “¤(3F)”
 
+  use (clients)
+   storage of (optional (thing))
+   {
+   }
+
   action (clients)
    (
     English: none
