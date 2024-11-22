@@ -973,6 +973,19 @@ extension Node {
             ])
           ),
           Node(
+            name: "EnumerationDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "EnumerationKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ThingName", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "implementation", type: "ThingImplementations", kind: .required),
+            ])
+          ),
+          Node(
             name: "ActionLikeKeyword",
             kind: .alternates([
               Alternate(name: "action", type: "ActionKeyword"),
@@ -1156,6 +1169,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "language", type: "LanguageDeclaration"),
               Alternate(name: "thing", type: "ThingDeclaration"),
+              Alternate(name: "enumeration", type: "EnumerationDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),
               Alternate(name: "use", type: "Use"),

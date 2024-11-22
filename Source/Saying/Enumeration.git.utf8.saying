@@ -6,6 +6,7 @@ enumeration (clients)
   case
    something
    truth value
+
   case
    nothing
  }
