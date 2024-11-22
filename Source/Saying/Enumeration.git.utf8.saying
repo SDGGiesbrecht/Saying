@@ -1,0 +1,11 @@
+enumeration (clients)
+ (
+  English: example enumeration
+ )
+ {
+  case
+   something
+   truth value
+  case
+   nothing
+ }

@@ -27,6 +27,8 @@ extension Node {
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
+          Node(name: "EnumerationKeyword", kind: .keyword(["enumeration", "Aufzählung", "énumération", "απαρίθμηση", "ספירה"])),
+          Node(name: "CaseKeyword", kind: .keyword(["case", "Fall", "cas", "περίπτωση", "מקרה"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "FlowKeyword", kind: .keyword(["flow", "Ablauf", "déroulement", "ροή", "זרימה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
