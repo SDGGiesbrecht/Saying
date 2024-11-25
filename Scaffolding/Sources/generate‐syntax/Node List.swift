@@ -973,6 +973,42 @@ extension Node {
             ])
           ),
           Node(
+            name: "CaseDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "CaseKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "contents", type: "RequirementReturnValue", kind: .optional),
+            ])
+          ),
+        ],
+          Node.separatedList(
+            name: "CaseList",
+            entryName: "caseNode", entryNamePlural: "cases",
+            entryType: "CaseDeclaration",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreak",
+            fixedSeparator: true
+          ),
+        [
+          Node(
+            name: "CaseListSection",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "cases", type: "CaseList", kind: .required),
+            ])
+          ),
+          Node(
+            name: "Cases",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "cases", type: "CaseListSection", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
             name: "EnumerationDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "EnumerationKeyword", kind: .required),
@@ -982,7 +1018,7 @@ extension Node {
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "implementation", type: "ThingImplementations", kind: .required),
+              Child(name: "cases", type: "Cases", kind: .required),
             ])
           ),
           Node(
