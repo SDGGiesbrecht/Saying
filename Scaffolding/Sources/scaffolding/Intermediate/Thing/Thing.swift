@@ -62,7 +62,7 @@ extension Thing {
     for enumerationCase in declaration.enumerationCases {
       switch CaseIntermediate.construct(enumerationCase, namespace: thingNamespace) {
       case .failure(let error):
-        #warning("Dropping error.")
+        errors.append(contentsOf: error.errors.map({ .brokenCaseImplementation($0) }))
       case .success(let constructed):
         cases.append(constructed)
       }
