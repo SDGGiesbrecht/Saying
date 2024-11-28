@@ -60,13 +60,17 @@ extension Thing {
     let selfReference = declaration.name.names.names
       .lazy.compactMap({ ParsedTypeReference($0.name) })
       .first!
+    let access = AccessIntermediate(declaration.access)
+    let testOnlyAccess = declaration.testAccess?.keyword is ParsedTestsKeyword
 
     var cases: [CaseIntermediate] = []
     for enumerationCase in declaration.enumerationCases {
       switch CaseIntermediate.construct(
         enumerationCase,
+        namespace: thingNamespace,
         type: selfReference,
-        namespace: thingNamespace
+        access: access,
+        testOnlyAccess: testOnlyAccess
       ) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ .brokenCaseImplementation($0) }))
@@ -119,8 +123,8 @@ extension Thing {
       Thing(
         names: names,
         parameters: parameters,
-        access: AccessIntermediate(declaration.access),
-        testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
+        access: access,
+        testOnlyAccess: testOnlyAccess,
         cases: cases,
         c: c,
         cSharp: cSharp,

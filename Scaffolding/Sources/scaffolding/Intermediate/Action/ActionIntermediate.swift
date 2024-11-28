@@ -12,6 +12,7 @@ struct ActionIntermediate {
   var implementation: StatementListIntermediate?
   var declaration: ParsedActionDeclarationPrototype?
   var isReferenceWrapper: Bool = false
+  var isEnumerationCaseWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
@@ -113,6 +114,26 @@ extension ActionIntermediate {
         access: .inferred,
         testOnlyAccess: false
       )
+    )
+  }
+
+  static func enumerationAction(
+    names: Set<StrictString>,
+    returnValue: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: false,
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: returnValue,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      isEnumerationCaseWrapper: true
     )
   }
 

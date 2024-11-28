@@ -456,7 +456,8 @@ extension Platform {
     for action: ActionIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil {
+    if nativeImplementation(of: action) ≠ nil
+      ∨ action.isEnumerationCaseWrapper {
       return nil
     }
 
@@ -488,7 +489,8 @@ extension Platform {
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil {
+    if nativeImplementation(of: action) ≠ nil
+      ∨ action.isEnumerationCaseWrapper {
       return nil
     }
 

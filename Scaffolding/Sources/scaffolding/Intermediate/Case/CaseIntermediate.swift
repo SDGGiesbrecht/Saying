@@ -16,8 +16,10 @@ struct CaseIntermediate {
 extension CaseIntermediate {
   static func construct(
     _ declaration: ParsedCaseDeclaration,
+    namespace: [Set<StrictString>],
     type: ParsedTypeReference,
-    namespace: [Set<StrictString>]
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
   ) -> Result<CaseIntermediate, ErrorList<CaseIntermediate.ConstructionError>> {
     var errors: [CaseIntermediate.ConstructionError] = []
 
@@ -40,7 +42,12 @@ extension CaseIntermediate {
     }
 
     let constantAction: ActionIntermediate? = declaration.contents == nil
-      ? ActionIntermediate.parameterAction(names: names, parameters: .none, returnValue: type)
+      ? ActionIntermediate.enumerationAction(
+        names: names,
+        returnValue: type,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
       : nil
 
     if ¬errors.isEmpty {
