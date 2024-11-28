@@ -11,7 +11,7 @@ struct Thing {
   var kotlin: NativeThingImplementation?
   var swift: NativeThingImplementation?
   var documentation: DocumentationIntermediate?
-  var declaration: ParsedThingDeclaration
+  var declaration: ParsedThingDeclarationProtocol
 }
 
 extension Thing {
@@ -25,10 +25,11 @@ extension Thing {
     }
   }
 
-  static func construct(
-    _ declaration: ParsedThingDeclaration,
+  static func construct<ThingNode>(
+    _ declaration: ThingNode,
     namespace: [Set<StrictString>]
-  ) -> Result<Thing, ErrorList<Thing.ConstructionError>> {
+  ) -> Result<Thing, ErrorList<Thing.ConstructionError>>
+  where ThingNode: ParsedThingDeclarationProtocol {
     var errors: [Thing.ConstructionError] = []
 
     let namesSyntax = declaration.name.names.names
@@ -58,7 +59,7 @@ extension Thing {
     var cSharp: NativeThingImplementation?
     var kotlin: NativeThingImplementation?
     var swift: NativeThingImplementation?
-    for implementation in declaration.implementation.implementations {
+    for implementation in declaration.nativeImplementations {
       let constructed: NativeThingImplementation
       switch NativeThingImplementation.construct(implementation: implementation.implementation) {
       case .failure(let error):

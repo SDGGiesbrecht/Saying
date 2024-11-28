@@ -41,7 +41,8 @@ extension ModuleIntermediate {
         let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
         errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
       case .enumeration(let enumeration):
-        #warning("Not implemented yet.")
+        let thing = try Thing.construct(enumeration, namespace: baseNamespace).get()
+        errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
       case .action(let actionNode):
         let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
         errors.append(contentsOf: referenceDictionary.add(action: action).map({ .redeclaredIdentifier($0) }))

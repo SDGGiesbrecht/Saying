@@ -1003,7 +1003,7 @@ extension Node {
             name: "Cases",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "cases", type: "CaseListSection", kind: .optional),
+              Child(name: "cases", type: "CaseListSection", kind: .required),
               Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])

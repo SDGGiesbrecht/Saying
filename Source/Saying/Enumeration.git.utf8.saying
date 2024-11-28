@@ -10,3 +10,15 @@ enumeration
   case
    nothing
  }
+
+action
+ [
+  test (verify (use example enumeration (nothing)))
+ ]
+ (
+  English: use example enumeration (value: example enumeration)
+ )
+ truth value
+ {
+  ← true
+ }
