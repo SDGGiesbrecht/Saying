@@ -54,7 +54,6 @@ extension CaseIntermediate {
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    #warning("Placeholder natives.")
     return .success(
       CaseIntermediate(
         names: names,
