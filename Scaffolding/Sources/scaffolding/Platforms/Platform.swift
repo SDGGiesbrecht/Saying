@@ -206,6 +206,24 @@ extension Platform {
     }
   }
 
+  static func declaration(
+    for thing: Thing,
+    externalReferenceLookup: [ReferenceDictionary]
+  ) -> String? {
+    if ¬isTyped {
+      return nil
+    }
+    if nativeType(of: thing) ≠ nil {
+      return nil
+    }
+
+    let name = sanitize(
+      identifier: thing.names.identifier(),
+      leading: true
+    )
+    return "struct \(name) {}"
+  }
+
   static func flowCoverageRegistration(
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
@@ -610,6 +628,16 @@ extension Platform {
       .map({ sanitize(stringLiteral: $0) })
     result.append(contentsOf: coverageRegionSet(regions: regions))
     result.append(contentsOf: registerCoverageAction)
+
+    let allThings = moduleReferenceLookup.allThings()
+    for thing in allThings {
+      if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
+      }
+    }
 
     if let start = actionDeclarationsContainerStart {
       result.append("")
