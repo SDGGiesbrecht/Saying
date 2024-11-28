@@ -387,6 +387,9 @@ extension Platform {
         }
       }
       return result
+    } else if action.isEnumerationCaseWrapper {
+      let name = sanitize(identifier: action.names.identifier(), leading: true)
+      return ".\(name)"
     } else {
       let name = sanitize(
         identifier: parameterName
