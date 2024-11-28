@@ -16,6 +16,7 @@ struct CaseIntermediate {
 extension CaseIntermediate {
   static func construct(
     _ declaration: ParsedCaseDeclaration,
+    type: ParsedTypeReference,
     namespace: [Set<StrictString>]
   ) -> Result<CaseIntermediate, ErrorList<CaseIntermediate.ConstructionError>> {
     var errors: [CaseIntermediate.ConstructionError] = []
@@ -38,9 +39,8 @@ extension CaseIntermediate {
       }
     }
 
-    #warning("Return value ought to be known.")
     let constantAction: ActionIntermediate? = declaration.contents == nil
-      ? ActionIntermediate.parameterAction(names: names, parameters: .none, returnValue: nil)
+      ? ActionIntermediate.parameterAction(names: names, parameters: .none, returnValue: type)
       : nil
 
     if ¬errors.isEmpty {

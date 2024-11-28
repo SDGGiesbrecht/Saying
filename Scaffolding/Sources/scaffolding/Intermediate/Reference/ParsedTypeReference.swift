@@ -35,6 +35,54 @@ extension ParsedTypeReference {
       self = .statements
     }
   }
+  init?(_ node: ParsedThingSignature) {
+    let reference: ParsedThingReference
+    switch node {
+    case .compound(let compound):
+      let first: ParsedUseArgumentType
+      switch compound.parameters.first {
+      case .type(let type):
+        first = ParsedUseArgumentType(
+          openingParenthesis: type.openingParenthesis,
+          name: ParsedThingReference.simple(type.name),
+          closingParenthesis: type.closingParenthesis
+        )
+      case .reference:
+        return nil
+      }
+      var continuations: [ParsedUseArgumentListContinuation] = []
+      for continuation in compound.parameters.continuations {
+        switch continuation.parameter {
+        case .type(let type):
+          continuations.append(
+            ParsedUseArgumentListContinuation(
+              identifierSegment: continuation.identifierSegment,
+              argument: ParsedUseArgumentType(
+                openingParenthesis: type.openingParenthesis,
+                name: ParsedThingReference.simple(type.name),
+                closingParenthesis: type.closingParenthesis
+              )
+            )
+          )
+        case .reference:
+          return nil
+        }
+      }
+      reference = .compound(
+        ParsedUseSignature(
+          initialIdentifierSegment: compound.initialIdentifierSegment,
+          arguments: ParsedUseArgumentList(
+            first: first,
+            continuations: continuations
+          ),
+          finalIdentifierSegment: compound.finalIdentifierSegment
+        )
+      )
+    case .simple(let simple):
+      reference = .simple(simple)
+    }
+    self.init(reference)
+  }
 }
 
 extension ParsedTypeReference {

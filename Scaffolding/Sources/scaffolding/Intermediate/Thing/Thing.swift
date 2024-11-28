@@ -57,10 +57,17 @@ extension Thing {
     }
 
     let thingNamespace = namespace.appending(names)
+    let selfReference = declaration.name.names.names
+      .lazy.compactMap({ ParsedTypeReference($0.name) })
+      .first!
 
     var cases: [CaseIntermediate] = []
     for enumerationCase in declaration.enumerationCases {
-      switch CaseIntermediate.construct(enumerationCase, namespace: thingNamespace) {
+      switch CaseIntermediate.construct(
+        enumerationCase,
+        type: selfReference,
+        namespace: thingNamespace
+      ) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ .brokenCaseImplementation($0) }))
       case .success(let constructed):
