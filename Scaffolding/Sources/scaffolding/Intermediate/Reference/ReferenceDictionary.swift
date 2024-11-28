@@ -81,6 +81,11 @@ extension ReferenceDictionary {
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
       .map({ $0.resolvedType!.key })
     things[identifier, default: [:]][parameters] = thing
+    for enumerationCase in thing.cases {
+      if let action = enumerationCase.constantAction {
+        errors.append(contentsOf: add(action: action))
+      }
+    }
     return errors
   }
 
