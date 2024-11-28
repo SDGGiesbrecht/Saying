@@ -40,8 +40,8 @@ extension CaseIntermediate {
 
     #warning("Return value ought to be known.")
     let constantAction: ActionIntermediate? = declaration.contents == nil
-      ? nil
-      : ActionIntermediate.parameterAction(names: names, parameters: .none, returnValue: nil)
+      ? ActionIntermediate.parameterAction(names: names, parameters: .none, returnValue: nil)
+      : nil
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
