@@ -6,6 +6,7 @@ struct Thing {
   var parameters: Interpolation<ThingParameterIntermediate>
   var access: AccessIntermediate
   var testOnlyAccess: Bool
+  var cases: [CaseIntermediate]
   var c: NativeThingImplementation?
   var cSharp: NativeThingImplementation?
   var kotlin: NativeThingImplementation?
@@ -55,6 +56,18 @@ extension Thing {
       names.insert(name.name.name())
     }
 
+    let thingNamespace = namespace.appending(names)
+
+    var cases: [CaseIntermediate] = []
+    for enumerationCase in declaration.enumerationCases {
+      switch CaseIntermediate.construct(enumerationCase, namespace: thingNamespace) {
+      case .failure(let error):
+        #warning("Dropping error.")
+      case .success(let constructed):
+        cases.append(constructed)
+      }
+    }
+
     var c: NativeThingImplementation?
     var cSharp: NativeThingImplementation?
     var kotlin: NativeThingImplementation?
@@ -86,7 +99,7 @@ extension Thing {
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: thingNamespace)
       attachedDocumentation = intermediateDocumentation
       for parameter in intermediateDocumentation.parameters.joined() {
         errors.append(ConstructionError.documentedParameterNotFound(parameter))
@@ -101,6 +114,7 @@ extension Thing {
         parameters: parameters,
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
+        cases: cases,
         c: c,
         cSharp: cSharp,
         kotlin: kotlin,
@@ -121,11 +135,13 @@ extension Thing {
       let identifier = parameter.names.identifier()
       return ThingParameterIntermediate(names: [typeLookup[identifier]!])
     })
+    #warning("Not resolving cases yet.")
     return Thing(
       names: names,
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
+      cases: cases,
       c: c?.resolvingExtensionContext(typeLookup: typeLookup),
       cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
       kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
@@ -146,11 +162,13 @@ extension Thing {
         specializationNamespace: specializationNamespace
       )
     })
+    #warning("Not specializing cases yet.")
     return Thing(
       names: names,
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
+      cases: cases,
       c: c?.specializing(typeLookup: typeLookup),
       cSharp: cSharp?.specializing(typeLookup: typeLookup),
       kotlin: kotlin?.specializing(typeLookup: typeLookup),
