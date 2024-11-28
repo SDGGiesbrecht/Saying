@@ -206,6 +206,13 @@ extension Platform {
     }
   }
 
+  static func declaration(for enumerationCase: CaseIntermediate) -> String {
+    let name = sanitize(
+      identifier: enumerationCase.names.identifier(),
+      leading: true
+    )
+    return "case \(name)"
+  }
   static func declaration(
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary]
@@ -217,12 +224,21 @@ extension Platform {
       return nil
     }
 
+    let keyword = thing.cases.isEmpty ? "struct" : "enum"
     let name = sanitize(
       identifier: thing.names.identifier(),
       leading: true
     )
-    let keyword = thing.cases.isEmpty ? "struct" : "enum"
-    return "\(keyword) \(name) {}"
+    var result: [String] = [
+      "\(keyword) \(name) {"
+    ]
+    for enumerationCase in thing.cases {
+      result.append("  \(declaration(for: enumerationCase))")
+    }
+    result.append(contentsOf: [
+      "}"
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func flowCoverageRegistration(
