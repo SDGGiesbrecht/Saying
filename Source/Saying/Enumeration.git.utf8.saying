@@ -4,11 +4,15 @@ enumeration
  )
  {
   case
-   something
+   (
+    English: something
+   )
    truth value
 
   case
-   nothing
+   (
+    English: nothing
+   )
  }
 
 action

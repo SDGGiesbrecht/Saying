@@ -540,6 +540,35 @@ extension Node {
           ),
 
           Node(
+            name: "CaseNameEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          )
+        ],
+        Node.separatedList(
+          name: "CaseNameList",
+          entryName: "name", entryNamePlural: "names",
+          entryType: "CaseNameEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak",
+          fixedSeparator: true
+        ),
+        [
+          Node(
+            name: "CaseName",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "names", type: "CaseNameList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+
+          Node(
             name: "ThingSignature",
             kind: .alternates([
               Alternate(name: "compound", type: "AbilitySignature"),
@@ -978,7 +1007,7 @@ extension Node {
               Child(name: "keyword", type: "CaseKeyword", kind: .required),
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
-              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "name", type: "CaseName", kind: .required),
               Child(name: "contents", type: "RequirementReturnValue", kind: .optional),
             ])
           ),

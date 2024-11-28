@@ -24,8 +24,9 @@ extension CaseIntermediate {
     var errors: [CaseIntermediate.ConstructionError] = []
 
     var names: Set<StrictString> = []
-    #warning("Only one name?!?")
-    names.insert(declaration.name.identifierText())
+    for name in declaration.name.names.names {
+      names.insert(name.name.identifierText())
+    }
 
     let caseNamespace = namespace.appending(names)
 
