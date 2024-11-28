@@ -219,7 +219,9 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
   ) -> Interpolation {
     return Interpolation(
       parameters: parameters,
-      reorderings: [newName: reorderings[originalName]!]
+      reorderings: reorderings == [:]
+        ? [:]
+        : [newName: reorderings[originalName]!]
     )
   }
 }
