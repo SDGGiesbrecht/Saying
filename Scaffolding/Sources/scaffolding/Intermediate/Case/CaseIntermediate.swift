@@ -3,6 +3,7 @@ import SDGText
 
 struct CaseIntermediate {
   var names: Set<StrictString>
+  var constantAction: ActionIntermediate?
   var c: NativeThingImplementation?
   var cSharp: NativeThingImplementation?
   var javaScript: NativeThingImplementation?
@@ -36,6 +37,12 @@ extension CaseIntermediate {
         errors.append(ConstructionError.documentedParameterNotFound(parameter))
       }
     }
+
+    #warning("Return value ought to be known.")
+    let constantAction: ActionIntermediate? = declaration.contents == nil
+      ? nil
+      : ActionIntermediate.parameterAction(names: names, parameters: .none, returnValue: nil)
+
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -43,6 +50,7 @@ extension CaseIntermediate {
     return .success(
       CaseIntermediate(
         names: names,
+        constantAction: constantAction,
         c: nil,
         cSharp: nil,
         javaScript: nil,
