@@ -221,7 +221,8 @@ extension Platform {
       identifier: thing.names.identifier(),
       leading: true
     )
-    return "struct \(name) {}"
+    let keyword = thing.cases.isEmpty ? "struct" : "enum"
+    return "\(keyword) \(name) {}"
   }
 
   static func flowCoverageRegistration(
