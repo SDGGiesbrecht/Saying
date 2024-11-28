@@ -146,13 +146,12 @@ extension Thing {
       let identifier = parameter.names.identifier()
       return ThingParameterIntermediate(names: [typeLookup[identifier]!])
     })
-    #warning("Not resolving cases yet.")
     return Thing(
       names: names,
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
-      cases: cases,
+      cases: cases.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       c: c?.resolvingExtensionContext(typeLookup: typeLookup),
       cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
       kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
@@ -163,23 +162,30 @@ extension Thing {
   }
 
   func specializing(
+    for use: UseIntermediate,
     typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
+    let newCases = cases.map({ enumerationCase in
+      return enumerationCase.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      )
+    })
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
       )
     })
-    #warning("Not specializing cases yet.")
     return Thing(
       names: names,
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
-      cases: cases,
+      cases: newCases,
       c: c?.specializing(typeLookup: typeLookup),
       cSharp: cSharp?.specializing(typeLookup: typeLookup),
       kotlin: kotlin?.specializing(typeLookup: typeLookup),

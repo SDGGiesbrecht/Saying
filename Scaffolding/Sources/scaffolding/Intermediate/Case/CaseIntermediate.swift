@@ -69,3 +69,47 @@ extension CaseIntermediate {
     )
   }
 }
+
+extension CaseIntermediate {
+
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: StrictString]
+  ) -> CaseIntermediate {
+    return CaseIntermediate(
+      names: names,
+      constantAction: constantAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      c: c?.resolvingExtensionContext(typeLookup: typeLookup),
+      cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
+      javaScript: javaScript?.resolvingExtensionContext(typeLookup: typeLookup),
+      kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
+      swift: swift?.resolvingExtensionContext(typeLookup: typeLookup),
+      documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
+      declaration: declaration
+    )
+  }
+
+  func specializing(
+    for use: UseIntermediate,
+    typeLookup: [StrictString: ParsedTypeReference],
+    specializationNamespace: [Set<StrictString>]
+  ) -> CaseIntermediate {
+    return CaseIntermediate(
+      names: names,
+      constantAction: constantAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      c: c?.specializing(typeLookup: typeLookup),
+      cSharp: cSharp?.specializing(typeLookup: typeLookup),
+      javaScript: javaScript?.specializing(typeLookup: typeLookup),
+      kotlin: kotlin?.specializing(typeLookup: typeLookup),
+      swift: swift?.specializing(typeLookup: typeLookup),
+      documentation: documentation?.specializing(
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      declaration: declaration
+    )
+  }
+}
