@@ -31,8 +31,6 @@ jobs:
     name: Amazon Linux (Test)
     runs-on: ubuntu-20.04
     container: amazonlinux:2
-    env:
-      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true 
     needs: Amazon_Linux_Build
     steps:
     - name: Install Git
@@ -40,8 +38,6 @@ jobs:
       run: |
         set -x
         yum install --assumeyes git
-    - name: Check out
-      uses: actions/checkout@v3
     - name: Download
       uses: actions/download-artifact@v3
       with:
