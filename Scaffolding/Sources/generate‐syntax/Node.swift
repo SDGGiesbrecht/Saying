@@ -900,7 +900,7 @@ struct Node {
       accumulator: for child in childList {
         switch child.kind {
         case .fixed, .required:
-          resolution.append("\(child.name)")
+          resolution.append("\(child.name) as \(parsed ? "Parsed" : "")SyntaxNode")
           break accumulator
         case .optional:
           resolution.append("\(child.name) ??")

@@ -979,6 +979,13 @@ extension Node {
             ])
           ),
           Node(
+            name: "CaseImplementations",
+            kind: .compound(children: [
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "implementations", type: "NativeActionImplementations", kind: .required),
+            ])
+          ),
+          Node(
             name: "EnumerationImplementations",
             kind: .alternates([
               Alternate(name: "source", type: "Cases"),
@@ -1024,6 +1031,7 @@ extension Node {
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "CaseName", kind: .required),
               Child(name: "contents", type: "RequirementReturnValue", kind: .optional),
+              Child(name: "implementation", type: "CaseImplementations", kind: .optional),
             ])
           ),
         ],
