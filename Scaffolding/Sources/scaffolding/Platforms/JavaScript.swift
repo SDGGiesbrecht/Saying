@@ -47,7 +47,7 @@ enum JavaScript: Platform {
   static func caseReference(name: String, type: String) -> String {
     return ".\(name)"
   }
-  static func caseDeclaration(name: String) -> String {
+  static func caseDeclaration(name: String, index: Int) -> String {
     return "case \(name)"
   }
 

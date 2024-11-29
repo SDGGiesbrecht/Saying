@@ -24,7 +24,7 @@ protocol Platform {
 
   // Cases
   static func caseReference(name: String, type: String) -> String
-  static func caseDeclaration(name: String) -> String
+  static func caseDeclaration(name: String, index: Int) -> String
 
   // Things
   static var isTyped: Bool { get }
@@ -211,12 +211,12 @@ extension Platform {
     }
   }
 
-  static func declaration(for enumerationCase: CaseIntermediate) -> String {
+  static func declaration(for enumerationCase: CaseIntermediate, index: Int) -> String {
     let name = sanitize(
       identifier: enumerationCase.names.identifier(),
       leading: true
     )
-    return caseDeclaration(name: name)
+    return caseDeclaration(name: name, index: index)
   }
   static func declaration(
     for thing: Thing,
@@ -236,7 +236,10 @@ extension Platform {
     if thing.cases.isEmpty {
       fatalError("Custom things not implemented yet.")
     } else {
-      let cases = thing.cases.map { declaration(for: $0) }
+      var cases: [String] = []
+      for enumerationCase in thing.cases {
+        cases.append(declaration(for: enumerationCase, index: cases.endIndex))
+      }
       return enumerationTypeDeclaration(name: name, cases: cases)
     }
   }
