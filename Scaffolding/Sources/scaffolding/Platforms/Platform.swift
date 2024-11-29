@@ -222,7 +222,8 @@ extension Platform {
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if ¬isTyped {
+    if ¬isTyped,
+      thing.cases.isEmpty {
       return nil
     }
     if nativeType(of: thing) ≠ nil {

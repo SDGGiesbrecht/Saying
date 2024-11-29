@@ -45,10 +45,10 @@ enum JavaScript: Platform {
   }
 
   static func caseReference(name: String, type: String) -> String {
-    return ".\(name)"
+    return "\(type).\(name)"
   }
   static func caseDeclaration(name: String, index: Int) -> String {
-    return "case \(name)"
+    return "\(name): \(index),"
   }
 
   static var isTyped: Bool {
@@ -67,13 +67,13 @@ enum JavaScript: Platform {
 
   static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
     var result: [String] = [
-      "enum \(name) {"
+      "const \(name) = Object.freeze({"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
     }
     result.append(contentsOf: [
-      "}"
+      "});"
     ])
     return result.joined(separator: "\n")
   }
