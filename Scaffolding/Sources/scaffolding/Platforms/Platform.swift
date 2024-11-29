@@ -23,7 +23,7 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Cases
-  static func caseReference(name: String) -> String
+  static func caseReference(name: String, type: String) -> String
   static func caseDeclaration(name: String) -> String
 
   // Things
@@ -389,7 +389,8 @@ extension Platform {
       return result
     } else if action.isEnumerationCaseWrapper {
       let name = sanitize(identifier: action.names.identifier(), leading: true)
-      return caseReference(name: name)
+      let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+      return caseReference(name: name, type: type)
     } else {
       let name = sanitize(
         identifier: parameterName

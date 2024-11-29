@@ -42,11 +42,11 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func caseReference(name: String) -> String {
-    return ".\(name)"
+  static func caseReference(name: String, type: String) -> String {
+    return "\(type).\(name)"
   }
   static func caseDeclaration(name: String) -> String {
-    return "case \(name)"
+    return "\(name),"
   }
 
   static var isTyped: Bool {
@@ -73,7 +73,8 @@ enum CSharp: Platform {
 
   static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
     var result: [String] = [
-      "enum \(name) {"
+      "enum \(name)",
+      "{",
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")

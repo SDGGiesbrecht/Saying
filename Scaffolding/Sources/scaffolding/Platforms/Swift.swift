@@ -101,8 +101,8 @@ enum Swift: Platform {
     return true
   }
 
-  static func caseReference(name: String) -> String {
-    return ".\(name)"
+  static func caseReference(name: String, type: String) -> String {
+    return "\(type).\(name)"
   }
   static func caseDeclaration(name: String) -> String {
     return "case \(name)"

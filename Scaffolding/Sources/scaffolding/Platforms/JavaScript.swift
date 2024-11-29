@@ -44,7 +44,7 @@ enum JavaScript: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
-  static func caseReference(name: String) -> String {
+  static func caseReference(name: String, type: String) -> String {
     return ".\(name)"
   }
   static func caseDeclaration(name: String) -> String {
