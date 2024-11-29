@@ -1,4 +1,2 @@
 #!/bin/bash
-
-echo "Hello, world!"
-echo "$1"
+swift run --package-path Scaffolding scaffolding $1
