@@ -21,12 +21,12 @@ jobs:
       with:
         run: |
           set -x
-          node .Construction/JavaScript/Package.js 2>Errors
-          if [ $? -eq 0 -a ! -s Errors ]
+          node .Construction/JavaScript/Package.js 2>.Construction/Errors
+          if [ $? -eq 0 -a ! -s .Construction/Errors ]
           then
             echo "Succeeded."
           else
-            cat Errors
+            cat .Construction/Errors
             exit 1
           fi
     - name: Check repository for changes
