@@ -1,3 +1,2 @@
 #!/bin/bash
-echo "«$1»"
-eval "$1"
+eval "echo «$1»"
