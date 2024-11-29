@@ -28,6 +28,7 @@ jobs:
       shell: bash
       run: |
         set -x
+        ls -l .Construction
         cd .Construction/Kotlin
         ls -R
         sudo chmod -R +rwx .
