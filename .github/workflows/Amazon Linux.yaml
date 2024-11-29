@@ -6,10 +6,11 @@ jobs:
   Amazon_Linux_Build:
     name: Amazon Linux (Build)
     runs-on: ubuntu-20.04
-    container: swift:5.7.3-focal
     steps:
     - name: Check out
       uses: actions/checkout@v3
+    - name: Build scaffolding
+      uses: ./.github/actions/Scaffolding
     - name: Build
       shell: bash
       run: |

@@ -1,4 +1,0 @@
-name: 'Amazon Linux'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
