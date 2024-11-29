@@ -28,10 +28,8 @@ jobs:
       shell: bash
       run: |
         set -x
-        ls -l .Construction
-        cd .Construction/Kotlin
-        ls -R
         sudo chmod -R +rwx .
+        cd .Construction/Kotlin
         gradle wrapper
         ./gradlew check
         ./gradlew assembleAndroidTest
