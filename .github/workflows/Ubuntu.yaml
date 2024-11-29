@@ -20,7 +20,7 @@ jobs:
       with:
         run: |
           set -x
-          # apt-get update --assume-yes
+          apt-get update --assume-yes
           apt-get install --assume-yes gcc
           cc .Construction/C/test.c -o .Construction/C/test
           .Construction/C/test
