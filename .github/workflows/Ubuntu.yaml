@@ -20,8 +20,8 @@ jobs:
       with:
         run: |
           set -x
-          apt update
-          apt install gcc
+          # apt-get update --assume-yes
+          apt-get install --assume-yes gcc
           cc .Construction/C/test.c -o .Construction/C/test
           .Construction/C/test
     - name: Check repository for changes
