@@ -3,23 +3,25 @@ name: Amazon Linux
 on: [push, pull_request]
 
 jobs:
-  Amazon_Linux_Build:
-    name: Amazon Linux (Build)
+  Amazon_Linux:
+    name: Amazon Linux
     runs-on: ubuntu-20.04
-    container: swift:5.7.3-focal
     steps:
     - name: Check out
       uses: actions/checkout@v3
     - name: Build
-      shell: bash
-      run: |
-        set -x
-        swift run --package-path Scaffolding scaffolding prepare‐c
-    - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: ./.github/actions/Scaffolding
       with:
-        name: C
-        path: .Construction/C
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding prepare‐c
+    - name: Test
+      uses: ./.github/actions/Amazon Linux
+      with:
+        run: |
+          set -x
+          cc .Construction/C/test.c -o .Construction/C/test
+          .Construction/C/test
     - name: Check repository for changes
       shell: bash
       run: |
@@ -27,34 +29,3 @@ jobs:
         git config --global --add safe.directory '*'
         git add . --intent-to-add
         git diff --exit-code
-  Amazon_Linux_Test:
-    name: Amazon Linux (Test)
-    runs-on: ubuntu-20.04
-    container: amazonlinux:2
-    env:
-      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
-    needs: Amazon_Linux_Build
-    steps:
-    - name: Install Git
-      shell: bash
-      run: |
-        set -x
-        yum install --assumeyes git
-    - name: Check out
-      uses: actions/checkout@v3
-    - name: Download
-      uses: actions/download-artifact@v3
-      with:
-        name: C
-        path: .Construction/C
-    - name: Install GNU Compiler Collection
-      shell: bash
-      run: |
-        set -x
-        yum install --assumeyes gcc
-    - name: Test
-      shell: bash
-      run: |
-        set -x
-        cc .Construction/C/test.c -o .Construction/C/test
-        .Construction/C/test

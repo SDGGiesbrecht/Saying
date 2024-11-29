@@ -1,0 +1,9 @@
+name: Scaffolding
+inputs:
+  run:
+    required: true
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.run }}

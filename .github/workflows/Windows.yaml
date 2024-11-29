@@ -6,15 +6,15 @@ jobs:
   Windows_Build:
     name: Windows (Build)
     runs-on: ubuntu-20.04
-    container: swift:5.7.3-focal
     steps:
     - name: Check out
       uses: actions/checkout@v2
     - name: Build
-      shell: bash
-      run: |
-        set -x
-        swift run --package-path Scaffolding scaffolding prepare‐c‐sharp
+      uses: ./.github/actions/Scaffolding
+      with:
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding prepare‐c‐sharp
     - name: Upload
       uses: actions/upload-artifact@v4
       with:

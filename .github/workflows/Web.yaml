@@ -3,23 +3,32 @@ name: Web
 on: [push, pull_request]
 
 jobs:
-  Web_Build:
-    name: Web (Build)
+  Web:
+    name: Web
     runs-on: ubuntu-20.04
     container: swift:5.7.3-focal
     steps:
     - name: Check out
       uses: actions/checkout@v2
     - name: Build
-      shell: bash
-      run: |
-        set -x
-        swift run --package-path Scaffolding scaffolding build‐javascript
-    - name: Upload
-      uses: actions/upload-artifact@v4
+      uses: ./.github/actions/Scaffolding
       with:
-        name: JavaScript
-        path: .Construction/JavaScript
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding build‐javascript
+    - name: Test
+      uses: ./.github/actions/Node
+      with:
+        run: |
+          set -x
+          node .Construction/JavaScript/Package.js 2>.Construction/Errors
+          if [ $? -eq 0 -a ! -s .Construction/Errors ]
+          then
+            echo "Succeeded."
+          else
+            cat .Construction/Errors
+            exit 1
+          fi
     - name: Check repository for changes
       shell: bash
       run: |
@@ -27,28 +36,3 @@ jobs:
         git config --global --add safe.directory '*'
         git add . --intent-to-add
         git diff --exit-code
-  Web_Test:
-    name: Web (Test)
-    runs-on: ubuntu-20.04
-    container: node:20.5.1
-    needs: Web_Build
-    steps:
-    - name: Check out
-      uses: actions/checkout@v2
-    - name: Download
-      uses: actions/download-artifact@v4
-      with:
-        name: JavaScript
-        path: .Construction/JavaScript
-    - name: Test
-      shell: bash
-      run: |
-        set -x
-        node .Construction/JavaScript/Package.js 2>Errors
-        if [ $? -eq 0 -a ! -s Errors ]
-        then
-          echo "Succeeded."
-        else
-          cat Errors
-          exit 1
-        fi
