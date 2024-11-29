@@ -901,7 +901,7 @@ extension Node {
             ])
           ),
           Node(
-            name: "ThingImplementation",
+            name: "NativeThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
@@ -945,9 +945,9 @@ extension Node {
           ),
         ],
           Node.separatedList(
-            name: "ThingImplementations",
+            name: "NativeThingImplementations",
             entryName: "implementation", entryNamePlural: "implementations",
-            entryType: "ThingImplementation",
+            entryType: "NativeThingImplementation",
             separatorName: "lineBreak",
             separatorType: "LineBreak",
             fixedSeparator: true
@@ -963,11 +963,26 @@ extension Node {
 
         [
           Node(
+            name: "DualEnumerationImplementation",
+            kind: .compound(children: [
+              Child(name: "native", type: "NativeThingImplementations", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "source", type: "Cases", kind: .required),
+            ])
+          ),
+          Node(
             name: "DualActionImplementation",
             kind: .compound(children: [
               Child(name: "native", type: "NativeActionImplementations", kind: .required),
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "source", type: "SourceActionImplementation", kind: .required),
+            ])
+          ),
+          Node(
+            name: "EnumerationImplementations",
+            kind: .alternates([
+              Alternate(name: "source", type: "Cases"),
+              Alternate(name: "dual", type: "DualEnumerationImplementation"),
             ])
           ),
           Node(
@@ -998,7 +1013,7 @@ extension Node {
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "implementation", type: "ThingImplementations", kind: .required),
+              Child(name: "implementation", type: "NativeThingImplementations", kind: .required),
             ])
           ),
           Node(
@@ -1047,7 +1062,7 @@ extension Node {
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "cases", type: "Cases", kind: .required),
+              Child(name: "implementation", type: "EnumerationImplementations", kind: .required),
             ])
           ),
           Node(

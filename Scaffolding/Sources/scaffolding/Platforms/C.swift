@@ -57,7 +57,7 @@ enum C: Platform {
     return true
   }
 
-  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.c
   }
   static func actionType(parameters: String, returnValue: String) -> String {

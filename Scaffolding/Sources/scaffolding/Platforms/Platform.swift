@@ -28,7 +28,7 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
-  static func nativeType(of thing: Thing) -> NativeThingImplementation?
+  static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
   static func enumerationTypeDeclaration(name: String, cases: [String]) -> String

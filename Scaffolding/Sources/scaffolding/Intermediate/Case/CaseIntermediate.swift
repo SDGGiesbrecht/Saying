@@ -4,11 +4,11 @@ import SDGText
 struct CaseIntermediate {
   var names: Set<StrictString>
   var constantAction: ActionIntermediate?
-  var c: NativeThingImplementation?
-  var cSharp: NativeThingImplementation?
-  var javaScript: NativeThingImplementation?
-  var kotlin: NativeThingImplementation?
-  var swift: NativeThingImplementation?
+  var c: NativeThingImplementationIntermediate?
+  var cSharp: NativeThingImplementationIntermediate?
+  var javaScript: NativeThingImplementationIntermediate?
+  var kotlin: NativeThingImplementationIntermediate?
+  var swift: NativeThingImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedCaseDeclaration
 }

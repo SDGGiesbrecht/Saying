@@ -4,8 +4,8 @@ extension Thing {
   enum ConstructionError: DiagnosticError {
     case brokenParameterInterpolation(Interpolation<ThingParameterIntermediate>.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
-    case brokenNativeImplementation(NativeThingImplementation.ConstructionError)
-    case invalidImport(ParsedThingImplementation)
+    case brokenNativeImplementation(NativeThingImplementationIntermediate.ConstructionError)
+    case invalidImport(ParsedNativeThingImplementation)
     case documentedParameterNotFound(ParsedParameterDocumentation)
     case brokenCaseImplementation(CaseIntermediate.ConstructionError)
 

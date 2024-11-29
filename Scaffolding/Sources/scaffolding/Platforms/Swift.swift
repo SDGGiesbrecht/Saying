@@ -108,7 +108,7 @@ enum Swift: Platform {
     return "case \(name)"
   }
 
-  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
   }
   static func actionType(parameters: String, returnValue: String) -> String {

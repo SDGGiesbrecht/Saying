@@ -55,7 +55,7 @@ enum JavaScript: Platform {
     return false
   }
 
-  static func nativeType(of thing: Thing) -> NativeThingImplementation? {
+  static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return nil
   }
   static func actionType(parameters: String, returnValue: String) -> String {
