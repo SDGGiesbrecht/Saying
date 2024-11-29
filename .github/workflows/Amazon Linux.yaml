@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-20.04
     container: amazonlinux:2
     env:
-      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true 
     needs: Amazon_Linux_Build
     steps:
     - name: Install Git
