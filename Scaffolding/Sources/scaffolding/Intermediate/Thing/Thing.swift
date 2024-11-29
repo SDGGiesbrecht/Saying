@@ -6,12 +6,13 @@ struct Thing {
   var parameters: Interpolation<ThingParameterIntermediate>
   var access: AccessIntermediate
   var testOnlyAccess: Bool
+  var cases: [CaseIntermediate]
   var c: NativeThingImplementation?
   var cSharp: NativeThingImplementation?
   var kotlin: NativeThingImplementation?
   var swift: NativeThingImplementation?
   var documentation: DocumentationIntermediate?
-  var declaration: ParsedThingDeclaration
+  var declaration: ParsedThingDeclarationProtocol
 }
 
 extension Thing {
@@ -25,10 +26,11 @@ extension Thing {
     }
   }
 
-  static func construct(
-    _ declaration: ParsedThingDeclaration,
+  static func construct<ThingNode>(
+    _ declaration: ThingNode,
     namespace: [Set<StrictString>]
-  ) -> Result<Thing, ErrorList<Thing.ConstructionError>> {
+  ) -> Result<Thing, ErrorList<Thing.ConstructionError>>
+  where ThingNode: ParsedThingDeclarationProtocol {
     var errors: [Thing.ConstructionError] = []
 
     let namesSyntax = declaration.name.names.names
@@ -54,11 +56,34 @@ extension Thing {
       names.insert(name.name.name())
     }
 
+    let thingNamespace = namespace.appending(names)
+    let selfReference = declaration.name.names.names
+      .lazy.compactMap({ ParsedTypeReference($0.name) })
+      .first!
+    let access = AccessIntermediate(declaration.access)
+    let testOnlyAccess = declaration.testAccess?.keyword is ParsedTestsKeyword
+
+    var cases: [CaseIntermediate] = []
+    for enumerationCase in declaration.enumerationCases {
+      switch CaseIntermediate.construct(
+        enumerationCase,
+        namespace: thingNamespace,
+        type: selfReference,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ .brokenCaseImplementation($0) }))
+      case .success(let constructed):
+        cases.append(constructed)
+      }
+    }
+
     var c: NativeThingImplementation?
     var cSharp: NativeThingImplementation?
     var kotlin: NativeThingImplementation?
     var swift: NativeThingImplementation?
-    for implementation in declaration.implementation.implementations {
+    for implementation in declaration.nativeImplementations {
       let constructed: NativeThingImplementation
       switch NativeThingImplementation.construct(implementation: implementation.implementation) {
       case .failure(let error):
@@ -85,7 +110,7 @@ extension Thing {
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names))
+      let intermediateDocumentation = DocumentationIntermediate.construct(documentation.documentation, namespace: thingNamespace)
       attachedDocumentation = intermediateDocumentation
       for parameter in intermediateDocumentation.parameters.joined() {
         errors.append(ConstructionError.documentedParameterNotFound(parameter))
@@ -98,8 +123,9 @@ extension Thing {
       Thing(
         names: names,
         parameters: parameters,
-        access: AccessIntermediate(declaration.access),
-        testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
+        access: access,
+        testOnlyAccess: testOnlyAccess,
+        cases: cases,
         c: c,
         cSharp: cSharp,
         kotlin: kotlin,
@@ -125,6 +151,7 @@ extension Thing {
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
+      cases: cases.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       c: c?.resolvingExtensionContext(typeLookup: typeLookup),
       cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
       kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
@@ -135,10 +162,18 @@ extension Thing {
   }
 
   func specializing(
+    for use: UseIntermediate,
     typeLookup: [StrictString: ParsedTypeReference],
     specializationNamespace: [Set<StrictString>]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
+    let newCases = cases.map({ enumerationCase in
+      return enumerationCase.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      )
+    })
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
@@ -150,6 +185,7 @@ extension Thing {
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
+      cases: newCases,
       c: c?.specializing(typeLookup: typeLookup),
       cSharp: cSharp?.specializing(typeLookup: typeLookup),
       kotlin: kotlin?.specializing(typeLookup: typeLookup),

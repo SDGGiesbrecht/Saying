@@ -42,6 +42,13 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
+  static func caseReference(name: String, type: String) -> String {
+    return "\(type).\(name)"
+  }
+  static func caseDeclaration(name: String, index: Int) -> String {
+    return "\(name),"
+  }
+
   static var isTyped: Bool {
     return true
   }
@@ -62,6 +69,20 @@ enum CSharp: Platform {
   }
   static func actionReferencePrefix(isVariable: Bool) -> String? {
     return nil
+  }
+
+  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+    var result: [String] = [
+      "enum \(name)",
+      "{",
+    ]
+    for enumerationCase in cases {
+      result.append("\(indent)\(enumerationCase)")
+    }
+    result.append(contentsOf: [
+      "}"
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

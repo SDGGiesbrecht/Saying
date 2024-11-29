@@ -46,8 +46,8 @@ extension ReferenceDictionary {
     specifiedReturnValue: ParsedTypeReference??
   ) -> ParsedDeclaration? {
     if signature.isEmpty,
-      let thing = lookupThing(identifier, components: [])?.declaration {
-      return .thing(thing)
+      let thing = lookupThing(identifier, components: [])?.declaration.genericDeclaration {
+      return thing
     } else if let fullSignature = signature.mapAll({ $0 }),
       let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue)?.declaration as? ParsedActionDeclaration {
       return .action(action)
@@ -74,13 +74,18 @@ extension ReferenceDictionary {
     for name in thing.names {
       if identifierMapping[name] ≠ nil,
         identifierMapping[name] ≠ identifier {
-        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .thing(thing.declaration), conflictingDeclarations: [lookupDeclaration(name, signature: [], specifiedReturnValue: nil)!]))
+        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: thing.declaration.genericDeclaration, conflictingDeclarations: [lookupDeclaration(name, signature: [], specifiedReturnValue: nil)!]))
       }
       identifierMapping[name] = identifier
     }
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
       .map({ $0.resolvedType!.key })
     things[identifier, default: [:]][parameters] = thing
+    for enumerationCase in thing.cases {
+      if let action = enumerationCase.constantAction {
+        errors.append(contentsOf: add(action: action))
+      }
+    }
     return errors
   }
 

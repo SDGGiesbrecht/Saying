@@ -35,6 +35,8 @@ extension ParsedSyntaxNode {
       list.append(name.language)
     case .thingNameEntry(let name):
       list.append(name.language)
+    case .caseNameEntry(let name):
+      list.append(name.language)
     case .paragraphEntry(let paragraph):
       list.append(paragraph.language)
     default:

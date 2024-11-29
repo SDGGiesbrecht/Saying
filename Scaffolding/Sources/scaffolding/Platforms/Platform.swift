@@ -22,11 +22,16 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
+  // Cases
+  static func caseReference(name: String, type: String) -> String
+  static func caseDeclaration(name: String, index: Int) -> String
+
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
+  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -206,6 +211,40 @@ extension Platform {
     }
   }
 
+  static func declaration(for enumerationCase: CaseIntermediate, index: Int) -> String {
+    let name = sanitize(
+      identifier: enumerationCase.names.identifier(),
+      leading: true
+    )
+    return caseDeclaration(name: name, index: index)
+  }
+  static func declaration(
+    for thing: Thing,
+    externalReferenceLookup: [ReferenceDictionary]
+  ) -> String? {
+    if ¬isTyped,
+      thing.cases.isEmpty {
+      return nil
+    }
+    if nativeType(of: thing) ≠ nil {
+      return nil
+    }
+
+    let name = sanitize(
+      identifier: thing.names.identifier(),
+      leading: true
+    )
+    if thing.cases.isEmpty {
+      fatalError("Custom things not implemented yet.")
+    } else {
+      var cases: [String] = []
+      for enumerationCase in thing.cases {
+        cases.append(declaration(for: enumerationCase, index: cases.endIndex))
+      }
+      return enumerationTypeDeclaration(name: name, cases: cases)
+    }
+  }
+
   static func flowCoverageRegistration(
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int
@@ -352,6 +391,10 @@ extension Platform {
         }
       }
       return result
+    } else if action.isEnumerationCaseWrapper {
+      let name = sanitize(identifier: action.names.identifier(), leading: true)
+      let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+      return caseReference(name: name, type: type)
     } else {
       let name = sanitize(
         identifier: parameterName
@@ -456,7 +499,8 @@ extension Platform {
     for action: ActionIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil {
+    if nativeImplementation(of: action) ≠ nil
+      ∨ action.isEnumerationCaseWrapper {
       return nil
     }
 
@@ -488,7 +532,8 @@ extension Platform {
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil {
+    if nativeImplementation(of: action) ≠ nil
+      ∨ action.isEnumerationCaseWrapper {
       return nil
     }
 
@@ -608,6 +653,16 @@ extension Platform {
       .map({ sanitize(stringLiteral: $0) })
     result.append(contentsOf: coverageRegionSet(regions: regions))
     result.append(contentsOf: registerCoverageAction)
+
+    let allThings = moduleReferenceLookup.allThings()
+    for thing in allThings {
+      if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
+        result.append(contentsOf: [
+          "",
+          declaration
+        ])
+      }
+    }
 
     if let start = actionDeclarationsContainerStart {
       result.append("")

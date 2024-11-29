@@ -27,6 +27,8 @@ extension Node {
           Node(name: "Space", kind: .fixedLeaf(" ")),
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
+          Node(name: "EnumerationKeyword", kind: .keyword(["enumeration", "Aufzählung", "énumération", "απαρίθμηση", "ספירה"])),
+          Node(name: "CaseKeyword", kind: .keyword(["case", "Fall", "cas", "περίπτωση", "מקרה"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "FlowKeyword", kind: .keyword(["flow", "Ablauf", "déroulement", "ροή", "זרימה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
@@ -538,6 +540,35 @@ extension Node {
           ),
 
           Node(
+            name: "CaseNameEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          )
+        ],
+        Node.separatedList(
+          name: "CaseNameList",
+          entryName: "name", entryNamePlural: "names",
+          entryType: "CaseNameEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreak",
+          fixedSeparator: true
+        ),
+        [
+          Node(
+            name: "CaseName",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "names", type: "CaseNameList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+            ])
+          ),
+
+          Node(
             name: "ThingSignature",
             kind: .alternates([
               Alternate(name: "compound", type: "AbilitySignature"),
@@ -971,6 +1002,55 @@ extension Node {
             ])
           ),
           Node(
+            name: "CaseDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "CaseKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "CaseName", kind: .required),
+              Child(name: "contents", type: "RequirementReturnValue", kind: .optional),
+            ])
+          ),
+        ],
+          Node.separatedList(
+            name: "CaseList",
+            entryName: "caseNode", entryNamePlural: "cases",
+            entryType: "CaseDeclaration",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreak",
+            fixedSeparator: true
+          ),
+        [
+          Node(
+            name: "CaseListSection",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "cases", type: "CaseList", kind: .required),
+            ])
+          ),
+          Node(
+            name: "Cases",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "cases", type: "CaseListSection", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "EnumerationDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "EnumerationKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "ThingName", kind: .required),
+              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "cases", type: "Cases", kind: .required),
+            ])
+          ),
+          Node(
             name: "ActionLikeKeyword",
             kind: .alternates([
               Alternate(name: "action", type: "ActionKeyword"),
@@ -1154,6 +1234,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "language", type: "LanguageDeclaration"),
               Alternate(name: "thing", type: "ThingDeclaration"),
+              Alternate(name: "enumeration", type: "EnumerationDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "ability", type: "AbilityDeclaration"),
               Alternate(name: "use", type: "Use"),

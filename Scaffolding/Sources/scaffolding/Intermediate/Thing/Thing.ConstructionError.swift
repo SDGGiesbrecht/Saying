@@ -7,6 +7,7 @@ extension Thing {
     case brokenNativeImplementation(NativeThingImplementation.ConstructionError)
     case invalidImport(ParsedThingImplementation)
     case documentedParameterNotFound(ParsedParameterDocumentation)
+    case brokenCaseImplementation(CaseIntermediate.ConstructionError)
 
     var range: Slice<UTF8Segments> {
       switch self {
@@ -20,6 +21,8 @@ extension Thing {
         return implementation.location
       case .documentedParameterNotFound(let documentation):
         return documentation.location
+      case .brokenCaseImplementation(let error):
+        return error.range
       }
     }
   }

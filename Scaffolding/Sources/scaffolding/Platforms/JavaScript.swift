@@ -44,6 +44,13 @@ enum JavaScript: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
+  static func caseReference(name: String, type: String) -> String {
+    return "\(type).\(name)"
+  }
+  static func caseDeclaration(name: String, index: Int) -> String {
+    return "\(name): \(index),"
+  }
+
   static var isTyped: Bool {
     return false
   }
@@ -56,6 +63,19 @@ enum JavaScript: Platform {
   }
   static func actionReferencePrefix(isVariable: Bool) -> String? {
     return nil
+  }
+
+  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+    var result: [String] = [
+      "const \(name) = Object.freeze({"
+    ]
+    for enumerationCase in cases {
+      result.append("\(indent)\(enumerationCase)")
+    }
+    result.append(contentsOf: [
+      "});"
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

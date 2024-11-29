@@ -40,6 +40,9 @@ extension ModuleIntermediate {
       case .thing(let thingNode):
         let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
         errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
+      case .enumeration(let enumeration):
+        let thing = try Thing.construct(enumeration, namespace: baseNamespace).get()
+        errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
       case .action(let actionNode):
         let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
         errors.append(contentsOf: referenceDictionary.add(action: action).map({ .redeclaredIdentifier($0) }))
@@ -186,6 +189,7 @@ extension ModuleIntermediate {
 
     for thing in ability.provisionThings {
       let specialized = thing.specializing(
+        for: use,
         typeLookup: useTypes,
         specializationNamespace: specializationNamespace
       )

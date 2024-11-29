@@ -1,0 +1,28 @@
+enumeration
+ (
+  English: example enumeration
+ )
+ {
+  case
+   (
+    English: something
+   )
+   truth value
+
+  case
+   (
+    English: nothing
+   )
+ }
+
+action
+ [
+  test (verify (use example enumeration (nothing)))
+ ]
+ (
+  English: use example enumeration (value: example enumeration)
+ )
+ truth value
+ {
+  ← true
+ }
