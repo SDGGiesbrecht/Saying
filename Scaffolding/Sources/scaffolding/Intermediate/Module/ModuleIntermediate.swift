@@ -123,6 +123,7 @@ extension ModuleIntermediate {
 
     for documentation in [
       referenceDictionary.allThings().lazy.compactMap({ $0.documentation }),
+      referenceDictionary.allThings().lazy.flatMap({ $0.cases.compactMap({ $0.documentation }) }),
       referenceDictionary.allActions().lazy.compactMap({ $0.documentation })
     ].joined() {
       tests.append(contentsOf: documentation.tests)
