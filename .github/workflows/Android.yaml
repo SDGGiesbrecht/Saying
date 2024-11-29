@@ -39,6 +39,12 @@ jobs:
       with:
         name: Kotlin
         path: .Construction/Kotlin
+    - name: Build
+      uses: ./.github/actions/Scaffolding
+      with:
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding prepare‐kotlin
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
