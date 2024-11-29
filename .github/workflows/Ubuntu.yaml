@@ -1,0 +1,31 @@
+name: Ubuntu
+
+on: [push, pull_request]
+
+jobs:
+  Ubuntu:
+    name: Ubuntu
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build
+      uses: ./.github/actions/Scaffolding
+      with:
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding prepare‐c
+    - name: Test
+      uses: ./.github/actions/Ubuntu
+      with:
+        run: |
+          set -x
+          cc .Construction/C/test.c -o .Construction/C/test
+          .Construction/C/test
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code

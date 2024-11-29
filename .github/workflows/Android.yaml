@@ -1,0 +1,47 @@
+name: Android
+
+on: [push, pull_request]
+
+jobs:
+  Android:
+    name: Android
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build
+      uses: ./.github/actions/Scaffolding
+      with:
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding prepare‐kotlin
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: zulu
+        java-version: 17
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: "8.10"
+    - name: Prepare tests
+      shell: bash
+      run: |
+        set -x
+        cd .Construction/Kotlin
+        gradle wrapper
+        ./gradlew check
+        ./gradlew assembleAndroidTest
+    - name: Test
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 24
+        script: |
+          cd .Construction/Kotlin ; ./gradlew connectedDebugAndroidTest
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code

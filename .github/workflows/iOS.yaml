@@ -1,0 +1,31 @@
+name: iOS
+
+on: [push, pull_request]
+
+jobs:
+  iOS:
+    name: iOS
+    runs-on: macos-13
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Set up Xcode
+      shell: bash
+      run: |
+        set -x
+        sudo xcode-select -switch /Applications/Xcode_14.2.app
+        defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+        xcodebuild -version
+        swift --version
+    - name: Test
+      shell: bash
+      run: |
+        set -x
+        swift run --package-path Scaffolding scaffolding test‐ios
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code

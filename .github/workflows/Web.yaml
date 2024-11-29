@@ -1,0 +1,37 @@
+name: Web
+
+on: [push, pull_request]
+
+jobs:
+  Web:
+    name: Web
+    runs-on: ubuntu-20.04
+    container: swift:5.7.3-focal
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build
+      uses: ./.github/actions/Scaffolding
+      with:
+        run: |
+          set -x
+          swift run --package-path Scaffolding scaffolding build‐javascript
+    - name: Test
+      uses: ./.github/actions/Node
+      run: |
+        set -x
+        node .Construction/JavaScript/Package.js 2>Errors
+        if [ $? -eq 0 -a ! -s Errors ]
+        then
+          echo "Succeeded."
+        else
+          cat Errors
+          exit 1
+        fi
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
