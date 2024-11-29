@@ -52,10 +52,10 @@ enum Kotlin: Platform {
   }
 
   static func caseReference(name: String, type: String) -> String {
-    return ".\(name)"
+    return "\(type).\(name)"
   }
   static func caseDeclaration(name: String) -> String {
-    return "case \(name)"
+    return "\(name),"
   }
 
   static var isTyped: Bool {
@@ -78,7 +78,7 @@ enum Kotlin: Platform {
 
   static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
     var result: [String] = [
-      "enum \(name) {"
+      "enum class \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
