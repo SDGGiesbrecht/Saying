@@ -30,7 +30,6 @@ jobs:
   Amazon_Linux_Test:
     name: Amazon Linux (Test)
     runs-on: ubuntu-20.04
-    container: amazonlinux:2
     needs: Amazon_Linux_Build
     steps:
     - name: Install Git
@@ -38,11 +37,6 @@ jobs:
       run: |
         set -x
         yum install --assumeyes git
-    - name: Install Node
-      shell: bash
-      run: |
-        set -x
-        yum install --assumeyes nodejs
     - name: Check out
       uses: actions/checkout@v3
     - name: Download
@@ -56,6 +50,7 @@ jobs:
         set -x
         yum install --assumeyes gcc
     - name: Test
+      uses: docker://amazonlinux:2
       shell: bash
       run: |
         set -x
