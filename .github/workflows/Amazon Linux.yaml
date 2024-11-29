@@ -12,7 +12,9 @@ jobs:
     - name: Build
       uses: ./.github/actions/Scaffolding
       with:
-        command: prepare‐c
+        run: |
+          set -x
+          swift run --package-path Scaffolding prepare‐c
     - name: Test
       uses: ./.github/actions/Amazon Linux
     - name: Check repository for changes
