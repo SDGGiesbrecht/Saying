@@ -9,20 +9,12 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v3
-    - name: Build scaffolding
+    - name: Build
       uses: ./.github/actions/Scaffolding
       with:
         command: prepare‐c
-    - name: Build
-      shell: bash
-      run: |
-        set -x
-        swift run --package-path Scaffolding scaffolding prepare‐c
-    - name: Upload
-      uses: actions/upload-artifact@v3
-      with:
-        name: C
-        path: .Construction/C
+    - name: Test
+      uses: ./.github/actions/Amazon Linux
     - name: Check repository for changes
       shell: bash
       run: |
