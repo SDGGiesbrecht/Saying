@@ -1,8 +1,6 @@
 name: Scaffolding
-description: "Where does the description show?"
 inputs:
   command:
-    description: "Is the input description used anywhere?"
     required: true
 runs:
   using: docker
