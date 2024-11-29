@@ -101,6 +101,13 @@ enum Swift: Platform {
     return true
   }
 
+  static func caseReference(name: String) -> String {
+    return ".\(name)"
+  }
+  static func caseDeclaration(name: String) -> String {
+    return "case \(name)"
+  }
+
   static func nativeType(of thing: Thing) -> NativeThingImplementation? {
     return thing.swift
   }
@@ -109,6 +116,19 @@ enum Swift: Platform {
   }
   static func actionReferencePrefix(isVariable: Bool) -> String? {
     return nil
+  }
+
+  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+    var result: [String] = [
+      "enum \(name) {"
+    ]
+    for enumerationCase in cases {
+      result.append("\(indent)\(enumerationCase)")
+    }
+    result.append(contentsOf: [
+      "}"
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

@@ -22,11 +22,16 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
+  // Cases
+  static func caseReference(name: String) -> String
+  static func caseDeclaration(name: String) -> String
+
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementation?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
+  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -211,7 +216,7 @@ extension Platform {
       identifier: enumerationCase.names.identifier(),
       leading: true
     )
-    return "case \(name)"
+    return caseDeclaration(name: name)
   }
   static func declaration(
     for thing: Thing,
@@ -224,21 +229,16 @@ extension Platform {
       return nil
     }
 
-    let keyword = thing.cases.isEmpty ? "struct" : "enum"
     let name = sanitize(
       identifier: thing.names.identifier(),
       leading: true
     )
-    var result: [String] = [
-      "\(keyword) \(name) {"
-    ]
-    for enumerationCase in thing.cases {
-      result.append("  \(declaration(for: enumerationCase))")
+    if thing.cases.isEmpty {
+      fatalError("Custom things not implemented yet.")
+    } else {
+      let cases = thing.cases.map { declaration(for: $0) }
+      return enumerationTypeDeclaration(name: name, cases: cases)
     }
-    result.append(contentsOf: [
-      "}"
-    ])
-    return result.joined(separator: "\n")
   }
 
   static func flowCoverageRegistration(
@@ -389,7 +389,7 @@ extension Platform {
       return result
     } else if action.isEnumerationCaseWrapper {
       let name = sanitize(identifier: action.names.identifier(), leading: true)
-      return ".\(name)"
+      return caseReference(name: name)
     } else {
       let name = sanitize(
         identifier: parameterName

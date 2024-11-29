@@ -51,6 +51,13 @@ enum Kotlin: Platform {
     }).joined()
   }
 
+  static func caseReference(name: String) -> String {
+    return ".\(name)"
+  }
+  static func caseDeclaration(name: String) -> String {
+    return "case \(name)"
+  }
+
   static var isTyped: Bool {
     return true
   }
@@ -67,6 +74,19 @@ enum Kotlin: Platform {
     } else {
       return "::"
     }
+  }
+
+  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+    var result: [String] = [
+      "enum \(name) {"
+    ]
+    for enumerationCase in cases {
+      result.append("\(indent)\(enumerationCase)")
+    }
+    result.append(contentsOf: [
+      "}"
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
