@@ -14,7 +14,7 @@ jobs:
       with:
         run: |
           set -x
-          swift run --package-path Scaffolding prepare‐c
+          swift run --package-path Scaffolding scaffolding prepare‐c
     - name: Test
       uses: ./.github/actions/Amazon Linux
     - name: Check repository for changes
