@@ -18,16 +18,17 @@ jobs:
           swift run --package-path Scaffolding scaffolding build‐javascript
     - name: Test
       uses: ./.github/actions/Node
-      run: |
-        set -x
-        node .Construction/JavaScript/Package.js 2>Errors
-        if [ $? -eq 0 -a ! -s Errors ]
-        then
-          echo "Succeeded."
-        else
-          cat Errors
-          exit 1
-        fi
+      with:
+        run: |
+          set -x
+          node .Construction/JavaScript/Package.js 2>Errors
+          if [ $? -eq 0 -a ! -s Errors ]
+          then
+            echo "Succeeded."
+          else
+            cat Errors
+            exit 1
+          fi
     - name: Check repository for changes
       shell: bash
       run: |
