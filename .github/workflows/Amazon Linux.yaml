@@ -30,14 +30,8 @@ jobs:
   Amazon_Linux_Test:
     name: Amazon Linux (Test)
     runs-on: ubuntu-20.04
-    container: amazonlinux:2
     needs: Amazon_Linux_Build
     steps:
-    - name: Install Git
-      shell: bash
-      run: |
-        set -x
-        yum install --assumeyes git
     - name: Check out
       uses: actions/checkout@v3
     - name: Download
@@ -45,6 +39,8 @@ jobs:
       with:
         name: C
         path: .Construction/C
+    - name: Do something with Amazon Linux
+      uses: ./.github/actions/Amazon Linux
     - name: Install GNU Compiler Collection
       shell: bash
       run: |
