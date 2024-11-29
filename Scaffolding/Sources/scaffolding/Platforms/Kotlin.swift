@@ -55,7 +55,7 @@ enum Kotlin: Platform {
     return "\(type).\(name)"
   }
   static func caseDeclaration(name: String, index: Int) -> String {
-    return "\(name): \(index),"
+    return "\(name),"
   }
 
   static var isTyped: Bool {
@@ -78,13 +78,13 @@ enum Kotlin: Platform {
 
   static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
     var result: [String] = [
-      "const \(name) = Object.freeze({"
+      "enum class \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
     }
     result.append(contentsOf: [
-      "});"
+      "}"
     ])
     return result.joined(separator: "\n")
   }
