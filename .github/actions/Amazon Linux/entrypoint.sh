@@ -1,2 +1,2 @@
 #!/bin/bash
-swift run --package-path Scaffolding scaffolding $1
+eval "$1"

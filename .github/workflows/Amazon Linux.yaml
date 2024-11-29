@@ -17,6 +17,10 @@ jobs:
           swift run --package-path Scaffolding scaffolding prepare‐c
     - name: Test
       uses: ./.github/actions/Amazon Linux
+      with:
+        run: |
+          set -x
+          echo "Hello, world!"
     - name: Check repository for changes
       shell: bash
       run: |
