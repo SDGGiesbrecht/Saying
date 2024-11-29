@@ -34,11 +34,6 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v2
-    - name: Download
-      uses: actions/download-artifact@v4
-      with:
-        name: Kotlin
-        path: .Construction/Kotlin
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
