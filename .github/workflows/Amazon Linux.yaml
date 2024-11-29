@@ -10,7 +10,7 @@ jobs:
     - name: Check out
       uses: actions/checkout@v3
     - name: Build scaffolding
-      uses: .github/actions/Scaffolding
+      uses: ./.github/actions/Scaffolding
     - name: Build
       shell: bash
       run: |
