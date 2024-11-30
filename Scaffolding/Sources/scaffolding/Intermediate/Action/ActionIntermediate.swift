@@ -160,7 +160,6 @@ extension ActionIntermediate {
     if let native = declaration.implementation.native {
       for implementation in native.implementations {
         switch NativeActionImplementationIntermediate.construct(
-          prototype: prototype,
           implementation: implementation.expression
         ) {
         case .failure(let error):

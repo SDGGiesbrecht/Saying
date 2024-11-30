@@ -4,16 +4,26 @@ import SDGText
 struct CaseIntermediate {
   var names: Set<StrictString>
   var constantAction: ActionIntermediate?
-  var c: NativeThingImplementationIntermediate?
-  var cSharp: NativeThingImplementationIntermediate?
-  var javaScript: NativeThingImplementationIntermediate?
-  var kotlin: NativeThingImplementationIntermediate?
-  var swift: NativeThingImplementationIntermediate?
+  var c: NativeActionImplementationIntermediate?
+  var cSharp: NativeActionImplementationIntermediate?
+  var javaScript: NativeActionImplementationIntermediate?
+  var kotlin: NativeActionImplementationIntermediate?
+  var swift: NativeActionImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedCaseDeclaration
 }
 
 extension CaseIntermediate {
+
+  static func disallowImports(
+    in implementation: ParsedNativeActionImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if implementation.expression.importNode ≠ nil {
+      errors.append(ConstructionError.invalidImport(implementation))
+    }
+  }
+
   static func construct(
     _ declaration: ParsedCaseDeclaration,
     namespace: [Set<StrictString>],
@@ -42,6 +52,41 @@ extension CaseIntermediate {
       }
     }
 
+    var c: NativeActionImplementationIntermediate?
+    var cSharp: NativeActionImplementationIntermediate?
+    var javaScript: NativeActionImplementationIntermediate?
+    var kotlin: NativeActionImplementationIntermediate?
+    var swift: NativeActionImplementationIntermediate?
+    if let native = declaration.implementation {
+      for implementation in native.implementations.implementations {
+        switch NativeActionImplementationIntermediate.construct(
+          implementation: implementation.expression
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
+        case .success(let constructed):
+          switch implementation.language.identifierText() {
+          case "C":
+            c = constructed
+          case "C♯":
+            cSharp = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "JavaScript":
+            javaScript = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "Kotlin":
+            kotlin = constructed
+            disallowImports(in: implementation, errors: &errors)
+          case "Swift":
+            swift = constructed
+            disallowImports(in: implementation, errors: &errors)
+          default:
+            errors.append(ConstructionError.unknownLanguage(implementation.language))
+          }
+        }
+      }
+    }
+
     let constantAction: ActionIntermediate? = declaration.contents == nil
       ? ActionIntermediate.enumerationAction(
         names: names,
@@ -58,11 +103,11 @@ extension CaseIntermediate {
       CaseIntermediate(
         names: names,
         constantAction: constantAction,
-        c: nil,
-        cSharp: nil,
-        javaScript: nil,
-        kotlin: nil,
-        swift: nil,
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift,
         documentation: attachedDocumentation,
         declaration: declaration
       )
@@ -78,11 +123,11 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       constantAction: constantAction?.resolvingExtensionContext(typeLookup: typeLookup),
-      c: c?.resolvingExtensionContext(typeLookup: typeLookup),
-      cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
-      javaScript: javaScript?.resolvingExtensionContext(typeLookup: typeLookup),
-      kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
-      swift: swift?.resolvingExtensionContext(typeLookup: typeLookup),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
     )
