@@ -43,8 +43,8 @@ struct ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func parameterReferenceDictionary() -> ReferenceDictionary {
-    return prototype.parameterReferenceDictionary()
+  func parameterReferenceDictionary(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
+    return prototype.parameterReferenceDictionary(externalLookup: externalLookup)
   }
 }
 
@@ -245,7 +245,7 @@ extension ActionIntermediate {
         }
       }
     }
-    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary()]
+    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary(externalLookup: [moduleReferenceDictionary])]
     implementation?.validateReferences(
       context: externalAndParameters,
       testContext: false,

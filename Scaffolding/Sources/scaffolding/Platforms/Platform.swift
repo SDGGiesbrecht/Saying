@@ -384,8 +384,12 @@ extension Platform {
                 result.append("\n")
               }
             }
-            for new in argument.localActions() {
+            let newActions = argument.localActions()
+            for new in newActions {
               _ = local.add(action: new)
+            }
+            if !newActions.isEmpty {
+              local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
             }
           }
         }
@@ -561,7 +565,7 @@ extension Platform {
       coverageRegistration = nil
     }
     var locals = ReferenceDictionary()
-    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary())
+    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary(externalLookup: externalReferenceLookup))
     var coverageRegionCounter = 0
     let implementation = action.implementation!.statements.map({ entry in
       let result = source(
@@ -572,8 +576,12 @@ extension Platform {
         contextCoverageIdentifier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
         coverageRegionCounter: &coverageRegionCounter
       )
-      for local in entry.localActions() {
+      let newActions = entry.localActions()
+      for local in newActions {
         _ = locals.add(action: local)
+      }
+      if !newActions.isEmpty {
+        locals.resolveTypeIdentifiers(externalLookup: nonLocalReferenceLookup)
       }
       return result
     })

@@ -213,13 +213,13 @@ extension ModuleIntermediate {
   }
 
   mutating func resolveTypeIdentifiers() {
-    referenceDictionary.resolveTypeIdentifiers()
+    referenceDictionary.resolveTypeIdentifiers(externalLookup: [])
   }
 
   mutating func resolveTypes() {
-    referenceDictionary.resolveTypes()
+    referenceDictionary.resolveTypes(parentContexts: [])
     for index in tests.indices {
-      tests[index].statement.resolveTypes(context: nil, referenceDictionary: referenceDictionary, finalReturnValue: .none)
+      tests[index].statement.resolveTypes(context: nil, referenceLookup: [referenceDictionary], finalReturnValue: .none)
     }
   }
 
@@ -248,7 +248,7 @@ extension ModuleIntermediate {
 
   func applyingTestCoverageTracking() -> ModuleIntermediate {
     return ModuleIntermediate(
-      referenceDictionary: referenceDictionary.applyingTestCoverageTracking(),
+      referenceDictionary: referenceDictionary.applyingTestCoverageTracking(externalLookup: []),
       uses: uses,
       tests: tests
     )

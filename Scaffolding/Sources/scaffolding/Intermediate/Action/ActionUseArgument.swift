@@ -38,7 +38,7 @@ extension ActionUseArgument {
 extension ActionUseArgument {
   mutating func resolveTypes(
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
     specifiedReturnValue: ParsedTypeReference??,
     finalReturnValue: ParsedTypeReference?
   ) {
@@ -46,7 +46,7 @@ extension ActionUseArgument {
     case .action(var action):
       action.resolveTypes(
         context: context,
-        referenceDictionary: referenceDictionary,
+        referenceLookup: referenceLookup,
         specifiedReturnValue: specifiedReturnValue,
         finalReturnValue: finalReturnValue
       )
@@ -54,7 +54,7 @@ extension ActionUseArgument {
     case .flow(var statements):
       statements.resolveTypes(
         context: context,
-        referenceDictionary: referenceDictionary,
+        referenceLookup: referenceLookup,
         finalReturnValue: finalReturnValue
       )
     }

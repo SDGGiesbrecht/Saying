@@ -58,7 +58,7 @@ extension ActionUse {
 extension ActionUse {
   mutating func resolveTypes(
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
     specifiedReturnValue: ParsedTypeReference??,
     finalReturnValue: ParsedTypeReference?
   ) {
@@ -72,7 +72,7 @@ extension ActionUse {
       }
       arguments[index].resolveTypes(
         context: context,
-        referenceDictionary: referenceDictionary,
+        referenceLookup: referenceLookup,
         specifiedReturnValue: explicitArgumentReturnValue,
         finalReturnValue: finalReturnValue
       )
@@ -88,7 +88,7 @@ extension ActionUse {
       }
       if let parameter = context?.lookupParameter(actionName) {
         resolvedResultType = parameter.type
-      } else if let action = referenceDictionary.lookupAction(
+      } else if let action = referenceLookup.lookupAction(
         actionName,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue
@@ -110,8 +110,12 @@ extension ActionUse {
         testContext: testContext,
         errors: &errors
       )
-      for new in argument.localActions() {
+      let newActions = argument.localActions()
+      for new in newActions {
         errors.append(contentsOf: local.add(action: new).map({ .redeclaredLocalIdentifier(error: $0) }))
+      }
+      if !newActions.isEmpty {
+        local.resolveTypeIdentifiers(externalLookup: context)
       }
     }
     if ¬isNew {
