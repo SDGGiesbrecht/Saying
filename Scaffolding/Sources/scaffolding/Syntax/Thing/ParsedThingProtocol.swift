@@ -21,7 +21,12 @@ extension ParsedThingDeclaration: ParsedThingDeclarationProtocol {
 }
 extension ParsedEnumerationDeclaration: ParsedThingDeclarationProtocol {
   var nativeImplementations: [ParsedNativeThingImplementation] {
-    return []
+    switch implementation {
+    case .source:
+      return []
+    case .dual(let dual):
+      return dual.native.implementations
+    }
   }
   var enumerationCases: [ParsedCaseDeclaration] {
     switch implementation {
