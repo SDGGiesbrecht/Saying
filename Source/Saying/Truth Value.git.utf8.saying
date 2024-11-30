@@ -52,7 +52,6 @@ enumeration (clients)
     ελληνικά: αληθής
     עברית: אמת
    )
-   truth value
    C: “¤(28)true¤(29)” (stdbool)
    C♯: “¤(28)true¤(29)”
    JavaScript: “¤(28)true¤(29)”
@@ -92,7 +91,6 @@ enumeration (clients)
     ελληνικά: ψευδής
     עברית: שקר
    )
-   truth value
    C: “¤(28)false¤(29)” (stdbool)
    C♯: “¤(28)false¤(29)”
    JavaScript: “¤(28)false¤(29)”
