@@ -13,18 +13,22 @@ extension StatementListIntermediate {
 extension StatementListIntermediate {
   mutating func resolveTypes(
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
     finalReturnValue: ParsedTypeReference?
   ) {
-    var adjustedReferences = referenceDictionary
+    var locals = ReferenceDictionary()
     for index in statements.indices {
       statements[index].resolveTypes(
         context: context,
-        referenceDictionary: adjustedReferences,
+        referenceLookup: referenceLookup.appending(locals),
         finalReturnValue: finalReturnValue
       )
-      for new in statements[index].localActions() {
-        _ = adjustedReferences.add(action: new)
+      let newActions = statements[index].localActions()
+      for new in newActions {
+        _ = locals.add(action: new)
+      }
+      if !newActions.isEmpty {
+        locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
       }
     }
   }
@@ -41,8 +45,12 @@ extension StatementListIntermediate {
         testContext: false,
         errors: &errors
       )
-      for new in statement.localActions() {
+      let newActions = statement.localActions()
+      for new in newActions {
         errors.append(contentsOf: local.add(action: new).map({ .redeclaredLocalIdentifier(error: $0) }))
+      }
+      if !newActions.isEmpty {
+        local.resolveTypeIdentifiers(externalLookup: context)
       }
     }
   }

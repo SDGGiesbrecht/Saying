@@ -43,8 +43,8 @@ struct ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func parameterReferenceDictionary() -> ReferenceDictionary {
-    return prototype.parameterReferenceDictionary()
+  func parameterReferenceDictionary(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
+    return prototype.parameterReferenceDictionary(externalLookup: externalLookup)
   }
 }
 
@@ -121,7 +121,12 @@ extension ActionIntermediate {
     names: Set<StrictString>,
     returnValue: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
   ) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
@@ -133,6 +138,11 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
       isEnumerationCaseWrapper: true
     )
   }
@@ -160,7 +170,6 @@ extension ActionIntermediate {
     if let native = declaration.implementation.native {
       for implementation in native.implementations {
         switch NativeActionImplementationIntermediate.construct(
-          prototype: prototype,
           implementation: implementation.expression
         ) {
         case .failure(let error):
@@ -245,7 +254,7 @@ extension ActionIntermediate {
         }
       }
     }
-    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary()]
+    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary(externalLookup: [moduleReferenceDictionary])]
     implementation?.validateReferences(
       context: externalAndParameters,
       testContext: false,

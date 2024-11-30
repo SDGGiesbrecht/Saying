@@ -1,4 +1,4 @@
-thing (clients)
+enumeration (clients)
  (
   español: valor de verdad
   English: truth value
@@ -18,86 +18,85 @@ thing (clients)
  C♯: “bool”
  Kotlin: “Boolean”
  Swift: “Bool”
+ {
+  case
+   [
+    [
+     español: Verdadero.
+     English: True.
+     العربية: صواب.
+     português: Verdadeiro.
+     русский: Истина.
+     Deutsch: Wahr.
+     한국어: 참.
+     français: Vrai.
+     Türkçe: Doğru.
+     italiano: Vero.
+     Nederlands: Waar.
+     ελληνικά: Αληθής.
+     עברית: אמת.
+    ]
+   ]
+   (
+    español: verdadero
+    English: true
+    العربية: صواب
+    português: verdadeiro
+    русский: истина.
+    Deutsch: wahr
+    한국어: 참
+    français : vrai
+    Türkçe: doğru
+    italiano: vero
+    Nederlands: waar
+    ελληνικά: αληθής
+    עברית: אמת
+   )
+   C: “¤(28)true¤(29)” (stdbool)
+   C♯: “¤(28)true¤(29)”
+   JavaScript: “¤(28)true¤(29)”
+   Kotlin: “¤(28)true¤(29)”
+   Swift: “¤(28)true¤(29)”
 
-action (clients)
- [
-  [
-   español: Verdadero.
-   English: True.
-   العربية: صواب.
-   português: Verdadeiro.
-   русский: Истина.
-   Deutsch: Wahr.
-   한국어: 참.
-   français: Vrai.
-   Türkçe: Doğru.
-   italiano: Vero.
-   Nederlands: Waar.
-   ελληνικά: Αληθής.
-   עברית: אמת.
-  ]
- ]
- (
-  español: verdadero
-  English: true
-  العربية: صواب
-  português: verdadeiro
-  русский: истина.
-  Deutsch: wahr
-  한국어: 참
-  français : vrai
-  Türkçe: doğru
-  italiano: vero
-  Nederlands: waar
-  ελληνικά: αληθής
-  עברית: אמת
- )
- truth value
- C: “¤(28)true¤(29)” (stdbool)
- C♯: “¤(28)true¤(29)”
- JavaScript: “¤(28)true¤(29)”
- Kotlin: “¤(28)true¤(29)”
- Swift: “¤(28)true¤(29)”
-
-action (clients)
- [
-  [
-   español: Falso.
-   English: False.
-   العربية: خطأ.
-   português: Falso.
-   русский: Ложь.
-   Deutsch: Falsch.
-   한국어: 거짓.
-   français: Faux.
-   Türkçe: Yanlış.
-   italiano: Falso.
-   Nederlands: Onwaar.
-   ελληνικά: Ψευδής.
-   עברית: שקר.
-  ]
- ]
- (
-  español: falso
-  English: false
-  العربية: خطأ
-  português: falso
-  русский: ложь.
-  Deutsch: falsch
-  한국어: 거짓
-  français : faux
-  Türkçe: yanlış
-  italiano: falso
-  Nederlands: onwaar
-  ελληνικά: ψευδής
-  עברית: שקר
- )
- truth value
- C: “¤(28)false¤(29)” (stdbool)
- C♯: “¤(28)false¤(29)”
- JavaScript: “¤(28)false¤(29)”
- Kotlin: “¤(28)false¤(29)”
- Swift: “¤(28)false¤(29)”
+  case
+   [
+    [
+     español: Falso.
+     English: False.
+     العربية: خطأ.
+     português: Falso.
+     русский: Ложь.
+     Deutsch: Falsch.
+     한국어: 거짓.
+     français: Faux.
+     Türkçe: Yanlış.
+     italiano: Falso.
+     Nederlands: Onwaar.
+     ελληνικά: Ψευδής.
+     עברית: שקר.
+    ]
+   ]
+   (
+    español: falso
+    English: false
+    العربية: خطأ
+    português: falso
+    русский: ложь.
+    Deutsch: falsch
+    한국어: 거짓
+    français : faux
+    Türkçe: yanlış
+    italiano: falso
+    Nederlands: onwaar
+    ελληνικά: ψευδής
+    עברית: שקר
+   )
+   C: “¤(28)false¤(29)” (stdbool)
+   C♯: “¤(28)false¤(29)”
+   JavaScript: “¤(28)false¤(29)”
+   Kotlin: “¤(28)false¤(29)”
+   Swift: “¤(28)false¤(29)”
+ }
 
 action (clients)
  [

@@ -1,17 +1,17 @@
 import SDGLogic
 import SDGText
 
-struct NativeThingImplementation {
+struct NativeThingImplementationIntermediate {
   var textComponents: [StrictString]
   var parameters: [NativeThingImplementationParameter]
   var requiredImport: StrictString?
 }
 
-extension NativeThingImplementation {
+extension NativeThingImplementationIntermediate {
 
   static func construct(
     implementation: ParsedNativeThing
-  ) -> Result<NativeThingImplementation, ErrorList<ConstructionError>> {
+  ) -> Result<NativeThingImplementationIntermediate, ErrorList<ConstructionError>> {
     var errors: [ConstructionError] = []
     let components = implementation.type.components
     var textComponents: [StrictString] = []
@@ -33,7 +33,7 @@ extension NativeThingImplementation {
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    return .success(NativeThingImplementation(
+    return .success(NativeThingImplementationIntermediate(
       textComponents: textComponents,
       parameters: parameters,
       requiredImport: implementation.importNode?.importNode.identifierText()
@@ -41,18 +41,18 @@ extension NativeThingImplementation {
   }
 }
 
-extension NativeThingImplementation {
+extension NativeThingImplementationIntermediate {
 
   func resolvingExtensionContext(
     typeLookup: [StrictString: StrictString]
-  ) -> NativeThingImplementation {
+  ) -> NativeThingImplementationIntermediate {
     let mappedParameters = parameters.map({ parameter in
       return NativeThingImplementationParameter(
         name: typeLookup[parameter.name] ?? parameter.name,
         syntaxNode: parameter.syntaxNode
       )
     })
-    return NativeThingImplementation(
+    return NativeThingImplementationIntermediate(
       textComponents: textComponents,
       parameters: mappedParameters,
       requiredImport: requiredImport
@@ -61,9 +61,9 @@ extension NativeThingImplementation {
 
   func specializing(
     typeLookup: [StrictString: ParsedTypeReference]
-  ) -> NativeThingImplementation {
+  ) -> NativeThingImplementationIntermediate {
     let mappedParameters = parameters.map { $0.specializing(typeLookup: typeLookup) }
-    return NativeThingImplementation(
+    return NativeThingImplementationIntermediate(
       textComponents: textComponents,
       parameters: mappedParameters,
       requiredImport: requiredImport

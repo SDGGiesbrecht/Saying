@@ -98,7 +98,7 @@ extension ActionPrototype {
     return parameters.parameter(named: identifier)
   }
 
-  func parameterReferenceDictionary() -> ReferenceDictionary {
+  func parameterReferenceDictionary(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
     var result = ReferenceDictionary()
     for parameter in parameters.inAnyOrder {
       _ = result.add(action: parameter.passAction)
@@ -106,6 +106,8 @@ extension ActionPrototype {
         _ = result.add(action: execute)
       }
     }
+
+    result.resolveTypeIdentifiers(externalLookup: externalLookup)
     return result
   }
 

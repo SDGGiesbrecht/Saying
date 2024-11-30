@@ -28,7 +28,7 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
-  static func nativeType(of thing: Thing) -> NativeThingImplementation?
+  static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
   static func enumerationTypeDeclaration(name: String, cases: [String]) -> String
@@ -272,7 +272,8 @@ extension Platform {
     } else if let local = localLookup.lookupAction(
       reference.actionName,
       signature: signature,
-      specifiedReturnValue: reference.resolvedResultType
+      specifiedReturnValue: reference.resolvedResultType,
+      externalLookup: referenceLookup
     ) {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
@@ -384,8 +385,12 @@ extension Platform {
                 result.append("\n")
               }
             }
-            for new in argument.localActions() {
+            let newActions = argument.localActions()
+            for new in newActions {
               _ = local.add(action: new)
+            }
+            if !newActions.isEmpty {
+              local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
             }
           }
         }
@@ -561,7 +566,7 @@ extension Platform {
       coverageRegistration = nil
     }
     var locals = ReferenceDictionary()
-    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary())
+    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary(externalLookup: externalReferenceLookup))
     var coverageRegionCounter = 0
     let implementation = action.implementation!.statements.map({ entry in
       let result = source(
@@ -572,8 +577,12 @@ extension Platform {
         contextCoverageIdentifier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
         coverageRegionCounter: &coverageRegionCounter
       )
-      for local in entry.localActions() {
+      let newActions = entry.localActions()
+      for local in newActions {
         _ = locals.add(action: local)
+      }
+      if !newActions.isEmpty {
+        locals.resolveTypeIdentifiers(externalLookup: nonLocalReferenceLookup)
       }
       return result
     })

@@ -21,12 +21,12 @@ extension StatementIntermediate {
 extension StatementIntermediate {
   mutating func resolveTypes(
     context: ActionIntermediate?,
-    referenceDictionary: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
     finalReturnValue: ParsedTypeReference?
   ) {
     action.resolveTypes(
       context: context,
-      referenceDictionary: referenceDictionary,
+      referenceLookup: referenceLookup,
       specifiedReturnValue: isReturn ? .some(finalReturnValue) : .some(.none),
       finalReturnValue: finalReturnValue
     )

@@ -1,4 +1,4 @@
-extension NativeThingImplementation {
+extension NativeThingImplementationIntermediate {
   enum ConstructionError: DiagnosticError {
     case literalError(LiteralIntermediate.ConstructionError)
 

@@ -7,10 +7,10 @@ struct Thing {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var cases: [CaseIntermediate]
-  var c: NativeThingImplementation?
-  var cSharp: NativeThingImplementation?
-  var kotlin: NativeThingImplementation?
-  var swift: NativeThingImplementation?
+  var c: NativeThingImplementationIntermediate?
+  var cSharp: NativeThingImplementationIntermediate?
+  var kotlin: NativeThingImplementationIntermediate?
+  var swift: NativeThingImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclarationProtocol
 }
@@ -18,7 +18,7 @@ struct Thing {
 extension Thing {
 
   static func disallowImports(
-    in implementation: ParsedThingImplementation,
+    in implementation: ParsedNativeThingImplementation,
     errors: inout [ConstructionError]
   ) {
     if implementation.implementation.importNode ≠ nil {
@@ -79,13 +79,13 @@ extension Thing {
       }
     }
 
-    var c: NativeThingImplementation?
-    var cSharp: NativeThingImplementation?
-    var kotlin: NativeThingImplementation?
-    var swift: NativeThingImplementation?
+    var c: NativeThingImplementationIntermediate?
+    var cSharp: NativeThingImplementationIntermediate?
+    var kotlin: NativeThingImplementationIntermediate?
+    var swift: NativeThingImplementationIntermediate?
     for implementation in declaration.nativeImplementations {
-      let constructed: NativeThingImplementation
-      switch NativeThingImplementation.construct(implementation: implementation.implementation) {
+      let constructed: NativeThingImplementationIntermediate
+      switch NativeThingImplementationIntermediate.construct(implementation: implementation.implementation) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ .brokenNativeImplementation($0) }))
         continue

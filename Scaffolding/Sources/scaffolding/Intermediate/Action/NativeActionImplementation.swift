@@ -11,7 +11,6 @@ struct NativeActionImplementationIntermediate {
 extension NativeActionImplementationIntermediate {
 
   static func construct(
-    prototype: ActionPrototype,
     implementation: ParsedNativeAction
   ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
     let components = implementation.expression.components
