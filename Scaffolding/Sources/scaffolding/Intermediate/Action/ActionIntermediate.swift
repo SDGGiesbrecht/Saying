@@ -121,7 +121,12 @@ extension ActionIntermediate {
     names: Set<StrictString>,
     returnValue: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
   ) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
@@ -133,6 +138,11 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
       isEnumerationCaseWrapper: true
     )
   }

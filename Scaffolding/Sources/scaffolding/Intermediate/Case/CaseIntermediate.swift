@@ -92,7 +92,12 @@ extension CaseIntermediate {
         names: names,
         returnValue: type,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
       )
       : nil
 
