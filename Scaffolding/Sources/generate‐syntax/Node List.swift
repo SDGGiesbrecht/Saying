@@ -1002,6 +1002,22 @@ extension Node {
           ),
 
           Node(
+            name: "DualCaseDetails",
+            kind: .compound(children: [
+              Child(name: "contents", type: "RequirementReturnValue", kind: .required),
+              Child(name: "implementation", type: "CaseImplementations", kind: .required),
+            ])
+          ),
+          Node(
+            name: "CaseDetails",
+            kind: .alternates([
+              Alternate(name: "implementation", type: "CaseImplementations"),
+              Alternate(name: "dual", type: "DualCaseDetails"),
+              Alternate(name: "contents", type: "RequirementReturnValue"),
+            ])
+          ),
+
+          Node(
             name: "LanguageDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "LanguageKeyword", kind: .required),
@@ -1030,8 +1046,7 @@ extension Node {
               Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "CaseName", kind: .required),
-              Child(name: "contents", type: "RequirementReturnValue", kind: .optional),
-              Child(name: "implementation", type: "CaseImplementations", kind: .optional),
+              Child(name: "details", type: "CaseDetails", kind: .optional),
             ])
           ),
         ],
