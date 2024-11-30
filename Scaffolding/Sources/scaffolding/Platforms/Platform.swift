@@ -272,7 +272,8 @@ extension Platform {
     } else if let local = localLookup.lookupAction(
       reference.actionName,
       signature: signature,
-      specifiedReturnValue: reference.resolvedResultType
+      specifiedReturnValue: reference.resolvedResultType,
+      externalLookup: referenceLookup
     ) {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {

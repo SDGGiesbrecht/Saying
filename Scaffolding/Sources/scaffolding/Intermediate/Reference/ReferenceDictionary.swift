@@ -207,7 +207,8 @@ extension Array where Element == ReferenceDictionary {
   func lookupAction(
     _ identifier: StrictString,
     signature: [ParsedTypeReference],
-    specifiedReturnValue: ParsedTypeReference??
+    specifiedReturnValue: ParsedTypeReference??,
+    externalLookup: [ReferenceDictionary] = []
   ) -> ActionIntermediate? {
     for index in indices.reversed() {
       let scope = self[index]
@@ -215,7 +216,7 @@ extension Array where Element == ReferenceDictionary {
         identifier,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue,
-        parentContexts: Array(self[..<index])
+        parentContexts: externalLookup.appending(contentsOf: self[..<index])
       ) {
         return found
       }
