@@ -71,6 +71,12 @@ enum Kotlin: Platform {
       }
     }
   }
+  static var needsSeparateCaseStorage: Bool {
+    return false
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return nil
+  }
 
   static var isTyped: Bool {
     return true
@@ -90,7 +96,12 @@ enum Kotlin: Platform {
     }
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String {
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
     let keyword = simple ? "enum" : "sealed"
     var result: [String] = [
       "\(keyword) class \(name) {"

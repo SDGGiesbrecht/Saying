@@ -58,6 +58,12 @@ enum C: Platform {
   ) -> String {
     return "\(name),"
   }
+  static var needsSeparateCaseStorage: Bool {
+    return true
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return "\(contents) \(name);"
+  }
 
   static var isTyped: Bool {
     return true
@@ -73,17 +79,42 @@ enum C: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String {
-    var result: [String] = [
-      "typedef enum \(name) {"
-    ]
-    for enumerationCase in cases {
-      result.append("\(indent)\(enumerationCase)")
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
+    if simple {
+      var result: [String] = [
+        "typedef enum \(name) {"
+      ]
+      for enumerationCase in cases {
+        result.append("\(indent)\(enumerationCase)")
+      }
+      result.append(contentsOf: [
+        "} \(name);"
+      ])
+      return result.joined(separator: "\n")
+    } else {
+      var result: [String] = []
+      result.append(
+        enumerationTypeDeclaration(name: "\(name)_case", cases: cases, simple: true, storageCases: [])
+      )
+      result.append("typedef union \(name)_value {")
+      for enumerationCase in storageCases {
+        result.append("\(indent)\(enumerationCase)")
+      }
+      result.append(contentsOf: [
+        "} \(name)_value;",
+        "typedef struct \(name) {",
+        "\(indent)\(name)_case enumeration_case;",
+        "\(indent)\(name)_value value;",
+        "} \(name);",
+      ])
+      
+      return result.joined(separator: "\n")
     }
-    result.append(contentsOf: [
-      "} \(name);"
-    ])
-    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

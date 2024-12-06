@@ -54,6 +54,12 @@ enum CSharp: Platform {
   ) -> String {
     return "\(name),"
   }
+  static var needsSeparateCaseStorage: Bool {
+    return false
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return nil
+  }
 
   static var isTyped: Bool {
     return true
@@ -77,7 +83,12 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String {
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
     var result: [String] = [
       "enum \(name)",
       "{",

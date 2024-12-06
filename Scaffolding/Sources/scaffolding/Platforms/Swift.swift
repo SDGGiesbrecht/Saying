@@ -117,6 +117,12 @@ enum Swift: Platform {
     }
     return result
   }
+  static var needsSeparateCaseStorage: Bool {
+    return false
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return nil
+  }
 
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
@@ -128,7 +134,12 @@ enum Swift: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String {
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
     var result: [String] = [
       "enum \(name) {"
     ]

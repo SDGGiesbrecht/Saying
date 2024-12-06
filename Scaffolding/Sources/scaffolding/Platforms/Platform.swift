@@ -31,13 +31,23 @@ protocol Platform {
     simple: Bool,
     parentType: String
   ) -> String
+  static var needsSeparateCaseStorage: Bool { get }
+  static func caseStorageDeclaration(
+    name: String,
+    contents: String
+  ) -> String?
 
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
-  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -238,6 +248,26 @@ extension Platform {
       parentType: parentType
     )
   }
+  static func storageDeclaration(
+    for enumerationCase: CaseIntermediate,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String? {
+    if ¬needsSeparateCaseStorage {
+      return nil
+    }
+    guard let contents = enumerationCase.contents
+      .map({ source(for: $0, referenceLookup: referenceLookup) }) else {
+      return nil
+    }
+    let name = sanitize(
+      identifier: enumerationCase.names.identifier(),
+      leading: true
+    )
+    return caseStorageDeclaration(
+      name: name,
+      contents: contents
+    )
+  }
   static func declaration(
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary]
@@ -264,6 +294,7 @@ extension Platform {
       fatalError("Custom things not implemented yet.")
     } else {
       var cases: [String] = []
+      var storageCases: [String] = []
       for enumerationCase in thing.cases {
         cases.append(
           declaration(
@@ -274,8 +305,11 @@ extension Platform {
             referenceLookup: externalReferenceLookup
           )
         )
+        if let storage = storageDeclaration(for: enumerationCase, referenceLookup: externalReferenceLookup) {
+          storageCases.append(storage)
+        }
       }
-      return enumerationTypeDeclaration(name: name, cases: cases, simple: thing.isSimple)
+      return enumerationTypeDeclaration(name: name, cases: cases, simple: thing.isSimple, storageCases: storageCases)
     }
   }
 
