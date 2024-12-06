@@ -249,6 +249,12 @@ extension Platform {
     if nativeType(of: thing) ≠ nil {
       return nil
     }
+    if ¬isTyped,
+      thing.cases.allSatisfy({ enumerationCase in
+        return enumerationCase.constantAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
+      }) {
+      return nil
+    }
 
     let name = sanitize(
       identifier: thing.names.identifier(),
