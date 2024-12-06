@@ -49,7 +49,13 @@ enum C: Platform {
   static func caseReference(name: String, type: String) -> String {
     return "\(name)"
   }
-  static func caseDeclaration(name: String, contents: String?, index: Int) -> String {
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String {
     return "\(name),"
   }
 
@@ -67,7 +73,7 @@ enum C: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String {
     var result: [String] = [
       "typedef enum \(name) {"
     ]

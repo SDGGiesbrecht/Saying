@@ -24,14 +24,20 @@ protocol Platform {
 
   // Cases
   static func caseReference(name: String, type: String) -> String
-  static func caseDeclaration(name: String, contents: String?, index: Int) -> String
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String
 
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String
+  static func enumerationTypeDeclaration(name: String, cases: [String], simple: Bool) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -214,6 +220,8 @@ extension Platform {
   static func declaration(
     for enumerationCase: CaseIntermediate,
     index: Int,
+    simple: Bool,
+    parentType: String,
     referenceLookup: [ReferenceDictionary]
   ) -> String {
     let name = sanitize(
@@ -222,7 +230,13 @@ extension Platform {
     )
     let contents = enumerationCase.contents
       .map({ source(for: $0, referenceLookup: referenceLookup) })
-    return caseDeclaration(name: name, contents: contents, index: index)
+    return caseDeclaration(
+      name: name,
+      contents: contents,
+      index: index,
+      simple: simple,
+      parentType: parentType
+    )
   }
   static func declaration(
     for thing: Thing,
@@ -246,10 +260,16 @@ extension Platform {
       var cases: [String] = []
       for enumerationCase in thing.cases {
         cases.append(
-          declaration(for: enumerationCase, index: cases.endIndex, referenceLookup: externalReferenceLookup)
+          declaration(
+            for: enumerationCase,
+            index: cases.endIndex,
+            simple: thing.isSimple,
+            parentType: name,
+            referenceLookup: externalReferenceLookup
+          )
         )
       }
-      return enumerationTypeDeclaration(name: name, cases: cases)
+      return enumerationTypeDeclaration(name: name, cases: cases, simple: thing.isSimple)
     }
   }
 
