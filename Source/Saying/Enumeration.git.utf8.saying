@@ -1,5 +1,34 @@
 enumeration
  (
+  English: example simple enumeration
+ )
+ {
+  case
+   (
+    English: case A
+   )
+
+  case
+   (
+    English: case B
+   )
+ }
+
+action
+ [
+  test (verify (use example simple enumeration (case A)))
+  test (verify (use example simple enumeration (case B)))
+ ]
+ (
+  English: use example simple enumeration (value: example simple enumeration)
+ )
+ truth value
+ {
+  ← true
+ }
+
+enumeration
+ (
   English: example enumeration
  )
  {
