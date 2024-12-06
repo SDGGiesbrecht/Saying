@@ -24,7 +24,7 @@ protocol Platform {
 
   // Cases
   static func caseReference(name: String, type: String) -> String
-  static func caseDeclaration(name: String, index: Int) -> String
+  static func caseDeclaration(name: String, contents: String?, index: Int) -> String
 
   // Things
   static var isTyped: Bool { get }
@@ -211,12 +211,18 @@ extension Platform {
     }
   }
 
-  static func declaration(for enumerationCase: CaseIntermediate, index: Int) -> String {
+  static func declaration(
+    for enumerationCase: CaseIntermediate,
+    index: Int,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
     let name = sanitize(
       identifier: enumerationCase.names.identifier(),
       leading: true
     )
-    return caseDeclaration(name: name, index: index)
+    let contents = enumerationCase.contents
+      .map({ source(for: $0, referenceLookup: referenceLookup) })
+    return caseDeclaration(name: name, contents: contents, index: index)
   }
   static func declaration(
     for thing: Thing,
@@ -239,7 +245,9 @@ extension Platform {
     } else {
       var cases: [String] = []
       for enumerationCase in thing.cases {
-        cases.append(declaration(for: enumerationCase, index: cases.endIndex))
+        cases.append(
+          declaration(for: enumerationCase, index: cases.endIndex, referenceLookup: externalReferenceLookup)
+        )
       }
       return enumerationTypeDeclaration(name: name, cases: cases)
     }

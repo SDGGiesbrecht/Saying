@@ -104,8 +104,12 @@ enum Swift: Platform {
   static func caseReference(name: String, type: String) -> String {
     return "\(type).\(name)"
   }
-  static func caseDeclaration(name: String, index: Int) -> String {
-    return "case \(name)"
+  static func caseDeclaration(name: String, contents: String?, index: Int) -> String {
+    var result = "case \(name)"
+    if let contents = contents {
+      result.append(contentsOf: "(\(contents))")
+    }
+    return result
   }
 
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {

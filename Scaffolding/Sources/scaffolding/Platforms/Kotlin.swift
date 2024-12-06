@@ -54,7 +54,7 @@ enum Kotlin: Platform {
   static func caseReference(name: String, type: String) -> String {
     return "\(type).\(name)"
   }
-  static func caseDeclaration(name: String, index: Int) -> String {
+  static func caseDeclaration(name: String, contents: String?, index: Int) -> String {
     return "\(name),"
   }
 
