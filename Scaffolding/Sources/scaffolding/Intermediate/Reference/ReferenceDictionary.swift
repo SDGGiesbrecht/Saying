@@ -99,12 +99,20 @@ extension ReferenceDictionary {
     return group[mappedComponents]
   }
 
-  func allThings() -> [Thing] {
+  func allThings(sorted: Bool = false) -> [Thing] {
     let result =
     things.values
       .lazy.map({ $0.values })
       .joined()
-    return Array(result)
+    if ¬sorted {
+      return Array(result)
+    } else {
+      var dictionary: [StrictString: Thing] = [:]
+      for entry in result {
+        dictionary[entry.names.identifier()] = entry
+      }
+      return dictionary.keys.sorted().map({ dictionary[$0]! })
+    }
   }
 }
 extension Array where Element == ReferenceDictionary {

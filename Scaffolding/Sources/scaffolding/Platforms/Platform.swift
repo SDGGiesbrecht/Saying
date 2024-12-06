@@ -691,7 +691,7 @@ extension Platform {
     result.append(contentsOf: coverageRegionSet(regions: regions))
     result.append(contentsOf: registerCoverageAction)
 
-    let allThings = moduleReferenceLookup.allThings()
+    let allThings = moduleReferenceLookup.allThings(sorted: true)
     for thing in allThings {
       if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
         result.append(contentsOf: [
