@@ -23,7 +23,7 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Cases
-  static func caseReference(name: String, type: String) -> String
+  static func caseReference(name: String, type: String, simple: Bool) -> String
   static func caseDeclaration(
     name: String,
     contents: String?,
@@ -185,6 +185,24 @@ extension Platform {
       .joined()
   }
 
+  static func isSimpleEnumeration(
+    _ type: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> Bool {
+    let intermediate: Thing
+    switch type {
+    case .simple(let simple):
+      intermediate = referenceLookup.lookupThing(simple.identifier, components: [])!
+    case .compound(let identifier, let components):
+      intermediate = referenceLookup.lookupThing(
+        identifier.name(),
+        components: components.map({ $0.key })
+      )!
+    case .action, .statements:
+      return false
+    }
+    return intermediate.isSimple
+  }
   static func source(for type: ParsedTypeReference, referenceLookup: [ReferenceDictionary]) -> String {
     switch type {
     case .simple(let simple):
@@ -467,7 +485,11 @@ extension Platform {
     } else if action.isEnumerationCaseWrapper {
       let name = sanitize(identifier: action.names.identifier(), leading: true)
       let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
-      return caseReference(name: name, type: type)
+      return caseReference(
+        name: name,
+        type: type,
+        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup)
+      )
     } else {
       let name = sanitize(
         identifier: parameterName
