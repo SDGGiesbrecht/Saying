@@ -52,7 +52,31 @@ enum CSharp: Platform {
     simple: Bool,
     parentType: String
   ) -> String {
-    return "\(name),"
+    if simple {
+      return "\(name),"
+    } else {
+      var result: [String] = [
+        "\(indent)sealed class \(name) : \(parentType)",
+        "\(indent){",
+      ]
+      let parameter: String
+      let implementation: String
+      if let contents = contents {
+        result.append(contentsOf: [
+          "\(indent)\(indent)readonly \(contents) Value;",
+        ])
+        parameter = "\(contents) value"
+        implementation = " this.Value = value; "
+      } else {
+        parameter = ""
+        implementation = ""
+      }
+      result.append(contentsOf: [
+        "\(indent)\(indent)\(name)(\(parameter)) : base() {\(implementation)}",
+        "\(indent)}"
+      ])
+      return result.joined(separator: "\n")
+    }
   }
   static var needsSeparateCaseStorage: Bool {
     return false
@@ -89,17 +113,33 @@ enum CSharp: Platform {
     simple: Bool,
     storageCases: [String]
   ) -> String {
-    var result: [String] = [
-      "enum \(name)",
-      "{",
-    ]
-    for enumerationCase in cases {
-      result.append("\(indent)\(enumerationCase)")
+    if simple {
+      var result: [String] = [
+        "enum \(name)",
+        "{",
+      ]
+      for enumerationCase in cases {
+        result.append("\(indent)\(enumerationCase)")
+      }
+      result.append(contentsOf: [
+        "}"
+      ])
+      return result.joined(separator: "\n")
+    } else {
+      var result: [String] = [
+        "abstract class \(name)",
+        "{",
+        "\(indent)private \(name)() {}",
+        "",
+      ]
+      for enumerationCase in cases {
+        result.append(enumerationCase)
+      }
+      result.append(contentsOf: [
+        "}"
+      ])
+      return result.joined(separator: "\n")
     }
-    result.append(contentsOf: [
-      "}"
-    ])
-    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
