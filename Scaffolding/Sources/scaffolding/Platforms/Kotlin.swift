@@ -102,7 +102,6 @@ enum Kotlin: Platform {
     simple: Bool,
     storageCases: [String]
   ) -> String {
-    #warning("Check for value semantics.")
     let keyword = simple ? "enum" : "sealed"
     var result: [String] = [
       "\(keyword) class \(name) {"

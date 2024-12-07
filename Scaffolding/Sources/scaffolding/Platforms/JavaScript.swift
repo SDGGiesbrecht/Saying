@@ -83,7 +83,6 @@ enum JavaScript: Platform {
     simple: Bool,
     storageCases: [String]
   ) -> String {
-    #warning("Check for value semantics.")
     var result: [String] = [
       "const \(name) = Object.freeze({"
     ]
