@@ -43,7 +43,11 @@ enum CSharp: Platform {
   }
 
   static func caseReference(name: String, type: String, simple: Bool) -> String {
-    return "\(type).\(name)"
+    if simple {
+      return "\(type).\(name)"
+    } else {
+      return "new \(type).\(name)()"
+    }
   }
   static func caseDeclaration(
     name: String,
@@ -56,7 +60,7 @@ enum CSharp: Platform {
       return "\(name),"
     } else {
       var result: [String] = [
-        "\(indent)sealed class \(name) : \(parentType)",
+        "\(indent)internal sealed class \(name) : \(parentType)",
         "\(indent){",
       ]
       let parameter: String
@@ -72,7 +76,7 @@ enum CSharp: Platform {
         implementation = ""
       }
       result.append(contentsOf: [
-        "\(indent)\(indent)\(name)(\(parameter)) : base() {\(implementation)}",
+        "\(indent)\(indent)internal \(name)(\(parameter)) : base() {\(implementation)}",
         "\(indent)}"
       ])
       return result.joined(separator: "\n")
