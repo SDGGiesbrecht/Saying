@@ -23,15 +23,31 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Cases
-  static func caseReference(name: String, type: String) -> String
-  static func caseDeclaration(name: String, index: Int) -> String
+  static func caseReference(name: String, type: String, simple: Bool) -> String
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String
+  static var needsSeparateCaseStorage: Bool { get }
+  static func caseStorageDeclaration(
+    name: String,
+    contents: String
+  ) -> String?
 
   // Things
   static var isTyped: Bool { get }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -169,6 +185,24 @@ extension Platform {
       .joined()
   }
 
+  static func isSimpleEnumeration(
+    _ type: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> Bool {
+    let intermediate: Thing
+    switch type {
+    case .simple(let simple):
+      intermediate = referenceLookup.lookupThing(simple.identifier, components: [])!
+    case .compound(let identifier, let components):
+      intermediate = referenceLookup.lookupThing(
+        identifier.name(),
+        components: components.map({ $0.key })
+      )!
+    case .action, .statements:
+      return false
+    }
+    return intermediate.isSimple
+  }
   static func source(for type: ParsedTypeReference, referenceLookup: [ReferenceDictionary]) -> String {
     switch type {
     case .simple(let simple):
@@ -211,12 +245,46 @@ extension Platform {
     }
   }
 
-  static func declaration(for enumerationCase: CaseIntermediate, index: Int) -> String {
+  static func declaration(
+    for enumerationCase: CaseIntermediate,
+    index: Int,
+    simple: Bool,
+    parentType: String,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
     let name = sanitize(
       identifier: enumerationCase.names.identifier(),
       leading: true
     )
-    return caseDeclaration(name: name, index: index)
+    let contents = enumerationCase.contents
+      .map({ source(for: $0, referenceLookup: referenceLookup) })
+    return caseDeclaration(
+      name: name,
+      contents: contents,
+      index: index,
+      simple: simple,
+      parentType: parentType
+    )
+  }
+  static func storageDeclaration(
+    for enumerationCase: CaseIntermediate,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String? {
+    if ¬needsSeparateCaseStorage {
+      return nil
+    }
+    guard let contents = enumerationCase.contents
+      .map({ source(for: $0, referenceLookup: referenceLookup) }) else {
+      return nil
+    }
+    let name = sanitize(
+      identifier: enumerationCase.names.identifier(),
+      leading: true
+    )
+    return caseStorageDeclaration(
+      name: name,
+      contents: contents
+    )
   }
   static func declaration(
     for thing: Thing,
@@ -229,6 +297,12 @@ extension Platform {
     if nativeType(of: thing) ≠ nil {
       return nil
     }
+    if ¬isTyped,
+      thing.cases.allSatisfy({ enumerationCase in
+        return enumerationCase.constantAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
+      }) {
+      return nil
+    }
 
     let name = sanitize(
       identifier: thing.names.identifier(),
@@ -238,10 +312,22 @@ extension Platform {
       fatalError("Custom things not implemented yet.")
     } else {
       var cases: [String] = []
+      var storageCases: [String] = []
       for enumerationCase in thing.cases {
-        cases.append(declaration(for: enumerationCase, index: cases.endIndex))
+        cases.append(
+          declaration(
+            for: enumerationCase,
+            index: cases.endIndex,
+            simple: thing.isSimple,
+            parentType: name,
+            referenceLookup: externalReferenceLookup
+          )
+        )
+        if let storage = storageDeclaration(for: enumerationCase, referenceLookup: externalReferenceLookup) {
+          storageCases.append(storage)
+        }
       }
-      return enumerationTypeDeclaration(name: name, cases: cases)
+      return enumerationTypeDeclaration(name: name, cases: cases, simple: thing.isSimple, storageCases: storageCases)
     }
   }
 
@@ -399,7 +485,11 @@ extension Platform {
     } else if action.isEnumerationCaseWrapper {
       let name = sanitize(identifier: action.names.identifier(), leading: true)
       let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
-      return caseReference(name: name, type: type)
+      return caseReference(
+        name: name,
+        type: type,
+        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup)
+      )
     } else {
       let name = sanitize(
         identifier: parameterName
@@ -663,7 +753,7 @@ extension Platform {
     result.append(contentsOf: coverageRegionSet(regions: regions))
     result.append(contentsOf: registerCoverageAction)
 
-    let allThings = moduleReferenceLookup.allThings()
+    let allThings = moduleReferenceLookup.allThings(sorted: true)
     for thing in allThings {
       if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
         result.append(contentsOf: [

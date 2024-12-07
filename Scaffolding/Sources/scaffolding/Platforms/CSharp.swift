@@ -42,11 +42,51 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func caseReference(name: String, type: String) -> String {
-    return "\(type).\(name)"
+  static func caseReference(name: String, type: String, simple: Bool) -> String {
+    if simple {
+      return "\(type).\(name)"
+    } else {
+      return "new \(type).\(name)()"
+    }
   }
-  static func caseDeclaration(name: String, index: Int) -> String {
-    return "\(name),"
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String {
+    if simple {
+      return "\(name),"
+    } else {
+      var result: [String] = [
+        "\(indent)internal sealed class \(name) : \(parentType)",
+        "\(indent){",
+      ]
+      let parameter: String
+      let implementation: String
+      if let contents = contents {
+        result.append(contentsOf: [
+          "\(indent)\(indent)readonly \(contents) Value;",
+        ])
+        parameter = "\(contents) value"
+        implementation = " this.Value = value; "
+      } else {
+        parameter = ""
+        implementation = ""
+      }
+      result.append(contentsOf: [
+        "\(indent)\(indent)internal \(name)(\(parameter)) : base() {\(implementation)}",
+        "\(indent)}"
+      ])
+      return result.joined(separator: "\n")
+    }
+  }
+  static var needsSeparateCaseStorage: Bool {
+    return false
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return nil
   }
 
   static var isTyped: Bool {
@@ -71,18 +111,39 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
-    var result: [String] = [
-      "enum \(name)",
-      "{",
-    ]
-    for enumerationCase in cases {
-      result.append("\(indent)\(enumerationCase)")
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
+    if simple {
+      var result: [String] = [
+        "enum \(name)",
+        "{",
+      ]
+      for enumerationCase in cases {
+        result.append("\(indent)\(enumerationCase)")
+      }
+      result.append(contentsOf: [
+        "}"
+      ])
+      return result.joined(separator: "\n")
+    } else {
+      var result: [String] = [
+        "abstract class \(name)",
+        "{",
+        "\(indent)private \(name)() {}",
+        "",
+      ]
+      for enumerationCase in cases {
+        result.append(enumerationCase)
+      }
+      result.append(contentsOf: [
+        "}"
+      ])
+      return result.joined(separator: "\n")
     }
-    result.append(contentsOf: [
-      "}"
-    ])
-    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

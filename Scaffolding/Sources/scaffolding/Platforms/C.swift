@@ -46,11 +46,27 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func caseReference(name: String, type: String) -> String {
-    return "\(name)"
+  static func caseReference(name: String, type: String, simple: Bool) -> String {
+    if simple {
+      return "\(name)"
+    } else {
+      return "((\(type)) {\(name)})"
+    }
   }
-  static func caseDeclaration(name: String, index: Int) -> String {
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String {
     return "\(name),"
+  }
+  static var needsSeparateCaseStorage: Bool {
+    return true
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return "\(contents) \(name);"
   }
 
   static var isTyped: Bool {
@@ -67,17 +83,42 @@ enum C: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
-    var result: [String] = [
-      "typedef enum \(name) {"
-    ]
-    for enumerationCase in cases {
-      result.append("\(indent)\(enumerationCase)")
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
+    if simple {
+      var result: [String] = [
+        "typedef enum \(name) {"
+      ]
+      for enumerationCase in cases {
+        result.append("\(indent)\(enumerationCase)")
+      }
+      result.append(contentsOf: [
+        "} \(name);"
+      ])
+      return result.joined(separator: "\n")
+    } else {
+      var result: [String] = []
+      result.append(
+        enumerationTypeDeclaration(name: "\(name)_case", cases: cases, simple: true, storageCases: [])
+      )
+      result.append("typedef union \(name)_value {")
+      for enumerationCase in storageCases {
+        result.append("\(indent)\(enumerationCase)")
+      }
+      result.append(contentsOf: [
+        "} \(name)_value;",
+        "typedef struct \(name) {",
+        "\(indent)\(name)_case enumeration_case;",
+        "\(indent)\(name)_value value;",
+        "} \(name);",
+      ])
+      
+      return result.joined(separator: "\n")
     }
-    result.append(contentsOf: [
-      "} \(name);"
-    ])
-    return result.joined(separator: "\n")
   }
 
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {

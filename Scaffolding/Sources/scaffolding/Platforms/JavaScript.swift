@@ -44,11 +44,23 @@ enum JavaScript: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
-  static func caseReference(name: String, type: String) -> String {
+  static func caseReference(name: String, type: String, simple: Bool) -> String {
     return "\(type).\(name)"
   }
-  static func caseDeclaration(name: String, index: Int) -> String {
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String {
     return "\(name): \(index),"
+  }
+  static var needsSeparateCaseStorage: Bool {
+    return false
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return nil
   }
 
   static var isTyped: Bool {
@@ -65,7 +77,12 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"
     ]

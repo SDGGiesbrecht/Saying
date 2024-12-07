@@ -16,6 +16,12 @@ struct Thing {
 }
 
 extension Thing {
+  var isSimple: Bool {
+    return cases.allSatisfy({ $0.contents == nil })
+  }
+}
+
+extension Thing {
 
   static func disallowImports(
     in implementation: ParsedNativeThingImplementation,

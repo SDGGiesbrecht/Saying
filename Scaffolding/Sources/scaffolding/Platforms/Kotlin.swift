@@ -51,11 +51,31 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func caseReference(name: String, type: String) -> String {
+  static func caseReference(name: String, type: String, simple: Bool) -> String {
     return "\(type).\(name)"
   }
-  static func caseDeclaration(name: String, index: Int) -> String {
-    return "\(name),"
+  static func caseDeclaration(
+    name: String,
+    contents: String?,
+    index: Int,
+    simple: Bool,
+    parentType: String
+  ) -> String {
+    if simple {
+      return "\(name),"
+    } else {
+      if let contents = contents {
+        return "class \(name)(val contents: \(contents)) : \(parentType)()"
+      } else {
+        return "object \(name) : \(parentType)()"
+      }
+    }
+  }
+  static var needsSeparateCaseStorage: Bool {
+    return false
+  }
+  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+    return nil
   }
 
   static var isTyped: Bool {
@@ -76,9 +96,15 @@ enum Kotlin: Platform {
     }
   }
 
-  static func enumerationTypeDeclaration(name: String, cases: [String]) -> String {
+  static func enumerationTypeDeclaration(
+    name: String,
+    cases: [String],
+    simple: Bool,
+    storageCases: [String]
+  ) -> String {
+    let keyword = simple ? "enum" : "sealed"
     var result: [String] = [
-      "enum class \(name) {"
+      "\(keyword) class \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
