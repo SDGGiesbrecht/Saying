@@ -198,7 +198,7 @@ extension Platform {
         identifier.name(),
         components: components.map({ $0.key })
       )!
-    case .action, .statements:
+    case .action, .statements, .enumerationCase:
       return false
     }
     return intermediate.isSimple
@@ -242,6 +242,8 @@ extension Platform {
       )
     case .statements:
       fatalError("Statements have no platform type.")
+    case .enumerationCase:
+      fatalError("Enumeration cases have no platform type.")
     }
   }
 
@@ -586,6 +588,8 @@ extension Platform {
         )
       case .statements:
         fatalError("Statements have no platform type.")
+      case .enumerationCase:
+        fatalError("Enumeration cases have no platform type.")
       }
     }
   }

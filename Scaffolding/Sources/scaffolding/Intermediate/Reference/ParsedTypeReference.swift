@@ -6,6 +6,7 @@ indirect enum ParsedTypeReference {
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])
   case action(parameters: [ParsedTypeReference], returnValue: ParsedTypeReference?)
   case statements
+  case enumerationCase(enumeration: ParsedTypeReference, identifier: ParsedUninterruptedIdentifier)
 }
 
 extension ParsedTypeReference {
@@ -96,6 +97,8 @@ extension ParsedTypeReference {
       return .action(parameters: parameters.map({ $0.key }), returnValue: returnValue.map({ $0.key }))
     case .statements:
       return .statements
+    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+      return .enumerationCase(enumeration.key, identifier: identifier.identifierText())
     }
   }
 }
@@ -125,6 +128,11 @@ extension ParsedTypeReference {
       )
     case .statements:
       return .statements
+    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+      return .enumerationCase(
+        enumeration: enumeration.resolvingExtensionContext(typeLookup: typeLookup),
+        identifier: identifier
+      )
     }
   }
 
@@ -148,6 +156,11 @@ extension ParsedTypeReference {
       )
     case .statements:
       return .statements
+    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+      return .enumerationCase(
+        enumeration: enumeration.specializing(typeLookup: typeLookup),
+        identifier: identifier
+      )
     }
   }
 }
@@ -212,6 +225,14 @@ extension ParsedTypeReference {
       )
     case .statements:
       break
+    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+      enumeration.validateReferences(
+        requiredAccess: requiredAccess,
+        allowTestOnlyAccess: allowTestOnlyAccess,
+        referenceDictionary: referenceDictionary,
+        errors: &errors
+      )
+      #warning("Not validating identifier.")
     }
   }
 }
@@ -235,6 +256,13 @@ extension ParsedTypeReference {
       return result
     case .statements:
       return ["{}"]
+    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+      var result: [StrictString] = ["((("]
+      result.append(contentsOf: enumeration.unresolvedGloballyUniqueIdentifierComponents())
+      result.append("•")
+      result.append(identifier.identifierText())
+      result.append(")))")
+      return result
     }
   }
 }
