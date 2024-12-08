@@ -5,6 +5,7 @@ indirect enum TypeReference: Hashable {
   case compound(identifier: StrictString, components: [TypeReference])
   case action(parameters: [TypeReference], returnValue: TypeReference?)
   case statements
+  case enumerationCase(TypeReference, identifier: StrictString)
 }
 
 extension TypeReference {
@@ -24,6 +25,8 @@ extension TypeReference {
       )
     case .statements:
       return .statements
+    case .enumerationCase(let type, let identifier):
+      return .enumerationCase(type.resolving(fromReferenceLookup: referenceLookup), identifier: identifier)
     }
   }
 }
