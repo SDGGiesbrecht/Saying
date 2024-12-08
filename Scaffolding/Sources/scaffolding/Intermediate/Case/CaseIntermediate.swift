@@ -102,7 +102,12 @@ extension CaseIntermediate {
         kotlin: kotlin,
         swift: swift
       )
-      : nil
+      : ActionIntermediate.enumerationCase(
+        names: names,
+        enumerationType: type,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))

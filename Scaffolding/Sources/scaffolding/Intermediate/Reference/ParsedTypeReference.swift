@@ -6,7 +6,7 @@ indirect enum ParsedTypeReference {
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])
   case action(parameters: [ParsedTypeReference], returnValue: ParsedTypeReference?)
   case statements
-  case enumerationCase(enumeration: ParsedTypeReference, identifier: ParsedUninterruptedIdentifier)
+  case enumerationCase(enumeration: ParsedTypeReference, identifier: StrictString)
 }
 
 extension ParsedTypeReference {
@@ -98,7 +98,7 @@ extension ParsedTypeReference {
     case .statements:
       return .statements
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
-      return .enumerationCase(enumeration.key, identifier: identifier.identifierText())
+      return .enumerationCase(enumeration.key, identifier: identifier)
     }
   }
 }
@@ -225,14 +225,13 @@ extension ParsedTypeReference {
       )
     case .statements:
       break
-    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+    case .enumerationCase(enumeration: let enumeration, identifier: _):
       enumeration.validateReferences(
         requiredAccess: requiredAccess,
         allowTestOnlyAccess: allowTestOnlyAccess,
         referenceDictionary: referenceDictionary,
         errors: &errors
       )
-      #warning("Not validating identifier.")
     }
   }
 }
@@ -260,7 +259,7 @@ extension ParsedTypeReference {
       var result: [StrictString] = ["((("]
       result.append(contentsOf: enumeration.unresolvedGloballyUniqueIdentifierComponents())
       result.append("•")
-      result.append(identifier.identifierText())
+      result.append(identifier)
       result.append(")))")
       return result
     }

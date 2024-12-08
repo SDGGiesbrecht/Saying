@@ -147,6 +147,26 @@ extension ActionIntermediate {
     )
   }
 
+  static func enumerationCase(
+    names: Set<StrictString>,
+    enumerationType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: .enumerationCase(enumeration: enumerationType, identifier: names.identifier()),
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      isEnumerationCaseWrapper: true
+    )
+  }
+
   static func construct<Declaration>(
     _ declaration: Declaration,
     namespace: [Set<StrictString>]
