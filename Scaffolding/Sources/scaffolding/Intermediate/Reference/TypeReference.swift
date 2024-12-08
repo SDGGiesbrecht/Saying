@@ -26,7 +26,10 @@ extension TypeReference {
     case .statements:
       return .statements
     case .enumerationCase(let type, let identifier):
-      return .enumerationCase(type.resolving(fromReferenceLookup: referenceLookup), identifier: identifier)
+      return .enumerationCase(
+        type.resolving(fromReferenceLookup: referenceLookup),
+        identifier: referenceLookup.resolve(identifier: identifier)
+      )
     }
   }
 }
