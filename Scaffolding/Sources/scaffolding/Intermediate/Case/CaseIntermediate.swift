@@ -5,6 +5,8 @@ struct CaseIntermediate {
   var names: Set<StrictString>
   var contents: ParsedTypeReference?
   var referenceAction: ActionIntermediate?
+  var wrapAction: ActionIntermediate?
+  var unwrapAction: ActionIntermediate?
   var c: NativeActionImplementationIntermediate?
   var cSharp: NativeActionImplementationIntermediate?
   var javaScript: NativeActionImplementationIntermediate?
@@ -108,6 +110,12 @@ extension CaseIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       )
+    let wrapAction: ActionIntermediate? = contents == nil
+      ? nil
+      : nil
+    let unwrapAction: ActionIntermediate? = contents == nil
+      ? nil
+      : nil
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -117,6 +125,8 @@ extension CaseIntermediate {
         names: names,
         contents: contents,
         referenceAction: referenceAction,
+        wrapAction: wrapAction,
+        unwrapAction: unwrapAction,
         c: c,
         cSharp: cSharp,
         javaScript: javaScript,
@@ -138,6 +148,8 @@ extension CaseIntermediate {
       names: names,
       contents: contents?.resolvingExtensionContext(typeLookup: typeLookup),
       referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      wrapAction: wrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
       c: c,
       cSharp: cSharp,
       javaScript: javaScript,
@@ -157,6 +169,16 @@ extension CaseIntermediate {
       names: names,
       contents: contents?.specializing(typeLookup: typeLookup),
       referenceAction: referenceAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      wrapAction: wrapAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      unwrapAction: unwrapAction?.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace

@@ -86,6 +86,12 @@ extension ReferenceDictionary {
       if let action = enumerationCase.referenceAction {
         errors.append(contentsOf: add(action: action))
       }
+      if let action = enumerationCase.wrapAction {
+        errors.append(contentsOf: add(action: action))
+      }
+      if let action = enumerationCase.unwrapAction {
+        errors.append(contentsOf: add(action: action))
+      }
     }
     return errors
   }
