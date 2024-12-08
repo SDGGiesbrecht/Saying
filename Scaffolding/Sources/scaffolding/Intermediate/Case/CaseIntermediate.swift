@@ -4,7 +4,7 @@ import SDGText
 struct CaseIntermediate {
   var names: Set<StrictString>
   var contents: ParsedTypeReference?
-  var constantAction: ActionIntermediate?
+  var referenceAction: ActionIntermediate?
   var c: NativeActionImplementationIntermediate?
   var cSharp: NativeActionImplementationIntermediate?
   var javaScript: NativeActionImplementationIntermediate?
@@ -90,7 +90,7 @@ extension CaseIntermediate {
 
     let contents = (declaration.contents?.type).map({ ParsedTypeReference($0) })
 
-    let constantAction: ActionIntermediate? = contents == nil
+    let referenceAction: ActionIntermediate? = contents == nil
       ? ActionIntermediate.enumerationAction(
         names: names,
         returnValue: type,
@@ -111,7 +111,7 @@ extension CaseIntermediate {
       CaseIntermediate(
         names: names,
         contents: contents,
-        constantAction: constantAction,
+        referenceAction: referenceAction,
         c: c,
         cSharp: cSharp,
         javaScript: javaScript,
@@ -132,7 +132,7 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.resolvingExtensionContext(typeLookup: typeLookup),
-      constantAction: constantAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
       c: c,
       cSharp: cSharp,
       javaScript: javaScript,
@@ -151,7 +151,7 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.specializing(typeLookup: typeLookup),
-      constantAction: constantAction?.specializing(
+      referenceAction: referenceAction?.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
