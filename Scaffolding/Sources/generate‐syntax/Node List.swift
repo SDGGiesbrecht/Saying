@@ -1221,11 +1221,12 @@ extension Node {
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
           ),
-          
+
           Node(
             name: "Provision",
             kind: .alternates([
               Alternate(name: "thing", type: "ThingDeclaration"),
+              Alternate(name: "enumeration", type: "EnumerationDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "use", type: "Use"),
             ])

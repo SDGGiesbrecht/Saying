@@ -31,6 +31,13 @@ extension ExtensionIntermediate {
         case .success(let result):
           things.append(result)
         }
+      case .enumeration(let enumeration):
+        switch Thing.construct(enumeration, namespace: extensionNamespace) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ .brokenThing($0) }))
+        case .success(let result):
+          things.append(result)
+        }
       case .action(let action):
         switch ActionIntermediate.construct(action, namespace: extensionNamespace) {
         case .failure(let error):

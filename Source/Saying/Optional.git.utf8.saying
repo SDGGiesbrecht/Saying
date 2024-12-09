@@ -8,7 +8,7 @@ ability (clients)
 extension
  optional (thing)
  {
-  thing (clients)
+  enumeration (clients)
    (
     English: optional (thing)
    )
@@ -16,25 +16,25 @@ extension
    C♯: “” thing “¤(3F)”
    Kotlin: “” thing “¤(3F)”
    Swift: “” thing “¤(3F)”
+   {
+    case
+     (
+      English: none
+      Deutsch: keiner
+      français : aucun
+      ελληνικά: κανένας
+     )
+     C: “¤(28)NULL¤(29)” (stddef)
+     C♯: “¤(28)null¤(29)”
+     JavaScript: “¤(28)null¤(29)”
+     Kotlin: “¤(28)null¤(29)”
+     Swift: “¤(28)nil¤(29)”
+   }
 
   use (clients)
    storage of (optional (thing))
    {
    }
-
-  action (clients)
-   (
-    English: none
-    Deutsch: keiner
-    français : aucun
-    ελληνικά: κανένας
-   )
-   optional (thing)
-   C: “¤(28)NULL¤(29)” (stddef)
-   C♯: “¤(28)null¤(29)”
-   JavaScript: “¤(28)null¤(29)”
-   Kotlin: “¤(28)null¤(29)”
-   Swift: “¤(28)nil¤(29)”
 
   action (clients)
    [
