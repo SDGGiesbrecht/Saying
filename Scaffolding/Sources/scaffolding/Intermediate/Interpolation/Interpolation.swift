@@ -227,6 +227,31 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
+  static func enumerationWrap(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    valueType: ParsedTypeReference
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: [
+        ParameterIntermediate(
+          names: ["value"],
+          type: valueType,
+          passAction: .parameterAction(names: ["value"], parameters: .none, returnValue: nil),
+          executeAction: nil
+        ),
+        ParameterIntermediate(
+          names: ["case"],
+          type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier),
+          passAction: .parameterAction(names: ["case"], parameters: .none, returnValue: nil),
+          executeAction: nil
+        ),
+      ],
+      reorderings: [
+        "wrap () as ()": [0, 1]
+      ]
+    )
+  }
   static func enumerationUnwrap(
     enumerationType: ParsedTypeReference,
     caseIdentifier: StrictString,

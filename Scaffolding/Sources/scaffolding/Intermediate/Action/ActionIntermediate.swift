@@ -167,6 +167,30 @@ extension ActionIntermediate {
     )
   }
 
+  static func enumerationWrap(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    valueType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    let parameters = Interpolation<ParameterIntermediate>.enumerationWrap(
+      enumerationType: enumerationType,
+      caseIdentifier: caseIdentifier,
+      valueType: valueType
+    )
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: false,
+        names: parameters.names(),
+        namespace: [],
+        parameters: parameters,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    )
+  }
+
   static func enumerationUnwrap(
     enumerationType: ParsedTypeReference,
     caseIdentifier: StrictString,
