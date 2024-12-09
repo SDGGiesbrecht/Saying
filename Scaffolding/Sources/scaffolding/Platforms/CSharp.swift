@@ -46,7 +46,11 @@ enum CSharp: Platform {
     if simple {
       return "\(type).\(name)"
     } else {
-      return "new \(type).\(name)()"
+      if ignoringValue {
+        return "\(type).\(name)"
+      } else {
+        return "new \(type).\(name)()"
+      }
     }
   }
   static func caseDeclaration(

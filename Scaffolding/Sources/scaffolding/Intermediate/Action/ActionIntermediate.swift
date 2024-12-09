@@ -198,6 +198,13 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
+      cSharp: NativeActionImplementationIntermediate(
+        textComponents: ["new ", "(", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
       swift: NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
@@ -239,6 +246,16 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      cSharp:NativeActionImplementationIntermediate(
+        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
