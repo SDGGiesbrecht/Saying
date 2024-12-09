@@ -181,7 +181,7 @@ extension ActionIntermediate {
     )
     return ActionIntermediate(
       prototype: ActionPrototype(
-        isFlow: false,
+        isFlow: true,
         names: parameters.names(),
         namespace: [],
         parameters: parameters,
