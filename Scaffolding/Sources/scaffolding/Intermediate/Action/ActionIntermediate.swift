@@ -190,6 +190,13 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
+      c: NativeActionImplementationIntermediate(
+        textComponents: ["", "(", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
       swift: NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
@@ -221,6 +228,18 @@ extension ActionIntermediate {
         parameters: parameters,
         access: access,
         testOnlyAccess: testOnlyAccess
+      ),
+      c:NativeActionImplementationIntermediate(
+        textComponents: ["if (", ".enumeration_case == ", ") { ", " ", " = ", ".value.", ";", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
       ),
       swift: NativeActionImplementationIntermediate(
         textComponents: ["if case ", "(let ", ") = ", " {", "}"],

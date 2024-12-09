@@ -51,7 +51,7 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func caseReference(name: String, type: String, simple: Bool) -> String {
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     return "\(type).\(name)"
   }
   static func caseDeclaration(

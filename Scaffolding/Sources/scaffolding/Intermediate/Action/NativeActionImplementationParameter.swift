@@ -7,10 +7,10 @@ struct NativeActionImplementationParameter {
 }
 
 extension NativeActionImplementationParameter {
-  init(_ parameter: ParsedUninterruptedIdentifier) {
+  init(_ parameter: ParsedUninterruptedIdentifier, typeInstead: ParsedTypeReference? = nil) {
     name = parameter.identifierText()
     syntaxNode = parameter
-    typeInstead = nil
+    self.typeInstead = typeInstead
   }
 }
 

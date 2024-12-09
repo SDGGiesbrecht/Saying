@@ -23,7 +23,7 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Cases
-  static func caseReference(name: String, type: String, simple: Bool) -> String
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String
   static func caseDeclaration(
     name: String,
     contents: String?,
@@ -492,7 +492,8 @@ extension Platform {
       return caseReference(
         name: name,
         type: type,
-        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup)
+        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
+        ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
       )
     } else {
       let name = sanitize(
@@ -590,9 +591,8 @@ extension Platform {
         )
       case .statements:
         fatalError("Statements should have been handled elsewhere.")
-      case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
-        #warning("Incomplete.")
-        return "2nd"
+      case .enumerationCase:
+        fatalError("Enumeration cases should have been handled elsewhere.")
       }
     }
   }

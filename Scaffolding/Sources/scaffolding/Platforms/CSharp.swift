@@ -42,7 +42,7 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func caseReference(name: String, type: String, simple: Bool) -> String {
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
       return "\(type).\(name)"
     } else {
