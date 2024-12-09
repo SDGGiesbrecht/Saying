@@ -191,8 +191,9 @@ extension ActionIntermediate {
         testOnlyAccess: testOnlyAccess
       ),
       c: NativeActionImplementationIntermediate(
-        textComponents: ["", "(", ")"],
+        textComponents: ["((", ") {", ", ", "})"],
         parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, typeInstead: enumerationType),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
