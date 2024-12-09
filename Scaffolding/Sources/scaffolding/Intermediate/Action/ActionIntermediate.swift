@@ -205,6 +205,13 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
+      javaScript: NativeActionImplementationIntermediate(
+        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", "})"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
       swift: NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
@@ -237,7 +244,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
-      c:NativeActionImplementationIntermediate(
+      c: NativeActionImplementationIntermediate(
         textComponents: ["if (", ".enumeration_case == ", ") { ", " ", " = ", ".value.", ";", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
@@ -249,13 +256,23 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
-      cSharp:NativeActionImplementationIntermediate(
+      cSharp: NativeActionImplementationIntermediate(
         textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      javaScript: NativeActionImplementationIntermediate(
+        textComponents: ["if (", ".enumerationCase == ", ") { let ", " = ", ".value;", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
