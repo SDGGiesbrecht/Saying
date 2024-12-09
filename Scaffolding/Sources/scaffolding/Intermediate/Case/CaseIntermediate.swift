@@ -113,9 +113,15 @@ extension CaseIntermediate {
     let wrapAction: ActionIntermediate? = contents == nil
       ? nil
       : nil
-    let unwrapAction: ActionIntermediate? = contents == nil
-      ? nil
-      : nil
+    let unwrapAction: ActionIntermediate? = contents.map({ valueType in
+      ActionIntermediate.enumerationUnwrap(
+        enumerationType: type,
+        caseIdentifier: names.identifier(),
+        valueType: valueType,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    })
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))

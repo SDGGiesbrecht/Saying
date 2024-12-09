@@ -225,3 +225,46 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
     )
   }
 }
+
+extension Interpolation where InterpolationParameter == ParameterIntermediate {
+  static func enumerationUnwrap(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    valueType: ParsedTypeReference
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: [
+        ParameterIntermediate(
+          names: ["enumeration"],
+          type: enumerationType,
+          passAction: .parameterAction(names: ["enumeration"], parameters: .none, returnValue: nil),
+          executeAction: nil
+        ),
+        ParameterIntermediate(
+          names: ["case"],
+          type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier),
+          passAction: .parameterAction(names: ["case"], parameters: .none, returnValue: nil),
+          executeAction: nil
+        ),
+        ParameterIntermediate(
+          names: ["value"],
+          type: valueType,
+          passAction: .parameterAction(names: ["value"], parameters: .none, returnValue: nil),
+          executeAction: nil
+        ),
+        ParameterIntermediate(
+          names: ["consequence"],
+          type: .statements,
+          passAction: .parameterAction(names: ["consequence"], parameters: .none, returnValue: nil),
+          executeAction: nil
+        ),
+      ],
+      reorderings: [
+        "if () is (), unwrap it as (), ()": [0, 1, 2, 3]
+      ]
+    )
+  }
+  func names() -> Set<StrictString> {
+    return Set(reorderings.keys)
+  }
+}
