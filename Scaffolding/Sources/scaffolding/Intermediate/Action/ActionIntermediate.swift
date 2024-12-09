@@ -185,6 +185,7 @@ extension ActionIntermediate {
         names: parameters.names(),
         namespace: [],
         parameters: parameters,
+        returnValue: enumerationType,
         access: access,
         testOnlyAccess: testOnlyAccess
       )
