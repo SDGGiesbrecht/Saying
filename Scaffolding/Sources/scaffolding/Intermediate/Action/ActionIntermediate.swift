@@ -188,6 +188,12 @@ extension ActionIntermediate {
         returnValue: enumerationType,
         access: access,
         testOnlyAccess: testOnlyAccess
+      ),
+      swift: NativeActionImplementationIntermediate(
+        textComponents: ["..."],
+        parameters: [
+          //NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "...")!)
+        ]
       )
     )
   }
@@ -212,6 +218,15 @@ extension ActionIntermediate {
         parameters: parameters,
         access: access,
         testOnlyAccess: testOnlyAccess
+      ),
+      swift: NativeActionImplementationIntermediate(
+        textComponents: ["if case ", "(let ", ") = ", " {", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
       )
     )
   }

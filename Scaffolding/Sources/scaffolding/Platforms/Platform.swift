@@ -242,8 +242,8 @@ extension Platform {
       )
     case .statements:
       fatalError("Statements have no platform type.")
-    case .enumerationCase:
-      fatalError("Enumeration cases have no platform type.")
+    case .enumerationCase(enumeration: let enumeration, identifier: _):
+      return source(for: enumeration, referenceLookup: referenceLookup)
     }
   }
 
@@ -406,6 +406,7 @@ extension Platform {
         )
       ]
       if bareAction.isFlow,
+        !bareAction.isEnumerationCaseWrapper,
         let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
@@ -587,9 +588,10 @@ extension Platform {
           returnValue: returnValue
         )
       case .statements:
-        fatalError("Statements have no platform type.")
-      case .enumerationCase:
-        fatalError("Enumeration cases have no platform type.")
+        fatalError("Statements should have been handled elsewhere.")
+      case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+        #warning("Incomplete.")
+        return "2nd"
       }
     }
   }
