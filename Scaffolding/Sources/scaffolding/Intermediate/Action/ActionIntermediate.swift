@@ -212,6 +212,13 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
+      kotlin: NativeActionImplementationIntermediate(
+        textComponents: ["", "(", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
       swift: NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
@@ -268,6 +275,16 @@ extension ActionIntermediate {
       ),
       javaScript: NativeActionImplementationIntermediate(
         textComponents: ["if (", ".enumerationCase == ", ") { let ", " = ", ".value;", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      kotlin: NativeActionImplementationIntermediate(
+        textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
