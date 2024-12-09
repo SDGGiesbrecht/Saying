@@ -13,6 +13,7 @@ struct ActionIntermediate {
   var declaration: ParsedActionDeclarationPrototype?
   var isReferenceWrapper: Bool = false
   var isEnumerationCaseWrapper: Bool = false
+  var isEnumerationValueWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
@@ -195,7 +196,8 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
-      )
+      ),
+      isEnumerationValueWrapper: true
     )
   }
 
