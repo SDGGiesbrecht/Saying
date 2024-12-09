@@ -13,6 +13,7 @@ struct ActionIntermediate {
   var declaration: ParsedActionDeclarationPrototype?
   var isReferenceWrapper: Bool = false
   var isEnumerationCaseWrapper: Bool = false
+  var isEnumerationValueWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
   var coveredIdentifier: StrictString?
 
@@ -56,7 +57,7 @@ extension ActionIntermediate {
     let resolvedReturnValue: ParsedTypeReference?
     if isReferenceWrapper {
       switch returnValue {
-      case .simple, .compound, .statements, .none:
+      case .simple, .compound, .statements, .enumerationCase, .none:
         fatalError("A real action reference would produce an action.")
       case .action(parameters: let parameters, returnValue: let returnValue):
         resolvedParameters = parameters
@@ -144,6 +145,163 @@ extension ActionIntermediate {
       kotlin: kotlin,
       swift: swift,
       isEnumerationCaseWrapper: true
+    )
+  }
+
+  static func enumerationCase(
+    names: Set<StrictString>,
+    enumerationType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: .enumerationCase(enumeration: enumerationType, identifier: names.identifier()),
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      isEnumerationCaseWrapper: true
+    )
+  }
+
+  static func enumerationWrap(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    valueType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    let parameters = Interpolation<ParameterIntermediate>.enumerationWrap(
+      enumerationType: enumerationType,
+      caseIdentifier: caseIdentifier,
+      valueType: valueType
+    )
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: parameters.names(),
+        namespace: [],
+        parameters: parameters,
+        returnValue: enumerationType,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      c: NativeActionImplementationIntermediate(
+        textComponents: ["((", ") {", ", ", "})"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, typeInstead: enumerationType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
+      cSharp: NativeActionImplementationIntermediate(
+        textComponents: ["new ", "(", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
+      javaScript: NativeActionImplementationIntermediate(
+        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", "})"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
+      kotlin: NativeActionImplementationIntermediate(
+        textComponents: ["", "(", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
+      swift: NativeActionImplementationIntermediate(
+        textComponents: ["", "(", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+        ]
+      ),
+      isEnumerationValueWrapper: true
+    )
+  }
+
+  static func enumerationUnwrap(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    valueType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    let parameters = Interpolation<ParameterIntermediate>.enumerationUnwrap(
+      enumerationType: enumerationType,
+      caseIdentifier: caseIdentifier,
+      valueType: valueType
+    )
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: parameters.names(),
+        namespace: [],
+        parameters: parameters,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      c: NativeActionImplementationIntermediate(
+        textComponents: ["if (", ".enumeration_case == ", ") { ", " ", " = ", ".value.", ";", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      cSharp: NativeActionImplementationIntermediate(
+        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      javaScript: NativeActionImplementationIntermediate(
+        textComponents: ["if (", ".enumerationCase == ", ") { let ", " = ", ".value;", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      kotlin: NativeActionImplementationIntermediate(
+        textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      ),
+      swift: NativeActionImplementationIntermediate(
+        textComponents: ["if case ", "(let ", ") = ", " {", "}"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+        ]
+      )
     )
   }
 

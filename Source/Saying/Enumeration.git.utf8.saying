@@ -46,12 +46,16 @@ enumeration
 
 action
  [
-  test (verify (use example enumeration (nothing)))
+  test (verify (not (use example enumeration (nothing))))
+  test (verify (use example enumeration (wrap (true) as (something))))
  ]
  (
   English: use example enumeration (value: example enumeration)
  )
  truth value
  {
-  ← true
+  if (value) is (something), unwrap it as (• unwrapped: truth value), {
+   ← unwrapped
+  }
+  ← false
  }

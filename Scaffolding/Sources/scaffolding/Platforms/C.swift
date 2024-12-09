@@ -46,11 +46,15 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func caseReference(name: String, type: String, simple: Bool) -> String {
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
       return "\(name)"
     } else {
-      return "((\(type)) {\(name)})"
+      if ignoringValue {
+        return "\(name)"
+      } else {
+        return "((\(type)) {\(name)})"
+      }
     }
   }
   static func caseDeclaration(

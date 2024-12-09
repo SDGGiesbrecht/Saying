@@ -23,7 +23,7 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Cases
-  static func caseReference(name: String, type: String, simple: Bool) -> String
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String
   static func caseDeclaration(
     name: String,
     contents: String?,
@@ -198,7 +198,7 @@ extension Platform {
         identifier.name(),
         components: components.map({ $0.key })
       )!
-    case .action, .statements:
+    case .action, .statements, .enumerationCase:
       return false
     }
     return intermediate.isSimple
@@ -242,6 +242,8 @@ extension Platform {
       )
     case .statements:
       fatalError("Statements have no platform type.")
+    case .enumerationCase(enumeration: let enumeration, identifier: _):
+      return source(for: enumeration, referenceLookup: referenceLookup)
     }
   }
 
@@ -299,7 +301,7 @@ extension Platform {
     }
     if ¬isTyped,
       thing.cases.allSatisfy({ enumerationCase in
-        return enumerationCase.constantAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
+        return enumerationCase.referenceAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
       }) {
       return nil
     }
@@ -404,6 +406,8 @@ extension Platform {
         )
       ]
       if bareAction.isFlow,
+        !bareAction.isEnumerationCaseWrapper,
+        !bareAction.isEnumerationValueWrapper,
         let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
@@ -488,7 +492,8 @@ extension Platform {
       return caseReference(
         name: name,
         type: type,
-        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup)
+        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
+        ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
       )
     } else {
       let name = sanitize(
@@ -585,7 +590,9 @@ extension Platform {
           returnValue: returnValue
         )
       case .statements:
-        fatalError("Statements have no platform type.")
+        fatalError("Statements should have been handled elsewhere.")
+      case .enumerationCase:
+        fatalError("Enumeration cases should have been handled elsewhere.")
       }
     }
   }
@@ -739,7 +746,11 @@ extension Platform {
 
     let moduleReferenceLookup = module.referenceDictionary
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
-      .lazy.filter({ ¬$0.isCoverageWrapper })
+      .lazy.filter({ action in
+        return ¬action.isCoverageWrapper
+        ∧ ¬(action.isFlow ∧ action.isEnumerationCaseWrapper)
+        ∧ ¬action.isEnumerationValueWrapper
+      })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })

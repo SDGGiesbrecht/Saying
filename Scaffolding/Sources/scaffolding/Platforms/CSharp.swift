@@ -42,11 +42,15 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func caseReference(name: String, type: String, simple: Bool) -> String {
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
       return "\(type).\(name)"
     } else {
-      return "new \(type).\(name)()"
+      if ignoringValue {
+        return "\(type).\(name)"
+      } else {
+        return "new \(type).\(name)()"
+      }
     }
   }
   static func caseDeclaration(
@@ -67,7 +71,7 @@ enum CSharp: Platform {
       let implementation: String
       if let contents = contents {
         result.append(contentsOf: [
-          "\(indent)\(indent)readonly \(contents) Value;",
+          "\(indent)\(indent)internal readonly \(contents) Value;",
         ])
         parameter = "\(contents) value"
         implementation = " this.Value = value; "

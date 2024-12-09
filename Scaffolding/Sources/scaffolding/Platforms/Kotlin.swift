@@ -51,7 +51,7 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func caseReference(name: String, type: String, simple: Bool) -> String {
+  static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     return "\(type).\(name)"
   }
   static func caseDeclaration(
@@ -65,7 +65,7 @@ enum Kotlin: Platform {
       return "\(name),"
     } else {
       if let contents = contents {
-        return "class \(name)(val contents: \(contents)) : \(parentType)()"
+        return "class \(name)(val value: \(contents)) : \(parentType)()"
       } else {
         return "object \(name) : \(parentType)()"
       }

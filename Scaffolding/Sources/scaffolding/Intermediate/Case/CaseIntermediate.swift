@@ -4,7 +4,9 @@ import SDGText
 struct CaseIntermediate {
   var names: Set<StrictString>
   var contents: ParsedTypeReference?
-  var constantAction: ActionIntermediate?
+  var referenceAction: ActionIntermediate?
+  var wrapAction: ActionIntermediate?
+  var unwrapAction: ActionIntermediate?
   var c: NativeActionImplementationIntermediate?
   var cSharp: NativeActionImplementationIntermediate?
   var javaScript: NativeActionImplementationIntermediate?
@@ -90,7 +92,7 @@ extension CaseIntermediate {
 
     let contents = (declaration.contents?.type).map({ ParsedTypeReference($0) })
 
-    let constantAction: ActionIntermediate? = contents == nil
+    let referenceAction: ActionIntermediate? = contents == nil
       ? ActionIntermediate.enumerationAction(
         names: names,
         returnValue: type,
@@ -102,7 +104,30 @@ extension CaseIntermediate {
         kotlin: kotlin,
         swift: swift
       )
-      : nil
+      : ActionIntermediate.enumerationCase(
+        names: names,
+        enumerationType: type,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    let wrapAction: ActionIntermediate? = contents.map({ valueType in
+      ActionIntermediate.enumerationWrap(
+        enumerationType: type,
+        caseIdentifier: names.identifier(),
+        valueType: valueType,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    })
+    let unwrapAction: ActionIntermediate? = contents.map({ valueType in
+      ActionIntermediate.enumerationUnwrap(
+        enumerationType: type,
+        caseIdentifier: names.identifier(),
+        valueType: valueType,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    })
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -111,7 +136,9 @@ extension CaseIntermediate {
       CaseIntermediate(
         names: names,
         contents: contents,
-        constantAction: constantAction,
+        referenceAction: referenceAction,
+        wrapAction: wrapAction,
+        unwrapAction: unwrapAction,
         c: c,
         cSharp: cSharp,
         javaScript: javaScript,
@@ -132,7 +159,9 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.resolvingExtensionContext(typeLookup: typeLookup),
-      constantAction: constantAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      wrapAction: wrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
       c: c,
       cSharp: cSharp,
       javaScript: javaScript,
@@ -151,7 +180,17 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.specializing(typeLookup: typeLookup),
-      constantAction: constantAction?.specializing(
+      referenceAction: referenceAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      wrapAction: wrapAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      unwrapAction: unwrapAction?.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
