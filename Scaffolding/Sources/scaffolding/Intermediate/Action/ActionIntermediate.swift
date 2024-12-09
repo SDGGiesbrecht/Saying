@@ -190,9 +190,10 @@ extension ActionIntermediate {
         testOnlyAccess: testOnlyAccess
       ),
       swift: NativeActionImplementationIntermediate(
-        textComponents: ["..."],
+        textComponents: ["", "(", ")"],
         parameters: [
-          //NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "...")!)
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       )
     )
