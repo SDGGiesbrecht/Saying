@@ -181,14 +181,12 @@ extension CaseIntermediate {
 
     let contents = (declaration.contents?.type).map({ ParsedTypeReference($0) })
 
-    let referenceAction: ActionIntermediate? = contents == nil
-      ? nil
-      : ActionIntermediate.enumerationCase(
-        names: names,
-        enumerationType: type,
-        access: access,
-        testOnlyAccess: testOnlyAccess
-      )
+    let referenceAction = ActionIntermediate.enumerationCase(
+      names: names,
+      enumerationType: type,
+      access: access,
+      testOnlyAccess: testOnlyAccess
+    )
     let wrapAction: ActionIntermediate? = contents.map({ valueType in
       ActionIntermediate.enumerationWrap(
         enumerationType: type,

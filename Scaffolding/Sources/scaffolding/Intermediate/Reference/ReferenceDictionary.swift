@@ -197,6 +197,15 @@ extension ReferenceDictionary {
         if set.count == 1 {
           return set.values.first
         }
+        if set.count == 2,
+          let create = set.first(
+            where: { if case .enumerationCase = $0.key { return false } else { return true } }
+          ),
+          let _ = set.first(
+            where: { if case .enumerationCase = $0.key { return true } else { return false } }
+          ) {
+          return create.value
+        }
       }
     }
     return nil
