@@ -5,6 +5,19 @@ extension CaseIntermediate {
     case invalidImport(ParsedNativeActionImplementation)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
+    var message: String {
+      switch self {
+      case .unknownLanguage:
+        return defaultMessage
+      case .brokenNativeCaseImplementation(let error):
+        return error.message
+      case .invalidImport:
+        return defaultMessage
+      case .documentedParameterNotFound:
+        return defaultMessage
+      }
+    }
+
     var range: Slice<UTF8Segments> {
       switch self {
       case .unknownLanguage(let language):
