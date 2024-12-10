@@ -34,27 +34,27 @@ enumeration
  {
   case
    (
-    English: something
+    English: example case with something
    )
    truth value
 
   case
    (
-    English: nothing
+    English: example case with nothing
    )
  }
 
 action
  [
-  test (verify (not (use example enumeration (nothing))))
-  test (verify (use example enumeration (wrap (true) as (something))))
+  test (verify (not (use example enumeration (example case with nothing))))
+  test (verify (use example enumeration (wrap (true) as (example case with something))))
  ]
  (
   English: use example enumeration (value: example enumeration)
  )
  truth value
  {
-  if (value) is (something), unwrap it as (• unwrapped: truth value), {
+  if (value) is (example case with something), unwrap it as (• unwrapped: truth value), {
    ← unwrapped
   }
   ← false

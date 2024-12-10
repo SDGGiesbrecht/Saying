@@ -4,6 +4,7 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
+#error("exists, does not exist and unwrap if all rely of placeholder native implementations.")
 enum C: Platform {
 
   static var directoryName: String {

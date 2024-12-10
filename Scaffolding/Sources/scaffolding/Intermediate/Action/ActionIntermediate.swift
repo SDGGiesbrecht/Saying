@@ -173,7 +173,12 @@ extension ActionIntermediate {
     caseIdentifier: StrictString,
     valueType: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationWrap(
       enumerationType: enumerationType,
@@ -190,7 +195,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
-      c: NativeActionImplementationIntermediate(
+      c: c ?? NativeActionImplementationIntermediate(
         textComponents: ["((", ") {", ", ", "})"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, typeInstead: enumerationType),
@@ -198,28 +203,28 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      cSharp: NativeActionImplementationIntermediate(
+      cSharp: cSharp ?? NativeActionImplementationIntermediate(
         textComponents: ["new ", "(", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      javaScript: NativeActionImplementationIntermediate(
+      javaScript: javaScript ?? NativeActionImplementationIntermediate(
         textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", "})"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      kotlin: NativeActionImplementationIntermediate(
+      kotlin: kotlin ?? NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      swift: NativeActionImplementationIntermediate(
+      swift: swift ?? NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
@@ -235,7 +240,12 @@ extension ActionIntermediate {
     caseIdentifier: StrictString,
     valueType: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationUnwrap(
       enumerationType: enumerationType,
@@ -251,7 +261,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
-      c: NativeActionImplementationIntermediate(
+      c: c ?? NativeActionImplementationIntermediate(
         textComponents: ["if (", ".enumeration_case == ", ") { ", " ", " = ", ".value.", ";", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
@@ -263,7 +273,7 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
-      cSharp: NativeActionImplementationIntermediate(
+      cSharp: cSharp ?? NativeActionImplementationIntermediate(
         textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
@@ -273,7 +283,7 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
-      javaScript: NativeActionImplementationIntermediate(
+      javaScript: javaScript ?? NativeActionImplementationIntermediate(
         textComponents: ["if (", ".enumerationCase == ", ") { let ", " = ", ".value;", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
@@ -283,7 +293,7 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
-      kotlin: NativeActionImplementationIntermediate(
+      kotlin: kotlin ?? NativeActionImplementationIntermediate(
         textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
@@ -293,7 +303,7 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
-      swift: NativeActionImplementationIntermediate(
+      swift: swift ?? NativeActionImplementationIntermediate(
         textComponents: ["if case ", "(let ", ") = ", " {", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
@@ -454,6 +464,9 @@ extension ActionIntermediate {
       swift: swift,
       implementation: implementation,
       declaration: declaration,
+      isReferenceWrapper: isReferenceWrapper,
+      isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+      isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
     )
@@ -510,6 +523,9 @@ extension ActionIntermediate {
         swift: swift,
         implementation: implementation,
         declaration: nil,
+        isReferenceWrapper: isReferenceWrapper,
+        isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+        isEnumerationValueWrapper: isEnumerationValueWrapper,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier
       )
@@ -559,6 +575,9 @@ extension ActionIntermediate {
       swift: swift?.specializing(typeLookup: nativeImplementationTypeLookup),
       implementation: implementation,
       declaration: nil,
+      isReferenceWrapper: isReferenceWrapper,
+      isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+      isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
     )

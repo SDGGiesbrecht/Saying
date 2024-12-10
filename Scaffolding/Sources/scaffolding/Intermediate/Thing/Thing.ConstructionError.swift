@@ -9,6 +9,23 @@ extension Thing {
     case documentedParameterNotFound(ParsedParameterDocumentation)
     case brokenCaseImplementation(CaseIntermediate.ConstructionError)
 
+    var message: String {
+      switch self {
+      case .brokenParameterInterpolation(let error):
+        return error.message
+      case .unknownLanguage:
+        return defaultMessage
+      case .brokenNativeImplementation(let error):
+        return error.message
+      case .invalidImport:
+        return defaultMessage
+      case .documentedParameterNotFound:
+        return defaultMessage
+      case .brokenCaseImplementation(let error):
+        return error.message
+      }
+    }
+
     var range: Slice<UTF8Segments> {
       switch self {
       case .brokenParameterInterpolation(let error):
