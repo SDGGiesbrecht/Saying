@@ -83,12 +83,8 @@ extension ReferenceDictionary {
       .map({ $0.resolvedType!.key })
     things[identifier, default: [:]][parameters] = thing
     for enumerationCase in thing.cases {
-      if let action = enumerationCase.referenceAction {
-        errors.append(contentsOf: add(action: action))
-      }
-      if let action = enumerationCase.wrapAction {
-        errors.append(contentsOf: add(action: action))
-      }
+      errors.append(contentsOf: add(action: enumerationCase.referenceAction))
+      errors.append(contentsOf: add(action: enumerationCase.wrapAction))
       if let action = enumerationCase.unwrapAction {
         errors.append(contentsOf: add(action: action))
       }

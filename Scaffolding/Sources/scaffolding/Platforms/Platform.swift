@@ -303,7 +303,7 @@ extension Platform {
     }
     if ¬isTyped,
       thing.cases.allSatisfy({ enumerationCase in
-        return enumerationCase.referenceAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
+        return nativeImplementation(of: enumerationCase.referenceAction) ≠ nil
       }) {
       return nil
     }

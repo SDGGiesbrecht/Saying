@@ -4,8 +4,8 @@ import SDGText
 struct CaseIntermediate {
   var names: Set<StrictString>
   var contents: ParsedTypeReference?
-  var referenceAction: ActionIntermediate?
-  var wrapAction: ActionIntermediate?
+  var referenceAction: ActionIntermediate
+  var wrapAction: ActionIntermediate
   var unwrapAction: ActionIntermediate?
   var checkAction: ActionIntermediate?
   var documentation: DocumentationIntermediate?
@@ -187,7 +187,7 @@ extension CaseIntermediate {
       access: access,
       testOnlyAccess: testOnlyAccess
     )
-    let wrapAction: ActionIntermediate? = contents.map({ valueType in
+    let wrapAction: ActionIntermediate = contents.map({ valueType in
       ActionIntermediate.enumerationWrap(
         enumerationType: type,
         caseIdentifier: names.identifier(),
@@ -265,8 +265,8 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.resolvingExtensionContext(typeLookup: typeLookup),
-      referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
-      wrapAction: wrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      referenceAction: referenceAction.resolvingExtensionContext(typeLookup: typeLookup),
+      wrapAction: wrapAction.resolvingExtensionContext(typeLookup: typeLookup),
       unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
       checkAction: checkAction?.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
@@ -282,12 +282,12 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.specializing(typeLookup: typeLookup),
-      referenceAction: referenceAction?.specializing(
+      referenceAction: referenceAction.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
       ),
-      wrapAction: wrapAction?.specializing(
+      wrapAction: wrapAction.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
