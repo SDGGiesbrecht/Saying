@@ -116,7 +116,12 @@ extension CaseIntermediate {
         caseIdentifier: names.identifier(),
         valueType: valueType,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
       )
     })
     let unwrapAction: ActionIntermediate? = contents.map({ valueType in

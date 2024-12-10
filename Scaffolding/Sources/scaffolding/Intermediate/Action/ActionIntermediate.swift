@@ -173,7 +173,12 @@ extension ActionIntermediate {
     caseIdentifier: StrictString,
     valueType: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationWrap(
       enumerationType: enumerationType,
@@ -190,7 +195,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess
       ),
-      c: NativeActionImplementationIntermediate(
+      c: c ?? NativeActionImplementationIntermediate(
         textComponents: ["((", ") {", ", ", "})"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, typeInstead: enumerationType),
@@ -198,28 +203,28 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      cSharp: NativeActionImplementationIntermediate(
+      cSharp: cSharp ?? NativeActionImplementationIntermediate(
         textComponents: ["new ", "(", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      javaScript: NativeActionImplementationIntermediate(
+      javaScript: javaScript ?? NativeActionImplementationIntermediate(
         textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", "})"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      kotlin: NativeActionImplementationIntermediate(
+      kotlin: kotlin ?? NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
         ]
       ),
-      swift: NativeActionImplementationIntermediate(
+      swift: swift ?? NativeActionImplementationIntermediate(
         textComponents: ["", "(", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
