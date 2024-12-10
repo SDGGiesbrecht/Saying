@@ -36,7 +36,6 @@ extension
       français : rien
       ελληνικά: τίποτα
      )
-     C: “¤(28)NULL¤(29)” (stddef)
      C♯: “¤(28)null¤(29)”
      JavaScript: “¤(28)null¤(29)”
      Kotlin: “¤(28)null¤(29)”
