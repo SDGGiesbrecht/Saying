@@ -7,7 +7,7 @@ struct CaseIntermediate {
   var referenceAction: ActionIntermediate
   var wrapAction: ActionIntermediate
   var unwrapAction: ActionIntermediate?
-  var checkAction: ActionIntermediate?
+  var checkAction: ActionIntermediate
   var documentation: DocumentationIntermediate?
   var declaration: ParsedCaseDeclaration
 }
@@ -225,19 +225,17 @@ extension CaseIntermediate {
         swift: swiftRetrieve
       )
     })
-    let checkAction: ActionIntermediate? = contents.map({ _ in
-      ActionIntermediate.enumerationCheck(
-        enumerationType: type,
-        caseIdentifier: names.identifier(),
-        access: access,
-        testOnlyAccess: testOnlyAccess,
-        c: cCheck,
-        cSharp: cSharpCheck,
-        javaScript: javaScriptCheck,
-        kotlin: kotlinCheck,
-        swift: swiftCheck
-      )
-    })
+    let checkAction = ActionIntermediate.enumerationCheck(
+      enumerationType: type,
+      caseIdentifier: names.identifier(),
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      c: cCheck,
+      cSharp: cSharpCheck,
+      javaScript: javaScriptCheck,
+      kotlin: kotlinCheck,
+      swift: swiftCheck
+    )
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -268,7 +266,7 @@ extension CaseIntermediate {
       referenceAction: referenceAction.resolvingExtensionContext(typeLookup: typeLookup),
       wrapAction: wrapAction.resolvingExtensionContext(typeLookup: typeLookup),
       unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
-      checkAction: checkAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      checkAction: checkAction.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
     )
@@ -297,7 +295,7 @@ extension CaseIntermediate {
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
       ),
-      checkAction: checkAction?.specializing(
+      checkAction: checkAction.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
