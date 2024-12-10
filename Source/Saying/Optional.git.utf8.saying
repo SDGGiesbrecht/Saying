@@ -87,7 +87,7 @@ extension
    (
     English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
    )
-   C: “if ¤(28)” optional “¤(29).enumeration¤(5F)case == etwas ¤(7B) ” thing “ ” unwrapped “ = ” optional “.value.etwas; ” consequence “¤(7D)”
+   C: “if ¤(28)¤(28)” optional “¤(29).enumeration¤(5F)case == etwas¤(29) ¤(7B) ” thing “ ” unwrapped “ = ” optional “.value.etwas; ” consequence “¤(7D)”
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
    JavaScript: “let ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
    Kotlin: “val ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”

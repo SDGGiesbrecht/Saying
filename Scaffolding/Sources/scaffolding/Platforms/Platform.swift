@@ -228,8 +228,10 @@ extension Platform {
         }
         return result
       } else {
-        // Only native types are implemented so far, so this is only reachable for untyped target languages.
-        return ""
+        return sanitize(
+          identifier: type.names.identifier(),
+          leading: true
+        )
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
