@@ -459,6 +459,9 @@ extension ActionIntermediate {
       swift: swift,
       implementation: implementation,
       declaration: declaration,
+      isReferenceWrapper: isReferenceWrapper,
+      isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+      isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
     )
@@ -515,6 +518,9 @@ extension ActionIntermediate {
         swift: swift,
         implementation: implementation,
         declaration: nil,
+        isReferenceWrapper: isReferenceWrapper,
+        isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+        isEnumerationValueWrapper: isEnumerationValueWrapper,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier
       )
@@ -564,6 +570,9 @@ extension ActionIntermediate {
       swift: swift?.specializing(typeLookup: nativeImplementationTypeLookup),
       implementation: implementation,
       declaration: nil,
+      isReferenceWrapper: isReferenceWrapper,
+      isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+      isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
     )
