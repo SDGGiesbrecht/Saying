@@ -19,10 +19,10 @@ extension
    {
     case
      (
-      English: none
-      Deutsch: keiner
-      français : aucun
-      ελληνικά: κανένας
+      English: nothing
+      Deutsch: nichts
+      français : rien
+      ελληνικά: τίποτα
      )
      C: “¤(28)NULL¤(29)” (stddef)
      C♯: “¤(28)null¤(29)”
@@ -38,7 +38,7 @@ extension
 
   action (clients)
    [
-    test (verify (not ((none) exists)))
+    test (verify (not ((nothing) exists)))
    ]
    (
     English: (thing: optional (thing)) exists
@@ -56,7 +56,7 @@ extension
 
   action (clients)
    [
-    test (verify ((none) does not exist))
+    test (verify ((nothing) does not exist))
    ]
    (
     English: (thing: optional (thing)) does not exist
@@ -109,7 +109,7 @@ action
 action
  [
   test (verify (unwrapping (optional true value) works))
-  test (verify (not (unwrapping (none) works)))
+  test (verify (not (unwrapping (nothing) works)))
  ]
  (
   English: unwrapping (optional: optional (truth value)) works
@@ -132,6 +132,6 @@ action
  truth value
  {
   let (• storage: optional (truth value)) start as (optional true value)
-  change (storage) to (none)
+  change (storage) to (nothing)
   ← (storage) does not exist
  }
