@@ -24,10 +24,10 @@ extension
       ελληνικά: κάτι
      )
      thing
-     C♯: “¤(28)” value “¤(29)”/“if ¤(28)” enumeration “ is ” thing “ ” value “¤(29) ¤(7B)” consequence “¤(7D)”
-     JavaScript: “¤(28)” value “¤(29)”/“let ” value “ = ¤(28)” enumeration “¤(29); if ¤(28)” value “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
-     Kotlin: “¤(28)” value “¤(29)”/“val ” value “ = ¤(28)” enumeration “¤(29); if ¤(28)” value “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
-     Swift: “¤(28)” value “¤(29)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”
+     C♯: “¤(28)” value “¤(29)”/“if ¤(28)” enumeration “ is ” thing “ ” value “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
+     JavaScript: “¤(28)” value “¤(29)”/“let ” value “ = ¤(28)” enumeration “¤(29); if ¤(28)” value “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
+     Kotlin: “¤(28)” value “¤(29)”/“val ” value “ = ¤(28)” enumeration “¤(29); if ¤(28)” value “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
+     Swift: “¤(28)” value “¤(29)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
 
     case
      (

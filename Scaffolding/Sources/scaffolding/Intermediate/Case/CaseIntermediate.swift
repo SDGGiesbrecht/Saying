@@ -150,6 +150,31 @@ extension CaseIntermediate {
               errors.append(ConstructionError.unknownLanguage(implementation.language))
             }
           }
+          switch NativeActionImplementationIntermediate.construct(
+            implementation: implementation.expressions.check
+          ) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
+          case .success(let constructed):
+            switch implementation.language.identifierText() {
+            case "C":
+              cCheck = constructed
+            case "C♯":
+              cSharpCheck = constructed
+              disallowImports(in: implementation.expressions.check, errors: &errors)
+            case "JavaScript":
+              javaScriptCheck = constructed
+              disallowImports(in: implementation.expressions.check, errors: &errors)
+            case "Kotlin":
+              kotlinCheck = constructed
+              disallowImports(in: implementation.expressions.check, errors: &errors)
+            case "Swift":
+              swiftCheck = constructed
+              disallowImports(in: implementation.expressions.check, errors: &errors)
+            default:
+              errors.append(ConstructionError.unknownLanguage(implementation.language))
+            }
+          }
         }
       }
     }
