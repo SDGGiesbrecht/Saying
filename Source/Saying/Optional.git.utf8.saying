@@ -12,7 +12,6 @@ extension
    (
     English: optional (thing)
    )
-   C: “” thing “¤(2A)”
    C♯: “” thing “¤(3F)”
    Kotlin: “” thing “¤(3F)”
    Swift: “” thing “¤(3F)”
