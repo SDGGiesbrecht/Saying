@@ -902,11 +902,13 @@ extension Node {
             ])
           ),
           Node(
-            name: "NativeActionPair",
+            name: "NativeStorageCase",
             kind: .compound(children: [
               Child(name: "store", type: "NativeAction", kind: .required),
-              Child(name: "slash", type: "Slash", kind: .required),
+              Child(name: "firstSlash", type: "Slash", kind: .required),
               Child(name: "retrieve", type: "NativeAction", kind: .required),
+              Child(name: "secondSlash", type: "Slash", kind: .required),
+              Child(name: "check", type: "NativeAction", kind: .required),
             ])
           ),
           Node(
@@ -926,11 +928,11 @@ extension Node {
             ])
           ),
           Node(
-            name: "NativeActionImplementationPair",
+            name: "NativeStorageCaseImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "expressions", type: "NativeActionPair", kind: .required),
+              Child(name: "expressions", type: "NativeStorageCase", kind: .required),
             ])
           ),
           Node(
@@ -978,9 +980,9 @@ extension Node {
             fixedSeparator: true
           ),
           Node.separatedList(
-            name: "NativeActionImplementationPairs",
+            name: "NativeStorageCaseImplementations",
             entryName: "implementation", entryNamePlural: "implementations",
-            entryType: "NativeActionImplementationPair",
+            entryType: "NativeStorageCaseImplementation",
             separatorName: "lineBreak",
             separatorType: "LineBreak",
             fixedSeparator: true
@@ -1004,17 +1006,17 @@ extension Node {
             ])
           ),
           Node(
-            name: "CaseImplementations",
+            name: "EmptyCaseImplementations",
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "implementations", type: "NativeActionImplementations", kind: .required),
             ])
           ),
           Node(
-            name: "CaseImplementationPairs",
+            name: "StorageCaseImplementations",
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "implementations", type: "NativeActionImplementationPairs", kind: .required),
+              Child(name: "implementations", type: "NativeStorageCaseImplementations", kind: .required),
             ])
           ),
           Node(
@@ -1037,13 +1039,13 @@ extension Node {
             name: "DualCaseDetails",
             kind: .compound(children: [
               Child(name: "contents", type: "RequirementReturnValue", kind: .required),
-              Child(name: "implementation", type: "CaseImplementationPairs", kind: .required),
+              Child(name: "implementation", type: "StorageCaseImplementations", kind: .required),
             ])
           ),
           Node(
             name: "CaseDetails",
             kind: .alternates([
-              Alternate(name: "implementation", type: "CaseImplementations"),
+              Alternate(name: "implementation", type: "EmptyCaseImplementations"),
               Alternate(name: "dual", type: "DualCaseDetails"),
               Alternate(name: "contents", type: "RequirementReturnValue"),
             ])
