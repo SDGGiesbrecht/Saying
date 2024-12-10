@@ -408,8 +408,7 @@ extension Platform {
         )
       ]
       if bareAction.isFlow,
-        !bareAction.isEnumerationCaseWrapper,
-        !bareAction.isEnumerationValueWrapper,
+        bareAction.returnValue == nil,
         let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
@@ -750,8 +749,7 @@ extension Platform {
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ action in
         return ¬action.isCoverageWrapper
-        ∧ ¬(action.isFlow ∧ action.isEnumerationCaseWrapper)
-        ∧ ¬action.isEnumerationValueWrapper
+        ∧ ¬(action.isFlow ∧ action.returnValue != nil)
       })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()

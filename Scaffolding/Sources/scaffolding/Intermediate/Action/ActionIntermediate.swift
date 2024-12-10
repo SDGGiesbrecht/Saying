@@ -369,7 +369,7 @@ extension ActionIntermediate {
         ]
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["{ if case ", " = ", " { true } else { false } }"],
+        textComponents: ["{ if case ", " = ", " { return true } else { return false } }()"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),

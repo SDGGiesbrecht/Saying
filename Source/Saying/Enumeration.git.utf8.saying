@@ -59,3 +59,19 @@ action
   }
   ← false
  }
+
+action
+ [
+  test (verify (not (check example enumeration (example case with nothing))))
+  test (verify (check example enumeration (wrap (true) as (example case with something))))
+ ]
+ (
+  English: check example enumeration (value: example enumeration)
+ )
+ truth value
+ {
+  if ((value) is case (example case with something)), {
+   ← true
+  }
+  ← false
+ }
