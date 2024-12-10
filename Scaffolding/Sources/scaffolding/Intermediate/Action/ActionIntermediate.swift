@@ -315,6 +315,69 @@ extension ActionIntermediate {
     )
   }
 
+  static func enumerationCheck(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
+  ) -> ActionIntermediate {
+    let parameters = Interpolation<ParameterIntermediate>.enumerationCheck(
+      enumerationType: enumerationType,
+      caseIdentifier: caseIdentifier
+    )
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: parameters.names(),
+        namespace: [],
+        parameters: parameters,
+        returnValue: .simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: "truth value")!)),
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      c: c ?? NativeActionImplementationIntermediate(
+        textComponents: ["(", ").enumeration_case == (", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+        ]
+      ),
+      cSharp: cSharp ?? NativeActionImplementationIntermediate(
+        textComponents: ["(", ") is (", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+        ]
+      ),
+      javaScript: javaScript ?? NativeActionImplementationIntermediate(
+        textComponents: ["(", ").enumerationCase == (", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+        ]
+      ),
+      kotlin: kotlin ?? NativeActionImplementationIntermediate(
+        textComponents: ["(", ") is (", ")"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+        ]
+      ),
+      swift: swift ?? NativeActionImplementationIntermediate(
+        textComponents: ["{ if case ", " = ", " { true } else { false } }"],
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+        ]
+      )
+    )
+  }
+
   static func construct<Declaration>(
     _ declaration: Declaration,
     namespace: [Set<StrictString>]

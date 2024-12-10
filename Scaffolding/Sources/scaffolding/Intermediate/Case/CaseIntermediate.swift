@@ -7,16 +7,7 @@ struct CaseIntermediate {
   var referenceAction: ActionIntermediate?
   var wrapAction: ActionIntermediate?
   var unwrapAction: ActionIntermediate?
-  var cStore: NativeActionImplementationIntermediate?
-  var cSharpStore: NativeActionImplementationIntermediate?
-  var javaScriptStore: NativeActionImplementationIntermediate?
-  var kotlinStore: NativeActionImplementationIntermediate?
-  var swiftStore: NativeActionImplementationIntermediate?
-  var cRetrieve: NativeActionImplementationIntermediate?
-  var cSharpRetrieve: NativeActionImplementationIntermediate?
-  var javaScriptRetrieve: NativeActionImplementationIntermediate?
-  var kotlinRetrieve: NativeActionImplementationIntermediate?
-  var swiftRetrieve: NativeActionImplementationIntermediate?
+  var checkAction: ActionIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedCaseDeclaration
 }
@@ -70,6 +61,11 @@ extension CaseIntermediate {
     var javaScriptRetrieve: NativeActionImplementationIntermediate?
     var kotlinRetrieve: NativeActionImplementationIntermediate?
     var swiftRetrieve: NativeActionImplementationIntermediate?
+    var cCheck: NativeActionImplementationIntermediate?
+    var cSharpCheck: NativeActionImplementationIntermediate?
+    var javaScriptCheck: NativeActionImplementationIntermediate?
+    var kotlinCheck: NativeActionImplementationIntermediate?
+    var swiftCheck: NativeActionImplementationIntermediate?
     if let details = declaration.details {
       switch details {
       case .contents:
@@ -206,6 +202,19 @@ extension CaseIntermediate {
         swift: swiftRetrieve
       )
     })
+    let checkAction: ActionIntermediate? = contents.map({ _ in
+      ActionIntermediate.enumerationCheck(
+        enumerationType: type,
+        caseIdentifier: names.identifier(),
+        access: access,
+        testOnlyAccess: testOnlyAccess,
+        c: cCheck,
+        cSharp: cSharpCheck,
+        javaScript: javaScriptCheck,
+        kotlin: kotlinCheck,
+        swift: swiftCheck
+      )
+    })
 
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -217,16 +226,7 @@ extension CaseIntermediate {
         referenceAction: referenceAction,
         wrapAction: wrapAction,
         unwrapAction: unwrapAction,
-        cStore: cStore,
-        cSharpStore: cSharpStore,
-        javaScriptStore: javaScriptStore,
-        kotlinStore: kotlinStore,
-        swiftStore: swiftStore,
-        cRetrieve: cRetrieve,
-        cSharpRetrieve: cSharpRetrieve,
-        javaScriptRetrieve: javaScriptRetrieve,
-        kotlinRetrieve: kotlinRetrieve,
-        swiftRetrieve: swiftRetrieve,
+        checkAction: checkAction,
         documentation: attachedDocumentation,
         declaration: declaration
       )
@@ -245,16 +245,7 @@ extension CaseIntermediate {
       referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
       wrapAction: wrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
       unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
-      cStore: cStore,
-      cSharpStore: cSharpStore,
-      javaScriptStore: javaScriptStore,
-      kotlinStore: kotlinStore,
-      swiftStore: swiftStore,
-      cRetrieve: cRetrieve,
-      cSharpRetrieve: cSharpRetrieve,
-      javaScriptRetrieve: javaScriptRetrieve,
-      kotlinRetrieve: kotlinRetrieve,
-      swiftRetrieve: swiftRetrieve,
+      checkAction: checkAction?.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
     )
@@ -283,16 +274,11 @@ extension CaseIntermediate {
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
       ),
-      cStore: cStore?.specializing(typeLookup: typeLookup),
-      cSharpStore: cSharpStore?.specializing(typeLookup: typeLookup),
-      javaScriptStore: javaScriptStore?.specializing(typeLookup: typeLookup),
-      kotlinStore: kotlinStore?.specializing(typeLookup: typeLookup),
-      swiftStore: swiftStore?.specializing(typeLookup: typeLookup),
-      cRetrieve: cRetrieve?.specializing(typeLookup: typeLookup),
-      cSharpRetrieve: cSharpRetrieve?.specializing(typeLookup: typeLookup),
-      javaScriptRetrieve: javaScriptRetrieve?.specializing(typeLookup: typeLookup),
-      kotlinRetrieve: kotlinRetrieve?.specializing(typeLookup: typeLookup),
-      swiftRetrieve: swiftRetrieve?.specializing(typeLookup: typeLookup),
+      checkAction: checkAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
