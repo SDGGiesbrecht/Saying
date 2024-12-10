@@ -118,36 +118,6 @@ extension ActionIntermediate {
     )
   }
 
-  static func enumerationAction(
-    names: Set<StrictString>,
-    returnValue: ParsedTypeReference,
-    access: AccessIntermediate,
-    testOnlyAccess: Bool,
-    c: NativeActionImplementationIntermediate?,
-    cSharp: NativeActionImplementationIntermediate?,
-    javaScript: NativeActionImplementationIntermediate?,
-    kotlin: NativeActionImplementationIntermediate?,
-    swift: NativeActionImplementationIntermediate?
-  ) -> ActionIntermediate {
-    return ActionIntermediate(
-      prototype: ActionPrototype(
-        isFlow: false,
-        names: names,
-        namespace: [],
-        parameters: .none,
-        returnValue: returnValue,
-        access: access,
-        testOnlyAccess: testOnlyAccess
-      ),
-      c: c,
-      cSharp: cSharp,
-      javaScript: javaScript,
-      kotlin: kotlin,
-      swift: swift,
-      isEnumerationCaseWrapper: true
-    )
-  }
-
   static func enumerationCase(
     names: Set<StrictString>,
     enumerationType: ParsedTypeReference,
@@ -232,6 +202,36 @@ extension ActionIntermediate {
         ]
       ),
       isEnumerationValueWrapper: true
+    )
+  }
+
+  static func enumerationWrapNothing(
+    names: Set<StrictString>,
+    returnValue: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
+  ) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: false,
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: returnValue,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ),
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift,
+      isEnumerationCaseWrapper: true
     )
   }
 
