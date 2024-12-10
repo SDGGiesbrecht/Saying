@@ -25,7 +25,7 @@ extension
       ελληνικά: κάτι
      )
      thing
-     Swift: “¤(28)” value “¤(29)”
+     Swift: “¤(28)” value “¤(29)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”
 
     case
      (

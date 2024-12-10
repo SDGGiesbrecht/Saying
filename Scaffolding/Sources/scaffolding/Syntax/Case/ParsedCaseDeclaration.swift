@@ -12,7 +12,9 @@ extension ParsedCaseDeclaration {
     }
   }
   var implementation: ParsedCaseImplementations? {
-    return details.flatMap { detailNode in
+    return nil
+    #warning("Not implemented yet.")
+    /*return details.flatMap { detailNode in
       switch detailNode {
       case .contents:
         return nil
@@ -21,6 +23,6 @@ extension ParsedCaseDeclaration {
       case .dual(let dual):
         return dual.implementation
       }
-    }
+    }*/
   }
 }

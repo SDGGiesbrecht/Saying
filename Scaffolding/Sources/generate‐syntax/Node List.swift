@@ -20,6 +20,7 @@ extension Node {
           Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
           Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
           Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
+          Node(name: "Slash", kind: .fixedLeaf("/")),
           Node(name: "BulletCharacter", kind: .fixedLeaf("•")),
           Node(name: "RightArrow", kind: .fixedLeaf("→")),
           Node(name: "LeftArrow", kind: .fixedLeaf("←")),
@@ -901,6 +902,14 @@ extension Node {
             ])
           ),
           Node(
+            name: "NativeActionPair",
+            kind: .compound(children: [
+              Child(name: "store", type: "NativeAction", kind: .required),
+              Child(name: "slash", type: "Slash", kind: .required),
+              Child(name: "retrieve", type: "NativeAction", kind: .required),
+            ])
+          ),
+          Node(
             name: "NativeThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
@@ -914,6 +923,14 @@ extension Node {
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "expression", type: "NativeAction", kind: .required),
+            ])
+          ),
+          Node(
+            name: "NativeActionImplementationPair",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "expression", type: "NativeActionPair", kind: .required),
             ])
           ),
           Node(
@@ -960,6 +977,14 @@ extension Node {
             separatorType: "LineBreak",
             fixedSeparator: true
           ),
+          Node.separatedList(
+            name: "NativeActionImplementationPairs",
+            entryName: "implementation", entryNamePlural: "implementations",
+            entryType: "NativeActionImplementationPair",
+            separatorName: "lineBreak",
+            separatorType: "LineBreak",
+            fixedSeparator: true
+          ),
 
         [
           Node(
@@ -986,6 +1011,13 @@ extension Node {
             ])
           ),
           Node(
+            name: "CaseImplementationPairs",
+            kind: .compound(children: [
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "implementations", type: "NativeActionImplementationPairs", kind: .required),
+            ])
+          ),
+          Node(
             name: "EnumerationImplementations",
             kind: .alternates([
               Alternate(name: "source", type: "Cases"),
@@ -1005,7 +1037,7 @@ extension Node {
             name: "DualCaseDetails",
             kind: .compound(children: [
               Child(name: "contents", type: "RequirementReturnValue", kind: .required),
-              Child(name: "implementation", type: "CaseImplementations", kind: .required),
+              Child(name: "implementation", type: "CaseImplementationPairs", kind: .required),
             ])
           ),
           Node(
