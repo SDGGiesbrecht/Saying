@@ -930,7 +930,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "expression", type: "NativeActionPair", kind: .required),
+              Child(name: "expressions", type: "NativeActionPair", kind: .required),
             ])
           ),
           Node(

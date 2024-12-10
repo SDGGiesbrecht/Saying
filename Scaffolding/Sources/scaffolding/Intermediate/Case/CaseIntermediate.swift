@@ -7,11 +7,16 @@ struct CaseIntermediate {
   var referenceAction: ActionIntermediate?
   var wrapAction: ActionIntermediate?
   var unwrapAction: ActionIntermediate?
-  var c: NativeActionImplementationIntermediate?
-  var cSharp: NativeActionImplementationIntermediate?
-  var javaScript: NativeActionImplementationIntermediate?
-  var kotlin: NativeActionImplementationIntermediate?
-  var swift: NativeActionImplementationIntermediate?
+  var cStore: NativeActionImplementationIntermediate?
+  var cSharpStore: NativeActionImplementationIntermediate?
+  var javaScriptStore: NativeActionImplementationIntermediate?
+  var kotlinStore: NativeActionImplementationIntermediate?
+  var swiftStore: NativeActionImplementationIntermediate?
+  var cRetrieve: NativeActionImplementationIntermediate?
+  var cSharpRetrieve: NativeActionImplementationIntermediate?
+  var javaScriptRetrieve: NativeActionImplementationIntermediate?
+  var kotlinRetrieve: NativeActionImplementationIntermediate?
+  var swiftRetrieve: NativeActionImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedCaseDeclaration
 }
@@ -19,10 +24,10 @@ struct CaseIntermediate {
 extension CaseIntermediate {
 
   static func disallowImports(
-    in implementation: ParsedNativeActionImplementation,
+    in implementation: ParsedNativeAction,
     errors: inout [ConstructionError]
   ) {
-    if implementation.expression.importNode ≠ nil {
+    if implementation.importNode ≠ nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }
@@ -55,36 +60,99 @@ extension CaseIntermediate {
       }
     }
 
-    var c: NativeActionImplementationIntermediate?
-    var cSharp: NativeActionImplementationIntermediate?
-    var javaScript: NativeActionImplementationIntermediate?
-    var kotlin: NativeActionImplementationIntermediate?
-    var swift: NativeActionImplementationIntermediate?
-    if let native = declaration.implementation {
-      for implementation in native.implementations.implementations {
-        switch NativeActionImplementationIntermediate.construct(
-          implementation: implementation.expression
-        ) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
-        case .success(let constructed):
-          switch implementation.language.identifierText() {
-          case "C":
-            c = constructed
-          case "C♯":
-            cSharp = constructed
-            disallowImports(in: implementation, errors: &errors)
-          case "JavaScript":
-            javaScript = constructed
-            disallowImports(in: implementation, errors: &errors)
-          case "Kotlin":
-            kotlin = constructed
-            disallowImports(in: implementation, errors: &errors)
-          case "Swift":
-            swift = constructed
-            disallowImports(in: implementation, errors: &errors)
-          default:
-            errors.append(ConstructionError.unknownLanguage(implementation.language))
+    var cStore: NativeActionImplementationIntermediate?
+    var cSharpStore: NativeActionImplementationIntermediate?
+    var javaScriptStore: NativeActionImplementationIntermediate?
+    var kotlinStore: NativeActionImplementationIntermediate?
+    var swiftStore: NativeActionImplementationIntermediate?
+    var cRetrieve: NativeActionImplementationIntermediate?
+    var cSharpRetrieve: NativeActionImplementationIntermediate?
+    var javaScriptRetrieve: NativeActionImplementationIntermediate?
+    var kotlinRetrieve: NativeActionImplementationIntermediate?
+    var swiftRetrieve: NativeActionImplementationIntermediate?
+    if let details = declaration.details {
+      switch details {
+      case .contents:
+        break
+      case .implementation(let implementations):
+        for implementation in implementations.implementations.implementations {
+          switch NativeActionImplementationIntermediate.construct(
+            implementation: implementation.expression
+          ) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
+          case .success(let constructed):
+            switch implementation.language.identifierText() {
+            case "C":
+              cStore = constructed
+            case "C♯":
+              cSharpStore = constructed
+              disallowImports(in: implementation.expression, errors: &errors)
+            case "JavaScript":
+              javaScriptStore = constructed
+              disallowImports(in: implementation.expression, errors: &errors)
+            case "Kotlin":
+              kotlinStore = constructed
+              disallowImports(in: implementation.expression, errors: &errors)
+            case "Swift":
+              swiftStore = constructed
+              disallowImports(in: implementation.expression, errors: &errors)
+            default:
+              errors.append(ConstructionError.unknownLanguage(implementation.language))
+            }
+          }
+        }
+      case .dual(let details):
+        for implementation in details.implementation.implementations.implementations {
+          switch NativeActionImplementationIntermediate.construct(
+            implementation: implementation.expressions.store
+          ) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
+          case .success(let constructed):
+            switch implementation.language.identifierText() {
+            case "C":
+              cStore = constructed
+            case "C♯":
+              cSharpStore = constructed
+              disallowImports(in: implementation.expressions.store, errors: &errors)
+            case "JavaScript":
+              javaScriptStore = constructed
+              disallowImports(in: implementation.expressions.store, errors: &errors)
+            case "Kotlin":
+              kotlinStore = constructed
+              disallowImports(in: implementation.expressions.store, errors: &errors)
+            case "Swift":
+              swiftStore = constructed
+              disallowImports(in: implementation.expressions.store, errors: &errors)
+            default:
+              errors.append(ConstructionError.unknownLanguage(implementation.language))
+            }
+          }
+          switch NativeActionImplementationIntermediate.construct(
+            implementation: implementation.expressions.retrieve
+          ) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
+          case .success(let constructed):
+            switch implementation.language.identifierText() {
+            case "C":
+              cRetrieve = constructed
+            case "C♯":
+              cSharpRetrieve = constructed
+              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
+            case "JavaScript":
+              javaScriptRetrieve = constructed
+              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
+            case "Kotlin":
+              kotlinRetrieve = constructed
+              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
+            case "Swift":
+              swiftRetrieve = constructed
+              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
+            default:
+              errors.append(ConstructionError.unknownLanguage(implementation.language))
+            }
           }
         }
       }
@@ -98,11 +166,11 @@ extension CaseIntermediate {
         returnValue: type,
         access: access,
         testOnlyAccess: testOnlyAccess,
-        c: c,
-        cSharp: cSharp,
-        javaScript: javaScript,
-        kotlin: kotlin,
-        swift: swift
+        c: cStore,
+        cSharp: cSharpStore,
+        javaScript: javaScriptStore,
+        kotlin: kotlinStore,
+        swift: swiftStore
       )
       : ActionIntermediate.enumerationCase(
         names: names,
@@ -117,11 +185,11 @@ extension CaseIntermediate {
         valueType: valueType,
         access: access,
         testOnlyAccess: testOnlyAccess,
-        c: c,
-        cSharp: cSharp,
-        javaScript: javaScript,
-        kotlin: kotlin,
-        swift: swift
+        c: cStore,
+        cSharp: cSharpStore,
+        javaScript: javaScriptStore,
+        kotlin: kotlinStore,
+        swift: swiftStore
       )
     })
     let unwrapAction: ActionIntermediate? = contents.map({ valueType in
@@ -130,7 +198,12 @@ extension CaseIntermediate {
         caseIdentifier: names.identifier(),
         valueType: valueType,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        c: cRetrieve,
+        cSharp: cRetrieve,
+        javaScript: cRetrieve,
+        kotlin: cRetrieve,
+        swift: cRetrieve
       )
     })
 
@@ -144,11 +217,16 @@ extension CaseIntermediate {
         referenceAction: referenceAction,
         wrapAction: wrapAction,
         unwrapAction: unwrapAction,
-        c: c,
-        cSharp: cSharp,
-        javaScript: javaScript,
-        kotlin: kotlin,
-        swift: swift,
+        cStore: cStore,
+        cSharpStore: cSharpStore,
+        javaScriptStore: javaScriptStore,
+        kotlinStore: kotlinStore,
+        swiftStore: swiftStore,
+        cRetrieve: cRetrieve,
+        cSharpRetrieve: cSharpRetrieve,
+        javaScriptRetrieve: javaScriptRetrieve,
+        kotlinRetrieve: kotlinRetrieve,
+        swiftRetrieve: swiftRetrieve,
         documentation: attachedDocumentation,
         declaration: declaration
       )
@@ -167,11 +245,16 @@ extension CaseIntermediate {
       referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
       wrapAction: wrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
       unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
-      c: c,
-      cSharp: cSharp,
-      javaScript: javaScript,
-      kotlin: kotlin,
-      swift: swift,
+      cStore: cStore,
+      cSharpStore: cSharpStore,
+      javaScriptStore: javaScriptStore,
+      kotlinStore: kotlinStore,
+      swiftStore: swiftStore,
+      cRetrieve: cRetrieve,
+      cSharpRetrieve: cSharpRetrieve,
+      javaScriptRetrieve: javaScriptRetrieve,
+      kotlinRetrieve: kotlinRetrieve,
+      swiftRetrieve: swiftRetrieve,
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
     )
@@ -200,11 +283,16 @@ extension CaseIntermediate {
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
       ),
-      c: c?.specializing(typeLookup: typeLookup),
-      cSharp: cSharp?.specializing(typeLookup: typeLookup),
-      javaScript: javaScript?.specializing(typeLookup: typeLookup),
-      kotlin: kotlin?.specializing(typeLookup: typeLookup),
-      swift: swift?.specializing(typeLookup: typeLookup),
+      cStore: cStore?.specializing(typeLookup: typeLookup),
+      cSharpStore: cSharpStore?.specializing(typeLookup: typeLookup),
+      javaScriptStore: javaScriptStore?.specializing(typeLookup: typeLookup),
+      kotlinStore: kotlinStore?.specializing(typeLookup: typeLookup),
+      swiftStore: swiftStore?.specializing(typeLookup: typeLookup),
+      cRetrieve: cRetrieve?.specializing(typeLookup: typeLookup),
+      cSharpRetrieve: cSharpRetrieve?.specializing(typeLookup: typeLookup),
+      javaScriptRetrieve: javaScriptRetrieve?.specializing(typeLookup: typeLookup),
+      kotlinRetrieve: kotlinRetrieve?.specializing(typeLookup: typeLookup),
+      swiftRetrieve: swiftRetrieve?.specializing(typeLookup: typeLookup),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace

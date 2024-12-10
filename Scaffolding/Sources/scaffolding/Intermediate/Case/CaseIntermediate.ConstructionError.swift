@@ -2,7 +2,7 @@ extension CaseIntermediate {
   enum ConstructionError: DiagnosticError {
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeCaseImplementation(NativeActionImplementationIntermediate.ConstructionError)
-    case invalidImport(ParsedNativeActionImplementation)
+    case invalidImport(ParsedNativeAction)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var message: String {
