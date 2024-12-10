@@ -200,10 +200,10 @@ extension CaseIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         c: cRetrieve,
-        cSharp: cRetrieve,
-        javaScript: cRetrieve,
-        kotlin: cRetrieve,
-        swift: cRetrieve
+        cSharp: cSharpRetrieve,
+        javaScript: javaScriptRetrieve,
+        kotlin: kotlinRetrieve,
+        swift: swiftRetrieve
       )
     })
 
