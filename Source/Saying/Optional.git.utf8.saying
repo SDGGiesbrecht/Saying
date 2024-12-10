@@ -59,11 +59,13 @@ extension
     עברית: יש (דבר: [thing])
    )
    truth value
-   C: “¤(28)” thing “¤(29).enumeration¤(5F)case == etwas”
    C♯: “¤(28)” thing “¤(29) ¤(21)= null”
    JavaScript: “¤(28)” thing “¤(29) ¤(21)== null”
    Kotlin: “¤(28)” thing “¤(29) ¤(21)= null”
    Swift: “¤(28)” thing “¤(29) ¤(21)= nil”
+   {
+    ← (thing) is case (something)
+   }
 
   action (clients)
    [
