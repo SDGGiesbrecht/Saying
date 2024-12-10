@@ -19,6 +19,15 @@ extension
    {
     case
      (
+      English: something
+      Deutsch: etwas
+      français : quelque chose
+      ελληνικά: κάτι
+     )
+     optional (thing)
+
+    case
+     (
       English: nothing
       Deutsch: nichts
       français : rien
@@ -134,4 +143,20 @@ action
   let (• storage: optional (truth value)) start as (optional true value)
   change (storage) to (nothing)
   ← (storage) does not exist
+ }
+
+action
+ [
+  test (verify (not (use optional (nothing: optional (truth value)))))
+  test (verify (use optional (wrap (true) as (something))))
+ ]
+ (
+  English: use optional (optional: optional (truth value))
+ )
+ truth value
+ {
+  if (optional) is (something), unwrap it as (• unwrapped: truth value), {
+   ← unwrapped
+  }
+  ← false
  }
