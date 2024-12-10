@@ -98,18 +98,6 @@ extension
 
 action
  [
-  test (verify (accept optional (wrap (true) as (something))))
- ]
- (
-  English: accept optional (thing: optional (truth value))
- )
- truth value
- {
-  ← true
- }
-
-action
- [
   test (verify (unwrapping (wrap (true) as (something)) works))
   test (verify (not (unwrapping (nothing) works)))
  ]
