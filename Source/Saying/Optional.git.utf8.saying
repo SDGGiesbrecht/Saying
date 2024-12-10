@@ -59,7 +59,7 @@ extension
     עברית: יש (דבר: [thing])
    )
    truth value
-   C: “¤(28)” thing “¤(29) ¤(21)= NULL” (stddef)
+   C: “¤(28)” thing “¤(29).enumeration¤(5F)case == etwas”
    C♯: “¤(28)” thing “¤(29) ¤(21)= null”
    JavaScript: “¤(28)” thing “¤(29) ¤(21)== null”
    Kotlin: “¤(28)” thing “¤(29) ¤(21)= null”
@@ -77,7 +77,7 @@ extension
     עברית: אין (דבר: [thing])
    )
    truth value
-   C: “¤(28)” thing “¤(29) == NULL” (stddef)
+   C: “¤(28)” thing “¤(29).enumeration¤(5F)case == rien”
    C♯: “¤(28)” thing “¤(29) == null”
    JavaScript: “¤(28)” thing “¤(29) === null”
    Kotlin: “¤(28)” thing “¤(29) == null”
@@ -87,7 +87,7 @@ extension
    (
     English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
    )
-   C: “if ¤(28)” optional “¤(29) ¤(7B) ” thing “ ” unwrapped “ = ¤(2A)” optional “; ” consequence “¤(7D)”
+   C: “if ¤(28)” optional “¤(29).enumeration¤(5F)case == etwas ¤(7B) ” thing “ ” unwrapped “ = ” optional “.value.etwas; ” consequence “¤(7D)”
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
    JavaScript: “let ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
    Kotlin: “val ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
