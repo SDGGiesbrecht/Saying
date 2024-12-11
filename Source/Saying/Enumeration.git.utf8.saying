@@ -28,6 +28,10 @@ action
  }
 
 enumeration
+ [
+  test (verify ((wrap (true) as (example case with something)) is case (example case with something)))
+  test (verify (not ((example case with nothing) is case (example case with something))))
+ ]
  (
   English: example enumeration
  )
@@ -56,22 +60,6 @@ action
  {
   if (value) is (example case with something), unwrap it as (• unwrapped: truth value), {
    ← unwrapped
-  }
-  ← false
- }
-
-action
- [
-  test (verify (not (check example enumeration (example case with nothing))))
-  test (verify (check example enumeration (wrap (true) as (example case with something))))
- ]
- (
-  English: check example enumeration (value: example enumeration)
- )
- truth value
- {
-  if ((value) is case (example case with something)), {
-   ← true
   }
   ← false
  }
