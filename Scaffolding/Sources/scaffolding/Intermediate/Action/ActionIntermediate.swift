@@ -262,13 +262,13 @@ extension ActionIntermediate {
         testOnlyAccess: testOnlyAccess
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", ".enumeration_case == ", ") { ", " ", " = ", ".value.", ";", "}"],
+        textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"],
         parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!, typeInstead: enumerationType),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
@@ -284,7 +284,7 @@ extension ActionIntermediate {
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", ".enumerationCase == ", ") { let ", " = ", ".value;", "}"],
+        textComponents: ["let enumeration = (", "); if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
@@ -344,28 +344,28 @@ extension ActionIntermediate {
         testOnlyAccess: testOnlyAccess
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ").enumeration_case == (", ")"],
+        textComponents: ["(", ").enumeration_case == ", ""],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ") is (", ")"],
+        textComponents: ["(", ") is ", ""],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ").enumerationCase == (", ")"],
+        textComponents: ["(", ").enumerationCase == ", ""],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ") is (", ")"],
+        textComponents: ["(", ") is ", ""],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
