@@ -438,6 +438,8 @@ extension Platform {
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
             result.append(contentsOf: typeSource)
+          } else if let enumerationCase = parameter.caseInstead {
+            result.append(contentsOf: "...")
           } else {
             let name = parameter.name
             let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!

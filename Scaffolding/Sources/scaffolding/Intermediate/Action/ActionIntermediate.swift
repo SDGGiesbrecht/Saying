@@ -332,6 +332,7 @@ extension ActionIntermediate {
       caseIdentifier: caseIdentifier,
       empty: empty
     )
+    let caseInstead: ParsedTypeReference? = empty ? .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier) : nil
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: true,
@@ -346,34 +347,34 @@ extension ActionIntermediate {
         textComponents: ["(", ").enumeration_case == (", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
         textComponents: ["(", ") is (", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
         textComponents: ["(", ").enumerationCase == (", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
         textComponents: ["(", ") is (", ")"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
         ]
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
         textComponents: ["{ if case ", " = ", " { return true } else { return false } }()"],
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
         ]
       )
