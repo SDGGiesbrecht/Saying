@@ -447,7 +447,7 @@ extension Platform {
                 name: sanitize(identifier: identifier, leading: true),
                 type: source(for: type, referenceLookup: referenceLookup),
                 simple: false,
-                ignoringValue: false
+                ignoringValue: true
               )
               result.append(contentsOf: reference)
             }
