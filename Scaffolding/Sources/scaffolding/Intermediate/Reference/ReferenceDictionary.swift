@@ -186,7 +186,7 @@ extension ReferenceDictionary {
           return result
         }
       case .some(.none):
-        if let result = set[.none] {
+        if let result = set[.none] ?? set[.statements] {
           return result
         }
       case .none:
