@@ -83,7 +83,9 @@ extension ReferenceDictionary {
       .map({ $0.resolvedType!.key })
     things[identifier, default: [:]][parameters] = thing
     for enumerationCase in thing.cases {
-      errors.append(contentsOf: add(action: enumerationCase.referenceAction))
+      if let action = enumerationCase.referenceAction {
+        errors.append(contentsOf: add(action: action))
+      }
       errors.append(contentsOf: add(action: enumerationCase.wrapAction))
       if let action = enumerationCase.unwrapAction {
         errors.append(contentsOf: add(action: action))
@@ -190,15 +192,6 @@ extension ReferenceDictionary {
       case .none:
         if set.count == 1 {
           return set.values.first
-        }
-        if set.count == 2,
-          let create = set.first(
-            where: { if case .enumerationCase = $0.key { return false } else { return true } }
-          ),
-          let _ = set.first(
-            where: { if case .enumerationCase = $0.key { return true } else { return false } }
-          ) {
-          return create.value
         }
       }
     }

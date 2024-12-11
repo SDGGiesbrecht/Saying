@@ -4,7 +4,7 @@ import SDGText
 struct CaseIntermediate {
   var names: Set<StrictString>
   var contents: ParsedTypeReference?
-  var referenceAction: ActionIntermediate
+  var referenceAction: ActionIntermediate?
   var wrapAction: ActionIntermediate
   var unwrapAction: ActionIntermediate?
   var checkAction: ActionIntermediate
@@ -181,13 +181,14 @@ extension CaseIntermediate {
 
     let contents = (declaration.contents?.type).map({ ParsedTypeReference($0) })
 
-    #warning("Should this be optional again if simples are unreachable and inserted elsewhere?")
-    let referenceAction = ActionIntermediate.enumerationCase(
-      names: names,
-      enumerationType: type,
-      access: access,
-      testOnlyAccess: testOnlyAccess
-    )
+    let referenceAction: ActionIntermediate? = contents.map { _ in
+      return ActionIntermediate.enumerationCase(
+        names: names,
+        enumerationType: type,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      )
+    }
     let wrapAction: ActionIntermediate = contents.map({ valueType in
       ActionIntermediate.enumerationWrap(
         enumerationType: type,
@@ -265,7 +266,7 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.resolvingExtensionContext(typeLookup: typeLookup),
-      referenceAction: referenceAction.resolvingExtensionContext(typeLookup: typeLookup),
+      referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
       wrapAction: wrapAction.resolvingExtensionContext(typeLookup: typeLookup),
       unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
       checkAction: checkAction.resolvingExtensionContext(typeLookup: typeLookup),
@@ -282,7 +283,7 @@ extension CaseIntermediate {
     return CaseIntermediate(
       names: names,
       contents: contents?.specializing(typeLookup: typeLookup),
-      referenceAction: referenceAction.specializing(
+      referenceAction: referenceAction?.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
