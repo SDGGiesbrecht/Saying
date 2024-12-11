@@ -97,7 +97,7 @@ extension
    Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
    {
     if (optional) is (something), unwrap it as (unwrapped), {
-      consequence
+     consequence
     }
    }
  }
