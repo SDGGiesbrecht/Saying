@@ -31,6 +31,8 @@ enumeration
  [
   test (verify ((wrap (true) as (example case with something)) is case (example case with something)))
   test (verify (not ((example case with nothing) is case (example case with something))))
+  test (verify ((example case with nothing) is case (example case with nothing)))
+  test (verify (not ((wrap (true) as (example case with something)) is case (example case with nothing))))
  ]
  (
   English: example enumeration
