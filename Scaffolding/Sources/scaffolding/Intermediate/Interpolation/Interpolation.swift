@@ -291,7 +291,8 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
   }
   static func enumerationCheck(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString
+    caseIdentifier: StrictString,
+    empty: Bool
   ) -> Interpolation {
     return Interpolation(
       parameters: [
@@ -303,7 +304,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
         ),
         ParameterIntermediate(
           names: ["case"],
-          type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier),
+          type: empty ? enumerationType : .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier),
           passAction: .parameterAction(names: ["case"], parameters: .none, returnValue: nil),
           executeAction: nil
         ),

@@ -318,6 +318,7 @@ extension ActionIntermediate {
   static func enumerationCheck(
     enumerationType: ParsedTypeReference,
     caseIdentifier: StrictString,
+    empty: Bool,
     access: AccessIntermediate,
     testOnlyAccess: Bool,
     c: NativeActionImplementationIntermediate?,
@@ -328,7 +329,8 @@ extension ActionIntermediate {
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationCheck(
       enumerationType: enumerationType,
-      caseIdentifier: caseIdentifier
+      caseIdentifier: caseIdentifier,
+      empty: empty
     )
     return ActionIntermediate(
       prototype: ActionPrototype(

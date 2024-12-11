@@ -181,6 +181,7 @@ extension CaseIntermediate {
 
     let contents = (declaration.contents?.type).map({ ParsedTypeReference($0) })
 
+    #warning("Should this be optional again if simples are unreachable and inserted elsewhere?")
     let referenceAction = ActionIntermediate.enumerationCase(
       names: names,
       enumerationType: type,
@@ -228,6 +229,7 @@ extension CaseIntermediate {
     let checkAction = ActionIntermediate.enumerationCheck(
       enumerationType: type,
       caseIdentifier: names.identifier(),
+      empty: contents == nil,
       access: access,
       testOnlyAccess: testOnlyAccess,
       c: cCheck,
