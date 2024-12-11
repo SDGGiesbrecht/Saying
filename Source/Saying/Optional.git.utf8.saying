@@ -79,11 +79,13 @@ extension
     עברית: אין (דבר: [thing])
    )
    truth value
-   C: “¤(28)” thing “¤(29).enumeration¤(5F)case == rien”
    C♯: “¤(28)” thing “¤(29) == null”
    JavaScript: “¤(28)” thing “¤(29) === null”
    Kotlin: “¤(28)” thing “¤(29) == null”
    Swift: “¤(28)” thing “¤(29) == nil”
+   {
+    ← (thing) is case (nothing)
+   }
 
   flow (clients)
    (
