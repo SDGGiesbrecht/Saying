@@ -764,10 +764,10 @@ extension Platform {
         return ¬action.isCoverageWrapper
         ∧ ¬(action.isFlow ∧ action.returnValue != nil)
       })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
     let regions = Set([
       actionRegions,
       choiceRegions

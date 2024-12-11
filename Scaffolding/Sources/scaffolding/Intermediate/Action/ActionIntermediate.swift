@@ -746,12 +746,17 @@ extension ActionIntermediate {
       .joined(separator: ":")
   }
 
-  func allCoverageRegionIdentifiers(referenceLookup: [ReferenceDictionary]) -> [StrictString] {
+  func allCoverageRegionIdentifiers(
+    referenceLookup: [ReferenceDictionary],
+    skippingSubregions: Bool
+  ) -> [StrictString] {
     var result: [StrictString] = []
     if let base = coverageRegionIdentifier(referenceLookup: referenceLookup) {
       result.append(base)
-      for entry in 0 ..< countCoverageSubregions() {
-        result.append("\(base):{\((entry + 1).inDigits())}")
+      if !skippingSubregions {
+        for entry in 0 ..< countCoverageSubregions() {
+          result.append("\(base):{\((entry + 1).inDigits())}")
+        }
       }
     }
     return result
