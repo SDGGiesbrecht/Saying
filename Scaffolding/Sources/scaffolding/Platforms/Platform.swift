@@ -509,6 +509,12 @@ extension Platform {
         simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
         ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
       )
+    } else if action.isFlow {
+      return source(
+        for: action.implementation!.statements,
+        context: action,
+        referenceLookup: referenceLookup
+      ).joined(separator: "\n")
     } else {
       let name = sanitize(
         identifier: parameterName
@@ -644,6 +650,33 @@ extension Platform {
     )
   }
 
+  static func source(
+    for statements: [StatementIntermediate],
+    context: ActionIntermediate,
+    referenceLookup: [ReferenceDictionary]
+  ) -> [String] {
+    var locals = ReferenceDictionary()
+    var coverageRegionCounter = 0
+    return statements.map({ entry in
+      let result = source(
+        for: entry,
+        context: context,
+        localLookup: [locals],
+        referenceLookup: referenceLookup.appending(locals),
+        contextCoverageIdentifier: context.coverageRegionIdentifier(referenceLookup: referenceLookup),
+        coverageRegionCounter: &coverageRegionCounter
+      )
+      let newActions = entry.localActions()
+      for local in newActions {
+        _ = locals.add(action: local)
+      }
+      if !newActions.isEmpty {
+        locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
+      }
+      return result
+    })
+  }
+
   static func declaration(
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary]
@@ -676,27 +709,13 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
-    var locals = ReferenceDictionary()
-    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary(externalLookup: externalReferenceLookup))
-    var coverageRegionCounter = 0
-    let implementation = action.implementation!.statements.map({ entry in
-      let result = source(
-        for: entry,
-        context: action,
-        localLookup: [locals],
-        referenceLookup: nonLocalReferenceLookup.appending(locals),
-        contextCoverageIdentifier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
-        coverageRegionCounter: &coverageRegionCounter
+    let implementation = source(
+      for: action.implementation!.statements,
+      context: action,
+      referenceLookup: externalReferenceLookup.appending(
+        action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       )
-      let newActions = entry.localActions()
-      for local in newActions {
-        _ = locals.add(action: local)
-      }
-      if !newActions.isEmpty {
-        locals.resolveTypeIdentifiers(externalLookup: nonLocalReferenceLookup)
-      }
-      return result
-    })
+    )
     return actionDeclaration(
       name: name,
       parameters: parameters,
