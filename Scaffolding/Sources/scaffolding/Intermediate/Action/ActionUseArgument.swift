@@ -57,6 +57,7 @@ extension ActionUseArgument {
         referenceLookup: referenceLookup,
         finalReturnValue: finalReturnValue
       )
+      self = .flow(statements)
     }
   }
 
