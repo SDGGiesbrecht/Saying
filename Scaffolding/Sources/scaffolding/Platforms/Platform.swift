@@ -367,7 +367,10 @@ extension Platform {
     ) {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
-      if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
+      if case .statements = parameter.passAction.returnValue {
+        #warning("Not implemented yet.")
+        return "..."
+      } else if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
       } else {
