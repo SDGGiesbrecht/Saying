@@ -284,7 +284,7 @@ extension ActionIntermediate {
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["let enumeration = (", "); if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"],
+        textComponents: ["let enumeration = ", "; if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
