@@ -11,16 +11,4 @@ extension ParsedCaseDeclaration {
       }
     }
   }
-  var implementation: ParsedCaseImplementations? {
-    return details.flatMap { detailNode in
-      switch detailNode {
-      case .contents:
-        return nil
-      case .implementation(let implementation):
-        return implementation
-      case .dual(let dual):
-        return dual.implementation
-      }
-    }
-  }
 }

@@ -20,6 +20,7 @@ extension Node {
           Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
           Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
           Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
+          Node(name: "Slash", kind: .fixedLeaf("/")),
           Node(name: "BulletCharacter", kind: .fixedLeaf("•")),
           Node(name: "RightArrow", kind: .fixedLeaf("→")),
           Node(name: "LeftArrow", kind: .fixedLeaf("←")),
@@ -901,6 +902,16 @@ extension Node {
             ])
           ),
           Node(
+            name: "NativeStorageCase",
+            kind: .compound(children: [
+              Child(name: "store", type: "NativeAction", kind: .required),
+              Child(name: "firstSlash", type: "Slash", kind: .required),
+              Child(name: "retrieve", type: "NativeAction", kind: .required),
+              Child(name: "secondSlash", type: "Slash", kind: .required),
+              Child(name: "check", type: "NativeAction", kind: .required),
+            ])
+          ),
+          Node(
             name: "NativeThingImplementation",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
@@ -914,6 +925,14 @@ extension Node {
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "expression", type: "NativeAction", kind: .required),
+            ])
+          ),
+          Node(
+            name: "NativeStorageCaseImplementation",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "expressions", type: "NativeStorageCase", kind: .required),
             ])
           ),
           Node(
@@ -960,6 +979,14 @@ extension Node {
             separatorType: "LineBreak",
             fixedSeparator: true
           ),
+          Node.separatedList(
+            name: "NativeStorageCaseImplementations",
+            entryName: "implementation", entryNamePlural: "implementations",
+            entryType: "NativeStorageCaseImplementation",
+            separatorName: "lineBreak",
+            separatorType: "LineBreak",
+            fixedSeparator: true
+          ),
 
         [
           Node(
@@ -979,10 +1006,17 @@ extension Node {
             ])
           ),
           Node(
-            name: "CaseImplementations",
+            name: "EmptyCaseImplementations",
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "implementations", type: "NativeActionImplementations", kind: .required),
+            ])
+          ),
+          Node(
+            name: "StorageCaseImplementations",
+            kind: .compound(children: [
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "implementations", type: "NativeStorageCaseImplementations", kind: .required),
             ])
           ),
           Node(
@@ -1005,13 +1039,13 @@ extension Node {
             name: "DualCaseDetails",
             kind: .compound(children: [
               Child(name: "contents", type: "RequirementReturnValue", kind: .required),
-              Child(name: "implementation", type: "CaseImplementations", kind: .required),
+              Child(name: "implementation", type: "StorageCaseImplementations", kind: .required),
             ])
           ),
           Node(
             name: "CaseDetails",
             kind: .alternates([
-              Alternate(name: "implementation", type: "CaseImplementations"),
+              Alternate(name: "implementation", type: "EmptyCaseImplementations"),
               Alternate(name: "dual", type: "DualCaseDetails"),
               Alternate(name: "contents", type: "RequirementReturnValue"),
             ])
@@ -1221,11 +1255,12 @@ extension Node {
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
           ),
-          
+
           Node(
             name: "Provision",
             kind: .alternates([
               Alternate(name: "thing", type: "ThingDeclaration"),
+              Alternate(name: "enumeration", type: "EnumerationDeclaration"),
               Alternate(name: "action", type: "ActionDeclaration"),
               Alternate(name: "use", type: "Use"),
             ])

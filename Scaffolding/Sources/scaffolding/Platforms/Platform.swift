@@ -228,8 +228,10 @@ extension Platform {
         }
         return result
       } else {
-        // Only native types are implemented so far, so this is only reachable for untyped target languages.
-        return ""
+        return sanitize(
+          identifier: type.names.identifier(),
+          leading: true
+        )
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
@@ -301,7 +303,7 @@ extension Platform {
     }
     if ¬isTyped,
       thing.cases.allSatisfy({ enumerationCase in
-        return enumerationCase.referenceAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
+        return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) ≠ nil
       }) {
       return nil
     }
@@ -406,8 +408,7 @@ extension Platform {
         )
       ]
       if bareAction.isFlow,
-        !bareAction.isEnumerationCaseWrapper,
-        !bareAction.isEnumerationValueWrapper,
+        bareAction.returnValue == nil,
         let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
@@ -437,6 +438,19 @@ extension Platform {
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
             result.append(contentsOf: typeSource)
+          } else if let enumerationCase = parameter.caseInstead {
+            switch enumerationCase {
+            case .simple, .compound, .action, .statements:
+              fatalError("Only enumeration cases should be stored in “caseInstead”.")
+            case .enumerationCase(enumeration: let type, identifier: let identifier):
+              let reference = caseReference(
+                name: sanitize(identifier: identifier, leading: true),
+                type: source(for: type, referenceLookup: referenceLookup),
+                simple: false,
+                ignoringValue: true
+              )
+              result.append(contentsOf: reference)
+            }
           } else {
             let name = parameter.name
             let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
@@ -748,8 +762,7 @@ extension Platform {
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ action in
         return ¬action.isCoverageWrapper
-        ∧ ¬(action.isFlow ∧ action.isEnumerationCaseWrapper)
-        ∧ ¬action.isEnumerationValueWrapper
+        ∧ ¬(action.isFlow ∧ action.returnValue != nil)
       })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()

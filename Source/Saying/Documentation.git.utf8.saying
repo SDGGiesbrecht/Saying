@@ -1,7 +1,7 @@
 action
  [
   [
-   English: Some examples of characters that should be available to documentation include (parentheses). It should also be possible to refer to a parameter {parameter of this action} and to a global action {none}.
+   English: Some examples of characters that should be available to documentation include (parentheses). It should also be possible to refer to a parameter {parameter of this action} and to a global action {nothing}.
   ]
   test (verify (hold some documentation that refers to a parameter (true)))
  ]
