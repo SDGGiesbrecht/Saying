@@ -439,7 +439,18 @@ extension Platform {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
             result.append(contentsOf: typeSource)
           } else if let enumerationCase = parameter.caseInstead {
-            result.append(contentsOf: "...")
+            switch enumerationCase {
+            case .simple, .compound, .action, .statements:
+              fatalError("Only enumeration cases should be stored in “caseInstead”.")
+            case .enumerationCase(enumeration: let type, identifier: let identifier):
+              let reference = caseReference(
+                name: sanitize(identifier: identifier, leading: true),
+                type: source(for: type, referenceLookup: referenceLookup),
+                simple: false,
+                ignoringValue: false
+              )
+              result.append(contentsOf: reference)
+            }
           } else {
             let name = parameter.name
             let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
