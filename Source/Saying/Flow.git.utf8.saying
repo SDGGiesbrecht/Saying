@@ -27,3 +27,28 @@ action
   }
   ← false
  }
+
+flow
+ (
+  English: nested flow (passed statements: {})
+ )
+ {
+  if (true), {
+   passed statements
+  }
+ }
+
+action
+ [
+  test (verify (use nested flow))
+ ]
+ (
+  English: use nested flow
+ )
+ truth value
+ {
+  nested flow {
+   ← true
+  }
+  ← false
+ }
