@@ -30,24 +30,25 @@ action
 
 flow
  (
-  English: nested flow (passed statements: {})
+  English: nested flow (condition: truth value) (passed statements: {})
  )
  {
-  if (true), {
+  if (condition), {
    passed statements
   }
  }
 
 action
  [
-  test (verify (use nested flow))
+  test (verify (use nested flow (true)))
+  test (verify (not (use nested flow (false))))
  ]
  (
-  English: use nested flow
+  English: use nested flow (condition: truth value)
  )
  truth value
  {
-  nested flow {
+  nested flow (condition) {
    ← true
   }
   ← false
