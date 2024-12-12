@@ -64,7 +64,7 @@ flow
   }
  }
 
- action
+action
  [
   test (verify (use indirect if with (wrap (true) as (something))))
   test (verify (not (use indirect if with (nothing))))
