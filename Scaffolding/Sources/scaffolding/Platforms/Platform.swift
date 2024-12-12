@@ -5,7 +5,6 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
-#warning("Optional wrapping required cast in Swift, does it need it in other languages too?")
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
