@@ -151,7 +151,8 @@ enum Kotlin: Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    flowArguments: [StrictString: String]
   ) -> String {
     return call(
       to: expression,
@@ -159,7 +160,8 @@ enum Kotlin: Platform {
       localLookup: localLookup,
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
-      coverageRegionCounter: &coverageRegionCounter
+      coverageRegionCounter: &coverageRegionCounter,
+      flowArguments: flowArguments
     )
   }
 

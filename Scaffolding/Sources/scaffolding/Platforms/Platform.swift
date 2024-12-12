@@ -69,7 +69,8 @@ protocol Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    flowArguments: [StrictString: String]
   ) -> String
   static func actionDeclaration(
     name: String,
@@ -354,7 +355,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    flowArguments: [StrictString: String]
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if reference.isNew {
@@ -368,8 +370,9 @@ extension Platform {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       if case .statements = parameter.passAction.returnValue {
-        #warning("Not implemented yet.")
-        return "..."
+        #warning("Debugging...")
+        print("expecting", parameter.names.identifier(), "in", flowArguments)
+        return flowArguments[parameter.names.identifier()]!
       } else if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
@@ -382,7 +385,8 @@ extension Platform {
           referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier(),
           contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter
+          coverageRegionCounter: &coverageRegionCounter,
+          flowArguments: ["passed statements": "#warning parameter call"]
         )
       }
     } else {
@@ -407,7 +411,8 @@ extension Platform {
           referenceLookup: referenceLookup,
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter
+          coverageRegionCounter: &coverageRegionCounter,
+          flowArguments: ["passed statements": "#warning action call (\(reference.source?.source()))"]
         )
       ]
       if bareAction.isFlow,
@@ -428,7 +433,8 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     parameterName: StrictString?,
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    flowArguments: [StrictString: String]
   ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
@@ -467,7 +473,8 @@ extension Platform {
                   localLookup: localLookup.appending(local),
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
-                  coverageRegionCounter: &coverageRegionCounter
+                  coverageRegionCounter: &coverageRegionCounter,
+                  flowArguments: flowArguments
                 )
               )
             case .flow(let statements):
@@ -486,7 +493,8 @@ extension Platform {
                     localLookup: localLookup.appending(local),
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
-                    coverageRegionCounter: &coverageRegionCounter
+                    coverageRegionCounter: &coverageRegionCounter,
+                    flowArguments: flowArguments
                   )
                 )
                 result.append("\n")
@@ -539,7 +547,8 @@ extension Platform {
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
                 contextCoverageIdentifier: contextCoverageIdentifier,
-                coverageRegionCounter: &coverageRegionCounter
+                coverageRegionCounter: &coverageRegionCounter,
+                flowArguments: flowArguments
               )
             )
           case .flow:
@@ -558,7 +567,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    flowArguments: [StrictString: String]
   ) -> String {
     var entry = ""
     if statement.isReturn {
@@ -572,7 +582,8 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: contextCoverageIdentifier,
-        coverageRegionCounter: &coverageRegionCounter
+        coverageRegionCounter: &coverageRegionCounter,
+        flowArguments: flowArguments
       )
     )
     if coverageRegionCounter ≠ before,
@@ -667,7 +678,8 @@ extension Platform {
         localLookup: [locals],
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context.coverageRegionIdentifier(referenceLookup: referenceLookup),
-        coverageRegionCounter: &coverageRegionCounter
+        coverageRegionCounter: &coverageRegionCounter,
+        flowArguments: ["passed statements": "#warning statements"]
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -744,7 +756,8 @@ extension Platform {
         localLookup: [],
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: nil,
-        coverageRegionCounter: &coverageRegionCounter
+        coverageRegionCounter: &coverageRegionCounter,
+        flowArguments: ["passed statements": "#warning test"]
       )
     )
   }
