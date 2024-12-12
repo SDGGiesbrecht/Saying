@@ -5,6 +5,7 @@ import SDGLogic
 import SDGCollections
 import SDGText
 
+#warning("Optional wrapping required cast in Swift, does it need it in other languages too?")
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
@@ -521,6 +522,7 @@ extension Platform {
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
       var newInliningArguments: [StrictString: String] = [:]
+      var locals = ReferenceDictionary()
       for index in parameters.indices {
         let parameter = parameters[index]
         let argument = reference.arguments[index]
@@ -529,16 +531,24 @@ extension Platform {
           newInliningArguments[parameter.names.identifier()] = call(
             to: action,
             context: context,
-            localLookup: localLookup,
+            localLookup: localLookup.appending(locals),
             referenceLookup: referenceLookup,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             inliningArguments: inliningArguments
           )
+          let newActions = action.localActions()
+          for local in newActions {
+            _ = locals.add(action: local)
+          }
+          if !newActions.isEmpty {
+            locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
+          }
         case .flow(let flow):
           var source: [String] = source(
             for: flow.statements,
             context: context,
+            localLookup: localLookup.appending(locals),
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments
           )
@@ -554,6 +564,7 @@ extension Platform {
       return source(
         for: action.implementation!.statements,
         context: action,
+        localLookup: localLookup,
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments
       ).joined(separator: "\n")
@@ -698,6 +709,7 @@ extension Platform {
   static func source(
     for statements: [StatementIntermediate],
     context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [StrictString: String]
   ) -> [String] {
@@ -707,7 +719,7 @@ extension Platform {
       let result = source(
         for: entry,
         context: context,
-        localLookup: [locals],
+        localLookup: localLookup.appending(locals),
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
@@ -759,6 +771,7 @@ extension Platform {
     let implementation = source(
       for: action.implementation!.statements,
       context: action,
+      localLookup: [],
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),

@@ -71,7 +71,7 @@ flow
  truth value
  {
   indirect if (wrap (true) as (something)) exists, unwrap it as (• contents: truth value), {
-   ← true
+   ← contents
   }
   ← false
  }
