@@ -529,12 +529,19 @@ extension Platform {
           case .action:
             fatalError("A statements parameter should have a statements argument.")
           case .flow(let flow):
-            newFlowArguments[parameter.names.identifier()] = source(
+            var source: [String] = source(
               for: flow.statements,
               context: context,
               referenceLookup: referenceLookup,
               flowArguments: flowArguments
-            ).joined(separator: "\n")
+            )
+            if let coverage = flowCoverageRegistration(
+              contextCoverageIdentifier: contextCoverageIdentifier,
+              coverageRegionCounter: &coverageRegionCounter
+            ) {
+              source.prepend(coverage)
+            }
+            newFlowArguments[parameter.names.identifier()] = source.joined(separator: "\n")
           }
         }
       }
