@@ -181,7 +181,7 @@ extension ActionIntermediate {
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", "})"],
+        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", " })"],
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
@@ -289,7 +289,6 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
         ]
       ),
