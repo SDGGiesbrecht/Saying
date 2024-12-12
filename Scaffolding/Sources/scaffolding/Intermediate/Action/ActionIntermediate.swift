@@ -616,10 +616,10 @@ extension ActionIntermediate {
         specializationNamespace: specializationNamespace
       )
     })
-    var nativeImplementationTypeLookup = typeLookup
+    var implementationTypeLookup = typeLookup
     for parameter in newParameters.inAnyOrder {
       for name in parameter.names {
-        nativeImplementationTypeLookup[name] = nil
+        implementationTypeLookup[name] = nil
       }
     }
     return ActionIntermediate(
@@ -633,12 +633,12 @@ extension ActionIntermediate {
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
         documentation: newDocumentation
       ),
-      c: c?.specializing(typeLookup: nativeImplementationTypeLookup),
-      cSharp: cSharp?.specializing(typeLookup: nativeImplementationTypeLookup),
-      javaScript: javaScript?.specializing(typeLookup: nativeImplementationTypeLookup),
-      kotlin: kotlin?.specializing(typeLookup: nativeImplementationTypeLookup),
-      swift: swift?.specializing(typeLookup: nativeImplementationTypeLookup),
-      implementation: implementation,
+      c: c?.specializing(typeLookup: implementationTypeLookup),
+      cSharp: cSharp?.specializing(typeLookup: implementationTypeLookup),
+      javaScript: javaScript?.specializing(typeLookup: implementationTypeLookup),
+      kotlin: kotlin?.specializing(typeLookup: implementationTypeLookup),
+      swift: swift?.specializing(typeLookup: implementationTypeLookup),
+      implementation: implementation?.specializing(typeLookup: implementationTypeLookup),
       declaration: nil,
       isReferenceWrapper: isReferenceWrapper,
       isEnumerationCaseWrapper: isEnumerationCaseWrapper,
