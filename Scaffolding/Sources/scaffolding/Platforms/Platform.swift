@@ -370,8 +370,6 @@ extension Platform {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       if case .statements = parameter.passAction.returnValue {
-        #warning("Debugging...")
-        print("expecting", parameter.names.identifier(), "in", flowArguments)
         return flowArguments[parameter.names.identifier()]!
       } else if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
@@ -386,7 +384,7 @@ extension Platform {
           parameterName: parameter.names.identifier(),
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          flowArguments: ["passed statements": "#warning parameter call"]
+          flowArguments: [:]
         )
       }
     } else {
@@ -412,7 +410,7 @@ extension Platform {
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          flowArguments: ["passed statements": "#warning action call (\(reference.source?.source()))"]
+          flowArguments: flowArguments
         )
       ]
       if bareAction.isFlow,
@@ -521,10 +519,30 @@ extension Platform {
         ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
       )
     } else if action.isFlow {
+      let parameters = action.parameters.ordered(for: reference.actionName)
+      var newFlowArguments: [StrictString: String] = [:]
+      for index in parameters.indices {
+        let parameter = parameters[index]
+        if case .statements = parameters[index].type {
+          let argument = reference.arguments[index]
+          switch argument {
+          case .action:
+            fatalError("A statements parameter should have a statements argument.")
+          case .flow(let flow):
+            newFlowArguments[parameter.names.identifier()] = source(
+              for: flow.statements,
+              context: context,
+              referenceLookup: referenceLookup,
+              flowArguments: flowArguments
+            ).joined(separator: "\n")
+          }
+        }
+      }
       return source(
         for: action.implementation!.statements,
         context: action,
-        referenceLookup: referenceLookup
+        referenceLookup: referenceLookup,
+        flowArguments: newFlowArguments
       ).joined(separator: "\n")
     } else {
       let name = sanitize(
@@ -666,8 +684,9 @@ extension Platform {
 
   static func source(
     for statements: [StatementIntermediate],
-    context: ActionIntermediate,
-    referenceLookup: [ReferenceDictionary]
+    context: ActionIntermediate?,
+    referenceLookup: [ReferenceDictionary],
+    flowArguments: [StrictString: String]
   ) -> [String] {
     var locals = ReferenceDictionary()
     var coverageRegionCounter = 0
@@ -677,9 +696,9 @@ extension Platform {
         context: context,
         localLookup: [locals],
         referenceLookup: referenceLookup.appending(locals),
-        contextCoverageIdentifier: context.coverageRegionIdentifier(referenceLookup: referenceLookup),
+        contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
-        flowArguments: ["passed statements": "#warning statements"]
+        flowArguments: flowArguments
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -729,7 +748,8 @@ extension Platform {
       context: action,
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
-      )
+      ),
+      flowArguments: [:]
     )
     return actionDeclaration(
       name: name,
@@ -757,7 +777,7 @@ extension Platform {
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: nil,
         coverageRegionCounter: &coverageRegionCounter,
-        flowArguments: ["passed statements": "#warning test"]
+        flowArguments: [:]
       )
     )
   }
