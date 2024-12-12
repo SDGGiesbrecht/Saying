@@ -101,9 +101,10 @@ extension ActionPrototype {
   func parameterReferenceDictionary(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
     var result = ReferenceDictionary()
     for parameter in parameters.inAnyOrder {
-      _ = result.add(action: parameter.passAction)
       if let execute = parameter.executeAction {
         _ = result.add(action: execute)
+      } else {
+        _ = result.add(action: parameter.passAction)
       }
     }
 
