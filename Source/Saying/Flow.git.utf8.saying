@@ -65,12 +65,16 @@ flow
  }
 
  action
+ [
+  test (verify (use indirect if with (wrap (true) as (something))))
+  test (verify (not (use indirect if with (nothing))))
+ ]
  (
-  English: use indirect if
+  English: use indirect if with (branch: optional (truth value))
  )
  truth value
  {
-  indirect if (wrap (true) as (something)) exists, unwrap it as (• contents: truth value), {
+  indirect if (branch) exists, unwrap it as (• contents: truth value), {
    ← contents
   }
   ← false
