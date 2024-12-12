@@ -70,7 +70,7 @@ protocol Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    flowArguments: [StrictString: String]
+    inliningArguments: [StrictString: String]
   ) -> String
   static func actionDeclaration(
     name: String,
@@ -356,10 +356,12 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    flowArguments: [StrictString: String]
+    inliningArguments: [StrictString: String]
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
-    if reference.isNew {
+    if let inlined = inliningArguments[reference.actionName] {
+      return inlined
+    } else if reference.isNew {
       return String(sanitize(identifier: reference.actionName, leading: true))
     } else if let local = localLookup.lookupAction(
       reference.actionName,
@@ -369,9 +371,7 @@ extension Platform {
     ) {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
-      if case .statements = parameter.passAction.returnValue {
-        return flowArguments[parameter.names.identifier()]!
-      } else if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
+      if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         return String(sanitize(identifier: parameter.names.identifier(), leading: true))
       } else {
@@ -384,7 +384,7 @@ extension Platform {
           parameterName: parameter.names.identifier(),
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          flowArguments: [:]
+          inliningArguments: [:]
         )
       }
     } else {
@@ -410,7 +410,7 @@ extension Platform {
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          flowArguments: flowArguments
+          inliningArguments: inliningArguments
         )
       ]
       if bareAction.isFlow,
@@ -432,7 +432,7 @@ extension Platform {
     parameterName: StrictString?,
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    flowArguments: [StrictString: String]
+    inliningArguments: [StrictString: String]
   ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
@@ -472,7 +472,7 @@ extension Platform {
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
-                  flowArguments: flowArguments
+                  inliningArguments: inliningArguments
                 )
               )
             case .flow(let statements):
@@ -492,7 +492,7 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
-                    flowArguments: flowArguments
+                    inliningArguments: inliningArguments
                   )
                 )
                 result.append("\n")
@@ -520,36 +520,42 @@ extension Platform {
       )
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
-      var newFlowArguments: [StrictString: String] = [:]
+      var newInliningArguments: [StrictString: String] = [:]
       for index in parameters.indices {
         let parameter = parameters[index]
-        if case .statements = parameters[index].type {
-          let argument = reference.arguments[index]
-          switch argument {
-          case .action:
-            fatalError("A statements parameter should have a statements argument.")
-          case .flow(let flow):
-            var source: [String] = source(
-              for: flow.statements,
-              context: context,
-              referenceLookup: referenceLookup,
-              flowArguments: flowArguments
-            )
-            if let coverage = flowCoverageRegistration(
-              contextCoverageIdentifier: contextCoverageIdentifier,
-              coverageRegionCounter: &coverageRegionCounter
-            ) {
-              source.prepend(coverage)
-            }
-            newFlowArguments[parameter.names.identifier()] = source.joined(separator: "\n")
+        let argument = reference.arguments[index]
+        switch argument {
+        case .action(let action):
+          newInliningArguments[parameter.names.identifier()] = call(
+            to: action,
+            context: context,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter,
+            inliningArguments: inliningArguments
+          )
+        case .flow(let flow):
+          var source: [String] = source(
+            for: flow.statements,
+            context: context,
+            referenceLookup: referenceLookup,
+            inliningArguments: inliningArguments
+          )
+          if let coverage = flowCoverageRegistration(
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter
+          ) {
+            source.prepend(coverage)
           }
+          newInliningArguments[parameter.names.identifier()] = source.joined(separator: "\n")
         }
       }
       return source(
         for: action.implementation!.statements,
         context: action,
         referenceLookup: referenceLookup,
-        flowArguments: newFlowArguments
+        inliningArguments: newInliningArguments
       ).joined(separator: "\n")
     } else {
       let name = sanitize(
@@ -573,7 +579,7 @@ extension Platform {
                 referenceLookup: referenceLookup,
                 contextCoverageIdentifier: contextCoverageIdentifier,
                 coverageRegionCounter: &coverageRegionCounter,
-                flowArguments: flowArguments
+                inliningArguments: inliningArguments
               )
             )
           case .flow:
@@ -593,7 +599,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    flowArguments: [StrictString: String]
+    inliningArguments: [StrictString: String]
   ) -> String {
     var entry = ""
     if statement.isReturn {
@@ -608,7 +614,7 @@ extension Platform {
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter,
-        flowArguments: flowArguments
+        inliningArguments: inliningArguments
       )
     )
     if coverageRegionCounter ≠ before,
@@ -693,7 +699,7 @@ extension Platform {
     for statements: [StatementIntermediate],
     context: ActionIntermediate?,
     referenceLookup: [ReferenceDictionary],
-    flowArguments: [StrictString: String]
+    inliningArguments: [StrictString: String]
   ) -> [String] {
     var locals = ReferenceDictionary()
     var coverageRegionCounter = 0
@@ -705,7 +711,7 @@ extension Platform {
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
-        flowArguments: flowArguments
+        inliningArguments: inliningArguments
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -756,7 +762,7 @@ extension Platform {
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
-      flowArguments: [:]
+      inliningArguments: [:]
     )
     return actionDeclaration(
       name: name,
@@ -784,7 +790,7 @@ extension Platform {
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: nil,
         coverageRegionCounter: &coverageRegionCounter,
-        flowArguments: [:]
+        inliningArguments: [:]
       )
     )
   }

@@ -132,7 +132,7 @@ enum JavaScript: Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    flowArguments: [StrictString: String]
+    inliningArguments: [StrictString: String]
   ) -> String {
     return call(
       to: expression,
@@ -141,7 +141,7 @@ enum JavaScript: Platform {
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter,
-      flowArguments: flowArguments
+      inliningArguments: inliningArguments
     ).appending(";")
   }
 

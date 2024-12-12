@@ -27,7 +27,7 @@ extension
      C♯: “¤(28)” value “¤(29)”/“if ¤(28)” enumeration “ is ” thing “ ” value “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
      JavaScript: “¤(28)” value “¤(29)”/“let ” value “ = ” enumeration “; if ¤(28)” value “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
      Kotlin: “¤(28)” value “¤(29)”/“val ” value “ = ” enumeration “; if ¤(28)” value “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
-     Swift: “¤(28)” value “¤(29)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
+     Swift: “¤(28)” value “¤(29) as ” thing “¤(3F)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
 
     case
      (
