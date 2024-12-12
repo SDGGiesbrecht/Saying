@@ -100,6 +100,14 @@ extension
      consequence
     }
    }
+
+  flow (clients)
+   (
+    English: change (storage: optional (thing)) to (value: thing)
+   )
+   {
+    change (storage) to (wrap (value) as (something))
+   }
  }
 
 action
@@ -128,6 +136,8 @@ action
  truth value
  {
   let (• storage: optional (truth value)) start as (wrap (true) as (something))
+  change (storage) to (nothing)
+  change (storage) to (true)
   change (storage) to (nothing)
   ← (storage) does not exist
  }
