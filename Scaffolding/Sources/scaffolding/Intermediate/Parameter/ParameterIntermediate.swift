@@ -8,6 +8,19 @@ struct ParameterIntermediate {
   var executeAction: ActionIntermediate?
 }
 
+extension ParameterIntermediate {
+  static func nativeParameterStub(
+    names: Set<StrictString>,
+    type: ParsedTypeReference
+  ) -> ParameterIntermediate {
+    return ParameterIntermediate(
+      names: names,
+      type: type,
+      passAction: .parameterAction(names: names, parameters: .none, returnValue: type)
+    )
+  }
+}
+
 extension ParameterIntermediate: InterpolationParameterProtocol {}
 
 extension ParameterIntermediate {

@@ -81,7 +81,7 @@ extension ActionUse {
     case .some(.some(let value)):
       resolvedResultType = value
     case .some(.none):
-      resolvedResultType = .none
+      resolvedResultType = .some(.none)
     case .none:
       guard let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }) else {
         return // aborting due to failure deeper down

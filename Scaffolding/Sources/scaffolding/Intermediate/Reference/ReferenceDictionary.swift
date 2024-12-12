@@ -86,12 +86,11 @@ extension ReferenceDictionary {
       if let action = enumerationCase.referenceAction {
         errors.append(contentsOf: add(action: action))
       }
-      if let action = enumerationCase.wrapAction {
-        errors.append(contentsOf: add(action: action))
-      }
+      errors.append(contentsOf: add(action: enumerationCase.wrapAction))
       if let action = enumerationCase.unwrapAction {
         errors.append(contentsOf: add(action: action))
       }
+      errors.append(contentsOf: add(action: enumerationCase.checkAction))
     }
     return errors
   }
@@ -187,7 +186,7 @@ extension ReferenceDictionary {
           return result
         }
       case .some(.none):
-        if let result = set[.none] {
+        if let result = set[.none] ?? set[.statements] {
           return result
         }
       case .none:

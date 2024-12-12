@@ -8,14 +8,39 @@ ability (clients)
 extension
  optional (thing)
  {
-  thing (clients)
+  enumeration (clients)
    (
     English: optional (thing)
    )
-   C: “” thing “¤(2A)”
    C♯: “” thing “¤(3F)”
    Kotlin: “” thing “¤(3F)”
    Swift: “” thing “¤(3F)”
+   {
+    case
+     (
+      English: something
+      Deutsch: etwas
+      français : quelque chose
+      ελληνικά: κάτι
+     )
+     thing
+     C♯: “¤(28)” value “¤(29)”/“if ¤(28)” enumeration “ is ” thing “ ” value “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
+     JavaScript: “¤(28)” value “¤(29)”/“let ” value “ = ” enumeration “; if ¤(28)” value “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
+     Kotlin: “¤(28)” value “¤(29)”/“val ” value “ = ” enumeration “; if ¤(28)” value “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
+     Swift: “¤(28)” value “¤(29) as ” thing “¤(3F)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
+
+    case
+     (
+      English: nothing
+      Deutsch: nichts
+      français : rien
+      ελληνικά: τίποτα
+     )
+     C♯: “¤(28)null¤(29)”
+     JavaScript: “¤(28)null¤(29)”
+     Kotlin: “¤(28)null¤(29)”
+     Swift: “¤(28)nil¤(29)”
+   }
 
   use (clients)
    storage of (optional (thing))
@@ -23,22 +48,8 @@ extension
    }
 
   action (clients)
-   (
-    English: none
-    Deutsch: keiner
-    français : aucun
-    ελληνικά: κανένας
-   )
-   optional (thing)
-   C: “¤(28)NULL¤(29)” (stddef)
-   C♯: “¤(28)null¤(29)”
-   JavaScript: “¤(28)null¤(29)”
-   Kotlin: “¤(28)null¤(29)”
-   Swift: “¤(28)nil¤(29)”
-
-  action (clients)
    [
-    test (verify (not ((none) exists)))
+    test (verify (not ((nothing) exists)))
    ]
    (
     English: (thing: optional (thing)) exists
@@ -48,15 +59,17 @@ extension
     עברית: יש (דבר: [thing])
    )
    truth value
-   C: “¤(28)” thing “¤(29) ¤(21)= NULL” (stddef)
    C♯: “¤(28)” thing “¤(29) ¤(21)= null”
    JavaScript: “¤(28)” thing “¤(29) ¤(21)== null”
    Kotlin: “¤(28)” thing “¤(29) ¤(21)= null”
    Swift: “¤(28)” thing “¤(29) ¤(21)= nil”
+   {
+    ← (thing) is case (something)
+   }
 
   action (clients)
    [
-    test (verify ((none) does not exist))
+    test (verify ((nothing) does not exist))
    ]
    (
     English: (thing: optional (thing)) does not exist
@@ -66,50 +79,33 @@ extension
     עברית: אין (דבר: [thing])
    )
    truth value
-   C: “¤(28)” thing “¤(29) == NULL” (stddef)
    C♯: “¤(28)” thing “¤(29) == null”
    JavaScript: “¤(28)” thing “¤(29) === null”
    Kotlin: “¤(28)” thing “¤(29) == null”
    Swift: “¤(28)” thing “¤(29) == nil”
+   {
+    ← (thing) is case (nothing)
+   }
 
   flow (clients)
    (
     English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
    )
-   C: “if ¤(28)” optional “¤(29) ¤(7B) ” thing “ ” unwrapped “ = ¤(2A)” optional “; ” consequence “¤(7D)”
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
-   JavaScript: “let ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
-   Kotlin: “val ” unwrapped “ = ¤(28)” optional “¤(29); if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
+   JavaScript: “let ” unwrapped “ = ” optional “; if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
+   Kotlin: “val ” unwrapped “ = ” optional “; if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
    Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
+   {
+    if (optional) is (something), unwrap it as (unwrapped), {
+     consequence
+    }
+   }
  }
 
 action
  [
-  test (verify (accept optional (optional true value)))
- ]
- (
-  English: accept optional (thing: optional (truth value))
- )
- truth value
- {
-  ← true
- }
-
-action
- (
-  English: optional true value
- )
- optional (truth value)
- C: “¤(28)¤(28)bool¤(2A)¤(29) ¤(22)1¤(22)¤(29)” (stdbool)
- C♯: “¤(28)true¤(29)”
- JavaScript: “¤(28)true¤(29)”
- Kotlin: “¤(28)true¤(29)”
- Swift: “¤(28)true¤(29)”
-
-action
- [
-  test (verify (unwrapping (optional true value) works))
-  test (verify (not (unwrapping (none) works)))
+  test (verify (unwrapping (wrap (true) as (something)) works))
+  test (verify (not (unwrapping (nothing) works)))
  ]
  (
   English: unwrapping (optional: optional (truth value)) works
@@ -131,7 +127,36 @@ action
  )
  truth value
  {
-  let (• storage: optional (truth value)) start as (optional true value)
-  change (storage) to (none)
+  let (• storage: optional (truth value)) start as (wrap (true) as (something))
+  change (storage) to (nothing)
   ← (storage) does not exist
+ }
+
+action
+ [
+  test (verify (not (use optional (nothing: optional (truth value)))))
+  test (verify (use optional (wrap (true) as (something))))
+ ]
+ (
+  English: use optional (optional: optional (truth value))
+ )
+ truth value
+ {
+  if (optional) is (something), unwrap it as (• unwrapped: truth value), {
+   ← unwrapped
+  }
+  ← false
+ }
+
+action
+ [
+  test (verify (not (check optional (nothing: optional (truth value)))))
+  test (verify (check optional (wrap (true) as (something))))
+ ]
+ (
+  English: check optional (optional: optional (truth value))
+ )
+ truth value
+ {
+  ← (optional) is case (something)
  }

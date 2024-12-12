@@ -234,18 +234,8 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
   ) -> Interpolation {
     return Interpolation(
       parameters: [
-        ParameterIntermediate(
-          names: ["value"],
-          type: valueType,
-          passAction: .parameterAction(names: ["value"], parameters: .none, returnValue: nil),
-          executeAction: nil
-        ),
-        ParameterIntermediate(
-          names: ["case"],
-          type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier),
-          passAction: .parameterAction(names: ["case"], parameters: .none, returnValue: nil),
-          executeAction: nil
-        ),
+        .nativeParameterStub(names: ["value"], type: valueType),
+        .nativeParameterStub(names: ["case"], type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier)),
       ],
       reorderings: [
         "wrap () as ()": [0, 1]
@@ -259,33 +249,28 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
   ) -> Interpolation {
     return Interpolation(
       parameters: [
-        ParameterIntermediate(
-          names: ["enumeration"],
-          type: enumerationType,
-          passAction: .parameterAction(names: ["enumeration"], parameters: .none, returnValue: nil),
-          executeAction: nil
-        ),
-        ParameterIntermediate(
-          names: ["case"],
-          type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier),
-          passAction: .parameterAction(names: ["case"], parameters: .none, returnValue: nil),
-          executeAction: nil
-        ),
-        ParameterIntermediate(
-          names: ["value"],
-          type: valueType,
-          passAction: .parameterAction(names: ["value"], parameters: .none, returnValue: nil),
-          executeAction: nil
-        ),
-        ParameterIntermediate(
-          names: ["consequence"],
-          type: .statements,
-          passAction: .parameterAction(names: ["consequence"], parameters: .none, returnValue: nil),
-          executeAction: nil
-        ),
+        .nativeParameterStub(names: ["enumeration"], type: enumerationType),
+        .nativeParameterStub(names: ["case"], type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier)),
+        .nativeParameterStub(names: ["value"], type: valueType),
+        .nativeParameterStub(names: ["consequence"], type: .statements),
       ],
       reorderings: [
         "if () is (), unwrap it as (), ()": [0, 1, 2, 3]
+      ]
+    )
+  }
+  static func enumerationCheck(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: StrictString,
+    empty: Bool
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: [
+        .nativeParameterStub(names: ["enumeration"], type: enumerationType),
+        .nativeParameterStub(names: ["case"], type: empty ? enumerationType : .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier)),
+      ],
+      reorderings: [
+        "() is case ()": [0, 1]
       ]
     )
   }

@@ -69,7 +69,8 @@ protocol Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    inliningArguments: [StrictString: String]
   ) -> String
   static func actionDeclaration(
     name: String,
@@ -228,8 +229,10 @@ extension Platform {
         }
         return result
       } else {
-        // Only native types are implemented so far, so this is only reachable for untyped target languages.
-        return ""
+        return sanitize(
+          identifier: type.names.identifier(),
+          leading: true
+        )
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
@@ -301,7 +304,7 @@ extension Platform {
     }
     if ¬isTyped,
       thing.cases.allSatisfy({ enumerationCase in
-        return enumerationCase.referenceAction.flatMap({ nativeImplementation(of: $0) }) ≠ nil
+        return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) ≠ nil
       }) {
       return nil
     }
@@ -352,10 +355,13 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    inliningArguments: [StrictString: String]
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
-    if reference.isNew {
+    if let inlined = inliningArguments[reference.actionName] {
+      return inlined
+    } else if reference.isNew {
       return String(sanitize(identifier: reference.actionName, leading: true))
     } else if let local = localLookup.lookupAction(
       reference.actionName,
@@ -377,7 +383,8 @@ extension Platform {
           referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier(),
           contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter
+          coverageRegionCounter: &coverageRegionCounter,
+          inliningArguments: [:]
         )
       }
     } else {
@@ -402,12 +409,12 @@ extension Platform {
           referenceLookup: referenceLookup,
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter
+          coverageRegionCounter: &coverageRegionCounter,
+          inliningArguments: inliningArguments
         )
       ]
       if bareAction.isFlow,
-        !bareAction.isEnumerationCaseWrapper,
-        !bareAction.isEnumerationValueWrapper,
+        bareAction.returnValue == nil,
         let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
@@ -424,7 +431,8 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     parameterName: StrictString?,
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    inliningArguments: [StrictString: String]
   ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
@@ -437,6 +445,19 @@ extension Platform {
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
             result.append(contentsOf: typeSource)
+          } else if let enumerationCase = parameter.caseInstead {
+            switch enumerationCase {
+            case .simple, .compound, .action, .statements:
+              fatalError("Only enumeration cases should be stored in “caseInstead”.")
+            case .enumerationCase(enumeration: let type, identifier: let identifier):
+              let reference = caseReference(
+                name: sanitize(identifier: identifier, leading: true),
+                type: source(for: type, referenceLookup: referenceLookup),
+                simple: false,
+                ignoringValue: true
+              )
+              result.append(contentsOf: reference)
+            }
           } else {
             let name = parameter.name
             let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
@@ -450,7 +471,8 @@ extension Platform {
                   localLookup: localLookup.appending(local),
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
-                  coverageRegionCounter: &coverageRegionCounter
+                  coverageRegionCounter: &coverageRegionCounter,
+                  inliningArguments: inliningArguments
                 )
               )
             case .flow(let statements):
@@ -469,7 +491,8 @@ extension Platform {
                     localLookup: localLookup.appending(local),
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
-                    coverageRegionCounter: &coverageRegionCounter
+                    coverageRegionCounter: &coverageRegionCounter,
+                    inliningArguments: inliningArguments
                   )
                 )
                 result.append("\n")
@@ -495,6 +518,55 @@ extension Platform {
         simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
         ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
       )
+    } else if action.isFlow {
+      let parameters = action.parameters.ordered(for: reference.actionName)
+      var newInliningArguments: [StrictString: String] = [:]
+      var locals = ReferenceDictionary()
+      for index in parameters.indices {
+        let parameter = parameters[index]
+        let argument = reference.arguments[index]
+        switch argument {
+        case .action(let action):
+          newInliningArguments[parameter.names.identifier()] = call(
+            to: action,
+            context: context,
+            localLookup: localLookup.appending(locals),
+            referenceLookup: referenceLookup,
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter,
+            inliningArguments: inliningArguments
+          )
+          let newActions = action.localActions()
+          for local in newActions {
+            _ = locals.add(action: local)
+          }
+          if !newActions.isEmpty {
+            locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
+          }
+        case .flow(let flow):
+          var source: [String] = source(
+            for: flow.statements,
+            context: context,
+            localLookup: localLookup.appending(locals),
+            referenceLookup: referenceLookup,
+            inliningArguments: inliningArguments
+          )
+          if let coverage = flowCoverageRegistration(
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter
+          ) {
+            source.prepend(coverage)
+          }
+          newInliningArguments[parameter.names.identifier()] = source.joined(separator: "\n")
+        }
+      }
+      return source(
+        for: action.implementation!.statements,
+        context: action,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        inliningArguments: newInliningArguments
+      ).joined(separator: "\n")
     } else {
       let name = sanitize(
         identifier: parameterName
@@ -516,7 +588,8 @@ extension Platform {
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
                 contextCoverageIdentifier: contextCoverageIdentifier,
-                coverageRegionCounter: &coverageRegionCounter
+                coverageRegionCounter: &coverageRegionCounter,
+                inliningArguments: inliningArguments
               )
             )
           case .flow:
@@ -535,7 +608,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    inliningArguments: [StrictString: String]
   ) -> String {
     var entry = ""
     if statement.isReturn {
@@ -549,7 +623,8 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: contextCoverageIdentifier,
-        coverageRegionCounter: &coverageRegionCounter
+        coverageRegionCounter: &coverageRegionCounter,
+        inliningArguments: inliningArguments
       )
     )
     if coverageRegionCounter ≠ before,
@@ -630,6 +705,36 @@ extension Platform {
     )
   }
 
+  static func source(
+    for statements: [StatementIntermediate],
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    inliningArguments: [StrictString: String]
+  ) -> [String] {
+    var locals = ReferenceDictionary()
+    var coverageRegionCounter = 0
+    return statements.map({ entry in
+      let result = source(
+        for: entry,
+        context: context,
+        localLookup: localLookup.appending(locals),
+        referenceLookup: referenceLookup.appending(locals),
+        contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
+        coverageRegionCounter: &coverageRegionCounter,
+        inliningArguments: inliningArguments
+      )
+      let newActions = entry.localActions()
+      for local in newActions {
+        _ = locals.add(action: local)
+      }
+      if !newActions.isEmpty {
+        locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
+      }
+      return result
+    })
+  }
+
   static func declaration(
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary]
@@ -662,27 +767,15 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
-    var locals = ReferenceDictionary()
-    let nonLocalReferenceLookup = externalReferenceLookup.appending(action.parameterReferenceDictionary(externalLookup: externalReferenceLookup))
-    var coverageRegionCounter = 0
-    let implementation = action.implementation!.statements.map({ entry in
-      let result = source(
-        for: entry,
-        context: action,
-        localLookup: [locals],
-        referenceLookup: nonLocalReferenceLookup.appending(locals),
-        contextCoverageIdentifier: action.coverageRegionIdentifier(referenceLookup: externalReferenceLookup),
-        coverageRegionCounter: &coverageRegionCounter
-      )
-      let newActions = entry.localActions()
-      for local in newActions {
-        _ = locals.add(action: local)
-      }
-      if !newActions.isEmpty {
-        locals.resolveTypeIdentifiers(externalLookup: nonLocalReferenceLookup)
-      }
-      return result
-    })
+    let implementation = source(
+      for: action.implementation!.statements,
+      context: action,
+      localLookup: [],
+      referenceLookup: externalReferenceLookup.appending(
+        action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
+      ),
+      inliningArguments: [:]
+    )
     return actionDeclaration(
       name: name,
       parameters: parameters,
@@ -708,7 +801,8 @@ extension Platform {
         localLookup: [],
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: nil,
-        coverageRegionCounter: &coverageRegionCounter
+        coverageRegionCounter: &coverageRegionCounter,
+        inliningArguments: [:]
       )
     )
   }
@@ -748,13 +842,12 @@ extension Platform {
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ action in
         return ¬action.isCoverageWrapper
-        ∧ ¬(action.isFlow ∧ action.isEnumerationCaseWrapper)
-        ∧ ¬action.isEnumerationValueWrapper
+        ∧ ¬(action.isFlow ∧ action.returnValue != nil)
       })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup]) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
     let regions = Set([
       actionRegions,
       choiceRegions
