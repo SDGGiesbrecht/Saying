@@ -53,3 +53,25 @@ action
   }
   ← false
  }
+
+flow
+ (
+  English: indirect if (package: optional (truth value)) exists, unwrap it as (unpacked: truth value), (stuff to do: {})
+ )
+ {
+  if (package) is (something), unwrap it as (unpacked), {
+   stuff to do
+  }
+ }
+
+ action
+ (
+  English: use indirect if
+ )
+ truth value
+ {
+  indirect if (wrap (true) as (something)) exists, unwrap it as (• contents: truth value), {
+   ← true
+  }
+  ← false
+ }
