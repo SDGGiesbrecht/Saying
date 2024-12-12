@@ -45,7 +45,15 @@ enum JavaScript: Platform {
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
-    return "\(type).\(name)"
+    if simple {
+      return "\(type).\(name)"
+    } else {
+      if ignoringValue {
+        return "\(type).\(name)"
+      } else {
+        return "{ enumerationCase: \(type).\(name) }"
+      }
+    }
   }
   static func caseDeclaration(
     name: String,
