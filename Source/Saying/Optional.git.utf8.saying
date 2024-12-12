@@ -137,6 +137,8 @@ action
  {
   let (• storage: optional (truth value)) start as (wrap (true) as (something))
   change (storage) to (nothing)
+  change (storage) to (true)
+  change (storage) to (nothing)
   ← (storage) does not exist
  }
 
