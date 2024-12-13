@@ -2,13 +2,14 @@ import Foundation
 
 import SDGCollections
 import SDGText
+import SDGPersistence
 
 struct Module {
 
   var directory: URL
 
   func sourceFiles() throws -> [URL] {
-    return try FileManager.default.contents(ofDirectory: directory)
+    return try FileManager.default.deepFileEnumeration(in: directory)
       .lazy.filter({ $0.lastPathComponent ∉ Package.ignoredFiles })
       .sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
   }
