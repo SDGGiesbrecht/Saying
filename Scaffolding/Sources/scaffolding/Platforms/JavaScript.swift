@@ -117,13 +117,13 @@ enum JavaScript: Platform {
     return true
   }
   static func prepareReference(to argument: String) -> String? {
-    return "let \(sanitize(identifier: StrictString(argument), leading: true))Reference = { value: \(argument) };"
+    return "let \(sanitize(identifier: StrictString(argument), leading: true))Reference = { value: \(argument) }; "
   }
   static func passReference(to argument: String) -> String {
     return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
   }
   static func unpackReference(to argument: String) -> String? {
-    return "\(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference.value;"
+    return " \(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference.value;"
   }
   static func dereference(throughParameter: String) -> String {
     return "\(throughParameter).value"

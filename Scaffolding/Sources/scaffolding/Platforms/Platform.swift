@@ -653,7 +653,7 @@ extension Platform {
       }
       for reference in referenceList {
         if let preparation = prepareReference(to: reference) {
-          entry.append("\(preparation) ")
+          entry.append(preparation)
         }
       }
     }
@@ -681,7 +681,7 @@ extension Platform {
     }
     for reference in referenceList.reversed() {
       if let unpack = unpackReference(to: reference) {
-        entry.append(" \(unpack)")
+        entry.append(unpack)
       }
     }
     return entry
