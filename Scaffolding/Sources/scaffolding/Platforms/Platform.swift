@@ -51,8 +51,13 @@ protocol Platform {
 
   // Actions
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
-  static func parameterDeclaration(name: String, type: String) -> String
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
+  static var needsReferencePreparation: Bool { get }
+  static func prepareReference(to argument: String) -> String?
+  static func passReference(to argument: String) -> String
+  static func unpackReference(to argument: String) -> String?
+  static func dereference(throughParameter: String) -> String
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String) -> String?
@@ -361,7 +366,7 @@ extension Platform {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
       return inlined
-    } else if reference.isNew {
+    } else if reference.passage == .out {
       return String(sanitize(identifier: reference.actionName, leading: true))
     } else if let local = localLookup.lookupAction(
       reference.actionName,
@@ -373,7 +378,12 @@ extension Platform {
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
-        return String(sanitize(identifier: parameter.names.identifier(), leading: true))
+        let name = String(sanitize(identifier: parameter.names.identifier(), leading: true))
+        if parameter.isThrough {
+          return dereference(throughParameter: name)
+        } else {
+          return name
+        }
       } else {
         return call(
           to: parameter.executeAction!,
@@ -581,17 +591,33 @@ extension Platform {
         for argument in reference.arguments {
           switch argument {
           case .action(let actionArgument):
-            argumentsArray.append(
-              call(
-                to: actionArgument,
-                context: context,
-                localLookup: localLookup,
-                referenceLookup: referenceLookup,
-                contextCoverageIdentifier: contextCoverageIdentifier,
-                coverageRegionCounter: &coverageRegionCounter,
-                inliningArguments: inliningArguments
+            if actionArgument.passage == .through {
+              argumentsArray.append(
+                passReference(
+                  to: call(
+                    to: actionArgument,
+                    context: context,
+                    localLookup: localLookup,
+                    referenceLookup: referenceLookup,
+                    contextCoverageIdentifier: contextCoverageIdentifier,
+                    coverageRegionCounter: &coverageRegionCounter,
+                    inliningArguments: inliningArguments
+                  )
+                )
               )
-            )
+            } else {
+              argumentsArray.append(
+                call(
+                  to: actionArgument,
+                  context: context,
+                  localLookup: localLookup,
+                  referenceLookup: referenceLookup,
+                  contextCoverageIdentifier: contextCoverageIdentifier,
+                  coverageRegionCounter: &coverageRegionCounter,
+                  inliningArguments: inliningArguments
+                )
+              )
+            }
           case .flow:
             fatalError("Statement parameters are only supported in native implementations (so far).")
           }
@@ -612,6 +638,25 @@ extension Platform {
     inliningArguments: [StrictString: String]
   ) -> String {
     var entry = ""
+    var referenceList: [String] = []
+    if needsReferencePreparation {
+      referenceList = statement.passedReferences().map { reference in
+        return call(
+          to: reference,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: contextCoverageIdentifier,
+          coverageRegionCounter: &coverageRegionCounter,
+          inliningArguments: inliningArguments
+        )
+      }
+      for reference in referenceList {
+        if let preparation = prepareReference(to: reference) {
+          entry.append(preparation)
+        }
+      }
+    }
     if statement.isReturn {
       entry.prepend(contentsOf: "return ")
     }
@@ -634,6 +679,11 @@ extension Platform {
        ) {
       entry.append(coverage)
     }
+    for reference in referenceList.reversed() {
+      if let unpack = unpackReference(to: reference) {
+        entry.append(unpack)
+      }
+    }
     return entry
   }
 
@@ -648,7 +698,7 @@ extension Platform {
       switch parameter.type {
       case .simple, .compound:
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
-        return parameterDeclaration(name: name, type: typeSource)
+        return parameterDeclaration(name: name, type: typeSource, isThrough: parameter.isThrough)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
         let parameters = actionParameters
           .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })

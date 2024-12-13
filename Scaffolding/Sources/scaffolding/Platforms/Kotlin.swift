@@ -119,11 +119,27 @@ enum Kotlin: Platform {
     return action.kotlin
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
-    "\(name): \(type)"
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+    let modifiedType = isThrough ? "MutableList<\(type)>" : type
+    return "\(name): \(modifiedType)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "\(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+  }
+  static var needsReferencePreparation: Bool {
+    return true
+  }
+  static func prepareReference(to argument: String) -> String? {
+    return "val \(sanitize(identifier: StrictString(argument), leading: true))Reference = mutableListOf(\(argument)); "
+  }
+  static func passReference(to argument: String) -> String {
+    return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
+  }
+  static func unpackReference(to argument: String) -> String? {
+    return "; \(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference[0]"
+  }
+  static func dereference(throughParameter: String) -> String {
+    return "\(throughParameter)[0]"
   }
 
   static var emptyReturnType: String? {

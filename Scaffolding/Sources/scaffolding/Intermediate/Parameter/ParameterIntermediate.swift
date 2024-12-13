@@ -4,6 +4,7 @@ import SDGText
 struct ParameterIntermediate {
   var names: Set<StrictString>
   var type: ParsedTypeReference
+  var isThrough: Bool
   var passAction: ActionIntermediate
   var executeAction: ActionIntermediate?
 }
@@ -16,6 +17,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type,
+      isThrough: false,
       passAction: .parameterAction(names: names, parameters: .none, returnValue: type)
     )
   }
@@ -27,7 +29,8 @@ extension ParameterIntermediate {
   init(
     names: Set<StrictString>,
     nestedParameters: Interpolation<ParameterIntermediate>,
-    returnValue: ParsedTypeReference
+    returnValue: ParsedTypeReference,
+    isThrough: Bool
   ) {
     let actionParameters = nestedParameters.ordered(for: names.identifier())
     let passedType: ParsedTypeReference
@@ -54,6 +57,7 @@ extension ParameterIntermediate {
     self.init(
       names: names,
       type: passedType,
+      isThrough: isThrough,
       passAction: passAction,
       executeAction: executeAction
     )
@@ -67,6 +71,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type.resolvingExtensionContext(typeLookup: typeLookup),
+      isThrough: isThrough,
       passAction: passAction.resolvingExtensionContext(typeLookup: typeLookup),
       executeAction: executeAction?.resolvingExtensionContext(typeLookup: typeLookup)
     )
@@ -75,6 +80,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names ∪ requirement.names,
       type: type,
+      isThrough: isThrough,
       passAction: passAction,
       executeAction: executeAction
     )
@@ -87,6 +93,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type.specializing(typeLookup: typeLookup),
+      isThrough: isThrough,
       passAction: passAction.specializing(
         for: use,
         typeLookup: typeLookup,

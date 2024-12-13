@@ -107,11 +107,26 @@ enum JavaScript: Platform {
     return action.javaScript
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
     return name
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     return name
+  }
+  static var needsReferencePreparation: Bool {
+    return true
+  }
+  static func prepareReference(to argument: String) -> String? {
+    return "let \(sanitize(identifier: StrictString(argument), leading: true))Reference = { value: \(argument) }; "
+  }
+  static func passReference(to argument: String) -> String {
+    return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
+  }
+  static func unpackReference(to argument: String) -> String? {
+    return " \(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference.value;"
+  }
+  static func dereference(throughParameter: String) -> String {
+    return "\(throughParameter).value"
   }
 
   static var emptyReturnType: String? {

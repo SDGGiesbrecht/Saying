@@ -22,6 +22,7 @@ extension Node {
           Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
           Node(name: "Slash", kind: .fixedLeaf("/")),
           Node(name: "BulletCharacter", kind: .fixedLeaf("•")),
+          Node(name: "DownArrow", kind: .fixedLeaf("↓")),
           Node(name: "RightArrow", kind: .fixedLeaf("→")),
           Node(name: "LeftArrow", kind: .fixedLeaf("←")),
           Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
@@ -153,6 +154,13 @@ extension Node {
             kind: .compound(children: [
               Child(name: "bullet", type: "BulletCharacter", kind: .fixed),
               Child(name: "followingSpace", type: "Space", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ThroughArrow",
+            kind: .compound(children: [
+              Child(name: "arrow", type: "DownArrow", kind: .fixed),
+              Child(name: "space", type: "Space", kind: .fixed),
             ])
           ),
           Node(
@@ -430,9 +438,16 @@ extension Node {
             isIndirect: true
           ),
           Node(
+            name: "Passage",
+            kind: .alternates([
+              Alternate(name: "bullet", type: "Bullet"),
+              Alternate(name: "throughArrow", type: "ThroughArrow"),
+            ])
+          ),
+          Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
-              Child(name: "bullet", type: "Bullet", kind: .optional),
+              Child(name: "passage", type: "Passage", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
               Child(name: "type", type: "TypeAnnotation", kind: .optional),
             ])
@@ -616,6 +631,7 @@ extension Node {
           Node(
             name: "ConcreteParameterType",
             kind: .compound(children: [
+              Child(name: "throughArrow", type: "ThroughArrow", kind: .optional),
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "type", type: "ThingReference", kind: .required),
             ])

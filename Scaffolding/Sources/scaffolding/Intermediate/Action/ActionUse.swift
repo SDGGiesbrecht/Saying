@@ -5,7 +5,7 @@ struct ActionUse {
   var actionName: StrictString
   var arguments: [ActionUseArgument]
   var source: ParsedAction?
-  var isNew: Bool
+  var passage: ParameterPassage
   var explicitResultType: ParsedTypeReference?
   var resolvedResultType: ParsedTypeReference??
 }
@@ -30,7 +30,7 @@ extension ActionUse {
       arguments = []
     }
     source = use
-    isNew = false
+    passage = .into
   }
 
   init(_ use: ParsedAnnotatedAction) {
@@ -41,16 +41,30 @@ extension ActionUse {
     } else {
       explicitResultType = type
     }
-    isNew = use.bullet ≠ nil
+    switch use.passage {
+    case .none:
+      passage = .into
+    case .bullet:
+      passage = .out
+    case .throughArrow:
+      passage = .through
+    }
   }
 }
 
 extension ActionUse {
   func localActions() -> [ActionIntermediate] {
-    if isNew {
+    if passage == .out {
       return [.parameterAction(names: [actionName], parameters: .none, returnValue: explicitResultType)]
     } else {
       return arguments.flatMap { $0.localActions() }
+    }
+  }
+  func passedReferences() -> [ActionUse] {
+    if passage == .through {
+      return [self]
+    } else {
+      return arguments.flatMap { $0.passedReferences() }
     }
   }
 }
@@ -118,7 +132,7 @@ extension ActionUse {
         local.resolveTypeIdentifiers(externalLookup: context)
       }
     }
-    if ¬isNew {
+    if passage != .out {
       if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
          let action = context.lookupAction(
           actionName,
@@ -143,7 +157,7 @@ extension ActionUse {
       actionName: actionName,
       arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       source: source,
-      isNew: isNew,
+      passage: passage,
       explicitResultType: explicitResultType
         .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
     )
@@ -156,7 +170,7 @@ extension ActionUse {
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
       source: source,
-      isNew: isNew,
+      passage: passage,
       explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) })
     )
   }

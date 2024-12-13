@@ -156,11 +156,27 @@ enum Swift: Platform {
     return action.swift
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
-    "_ \(name): \(type)"
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+    let inoutKeyword = isThrough ? "inout " : ""
+    return "_ \(name): \(inoutKeyword)\(type)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+  }
+  static var needsReferencePreparation: Bool {
+    return false
+  }
+  static func prepareReference(to argument: String) -> String? {
+    return nil
+  }
+  static func passReference(to argument: String) -> String {
+    return "&\(argument)"
+  }
+  static func unpackReference(to argument: String) -> String? {
+    return nil
+  }
+  static func dereference(throughParameter: String) -> String {
+    return throughParameter
   }
 
   static var emptyReturnType: String? {

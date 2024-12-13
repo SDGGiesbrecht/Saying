@@ -65,3 +65,25 @@ action
   change (storage) to (true)
   ← storage
  }
+
+action
+ (
+  English: make (storage: ↓ truth value) true
+ )
+ {
+  change (storage) to (true)
+ }
+
+action
+ [
+  test (verify (pass through argument))
+ ]
+ (
+  English: pass through argument
+ )
+ truth value
+ {
+  let (• storage: truth value) start as (false)
+  make (↓ storage) true
+  ← storage
+ }

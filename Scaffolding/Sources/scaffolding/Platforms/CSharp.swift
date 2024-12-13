@@ -154,11 +154,27 @@ enum CSharp: Platform {
     return action.cSharp
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
-    return "\(type) \(name)"
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+    let reference = isThrough ? "ref " : ""
+    return "\(reference)\(type) \(name)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
+  }
+  static var needsReferencePreparation: Bool {
+    return false
+  }
+  static func prepareReference(to argument: String) -> String? {
+    return nil
+  }
+  static func passReference(to argument: String) -> String {
+    return "ref \(argument)"
+  }
+  static func unpackReference(to argument: String) -> String? {
+    return nil
+  }
+  static func dereference(throughParameter: String) -> String {
+    return throughParameter
   }
 
   static var emptyReturnType: String? {

@@ -31,7 +31,7 @@ extension ActionPrototype {
       getDefinitionOrReference: { $0.definitionOrReference },
       getNestedSignature: { $0.name },
       getNestedParameters: { $0.parameters() },
-      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2) }
+      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough) }
     ) {
     case .failure(let interpolationError):
       errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))

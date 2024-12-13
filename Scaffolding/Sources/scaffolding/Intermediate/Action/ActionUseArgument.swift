@@ -33,6 +33,14 @@ extension ActionUseArgument {
       return []
     }
   }
+  func passedReferences() -> [ActionUse] {
+    switch self {
+    case .action(let action):
+      return action.passedReferences()
+    case .flow:
+      return []
+    }
+  }
 }
 
 extension ActionUseArgument {
