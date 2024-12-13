@@ -53,7 +53,10 @@ protocol Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
+  #warning("prepare and unpack need to be collected and called at the statement level.")
+  static func prepareReference(to argument: String) -> String?
   static func passReference(to argument: String) -> String
+  static func unpackReference(to argument: String) -> String?
   static func dereference(throughParameter: String) -> String
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }

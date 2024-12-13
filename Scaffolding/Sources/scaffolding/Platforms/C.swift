@@ -136,8 +136,14 @@ enum C: Platform {
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
   }
+  static func prepareReference(to argument: String) -> String? {
+    return nil
+  }
   static func passReference(to argument: String) -> String {
     return "&\(argument)"
+  }
+  static func unpackReference(to argument: String) -> String? {
+    return nil
   }
   static func dereference(throughParameter: String) -> String {
     return "*\(throughParameter)"
