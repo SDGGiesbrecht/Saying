@@ -265,13 +265,16 @@ enum C: Platform {
     return nil
   }
 
-  static func testSource(identifier: String, statement: String) -> [String] {
-    return [
+  static func testSource(identifier: String, statements: [String]) -> [String] {
+    var result: [String] = [
       "void run_\(identifier)()",
       "{",
-      "\(indent)\(statement)",
-      "}"
     ]
+    for statement in statements {
+      result.append("\(indent)\(statement)")
+    }
+    result.append("}")
+    return result
   }
   static func testCall(for identifier: String) -> String {
     return "run_\(identifier)();"

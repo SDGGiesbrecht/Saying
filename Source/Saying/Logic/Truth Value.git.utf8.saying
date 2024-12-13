@@ -104,8 +104,8 @@ action (clients)
    English: Performs logical negation.
    Deutsch: Führt eine logische Negation durch.
   ]
-  test (verify ((not (true)) is (false)))
-  test (verify ((not (false)) is (true)))
+  test {verify ((not (true)) is (false))}
+  test {verify ((not (false)) is (true))}
   parameter: negand
    (
     [
@@ -139,10 +139,10 @@ action (clients)
    English: Performs logical conjuction.
    Deutsch: Führt eine logische Konjunktion durch.
   ]
-  test (verify (((true) and (true)) is (true)))
-  test (verify (((true) and (false)) is (false)))
-  test (verify (((false) and (true)) is (false)))
-  test (verify (((false) and (false)) is (false)))
+  test {verify (((true) and (true)) is (true))}
+  test {verify (((true) and (false)) is (false))}
+  test {verify (((false) and (true)) is (false))}
+  test {verify (((false) and (false)) is (false))}
   parameter: first
    (
     [
@@ -183,10 +183,10 @@ action (clients)
    English: Performs logical disjunction.
    Deutsch: Führt eine logische Disjunktion durch.
   ]
-  test (verify (((true) or (true)) is (true)))
-  test (verify (((true) or (false)) is (true)))
-  test (verify (((false) or (true)) is (true)))
-  test (verify (((false) or (false)) is (false)))
+  test {verify (((true) or (true)) is (true))}
+  test {verify (((true) or (false)) is (true))}
+  test {verify (((false) or (true)) is (true))}
+  test {verify (((false) or (false)) is (false))}
   parameter: first
    (
     [
@@ -236,10 +236,10 @@ use (clients)
  {
   action (clients)
    [
-    test (verify (((true) is (true)) is (true)))
-    test (verify (((true) is (false)) is (false)))
-    test (verify (((false) is (true)) is (false)))
-    test (verify (((false) is (false)) is (true)))
+    test {verify (((true) is (true)) is (true))}
+    test {verify (((true) is (false)) is (false))}
+    test {verify (((false) is (true)) is (false))}
+    test {verify (((false) is (false)) is (true))}
    ]
    (first: truth value) is (second: truth value)
    truth value
@@ -251,10 +251,10 @@ use (clients)
 
   action (clients)
    [
-    test (verify (((true) is not (true)) is (false)))
-    test (verify (((true) is not (false)) is (true)))
-    test (verify (((false) is not (true)) is (true)))
-    test (verify (((false) is not (false)) is (false)))
+    test {verify (((true) is not (true)) is (false))}
+    test {verify (((true) is not (false)) is (true))}
+    test {verify (((false) is not (true)) is (true))}
+    test {verify (((false) is not (false)) is (false))}
    ]
    (first: truth value) is not (second: truth value)
    truth value

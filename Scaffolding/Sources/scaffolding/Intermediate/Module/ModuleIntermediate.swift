@@ -218,8 +218,23 @@ extension ModuleIntermediate {
 
   mutating func resolveTypes() {
     referenceDictionary.resolveTypes(parentContexts: [])
-    for index in tests.indices {
-      tests[index].statement.resolveTypes(context: nil, referenceLookup: [referenceDictionary], finalReturnValue: .none)
+    for testIndex in tests.indices {
+      var locals = ReferenceDictionary()
+      for statementIndex in tests[testIndex].statements.indices {
+        let statement = tests[testIndex].statements[statementIndex]
+        tests[testIndex].statements[statementIndex].resolveTypes(
+          context: nil,
+          referenceLookup: [referenceDictionary, locals],
+          finalReturnValue: .none
+        )
+        let newActions = statement.action.localActions()
+        for local in newActions {
+          _ = locals.add(action: local)
+        }
+        if !newActions.isEmpty {
+          locals.resolveTypeIdentifiers(externalLookup: [referenceDictionary])
+        }
+      }
     }
   }
 
@@ -227,7 +242,21 @@ extension ModuleIntermediate {
     var errors: [ReferenceError] = []
     referenceDictionary.validateReferencesAsModule(errors: &errors)
     for test in tests {
-      test.statement.validateReferences(context: [referenceDictionary], testContext: true, errors: &errors)
+      var locals = ReferenceDictionary()
+      for statement in test.statements {
+        statement.validateReferences(
+          context: [referenceDictionary].appending(locals),
+          testContext: true,
+          errors: &errors
+        )
+        let newActions = statement.action.localActions()
+        for local in newActions {
+          _ = locals.add(action: local)
+        }
+        if !newActions.isEmpty {
+          locals.resolveTypeIdentifiers(externalLookup: [referenceDictionary])
+        }
+      }
     }
     for language in languageNodes {
       var identifier = language.identifierText()

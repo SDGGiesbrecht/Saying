@@ -16,8 +16,8 @@ enumeration
 
 action
  [
-  test (verify (use example simple enumeration (case A)))
-  test (verify (use example simple enumeration (case B)))
+  test {verify (use example simple enumeration (case A))}
+  test {verify (use example simple enumeration (case B))}
  ]
  (
   English: use example simple enumeration (value: example simple enumeration)
@@ -29,10 +29,10 @@ action
 
 enumeration
  [
-  test (verify ((wrap (true) as (example case with something)) is case (example case with something)))
-  test (verify (not ((example case with nothing) is case (example case with something))))
-  test (verify ((example case with nothing) is case (example case with nothing)))
-  test (verify (not ((wrap (true) as (example case with something)) is case (example case with nothing))))
+  test {verify ((wrap (true) as (example case with something)) is case (example case with something))}
+  test {verify (not ((example case with nothing) is case (example case with something)))}
+  test {verify ((example case with nothing) is case (example case with nothing))}
+  test {verify (not ((wrap (true) as (example case with something)) is case (example case with nothing)))}
  ]
  (
   English: example enumeration
@@ -52,8 +52,8 @@ enumeration
 
 action
  [
-  test (verify (not (use example enumeration (example case with nothing))))
-  test (verify (use example enumeration (wrap (true) as (example case with something))))
+  test {verify (not (use example enumeration (example case with nothing)))}
+  test {verify (use example enumeration (wrap (true) as (example case with something)))}
  ]
  (
   English: use example enumeration (value: example enumeration)

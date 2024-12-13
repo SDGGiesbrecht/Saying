@@ -503,11 +503,28 @@ extension Node {
             ])
           ),
           Node(
-            name: "TestDetails",
+            name: "ShortTestImplementation",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "test", type: "Action", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "LongTestImplementation",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "test", type: "StatementList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "TestImplemenation",
+            kind: .alternates([
+              Alternate(name: "short", type: "ShortTestImplementation"),
+              Alternate(name: "long", type: "LongTestImplementation"),
             ])
           ),
           Node(
@@ -515,7 +532,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "keyword", type: "TestKeyword", kind: .required),
               Child(name: "space", type: "Space", kind: .fixed),
-              Child(name: "details", type: "TestDetails", kind: .required),
+              Child(name: "implementation", type: "TestImplemenation", kind: .required),
             ])
           ),
 

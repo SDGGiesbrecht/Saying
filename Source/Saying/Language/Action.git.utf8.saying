@@ -1,7 +1,7 @@
 action
  [
-  test (verify ((do (not ())) is (false)))
-  test (verify (((nicht ()) tun) ist (falsch)))
+  test {verify ((do (not ())) is (false))}
+  test {verify (((nicht ()) tun) ist (falsch))}
  ]
  (
   English: do (act on (thing: truth value): → truth value)
@@ -14,7 +14,7 @@ action
 
 action
  [
-  test (verify ((very indirectly do (do ())) is (false)))
+  test {verify ((very indirectly do (do ())) is (false))}
  ]
  (
   English: very indirectly do (indirectly do (act on (thing: truth value): → truth value): → truth value)
@@ -26,7 +26,7 @@ action
 
 action
  [
-  test (verify (do query (true: → truth value)))
+  test {verify (do query (true: → truth value))}
  ]
  (
   English: do query (query: → truth value)

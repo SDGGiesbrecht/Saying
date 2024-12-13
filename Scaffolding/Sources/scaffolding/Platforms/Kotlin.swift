@@ -235,12 +235,15 @@ enum Kotlin: Platform {
     return nil
   }
 
-  static func testSource(identifier: String, statement: String) -> [String] {
-    return [
-      "fun run_\(identifier)() {",
-      "\(indent)\(statement)",
-      "}"
+  static func testSource(identifier: String, statements: [String]) -> [String] {
+    var result: [String] = [
+      "fun run_\(identifier)() {"
     ]
+    for statement in statements {
+      result.append("\(indent)\(statement)")
+    }
+    result.append("}")
+    return result
   }
   static func testCall(for identifier: String) -> String {
     return "run_\(identifier)()"

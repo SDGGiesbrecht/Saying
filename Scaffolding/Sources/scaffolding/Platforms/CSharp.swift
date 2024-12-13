@@ -293,13 +293,16 @@ enum CSharp: Platform {
     ]
   }
 
-  static func testSource(identifier: String, statement: String) -> [String] {
-    return [
+  static func testSource(identifier: String, statements: [String]) -> [String] {
+    var result: [String] = [
       "\(indent)static void run_\(identifier)()",
       "\(indent){",
-      "\(indent)\(indent)\(statement)",
-      "\(indent)}"
     ]
+    for statement in statements {
+      result.append("\(indent)\(indent)\(statement)")
+    }
+    result.append("\(indent)}")
+    return result
   }
   static func testCall(for identifier: String) -> String {
     return "run_\(identifier)();"

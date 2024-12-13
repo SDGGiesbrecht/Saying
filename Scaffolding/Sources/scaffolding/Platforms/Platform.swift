@@ -94,7 +94,7 @@ protocol Platform {
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
-  static func testSource(identifier: String, statement: String) -> [String]
+  static func testSource(identifier: String, statements: [String]) -> [String]
   static func testCall(for identifier: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
 
@@ -843,17 +843,28 @@ extension Platform {
 
   static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
     var coverageRegionCounter = 0
+    var locals = ReferenceDictionary()
     return testSource(
       identifier: identifier(for: test, leading: false),
-      statement: statement(
-        expression: test.statement.action,
-        context: nil,
-        localLookup: [],
-        referenceLookup: referenceLookup,
-        contextCoverageIdentifier: nil,
-        coverageRegionCounter: &coverageRegionCounter,
-        inliningArguments: [:]
-      )
+      statements: test.statements.map({ statement in
+        let result = self.statement(
+          expression: statement.action,
+          context: nil,
+          localLookup: [locals],
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: nil,
+          coverageRegionCounter: &coverageRegionCounter,
+          inliningArguments: [:]
+        )
+        let newActions = statement.action.localActions()
+        for local in newActions {
+          _ = locals.add(action: local)
+        }
+        if !newActions.isEmpty {
+          locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
+        }
+        return result
+      })
     )
   }
 
