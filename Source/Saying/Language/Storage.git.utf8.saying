@@ -19,6 +19,12 @@ extension
    Swift: “let ” storage “: ” thing “ = ¤(28)” value “¤(29)”
 
   flow (clients)
+   [
+    test {
+     let (• constant: truth value) be (true)
+     verify ((constant) is (true))
+    }
+   ]
    (
     English: let (storage: thing) start as (value: thing)
    )
@@ -37,19 +43,6 @@ extension
    JavaScript: “” storage “ = ¤(28)” value “¤(29)”
    Kotlin: “” storage “ = ¤(28)” value “¤(29)”
    Swift: “” storage “ = ¤(28)” value “¤(29)”
- }
-
-action
- [
-  test {verify (create and use storage)}
- ]
- (
-  English: create and use storage
- )
- truth value
- {
-  let (• storage: truth value) be (true)
-  ← storage
  }
 
 action
