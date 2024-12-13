@@ -68,7 +68,7 @@ action
 
 action
  (
-  English: make (storage: truth value) true
+  English: make (storage: ↓ truth value) true
  )
  {
   change (storage) to (true)
@@ -76,10 +76,10 @@ action
 
 action
  [
-  test (verify (pass in‐out argument))
+  test (verify (pass through argument))
  ]
  (
-  English: pass in‐out argument
+  English: pass through argument
  )
  truth value
  {
