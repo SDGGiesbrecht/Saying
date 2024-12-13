@@ -125,6 +125,9 @@ enum Kotlin: Platform {
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "\(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
+  static func dereference(throughParameter: String) -> String {
+    return throughParameter
+  }
 
   static var emptyReturnType: String? {
     return nil

@@ -53,6 +53,7 @@ protocol Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
+  static func dereference(throughParameter: String) -> String
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String) -> String?
@@ -373,7 +374,12 @@ extension Platform {
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
-        return String(sanitize(identifier: parameter.names.identifier(), leading: true))
+        let name = String(sanitize(identifier: parameter.names.identifier(), leading: true))
+        if parameter.isThrough {
+          return dereference(throughParameter: name)
+        } else {
+          return name
+        }
       } else {
         return call(
           to: parameter.executeAction!,

@@ -136,6 +136,9 @@ enum C: Platform {
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
   }
+  static func dereference(throughParameter: String) -> String {
+    return "*\(throughParameter)"
+  }
 
   static var emptyReturnType: String? {
     return emptyReturnTypeForActionType
