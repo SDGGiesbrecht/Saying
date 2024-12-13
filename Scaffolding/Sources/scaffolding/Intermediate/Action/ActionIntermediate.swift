@@ -712,12 +712,12 @@ extension ActionIntermediate {
                     ActionUse(
                       actionName: parameter.names.identifier(),
                       arguments: [],
-                      isNew: false,
+                      passage: parameter.isThrough ? .through : .into,
                       resolvedResultType: parameter.type
                     )
                   )
                 }),
-                isNew: false,
+                passage: .into,
                 resolvedResultType: returnValue
               )
             )

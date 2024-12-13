@@ -438,9 +438,16 @@ extension Node {
             isIndirect: true
           ),
           Node(
+            name: "Passage",
+            kind: .alternates([
+              Alternate(name: "bullet", type: "Bullet"),
+              Alternate(name: "throughArrow", type: "ThroughArrow"),
+            ])
+          ),
+          Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
-              Child(name: "bullet", type: "Bullet", kind: .optional),
+              Child(name: "passage", type: "Passage", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
               Child(name: "type", type: "TypeAnnotation", kind: .optional),
             ])

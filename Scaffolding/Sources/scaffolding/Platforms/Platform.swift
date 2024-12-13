@@ -361,7 +361,7 @@ extension Platform {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
       return inlined
-    } else if reference.isNew {
+    } else if reference.passage == .out {
       return String(sanitize(identifier: reference.actionName, leading: true))
     } else if let local = localLookup.lookupAction(
       reference.actionName,
