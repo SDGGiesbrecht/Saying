@@ -107,7 +107,7 @@ enum JavaScript: Platform {
     return action.javaScript
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
     return name
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {

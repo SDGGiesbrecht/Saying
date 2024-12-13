@@ -4,7 +4,6 @@ import SDGText
 struct ParameterIntermediate {
   var names: Set<StrictString>
   var type: ParsedTypeReference
-  #warning("Collected, but not used yet.")
   var isThrough: Bool
   var passAction: ActionIntermediate
   var executeAction: ActionIntermediate?

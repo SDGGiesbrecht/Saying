@@ -156,8 +156,9 @@ enum Swift: Platform {
     return action.swift
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
-    "_ \(name): \(type)"
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+    let inoutKeyword = isThrough ? "inout " : ""
+    return "_ \(name): \(inoutKeyword)\(type)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"

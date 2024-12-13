@@ -119,7 +119,7 @@ enum Kotlin: Platform {
     return action.kotlin
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
     "\(name): \(type)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {

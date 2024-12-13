@@ -129,7 +129,7 @@ enum C: Platform {
     return action.c
   }
 
-  static func parameterDeclaration(name: String, type: String) -> String {
+  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
     return "\(type) \(name)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
