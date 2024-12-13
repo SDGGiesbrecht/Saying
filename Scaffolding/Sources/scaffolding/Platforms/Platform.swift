@@ -94,7 +94,7 @@ protocol Platform {
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
-  static func testSource(identifier: String, statement: String) -> [String]
+  static func testSource(identifier: String, statements: [String]) -> [String]
   static func testCall(for identifier: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
 
@@ -845,15 +845,17 @@ extension Platform {
     var coverageRegionCounter = 0
     return testSource(
       identifier: identifier(for: test, leading: false),
-      statement: statement(
-        expression: test.statement.action,
-        context: nil,
-        localLookup: [],
-        referenceLookup: referenceLookup,
-        contextCoverageIdentifier: nil,
-        coverageRegionCounter: &coverageRegionCounter,
-        inliningArguments: [:]
-      )
+      statements: test.statements.map({ statement in
+        return self.statement(
+          expression: statement.action,
+          context: nil,
+          localLookup: [],
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: nil,
+          coverageRegionCounter: &coverageRegionCounter,
+          inliningArguments: [:]
+        )
+      })
     )
   }
 

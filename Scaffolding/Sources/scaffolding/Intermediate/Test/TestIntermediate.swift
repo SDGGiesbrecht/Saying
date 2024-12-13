@@ -2,17 +2,21 @@ import SDGText
 
 struct TestIntermediate {
   var location: [Set<StrictString>]
-  var statement: StatementIntermediate
+  var statements: [StatementIntermediate]
 }
 
 extension TestIntermediate {
 
   init(_ test: ParsedTest, location: [Set<StrictString>], index: Int) {
     self.location = location.appending([index.inDigits()])
-    self.statement = StatementIntermediate(
-      isReturn: false,
-      action: ActionUse(test.details.test)
-    )
+    switch test.implementation {
+    case .short(let short):
+      self.statements = [StatementIntermediate(isReturn: false, action: ActionUse(short.test))]
+    case .long(let long):
+      self.statements = long.test.statements.map { statement in
+        return StatementIntermediate(statement)
+      }
+    }
   }
 }
 
@@ -22,7 +26,7 @@ extension TestIntermediate {
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location,
-      statement: statement.resolvingExtensionContext(typeLookup: typeLookup)
+      statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
     )
   }
 
@@ -32,7 +36,7 @@ extension TestIntermediate {
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location.appending(contentsOf: specializationNamespace),
-      statement: statement.specializing(typeLookup: typeLookup)
+      statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
     )
   }
 }
