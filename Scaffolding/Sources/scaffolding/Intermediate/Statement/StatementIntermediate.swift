@@ -16,6 +16,9 @@ extension StatementIntermediate {
   func localActions() -> [ActionIntermediate] {
     return action.localActions()
   }
+  func passedReferences() -> [ActionUse] {
+    return action.passedReferences()
+  }
 }
 
 extension StatementIntermediate {

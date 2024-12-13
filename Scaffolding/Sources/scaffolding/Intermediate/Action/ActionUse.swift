@@ -60,6 +60,13 @@ extension ActionUse {
       return arguments.flatMap { $0.localActions() }
     }
   }
+  func passedReferences() -> [ActionUse] {
+    if passage == .through {
+      return [self]
+    } else {
+      return arguments.flatMap { $0.passedReferences() }
+    }
+  }
 }
 
 extension ActionUse {

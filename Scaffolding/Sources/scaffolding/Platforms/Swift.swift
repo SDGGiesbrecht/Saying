@@ -163,6 +163,9 @@ enum Swift: Platform {
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
+  static var needsReferencePreparation: Bool {
+    return false
+  }
   static func prepareReference(to argument: String) -> String? {
     return nil
   }

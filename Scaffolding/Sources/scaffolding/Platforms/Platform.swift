@@ -53,7 +53,7 @@ protocol Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
-  #warning("prepare and unpack need to be collected and called at the statement level.")
+  static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String) -> String?
   static func passReference(to argument: String) -> String
   static func unpackReference(to argument: String) -> String?
@@ -638,6 +638,25 @@ extension Platform {
     inliningArguments: [StrictString: String]
   ) -> String {
     var entry = ""
+    var referenceList: [String] = []
+    if needsReferencePreparation {
+      referenceList = statement.passedReferences().map { reference in
+        return call(
+          to: reference,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: contextCoverageIdentifier,
+          coverageRegionCounter: &coverageRegionCounter,
+          inliningArguments: inliningArguments
+        )
+      }
+      for reference in referenceList {
+        if let preparation = prepareReference(to: reference) {
+          entry.append("\(preparation) ")
+        }
+      }
+    }
     if statement.isReturn {
       entry.prepend(contentsOf: "return ")
     }
@@ -659,6 +678,11 @@ extension Platform {
         coverageRegionCounter: &coverageRegionCounter
        ) {
       entry.append(coverage)
+    }
+    for reference in referenceList.reversed() {
+      if let unpack = unpackReference(to: reference) {
+        entry.append(" \(unpack)")
+      }
     }
     return entry
   }

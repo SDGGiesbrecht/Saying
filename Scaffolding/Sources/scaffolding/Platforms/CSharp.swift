@@ -160,6 +160,9 @@ enum CSharp: Platform {
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
   }
+  static var needsReferencePreparation: Bool {
+    return false
+  }
   static func prepareReference(to argument: String) -> String? {
     return nil
   }
