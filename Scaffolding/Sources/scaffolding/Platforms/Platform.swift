@@ -581,7 +581,11 @@ extension Platform {
         for argument in reference.arguments {
           switch argument {
           case .action(let actionArgument):
-            argumentsArray.append(
+            var argumentSource: String = ""
+            if actionArgument.passage == .through {
+              argumentSource.append("&")
+            }
+            argumentSource.append(contentsOf:
               call(
                 to: actionArgument,
                 context: context,
@@ -592,6 +596,7 @@ extension Platform {
                 inliningArguments: inliningArguments
               )
             )
+            argumentsArray.append(argumentSource)
           case .flow:
             fatalError("Statement parameters are only supported in native implementations (so far).")
           }
