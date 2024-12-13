@@ -9,8 +9,8 @@ ability (clients)
     [
      English: Compares two values for equality.
     ]
-    test (verify ((example: thing) is (example: thing)))
-    test (verify (((example: thing) is (differing example: thing)) is (false)))
+    test {verify ((example: thing) is (example: thing))}
+    test {verify (((example: thing) is (differing example: thing)) is (false))}
     parameter: first
      (
       [
@@ -45,8 +45,8 @@ ability (clients)
     [
      English: Compares two values for inequality.
     ]
-    test (verify ((example: thing) is not (differing example: thing)))
-    test (verify (((example: thing) is not (example: thing)) is (false)))
+    test {verify ((example: thing) is not (differing example: thing))}
+    test {verify (((example: thing) is not (example: thing)) is (false))}
     parameter: first
      (
       [

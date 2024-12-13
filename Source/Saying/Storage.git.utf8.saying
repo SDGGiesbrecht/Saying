@@ -41,7 +41,7 @@ extension
 
 action
  [
-  test (verify (create and use storage))
+  test {verify (create and use storage)}
  ]
  (
   English: create and use storage
@@ -54,7 +54,7 @@ action
 
 action
  [
-  test (verify (create and use changeable storage))
+  test {verify (create and use changeable storage)}
  ]
  (
   English: create and use changeable storage
@@ -76,7 +76,7 @@ action
 
 action
  [
-  test (verify (pass through argument))
+  test {verify (pass through argument)}
  ]
  (
   English: pass through argument

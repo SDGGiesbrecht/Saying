@@ -49,7 +49,7 @@ extension
 
   action (clients)
    [
-    test (verify (not ((nothing) exists)))
+    test {verify (not ((nothing) exists))}
    ]
    (
     English: (thing: optional (thing)) exists
@@ -69,7 +69,7 @@ extension
 
   action (clients)
    [
-    test (verify ((nothing) does not exist))
+    test {verify ((nothing) does not exist)}
    ]
    (
     English: (thing: optional (thing)) does not exist
@@ -112,8 +112,8 @@ extension
 
 action
  [
-  test (verify (unwrapping (wrap (true) as (something)) works))
-  test (verify (not (unwrapping (nothing) works)))
+  test {verify (unwrapping (wrap (true) as (something)) works)}
+  test {verify (not (unwrapping (nothing) works))}
  ]
  (
   English: unwrapping (optional: optional (truth value)) works
@@ -128,7 +128,7 @@ action
 
 action
  [
-  test (verify (using optional storage works))
+  test {verify (using optional storage works)}
  ]
  (
   English: using optional storage works
@@ -144,8 +144,8 @@ action
 
 action
  [
-  test (verify (not (use optional (nothing: optional (truth value)))))
-  test (verify (use optional (wrap (true) as (something))))
+  test {verify (not (use optional (nothing: optional (truth value))))}
+  test {verify (use optional (wrap (true) as (something)))}
  ]
  (
   English: use optional (optional: optional (truth value))
@@ -160,8 +160,8 @@ action
 
 action
  [
-  test (verify (not (check optional (nothing: optional (truth value)))))
-  test (verify (check optional (wrap (true) as (something))))
+  test {verify (not (check optional (nothing: optional (truth value))))}
+  test {verify (check optional (wrap (true) as (something)))}
  ]
  (
   English: check optional (optional: optional (truth value))

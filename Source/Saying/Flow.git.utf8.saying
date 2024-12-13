@@ -14,8 +14,8 @@ flow (clients)
 
 action
  [
-  test (verify ((true) triggers if))
-  test (verify (not ((false) triggers if)))
+  test {verify ((true) triggers if)}
+  test {verify (not ((false) triggers if))}
  ]
  (
   English: (condition: truth value) triggers if
@@ -40,8 +40,8 @@ flow
 
 action
  [
-  test (verify (use nested flow (true)))
-  test (verify (not (use nested flow (false))))
+  test {verify (use nested flow (true))}
+  test {verify (not (use nested flow (false)))}
  ]
  (
   English: use nested flow (condition: truth value)
@@ -66,8 +66,8 @@ flow
 
 action
  [
-  test (verify (use indirect if with (wrap (true) as (something))))
-  test (verify (not (use indirect if with (nothing))))
+  test {verify (use indirect if with (wrap (true) as (something)))}
+  test {verify (not (use indirect if with (nothing)))}
  ]
  (
   English: use indirect if with (branch: optional (truth value))

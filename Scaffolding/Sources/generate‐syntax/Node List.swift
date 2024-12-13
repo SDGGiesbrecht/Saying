@@ -505,9 +505,9 @@ extension Node {
           Node(
             name: "TestDetails",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
               Child(name: "test", type: "Action", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
             ])
           ),
           Node(
