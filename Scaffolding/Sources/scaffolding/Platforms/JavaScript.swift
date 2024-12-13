@@ -120,7 +120,7 @@ enum JavaScript: Platform {
     return "let \(sanitize(identifier: StrictString(argument), leading: true))Reference = { value: \(argument) };"
   }
   static func passReference(to argument: String) -> String {
-    return "\(argument)Reference"
+    return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
   }
   static func unpackReference(to argument: String) -> String? {
     return "\(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference.value;"
