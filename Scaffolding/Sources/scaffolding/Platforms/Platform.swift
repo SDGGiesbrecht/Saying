@@ -53,6 +53,7 @@ protocol Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
+  static func passReference(to argument: String) -> String
   static func dereference(throughParameter: String) -> String
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
@@ -587,22 +588,33 @@ extension Platform {
         for argument in reference.arguments {
           switch argument {
           case .action(let actionArgument):
-            var argumentSource: String = ""
             if actionArgument.passage == .through {
-              argumentSource.append("&")
-            }
-            argumentSource.append(contentsOf:
-              call(
-                to: actionArgument,
-                context: context,
-                localLookup: localLookup,
-                referenceLookup: referenceLookup,
-                contextCoverageIdentifier: contextCoverageIdentifier,
-                coverageRegionCounter: &coverageRegionCounter,
-                inliningArguments: inliningArguments
+              argumentsArray.append(
+                passReference(
+                  to: call(
+                    to: actionArgument,
+                    context: context,
+                    localLookup: localLookup,
+                    referenceLookup: referenceLookup,
+                    contextCoverageIdentifier: contextCoverageIdentifier,
+                    coverageRegionCounter: &coverageRegionCounter,
+                    inliningArguments: inliningArguments
+                  )
+                )
               )
-            )
-            argumentsArray.append(argumentSource)
+            } else {
+              argumentsArray.append(
+                call(
+                  to: actionArgument,
+                  context: context,
+                  localLookup: localLookup,
+                  referenceLookup: referenceLookup,
+                  contextCoverageIdentifier: contextCoverageIdentifier,
+                  coverageRegionCounter: &coverageRegionCounter,
+                  inliningArguments: inliningArguments
+                )
+              )
+            }
           case .flow:
             fatalError("Statement parameters are only supported in native implementations (so far).")
           }

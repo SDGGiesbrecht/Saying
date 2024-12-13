@@ -113,6 +113,9 @@ enum JavaScript: Platform {
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     return name
   }
+  static func passReference(to argument: String) -> String {
+    return argument
+  }
   static func dereference(throughParameter: String) -> String {
     return throughParameter
   }
