@@ -155,7 +155,8 @@ enum CSharp: Platform {
   }
 
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
-    return "\(type) \(name)"
+    let reference = isThrough ? "ref " : ""
+    return "\(reference)\(type) \(name)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
@@ -167,7 +168,7 @@ enum CSharp: Platform {
     return nil
   }
   static func passReference(to argument: String) -> String {
-    return argument
+    return "ref \(argument)"
   }
   static func unpackReference(to argument: String) -> String? {
     return nil
