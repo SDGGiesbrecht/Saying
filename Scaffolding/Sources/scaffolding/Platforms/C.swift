@@ -130,7 +130,8 @@ enum C: Platform {
   }
 
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
-    return "\(type) \(name)"
+    let pointer = isThrough ? "*" : ""
+    return "\(type)\(pointer) \(name)"
   }
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
