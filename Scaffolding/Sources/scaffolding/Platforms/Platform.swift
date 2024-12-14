@@ -54,7 +54,7 @@ protocol Platform {
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
   static var needsReferencePreparation: Bool { get }
-  static func prepareReference(to argument: String) -> String?
+  static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String) -> String
   static func unpackReference(to argument: String) -> String?
   static func dereference(throughParameter: String) -> String
@@ -77,6 +77,8 @@ protocol Platform {
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String]
   ) -> String
+  static func returnDelayStorage(type: String?) -> String
+  static var delayedReturn: String { get }
   static func actionDeclaration(
     name: String,
     parameters: String,
@@ -493,6 +495,7 @@ extension Platform {
                 result.append(coverage)
               }
               result.append("\n")
+              var existingReferences: Set<String> = []
               for statement in statements.statements {
                 result.append(
                   source(
@@ -502,7 +505,8 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
-                    inliningArguments: inliningArguments
+                    inliningArguments: inliningArguments,
+                    existingReferences: &existingReferences
                   )
                 )
                 result.append("\n")
@@ -635,7 +639,8 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    existingReferences: inout Set<String>
   ) -> String {
     var entry = ""
     var referenceList: [String] = []
@@ -652,13 +657,25 @@ extension Platform {
         )
       }
       for reference in referenceList {
-        if let preparation = prepareReference(to: reference) {
+        if let preparation = prepareReference(
+          to: reference,
+          update: existingReferences.contains(reference)
+        ) {
           entry.append(preparation)
         }
       }
     }
     if statement.isReturn {
-      entry.prepend(contentsOf: "return ")
+      if referenceList.isEmpty {
+        entry.append(contentsOf: "return ")
+      } else {
+        entry.append(
+          contentsOf: returnDelayStorage(
+            type: statement.action.resolvedResultType!
+              .map({ source(for: $0, referenceLookup: referenceLookup) })
+          )
+        )
+      }
     }
     let before = coverageRegionCounter
     entry.append(
@@ -682,6 +699,14 @@ extension Platform {
     for reference in referenceList.reversed() {
       if let unpack = unpackReference(to: reference) {
         entry.append(unpack)
+      }
+    }
+    if !referenceList.isEmpty {
+      if statement.isReturn {
+        entry.append(contentsOf: delayedReturn)
+      }
+      for reference in referenceList {
+        existingReferences.insert(reference)
       }
     }
     return entry
@@ -764,6 +789,7 @@ extension Platform {
   ) -> [String] {
     var locals = ReferenceDictionary()
     var coverageRegionCounter = 0
+    var existingReferences: Set<String> = []
     return statements.map({ entry in
       let result = source(
         for: entry,
@@ -772,7 +798,8 @@ extension Platform {
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
-        inliningArguments: inliningArguments
+        inliningArguments: inliningArguments,
+        existingReferences: &existingReferences
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -844,17 +871,19 @@ extension Platform {
   static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
     var coverageRegionCounter = 0
     var locals = ReferenceDictionary()
+    var existingReferences: Set<String> = []
     return testSource(
       identifier: identifier(for: test, leading: false),
       statements: test.statements.map({ statement in
-        let result = self.statement(
-          expression: statement.action,
+        let result = self.source(
+          for: statement,
           context: nil,
           localLookup: [locals],
           referenceLookup: referenceLookup,
           contextCoverageIdentifier: nil,
           coverageRegionCounter: &coverageRegionCounter,
-          inliningArguments: [:]
+          inliningArguments: [:],
+          existingReferences: &existingReferences
         )
         let newActions = statement.action.localActions()
         for local in newActions {

@@ -164,7 +164,7 @@ enum CSharp: Platform {
   static var needsReferencePreparation: Bool {
     return false
   }
-  static func prepareReference(to argument: String) -> String? {
+  static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
   static func passReference(to argument: String) -> String {
@@ -214,6 +214,16 @@ enum CSharp: Platform {
       coverageRegionCounter: &coverageRegionCounter,
       inliningArguments: inliningArguments
     ).appending(";")
+  }
+  static func returnDelayStorage(type: String?) -> String {
+    if let type = type {
+      return "\(type) returnValue = "
+    } else {
+      return ""
+    }
+  }
+  static var delayedReturn: String {
+    return " return returnValue;"
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {

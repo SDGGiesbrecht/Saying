@@ -116,8 +116,10 @@ enum JavaScript: Platform {
   static var needsReferencePreparation: Bool {
     return true
   }
-  static func prepareReference(to argument: String) -> String? {
-    return "let \(sanitize(identifier: StrictString(argument), leading: true))Reference = { value: \(argument) }; "
+  static func prepareReference(to argument: String, update: Bool) -> String? {
+    let keyword = update ? "" : "let "
+    let name = sanitize(identifier: StrictString(argument), leading: true)
+    return "\(keyword)\(name)Reference = { value: \(argument) }; "
   }
   static func passReference(to argument: String) -> String {
     return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
@@ -166,6 +168,16 @@ enum JavaScript: Platform {
       coverageRegionCounter: &coverageRegionCounter,
       inliningArguments: inliningArguments
     ).appending(";")
+  }
+  static func returnDelayStorage(type: String?) -> String {
+    if type ≠ nil {
+      return "const returnValue = "
+    } else {
+      return ""
+    }
+  }
+  static var delayedReturn: String {
+    return " return returnValue;"
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {

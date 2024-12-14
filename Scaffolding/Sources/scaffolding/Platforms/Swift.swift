@@ -166,7 +166,7 @@ enum Swift: Platform {
   static var needsReferencePreparation: Bool {
     return false
   }
-  static func prepareReference(to argument: String) -> String? {
+  static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
   static func passReference(to argument: String) -> String {
@@ -216,6 +216,16 @@ enum Swift: Platform {
       coverageRegionCounter: &coverageRegionCounter,
       inliningArguments: inliningArguments
     )
+  }
+  static func returnDelayStorage(type: String?) -> String {
+    if type != nil {
+      return "let returnValue = "
+    } else {
+      return ""
+    }
+  }
+  static var delayedReturn: String {
+    return "; return returnValue"
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
