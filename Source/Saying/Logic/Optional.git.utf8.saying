@@ -25,8 +25,8 @@ extension
      )
      thing
      C♯: “¤(28)” value “¤(29)”/“if ¤(28)” enumeration “ is ” thing “ ” value “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
-     JavaScript: “¤(28)” value “¤(29)”/“let optional = ” enumeration “; if ¤(28)optional ¤(21)== null¤(29) ¤(7B) let ” value “ = optional;” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
-     Kotlin: “¤(28)” value “¤(29)”/“val optional = ” enumeration “; if ¤(28)optional ¤(21)= null¤(29) ¤(7B) val optional = ” value “” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
+     JavaScript: “¤(28)” value “¤(29)”/“let resolvedOptional = ” enumeration “; if ¤(28)resolvedOptional ¤(21)== null¤(29) ¤(7B) let ” value “ = resolvedOptional;” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
+     Kotlin: “¤(28)” value “¤(29)”/“val resolvedOptional = ” enumeration “; if ¤(28)resolvedOptional ¤(21)= null¤(29) ¤(7B) val resolvedOptional = ” value “” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
      Swift: “¤(28)” value “¤(29) as ” thing “¤(3F)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
 
     case
