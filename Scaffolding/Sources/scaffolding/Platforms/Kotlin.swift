@@ -130,7 +130,7 @@ enum Kotlin: Platform {
     return true
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
-    let keyword = update ? "" : "val "
+    let keyword = update ? "" : "var "
     let name = sanitize(identifier: StrictString(argument), leading: true)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
   }
@@ -190,7 +190,7 @@ enum Kotlin: Platform {
     }
   }
   static var delayedReturn: String {
-    return " return returnValue;"
+    return "; return returnValue"
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
