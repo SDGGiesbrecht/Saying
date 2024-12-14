@@ -175,7 +175,7 @@ enum JavaScript: Platform {
     }
   }
   static var delayedReturn: String {
-    return "return returnValue;"
+    return " return returnValue;"
   }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
