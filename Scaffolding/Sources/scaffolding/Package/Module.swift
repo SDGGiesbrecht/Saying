@@ -11,6 +11,7 @@ struct Module {
   func sourceFiles() throws -> [URL] {
     return try FileManager.default.deepFileEnumeration(in: directory)
       .lazy.filter({ $0.lastPathComponent ∉ Package.ignoredFiles })
+      .lazy.filter({ $0.isSaying })
       .sorted(by: { $0.path < $1.path })
   }
 

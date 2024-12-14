@@ -2,6 +2,10 @@ import Foundation
 
 extension URL {
 
+  var isSaying: Bool {
+    return pathExtension == "saying"
+  }
+
   var sourceFormat: SourceFormat {
     let encoding = deletingPathExtension()
     // Only UTF‐8 supported at the moment.
