@@ -862,8 +862,8 @@ extension Platform {
     return testSource(
       identifier: identifier(for: test, leading: false),
       statements: test.statements.map({ statement in
-        let result = self.statement(
-          expression: statement.action,
+        let result = self.source(
+          for: statement,
           context: nil,
           localLookup: [locals],
           referenceLookup: referenceLookup,
