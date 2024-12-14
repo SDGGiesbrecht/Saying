@@ -129,8 +129,10 @@ enum Kotlin: Platform {
   static var needsReferencePreparation: Bool {
     return true
   }
-  static func prepareReference(to argument: String) -> String? {
-    return "val \(sanitize(identifier: StrictString(argument), leading: true))Reference = mutableListOf(\(argument)); "
+  static func prepareReference(to argument: String, update: Bool) -> String? {
+    let keyword = update ? "" : "val "
+    let name = sanitize(identifier: StrictString(argument), leading: true)
+    return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
   }
   static func passReference(to argument: String) -> String {
     return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"

@@ -139,7 +139,7 @@ enum C: Platform {
   static var needsReferencePreparation: Bool {
     return false
   }
-  static func prepareReference(to argument: String) -> String? {
+  static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
   static func passReference(to argument: String) -> String {
