@@ -92,8 +92,8 @@ extension
     English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
    )
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
-   JavaScript: “let ” unwrapped “ = ” optional “; if ¤(28)” unwrapped “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”
-   Kotlin: “val ” unwrapped “ = ” optional “; if ¤(28)” unwrapped “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”
+   JavaScript: “let resolved” unwrapped “ = ” optional “; if ¤(28)resolved” unwrapped “ ¤(21)== null¤(29) ¤(7B) let ” unwrapped “ = resolved” unwrapped “;” consequence “¤(7D)”
+   Kotlin: “val resolved” unwrapped “ = ” optional “; if ¤(28)resolved” unwrapped “ ¤(21)= null¤(29) ¤(7B) val resolved” unwrapped “ = ” unwrapped “;” consequence “¤(7D)”
    Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
    {
     if (optional) is (something), unwrap it as (unwrapped), {
