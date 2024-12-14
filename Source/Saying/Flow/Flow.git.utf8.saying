@@ -46,8 +46,8 @@ extension
    )
    thing
    {
-    if (cache) exists, unwrap it as (• cached: thing), {
-     ← cached
+    if (cache) exists, unwrap it as (• result: thing), {
+     ← result
     }
     let (• result: thing) be (compute: thing)
     change (cache) to (result)
