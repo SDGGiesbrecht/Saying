@@ -77,6 +77,8 @@ protocol Platform {
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String]
   ) -> String
+  static func returnDelayStorage(type: String?) -> String
+  static var delayedReturn: String { get }
   static func actionDeclaration(
     name: String,
     parameters: String,
@@ -658,7 +660,16 @@ extension Platform {
       }
     }
     if statement.isReturn {
-      entry.prepend(contentsOf: "return ")
+      if referenceList.isEmpty {
+        entry.append(contentsOf: "return ")
+      } else {
+        entry.append(
+          contentsOf: returnDelayStorage(
+            type: statement.action.resolvedResultType!
+              .map({ source(for: $0, referenceLookup: referenceLookup) })
+          )
+        )
+      }
     }
     let before = coverageRegionCounter
     entry.append(
@@ -683,6 +694,10 @@ extension Platform {
       if let unpack = unpackReference(to: reference) {
         entry.append(unpack)
       }
+    }
+    if statement.isReturn,
+      !referenceList.isEmpty {
+      entry.append(contentsOf: delayedReturn)
     }
     return entry
   }

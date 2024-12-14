@@ -217,6 +217,16 @@ enum Swift: Platform {
       inliningArguments: inliningArguments
     )
   }
+  static func returnDelayStorage(type: String?) -> String {
+    if type != nil {
+      return "let returnValue = "
+    } else {
+      return ""
+    }
+  }
+  static var delayedReturn: String {
+    return "return returnValue;"
+  }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [

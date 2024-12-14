@@ -167,6 +167,16 @@ enum JavaScript: Platform {
       inliningArguments: inliningArguments
     ).appending(";")
   }
+  static func returnDelayStorage(type: String?) -> String {
+    if type ≠ nil {
+      return "const returnValue = "
+    } else {
+      return ""
+    }
+  }
+  static var delayedReturn: String {
+    return "return returnValue;"
+  }
 
   static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
     var result: [String] = [
