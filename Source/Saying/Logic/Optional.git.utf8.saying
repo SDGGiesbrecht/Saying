@@ -25,8 +25,8 @@ extension
      )
      thing
      C♯: “¤(28)” value “¤(29)”/“if ¤(28)” enumeration “ is ” thing “ ” value “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
-     JavaScript: “¤(28)” value “¤(29)”/“let ” value “ = ” enumeration “; if ¤(28)” value “ ¤(21)== null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
-     Kotlin: “¤(28)” value “¤(29)”/“val ” value “ = ” enumeration “; if ¤(28)” value “ ¤(21)= null¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
+     JavaScript: “¤(28)” value “¤(29)”/“let resolved” value “ = ” enumeration “; if ¤(28)resolved” value “ ¤(21)== null¤(29) ¤(7B) let ” value “ = resolved” value “;” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
+     Kotlin: “¤(28)” value “¤(29)”/“val resolved” value “ = ” enumeration “; if ¤(28)resolved” value “ ¤(21)= null¤(29) ¤(7B) val resolved” value “ = ” value “” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
      Swift: “¤(28)” value “¤(29) as ” thing “¤(3F)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
 
     case
@@ -93,7 +93,7 @@ extension
    )
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
    JavaScript: “let resolved” unwrapped “ = ” optional “; if ¤(28)resolved” unwrapped “ ¤(21)== null¤(29) ¤(7B) let ” unwrapped “ = resolved” unwrapped “;” consequence “¤(7D)”
-   Kotlin: “val resolved” unwrapped “ = ” optional “; if ¤(28)resolved” unwrapped “ ¤(21)= null¤(29) ¤(7B) val resolved” unwrapped “ = ” unwrapped “;” consequence “¤(7D)”
+   Kotlin: “val resolved” unwrapped “ = ” optional “; if ¤(28)resolved” unwrapped “ ¤(21)= null¤(29) ¤(7B) val resolved” unwrapped “ = ” unwrapped “” consequence “¤(7D)”
    Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
    {
     if (optional) is (something), unwrap it as (unwrapped), {
