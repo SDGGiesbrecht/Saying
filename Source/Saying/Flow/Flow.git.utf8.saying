@@ -12,6 +12,49 @@ flow (clients)
  Kotlin: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
  Swift: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
 
+extension
+ optional (thing)
+ {
+  action
+   [
+    [
+     English: Returns the result of a computation, using caching to improve efficiency upon repeated use.
+    ]
+    [
+     English: This is accomplished by either (A) retrieving a previous result from {cache} (if {cache} is not {nothing}), or (B) executing {compute} and saving the result to {cache} before returning it.
+    ]
+    parameter: compute
+     (
+      [
+       English: The computation to be evaluated.
+      ]
+     )
+    parameter: cache
+     (
+      [
+       English: The storage in which to cache the result. Declare it in the appropriate scope for the desired cache lifetime. The cache can be reset at any time by setting it to {nothing}.
+      ]
+     )
+    test {
+     let (• cache: optional (truth value)) start as (nothing: optional (truth value))
+     verify (((true: → truth value), caching in (↓ cache)) is (true))
+     verify (((true: → truth value), caching in (↓ cache)) is (true))
+    }
+   ]
+   (
+    English: (compute: → thing), caching in (cache: ↓ optional (thing))
+   )
+   thing
+   {
+    if (cache) exists, unwrap it as (• result: thing), {
+     ← result
+    }
+    let (• result: thing) be (compute: thing)
+    change (cache) to (result)
+    ← result
+   }
+ }
+
 action
  [
   test {verify ((true) triggers if)}
