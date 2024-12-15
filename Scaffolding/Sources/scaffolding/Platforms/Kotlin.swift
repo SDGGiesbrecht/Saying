@@ -170,7 +170,8 @@ enum Kotlin: Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
   ) -> String {
     return call(
       to: expression,
@@ -179,7 +180,8 @@ enum Kotlin: Platform {
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter,
-      inliningArguments: inliningArguments
+      inliningArguments: inliningArguments,
+      mode: mode
     )
   }
   static func returnDelayStorage(type: String?) -> String {

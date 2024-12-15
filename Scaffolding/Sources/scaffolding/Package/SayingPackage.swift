@@ -15,6 +15,9 @@ struct Package {
   var constructionDirectory: URL {
     return location.appendingPathComponent(".Construction")
   }
+  var productsDirectory: URL {
+    return location.appendingPathComponent("Products")
+  }
 
   static let ignoredDirectories: Set<String> = [
     ".git"
@@ -65,7 +68,7 @@ struct Package {
   }
 
   func buildSwift() throws {
-    try Swift.prepare(package: self)
+    try Swift.prepare(package: self, mode: .testing)
     _ = try Shell.default.run(
       command: [
         "swift", "build",
@@ -76,7 +79,7 @@ struct Package {
   }
 
   func testC() throws {
-    try C.prepare(package: self)
+    try C.prepare(package: self, mode: .testing)
     let directory = C.preparedDirectory(for: self)
     _ = try Shell.default.run(
       command: [
@@ -95,7 +98,7 @@ struct Package {
   }
 
   func testSwift() throws {
-    try Swift.prepare(package: self)
+    try Swift.prepare(package: self, mode: .testing)
     _ = try Shell.default.run(
       command: [
         "swift", "run",
@@ -107,7 +110,7 @@ struct Package {
   }
 
   func buildXcode(platform: String) throws {
-    try Swift.prepare(package: self)
+    try Swift.prepare(package: self, mode: .testing)
     _ = try Shell.default.run(
       command: [
         "xcrun", "xcodebuild", "build",

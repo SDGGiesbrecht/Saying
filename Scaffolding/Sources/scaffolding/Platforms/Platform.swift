@@ -75,7 +75,8 @@ protocol Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
   ) -> String
   static func returnDelayStorage(type: String?) -> String
   static var delayedReturn: String { get }
@@ -363,7 +364,8 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
@@ -396,7 +398,8 @@ extension Platform {
           parameterName: parameter.names.identifier(),
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          inliningArguments: [:]
+          inliningArguments: [:],
+          mode: mode
         )
       }
     } else {
@@ -405,7 +408,7 @@ extension Platform {
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
-      let action = (context?.isCoverageWrapper ?? false)
+      let action = mode != .testing || (context?.isCoverageWrapper ?? false)
         ? bareAction
         : referenceLookup.lookupAction(
           bareAction.coverageTrackingIdentifier(),
@@ -422,10 +425,12 @@ extension Platform {
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          inliningArguments: inliningArguments
+          inliningArguments: inliningArguments,
+          mode: mode
         )
       ]
-      if bareAction.isFlow,
+      if mode == .testing,
+        bareAction.isFlow,
         bareAction.returnValue == nil,
         let coveredIdentifier = action.coveredIdentifier {
         result.prepend(
@@ -444,7 +449,8 @@ extension Platform {
     parameterName: StrictString?,
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
   ) -> String {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
@@ -484,11 +490,13 @@ extension Platform {
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
-                  inliningArguments: inliningArguments
+                  inliningArguments: inliningArguments,
+                  mode: mode
                 )
               )
             case .flow(let statements):
-              if let coverage = flowCoverageRegistration(
+              if mode == .testing,
+                let coverage = flowCoverageRegistration(
                 contextCoverageIdentifier: contextCoverageIdentifier,
                 coverageRegionCounter: &coverageRegionCounter
               ) {
@@ -506,7 +514,8 @@ extension Platform {
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     inliningArguments: inliningArguments,
-                    existingReferences: &existingReferences
+                    existingReferences: &existingReferences,
+                    mode: mode
                   )
                 )
                 result.append("\n")
@@ -548,7 +557,8 @@ extension Platform {
             referenceLookup: referenceLookup,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
-            inliningArguments: inliningArguments
+            inliningArguments: inliningArguments,
+            mode: mode
           )
           let newActions = action.localActions()
           for local in newActions {
@@ -563,9 +573,11 @@ extension Platform {
             context: context,
             localLookup: localLookup.appending(locals),
             referenceLookup: referenceLookup,
-            inliningArguments: inliningArguments
+            inliningArguments: inliningArguments,
+            mode: mode
           )
-          if let coverage = flowCoverageRegistration(
+          if mode == .testing,
+            let coverage = flowCoverageRegistration(
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter
           ) {
@@ -579,7 +591,8 @@ extension Platform {
         context: action,
         localLookup: localLookup,
         referenceLookup: referenceLookup,
-        inliningArguments: newInliningArguments
+        inliningArguments: newInliningArguments,
+        mode: mode
       ).joined(separator: "\n")
     } else {
       let name = sanitize(
@@ -605,7 +618,8 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
-                    inliningArguments: inliningArguments
+                    inliningArguments: inliningArguments,
+                    mode: mode
                   )
                 )
               )
@@ -618,7 +632,8 @@ extension Platform {
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
-                  inliningArguments: inliningArguments
+                  inliningArguments: inliningArguments,
+                  mode: mode
                 )
               )
             }
@@ -640,7 +655,8 @@ extension Platform {
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
-    existingReferences: inout Set<String>
+    existingReferences: inout Set<String>,
+    mode: CompilationMode
   ) -> String {
     var entry = ""
     var referenceList: [String] = []
@@ -653,7 +669,8 @@ extension Platform {
           referenceLookup: referenceLookup,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
-          inliningArguments: inliningArguments
+          inliningArguments: inliningArguments,
+          mode: mode
         )
       }
       for reference in referenceList {
@@ -686,10 +703,12 @@ extension Platform {
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter,
-        inliningArguments: inliningArguments
+        inliningArguments: inliningArguments,
+        mode: mode
       )
     )
-    if coverageRegionCounter ≠ before,
+    if mode == .testing,
+      coverageRegionCounter ≠ before,
        let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter
@@ -785,7 +804,8 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
   ) -> [String] {
     var locals = ReferenceDictionary()
     var coverageRegionCounter = 0
@@ -799,7 +819,8 @@ extension Platform {
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
         inliningArguments: inliningArguments,
-        existingReferences: &existingReferences
+        existingReferences: &existingReferences,
+        mode: mode
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -814,7 +835,8 @@ extension Platform {
 
   static func declaration(
     for action: ActionIntermediate,
-    externalReferenceLookup: [ReferenceDictionary]
+    externalReferenceLookup: [ReferenceDictionary],
+    mode: CompilationMode
   ) -> String? {
     if nativeImplementation(of: action) ≠ nil
       ∨ action.isEnumerationCaseWrapper {
@@ -839,7 +861,8 @@ extension Platform {
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
 
     let coverageRegistration: String?
-    if let identifier = action.coveredIdentifier {
+    if mode == .testing,
+      let identifier = action.coveredIdentifier {
       coverageRegistration = "\(indent)\(self.coverageRegistration(identifier: sanitize(stringLiteral: identifier)))"
     } else {
       coverageRegistration = nil
@@ -851,7 +874,8 @@ extension Platform {
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
-      inliningArguments: [:]
+      inliningArguments: [:],
+      mode: mode
     )
     return actionDeclaration(
       name: name,
@@ -883,7 +907,8 @@ extension Platform {
           contextCoverageIdentifier: nil,
           coverageRegionCounter: &coverageRegionCounter,
           inliningArguments: [:],
-          existingReferences: &existingReferences
+          existingReferences: &existingReferences,
+          mode: .testing
         )
         let newActions = statement.action.localActions()
         for local in newActions {
@@ -916,7 +941,7 @@ extension Platform {
     return imports
   }
 
-  static func source(for module: ModuleIntermediate) -> String {
+  static func source(for module: ModuleIntermediate, mode: CompilationMode) -> String {
     var result: [String] = []
 
     var imports = nativeImports(for: module.referenceDictionary)
@@ -929,23 +954,25 @@ extension Platform {
     }
 
     let moduleReferenceLookup = module.referenceDictionary
-    let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
-      .lazy.filter({ action in
-        return ¬action.isCoverageWrapper
-        ∧ ¬(action.isFlow ∧ action.returnValue != nil)
-      })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
-    let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
-      .lazy.flatMap({ $0.defaults.values })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
-    let regions = Set([
-      actionRegions,
-      choiceRegions
-    ].joined())
-      .sorted()
-      .map({ sanitize(stringLiteral: $0) })
-    result.append(contentsOf: coverageRegionSet(regions: regions))
-    result.append(contentsOf: registerCoverageAction)
+    if mode == .testing {
+      let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
+        .lazy.filter({ action in
+          return ¬action.isCoverageWrapper
+          ∧ ¬(action.isFlow ∧ action.returnValue != nil)
+        })
+        .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
+      let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
+        .lazy.flatMap({ $0.defaults.values })
+        .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
+      let regions = Set([
+        actionRegions,
+        choiceRegions
+      ].joined())
+        .sorted()
+        .map({ sanitize(stringLiteral: $0) })
+      result.append(contentsOf: coverageRegionSet(regions: regions))
+      result.append(contentsOf: registerCoverageAction)
+    }
 
     let allThings = moduleReferenceLookup.allThings(sorted: true)
     for thing in allThings {
@@ -973,20 +1000,26 @@ extension Platform {
       }
     }
     for action in allActions where ¬action.isFlow {
-      if let declaration = self.declaration(for: action, externalReferenceLookup: [moduleReferenceLookup]) {
+      if let declaration = self.declaration(
+        for: action,
+        externalReferenceLookup: [moduleReferenceLookup],
+        mode: mode
+      ) {
         result.append(contentsOf: [
           "",
           declaration
         ])
       }
     }
-    let allTests = module.allTests(sorted: true)
-    for test in allTests {
+    if mode == .testing {
+      let allTests = module.allTests(sorted: true)
+      for test in allTests {
+        result.append("")
+        result.append(contentsOf: source(of: test, referenceLookup: [moduleReferenceLookup]))
+      }
       result.append("")
-      result.append(contentsOf: source(of: test, referenceLookup: [moduleReferenceLookup]))
+      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
     }
-    result.append("")
-    result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
     }
@@ -994,29 +1027,61 @@ extension Platform {
     return result.joined(separator: "\n").appending("\n")
   }
 
-  static func source(for module: Module) throws -> String {
-    return try source(for: module.build())
+  static func source(
+    for module: Module,
+    mode: CompilationMode,
+    entryPoints: [StrictString]? = nil
+  ) throws -> String {
+    return try source(for: module.build(mode: mode, entryPoints: entryPoints), mode: mode)
   }
 
   static func preparedDirectory(for package: Package) -> URL {
     return package.constructionDirectory
       .appendingPathComponent(self.directoryName)
   }
+  static func productsDirectory(for package: Package) -> URL {
+    return package.productsDirectory
+      .appendingPathComponent(self.directoryName)
+  }
 
-  static func prepare(package: Package) throws {
-    let constructionDirectory = preparedDirectory(for: package)
+  static func prepare(
+    package: Package,
+    mode: CompilationMode,
+    entryPoints: [StrictString]? = nil,
+    location: URL? = nil
+  ) throws {
+    switch mode {
+    case .testing, .debugging, .dependency:
+      let constructionDirectory = location ?? preparedDirectory(for: package)
+      var source: [String] = [
+        try package.modules()
+          .lazy.map({ try self.source(for: $0, mode: mode) })
+          .joined(separator: "\n\n")
+      ]
+      if let entryPoint = testEntryPoint() {
+        source.append("")
+        source.append(contentsOf: entryPoint)
+      }
+      try source.joined(separator: "\n").appending("\n")
+        .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
+      try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
+    case .release:
+      let productsDirectory = location ?? productsDirectory(for: package)
+      let source: [String] = [
+        try package.modules()
+          .lazy.map({ try self.source(for: $0, mode: mode, entryPoints: entryPoints) })
+          .joined(separator: "\n\n")
+      ]
 
-    var source: [String] = [
-      try package.modules()
-        .lazy.map({ try self.source(for: $0) })
-        .joined(separator: "\n\n")
-    ]
-    if let entryPoint = testEntryPoint() {
-      source.append("")
-      source.append(contentsOf: entryPoint)
+      var joined = source.joined(separator: "\n").appending("\n")
+      while joined.first == "\n" {
+        joined.removeFirst()
+      }
+      while joined.hasSuffix("\n\n") {
+        joined.removeLast()
+      }
+      try joined
+        .save(to: productsDirectory)
     }
-    try source.joined(separator: "\n").appending("\n")
-      .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
-    try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
   }
 }

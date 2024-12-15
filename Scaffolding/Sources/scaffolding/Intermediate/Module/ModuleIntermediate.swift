@@ -283,3 +283,10 @@ extension ModuleIntermediate {
     )
   }
 }
+
+extension ModuleIntermediate {
+  func removingUnreachable(fromEntryPoints entryPoints: [StrictString]? = nil) -> ModuleIntermediate {
+    #warning("Not implemented yet.")
+    return ModuleIntermediate()
+  }
+}
