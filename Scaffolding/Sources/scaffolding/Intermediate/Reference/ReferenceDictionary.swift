@@ -333,3 +333,16 @@ extension ReferenceDictionary {
     return new
   }
 }
+
+extension ReferenceDictionary {
+  mutating func removeUnreachable(
+    fromEntryPoints entryPoints: Set<StrictString>
+  ) {
+    for key in Array(things.keys) where !entryPoints.contains(key) {
+      things[key] = nil
+    }
+    for key in Array(actions.keys) where !entryPoints.contains(key) {
+      actions[key] = nil
+    }
+  }
+}
