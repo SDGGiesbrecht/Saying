@@ -15,7 +15,7 @@ struct Module {
       .sorted(by: { $0.path < $1.path })
   }
 
-  func build(mode: CompilationMode, entryPoints: [StrictString]?) throws -> ModuleIntermediate {
+  func build(mode: CompilationMode, entryPoints: Set<StrictString>?) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {

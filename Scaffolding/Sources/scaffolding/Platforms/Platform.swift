@@ -1030,7 +1030,7 @@ extension Platform {
   static func source(
     for module: Module,
     mode: CompilationMode,
-    entryPoints: [StrictString]? = nil
+    entryPoints: Set<StrictString>? = nil
   ) throws -> String {
     return try source(for: module.build(mode: mode, entryPoints: entryPoints), mode: mode)
   }
@@ -1047,7 +1047,7 @@ extension Platform {
   static func prepare(
     package: Package,
     mode: CompilationMode,
-    entryPoints: [StrictString]? = nil,
+    entryPoints: Set<StrictString>? = nil,
     location: URL? = nil
   ) throws {
     switch mode {
