@@ -338,11 +338,25 @@ extension ReferenceDictionary {
   mutating func removeUnreachable(
     fromEntryPoints entryPoints: Set<StrictString>
   ) {
-    for key in Array(things.keys) where !entryPoints.contains(key) {
-      things[key] = nil
-    }
-    for key in Array(actions.keys) where !entryPoints.contains(key) {
-      actions[key] = nil
-    }
+    var optimized = ReferenceDictionary()
+    var found: Set<StrictString> = []
+    var stillRequired: Set<StrictString> = entryPoints
+    var foundSomething = false
+    repeat {
+      foundSomething = false
+      for action in allActions() {
+        if let swift = action.swiftIdentifier(),
+           stillRequired.contains(swift) {
+          stillRequired.remove(swift)
+          foundSomething = true
+          found.insert(action.globallyUniqueIdentifier(referenceLookup: [self]))
+          _ = optimized.add(action: action)
+        }
+      }
+    } while !stillRequired.isEmpty && foundSomething
+    #warning("Debugging...")
+    print(found)
+    print(stillRequired)
+    self = optimized
   }
 }

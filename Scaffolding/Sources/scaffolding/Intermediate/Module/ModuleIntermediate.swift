@@ -260,6 +260,9 @@ extension ModuleIntermediate {
     }
     for language in languageNodes {
       var identifier = language.identifierText()
+      if identifier == "Swift" {
+        continue
+      }
       if identifier.hasSuffix(" +") {
         identifier.removeLast(2)
       }

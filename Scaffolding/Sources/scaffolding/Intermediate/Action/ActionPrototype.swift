@@ -11,6 +11,29 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
+  var swiftName: StrictString?
+
+  init(
+    isFlow: Bool,
+    names: Set<StrictString>,
+    namespace: [Set<StrictString>],
+    parameters: Interpolation<ParameterIntermediate>,
+    returnValue: ParsedTypeReference?,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool,
+    documentation: DocumentationIntermediate?,
+    swiftName: StrictString?
+  ) {
+    self.isFlow = isFlow
+    self.names = names
+    self.namespace = namespace
+    self.parameters = parameters
+    self.returnValue = returnValue
+    self.access = access
+    self.testOnlyAccess = testOnlyAccess
+    self.documentation = documentation
+    self.swiftName = swiftName
+  }
 }
 
 extension ActionPrototype {
@@ -40,7 +63,12 @@ extension ActionPrototype {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    for (_, signature) in namesDictionary {
+    var swiftName: StrictString?
+    for (language, signature) in namesDictionary {
+      let name = signature.name()
+      if language == "Swift" {
+        swiftName = name
+      }
       names.insert(signature.name())
     }
     var attachedDocumentation: DocumentationIntermediate?
@@ -70,7 +98,8 @@ extension ActionPrototype {
         returnValue: declaration.returnValueType.map({ ParsedTypeReference($0) }),
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
-        documentation: attachedDocumentation
+        documentation: attachedDocumentation,
+        swiftName: swiftName
       )
     )
   }
