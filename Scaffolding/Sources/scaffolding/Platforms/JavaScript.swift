@@ -157,7 +157,8 @@ enum JavaScript: Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: StrictString?,
     coverageRegionCounter: inout Int,
-    inliningArguments: [StrictString: String]
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
   ) -> String {
     return call(
       to: expression,
@@ -166,7 +167,8 @@ enum JavaScript: Platform {
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter,
-      inliningArguments: inliningArguments
+      inliningArguments: inliningArguments,
+      mode: mode
     ).appending(";")
   }
   static func returnDelayStorage(type: String?) -> String {

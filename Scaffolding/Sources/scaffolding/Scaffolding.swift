@@ -41,16 +41,18 @@ import Foundation
 
     let arguments = ProcessInfo.processInfo.arguments.dropFirst()
     switch arguments.first {
+    case "rescaffold":
+      try rescaffold(from: package, packageRoot: packageRoot)
     case "format":
       try package.format(reportProgress: { print($0) })
     case "prepare‐c":
-      try C.prepare(package: package)
+      try C.prepare(package: package, mode: .testing)
     case "prepare‐c‐sharp":
-      try CSharp.prepare(package: package)
+      try CSharp.prepare(package: package, mode: .testing)
     case "prepare‐kotlin":
-      try Kotlin.prepare(package: package)
+      try Kotlin.prepare(package: package, mode: .testing)
     case "build‐javascript":
-      try JavaScript.prepare(package: package)
+      try JavaScript.prepare(package: package, mode: .testing)
     case "test‐c":
       try package.testC()
     case "test‐swift":
@@ -64,5 +66,19 @@ import Foundation
     default:
       try package.testSwift()
     }
+  }
+
+  static func rescaffold(from package: Package, packageRoot: URL) throws {
+    try Swift.prepare(
+      package: package,
+      mode: .release,
+      entryPoints: ["example simple enumeration"],
+      location: packageRoot
+        .appendingPathComponent("Scaffolding")
+        .appendingPathComponent("Sources")
+        .appendingPathComponent("scaffolding")
+        .appendingPathComponent("Generated")
+        .appendingPathComponent("Saying.swift")
+    )
   }
 }

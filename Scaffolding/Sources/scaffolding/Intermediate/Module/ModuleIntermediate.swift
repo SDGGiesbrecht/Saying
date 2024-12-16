@@ -283,3 +283,16 @@ extension ModuleIntermediate {
     )
   }
 }
+
+extension ModuleIntermediate {
+  func removingUnreachable(
+    fromEntryPoints entryPoints: Set<StrictString>? = nil
+  ) -> ModuleIntermediate {
+    guard let entryPoints = entryPoints else {
+      fatalError("General reachability checks without specifying entry points are not implemented yet.")
+    }
+    var result = self
+    result.referenceDictionary.removeUnreachable(fromEntryPoints: entryPoints)
+    return result
+  }
+}

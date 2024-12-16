@@ -15,7 +15,7 @@ struct Module {
       .sorted(by: { $0.path < $1.path })
   }
 
-  func build() throws -> ModuleIntermediate {
+  func build(mode: CompilationMode, entryPoints: Set<StrictString>?) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
@@ -26,6 +26,13 @@ struct Module {
     module.resolveTypeIdentifiers()
     module.resolveTypes()
     try module.validateReferences()
-    return module.applyingTestCoverageTracking()
+    switch mode {
+    case .testing:
+      return module.applyingTestCoverageTracking()
+    case .debugging, .dependency:
+      return module
+    case .release:
+      return module.removingUnreachable(fromEntryPoints: entryPoints)
+    }
   }
 }
