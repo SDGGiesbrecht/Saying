@@ -741,7 +741,7 @@ extension Platform {
     }
     let presentIndent = String(repeating: indent, count: indentationLevel)
     entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)
-    return entry
+    return entry.prepending(contentsOf: presentIndent)
   }
 
   static func source(
@@ -895,7 +895,7 @@ extension Platform {
       ),
       inliningArguments: [:],
       mode: mode,
-      indentationLevel: 0
+      indentationLevel: 1
     )
     return actionDeclaration(
       name: name,
