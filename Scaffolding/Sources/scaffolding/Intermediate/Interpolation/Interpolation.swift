@@ -224,6 +224,14 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
         : [newName: reorderings[originalName]!]
     )
   }
+  func prefixingEach(
+    with prefix: StrictString
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: parameters.map({ $0.prefixing(with: prefix) }),
+      reorderings: reorderings
+    )
+  }
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {

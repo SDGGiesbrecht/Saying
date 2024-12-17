@@ -596,7 +596,7 @@ extension Platform {
         mode: mode
       ).joined(separator: "\n")
     } else {
-      let name = sanitize(
+      let name = nativeName(of: action) ?? sanitize(
         identifier: parameterName
           ?? action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
         leading: true
@@ -743,6 +743,7 @@ extension Platform {
       switch parameter.type {
       case .simple, .compound:
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
+        #warning("Not getting real label.")
         return parameterDeclaration(label: nil, name: name, type: typeSource, isThrough: parameter.isThrough)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
         let parameters = actionParameters
@@ -754,6 +755,7 @@ extension Platform {
         } else {
           returnValue = emptyReturnTypeForActionType
         }
+        #warning("Not getting real label.")
         return parameterDeclaration(
           label: nil,
           name: name,

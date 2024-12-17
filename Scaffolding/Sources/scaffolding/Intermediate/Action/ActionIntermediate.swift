@@ -717,7 +717,9 @@ extension ActionIntermediate {
           isFlow: isFlow,
           names: [wrapperName],
           namespace: [],
-          parameters: prototype.parameters.removingOtherNamesAnd(replacing: baseName, with: wrapperName),
+          parameters: prototype.parameters
+            .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
+            .prefixingEach(with: "→"),
           returnValue: prototype.returnValue,
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
@@ -730,7 +732,9 @@ extension ActionIntermediate {
               isReturn: returnValue != nil,
               action: ActionUse(
                 actionName: baseName,
-                arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
+                arguments: prototype.parameters
+                  .prefixingEach(with: "→")
+                  .ordered(for: baseName).map({ parameter in
                   return .action(
                     ActionUse(
                       actionName: parameter.names.identifier(),

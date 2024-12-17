@@ -107,3 +107,15 @@ extension ParameterIntermediate {
     )
   }
 }
+
+extension ParameterIntermediate {
+  func prefixing(with prefix: StrictString) -> ParameterIntermediate {
+    return ParameterIntermediate(
+      names: Set(names.map({ "\(prefix)\($0)" })),
+      type: type,
+      isThrough: isThrough,
+      passAction: passAction,
+      executeAction: executeAction
+    )
+  }
+}
