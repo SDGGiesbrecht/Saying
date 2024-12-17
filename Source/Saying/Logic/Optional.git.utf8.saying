@@ -94,7 +94,7 @@ extension
    C♯: “if ¤(28)” optional “ is ” thing “ ” unwrapped “¤(29) ¤(7B)” consequence “¤(7D)”
    JavaScript: “let resolvedOptional = ” optional “; if ¤(28)resolvedOptional ¤(21)== null¤(29) ¤(7B) const ” unwrapped “ = resolvedOptional;” consequence “¤(7D)”
    Kotlin: “val resolvedOptional = ” optional “; if ¤(28)resolvedOptional ¤(21)= null¤(29) ¤(7B) val ” unwrapped “ = resolvedOptional” consequence “¤(7D)”
-   Swift: “if let ” unwrapped “ = ¤(28)” optional “¤(29) ¤(7B)” consequence “¤(7D)”
+   Swift: “if let ” unwrapped “ = ” optional “ ¤(7B)” consequence “¤(7D)”
    {
     if (optional) is (something), unwrap it as (unwrapped), {
      consequence
