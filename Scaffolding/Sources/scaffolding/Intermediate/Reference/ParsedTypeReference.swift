@@ -270,3 +270,55 @@ extension Optional where Wrapped == ParsedTypeReference {
     return self?.unresolvedGloballyUniqueIdentifierComponents() ?? [""]
   }
 }
+
+extension ParsedTypeReference {
+  func requiredIdentifiers(
+    referenceDictionary: ReferenceDictionary
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    switch self {
+    case .simple(let simple):
+      if let thing = referenceDictionary.lookupThing(simple.identifier, components: []) {
+        result.append(thing.names.identifier())
+      }
+    case .compound(identifier: let identifier, components: let components):
+      if let thing = referenceDictionary.lookupThing(
+        identifier.name(),
+        components: components.map({ $0.key })
+      ) {
+        result.append(thing.names.identifier())
+      }
+      for component in components {
+        result.append(
+          contentsOf: component.requiredIdentifiers(
+            referenceDictionary: referenceDictionary
+          )
+        )
+      }
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      for parameter in parameters {
+        result.append(
+          contentsOf: parameter.requiredIdentifiers(
+            referenceDictionary: referenceDictionary
+          )
+        )
+      }
+      if let value = returnValue {
+        result.append(
+          contentsOf: value.requiredIdentifiers(
+            referenceDictionary: referenceDictionary
+          )
+        )
+      }
+    case .statements:
+      break
+    case .enumerationCase(enumeration: let enumeration, identifier: _):
+      result.append(
+        contentsOf: enumeration.requiredIdentifiers(
+          referenceDictionary: referenceDictionary
+        )
+      )
+    }
+    return result
+  }
+}

@@ -145,3 +145,27 @@ extension ActionPrototype {
     return parameters.ordered(for: name).map({ $0.type })
   }
 }
+
+extension ActionPrototype {
+
+  func requiredIdentifiers(
+    referenceDictionary: ReferenceDictionary
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    for parameter in parameters.inAnyOrder {
+      result.append(
+        contentsOf: parameter.type.requiredIdentifiers(
+          referenceDictionary: referenceDictionary
+        )
+      )
+    }
+    if let value = returnValue {
+      result.append(
+        contentsOf: value.requiredIdentifiers(
+          referenceDictionary: referenceDictionary
+        )
+      )
+    }
+    return result
+  }
+}

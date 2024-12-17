@@ -827,3 +827,37 @@ extension ActionIntermediate {
     return "\(functionName)(\(parameterNames.joined(separator: ":")):)"
   }
 }
+
+extension ActionIntermediate {
+
+  func requiredIdentifiers(
+    moduleReferenceDictionary: ReferenceDictionary
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    result.append(
+      contentsOf: prototype.requiredIdentifiers(
+        referenceDictionary: moduleReferenceDictionary
+      )
+    )
+    for native in allNativeImplementations() {
+      for parameterReference in native.parameters {
+        if let typeInstead = parameterReference.typeInstead {
+          result.append(
+            contentsOf: typeInstead.requiredIdentifiers(
+              referenceDictionary: moduleReferenceDictionary
+            )
+          )
+        }
+      }
+    }
+    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary(externalLookup: [moduleReferenceDictionary])]
+    if let implementation = self.implementation {
+      result.append(
+        contentsOf: implementation.requiredIdentifiers(
+          context: externalAndParameters
+        )
+      )
+    }
+    return result
+  }
+}

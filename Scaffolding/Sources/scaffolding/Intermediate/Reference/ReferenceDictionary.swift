@@ -351,12 +351,19 @@ extension ReferenceDictionary {
           foundSomething = true
           found.insert(action.globallyUniqueIdentifier(referenceLookup: [self]))
           _ = optimized.add(action: action)
+          for identifer in action.requiredIdentifiers(
+            moduleReferenceDictionary: self
+          ) {
+            if !found.contains(identifer) {
+              stillRequired.insert(identifer)
+            }
+          }
         }
       }
     } while !stillRequired.isEmpty && foundSomething
     #warning("Debugging...")
-    print(found)
-    print(stillRequired)
+    print("found:\n", found.joined(separator: "\n"))
+    print("stillRequired:\n", stillRequired.joined(separator: "\n"))
     self = optimized
   }
 }

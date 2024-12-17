@@ -81,3 +81,28 @@ extension StatementListIntermediate {
     }
   }
 }
+
+extension StatementListIntermediate {
+
+  func requiredIdentifiers(
+    context: [ReferenceDictionary]
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    var local = ReferenceDictionary()
+    for statement in statements {
+      result.append(
+        contentsOf: statement.requiredIdentifiers(
+          context: context.appending(local)
+        )
+      )
+      let newActions = statement.localActions()
+      for new in newActions {
+        _ = local.add(action: new)
+      }
+      if !newActions.isEmpty {
+        local.resolveTypeIdentifiers(externalLookup: context)
+      }
+    }
+    return result
+  }
+}
