@@ -145,6 +145,15 @@ extension Interpolation {
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
+  mutating func apply(swiftLabels: [StrictString], accordingTo name: StrictString) {
+    let indices = reorderings[name]!
+    for (index, label) in zip(indices, swiftLabels) {
+      parameters[index].swiftLabel = label
+    }
+  }
+}
+
+extension Interpolation where InterpolationParameter == ParameterIntermediate {
   func merging(
     requirement: Interpolation,
     provisionDeclarationName: ParsedActionName
@@ -222,6 +231,14 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       reorderings: reorderings == [:]
         ? [:]
         : [newName: reorderings[originalName]!]
+    )
+  }
+  func prefixingEach(
+    with prefix: StrictString
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: parameters.map({ $0.prefixing(with: prefix) }),
+      reorderings: reorderings
     )
   }
 }

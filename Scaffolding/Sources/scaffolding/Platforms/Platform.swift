@@ -50,9 +50,11 @@ protocol Platform {
   ) -> String
 
   // Actions
+  static func nativeName(of action: ActionIntermediate) -> String?
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String) -> String
@@ -515,7 +517,8 @@ extension Platform {
                     coverageRegionCounter: &coverageRegionCounter,
                     inliningArguments: inliningArguments,
                     existingReferences: &existingReferences,
-                    mode: mode
+                    mode: mode,
+                    indentationLevel: 1
                   )
                 )
                 result.append("\n")
@@ -574,7 +577,8 @@ extension Platform {
             localLookup: localLookup.appending(locals),
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments,
-            mode: mode
+            mode: mode,
+            indentationLevel: 0
           )
           if mode == .testing,
             let coverage = flowCoverageRegistration(
@@ -592,10 +596,11 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments,
-        mode: mode
+        mode: mode,
+        indentationLevel: 0
       ).joined(separator: "\n")
     } else {
-      let name = sanitize(
+      let name = nativeName(of: action) ?? sanitize(
         identifier: parameterName
           ?? action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
         leading: true
@@ -605,12 +610,17 @@ extension Platform {
         return "\(prefix)\(name)"
       } else {
         var argumentsArray: [String] = []
-        for argument in reference.arguments {
+        let parameters = action.parameters.ordered(for: action.names.identifier())
+        for argumentIndex in reference.arguments.indices {
+          let argument = reference.arguments[argumentIndex]
+          let parameter = parameters[argumentIndex]
+          let parameterLabel = nativeLabel(of: parameter)
+            .map({ $0 == "" ? "" : "\($0): " }) ?? ""
           switch argument {
           case .action(let actionArgument):
             if actionArgument.passage == .through {
               argumentsArray.append(
-                passReference(
+                parameterLabel + passReference(
                   to: call(
                     to: actionArgument,
                     context: context,
@@ -625,7 +635,7 @@ extension Platform {
               )
             } else {
               argumentsArray.append(
-                call(
+                parameterLabel + call(
                   to: actionArgument,
                   context: context,
                   localLookup: localLookup,
@@ -656,7 +666,8 @@ extension Platform {
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     existingReferences: inout Set<String>,
-    mode: CompilationMode
+    mode: CompilationMode,
+    indentationLevel: Int
   ) -> String {
     var entry = ""
     var referenceList: [String] = []
@@ -728,7 +739,9 @@ extension Platform {
         existingReferences.insert(reference)
       }
     }
-    return entry
+    let presentIndent = String(repeating: indent, count: indentationLevel)
+    entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)
+    return entry.prepending(contentsOf: presentIndent)
   }
 
   static func source(
@@ -741,9 +754,11 @@ extension Platform {
     } else {
       switch parameter.type {
       case .simple, .compound:
+        let label = nativeLabel(of: parameter)
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
-        return parameterDeclaration(name: name, type: typeSource, isThrough: parameter.isThrough)
+        return parameterDeclaration(label: label, name: name, type: typeSource, isThrough: parameter.isThrough)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
+        let label = nativeLabel(of: parameter)
         let parameters = actionParameters
           .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
           .joined(separator: ", ")
@@ -754,6 +769,7 @@ extension Platform {
           returnValue = emptyReturnTypeForActionType
         }
         return parameterDeclaration(
+          label: label,
           name: name,
           parameters: parameters,
           returnValue: returnValue
@@ -805,7 +821,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [StrictString: String],
-    mode: CompilationMode
+    mode: CompilationMode,
+    indentationLevel: Int
   ) -> [String] {
     var locals = ReferenceDictionary()
     var coverageRegionCounter = 0
@@ -820,7 +837,8 @@ extension Platform {
         coverageRegionCounter: &coverageRegionCounter,
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
-        mode: mode
+        mode: mode,
+        indentationLevel: indentationLevel
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -843,10 +861,11 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(
-      identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-      leading: true
-    )
+    let name = nativeName(of: action)
+      ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
+        leading: true
+      )
     let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
@@ -875,7 +894,8 @@ extension Platform {
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
       inliningArguments: [:],
-      mode: mode
+      mode: mode,
+      indentationLevel: 1
     )
     return actionDeclaration(
       name: name,
@@ -908,7 +928,8 @@ extension Platform {
           coverageRegionCounter: &coverageRegionCounter,
           inliningArguments: [:],
           existingReferences: &existingReferences,
-          mode: .testing
+          mode: .testing,
+          indentationLevel: 0
         )
         let newActions = statement.action.localActions()
         for local in newActions {

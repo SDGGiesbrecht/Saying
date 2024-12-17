@@ -22,6 +22,38 @@ extension Thing {
 }
 
 extension Thing {
+  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
+    if parameters.inAnyOrder.isEmpty {
+      return [self.names.identifier()]
+    } else {
+      let simple = names.identifier()
+      var result: [StrictString] = ["("]
+      result.append(simple)
+      result.append(contentsOf: parameters.ordered(for: simple)
+        .lazy.flatMap({ $0.resolvedType!.unresolvedGloballyUniqueIdentifierComponents() }))
+      result.append(")")
+      return result
+    }
+  }
+
+  func resolve(
+    globallyUniqueIdentifierComponents: [StrictString],
+    referenceLookup: [ReferenceDictionary]
+  ) -> StrictString {
+    return globallyUniqueIdentifierComponents
+        .lazy.map({ referenceLookup.resolve(identifier: $0) })
+        .joined(separator: ":")
+  }
+
+  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString {
+    return resolve(
+      globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
+      referenceLookup: referenceLookup
+    )
+  }
+}
+
+extension Thing {
 
   static func disallowImports(
     in implementation: ParsedNativeThingImplementation,

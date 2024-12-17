@@ -150,15 +150,21 @@ enum CSharp: Platform {
     }
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    return nil
+  }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return nil
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.cSharp
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     let reference = isThrough ? "ref " : ""
     return "\(reference)\(type) \(name)"
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
   }
   static var needsReferencePreparation: Bool {
@@ -238,7 +244,7 @@ enum CSharp: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(indent)\(statement)",
+        "\(indent)\(statement)",
       ])
     }
     result.append(contentsOf: [

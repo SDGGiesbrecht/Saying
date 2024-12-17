@@ -31,10 +31,6 @@ extension NativeActionImplementationIntermediate {
         }
       }
     }
-    if ¬textComponents.contains(where: { $0.contains("(") })
-      ∨ ¬textComponents.contains(where: { $0.contains(")") }) {
-      errors.append(.parenthesesMissing(implementation.expression))
-    }
     let requiredImport = implementation.importNode?.importNode.identifierText()
     if ¬errors.isEmpty {
       return .failure(ErrorList(errors))

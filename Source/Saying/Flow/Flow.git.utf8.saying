@@ -43,6 +43,7 @@ extension
    ]
    (
     English: (compute: → thing), caching in (cache: ↓ optional (thing))
+    Swift: compute (compute: [compute]) cachingIn (cache: [cache])
    )
    thing
    {

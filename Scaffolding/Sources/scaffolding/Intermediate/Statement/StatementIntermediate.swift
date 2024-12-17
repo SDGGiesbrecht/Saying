@@ -77,3 +77,14 @@ extension StatementIntermediate {
     }
   }
 }
+
+extension StatementIntermediate {
+
+  func requiredIdentifiers(
+    context: [ReferenceDictionary]
+  ) -> [StrictString] {
+    return action.requiredIdentifiers(
+      context: context
+    )
+  }
+}

@@ -125,15 +125,21 @@ enum C: Platform {
     }
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    return nil
+  }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return nil
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.c
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     let pointer = isThrough ? "*" : ""
     return "\(type)\(pointer) \(name)"
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
   }
   static var needsReferencePreparation: Bool {
@@ -217,7 +223,7 @@ enum C: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(statement)",
+        "\(statement)",
       ])
     }
     result.append(contentsOf: [

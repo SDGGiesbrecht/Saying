@@ -11,6 +11,29 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
+  var swiftName: StrictString?
+
+  init(
+    isFlow: Bool,
+    names: Set<StrictString>,
+    namespace: [Set<StrictString>],
+    parameters: Interpolation<ParameterIntermediate>,
+    returnValue: ParsedTypeReference?,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool,
+    documentation: DocumentationIntermediate?,
+    swiftName: StrictString?
+  ) {
+    self.isFlow = isFlow
+    self.names = names
+    self.namespace = namespace
+    self.parameters = parameters
+    self.returnValue = returnValue
+    self.access = access
+    self.testOnlyAccess = testOnlyAccess
+    self.documentation = documentation
+    self.swiftName = swiftName
+  }
 }
 
 extension ActionPrototype {
@@ -22,7 +45,7 @@ extension ActionPrototype {
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
     let namesDictionary = declaration.name.names
-    let parameters: Interpolation<ParameterIntermediate>
+    var parameters: Interpolation<ParameterIntermediate>
     switch Interpolation.construct(
       entries: namesDictionary.values,
       getEntryName: { $0.name() },
@@ -31,7 +54,7 @@ extension ActionPrototype {
       getDefinitionOrReference: { $0.definitionOrReference },
       getNestedSignature: { $0.name },
       getNestedParameters: { $0.parameters() },
-      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough) }
+      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough, swiftLabel: nil) }
     ) {
     case .failure(let interpolationError):
       errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))
@@ -40,7 +63,25 @@ extension ActionPrototype {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    for (_, signature) in namesDictionary {
+    var swiftName: StrictString?
+    for (language, signature) in namesDictionary {
+      let name = signature.name()
+      if language == "Swift" {
+        swiftName = name
+        let parameterList = name.dropping(through: " ")
+        let labels = parameterList.components(separatedBy: "()").dropLast()
+          .map({ component in
+            var label = StrictString(component.contents)
+            if label.first == " " {
+              label.removeFirst()
+            }
+            if label.last == " " {
+              label.removeLast()
+            }
+            return label
+          })
+        parameters.apply(swiftLabels: labels, accordingTo: name)
+      }
       names.insert(signature.name())
     }
     var attachedDocumentation: DocumentationIntermediate?
@@ -70,7 +111,8 @@ extension ActionPrototype {
         returnValue: declaration.returnValueType.map({ ParsedTypeReference($0) }),
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
-        documentation: attachedDocumentation
+        documentation: attachedDocumentation,
+        swiftName: swiftName
       )
     )
   }
@@ -114,5 +156,29 @@ extension ActionPrototype {
 
   func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
     return parameters.ordered(for: name).map({ $0.type })
+  }
+}
+
+extension ActionPrototype {
+
+  func requiredIdentifiers(
+    referenceDictionary: ReferenceDictionary
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    for parameter in parameters.inAnyOrder {
+      result.append(
+        contentsOf: parameter.type.requiredIdentifiers(
+          referenceDictionary: referenceDictionary
+        )
+      )
+    }
+    if let value = returnValue {
+      result.append(
+        contentsOf: value.requiredIdentifiers(
+          referenceDictionary: referenceDictionary
+        )
+      )
+    }
+    return result
   }
 }

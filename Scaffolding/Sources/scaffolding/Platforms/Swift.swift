@@ -152,15 +152,23 @@ enum Swift: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    let found = action.swiftIdentifier()?.prefix(upTo: "(".scalars.literal())?.contents
+    return found.map { String(StrictString($0)) }
+  }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return parameter.swiftLabel.map({ String($0) })
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
+    let resolvedLabel = label ?? "_"
     let inoutKeyword = isThrough ? "inout " : ""
-    return "_ \(name): \(inoutKeyword)\(type)"
+    return "\(resolvedLabel) \(name): \(inoutKeyword)\(type)"
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
   static var needsReferencePreparation: Bool {
@@ -239,7 +247,7 @@ enum Swift: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(statement)",
+        "\(statement)",
       ])
     }
     result.append(contentsOf: [

@@ -1,4 +1,8 @@
-enum example_0020simple_0020enumeration {
-  case case_0020A
-  case case_0020B
+func compute(_ compute: () -> Bool, cachingIn cache: inout Bool?) -> Bool {
+  if let cached = cache {
+    return cached
+  }
+  let result: Bool = compute()
+  cache = (result) as Bool?
+  return result
 }

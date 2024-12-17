@@ -115,15 +115,21 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    return nil
+  }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return nil
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.kotlin
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     let modifiedType = isThrough ? "MutableList<\(type)>" : type
     return "\(name): \(modifiedType)"
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
   static var needsReferencePreparation: Bool {
@@ -204,7 +210,7 @@ enum Kotlin: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(statement)",
+        "\(statement)",
       ])
     }
     result.append(contentsOf: [

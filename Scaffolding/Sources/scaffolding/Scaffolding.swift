@@ -72,7 +72,7 @@ import Foundation
     try Swift.prepare(
       package: package,
       mode: .release,
-      entryPoints: ["example simple enumeration"],
+      entryPoints: ["compute(_:cachingIn:)"],
       location: packageRoot
         .appendingPathComponent("Scaffolding")
         .appendingPathComponent("Sources")

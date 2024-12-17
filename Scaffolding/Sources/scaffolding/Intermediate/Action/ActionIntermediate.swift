@@ -38,6 +38,9 @@ struct ActionIntermediate {
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
+  var swiftName: StrictString? {
+    return prototype.swiftName
+  }
   func allNativeImplementations() -> [NativeActionImplementationIntermediate] {
     return [c, cSharp, javaScript, kotlin, swift].compactMap({ $0 })
   }
@@ -113,7 +116,9 @@ extension ActionIntermediate {
         parameters: parameters,
         returnValue: returnValue,
         access: .inferred,
-        testOnlyAccess: false
+        testOnlyAccess: false,
+        documentation: nil,
+        swiftName: nil
       )
     )
   }
@@ -132,7 +137,9 @@ extension ActionIntermediate {
         parameters: .none,
         returnValue: .enumerationCase(enumeration: enumerationType, identifier: names.identifier()),
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
       ),
       isEnumerationCaseWrapper: true
     )
@@ -163,7 +170,9 @@ extension ActionIntermediate {
         parameters: parameters,
         returnValue: enumerationType,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
         textComponents: ["((", ") {", ", ", "})"],
@@ -224,7 +233,9 @@ extension ActionIntermediate {
         parameters: .none,
         returnValue: returnValue,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
       ),
       c: c,
       cSharp: cSharp,
@@ -258,8 +269,11 @@ extension ActionIntermediate {
         names: parameters.names(),
         namespace: [],
         parameters: parameters,
+        returnValue: nil,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
         textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"],
@@ -340,7 +354,9 @@ extension ActionIntermediate {
         parameters: parameters,
         returnValue: .simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: "truth value")!)),
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
         textComponents: ["(", ").enumeration_case == ", ""],
@@ -520,7 +536,8 @@ extension ActionIntermediate {
         returnValue: newReturnValue,
         access: access,
         testOnlyAccess: testOnlyAccess,
-        documentation: newDocumentation
+        documentation: newDocumentation,
+        swiftName: swiftName
       ),
       c: c,
       cSharp: cSharp,
@@ -579,7 +596,8 @@ extension ActionIntermediate {
           returnValue: returnValue,
           access: access,
           testOnlyAccess: testOnlyAccess,
-          documentation: mergedDocumentation
+          documentation: mergedDocumentation,
+          swiftName: swiftName
         ),
         c: c,
         cSharp: cSharp,
@@ -631,7 +649,8 @@ extension ActionIntermediate {
         returnValue: newReturnValue,
         access: min(self.access, use.access),
         testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
-        documentation: newDocumentation
+        documentation: newDocumentation,
+        swiftName: swiftName
       ),
       c: c?.specializing(typeLookup: implementationTypeLookup),
       cSharp: cSharp?.specializing(typeLookup: implementationTypeLookup),
@@ -671,7 +690,9 @@ extension ActionIntermediate {
           parameters: parameters.ordered(for: names.identifier()).map({ $0.type }),
           returnValue: returnValue),
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
       ),
       isReferenceWrapper: true
     )
@@ -696,10 +717,14 @@ extension ActionIntermediate {
           isFlow: isFlow,
           names: [wrapperName],
           namespace: [],
-          parameters: prototype.parameters.removingOtherNamesAnd(replacing: baseName, with: wrapperName),
+          parameters: prototype.parameters
+            .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
+            .prefixingEach(with: "→"),
           returnValue: prototype.returnValue,
           access: prototype.access,
-          testOnlyAccess: prototype.testOnlyAccess
+          testOnlyAccess: prototype.testOnlyAccess,
+          documentation: nil,
+          swiftName: nil
         ),
         implementation: StatementListIntermediate(
           statements: [
@@ -707,7 +732,9 @@ extension ActionIntermediate {
               isReturn: returnValue != nil,
               action: ActionUse(
                 actionName: baseName,
-                arguments: prototype.parameters.ordered(for: baseName).map({ parameter in
+                arguments: prototype.parameters
+                  .prefixingEach(with: "→")
+                  .ordered(for: baseName).map({ parameter in
                   return .action(
                     ActionUse(
                       actionName: parameter.names.identifier(),
@@ -765,5 +792,75 @@ extension ActionIntermediate {
     var count: Int = 0
     implementation?.countCoverageSubregions(count: &count)
     return count
+  }
+}
+
+extension ActionIntermediate {
+  func swiftIdentifier() -> StrictString? {
+    guard var name = swiftName else {
+      return nil
+    }
+    guard let firstSpace = name.firstIndex(of: " ") else {
+      fatalError("Swift name lacks space to indicate end of function name (where the opening parenthesis should be in Swift.")
+    }
+    let functionName = StrictString(name[..<firstSpace])
+    name.removeSubrange(...firstSpace)
+    var parameterNames: [StrictString] = []
+    while !name.isEmpty {
+      if name.hasPrefix("()".scalars.literal()) {
+        parameterNames.append("_")
+        name.removeFirst(2)
+      } else {
+        guard let next = name.firstIndex(of: "(") else {
+          fatalError("Swift cannot have postfix name components.")
+        }
+        var parameterName = StrictString(name[..<next])
+        name.removeSubrange(..<next)
+        if parameterName.last == " " {
+          parameterName.removeLast()
+        }
+        parameterNames.append(parameterName)
+        if name.hasPrefix("()") {
+          name.removeFirst(2)
+        }
+      }
+      if name.hasPrefix(" ") {
+        name.removeFirst()
+      }
+    }
+    return "\(functionName)(\(parameterNames.joined(separator: ":")):)"
+  }
+}
+
+extension ActionIntermediate {
+
+  func requiredIdentifiers(
+    moduleReferenceDictionary: ReferenceDictionary
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    result.append(
+      contentsOf: prototype.requiredIdentifiers(
+        referenceDictionary: moduleReferenceDictionary
+      )
+    )
+    for native in allNativeImplementations() {
+      for parameterReference in native.parameters {
+        if let typeInstead = parameterReference.typeInstead {
+          result.append(
+            contentsOf: typeInstead.requiredIdentifiers(
+              referenceDictionary: moduleReferenceDictionary
+            )
+          )
+        }
+      }
+    }
+    if let implementation = self.implementation {
+      result.append(
+        contentsOf: implementation.requiredIdentifiers(
+          context: [moduleReferenceDictionary]
+        )
+      )
+    }
+    return result
   }
 }

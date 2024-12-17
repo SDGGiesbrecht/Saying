@@ -7,6 +7,23 @@ struct ParameterIntermediate {
   var isThrough: Bool
   var passAction: ActionIntermediate
   var executeAction: ActionIntermediate?
+  var swiftLabel: StrictString?
+
+  init(
+    names: Set<StrictString>,
+    type: ParsedTypeReference,
+    isThrough: Bool,
+    passAction: ActionIntermediate,
+    executeAction: ActionIntermediate?,
+    swiftLabel: StrictString?
+  ) {
+    self.names = names
+    self.type = type
+    self.isThrough = isThrough
+    self.passAction = passAction
+    self.executeAction = executeAction
+    self.swiftLabel = swiftLabel
+  }
 }
 
 extension ParameterIntermediate {
@@ -18,7 +35,9 @@ extension ParameterIntermediate {
       names: names,
       type: type,
       isThrough: false,
-      passAction: .parameterAction(names: names, parameters: .none, returnValue: type)
+      passAction: .parameterAction(names: names, parameters: .none, returnValue: type),
+      executeAction: nil,
+      swiftLabel: nil
     )
   }
 }
@@ -30,7 +49,8 @@ extension ParameterIntermediate {
     names: Set<StrictString>,
     nestedParameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference,
-    isThrough: Bool
+    isThrough: Bool,
+    swiftLabel: StrictString?
   ) {
     let actionParameters = nestedParameters.ordered(for: names.identifier())
     let passedType: ParsedTypeReference
@@ -59,7 +79,8 @@ extension ParameterIntermediate {
       type: passedType,
       isThrough: isThrough,
       passAction: passAction,
-      executeAction: executeAction
+      executeAction: executeAction,
+      swiftLabel: swiftLabel
     )
   }
 }
@@ -73,7 +94,8 @@ extension ParameterIntermediate {
       type: type.resolvingExtensionContext(typeLookup: typeLookup),
       isThrough: isThrough,
       passAction: passAction.resolvingExtensionContext(typeLookup: typeLookup),
-      executeAction: executeAction?.resolvingExtensionContext(typeLookup: typeLookup)
+      executeAction: executeAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      swiftLabel: swiftLabel
     )
   }
   func merging(requirement: ParameterIntermediate) -> ParameterIntermediate {
@@ -82,7 +104,8 @@ extension ParameterIntermediate {
       type: type,
       isThrough: isThrough,
       passAction: passAction,
-      executeAction: executeAction
+      executeAction: executeAction,
+      swiftLabel: swiftLabel
     )
   }
   func specializing(
@@ -103,7 +126,21 @@ extension ParameterIntermediate {
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
-      )
+      ),
+      swiftLabel: swiftLabel
+    )
+  }
+}
+
+extension ParameterIntermediate {
+  func prefixing(with prefix: StrictString) -> ParameterIntermediate {
+    return ParameterIntermediate(
+      names: Set(names.map({ "\(prefix)\($0)" })),
+      type: type,
+      isThrough: isThrough,
+      passAction: passAction,
+      executeAction: executeAction,
+      swiftLabel: swiftLabel
     )
   }
 }

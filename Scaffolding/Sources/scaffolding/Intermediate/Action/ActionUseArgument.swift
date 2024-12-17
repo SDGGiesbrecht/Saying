@@ -118,3 +118,25 @@ extension ActionUseArgument {
     }
   }
 }
+
+extension ActionUseArgument {
+
+  func requiredIdentifiers(
+    context: [ReferenceDictionary]
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    switch self {
+    case .action(let action):
+      result.append(
+        contentsOf: action.requiredIdentifiers(context: context)
+      )
+    case .flow(let statements):
+      result.append(
+        contentsOf: statements.requiredIdentifiers(
+          context: context
+        )
+      )
+    }
+    return result
+  }
+}

@@ -197,3 +197,29 @@ extension ActionUse {
     }
   }
 }
+
+extension ActionUse {
+
+  func requiredIdentifiers(
+    context: [ReferenceDictionary]
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    for argument in arguments {
+      result.append(
+        contentsOf: argument.requiredIdentifiers(
+          context: context
+        )
+      )
+    }
+    if passage != .out {
+      if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
+         let action = context.lookupAction(
+          actionName,
+          signature: signature,
+          specifiedReturnValue: resolvedResultType) {
+        result.append(action.globallyUniqueIdentifier(referenceLookup: context))
+      }
+    }
+    return result
+  }
+}

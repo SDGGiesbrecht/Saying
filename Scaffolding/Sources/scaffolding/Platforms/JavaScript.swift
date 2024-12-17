@@ -103,14 +103,20 @@ enum JavaScript: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    return nil
+  }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return nil
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.javaScript
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     return name
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return name
   }
   static var needsReferencePreparation: Bool {
@@ -191,7 +197,7 @@ enum JavaScript: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(statement)",
+        "\(statement)",
       ])
     }
     result.append(contentsOf: [
