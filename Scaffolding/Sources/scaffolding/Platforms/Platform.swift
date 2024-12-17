@@ -518,7 +518,7 @@ extension Platform {
                     inliningArguments: inliningArguments,
                     existingReferences: &existingReferences,
                     mode: mode,
-                    indentationLevel: 0
+                    indentationLevel: 1
                   )
                 )
                 result.append("\n")
