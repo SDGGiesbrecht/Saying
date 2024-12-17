@@ -204,20 +204,12 @@ extension ActionUse {
     context: [ReferenceDictionary]
   ) -> [StrictString] {
     var result: [StrictString] = []
-    var local = ReferenceDictionary()
     for argument in arguments {
       result.append(
         contentsOf: argument.requiredIdentifiers(
-          context: context.appending(local)
+          context: context
         )
       )
-      let newActions = argument.localActions()
-      for new in newActions {
-        _ = local.add(action: new)
-      }
-      if !newActions.isEmpty {
-        local.resolveTypeIdentifiers(externalLookup: context)
-      }
     }
     if passage != .out {
       if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),

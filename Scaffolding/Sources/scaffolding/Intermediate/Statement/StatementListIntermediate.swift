@@ -88,20 +88,12 @@ extension StatementListIntermediate {
     context: [ReferenceDictionary]
   ) -> [StrictString] {
     var result: [StrictString] = []
-    var local = ReferenceDictionary()
     for statement in statements {
       result.append(
         contentsOf: statement.requiredIdentifiers(
-          context: context.appending(local)
+          context: context
         )
       )
-      let newActions = statement.localActions()
-      for new in newActions {
-        _ = local.add(action: new)
-      }
-      if !newActions.isEmpty {
-        local.resolveTypeIdentifiers(externalLookup: context)
-      }
     }
     return result
   }
