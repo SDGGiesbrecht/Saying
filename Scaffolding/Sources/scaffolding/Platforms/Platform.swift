@@ -52,8 +52,8 @@ protocol Platform {
   // Actions
   static func nativeName(of action: ActionIntermediate) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String) -> String
@@ -743,7 +743,7 @@ extension Platform {
       switch parameter.type {
       case .simple, .compound:
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
-        return parameterDeclaration(name: name, type: typeSource, isThrough: parameter.isThrough)
+        return parameterDeclaration(label: nil, name: name, type: typeSource, isThrough: parameter.isThrough)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
         let parameters = actionParameters
           .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
@@ -755,6 +755,7 @@ extension Platform {
           returnValue = emptyReturnTypeForActionType
         }
         return parameterDeclaration(
+          label: nil,
           name: name,
           parameters: parameters,
           returnValue: returnValue

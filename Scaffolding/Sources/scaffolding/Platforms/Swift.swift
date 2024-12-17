@@ -160,11 +160,11 @@ enum Swift: Platform {
     return action.swift
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     let inoutKeyword = isThrough ? "inout " : ""
     return "_ \(name): \(inoutKeyword)\(type)"
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
   static var needsReferencePreparation: Bool {

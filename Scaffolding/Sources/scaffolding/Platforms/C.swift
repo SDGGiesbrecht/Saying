@@ -132,11 +132,11 @@ enum C: Platform {
     return action.c
   }
 
-  static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String {
+  static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     let pointer = isThrough ? "*" : ""
     return "\(type)\(pointer) \(name)"
   }
-  static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String {
+  static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
   }
   static var needsReferencePreparation: Bool {
