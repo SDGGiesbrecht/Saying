@@ -850,11 +850,10 @@ extension ActionIntermediate {
         }
       }
     }
-    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary(externalLookup: [moduleReferenceDictionary])]
     if let implementation = self.implementation {
       result.append(
         contentsOf: implementation.requiredIdentifiers(
-          context: externalAndParameters
+          context: [moduleReferenceDictionary]
         )
       )
     }
