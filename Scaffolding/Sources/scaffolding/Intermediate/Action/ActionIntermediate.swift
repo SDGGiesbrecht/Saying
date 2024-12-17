@@ -830,6 +830,25 @@ extension ActionIntermediate {
     }
     return "\(functionName)(\(parameterNames.joined(separator: ":")):)"
   }
+  func swiftSignature(referenceLookup: [ReferenceDictionary]) -> StrictString? {
+    guard let name = swiftName,
+      let identifier = swiftIdentifier() else {
+      return nil
+    }
+    let components = identifier.components(separatedBy: ":")
+    let parameters = self.parameters.ordered(for: name)
+    var result: StrictString = ""
+    for index in parameters.indices {
+      if index != parameters.startIndex {
+        result.append(contentsOf: ", ")
+      }
+      result.append(contentsOf: components[index].contents)
+      result.append(contentsOf: ": ".scalars)
+      result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
+    }
+    result.append(contentsOf: components.last!.contents)
+    return result
+  }
 }
 
 extension ActionIntermediate {
