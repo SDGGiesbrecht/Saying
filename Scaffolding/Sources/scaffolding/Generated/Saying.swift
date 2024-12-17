@@ -3,6 +3,6 @@ func compute(_ compute: () -> Bool, cachingIn cache: inout Bool?) -> Bool {
     return cached
   }
   let result: Bool = compute()
-  cache = ((result) as Bool?)
+  cache = (result) as Bool?
   return result
 }

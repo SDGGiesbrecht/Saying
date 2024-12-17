@@ -36,21 +36,21 @@ extension
    (
     English: let (storage: thing) start as (value: thing)
    )
-   C: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
-   C♯: “” thing “ ” storage “ = ¤(28)” value “¤(29)”
-   JavaScript: “let ” storage “ = ¤(28)” value “¤(29)”
-   Kotlin: “var ” storage “: ” thing “ = ¤(28)” value “¤(29)”
-   Swift: “var ” storage “: ” thing “ = ¤(28)” value “¤(29)”
+   C: “” thing “ ” storage “ = ” value “”
+   C♯: “” thing “ ” storage “ = ” value “”
+   JavaScript: “let ” storage “ = ” value “”
+   Kotlin: “var ” storage “: ” thing “ = ” value “”
+   Swift: “var ” storage “: ” thing “ = ” value “”
 
   flow (clients)
    (
     English: change (storage: thing) to (value: thing)
    )
-   C: “” storage “ = ¤(28)” value “¤(29)”
-   C♯: “” storage “ = ¤(28)” value “¤(29)”
-   JavaScript: “” storage “ = ¤(28)” value “¤(29)”
-   Kotlin: “” storage “ = ¤(28)” value “¤(29)”
-   Swift: “” storage “ = ¤(28)” value “¤(29)”
+   C: “” storage “ = ” value “”
+   C♯: “” storage “ = ” value “”
+   JavaScript: “” storage “ = ” value “”
+   Kotlin: “” storage “ = ” value “”
+   Swift: “” storage “ = ” value “”
  }
 
 action
