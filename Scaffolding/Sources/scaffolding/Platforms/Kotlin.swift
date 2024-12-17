@@ -210,7 +210,7 @@ enum Kotlin: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(statement)",
+        "\(statement)",
       ])
     }
     result.append(contentsOf: [

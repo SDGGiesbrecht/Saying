@@ -244,7 +244,7 @@ enum CSharp: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(indent)\(statement)",
+        "\(indent)\(statement)",
       ])
     }
     result.append(contentsOf: [

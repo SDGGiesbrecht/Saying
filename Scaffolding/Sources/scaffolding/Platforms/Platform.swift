@@ -517,7 +517,8 @@ extension Platform {
                     coverageRegionCounter: &coverageRegionCounter,
                     inliningArguments: inliningArguments,
                     existingReferences: &existingReferences,
-                    mode: mode
+                    mode: mode,
+                    indentationLevel: 0
                   )
                 )
                 result.append("\n")
@@ -576,7 +577,8 @@ extension Platform {
             localLookup: localLookup.appending(locals),
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments,
-            mode: mode
+            mode: mode,
+            indentationLevel: 0
           )
           if mode == .testing,
             let coverage = flowCoverageRegistration(
@@ -594,7 +596,8 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments,
-        mode: mode
+        mode: mode,
+        indentationLevel: 0
       ).joined(separator: "\n")
     } else {
       let name = nativeName(of: action) ?? sanitize(
@@ -663,7 +666,8 @@ extension Platform {
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     existingReferences: inout Set<String>,
-    mode: CompilationMode
+    mode: CompilationMode,
+    indentationLevel: Int
   ) -> String {
     var entry = ""
     var referenceList: [String] = []
@@ -735,6 +739,8 @@ extension Platform {
         existingReferences.insert(reference)
       }
     }
+    let presentIndent = String(repeating: indent, count: indentationLevel)
+    entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)
     return entry
   }
 
@@ -815,7 +821,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [StrictString: String],
-    mode: CompilationMode
+    mode: CompilationMode,
+    indentationLevel: Int
   ) -> [String] {
     var locals = ReferenceDictionary()
     var coverageRegionCounter = 0
@@ -830,7 +837,8 @@ extension Platform {
         coverageRegionCounter: &coverageRegionCounter,
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
-        mode: mode
+        mode: mode,
+        indentationLevel: indentationLevel
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -886,7 +894,8 @@ extension Platform {
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
       inliningArguments: [:],
-      mode: mode
+      mode: mode,
+      indentationLevel: 0
     )
     return actionDeclaration(
       name: name,
@@ -919,7 +928,8 @@ extension Platform {
           coverageRegionCounter: &coverageRegionCounter,
           inliningArguments: [:],
           existingReferences: &existingReferences,
-          mode: .testing
+          mode: .testing,
+          indentationLevel: 0
         )
         let newActions = statement.action.localActions()
         for local in newActions {
