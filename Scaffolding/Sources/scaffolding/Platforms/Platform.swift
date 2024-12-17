@@ -51,6 +51,7 @@ protocol Platform {
 
   // Actions
   static func nativeName(of action: ActionIntermediate) -> String?
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
@@ -742,10 +743,11 @@ extension Platform {
     } else {
       switch parameter.type {
       case .simple, .compound:
+        let label = nativeLabel(of: parameter)
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
-        #warning("Not getting real label.")
-        return parameterDeclaration(label: nil, name: name, type: typeSource, isThrough: parameter.isThrough)
+        return parameterDeclaration(label: label, name: name, type: typeSource, isThrough: parameter.isThrough)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
+        let label = nativeLabel(of: parameter)
         let parameters = actionParameters
           .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
           .joined(separator: ", ")
@@ -755,9 +757,8 @@ extension Platform {
         } else {
           returnValue = emptyReturnTypeForActionType
         }
-        #warning("Not getting real label.")
         return parameterDeclaration(
-          label: nil,
+          label: label,
           name: name,
           parameters: parameters,
           returnValue: returnValue

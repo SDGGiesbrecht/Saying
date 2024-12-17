@@ -45,7 +45,7 @@ extension ActionPrototype {
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
     let namesDictionary = declaration.name.names
-    let parameters: Interpolation<ParameterIntermediate>
+    var parameters: Interpolation<ParameterIntermediate>
     switch Interpolation.construct(
       entries: namesDictionary.values,
       getEntryName: { $0.name() },
@@ -54,7 +54,7 @@ extension ActionPrototype {
       getDefinitionOrReference: { $0.definitionOrReference },
       getNestedSignature: { $0.name },
       getNestedParameters: { $0.parameters() },
-      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough) }
+      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough, swiftLabel: nil) }
     ) {
     case .failure(let interpolationError):
       errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))
@@ -68,6 +68,19 @@ extension ActionPrototype {
       let name = signature.name()
       if language == "Swift" {
         swiftName = name
+        let parameterList = name.dropping(through: " ")
+        let labels = parameterList.components(separatedBy: "()").dropLast()
+          .map({ component in
+            var label = StrictString(component.contents)
+            if label.first == " " {
+              label.removeFirst()
+            }
+            if label.last == " " {
+              label.removeLast()
+            }
+            return label
+          })
+        parameters.apply(swiftLabels: labels, accordingTo: name)
       }
       names.insert(signature.name())
     }

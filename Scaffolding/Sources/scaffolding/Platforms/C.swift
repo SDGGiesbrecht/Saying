@@ -128,6 +128,9 @@ enum C: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return nil
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.c
   }

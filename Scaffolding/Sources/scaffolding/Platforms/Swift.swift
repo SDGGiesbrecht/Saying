@@ -156,13 +156,17 @@ enum Swift: Platform {
     let found = action.swiftIdentifier()?.prefix(upTo: "(".scalars.literal())?.contents
     return found.map { String(StrictString($0)) }
   }
+  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+    return parameter.swiftLabel.map({ String($0) })
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
   }
 
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
+    let resolvedLabel = label ?? "_"
     let inoutKeyword = isThrough ? "inout " : ""
-    return "_ \(name): \(inoutKeyword)\(type)"
+    return "\(resolvedLabel) \(name): \(inoutKeyword)\(type)"
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
