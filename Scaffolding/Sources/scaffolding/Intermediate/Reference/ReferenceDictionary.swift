@@ -383,8 +383,10 @@ extension ReferenceDictionary {
       }
     } while !stillRequired.isEmpty && foundSomething
     #warning("Debugging...")
-    print("found:\n", found.joined(separator: "\n"))
-    print("stillRequired:\n", stillRequired.joined(separator: "\n"))
+    print("found:")
+    print(found.sorted().joined(separator: "\n"))
+    print("stillRequired:")
+    print(stillRequired.sorted().joined(separator: "\n"))
     self = optimized
   }
 }
