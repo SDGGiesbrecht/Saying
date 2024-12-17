@@ -354,7 +354,7 @@ extension ReferenceDictionary {
         }
       }
       for action in allActions() {
-        if let swift = action.swiftIdentifier(),
+        if let swift = action.swiftSignature(referenceLookup: [self]),
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true

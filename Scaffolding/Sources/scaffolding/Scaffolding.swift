@@ -72,7 +72,7 @@ import Foundation
     try Swift.prepare(
       package: package,
       mode: .release,
-      entryPoints: ["compute(_:cachingIn:)"],
+      entryPoints: ["compute(_: () -> Bool, cachingIn: Bool?)"],
       location: packageRoot
         .appendingPathComponent("Scaffolding")
         .appendingPathComponent("Sources")
