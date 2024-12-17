@@ -152,6 +152,10 @@ enum Swift: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    let found = action.swiftIdentifier()?.prefix(upTo: "(".scalars.literal())?.contents
+    return found.map { String(StrictString($0)) }
+  }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
   }

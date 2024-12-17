@@ -50,6 +50,7 @@ protocol Platform {
   ) -> String
 
   // Actions
+  static func nativeName(of action: ActionIntermediate) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(name: String, parameters: String, returnValue: String) -> String
@@ -843,10 +844,11 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(
-      identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-      leading: true
-    )
+    let name = nativeName(of: action)
+      ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
+        leading: true
+      )
     let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
