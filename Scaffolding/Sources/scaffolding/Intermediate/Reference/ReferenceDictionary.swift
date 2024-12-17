@@ -344,6 +344,15 @@ extension ReferenceDictionary {
     var foundSomething = false
     repeat {
       foundSomething = false
+      for thing in allThings() {
+        let identifier = thing.names.identifier()
+        if stillRequired.contains(identifier) {
+          stillRequired.remove(identifier)
+          foundSomething = true
+          found.insert(identifier)
+          _ = optimized.add(thing: thing)
+        }
+      }
       for action in allActions() {
         if let swift = action.swiftIdentifier(),
            stillRequired.contains(swift) {
@@ -356,6 +365,18 @@ extension ReferenceDictionary {
           ) {
             if !found.contains(identifer) {
               stillRequired.insert(identifer)
+            }
+          }
+        }
+        let identifier = action.globallyUniqueIdentifier(referenceLookup: [self])
+        if stillRequired.contains(identifier) {
+          stillRequired.remove(identifier)
+          foundSomething = true
+          found.insert(identifier)
+          _ = optimized.add(action: action)
+          for child in action.requiredIdentifiers(moduleReferenceDictionary: self) {
+            if !found.contains(child) {
+              stillRequired.insert(child)
             }
           }
         }
