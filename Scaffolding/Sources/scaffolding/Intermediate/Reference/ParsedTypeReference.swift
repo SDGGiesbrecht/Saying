@@ -279,14 +279,14 @@ extension ParsedTypeReference {
     switch self {
     case .simple(let simple):
       if let thing = referenceDictionary.lookupThing(simple.identifier, components: []) {
-        result.append(thing.names.identifier())
+        result.append(thing.globallyUniqueIdentifier(referenceLookup: [referenceDictionary]))
       }
     case .compound(identifier: let identifier, components: let components):
       if let thing = referenceDictionary.lookupThing(
         identifier.name(),
         components: components.map({ $0.key })
       ) {
-        result.append(thing.names.identifier())
+        result.append(thing.globallyUniqueIdentifier(referenceLookup: [referenceDictionary]))
       }
       for component in components {
         result.append(

@@ -345,7 +345,7 @@ extension ReferenceDictionary {
     repeat {
       foundSomething = false
       for thing in allThings() {
-        let identifier = thing.names.identifier()
+        let identifier = thing.globallyUniqueIdentifier(referenceLookup: [self])
         if stillRequired.contains(identifier) {
           stillRequired.remove(identifier)
           foundSomething = true
