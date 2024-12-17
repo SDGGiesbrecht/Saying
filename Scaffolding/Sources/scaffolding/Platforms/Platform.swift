@@ -607,12 +607,17 @@ extension Platform {
         return "\(prefix)\(name)"
       } else {
         var argumentsArray: [String] = []
-        for argument in reference.arguments {
+        let parameters = action.parameters.ordered(for: action.names.identifier())
+        for argumentIndex in reference.arguments.indices {
+          let argument = reference.arguments[argumentIndex]
+          let parameter = parameters[argumentIndex]
+          let parameterLabel = nativeLabel(of: parameter)
+            .map({ $0 == "" ? "" : "\($0): " }) ?? ""
           switch argument {
           case .action(let actionArgument):
             if actionArgument.passage == .through {
               argumentsArray.append(
-                passReference(
+                parameterLabel + passReference(
                   to: call(
                     to: actionArgument,
                     context: context,
@@ -627,7 +632,7 @@ extension Platform {
               )
             } else {
               argumentsArray.append(
-                call(
+                parameterLabel + call(
                   to: actionArgument,
                   context: context,
                   localLookup: localLookup,
