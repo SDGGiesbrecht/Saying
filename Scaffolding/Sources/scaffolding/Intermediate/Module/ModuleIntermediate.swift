@@ -296,6 +296,7 @@ extension ModuleIntermediate {
     }
     var result = self
     result.referenceDictionary.removeUnreachable(fromEntryPoints: entryPoints)
+    result.resolveTypeIdentifiers()
     return result
   }
 }
