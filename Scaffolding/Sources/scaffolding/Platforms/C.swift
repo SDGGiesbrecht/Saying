@@ -54,7 +54,7 @@ enum C: Platform {
       if ignoringValue {
         return "\(type)_case_\(name)"
       } else {
-        return "((\(type)) {\(name)})"
+        return "((\(type)) {\(type)_case_\(name)})"
       }
     }
   }
