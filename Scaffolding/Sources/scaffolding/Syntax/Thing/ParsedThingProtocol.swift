@@ -10,7 +10,14 @@ protocol ParsedThingDeclarationProtocol: ParsedSyntaxNode {
 
 extension ParsedThingDeclaration: ParsedThingDeclarationProtocol {
   var nativeImplementations: [ParsedNativeThingImplementation] {
-    return implementation.implementations
+    switch implementation {
+    case .source:
+      return []
+    case .dual(let dual):
+      return dual.native.implementations
+    case .native(let native):
+      return native.implementations
+    }
   }
   var enumerationCases: [ParsedCaseDeclaration] {
     return []
