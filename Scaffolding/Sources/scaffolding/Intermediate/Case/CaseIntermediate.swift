@@ -18,7 +18,7 @@ extension CaseIntermediate {
     in implementation: ParsedNativeAction,
     errors: inout [ConstructionError]
   ) {
-    if implementation.importNode ≠ nil {
+    if implementation.importNode != nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }

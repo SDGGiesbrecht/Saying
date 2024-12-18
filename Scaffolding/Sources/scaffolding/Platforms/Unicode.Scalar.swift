@@ -4,7 +4,7 @@ import SDGText
 extension Unicode.Scalar {
   
   var isVulnerableToNormalization: Bool {
-    return properties.canonicalCombiningClass ≠ .notReordered
+    return properties.canonicalCombiningClass != .notReordered
       ∨ isDecomposableInNFKD
   }
 }

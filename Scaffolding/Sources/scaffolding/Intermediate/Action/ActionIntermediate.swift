@@ -98,7 +98,7 @@ extension ActionIntermediate {
     in implementation: ParsedNativeActionImplementation,
     errors: inout [ConstructionError]
   ) {
-    if implementation.expression.importNode ≠ nil {
+    if implementation.expression.importNode != nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }
@@ -575,7 +575,7 @@ extension ActionIntermediate {
     if access < min(requirement.access, useAccess) {
       errors.append(.fulfillmentAccessNarrowerThanRequirement(declaration: self.declaration!.name))
     }
-    if testOnlyAccess ≠ requirement.testOnlyAccess {
+    if testOnlyAccess != requirement.testOnlyAccess {
       errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
     }
     if !errors.isEmpty {
@@ -702,7 +702,7 @@ extension ActionIntermediate {
 extension ActionIntermediate {
 
   var isCoverageWrapper: Bool {
-    return coveredIdentifier ≠ nil
+    return coveredIdentifier != nil
   }
 
   func coverageTrackingIdentifier() -> StrictString {

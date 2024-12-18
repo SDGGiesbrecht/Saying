@@ -73,8 +73,8 @@ extension ReferenceDictionary {
     var errors: [RedeclaredIdentifierError] = []
     let identifier = thing.names.identifier()
     for name in thing.names {
-      if identifierMapping[name] ≠ nil,
-        identifierMapping[name] ≠ identifier {
+      if identifierMapping[name] != nil,
+        identifierMapping[name] != identifier {
         errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: thing.declaration.genericDeclaration, conflictingDeclarations: [lookupDeclaration(name, signature: [], specifiedReturnValue: nil, parentContexts: [])!]))
       }
       identifierMapping[name] = identifier
@@ -176,8 +176,8 @@ extension ReferenceDictionary {
     var errors: [RedeclaredIdentifierError] = []
     let identifier = action.names.identifier()
     for name in action.names {
-      if identifierMapping[name] ≠ nil,
-        identifierMapping[name] ≠ identifier {
+      if identifierMapping[name] != nil,
+        identifierMapping[name] != identifier {
         errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .action(action.declaration as! ParsedActionDeclaration), conflictingDeclarations: [lookupDeclaration(name, signature: action.signature(orderedFor: name), specifiedReturnValue: action.returnValue, parentContexts: [])!]))
       }
       identifierMapping[name] = identifier
@@ -323,7 +323,7 @@ extension ReferenceDictionary {
     var errors: [RedeclaredIdentifierError] = []
     let identifier = ability.names.identifier()
     for name in ability.names {
-      if identifierMapping[name] ≠ nil {
+      if identifierMapping[name] != nil {
         errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .ability(ability.declaration), conflictingDeclarations: [lookupDeclaration(name, signature: ability.parameters.ordered(for: name).map({ _ in nil }), specifiedReturnValue: nil, parentContexts: [])!]))
       }
       identifierMapping[name] = identifier

@@ -182,7 +182,7 @@ extension Platform {
 
   static func sanitize(identifier: StrictString, leading: Bool) -> String {
     var result: String = identifier.lazy
-      .map({ allowedAsIdentifierContinuation($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .map({ allowedAsIdentifierContinuation($0) ∧ $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
     if leading,
       let first = result.scalars.first,
@@ -235,7 +235,7 @@ extension Platform {
         var result = ""
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
-          if index ≠ native.textComponents.indices.last {
+          if index != native.textComponents.indices.last {
             let type = native.parameters[index].resolvedType!
             result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
           }
@@ -314,12 +314,12 @@ extension Platform {
       thing.cases.isEmpty {
       return nil
     }
-    if nativeType(of: thing) ≠ nil {
+    if nativeType(of: thing) != nil {
       return nil
     }
     if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
-        return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) ≠ nil
+        return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) != nil
       }) {
       return nil
     }
@@ -465,7 +465,7 @@ extension Platform {
       var local = ReferenceDictionary()
       for index in native.textComponents.indices {
         result.append(contentsOf: String(native.textComponents[index]))
-        if index ≠ native.textComponents.indices.last {
+        if index != native.textComponents.indices.last {
           let parameter = native.parameters[index]
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
@@ -611,7 +611,7 @@ extension Platform {
         leading: true
       )
       if action.isReferenceWrapper {
-        let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
+        let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
         return "\(prefix)\(name)"
       } else {
         var argumentsArray: [String] = []
@@ -724,7 +724,7 @@ extension Platform {
       )
     )
     if mode == .testing,
-      coverageRegionCounter ≠ before,
+      coverageRegionCounter != before,
        let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter
@@ -791,7 +791,7 @@ extension Platform {
     for action: ActionIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil
+    if nativeImplementation(of: action) != nil
       ∨ action.isEnumerationCaseWrapper {
       return nil
     }
@@ -861,7 +861,7 @@ extension Platform {
     externalReferenceLookup: [ReferenceDictionary],
     mode: CompilationMode
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil
+    if nativeImplementation(of: action) != nil
       ∨ action.isEnumerationCaseWrapper {
       return nil
     }

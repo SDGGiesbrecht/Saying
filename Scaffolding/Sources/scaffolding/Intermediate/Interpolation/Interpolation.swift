@@ -159,7 +159,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
     provisionDeclarationName: ParsedActionName
   ) -> Result<Interpolation, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
-    let correlatedName = self.reorderings.keys.first(where: { requirement.reorderings[$0] ≠ nil })!
+    let correlatedName = self.reorderings.keys.first(where: { requirement.reorderings[$0] != nil })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
     let nameToSelf = self.reorderings[correlatedName]!
     let mergedParameters = self.parameters.indices.map { index in
@@ -176,7 +176,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
         return ownIndex
       }
       if let existing = mergedReorderings[name] {
-        if existing ≠ rearranged {
+        if existing != rearranged {
           errors.append(.mismatchedParameters(name: name, declaration: provisionDeclarationName))
         }
       } else {

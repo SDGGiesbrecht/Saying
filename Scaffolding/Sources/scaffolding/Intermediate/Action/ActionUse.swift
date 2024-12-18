@@ -37,7 +37,7 @@ extension ActionUse {
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
     let type = use.type.map({ ParsedTypeReference($0.type) })
-    if use.type?.yieldArrow ≠ nil {
+    if use.type?.yieldArrow != nil {
       explicitResultType = .action(parameters: [], returnValue: type)
     } else {
       explicitResultType = type
