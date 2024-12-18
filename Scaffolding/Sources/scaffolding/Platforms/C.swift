@@ -47,7 +47,6 @@ enum C: Platform {
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
-    #warning("Do the others have to change too?")
     if simple {
       return "\(type)_\(name)"
     } else {
