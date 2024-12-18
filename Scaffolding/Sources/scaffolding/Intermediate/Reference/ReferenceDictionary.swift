@@ -134,7 +134,7 @@ extension ReferenceDictionary {
     } else {
       var dictionary: [StrictString: Thing] = [:]
       for entry in unsorted {
-        dictionary[entry.names.identifier()] = entry
+        dictionary[entry.globallyUniqueIdentifier(referenceLookup: [self])] = entry
       }
       var alphabetical = dictionary.keys.sorted().map({ dictionary[$0]! })
       var sorted: [Thing] = []
@@ -147,10 +147,10 @@ extension ReferenceDictionary {
           let thing = alphabetical[index]
           if otherThingsRequiredByDeclaration(of: thing)
             .allSatisfy({ already.contains($0) }) {
-            sorted.append(thing)
-            already.insert(thing.globallyUniqueIdentifier(referenceLookup: [self]))
             _ = alphabetical.remove(at: index)
             foundMore = true
+            sorted.append(thing)
+            already.insert(thing.globallyUniqueIdentifier(referenceLookup: [self]))
           } else {
             index += 1
           }
