@@ -103,20 +103,60 @@ extension ReferenceDictionary {
     let mappedComponents = components.map({ $0.resolving(fromReferenceLookup: [self]) })
     return group[mappedComponents]
   }
+  func lookupThing(_ reference: TypeReference) -> Thing? {
+    switch reference {
+    case .simple(let simple):
+      return lookupThing(simple, components: [])
+    case .compound(identifier: let identifier, components: let components):
+      return lookupThing(identifier, components: components.map({ $0 }))
+    case .action, .enumerationCase, .statements:
+      return nil
+    }
+  }
 
+  func otherThingsRequiredByDeclaration(of thing: Thing) -> [StrictString] {
+    var result: [StrictString] = []
+    for enumerationCase in thing.cases {
+      if let contents = enumerationCase.contents,
+         let contentThing = lookupThing(contents.key) {
+        result.append(contentThing.globallyUniqueIdentifier(referenceLookup: [self]))
+      }
+    }
+    return result
+  }
   func allThings(sorted: Bool = false) -> [Thing] {
-    let result =
+    let unsorted =
     things.values
       .lazy.map({ $0.values })
       .joined()
     if ¬sorted {
-      return Array(result)
+      return Array(unsorted)
     } else {
       var dictionary: [StrictString: Thing] = [:]
-      for entry in result {
+      for entry in unsorted {
         dictionary[entry.names.identifier()] = entry
       }
-      return dictionary.keys.sorted().map({ dictionary[$0]! })
+      var alphabetical = dictionary.keys.sorted().map({ dictionary[$0]! })
+      var sorted: [Thing] = []
+      var already: Set<StrictString> = []
+      var foundMore: Bool = false
+      repeat {
+        foundMore = false
+        var index = 0
+        while index != alphabetical.endIndex {
+          let thing = alphabetical[index]
+          if otherThingsRequiredByDeclaration(of: thing)
+            .allSatisfy({ already.contains($0) }) {
+            sorted.append(thing)
+            already.insert(thing.globallyUniqueIdentifier(referenceLookup: [self]))
+            _ = alphabetical.remove(at: index)
+            foundMore = true
+          } else {
+            index += 1
+          }
+        }
+      } while !alphabetical.isEmpty && foundMore
+      return sorted
     }
   }
 }
