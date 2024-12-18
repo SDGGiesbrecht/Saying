@@ -107,7 +107,7 @@ enum C: Platform {
         "typedef enum \(name) {"
       ]
       for enumerationCase in cases {
-        result.append("\(indent)\(enumerationCase)")
+        result.append("\(indent)\(name)_\(enumerationCase)")
       }
       result.append(contentsOf: [
         "} \(name);"
