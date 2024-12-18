@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGControlFlow
 import SDGLogic
 import SDGCollections
 import SDGText
@@ -126,23 +125,23 @@ extension Platform {
     )
   }
   static var allowedIdentifierStartCharacters: Set<Unicode.Scalar> {
-    return cached(in: &_allowedIdentifierStartCharactersCache) {
+    return compute({
       return filterUnsafe(characters: allowedIdentifierStartCharacterPoints)
-    }
+    }, cachingIn: &_allowedIdentifierStartCharactersCache)
   }
   static var allowedIdentifierContinuationCharacters: Set<Unicode.Scalar> {
-    return cached(in: &_allowedIdentifierContinuationCharactersCache) {
+    return compute({
       allowedIdentifierStartCharacters
       ∪ filterUnsafe(characters: additionalAllowedIdentifierContinuationCharacterPoints)
-    }
+    }, cachingIn: &_allowedIdentifierContinuationCharactersCache)
   }
   static var disallowedStringLiteralCharacters: Set<Unicode.Scalar> {
-    return cached(in: &_disallowedStringLiteralCharactersCache) {
+    return compute({
       return Set(
         disallowedStringLiteralPoints
           .lazy.compactMap({ Unicode.Scalar($0) })
       )
-    }
+    }, cachingIn: &_disallowedStringLiteralCharactersCache)
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
     return (scalar ∈ allowedIdentifierStartCharacters)

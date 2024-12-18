@@ -158,15 +158,15 @@ extension ReferenceDictionary {
     }
     return result
   }
-  func lookupAction(
+  func lookupActions(
     _ identifier: StrictString,
     signature: [ParsedTypeReference],
     specifiedReturnValue: ParsedTypeReference??,
     parentContexts: [ReferenceDictionary]
-  ) -> ActionIntermediate? {
+  ) -> [ActionIntermediate] {
     guard let mappedIdentifier = identifierMapping[identifier],
       let group = actions[mappedIdentifier] else {
-      return nil
+      return []
     }
     let mappedSignature = signature.map({ $0.key.resolving(fromReferenceLookup: parentContexts.appending(self)) })
     let returnOverloads: [() -> [TypeReference?: ActionIntermediate]]
@@ -183,19 +183,39 @@ extension ReferenceDictionary {
       case .some(.some(let value)):
         let mappedReturn = value.key.resolving(fromReferenceLookup: parentContexts.appending(self))
         if let result = set[mappedReturn] {
-          return result
+          return [result]
         }
       case .some(.none):
         if let result = set[.none] ?? set[.statements] {
-          return result
+          return [result]
         }
       case .none:
         if set.count == 1 {
-          return set.values.first
+          return Array(set.values)
+        } else {
+          return set.values.filter({ $0.isEnumerationCaseWrapper })
         }
       }
     }
-    return nil
+    return []
+  }
+  func lookupAction(
+    _ identifier: StrictString,
+    signature: [ParsedTypeReference],
+    specifiedReturnValue: ParsedTypeReference??,
+    parentContexts: [ReferenceDictionary]
+  ) -> ActionIntermediate? {
+    let all = lookupActions(
+      identifier,
+      signature: signature,
+      specifiedReturnValue: specifiedReturnValue,
+      parentContexts: parentContexts
+    )
+    if all.count == 1 {
+      return all[0]
+    } else {
+      return nil
+    }
   }
 
   func allActions(sorted: Bool = false) -> [ActionIntermediate] {
@@ -217,6 +237,26 @@ extension ReferenceDictionary {
   }
 }
 extension Array where Element == ReferenceDictionary {
+  func lookupActions(
+    _ identifier: StrictString,
+    signature: [ParsedTypeReference],
+    specifiedReturnValue: ParsedTypeReference??,
+    externalLookup: [ReferenceDictionary] = []
+  ) -> [ActionIntermediate] {
+    for index in indices.reversed() {
+      let scope = self[index]
+      let found = scope.lookupActions(
+        identifier,
+        signature: signature,
+        specifiedReturnValue: specifiedReturnValue,
+        parentContexts: externalLookup.appending(contentsOf: self[..<index])
+      )
+      if !found.isEmpty {
+        return found
+      }
+    }
+    return []
+  }
   func lookupAction(
     _ identifier: StrictString,
     signature: [ParsedTypeReference],

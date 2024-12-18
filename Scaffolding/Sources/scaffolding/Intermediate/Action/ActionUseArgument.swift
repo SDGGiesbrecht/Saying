@@ -15,11 +15,30 @@ extension ActionUseArgument {
     }
   }
   var resolvedResultType: ParsedTypeReference?? {
+    get {
+      switch self {
+      case .action(let action):
+        return action.resolvedResultType
+      case .flow:
+        return .statements
+      }
+    }
+    set {
+      switch self {
+      case .action(var action):
+        action.resolvedResultType = newValue
+        self = .action(action)
+      case .flow:
+        break
+      }
+    }
+  }
+  var narrowedResultTypes: [ParsedTypeReference?]? {
     switch self {
     case .action(let action):
-      return action.resolvedResultType
+      return action.narrowedResultTypes
     case .flow:
-      return .statements
+      return nil
     }
   }
 }

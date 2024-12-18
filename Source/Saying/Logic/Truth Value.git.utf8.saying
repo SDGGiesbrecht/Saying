@@ -29,7 +29,7 @@ enumeration (clients)
      русский: Истина.
      Deutsch: Wahr.
      한국어: 참.
-     français: Vrai.
+     français : Vrai.
      Türkçe: Doğru.
      italiano: Vero.
      Nederlands: Waar.
@@ -68,7 +68,7 @@ enumeration (clients)
      русский: Ложь.
      Deutsch: Falsch.
      한국어: 거짓.
-     français: Faux.
+     français : Faux.
      Türkçe: Yanlış.
      italiano: Falso.
      Nederlands: Onwaar.
@@ -220,11 +220,6 @@ action (clients)
  JavaScript: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
  Kotlin: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
  Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
-
-use (clients)
- storage of (truth value)
- {
- }
 
 use (clients)
  optional (truth value)

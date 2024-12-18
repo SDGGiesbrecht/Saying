@@ -181,8 +181,10 @@ extension Thing {
     typeLookup: [StrictString: StrictString]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters({ parameter in
-      let identifier = parameter.names.identifier()
-      return ThingParameterIntermediate(names: [typeLookup[identifier]!])
+      let identifier = parameter.names
+        .lazy.compactMap({ typeLookup[$0] })
+        .first!
+      return ThingParameterIntermediate(names: [identifier])
     })
     return Thing(
       names: names,
