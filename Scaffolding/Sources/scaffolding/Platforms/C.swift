@@ -49,7 +49,7 @@ enum C: Platform {
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     #warning("Do the others have to change too?")
     if simple {
-      return "\(name)"
+      return "\(type)_\(name)"
     } else {
       if ignoringValue {
         return "\(type)_case_\(name)"
