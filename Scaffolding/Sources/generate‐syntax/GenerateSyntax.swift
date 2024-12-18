@@ -11,7 +11,6 @@ import SDGPersistence
 
   static func source() -> StrictString {
     return [
-      "import SDGLogic",
       "import SDGCollections",
       "import SDGText",
       "",
