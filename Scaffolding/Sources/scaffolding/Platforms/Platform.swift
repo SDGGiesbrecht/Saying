@@ -322,7 +322,7 @@ extension Platform {
     }
 
     let name = sanitize(
-      identifier: thing.names.identifier(),
+      identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
     if thing.cases.isEmpty {
