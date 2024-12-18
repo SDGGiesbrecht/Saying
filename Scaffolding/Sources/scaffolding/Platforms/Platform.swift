@@ -118,7 +118,7 @@ extension Platform {
     return Set(
       characters.lazy.compactMap({ value in
         guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isVulnerableToNormalization else {
+          !scalar.isVulnerableToNormalization else {
           return nil
         }
         return scalar
@@ -154,7 +154,7 @@ extension Platform {
         (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
       )
       ∧
-      (¬scalar.isVulnerableToNormalization)
+      (!scalar.isVulnerableToNormalization)
     )
   }
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
@@ -171,7 +171,7 @@ extension Platform {
         )
       )
       ∧
-      (¬scalar.isVulnerableToNormalization)
+      (!scalar.isVulnerableToNormalization)
     )
   }
   static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
@@ -186,7 +186,7 @@ extension Platform {
       .joined()
     if leading,
       let first = result.scalars.first,
-      ¬allowedAsIdentifierStart(first) {
+      !allowedAsIdentifierStart(first) {
       result.scalars.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
@@ -195,7 +195,7 @@ extension Platform {
 
   static func sanitize(stringLiteral: StrictString) -> String {
     return stringLiteral.lazy
-      .map({ ¬disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
+      .map({ !disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
       .joined()
   }
 
@@ -289,7 +289,7 @@ extension Platform {
     parentType: String,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if ¬needsSeparateCaseStorage {
+    if !needsSeparateCaseStorage {
       return nil
     }
     guard let contents = enumerationCase.contents
@@ -310,14 +310,14 @@ extension Platform {
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if ¬isTyped,
+    if !isTyped,
       thing.cases.isEmpty {
       return nil
     }
     if nativeType(of: thing) ≠ nil {
       return nil
     }
-    if ¬isTyped,
+    if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
         return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) ≠ nil
       }) {
@@ -754,7 +754,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary]
   ) -> String {
     let name = sanitize(identifier: parameter.names.identifier(), leading: true)
-    if ¬isTyped {
+    if !isTyped {
       return name
     } else {
       switch parameter.type {
@@ -972,7 +972,7 @@ extension Platform {
 
     var imports = nativeImports(for: module.referenceDictionary)
     imports ∪= importsNeededByTestScaffolding
-    if ¬imports.isEmpty {
+    if !imports.isEmpty {
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
       }
@@ -983,8 +983,8 @@ extension Platform {
     if mode == .testing {
       let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
         .lazy.filter({ action in
-          return ¬action.isCoverageWrapper
-          ∧ ¬(action.isFlow ∧ action.returnValue != nil)
+          return !action.isCoverageWrapper
+          ∧ !(action.isFlow ∧ action.returnValue != nil)
         })
         .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
       let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
@@ -1016,7 +1016,7 @@ extension Platform {
     }
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
-      for action in allActions where ¬action.isFlow {
+      for action in allActions where !action.isFlow {
         if let declaration = forwardDeclaration(for: action, referenceLookup: [moduleReferenceLookup]) {
           result.append(contentsOf: [
             "",
@@ -1025,7 +1025,7 @@ extension Platform {
         }
       }
     }
-    for action in allActions where ¬action.isFlow {
+    for action in allActions where !action.isFlow {
       if let declaration = self.declaration(
         for: action,
         externalReferenceLookup: [moduleReferenceLookup],

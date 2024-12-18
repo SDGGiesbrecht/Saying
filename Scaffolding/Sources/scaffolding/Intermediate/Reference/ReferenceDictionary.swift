@@ -129,7 +129,7 @@ extension ReferenceDictionary {
     things.values
       .lazy.map({ $0.values })
       .joined()
-    if ¬sorted {
+    if !sorted {
       return Array(unsorted)
     } else {
       var dictionary: [StrictString: Thing] = [:]
@@ -265,7 +265,7 @@ extension ReferenceDictionary {
       .joined()
       .lazy.map({ $0.values })
       .joined()
-    if ¬sorted {
+    if !sorted {
       return Array(result)
     } else {
       var dictionary: [StrictString: ActionIntermediate] = [:]

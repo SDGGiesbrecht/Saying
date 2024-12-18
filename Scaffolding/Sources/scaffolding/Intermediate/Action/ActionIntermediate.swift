@@ -465,7 +465,7 @@ extension ActionIntermediate {
         errors.append(ConstructionError.missingImplementation(language: "Swift", action: declaration.name))
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(
@@ -578,7 +578,7 @@ extension ActionIntermediate {
     if testOnlyAccess ≠ requirement.testOnlyAccess {
       errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     let mergedDocumentation = documentation.merging(

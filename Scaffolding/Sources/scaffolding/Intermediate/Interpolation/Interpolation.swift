@@ -137,7 +137,7 @@ extension Interpolation {
       }
       return constructParameter(names, nestedParemeters, definition)
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(Interpolation(parameters: parameters, reorderings: reorderings))
@@ -183,7 +183,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
         mergedReorderings[name] = rearranged
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

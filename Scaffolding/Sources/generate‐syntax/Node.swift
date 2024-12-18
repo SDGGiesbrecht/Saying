@@ -59,14 +59,14 @@ struct Node {
     result.append(contentsOf: [
       parsedConversions()
     ])
-    if ¬utilities.isEmpty {
+    if !utilities.isEmpty {
       result.append("extension \(name) {")
       for utility in utilities {
         result.append(utility)
       }
       result.append("}")
     }
-    if ¬parsedUtilities.isEmpty {
+    if !parsedUtilities.isEmpty {
       result.append("extension Parsed\(name) {")
       for utility in parsedUtilities {
         result.append(utility)
@@ -150,7 +150,7 @@ struct Node {
   }
 
   func storedLocationProperty(parsed: Bool) -> StrictString? {
-    if ¬parsed {
+    if !parsed {
       return nil
     } else {
       switch kind {
@@ -352,7 +352,7 @@ struct Node {
         "        cursor = remainder.index(after: cursor)",
         "    }",
         "    let range = remainder.startIndex..<cursor",
-        "    guard ¬range.isEmpty else {",
+        "    guard !range.isEmpty else {",
         "      return .failure([.notA\(name)(remainder.prefix(1))])",
         "    }",
         "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonNotContinued: nil))",
@@ -500,7 +500,7 @@ struct Node {
         "        cursor = remainder.index(after: cursor)",
         "    }",
         "    let range = remainder.startIndex..<cursor",
-        "    guard ¬range.isEmpty else {",
+        "    guard !range.isEmpty else {",
         "      return nil",
         "    }",
         "    return Parsed\(name)(location: remainder[range])",
@@ -806,9 +806,9 @@ struct Node {
       ])
     }
     let combinedArguments = arguments.joined(separator: ",\n      ")
-    if ¬isEnumeration {
+    if !isEnumeration {
       result.append("    \(name)(")
-      if ¬combinedArguments.isEmpty {
+      if !combinedArguments.isEmpty {
         result.append("      \(combinedArguments)")
       }
       result.append("    )")

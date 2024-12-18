@@ -32,7 +32,7 @@ extension LiteralIntermediate {
       case .escape(let symbol):
         let code = symbol.code
         let codeSource = code.source()
-        if ¬codeSource.allSatisfy({ $0 ∈ codeCharacters }) {
+        if !codeSource.allSatisfy({ $0 ∈ codeCharacters }) {
           errors.append(.escapeCodeNotHexadecimal(code))
         }
         if let value = UInt32(String(codeSource), radix: 16),
@@ -43,7 +43,7 @@ extension LiteralIntermediate {
         }
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(LiteralIntermediate(string: string))

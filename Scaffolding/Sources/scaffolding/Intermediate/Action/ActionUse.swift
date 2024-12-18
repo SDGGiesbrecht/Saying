@@ -209,7 +209,7 @@ extension ActionUse {
           actionName,
           signature: signature,
           specifiedReturnValue: resolvedResultType) {
-        if ¬testContext,
+        if !testContext,
            action.testOnlyAccess {
           errors.append(.actionUnavailableOutsideTests(reference: source!))
         }

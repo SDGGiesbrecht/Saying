@@ -178,7 +178,7 @@ extension ParsedTypeReference {
         if requiredAccess > thing.access {
           errors.append(.thingAccessNarrowerThanSignature(reference: simple.syntaxNode))
         }
-        if ¬allowTestOnlyAccess,
+        if !allowTestOnlyAccess,
           thing.testOnlyAccess {
           errors.append(.thingUnavailableOutsideTests(reference: simple.syntaxNode))
         }
@@ -193,7 +193,7 @@ extension ParsedTypeReference {
         if requiredAccess > thing.access {
           errors.append(.thingAccessNarrowerThanSignature(reference: identifier))
         }
-        if ¬allowTestOnlyAccess,
+        if !allowTestOnlyAccess,
           thing.testOnlyAccess {
           errors.append(.thingUnavailableOutsideTests(reference: identifier))
         }
