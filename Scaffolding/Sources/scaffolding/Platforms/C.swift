@@ -48,12 +48,12 @@ enum C: Platform {
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
-      return "\(name)"
+      return "\(type)_\(name)"
     } else {
       if ignoringValue {
-        return "\(name)"
+        return "\(type)_case_\(name)"
       } else {
-        return "((\(type)) {\(name)})"
+        return "((\(type)) {\(type)_case_\(name)})"
       }
     }
   }
@@ -69,8 +69,8 @@ enum C: Platform {
   static var needsSeparateCaseStorage: Bool {
     return true
   }
-  static func caseStorageDeclaration(name: String, contents: String) -> String? {
-    return "\(contents) \(name);"
+  static func caseStorageDeclaration(name: String, contents: String, parentType: String) -> String? {
+    return "\(contents) \(parentType)_case_\(name);"
   }
 
   static var isTyped: Bool {
@@ -107,7 +107,7 @@ enum C: Platform {
         "typedef enum \(name) {"
       ]
       for enumerationCase in cases {
-        result.append("\(indent)\(enumerationCase)")
+        result.append("\(indent)\(name)_\(enumerationCase)")
       }
       result.append(contentsOf: [
         "} \(name);"

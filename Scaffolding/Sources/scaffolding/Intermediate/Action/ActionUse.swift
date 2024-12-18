@@ -8,6 +8,7 @@ struct ActionUse {
   var passage: ParameterPassage
   var explicitResultType: ParsedTypeReference?
   var resolvedResultType: ParsedTypeReference??
+  var narrowedResultTypes: [ParsedTypeReference?]?
 }
 
 extension ActionUse {
@@ -70,6 +71,55 @@ extension ActionUse {
 }
 
 extension ActionUse {
+  enum ArgumentTypeResolutionResult {
+    case resolved(ParsedTypeReference??)
+    case narrowed([ParsedTypeReference?])
+    case failed
+  }
+  mutating func resolveArgumentTypes(
+    specifiedReturnValue: ParsedTypeReference??,
+    referenceLookup: [ReferenceDictionary]
+  ) -> ArgumentTypeResolutionResult {
+    var guesses: [[ParsedTypeReference]] = [[]]
+    for argument in arguments {
+      switch argument.resolvedResultType {
+      case .some(.some(let knownType)):
+        for index in guesses.indices {
+          guesses[index].append(knownType)
+        }
+      case .some(.none):
+        return .failed
+      case .none:
+        guard let narrowed = argument.narrowedResultTypes?.mapAll({ $0 }) else {
+          return .failed
+        }
+        guesses = guesses.flatMap({ preceding in
+          return narrowed.map({ guess in
+            return preceding.appending(guess)
+          })
+        })
+      }
+    }
+    let actions = guesses.flatMap { guess in
+      return referenceLookup.lookupActions(
+        actionName,
+        signature: guess,
+        specifiedReturnValue: specifiedReturnValue
+      ).map { action in
+        return (guess, action)
+      }
+    }
+    if actions.count == 1 {
+      let (guess, action) = actions[0]
+      for (guessEntry, index) in zip(guess, arguments.indices) {
+        arguments[index].resolvedResultType = .some(guessEntry)
+      }
+      return .resolved(action.returnValue)
+    } else if actions.count > 1 {
+      return .narrowed(actions.map({ $0.1.returnValue }))
+    }
+    return .failed
+  }
   mutating func resolveTypes(
     context: ActionIntermediate?,
     referenceLookup: [ReferenceDictionary],
@@ -94,20 +144,41 @@ extension ActionUse {
     switch specifiedReturnValue {
     case .some(.some(let value)):
       resolvedResultType = value
+      if arguments.contains(where: { $0.resolvedResultType == nil }) {
+        _ = resolveArgumentTypes(
+          specifiedReturnValue: specifiedReturnValue,
+          referenceLookup: referenceLookup
+        )
+      }
     case .some(.none):
       resolvedResultType = .some(.none)
-    case .none:
-      guard let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }) else {
-        return // aborting due to failure deeper down
+      if arguments.contains(where: { $0.resolvedResultType == nil }) {
+        _ = resolveArgumentTypes(
+          specifiedReturnValue: specifiedReturnValue,
+          referenceLookup: referenceLookup
+        )
       }
+    case .none:
       if let parameter = context?.lookupParameter(actionName) {
         resolvedResultType = parameter.type
-      } else if let action = referenceLookup.lookupAction(
-        actionName,
-        signature: signature,
-        specifiedReturnValue: specifiedReturnValue
-      ) {
-        resolvedResultType = action.returnValue
+        if arguments.contains(where: { $0.resolvedResultType == nil }) {
+          _ = resolveArgumentTypes(
+            specifiedReturnValue: specifiedReturnValue,
+            referenceLookup: referenceLookup
+          )
+        }
+      } else {
+        switch resolveArgumentTypes(
+          specifiedReturnValue: specifiedReturnValue,
+          referenceLookup: referenceLookup
+        ) {
+        case .resolved(let resolved):
+          resolvedResultType = resolved
+        case .narrowed(let narrowed):
+          narrowedResultTypes = narrowed
+        case .failed:
+          return
+        }
       }
     }
   }

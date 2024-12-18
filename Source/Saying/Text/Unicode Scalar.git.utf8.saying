@@ -1,7 +1,12 @@
 thing (clients)
  (
-  English: Uniocde scalar
+  English: Unicode scalar
  )
  Swift: “Unicode.Scalar”
+ {
+ }
+
+use (clients)
+ sets of (Unicode scalar)
  {
  }

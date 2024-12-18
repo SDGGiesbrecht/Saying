@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGControlFlow
 import SDGLogic
 import SDGCollections
 import SDGText
@@ -34,7 +33,8 @@ protocol Platform {
   static var needsSeparateCaseStorage: Bool { get }
   static func caseStorageDeclaration(
     name: String,
-    contents: String
+    contents: String,
+    parentType: String
   ) -> String?
 
   // Things
@@ -126,23 +126,23 @@ extension Platform {
     )
   }
   static var allowedIdentifierStartCharacters: Set<Unicode.Scalar> {
-    return cached(in: &_allowedIdentifierStartCharactersCache) {
+    return compute({
       return filterUnsafe(characters: allowedIdentifierStartCharacterPoints)
-    }
+    }, cachingIn: &_allowedIdentifierStartCharactersCache)
   }
   static var allowedIdentifierContinuationCharacters: Set<Unicode.Scalar> {
-    return cached(in: &_allowedIdentifierContinuationCharactersCache) {
+    return compute({
       allowedIdentifierStartCharacters
       ∪ filterUnsafe(characters: additionalAllowedIdentifierContinuationCharacterPoints)
-    }
+    }, cachingIn: &_allowedIdentifierContinuationCharactersCache)
   }
   static var disallowedStringLiteralCharacters: Set<Unicode.Scalar> {
-    return cached(in: &_disallowedStringLiteralCharactersCache) {
+    return compute({
       return Set(
         disallowedStringLiteralPoints
           .lazy.compactMap({ Unicode.Scalar($0) })
       )
-    }
+    }, cachingIn: &_disallowedStringLiteralCharactersCache)
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
     return (scalar ∈ allowedIdentifierStartCharacters)
@@ -224,7 +224,7 @@ extension Platform {
       if let native = nativeType(of: type) {
         return String(native.textComponents.joined())
       } else {
-        return sanitize(identifier: type.names.identifier(), leading: true)
+        return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
       }
     case .compound(identifier: let identifier, components: let components):
       let type = referenceLookup.lookupThing(
@@ -243,7 +243,7 @@ extension Platform {
         return result
       } else {
         return sanitize(
-          identifier: type.names.identifier(),
+          identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
           leading: true
         )
       }
@@ -286,6 +286,7 @@ extension Platform {
   }
   static func storageDeclaration(
     for enumerationCase: CaseIntermediate,
+    parentType: String,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
     if ¬needsSeparateCaseStorage {
@@ -301,7 +302,8 @@ extension Platform {
     )
     return caseStorageDeclaration(
       name: name,
-      contents: contents
+      contents: contents,
+      parentType: parentType
     )
   }
   static func declaration(
@@ -323,7 +325,7 @@ extension Platform {
     }
 
     let name = sanitize(
-      identifier: thing.names.identifier(),
+      identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
     if thing.cases.isEmpty {
@@ -341,7 +343,7 @@ extension Platform {
             referenceLookup: externalReferenceLookup
           )
         )
-        if let storage = storageDeclaration(for: enumerationCase, referenceLookup: externalReferenceLookup) {
+        if let storage = storageDeclaration(for: enumerationCase, parentType: name, referenceLookup: externalReferenceLookup) {
           storageCases.append(storage)
         }
       }

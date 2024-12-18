@@ -2,7 +2,7 @@ flow (clients)
  (
   English: if (condition: truth value), (consequence: {})
   Deutsch: wenn (Bedingung: [condition]), (Folge: [consequence])
-  français: si (condition: [condition]), (conséquence: [consequence])
+  français : si (condition: [condition]), (conséquence: [consequence])
   ελληνικά: αν (όρος: [condition]), (επακόλουθο: [consequence])
   עברית: אם (תנאי: [condition]), (תוצאה: [consequence])
  )

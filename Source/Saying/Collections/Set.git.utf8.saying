@@ -1,0 +1,33 @@
+ability (clients)
+ (
+  English: sets of (element)
+  Deutsch: Mengen von (Element: [element])
+  français : ensembles de (élément: [element])
+  ελληνικά: σύνολα (στοιχείο: [element])
+  עברית: קבוצות של (איבר: [element])
+ )
+ {
+ }
+
+extension
+ sets of (element)
+ {
+  thing (clients)
+   (
+    English: set of (element)
+    Deutsch: Menge von (Element: [element])
+    français : ensemble de (élément: [element])
+    ελληνικά: σύνολο (στοιχείο: [element])
+    עברית: קבוצה של (איבר: [element])
+   )
+   C♯: “HashSet<” element “>”
+   Kotlin: “Set<” element “>”
+   Swift: “Set<” element “>”
+   {
+   }
+
+  use
+   optional (set of (element))
+   {
+   }
+ }

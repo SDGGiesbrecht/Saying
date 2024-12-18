@@ -43,13 +43,18 @@ extension
    }
 
   use (clients)
+   storage of (thing)
+   {
+   }
+
+  use (clients)
    storage of (optional (thing))
    {
    }
 
   action (clients)
    [
-    test {verify (not ((nothing) exists))}
+    test {verify (not ((nothing: optional (thing)) exists))}
    ]
    (
     English: (thing: optional (thing)) exists
@@ -69,7 +74,7 @@ extension
 
   action (clients)
    [
-    test {verify ((nothing) does not exist)}
+    test {verify ((nothing: optional (thing)) does not exist)}
    ]
    (
     English: (thing: optional (thing)) does not exist
