@@ -223,7 +223,7 @@ extension Platform {
       if let native = nativeType(of: type) {
         return String(native.textComponents.joined())
       } else {
-        return sanitize(identifier: type.names.identifier(), leading: true)
+        return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
       }
     case .compound(identifier: let identifier, components: let components):
       let type = referenceLookup.lookupThing(
@@ -242,7 +242,7 @@ extension Platform {
         return result
       } else {
         return sanitize(
-          identifier: type.names.identifier(),
+          identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
           leading: true
         )
       }
