@@ -87,6 +87,15 @@ enum C: Platform {
     return nil
   }
 
+  static func thingDeclaration(name: String) -> String? {
+    var result: [String] = [
+      "typedef struct \(name) {"
+    ]
+    result.append(contentsOf: [
+      "} \(name);"
+    ])
+    return result.joined(separator: "\n")
+  }
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
