@@ -96,6 +96,15 @@ enum Kotlin: Platform {
     }
   }
 
+  static func thingDeclaration(name: String) -> String? {
+    var result: [String] = [
+      "class \(name)() {"
+    ]
+    result.append(contentsOf: [
+      "}"
+    ])
+    return result.joined(separator: "\n")
+  }
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],

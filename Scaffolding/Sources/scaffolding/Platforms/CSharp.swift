@@ -115,6 +115,16 @@ enum CSharp: Platform {
     return nil
   }
 
+  static func thingDeclaration(name: String) -> String? {
+    var result: [String] = [
+      "struct \(name)",
+      "{",
+    ]
+    result.append(contentsOf: [
+      "}"
+    ])
+    return result.joined(separator: "\n")
+  }
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],

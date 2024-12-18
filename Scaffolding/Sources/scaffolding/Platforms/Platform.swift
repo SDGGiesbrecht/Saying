@@ -42,6 +42,9 @@ protocol Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
+  static func thingDeclaration(
+    name: String
+  ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
@@ -324,7 +327,7 @@ extension Platform {
       leading: true
     )
     if thing.cases.isEmpty {
-      fatalError("Custom things not implemented yet.")
+      return thingDeclaration(name: name)
     } else {
       var cases: [String] = []
       var storageCases: [String] = []

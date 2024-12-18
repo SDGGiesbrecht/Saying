@@ -85,6 +85,9 @@ enum JavaScript: Platform {
     return nil
   }
 
+  static func thingDeclaration(name: String) -> String? {
+    return nil
+  }
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],

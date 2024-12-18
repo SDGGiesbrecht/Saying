@@ -969,6 +969,14 @@ extension Node {
             ])
           ),
           Node(
+            name: "SourceThingImplementation",
+            kind: .compound(children: [
+              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+            ])
+          ),
+          Node(
             name: "Statement",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
@@ -1023,6 +1031,14 @@ extension Node {
 
         [
           Node(
+            name: "DualThingImplementation",
+            kind: .compound(children: [
+              Child(name: "native", type: "NativeThingImplementations", kind: .required),
+              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "source", type: "SourceThingImplementation", kind: .required),
+            ])
+          ),
+          Node(
             name: "DualEnumerationImplementation",
             kind: .compound(children: [
               Child(name: "native", type: "NativeThingImplementations", kind: .required),
@@ -1050,6 +1066,14 @@ extension Node {
             kind: .compound(children: [
               Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
               Child(name: "implementations", type: "NativeStorageCaseImplementations", kind: .required),
+            ])
+          ),
+          Node(
+            name: "ThingImplementations",
+            kind: .alternates([
+              Alternate(name: "source", type: "SourceThingImplementation"),
+              Alternate(name: "dual", type: "DualThingImplementation"),
+              Alternate(name: "native", type: "NativeThingImplementations"),
             ])
           ),
           Node(
@@ -1103,7 +1127,7 @@ extension Node {
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
               Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "implementation", type: "NativeThingImplementations", kind: .required),
+              Child(name: "implementation", type: "ThingImplementations", kind: .required),
             ])
           ),
           Node(
