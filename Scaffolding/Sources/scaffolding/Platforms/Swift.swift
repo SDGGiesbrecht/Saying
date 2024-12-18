@@ -120,7 +120,7 @@ enum Swift: Platform {
   static var needsSeparateCaseStorage: Bool {
     return false
   }
-  static func caseStorageDeclaration(name: String, contents: String) -> String? {
+  static func caseStorageDeclaration(name: String, contents: String, parentType: String) -> String? {
     return nil
   }
 

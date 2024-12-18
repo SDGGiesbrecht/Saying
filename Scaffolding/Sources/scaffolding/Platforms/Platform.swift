@@ -33,7 +33,8 @@ protocol Platform {
   static var needsSeparateCaseStorage: Bool { get }
   static func caseStorageDeclaration(
     name: String,
-    contents: String
+    contents: String,
+    parentType: String
   ) -> String?
 
   // Things
@@ -285,6 +286,7 @@ extension Platform {
   }
   static func storageDeclaration(
     for enumerationCase: CaseIntermediate,
+    parentType: String,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
     if ¬needsSeparateCaseStorage {
@@ -300,7 +302,8 @@ extension Platform {
     )
     return caseStorageDeclaration(
       name: name,
-      contents: contents
+      contents: contents,
+      parentType: parentType
     )
   }
   static func declaration(
@@ -340,7 +343,7 @@ extension Platform {
             referenceLookup: externalReferenceLookup
           )
         )
-        if let storage = storageDeclaration(for: enumerationCase, referenceLookup: externalReferenceLookup) {
+        if let storage = storageDeclaration(for: enumerationCase, parentType: name, referenceLookup: externalReferenceLookup) {
           storageCases.append(storage)
         }
       }
