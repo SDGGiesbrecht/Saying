@@ -648,7 +648,7 @@ extension ActionIntermediate {
         parameters: newParameters,
         returnValue: newReturnValue,
         access: min(self.access, use.access),
-        testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
+        testOnlyAccess: self.testOnlyAccess || use.testOnlyAccess,
         documentation: newDocumentation,
         swiftName: swiftName
       ),

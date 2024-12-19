@@ -104,7 +104,7 @@ extension Interpolation {
       }
       let existingReordering = reorderings[entryName]
       if existingReordering == nil
-        ∨ existingReordering == reordering {
+        || existingReordering == reordering {
         reorderings[entryName] = reordering
       } else {
         errors.append(.rearrangedParameters(entry))

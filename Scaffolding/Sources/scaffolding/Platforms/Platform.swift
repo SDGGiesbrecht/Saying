@@ -146,11 +146,11 @@ extension Platform {
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
     return (scalar ∈ allowedIdentifierStartCharacters)
-    ∨
+    ||
     (
       (
         (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart)
-        ∨
+        ||
         (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
       )
       ∧
@@ -159,14 +159,14 @@ extension Platform {
   }
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
     return (scalar ∈ allowedIdentifierContinuationCharacters)
-    ∨
+    ||
     (
       (
         (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue)
-        ∨
+        ||
         (
           scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories
-          ∨
+          ||
           scalar.properties.generalCategory ∈ additionalAllowedIdentifierContinuationGeneralCategories
         )
       )
@@ -176,8 +176,8 @@ extension Platform {
   }
   static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ disallowedStringLiteralCharacters
-    ∨ Character(scalar).isNewline
-    ∨ scalar.isVulnerableToNormalization
+    || Character(scalar).isNewline
+    || scalar.isVulnerableToNormalization
   }
 
   static func sanitize(identifier: StrictString, leading: Bool) -> String {
@@ -547,7 +547,7 @@ extension Platform {
         name: name,
         type: type,
         simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
-        ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
+        ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) || action.isEnumerationValueWrapper
       )
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
@@ -792,7 +792,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
     if nativeImplementation(of: action) != nil
-      ∨ action.isEnumerationCaseWrapper {
+      || action.isEnumerationCaseWrapper {
       return nil
     }
 
@@ -862,7 +862,7 @@ extension Platform {
     mode: CompilationMode
   ) -> String? {
     if nativeImplementation(of: action) != nil
-      ∨ action.isEnumerationCaseWrapper {
+      || action.isEnumerationCaseWrapper {
       return nil
     }
 
