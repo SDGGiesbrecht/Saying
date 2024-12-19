@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 internal struct UTF8Segments {
