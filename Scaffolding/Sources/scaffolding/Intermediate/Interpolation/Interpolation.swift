@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -104,7 +103,7 @@ extension Interpolation {
       }
       let existingReordering = reorderings[entryName]
       if existingReordering == nil
-        ∨ existingReordering == reordering {
+        || existingReordering == reordering {
         reorderings[entryName] = reordering
       } else {
         errors.append(.rearrangedParameters(entry))
@@ -137,7 +136,7 @@ extension Interpolation {
       }
       return constructParameter(names, nestedParemeters, definition)
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(Interpolation(parameters: parameters, reorderings: reorderings))
@@ -159,7 +158,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
     provisionDeclarationName: ParsedActionName
   ) -> Result<Interpolation, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
-    let correlatedName = self.reorderings.keys.first(where: { requirement.reorderings[$0] ≠ nil })!
+    let correlatedName = self.reorderings.keys.first(where: { requirement.reorderings[$0] != nil })!
     let nameToRequirement = requirement.reorderings[correlatedName]!
     let nameToSelf = self.reorderings[correlatedName]!
     let mergedParameters = self.parameters.indices.map { index in
@@ -176,14 +175,14 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
         return ownIndex
       }
       if let existing = mergedReorderings[name] {
-        if existing ≠ rearranged {
+        if existing != rearranged {
           errors.append(.mismatchedParameters(name: name, declaration: provisionDeclarationName))
         }
       } else {
         mergedReorderings[name] = rearranged
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

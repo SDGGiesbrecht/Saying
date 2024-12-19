@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -63,7 +62,7 @@ extension Ability {
         }
         let identifier = requirement.names.identifier()
         for name in requirement.names {
-          if identifierMapping[name] ≠ nil {
+          if identifierMapping[name] != nil {
             errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
           }
           identifierMapping[name] = identifier
@@ -80,7 +79,7 @@ extension Ability {
         }
         let identifier = requirement.names.identifier()
         for name in requirement.names {
-          if identifierMapping[name] ≠ nil {
+          if identifierMapping[name] != nil {
             errors.append(ConstructionError.redeclaredIdentifier(name, [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
           }
           identifierMapping[name] = identifier
@@ -105,7 +104,7 @@ extension Ability {
         errors.append(ConstructionError.documentedParameterNotFound(parameter))
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

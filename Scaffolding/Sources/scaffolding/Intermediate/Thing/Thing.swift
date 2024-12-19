@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 struct Thing {
@@ -59,7 +58,7 @@ extension Thing {
     in implementation: ParsedNativeThingImplementation,
     errors: inout [ConstructionError]
   ) {
-    if implementation.implementation.importNode ≠ nil {
+    if implementation.implementation.importNode != nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }
@@ -154,7 +153,7 @@ extension Thing {
         errors.append(ConstructionError.documentedParameterNotFound(parameter))
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

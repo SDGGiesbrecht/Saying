@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 struct ActionUse {
@@ -37,7 +36,7 @@ extension ActionUse {
   init(_ use: ParsedAnnotatedAction) {
     self = ActionUse(use.action)
     let type = use.type.map({ ParsedTypeReference($0.type) })
-    if use.type?.yieldArrow ≠ nil {
+    if use.type?.yieldArrow != nil {
       explicitResultType = .action(parameters: [], returnValue: type)
     } else {
       explicitResultType = type
@@ -209,7 +208,7 @@ extension ActionUse {
           actionName,
           signature: signature,
           specifiedReturnValue: resolvedResultType) {
-        if ¬testContext,
+        if !testContext,
            action.testOnlyAccess {
           errors.append(.actionUnavailableOutsideTests(reference: source!))
         }

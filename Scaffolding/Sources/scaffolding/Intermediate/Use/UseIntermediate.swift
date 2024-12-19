@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 struct UseIntermediate {
@@ -28,7 +27,7 @@ extension UseIntermediate {
         actions.append(action)
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

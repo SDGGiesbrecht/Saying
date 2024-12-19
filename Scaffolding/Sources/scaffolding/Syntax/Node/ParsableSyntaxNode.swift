@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 protocol ParsableSyntaxNode: ParsedSyntaxNode {

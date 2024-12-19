@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -43,7 +42,7 @@ extension RequirementIntermediate {
     case .success(let constructed):
       prototype = constructed
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

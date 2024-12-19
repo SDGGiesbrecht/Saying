@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -12,7 +11,7 @@ struct ModuleIntermediate {
 
 extension ModuleIntermediate {
   func allTests(sorted: Bool = false) -> [TestIntermediate] {
-    if ¬sorted {
+    if !sorted {
       return tests
     } else {
       var dictionary: [StrictString: TestIntermediate] = [:]
@@ -57,7 +56,7 @@ extension ModuleIntermediate {
         extensions.append(intermediate)
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       throw ErrorList(errors)
     }
   }
@@ -110,7 +109,7 @@ extension ModuleIntermediate {
       }
     }
 
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       throw ErrorList(errors)
     }
   }
@@ -129,7 +128,7 @@ extension ModuleIntermediate {
       tests.append(contentsOf: documentation.tests)
     }
 
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       throw ErrorList(errors)
     }
   }
@@ -266,11 +265,11 @@ extension ModuleIntermediate {
       if identifier.hasSuffix(" +") {
         identifier.removeLast(2)
       }
-      if ¬referenceDictionary.languageIsKnown(identifier) {
+      if !referenceDictionary.languageIsKnown(identifier) {
         errors.append(.noSuchLanguage(language))
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       throw ErrorList(errors)
     }
   }

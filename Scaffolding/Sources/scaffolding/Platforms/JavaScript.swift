@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -181,7 +180,7 @@ enum JavaScript: Platform {
     ).appending(";")
   }
   static func returnDelayStorage(type: String?) -> String {
-    if type ≠ nil {
+    if type != nil {
       return "const returnValue = "
     } else {
       return ""

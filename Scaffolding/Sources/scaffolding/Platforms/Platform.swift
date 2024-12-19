@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -118,7 +117,7 @@ extension Platform {
     return Set(
       characters.lazy.compactMap({ value in
         guard let scalar = Unicode.Scalar(value),
-          ¬scalar.isVulnerableToNormalization else {
+          !scalar.isVulnerableToNormalization else {
           return nil
         }
         return scalar
@@ -146,47 +145,47 @@ extension Platform {
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
     return (scalar ∈ allowedIdentifierStartCharacters)
-    ∨
+    ||
     (
       (
-        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart)
-        ∨
+        (allowsAllUnicodeIdentifiers && scalar.properties.isIDStart)
+        ||
         (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
       )
-      ∧
-      (¬scalar.isVulnerableToNormalization)
+      &&
+      (!scalar.isVulnerableToNormalization)
     )
   }
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
     return (scalar ∈ allowedIdentifierContinuationCharacters)
-    ∨
+    ||
     (
       (
-        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue)
-        ∨
+        (allowsAllUnicodeIdentifiers && scalar.properties.isIDContinue)
+        ||
         (
           scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories
-          ∨
+          ||
           scalar.properties.generalCategory ∈ additionalAllowedIdentifierContinuationGeneralCategories
         )
       )
-      ∧
-      (¬scalar.isVulnerableToNormalization)
+      &&
+      (!scalar.isVulnerableToNormalization)
     )
   }
   static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
     return scalar ∈ disallowedStringLiteralCharacters
-    ∨ Character(scalar).isNewline
-    ∨ scalar.isVulnerableToNormalization
+    || Character(scalar).isNewline
+    || scalar.isVulnerableToNormalization
   }
 
   static func sanitize(identifier: StrictString, leading: Bool) -> String {
     var result: String = identifier.lazy
-      .map({ allowedAsIdentifierContinuation($0) ∧ $0 ≠ "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
     if leading,
       let first = result.scalars.first,
-      ¬allowedAsIdentifierStart(first) {
+      !allowedAsIdentifierStart(first) {
       result.scalars.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
@@ -195,7 +194,7 @@ extension Platform {
 
   static func sanitize(stringLiteral: StrictString) -> String {
     return stringLiteral.lazy
-      .map({ ¬disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
+      .map({ !disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
       .joined()
   }
 
@@ -235,7 +234,7 @@ extension Platform {
         var result = ""
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
-          if index ≠ native.textComponents.indices.last {
+          if index != native.textComponents.indices.last {
             let type = native.parameters[index].resolvedType!
             result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
           }
@@ -289,7 +288,7 @@ extension Platform {
     parentType: String,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if ¬needsSeparateCaseStorage {
+    if !needsSeparateCaseStorage {
       return nil
     }
     guard let contents = enumerationCase.contents
@@ -310,16 +309,16 @@ extension Platform {
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if ¬isTyped,
+    if !isTyped,
       thing.cases.isEmpty {
       return nil
     }
-    if nativeType(of: thing) ≠ nil {
+    if nativeType(of: thing) != nil {
       return nil
     }
-    if ¬isTyped,
+    if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
-        return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) ≠ nil
+        return enumerationCase.referenceAction.map({ nativeImplementation(of: $0) }) != nil
       }) {
       return nil
     }
@@ -465,7 +464,7 @@ extension Platform {
       var local = ReferenceDictionary()
       for index in native.textComponents.indices {
         result.append(contentsOf: String(native.textComponents[index]))
-        if index ≠ native.textComponents.indices.last {
+        if index != native.textComponents.indices.last {
           let parameter = native.parameters[index]
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
@@ -547,7 +546,7 @@ extension Platform {
         name: name,
         type: type,
         simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
-        ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) ∨ action.isEnumerationValueWrapper
+        ignoringValue: (action.isFlow && action.isEnumerationCaseWrapper) || action.isEnumerationValueWrapper
       )
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
@@ -611,7 +610,7 @@ extension Platform {
         leading: true
       )
       if action.isReferenceWrapper {
-        let prefix = actionReferencePrefix(isVariable: parameterName ≠ nil) ?? ""
+        let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
         return "\(prefix)\(name)"
       } else {
         var argumentsArray: [String] = []
@@ -724,7 +723,7 @@ extension Platform {
       )
     )
     if mode == .testing,
-      coverageRegionCounter ≠ before,
+      coverageRegionCounter != before,
        let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter
@@ -754,7 +753,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary]
   ) -> String {
     let name = sanitize(identifier: parameter.names.identifier(), leading: true)
-    if ¬isTyped {
+    if !isTyped {
       return name
     } else {
       switch parameter.type {
@@ -791,8 +790,8 @@ extension Platform {
     for action: ActionIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil
-      ∨ action.isEnumerationCaseWrapper {
+    if nativeImplementation(of: action) != nil
+      || action.isEnumerationCaseWrapper {
       return nil
     }
 
@@ -861,8 +860,8 @@ extension Platform {
     externalReferenceLookup: [ReferenceDictionary],
     mode: CompilationMode
   ) -> String? {
-    if nativeImplementation(of: action) ≠ nil
-      ∨ action.isEnumerationCaseWrapper {
+    if nativeImplementation(of: action) != nil
+      || action.isEnumerationCaseWrapper {
       return nil
     }
 
@@ -913,7 +912,7 @@ extension Platform {
 
   static func identifier(for test: TestIntermediate, leading: Bool) -> String {
     return test.location.lazy.enumerated()
-      .map({ sanitize(identifier: $1.identifier(), leading: leading ∧ $0 == 0) })
+      .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0) })
       .joined(separator: "_")
   }
 
@@ -972,7 +971,7 @@ extension Platform {
 
     var imports = nativeImports(for: module.referenceDictionary)
     imports ∪= importsNeededByTestScaffolding
-    if ¬imports.isEmpty {
+    if !imports.isEmpty {
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
       }
@@ -983,8 +982,8 @@ extension Platform {
     if mode == .testing {
       let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
         .lazy.filter({ action in
-          return ¬action.isCoverageWrapper
-          ∧ ¬(action.isFlow ∧ action.returnValue != nil)
+          return !action.isCoverageWrapper
+          && !(action.isFlow && action.returnValue != nil)
         })
         .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
       let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
@@ -1016,7 +1015,7 @@ extension Platform {
     }
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
-      for action in allActions where ¬action.isFlow {
+      for action in allActions where !action.isFlow {
         if let declaration = forwardDeclaration(for: action, referenceLookup: [moduleReferenceLookup]) {
           result.append(contentsOf: [
             "",
@@ -1025,7 +1024,7 @@ extension Platform {
         }
       }
     }
-    for action in allActions where ¬action.isFlow {
+    for action in allActions where !action.isFlow {
       if let declaration = self.declaration(
         for: action,
         externalReferenceLookup: [moduleReferenceLookup],

@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -99,7 +98,7 @@ extension ActionPrototype {
         }
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

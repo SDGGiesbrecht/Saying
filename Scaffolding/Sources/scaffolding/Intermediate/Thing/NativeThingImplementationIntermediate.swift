@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 struct NativeThingImplementationIntermediate {
@@ -30,7 +29,7 @@ extension NativeThingImplementationIntermediate {
         }
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(NativeThingImplementationIntermediate(

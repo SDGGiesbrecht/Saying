@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGLogic
 import SDGCollections
 import SDGText
 import SDGPersistence
@@ -23,7 +22,7 @@ struct GitStyleFile {
     cursor: (offset: Int, index: StrictString.Index)
   ) {
     if let segmentStart = segmentStart,
-       segmentStart.offset ≠ cursor.offset {
+       segmentStart.offset != cursor.offset {
       var segment = source[segmentStart.index..<cursor.index]
       var adjustedOffset = segmentStart.offset
       while segment.first == " " {
@@ -52,7 +51,7 @@ struct GitStyleFile {
           segmentStart: &segmentStart,
           cursor: (offset: offset, index: index)
         )
-        if index ≠ lastIndex {
+        if index != lastIndex {
           if segments.last?.source == "\u{2028}" {
             let first = segments.removeLast()
             segments.append(UTF8Segment(offset: first.offset, source: "\u{2029}"))

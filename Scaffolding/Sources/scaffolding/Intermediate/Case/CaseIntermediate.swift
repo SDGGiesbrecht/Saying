@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 struct CaseIntermediate {
@@ -18,7 +17,7 @@ extension CaseIntermediate {
     in implementation: ParsedNativeAction,
     errors: inout [ConstructionError]
   ) {
-    if implementation.importNode ≠ nil {
+    if implementation.importNode != nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }
@@ -240,7 +239,7 @@ extension CaseIntermediate {
       swift: swiftCheck
     )
 
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

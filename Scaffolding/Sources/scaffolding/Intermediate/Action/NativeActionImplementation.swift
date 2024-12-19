@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -32,7 +31,7 @@ extension NativeActionImplementationIntermediate {
       }
     }
     let requiredImport = implementation.importNode?.importNode.identifierText()
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

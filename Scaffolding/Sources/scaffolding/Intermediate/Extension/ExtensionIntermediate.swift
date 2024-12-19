@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 struct ExtensionIntermediate {
@@ -54,7 +53,7 @@ extension ExtensionIntermediate {
         }
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(

@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 import SDGText
 
@@ -98,7 +97,7 @@ extension ActionIntermediate {
     in implementation: ParsedNativeActionImplementation,
     errors: inout [ConstructionError]
   ) {
-    if implementation.expression.importNode ≠ nil {
+    if implementation.expression.importNode != nil {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }
@@ -465,7 +464,7 @@ extension ActionIntermediate {
         errors.append(ConstructionError.missingImplementation(language: "Swift", action: declaration.name))
       }
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(
@@ -575,10 +574,10 @@ extension ActionIntermediate {
     if access < min(requirement.access, useAccess) {
       errors.append(.fulfillmentAccessNarrowerThanRequirement(declaration: self.declaration!.name))
     }
-    if testOnlyAccess ≠ requirement.testOnlyAccess {
+    if testOnlyAccess != requirement.testOnlyAccess {
       errors.append(.mismatchedTestAccess(testAccess: self.declaration!.testAccess!))
     }
-    if ¬errors.isEmpty {
+    if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     let mergedDocumentation = documentation.merging(
@@ -648,7 +647,7 @@ extension ActionIntermediate {
         parameters: newParameters,
         returnValue: newReturnValue,
         access: min(self.access, use.access),
-        testOnlyAccess: self.testOnlyAccess ∨ use.testOnlyAccess,
+        testOnlyAccess: self.testOnlyAccess || use.testOnlyAccess,
         documentation: newDocumentation,
         swiftName: swiftName
       ),
@@ -702,7 +701,7 @@ extension ActionIntermediate {
 extension ActionIntermediate {
 
   var isCoverageWrapper: Bool {
-    return coveredIdentifier ≠ nil
+    return coveredIdentifier != nil
   }
 
   func coverageTrackingIdentifier() -> StrictString {
