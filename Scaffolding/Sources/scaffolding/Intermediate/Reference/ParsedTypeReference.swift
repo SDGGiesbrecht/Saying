@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGText
 
 indirect enum ParsedTypeReference {

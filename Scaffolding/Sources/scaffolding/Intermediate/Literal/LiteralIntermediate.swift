@@ -1,4 +1,3 @@
-import SDGLogic
 import SDGCollections
 
 struct LiteralIntermediate {
