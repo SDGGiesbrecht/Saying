@@ -149,11 +149,11 @@ extension Platform {
     ||
     (
       (
-        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDStart)
+        (allowsAllUnicodeIdentifiers && scalar.properties.isIDStart)
         ||
         (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
       )
-      ∧
+      &&
       (!scalar.isVulnerableToNormalization)
     )
   }
@@ -162,7 +162,7 @@ extension Platform {
     ||
     (
       (
-        (allowsAllUnicodeIdentifiers ∧ scalar.properties.isIDContinue)
+        (allowsAllUnicodeIdentifiers && scalar.properties.isIDContinue)
         ||
         (
           scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories
@@ -170,7 +170,7 @@ extension Platform {
           scalar.properties.generalCategory ∈ additionalAllowedIdentifierContinuationGeneralCategories
         )
       )
-      ∧
+      &&
       (!scalar.isVulnerableToNormalization)
     )
   }
@@ -182,7 +182,7 @@ extension Platform {
 
   static func sanitize(identifier: StrictString, leading: Bool) -> String {
     var result: String = identifier.lazy
-      .map({ allowedAsIdentifierContinuation($0) ∧ $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
     if leading,
       let first = result.scalars.first,
@@ -547,7 +547,7 @@ extension Platform {
         name: name,
         type: type,
         simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
-        ignoringValue: (action.isFlow ∧ action.isEnumerationCaseWrapper) || action.isEnumerationValueWrapper
+        ignoringValue: (action.isFlow && action.isEnumerationCaseWrapper) || action.isEnumerationValueWrapper
       )
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
@@ -913,7 +913,7 @@ extension Platform {
 
   static func identifier(for test: TestIntermediate, leading: Bool) -> String {
     return test.location.lazy.enumerated()
-      .map({ sanitize(identifier: $1.identifier(), leading: leading ∧ $0 == 0) })
+      .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0) })
       .joined(separator: "_")
   }
 
@@ -984,7 +984,7 @@ extension Platform {
       let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
         .lazy.filter({ action in
           return !action.isCoverageWrapper
-          ∧ !(action.isFlow ∧ action.returnValue != nil)
+          && !(action.isFlow && action.returnValue != nil)
         })
         .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
       let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
