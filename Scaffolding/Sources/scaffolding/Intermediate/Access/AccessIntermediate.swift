@@ -1,6 +1,4 @@
-import SDGMathematics
-
-enum AccessIntermediate: OrderedEnumeration {
+enum AccessIntermediate: Comparable {
   static var inferred: AccessIntermediate { .file }
   case file
   case clients
