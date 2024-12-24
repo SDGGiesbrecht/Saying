@@ -1,4 +1,3 @@
-import SDGMathematics
 import SDGCollections
 import SDGText
 
@@ -20,7 +19,9 @@ extension DiagnosticError {
 
   var diagnostic: String {
     let preceding = String(String.UnicodeScalarView(range.base[..<range.startIndex]))
-    let line = ∑preceding.lines.lazy.map({ $0.newline.elementsEqual("\u{2029}".scalars) ? 2 : 1 })
+    let line = preceding.lines
+      .lazy.map({ $0.newline.elementsEqual("\u{2029}".scalars) ? 2 : 1 })
+      .reduce(0, +)
     let source = String.UnicodeScalarView(range)
     return "\(line): \(message) “\(source)”"
   }
