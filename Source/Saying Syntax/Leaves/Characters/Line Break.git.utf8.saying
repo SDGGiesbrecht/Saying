@@ -1,0 +1,8 @@
+thing (clients)
+ (
+  English: line break syntax
+  Deutsch: Zeilenwechselsyntax
+  français : syntaxe de saut de ligne
+ )
+ {
+ }

@@ -237,7 +237,9 @@ extension ModuleIntermediate {
     }
   }
 
-  func validateReferences() throws {
+  func validateReferences(
+    moduleWideImports: [ModuleIntermediate]
+  ) throws {
     var errors: [ReferenceError] = []
     referenceDictionary.validateReferencesAsModule(errors: &errors)
     for test in tests {
@@ -265,7 +267,8 @@ extension ModuleIntermediate {
       if identifier.hasSuffix(" +") {
         identifier.removeLast(2)
       }
-      if !referenceDictionary.languageIsKnown(identifier) {
+      if !moduleWideImports.contains(where: { $0.referenceDictionary.languageIsKnown(identifier) }),
+        !referenceDictionary.languageIsKnown(identifier) {
         errors.append(.noSuchLanguage(language))
       }
     }

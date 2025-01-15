@@ -966,6 +966,22 @@ extension Platform {
     return imports
   }
 
+  static func coverageRegions(for module: ModuleIntermediate) -> Set<StrictString> {
+    let moduleReferenceLookup = module.referenceDictionary
+    let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
+      .lazy.filter({ action in
+        return !action.isCoverageWrapper
+        && !(action.isFlow && action.returnValue != nil)
+      })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
+    let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
+      .lazy.flatMap({ $0.defaults.values })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
+    return Set([
+      actionRegions,
+      choiceRegions
+    ].joined())
+  }
   static func source(for module: ModuleIntermediate, mode: CompilationMode) -> String {
     var result: [String] = []
 
@@ -979,26 +995,6 @@ extension Platform {
     }
 
     let moduleReferenceLookup = module.referenceDictionary
-    if mode == .testing {
-      let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
-        .lazy.filter({ action in
-          return !action.isCoverageWrapper
-          && !(action.isFlow && action.returnValue != nil)
-        })
-        .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
-      let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
-        .lazy.flatMap({ $0.defaults.values })
-        .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
-      let regions = Set([
-        actionRegions,
-        choiceRegions
-      ].joined())
-        .sorted()
-        .map({ sanitize(stringLiteral: $0) })
-      result.append(contentsOf: coverageRegionSet(regions: regions))
-      result.append(contentsOf: registerCoverageAction)
-    }
-
     let allThings = moduleReferenceLookup.allThings(sorted: true)
     for thing in allThings {
       if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
@@ -1042,22 +1038,43 @@ extension Platform {
         result.append("")
         result.append(contentsOf: source(of: test, referenceLookup: [moduleReferenceLookup]))
       }
-      result.append("")
-      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
     }
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
     }
 
-    return result.joined(separator: "\n").appending("\n")
+    return result.joined(separator: "\n")
   }
 
-  static func source(
-    for module: Module,
-    mode: CompilationMode,
-    entryPoints: Set<StrictString>? = nil
-  ) throws -> String {
-    return try source(for: module.build(mode: mode, entryPoints: entryPoints), mode: mode)
+  static func source(for modules: [ModuleIntermediate], mode: CompilationMode) -> String {
+    var result: [String] = []
+
+    if mode == .testing {
+      var regionSet: Set<StrictString> = []
+      for module in modules {
+        regionSet.formUnion(self.coverageRegions(for: module))
+      }
+      let regions = regionSet
+        .sorted()
+        .map({ sanitize(stringLiteral: $0) })
+      result.append(contentsOf: coverageRegionSet(regions: regions))
+      result.append(contentsOf: registerCoverageAction)
+    }
+
+    for module in modules {
+      result.append(self.source(for: module, mode: mode))
+    }
+
+    if mode == .testing {
+      var allTests: [TestIntermediate] = []
+      for module in modules {
+        allTests.append(contentsOf: module.allTests(sorted: true))
+      }
+      result.append("")
+      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
+    }
+
+    return result.joined(separator: "\n").appending("\n")
   }
 
   static func preparedDirectory(for package: Package) -> URL {
@@ -1075,29 +1092,37 @@ extension Platform {
     entryPoints: Set<StrictString>? = nil,
     location: URL? = nil
   ) throws {
+    let sourceModules = try package.modules()
+    let sayingModule = try sourceModules.first(where: { $0.isSayingModule })?
+      .build(mode: mode, entryPoints: entryPoints, moduleWideImports: [])
+    var builtModules = try sourceModules
+      .lazy.filter({ !$0.isSayingModule })
+      .map({ module in
+        return try module.build(
+          mode: mode,
+          entryPoints: entryPoints,
+          moduleWideImports: sayingModule.map({ [$0] }) ?? []) }
+      )
+    if let saying = sayingModule {
+      builtModules.prepend(saying)
+    }
+
+    var source: [String] = [
+      self.source(for: builtModules, mode: mode)
+    ]
+
     switch mode {
     case .testing, .debugging, .dependency:
-      let constructionDirectory = location ?? preparedDirectory(for: package)
-      var source: [String] = [
-        try package.modules()
-          .lazy.map({ try self.source(for: $0, mode: mode) })
-          .joined(separator: "\n\n")
-      ]
       if let entryPoint = testEntryPoint() {
         source.append("")
         source.append(contentsOf: entryPoint)
       }
+      let constructionDirectory = location ?? preparedDirectory(for: package)
       try source.joined(separator: "\n").appending("\n")
         .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
       try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
     case .release:
       let productsDirectory = location ?? productsDirectory(for: package)
-      let source: [String] = [
-        try package.modules()
-          .lazy.map({ try self.source(for: $0, mode: mode, entryPoints: entryPoints) })
-          .joined(separator: "\n\n")
-      ]
-
       var joined = source.joined(separator: "\n").appending("\n")
       while joined.first == "\n" {
         joined.removeFirst()
