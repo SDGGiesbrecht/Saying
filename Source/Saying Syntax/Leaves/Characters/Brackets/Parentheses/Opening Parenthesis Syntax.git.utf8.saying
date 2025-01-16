@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: opening parenthesis syntax
+  Deutsch: Offenrundklammersyntax
+  français : syntaxe de parenthèse ouvrante
+  Swift: OpeningParenthesisSyntax
+ )
+ {
+ }

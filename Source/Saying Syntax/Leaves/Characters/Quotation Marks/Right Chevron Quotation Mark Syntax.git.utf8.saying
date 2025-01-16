@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: right chevron quotation mark syntax
+  Deutsch: Rechtsspitzzeichensyntax
+  français : syntaxe de chevrons à droite
+  Swift: RightChevronQuotationMarkSyntax
+ )
+ {
+ }

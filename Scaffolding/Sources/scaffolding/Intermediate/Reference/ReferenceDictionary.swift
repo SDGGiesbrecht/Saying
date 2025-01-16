@@ -425,6 +425,13 @@ extension ReferenceDictionary {
     repeat {
       foundSomething = false
       for thing in allThings() {
+        if let swift = thing.swiftName,
+           stillRequired.contains(swift) {
+          stillRequired.remove(swift)
+          foundSomething = true
+          found.insert(thing.globallyUniqueIdentifier(referenceLookup: [self]))
+          _ = optimized.add(thing: thing)
+        }
         let identifier = thing.globallyUniqueIdentifier(referenceLookup: [self])
         if stillRequired.contains(identifier) {
           stillRequired.remove(identifier)

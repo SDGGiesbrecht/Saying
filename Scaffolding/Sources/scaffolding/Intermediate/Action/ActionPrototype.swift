@@ -81,7 +81,7 @@ extension ActionPrototype {
           })
         parameters.apply(swiftLabels: labels, accordingTo: name)
       }
-      names.insert(signature.name())
+      names.insert(name)
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {

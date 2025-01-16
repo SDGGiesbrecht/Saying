@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: closing parenthesis syntax
+  Deutsch: Schließrundklammersyntax
+  français : syntaxe de parenthèse fermante
+  Swift: ClosingParenthesisSyntax
+ )
+ {
+ }

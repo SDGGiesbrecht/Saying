@@ -1,3 +1,66 @@
+struct ParagraphBreakSyntax {
+}
+
+struct BulletCharacterSyntax {
+}
+
+struct ClosingBraceSyntax {
+}
+
+struct ClosingBracketSyntax {
+}
+
+struct ClosingParenthesisSyntax {
+}
+
+struct ColonCharacterSyntax {
+}
+
+struct DownArrowSyntax {
+}
+
+struct LeftArrowSyntax {
+}
+
+struct LineBreakSyntax {
+}
+
+struct LeftChevronQuotationMarkSyntax {
+}
+
+struct LowQuotationMarkSyntax {
+}
+
+struct NinesQuotationMarkSyntax {
+}
+
+struct OpeningParenthesisSyntax {
+}
+
+struct OpeningBraceSyntax {
+}
+
+struct OpeningBracketSyntax {
+}
+
+struct RightChevronQuotationMarkSyntax {
+}
+
+struct RightArrowSyntax {
+}
+
+struct SixesQuotationMarkSyntax {
+}
+
+struct SlashSyntax {
+}
+
+struct SpaceSyntax {
+}
+
+struct SymbolInsertionMarkSyntax {
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached

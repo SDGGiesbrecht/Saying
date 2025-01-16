@@ -6,27 +6,27 @@ extension Node {
     (
       [
         [
-          Node(name: "ParagraphBreak", kind: .fixedLeaf("\u{2029}")),
-          Node(name: "LineBreak", kind: .fixedLeaf("\u{2028}")),
-          Node(name: "OpeningParenthesis", kind: .fixedLeaf("(")),
-          Node(name: "ClosingParenthesis", kind: .fixedLeaf(")")),
-          Node(name: "OpeningBracket", kind: .fixedLeaf("[")),
-          Node(name: "ClosingBracket", kind: .fixedLeaf("]")),
-          Node(name: "OpeningBrace", kind: .fixedLeaf("{")),
-          Node(name: "ClosingBrace", kind: .fixedLeaf("}")),
-          Node(name: "LeftChevronQuotationMark", kind: .fixedLeaf("«")),
-          Node(name: "RightChevronQuotationMark", kind: .fixedLeaf("»")),
-          Node(name: "SixesQuotationMark", kind: .fixedLeaf("“")),
-          Node(name: "NinesQuotationMark", kind: .fixedLeaf("”")),
-          Node(name: "LowQuotationMark", kind: .fixedLeaf("„")),
-          Node(name: "ColonCharacter", kind: .fixedLeaf(":")),
-          Node(name: "Slash", kind: .fixedLeaf("/")),
-          Node(name: "BulletCharacter", kind: .fixedLeaf("•")),
-          Node(name: "DownArrow", kind: .fixedLeaf("↓")),
-          Node(name: "RightArrow", kind: .fixedLeaf("→")),
-          Node(name: "LeftArrow", kind: .fixedLeaf("←")),
-          Node(name: "SymbolInsertionMark", kind: .fixedLeaf("¤")),
-          Node(name: "Space", kind: .fixedLeaf(" ")),
+          Node(name: "ParagraphBreakSyntax", kind: .fixedLeaf("\u{2029}")),
+          Node(name: "LineBreakSyntax", kind: .fixedLeaf("\u{2028}")),
+          Node(name: "OpeningParenthesisSyntax", kind: .fixedLeaf("(")),
+          Node(name: "ClosingParenthesisSyntax", kind: .fixedLeaf(")")),
+          Node(name: "OpeningBracketSyntax", kind: .fixedLeaf("[")),
+          Node(name: "ClosingBracketSyntax", kind: .fixedLeaf("]")),
+          Node(name: "OpeningBraceSyntax", kind: .fixedLeaf("{")),
+          Node(name: "ClosingBraceSyntax", kind: .fixedLeaf("}")),
+          Node(name: "LeftChevronQuotationMarkSyntax", kind: .fixedLeaf("«")),
+          Node(name: "RightChevronQuotationMarkSyntax", kind: .fixedLeaf("»")),
+          Node(name: "SixesQuotationMarkSyntax", kind: .fixedLeaf("“")),
+          Node(name: "NinesQuotationMarkSyntax", kind: .fixedLeaf("”")),
+          Node(name: "LowQuotationMarkSyntax", kind: .fixedLeaf("„")),
+          Node(name: "ColonCharacterSyntax", kind: .fixedLeaf(":")),
+          Node(name: "SlashSyntax", kind: .fixedLeaf("/")),
+          Node(name: "BulletCharacterSyntax", kind: .fixedLeaf("•")),
+          Node(name: "DownArrowSyntax", kind: .fixedLeaf("↓")),
+          Node(name: "RightArrowSyntax", kind: .fixedLeaf("→")),
+          Node(name: "LeftArrowSyntax", kind: .fixedLeaf("←")),
+          Node(name: "SymbolInsertionMarkSyntax", kind: .fixedLeaf("¤")),
+          Node(name: "SpaceSyntax", kind: .fixedLeaf(" ")),
           Node(name: "LanguageKeyword", kind: .keyword(["language", "Sprache", "langue", "γλώσσα", "שפה"])),
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "EnumerationKeyword", kind: .keyword(["enumeration", "Aufzählung", "énumération", "απαρίθμηση", "ספירה"])),
@@ -144,52 +144,52 @@ extension Node {
           Node(
             name: "Colon",
             kind: .compound(children: [
-              Child(name: "precedingSpace", type: "Space", kind: .optional),
-              Child(name: "colon", type: "ColonCharacter", kind: .fixed),
-              Child(name: "followingSpace", type: "Space", kind: .fixed),
+              Child(name: "precedingSpace", type: "SpaceSyntax", kind: .optional),
+              Child(name: "colon", type: "ColonCharacterSyntax", kind: .fixed),
+              Child(name: "followingSpace", type: "SpaceSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "Bullet",
             kind: .compound(children: [
-              Child(name: "bullet", type: "BulletCharacter", kind: .fixed),
-              Child(name: "followingSpace", type: "Space", kind: .fixed),
+              Child(name: "bullet", type: "BulletCharacterSyntax", kind: .fixed),
+              Child(name: "followingSpace", type: "SpaceSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "ThroughArrow",
             kind: .compound(children: [
-              Child(name: "arrow", type: "DownArrow", kind: .fixed),
-              Child(name: "space", type: "Space", kind: .fixed),
+              Child(name: "arrow", type: "DownArrowSyntax", kind: .fixed),
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "YieldArrowCharacter",
             kind: .alternates([
-              Alternate(name: "right", type: "RightArrow"),
-              Alternate(name: "left", type: "LeftArrow"),
+              Alternate(name: "right", type: "RightArrowSyntax"),
+              Alternate(name: "left", type: "LeftArrowSyntax"),
             ])
           ),
           Node(
             name: "YieldArrow",
             kind: .compound(children: [
               Child(name: "arrow", type: "YieldArrowCharacter", kind: .required),
-              Child(name: "space", type: "Space", kind: .fixed),
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
             ])
           ),
 
           Node(
             name: "EmptyParentheses",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "EmptyBraces",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
 
@@ -199,7 +199,7 @@ extension Node {
           entryName: "component", entryNamePlural: "components",
           entryType: "IdentifierComponent",
           separatorName: "space",
-          separatorType: "Space",
+          separatorType: "SpaceSyntax",
           fixedSeparator: true,
           isIdentifierSegment: true
         ),
@@ -208,30 +208,30 @@ extension Node {
             name: "InitialIdentifierSegment",
             kind: .compound(children: [
               Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "space", type: "Space", kind: .optional),
+              Child(name: "space", type: "SpaceSyntax", kind: .optional),
             ]),
             isIdentifierSegment: true
           ),
           Node(
             name: "TextMedialIdentifierSegment",
             kind: .compound(children: [
-              Child(name: "initialSpace", type: "Space", kind: .optional),
+              Child(name: "initialSpace", type: "SpaceSyntax", kind: .optional),
               Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "finalSpace", type: "Space", kind: .optional),
+              Child(name: "finalSpace", type: "SpaceSyntax", kind: .optional),
             ])
           ),
           Node(
             name: "MedialIdentifierSegment",
             kind: .alternates([
               Alternate(name: "text", type: "TextMedialIdentifierSegment"),
-              Alternate(name: "space", type: "Space"),
+              Alternate(name: "space", type: "SpaceSyntax"),
             ]),
             isIdentifierSegment: true
           ),
           Node(
             name: "FinalIdentifierSegment",
             kind: .compound(children: [
-              Child(name: "space", type: "Space", kind: .optional),
+              Child(name: "space", type: "SpaceSyntax", kind: .optional),
               Child(name: "segment", type: "UninterruptedIdentifier", kind: .required),
             ]),
             isIdentifierSegment: true
@@ -240,17 +240,17 @@ extension Node {
           Node(
             name: "DocumentationReference",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "identifier", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "DocumentationTextSegment",
             kind: .alternates([
               Alternate(name: "identifierCharacters", type: "IdentifierComponent"),
-              Alternate(name: "openingParenthesis", type: "OpeningParenthesis"),
-              Alternate(name: "closingParenthesis", type: "ClosingParenthesis"),
+              Alternate(name: "openingParenthesis", type: "OpeningParenthesisSyntax"),
+              Alternate(name: "closingParenthesis", type: "ClosingParenthesisSyntax"),
               Alternate(name: "reference", type: "DocumentationReference")
             ])
           ),
@@ -267,7 +267,7 @@ extension Node {
           entryName: "span", entryNamePlural: "spans",
           entryType: "DocumentationTextSpan",
           separatorName: "space",
-          separatorType: "Space",
+          separatorType: "SpaceSyntax",
           fixedSeparator: true
         ),
 
@@ -276,17 +276,17 @@ extension Node {
             name: "LiteralSegment",
             kind: .alternates([
               Alternate(name: "identifier", type: "IdentifierComponent"),
-              Alternate(name: "space", type: "Space"),
-              Alternate(name: "colon", type: "ColonCharacter"),
+              Alternate(name: "space", type: "SpaceSyntax"),
+              Alternate(name: "colon", type: "ColonCharacterSyntax"),
             ])
           ),
           Node(
             name: "Symbol",
             kind: .compound(children: [
-              Child(name: "mark", type: "SymbolInsertionMark", kind: .fixed),
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "mark", type: "SymbolInsertionMarkSyntax", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "code", type: "IdentifierComponent", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -299,25 +299,25 @@ extension Node {
           Node(
             name: "ChevronString",
             kind: .compound(children: [
-              Child(name: "openingQuotationMark", type: "LeftChevronQuotationMark", kind: .fixed),
+              Child(name: "openingQuotationMark", type: "LeftChevronQuotationMarkSyntax", kind: .fixed),
               Child(name: "contents", type: "LiteralComponent", kind: .array),
-              Child(name: "closingQuotationMark", type: "RightChevronQuotationMark", kind: .fixed),
+              Child(name: "closingQuotationMark", type: "RightChevronQuotationMarkSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "SixNineString",
             kind: .compound(children: [
-              Child(name: "openingQuotationMark", type: "SixesQuotationMark", kind: .fixed),
+              Child(name: "openingQuotationMark", type: "SixesQuotationMarkSyntax", kind: .fixed),
               Child(name: "contents", type: "LiteralComponent", kind: .array),
-              Child(name: "closingQuotationMark", type: "NinesQuotationMark", kind: .fixed),
+              Child(name: "closingQuotationMark", type: "NinesQuotationMarkSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "LowSixString",
             kind: .compound(children: [
-              Child(name: "openingQuotationMark", type: "LowQuotationMark", kind: .fixed),
+              Child(name: "openingQuotationMark", type: "LowQuotationMarkSyntax", kind: .fixed),
               Child(name: "contents", type: "LiteralComponent", kind: .array),
-              Child(name: "closingQuotationMark", type: "SixesQuotationMark", kind: .fixed),
+              Child(name: "closingQuotationMark", type: "SixesQuotationMarkSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -338,45 +338,45 @@ extension Node {
           Node(
             name: "Access",
             kind: .compound(children: [
-              Child(name: "space", type: "Space", kind: .fixed),
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "keyword", type: "AccessDeclaration", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "TestAccess",
             kind: .compound(children: [
-              Child(name: "space", type: "Space", kind: .fixed),
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "keyword", type: "TestsKeyword", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
 
           Node(
             name: "PassedArgument",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "argument", type: "AnnotatedAction", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "EmptyArgument",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "FlowArgument",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "statements", type: "StatementList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -467,29 +467,29 @@ extension Node {
           entryName: "text", entryNamePlural: "text",
           entryType: "ParagraphEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak",
+          separatorType: "LineBreakSyntax",
           fixedSeparator: true
         ),
         [
           Node(
             name: "Paragraph",
             kind: .compound(children: [
-              Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingBracket", type: "OpeningBracketSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "paragraphs", type: "ParagraphList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracketSyntax", kind: .fixed),
             ])
           ),
 
           Node(
             name: "ParameterDetails",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "paragraph", type: "Paragraph", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -498,26 +498,26 @@ extension Node {
               Child(name: "keyword", type: "ParameterKeyword", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "details", type: "ParameterDetails", kind: .required),
             ])
           ),
           Node(
             name: "ShortTestImplementation",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "test", type: "Action", kind: .required),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "LongTestImplementation",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "test", type: "StatementList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -531,7 +531,7 @@ extension Node {
             name: "Test",
             kind: .compound(children: [
               Child(name: "keyword", type: "TestKeyword", kind: .required),
-              Child(name: "space", type: "Space", kind: .fixed),
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "implementation", type: "TestImplemenation", kind: .required),
             ])
           ),
@@ -550,25 +550,25 @@ extension Node {
           entryName: "entry", entryNamePlural: "entries",
           entryType: "DocumentationEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak",
+          separatorType: "LineBreakSyntax",
           fixedSeparator: true
         ),
         [
           Node(
             name: "Documentation",
             kind: .compound(children: [
-              Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingBracket", type: "OpeningBracketSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "entries", type: "DocumentationList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracketSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "AttachedDocumentation",
             kind: .compound(children: [
               Child(name: "documentation", type: "Documentation", kind: .required),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
             ])
           ),
 
@@ -586,18 +586,18 @@ extension Node {
           entryName: "name", entryNamePlural: "names",
           entryType: "CaseNameEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak",
+          separatorType: "LineBreakSyntax",
           fixedSeparator: true
         ),
         [
           Node(
             name: "CaseName",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "names", type: "CaseNameList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
 
@@ -622,18 +622,18 @@ extension Node {
           entryName: "name", entryNamePlural: "names",
           entryType: "ThingNameEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak",
+          separatorType: "LineBreakSyntax",
           fixedSeparator: true
         ),
         [
           Node(
             name: "ThingName",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "names", type: "ThingNameList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
 
@@ -663,9 +663,9 @@ extension Node {
           Node(
             name: "ParameterReference",
             kind: .compound(children: [
-              Child(name: "openingBracket", type: "OpeningBracket", kind: .fixed),
+              Child(name: "openingBracket", type: "OpeningBracketSyntax", kind: .fixed),
               Child(name: "name", type: "ParameterName", kind: .required),
-              Child(name: "closingBracket", type: "ClosingBracket", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracketSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -704,11 +704,11 @@ extension Node {
           Node(
             name: "Parameter",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "name", type: "Signature", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "type", type: "ParameterTypeOrReference", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
         ],
@@ -751,18 +751,18 @@ extension Node {
           entryName: "name", entryNamePlural: "names",
           entryType: "ActionNameEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak",
+          separatorType: "LineBreakSyntax",
           fixedSeparator: true
         ),
         [
           Node(
             name: "MultipleActionNames",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "names", type: "ActionNameList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -776,27 +776,27 @@ extension Node {
           Node(
             name: "AbilityParameterType",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "UseArgumentType",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "name", type: "ThingReference", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "AbilityParameterReference",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "reference", type: "ParameterReference", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -838,18 +838,18 @@ extension Node {
           entryName: "name", entryNamePlural: "names",
           entryType: "AbilityNameEntry",
           separatorName: "lineBreak",
-          separatorType: "LineBreak",
+          separatorType: "LineBreakSyntax",
           fixedSeparator: true
         ),
         [
           Node(
             name: "AbilityName",
             kind: .compound(children: [
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "names", type: "AbilityNameList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
         ],
@@ -875,13 +875,13 @@ extension Node {
             name: "ActionReturnValue",
             kind: .compound(children: [
               Child(name: "type", type: "ThingReference", kind: .required),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "RequirementReturnValue",
             kind: .compound(children: [
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),
@@ -896,10 +896,10 @@ extension Node {
           Node(
             name: "NativeImport",
             kind: .compound(children: [
-              Child(name: "space", type: "Space", kind: .required),
-              Child(name: "openingParenthesis", type: "OpeningParenthesis", kind: .fixed),
+              Child(name: "space", type: "SpaceSyntax", kind: .required),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "importNode", type: "UninterruptedIdentifier", kind: .required),
-              Child(name: "closingParenthesis", type: "ClosingParenthesis", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
         ],
@@ -908,7 +908,7 @@ extension Node {
           entryName: "component", entryNamePlural: "components",
           entryType: "ImplementationComponent",
           separatorName: "space",
-          separatorType: "Space",
+          separatorType: "SpaceSyntax",
           fixedSeparator: true
         ),
         Node.separatedList(
@@ -916,7 +916,7 @@ extension Node {
           entryName: "component", entryNamePlural: "components",
           entryType: "ImplementationComponent",
           separatorName: "space",
-          separatorType: "Space",
+          separatorType: "SpaceSyntax",
           fixedSeparator: true
         ),
         [
@@ -938,9 +938,9 @@ extension Node {
             name: "NativeStorageCase",
             kind: .compound(children: [
               Child(name: "store", type: "NativeAction", kind: .required),
-              Child(name: "firstSlash", type: "Slash", kind: .required),
+              Child(name: "firstSlash", type: "SlashSyntax", kind: .required),
               Child(name: "retrieve", type: "NativeAction", kind: .required),
-              Child(name: "secondSlash", type: "Slash", kind: .required),
+              Child(name: "secondSlash", type: "SlashSyntax", kind: .required),
               Child(name: "check", type: "NativeAction", kind: .required),
             ])
           ),
@@ -971,9 +971,9 @@ extension Node {
           Node(
             name: "SourceThingImplementation",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -989,18 +989,18 @@ extension Node {
             entryName: "statement", entryNamePlural: "statements",
             entryType: "Statement",
             separatorName: "lineBreak",
-            separatorType: "LineBreak",
+            separatorType: "LineBreakSyntax",
             fixedSeparator: true
           ),
         [
           Node(
             name: "SourceActionImplementation",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "statements", type: "StatementList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
         ],
@@ -1009,7 +1009,7 @@ extension Node {
             entryName: "implementation", entryNamePlural: "implementations",
             entryType: "NativeThingImplementation",
             separatorName: "lineBreak",
-            separatorType: "LineBreak",
+            separatorType: "LineBreakSyntax",
             fixedSeparator: true
           ),
           Node.separatedList(
@@ -1017,7 +1017,7 @@ extension Node {
             entryName: "implementation", entryNamePlural: "implementations",
             entryType: "NativeActionImplementation",
             separatorName: "lineBreak",
-            separatorType: "LineBreak",
+            separatorType: "LineBreakSyntax",
             fixedSeparator: true
           ),
           Node.separatedList(
@@ -1025,7 +1025,7 @@ extension Node {
             entryName: "implementation", entryNamePlural: "implementations",
             entryType: "NativeStorageCaseImplementation",
             separatorName: "lineBreak",
-            separatorType: "LineBreak",
+            separatorType: "LineBreakSyntax",
             fixedSeparator: true
           ),
 
@@ -1034,7 +1034,7 @@ extension Node {
             name: "DualThingImplementation",
             kind: .compound(children: [
               Child(name: "native", type: "NativeThingImplementations", kind: .required),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "source", type: "SourceThingImplementation", kind: .required),
             ])
           ),
@@ -1042,7 +1042,7 @@ extension Node {
             name: "DualEnumerationImplementation",
             kind: .compound(children: [
               Child(name: "native", type: "NativeThingImplementations", kind: .required),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "source", type: "Cases", kind: .required),
             ])
           ),
@@ -1050,21 +1050,21 @@ extension Node {
             name: "DualActionImplementation",
             kind: .compound(children: [
               Child(name: "native", type: "NativeActionImplementations", kind: .required),
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "source", type: "SourceActionImplementation", kind: .required),
             ])
           ),
           Node(
             name: "EmptyCaseImplementations",
             kind: .compound(children: [
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "implementations", type: "NativeActionImplementations", kind: .required),
             ])
           ),
           Node(
             name: "StorageCaseImplementations",
             kind: .compound(children: [
-              Child(name: "lineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "implementations", type: "NativeStorageCaseImplementations", kind: .required),
             ])
           ),
@@ -1113,7 +1113,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "keyword", type: "LanguageKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
             ])
           ),
@@ -1123,10 +1123,10 @@ extension Node {
               Child(name: "keyword", type: "ThingKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "implementation", type: "ThingImplementations", kind: .required),
             ])
           ),
@@ -1134,7 +1134,7 @@ extension Node {
             name: "CaseDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "CaseKeyword", kind: .required),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "CaseName", kind: .required),
               Child(name: "details", type: "CaseDetails", kind: .optional),
@@ -1146,24 +1146,24 @@ extension Node {
             entryName: "caseNode", entryNamePlural: "cases",
             entryType: "CaseDeclaration",
             separatorName: "paragraphBreak",
-            separatorType: "ParagraphBreak",
+            separatorType: "ParagraphBreakSyntax",
             fixedSeparator: true
           ),
         [
           Node(
             name: "CaseListSection",
             kind: .compound(children: [
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "cases", type: "CaseList", kind: .required),
             ])
           ),
           Node(
             name: "Cases",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "cases", type: "CaseListSection", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -1172,10 +1172,10 @@ extension Node {
               Child(name: "keyword", type: "EnumerationKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ThingName", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "implementation", type: "EnumerationImplementations", kind: .required),
             ])
           ),
@@ -1192,10 +1192,10 @@ extension Node {
               Child(name: "keyword", type: "ActionLikeKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "returnValue", type: "ActionReturnValue", kind: .optional),
               Child(name: "implementation", type: "ActionImplementations", kind: .required),
             ])
@@ -1206,7 +1206,7 @@ extension Node {
               Child(name: "keyword", type: "RequirementKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
               Child(name: "returnValue", type: "RequirementReturnValue", kind: .optional),
@@ -1218,10 +1218,10 @@ extension Node {
               Child(name: "keyword", type: "ChoiceKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "ActionName", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "returnValue", type: "ActionReturnValue", kind: .optional),
               Child(name: "implementation", type: "ActionImplementations", kind: .required),
             ])
@@ -1240,24 +1240,24 @@ extension Node {
             entryName: "requirement", entryNamePlural: "requirements",
             entryType: "RequirementsElement",
             separatorName: "paragraphBreak",
-            separatorType: "ParagraphBreak",
+            separatorType: "ParagraphBreakSyntax",
             fixedSeparator: true
           ),
         [
           Node(
             name: "RequirementsListSection",
             kind: .compound(children: [
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "requirements", type: "RequirementsList", kind: .required),
             ])
           ),
           Node(
             name: "Requirements",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "requirements", type: "RequirementsListSection", kind: .optional),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -1266,10 +1266,10 @@ extension Node {
               Child(name: "keyword", type: "AbilityKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "AbilityName", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "requirements", type: "Requirements", kind: .required),
             ])
           ),
@@ -1280,24 +1280,24 @@ extension Node {
             entryName: "fulfillment", entryNamePlural: "fulfillments",
             entryType: "ActionDeclaration",
             separatorName: "paragraphBreak",
-            separatorType: "ParagraphBreak",
+            separatorType: "ParagraphBreakSyntax",
             fixedSeparator: true
           ),
         [
           Node(
             name: "FulfillmentListSection",
             kind: .compound(children: [
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "fulfillments", type: "FulfillmentList", kind: .required),
             ])
           ),
           Node(
             name: "Fulfillments",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "fulfillments", type: "FulfillmentListSection", kind: .optional),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
@@ -1306,9 +1306,9 @@ extension Node {
               Child(name: "keyword", type: "UseKeyword", kind: .required),
               Child(name: "access", type: "Access", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "use", type: "UseSignature", kind: .required),
-              Child(name: "nameLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "nameLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "fulfillments", type: "Fulfillments", kind: .required),
             ])
           ),
@@ -1328,33 +1328,33 @@ extension Node {
             entryName: "provision", entryNamePlural: "provisions",
             entryType: "Provision",
             separatorName: "paragraphBreak",
-            separatorType: "ParagraphBreak",
+            separatorType: "ParagraphBreakSyntax",
             fixedSeparator: true
           ),
         [
           Node(
             name: "ProvisionListSection",
             kind: .compound(children: [
-              Child(name: "openingLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "provisions", type: "ProvisionList", kind: .required),
             ])
           ),
           Node(
             name: "Provisions",
             kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBrace", kind: .fixed),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "provisions", type: "ProvisionListSection", kind: .optional),
-              Child(name: "closingLineBreak", type: "LineBreak", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBrace", kind: .fixed),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
           Node(
             name: "ExtensionSyntax",
             kind: .compound(children: [
               Child(name: "keyword", type: "ExtensionKeyword", kind: .required),
-              Child(name: "keywordLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "ability", type: "AbilitySignature", kind: .required),
-              Child(name: "abilityLineBreak", type: "LineBreak", kind: .fixed),
+              Child(name: "abilityLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "provisions", type: "Provisions", kind: .required),
             ])
           ),
@@ -1378,7 +1378,7 @@ extension Node {
           entryName: "declaration", entryNamePlural: "declarations",
           entryType: "Declaration",
           separatorName: "paragraphBreak",
-          separatorType: "ParagraphBreak",
+          separatorType: "ParagraphBreakSyntax",
           fixedSeparator: true
         ),
       ] as [[Node]]

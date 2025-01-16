@@ -12,6 +12,7 @@ struct Thing {
   var swift: NativeThingImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclarationProtocol
+  var swiftName: StrictString?
 }
 
 extension Thing {
@@ -69,13 +70,12 @@ extension Thing {
   ) -> Result<Thing, ErrorList<Thing.ConstructionError>>
   where ThingNode: ParsedThingDeclarationProtocol {
     var errors: [Thing.ConstructionError] = []
-
-    let namesSyntax = declaration.name.names.names
+    let namesDictionary = declaration.name.namesDictionary
     let parameters: Interpolation<ThingParameterIntermediate>
     switch Interpolation.construct(
-      entries: declaration.name.names.names,
-      getEntryName: { $0.name.name() },
-      getParameters: { $0.name.parameters?.parameters ?? [] },
+      entries: namesDictionary.values,
+      getEntryName: { $0.name() },
+      getParameters: { $0.parameters?.parameters ?? [] },
       getParameterName: { $0.name.identifierText() },
       getDefinitionOrReference: { $0.definitionOrReference },
       getNestedSignature: { _ in nil },
@@ -89,8 +89,13 @@ extension Thing {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    for name in namesSyntax {
-      names.insert(name.name.name())
+    var swiftName: StrictString?
+    for (language, signature) in namesDictionary {
+      let name = signature.name()
+      if language == "Swift" {
+        swiftName = name
+      }
+      names.insert(name)
     }
 
     let thingNamespace = namespace.appending(names)
@@ -168,7 +173,8 @@ extension Thing {
         kotlin: kotlin,
         swift: swift,
         documentation: attachedDocumentation,
-        declaration: declaration
+        declaration: declaration,
+        swiftName: swiftName
       )
     )
   }
@@ -196,7 +202,8 @@ extension Thing {
       kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
       swift: swift?.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation,
-      declaration: declaration
+      declaration: declaration,
+      swiftName: swiftName
     )
   }
 
@@ -230,7 +237,8 @@ extension Thing {
       kotlin: kotlin?.specializing(typeLookup: typeLookup),
       swift: swift?.specializing(typeLookup: typeLookup),
       documentation: newDocumentation,
-      declaration: declaration
+      declaration: declaration,
+      swiftName: swiftName
     )
   }
 }

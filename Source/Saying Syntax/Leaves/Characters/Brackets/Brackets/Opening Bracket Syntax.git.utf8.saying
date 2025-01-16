@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: opening bracket syntax
+  Deutsch: Offeneckklammersyntax
+  français : syntaxe de crochet ouvrant
+  Swift: OpeningBracketSyntax
+ )
+ {
+ }

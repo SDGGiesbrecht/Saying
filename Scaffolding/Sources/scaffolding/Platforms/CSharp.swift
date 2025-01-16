@@ -96,6 +96,9 @@ enum CSharp: Platform {
     return true
   }
 
+  static func nativeName(of thing: Thing) -> String? {
+    return nil
+  }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.cSharp
   }

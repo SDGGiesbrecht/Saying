@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: closing brace syntax
+  Deutsch: Schließschweifklammersyntax
+  français : syntaxe de accolade fermante
+  Swift: ClosingBraceSyntax
+ )
+ {
+ }
