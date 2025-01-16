@@ -1,0 +1,10 @@
+thing (clients)
+ (
+  English: bullet character syntax
+  Deutsch: Aufzählungszeichenzeichensyntax
+  français : syntaxe de caractère de puce
+  ελληνικά: σύνταξη χαρακτήρα βούλας
+  Swift: BulletCharacterSyntax
+ )
+ {
+ }

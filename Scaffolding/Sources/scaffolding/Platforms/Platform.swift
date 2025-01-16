@@ -38,6 +38,7 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
+  static func nativeName(of thing: Thing) -> String?
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
@@ -323,7 +324,7 @@ extension Platform {
       return nil
     }
 
-    let name = sanitize(
+    let name = nativeName(of: thing) ?? sanitize(
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )

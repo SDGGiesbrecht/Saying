@@ -1,0 +1,10 @@
+thing (clients)
+ (
+  English: colon character syntax
+  Deutsch: Doppelpunktzeichensyntax
+  français : syntaxe de caractère de deux‐points
+  ελληνικά: σύνταξη χαρακτήρα άνω και κάτω τελείας
+  Swift: ColonCharacterSyntax
+ )
+ {
+ }

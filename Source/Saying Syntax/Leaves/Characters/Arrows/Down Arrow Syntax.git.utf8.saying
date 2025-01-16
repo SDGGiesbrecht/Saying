@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: down arrow syntax
+  Deutsch: Abwertspfeilsyntax
+  français : syntaxe de flèche vers bas
+  Swift: DownArrowSyntax
+ )
+ {
+ }

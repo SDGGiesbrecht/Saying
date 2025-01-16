@@ -19,9 +19,9 @@ extension SyntaxNode {
   }
   private func formattedGitStyleSource(indent: Int) -> StrictString {
     switch nodeKind {
-    case .paragraphBreak:
+    case .paragraphBreakSyntax:
       return "\n\n" + StrictString(repeating: " ", count: indent)
-    case .lineBreak:
+    case .lineBreakSyntax:
       return "\n" + StrictString(repeating: " ", count: indent)
     case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .parameterDocumentation, .requirementDeclaration, .thingDeclaration, .use:
       return children.lazy.map({ $0.formattedGitStyleSource(indent: indent + 1) }).joined()

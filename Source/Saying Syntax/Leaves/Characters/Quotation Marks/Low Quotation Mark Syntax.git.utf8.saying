@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: low quotation mark syntax
+  Deutsch: Niederanführungszeichensyntax
+  français : syntaxe de guillemets bas
+  Swift: LowQuotationMarkSyntax
+ )
+ {
+ }

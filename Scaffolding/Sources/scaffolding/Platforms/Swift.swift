@@ -123,6 +123,9 @@ enum Swift: Platform {
     return nil
   }
 
+  static func nativeName(of thing: Thing) -> String? {
+    return thing.swiftName.map { String($0) }
+  }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
   }

@@ -1,0 +1,10 @@
+thing (clients)
+ (
+  English: space syntax
+  Deutsch: Leerzeichensyntax
+  français : syntaxe d’espace
+  ελληνικά: σύνταξη διαστήματος
+  Swift: SpaceSyntax
+ )
+ {
+ }

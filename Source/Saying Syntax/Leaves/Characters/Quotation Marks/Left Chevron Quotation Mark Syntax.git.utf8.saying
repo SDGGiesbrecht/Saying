@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: left chevron quotation mark syntax
+  Deutsch: Linksspitzzeichensyntax
+  français : syntaxe de chevrons à gauche
+  Swift: LeftChevronQuotationMarkSyntax
+ )
+ {
+ }

@@ -76,6 +76,15 @@ struct Node {
   }
 
   func declarationSource(parsed: Bool) -> StrictString {
+    if !parsed {
+      switch kind {
+      case .fixedLeaf:
+        return ""
+      case .keyword, .variableLeaf, .compound, .alternates:
+        break
+      }
+    }
+
     var result: [StrictString] = [
       "\(typeKeyword()) \(parsed ? "Parsed" : "")\(name) {"
     ]

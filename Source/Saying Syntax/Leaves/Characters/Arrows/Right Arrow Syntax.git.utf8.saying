@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: right arrow syntax
+  Deutsch: Richtspfeilsyntax
+  français : syntaxe de flèche vers droite
+  Swift: RightArrowSyntax
+ )
+ {
+ }

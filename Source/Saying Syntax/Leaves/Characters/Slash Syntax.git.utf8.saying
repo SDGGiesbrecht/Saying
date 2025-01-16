@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: slash syntax
+  Deutsch: Schrägstrichsyntax
+  français : syntaxe de barre oblique
+  Swift: SlashSyntax
+ )
+ {
+ }

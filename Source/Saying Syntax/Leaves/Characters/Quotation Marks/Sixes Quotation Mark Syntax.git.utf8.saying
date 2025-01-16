@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: sixes quotation mark syntax
+  Deutsch: Sechsformanführungszeichensyntax
+  français : syntaxe de guillemets six
+  Swift: SixesQuotationMarkSyntax
+ )
+ {
+ }
