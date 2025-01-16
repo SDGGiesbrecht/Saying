@@ -985,15 +985,6 @@ extension Platform {
   static func source(for module: ModuleIntermediate, mode: CompilationMode) -> String {
     var result: [String] = []
 
-    var imports = nativeImports(for: module.referenceDictionary)
-    imports ∪= importsNeededByTestScaffolding
-    if !imports.isEmpty {
-      for importTarget in imports.sorted() {
-        result.append(statementImporting(importTarget))
-      }
-      result.append("")
-    }
-
     let moduleReferenceLookup = module.referenceDictionary
     let allThings = moduleReferenceLookup.allThings(sorted: true)
     for thing in allThings {
@@ -1048,6 +1039,18 @@ extension Platform {
 
   static func source(for modules: [ModuleIntermediate], mode: CompilationMode) -> String {
     var result: [String] = []
+
+    var imports: Set<String> = []
+    for module in modules {
+      imports.formUnion(nativeImports(for: module.referenceDictionary))
+    }
+    imports ∪= importsNeededByTestScaffolding
+    if !imports.isEmpty {
+      for importTarget in imports.sorted() {
+        result.append(statementImporting(importTarget))
+      }
+      result.append("")
+    }
 
     if mode == .testing {
       var regionSet: Set<StrictString> = []
