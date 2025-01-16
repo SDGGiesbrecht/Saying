@@ -982,11 +982,10 @@ extension Platform {
       choiceRegions
     ].joined())
   }
-  static func source(for module: ModuleIntermediate, mode: CompilationMode) -> String {
+  static func typesSource(for module: ModuleIntermediate) -> String {
     var result: [String] = []
-
     let moduleReferenceLookup = module.referenceDictionary
-    let allThings = moduleReferenceLookup.allThings(sorted: true)
+    let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
       if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
         result.append(contentsOf: [
@@ -995,11 +994,16 @@ extension Platform {
         ])
       }
     }
+    return result.joined(separator: "\n")
+  }
+  static func source(for module: ModuleIntermediate, mode: CompilationMode) -> String {
+    var result: [String] = []
 
     if let start = actionDeclarationsContainerStart {
       result.append("")
       result.append(contentsOf: start)
     }
+    let moduleReferenceLookup = module.referenceDictionary
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
       for action in allActions where !action.isFlow {
@@ -1062,6 +1066,10 @@ extension Platform {
         .map({ sanitize(stringLiteral: $0) })
       result.append(contentsOf: coverageRegionSet(regions: regions))
       result.append(contentsOf: registerCoverageAction)
+    }
+
+    for module in modules {
+      result.append(typesSource(for: module))
     }
 
     for module in modules {
