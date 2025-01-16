@@ -7,6 +7,7 @@ extension Thing {
     case brokenNativeImplementation(NativeThingImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeThingImplementation)
     case documentedParameterNotFound(ParsedParameterDocumentation)
+    case brokenPartImplementation(PartIntermediate.ConstructionError)
     case brokenCaseImplementation(CaseIntermediate.ConstructionError)
 
     var message: String {
@@ -21,6 +22,8 @@ extension Thing {
         return defaultMessage
       case .documentedParameterNotFound:
         return defaultMessage
+      case .brokenPartImplementation(let error):
+        return error.message
       case .brokenCaseImplementation(let error):
         return error.message
       }
@@ -38,6 +41,8 @@ extension Thing {
         return implementation.location
       case .documentedParameterNotFound(let documentation):
         return documentation.location
+      case .brokenPartImplementation(let error):
+        return error.range
       case .brokenCaseImplementation(let error):
         return error.range
       }

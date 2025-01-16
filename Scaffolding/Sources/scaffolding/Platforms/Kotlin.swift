@@ -51,6 +51,10 @@ enum Kotlin: Platform {
     }).joined()
   }
 
+  static func partDeclaration(name: String, type: String) -> String {
+    return "var \(name): \(type)"
+  }
+
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     return "\(type).\(name)"
   }
@@ -99,13 +103,12 @@ enum Kotlin: Platform {
     }
   }
 
-  static func thingDeclaration(name: String) -> String? {
-    var result: [String] = [
-      "class \(name)() {"
+  static func thingDeclaration(name: String, components: [String]) -> String? {
+    let properties = components.joined(separator: ", ")
+    let result: [String] = [
+      "class \(name)(\(properties)) {",
+      "}",
     ]
-    result.append(contentsOf: [
-      "}"
-    ])
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(

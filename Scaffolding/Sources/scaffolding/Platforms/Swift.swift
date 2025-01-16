@@ -100,6 +100,10 @@ enum Swift: Platform {
     return true
   }
 
+  static func partDeclaration(name: String, type: String) -> String {
+    return "var \(name): \(type)"
+  }
+
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     return "\(type).\(name)"
   }
@@ -136,10 +140,13 @@ enum Swift: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String) -> String? {
+  static func thingDeclaration(name: String, components: [String]) -> String? {
     var result: [String] = [
       "struct \(name) {"
     ]
+    for component in components {
+      result.append("\(indent)\(component)")
+    }
     result.append(contentsOf: [
       "}"
     ])

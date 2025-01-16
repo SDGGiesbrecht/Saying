@@ -4,3 +4,21 @@ thing
  )
  {
  }
+
+thing
+ (
+  English: example thing
+ )
+ {
+  part
+   (
+    English: part A
+   )
+   truth value
+
+  part
+   (
+    English: part B
+   )
+   truth value
+ }
