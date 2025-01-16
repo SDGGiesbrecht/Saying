@@ -418,6 +418,7 @@ extension ReferenceDictionary {
     fromEntryPoints entryPoints: Set<StrictString>
   ) {
     var optimized = ReferenceDictionary()
+    optimized.languages = self.languages // For temporary simplicity; not output anyway.
     var found: Set<StrictString> = []
     var stillRequired: Set<StrictString> = entryPoints
     var foundSomething = false
