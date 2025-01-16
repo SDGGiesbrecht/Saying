@@ -996,13 +996,8 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
-  static func source(for module: ModuleIntermediate, mode: CompilationMode) -> String {
+  static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode) -> String {
     var result: [String] = []
-
-    if let start = actionDeclarationsContainerStart {
-      result.append("")
-      result.append(contentsOf: start)
-    }
     let moduleReferenceLookup = module.referenceDictionary
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
@@ -1034,13 +1029,8 @@ extension Platform {
         result.append(contentsOf: source(of: test, referenceLookup: [moduleReferenceLookup]))
       }
     }
-    if let end = actionDeclarationsContainerEnd {
-      result.append(contentsOf: end)
-    }
-
     return result.joined(separator: "\n")
   }
-
   static func source(for modules: [ModuleIntermediate], mode: CompilationMode) -> String {
     var result: [String] = []
 
@@ -1072,10 +1062,13 @@ extension Platform {
       result.append(typesSource(for: module))
     }
 
-    for module in modules {
-      result.append(self.source(for: module, mode: mode))
+    if let start = actionDeclarationsContainerStart {
+      result.append("")
+      result.append(contentsOf: start)
     }
-
+    for module in modules {
+      result.append(self.actionsSource(for: module, mode: mode))
+    }
     if mode == .testing {
       var allTests: [TestIntermediate] = []
       for module in modules {
@@ -1083,6 +1076,9 @@ extension Platform {
       }
       result.append("")
       result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
+    }
+    if let end = actionDeclarationsContainerEnd {
+      result.append(contentsOf: end)
     }
 
     return result.joined(separator: "\n").appending("\n")
