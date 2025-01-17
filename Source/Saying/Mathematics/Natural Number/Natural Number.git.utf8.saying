@@ -1,0 +1,35 @@
+thing (clients)
+ (
+  español: número natural
+  English: natural number
+  العربية: عدد طبيعي
+  हिन्दी: प्राकृतिक संख्या
+  português: número natural
+  русский: натуральное число
+  Deutsch: natürliche Zahl
+  tiếng Việt: số tự nhiên
+  한국어: 자연수
+  français : entier naturel
+  türkçe: doğal sayı
+  italiano: numero naturale
+  polski: liczba naturalna
+  українська: натуральне число
+  Nederlands: natuurlijk getal
+  română: număr natural
+  ελληνικά: φυσικός αριθμός
+  čeština: přirozené číslo
+  magyar: természetes szám
+  svenska: naturligt tal
+  Afrikaans: natuurlike getal
+  dansk: naturligt tal
+  suomi: luonnollinen luku
+  slovenčina: prirodzené číslo
+  עברית: מספר טבעי
+  norsk: naturlig tall
+  català: nombre natural
+  Gaeilge: uimhir aiceanta
+ )
+ C: “uintmax¤(5F)t” (stdint)
+ C♯: “ulong”
+ Kotlin: “ULong”
+ Swift: “UInt64”
