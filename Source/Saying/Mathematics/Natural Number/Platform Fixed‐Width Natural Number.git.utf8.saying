@@ -1,0 +1,8 @@
+thing (clients)
+ (
+  English: platform fixed‐width natural number
+ )
+ C: “unsigned”
+ C♯: “uint”
+ Kotlin: “UInt”
+ Swift: “UInt”

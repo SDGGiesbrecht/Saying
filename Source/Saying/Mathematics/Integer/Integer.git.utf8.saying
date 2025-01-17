@@ -1,0 +1,35 @@
+thing (clients)
+ (
+  español: número entero
+  English: integer
+  العربية: عدد صحيح
+  हिन्दी: पूर्णांक
+  português: número inteiro
+  русский: целое число
+  Deutsch: ganze Zahl
+  tiếng Việt: số nguyên
+  한국어: 정수
+  français : entier relatif
+  Türkçe: tam sayı
+  italiano: numero intero
+  polski: liczba całkowita
+  українська: ціле число
+  Nederlands: geheel getal
+  română: număr întreg
+  ελληνικά: ακέραιος αριθμός
+  čeština: celé číslo
+  magyar: egész szám
+  svenska: heltal
+  Afrikaans: heelgetal
+  dansk: heltal
+  suomi: kokonaisluku
+  slovenčina: celé číslo
+  עברית: מספר שלם
+  norsk: heltall
+  català: nombre enter
+  Gaeilge: slánuimhir
+ )
+ C: “intmax¤(5F)t” (stdint)
+ C♯: “long”
+ Kotlin: “Long”
+ Swift: “Int64”

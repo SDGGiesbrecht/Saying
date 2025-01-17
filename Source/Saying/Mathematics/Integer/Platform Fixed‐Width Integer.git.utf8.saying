@@ -1,0 +1,8 @@
+thing (clients)
+ (
+  English: platform fixed‐width integer
+ )
+ C: “int”
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “Int”
