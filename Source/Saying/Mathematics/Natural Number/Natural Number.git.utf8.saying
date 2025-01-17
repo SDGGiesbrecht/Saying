@@ -1,4 +1,18 @@
 thing (clients)
+ [
+  [
+   English: A natural number; 0, 1, 2, 3 or any number that follows in that sequence.
+  ]
+  [
+   English: {natural number} and {integer} are the generally recommended representations to use for numbers. They most closely match the mathematical concepts, prioritizing reliability over efficiency. They are expected to be used as though they could hypothetically hold any relevant number with exact precision, regardless of size.
+  ]
+  [
+   English: In practice, storage of a number is still bound by the physical limits of the device. If the platform runs out of resources, code execution will fail in some manner.
+  ]
+  [
+   English: Where speed or memory size becomes a concern, fixed‐width numbers can be used instead, provided values are known to remain within their representable range.
+  ]
+ ]
  (
   español: número natural
   English: natural number
