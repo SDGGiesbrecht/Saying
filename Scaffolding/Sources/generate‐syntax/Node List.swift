@@ -31,6 +31,7 @@ extension Node {
           Node(name: "ThingKeyword", kind: .keyword(["thing", "Ding", "chose", "πράγμα", "דבר"])),
           Node(name: "EnumerationKeyword", kind: .keyword(["enumeration", "Aufzählung", "énumération", "απαρίθμηση", "ספירה"])),
           Node(name: "CaseKeyword", kind: .keyword(["case", "Fall", "cas", "περίπτωση", "מקרה"])),
+          Node(name: "PartKeyword", kind: .keyword(["part", "Teil", "partie", "μέρος", "חלק"])),
           Node(name: "ActionKeyword", kind: .keyword(["action", "Tat", /* action */ "ενέργεια", "פעולה"])),
           Node(name: "FlowKeyword", kind: .keyword(["flow", "Ablauf", "déroulement", "ροή", "זרימה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
@@ -573,14 +574,30 @@ extension Node {
           ),
 
           Node(
+            name: "PartNameEntry",
+            kind: .compound(children: [
+              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
+            ])
+          ),
+          Node(
             name: "CaseNameEntry",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "name", type: "UninterruptedIdentifier", kind: .required),
             ])
-          )
+          ),
         ],
+        Node.separatedList(
+          name: "PartNameList",
+          entryName: "name", entryNamePlural: "names",
+          entryType: "PartNameEntry",
+          separatorName: "lineBreak",
+          separatorType: "LineBreakSyntax",
+          fixedSeparator: true
+        ),
         Node.separatedList(
           name: "CaseNameList",
           entryName: "name", entryNamePlural: "names",
@@ -590,6 +607,16 @@ extension Node {
           fixedSeparator: true
         ),
         [
+          Node(
+            name: "PartName",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "names", type: "PartNameList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
+            ])
+          ),
           Node(
             name: "CaseName",
             kind: .compound(children: [
@@ -972,7 +999,8 @@ extension Node {
             name: "SourceThingImplementation",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
-              Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "parts", type: "PartListSection", kind: .optional),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
@@ -1131,6 +1159,17 @@ extension Node {
             ])
           ),
           Node(
+            name: "PartDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "PartKeyword", kind: .required),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
+              Child(name: "name", type: "PartName", kind: .required),
+              Child(name: "typeLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "type", type: "ThingReference", kind: .required),
+            ])
+          ),
+          Node(
             name: "CaseDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "CaseKeyword", kind: .required),
@@ -1142,6 +1181,14 @@ extension Node {
           ),
         ],
           Node.separatedList(
+            name: "PartList",
+            entryName: "partNode", entryNamePlural: "parts",
+            entryType: "PartDeclaration",
+            separatorName: "paragraphBreak",
+            separatorType: "ParagraphBreakSyntax",
+            fixedSeparator: true
+          ),
+          Node.separatedList(
             name: "CaseList",
             entryName: "caseNode", entryNamePlural: "cases",
             entryType: "CaseDeclaration",
@@ -1150,6 +1197,13 @@ extension Node {
             fixedSeparator: true
           ),
         [
+          Node(
+            name: "PartListSection",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "parts", type: "PartList", kind: .required),
+            ])
+          ),
           Node(
             name: "CaseListSection",
             kind: .compound(children: [

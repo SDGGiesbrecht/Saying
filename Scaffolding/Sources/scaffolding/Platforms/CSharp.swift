@@ -41,6 +41,10 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
+  static func partDeclaration(name: String, type: String) -> String {
+    return "\(type) \(name);"
+  }
+
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
       return "\(type).\(name)"
@@ -117,11 +121,14 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String) -> String? {
+  static func thingDeclaration(name: String, components: [String]) -> String? {
     var result: [String] = [
       "struct \(name)",
       "{",
     ]
+    for component in components {
+      result.append("\(indent)\(component)")
+    }
     result.append(contentsOf: [
       "}"
     ])

@@ -42,6 +42,10 @@ enum JavaScript: Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
+  
+  static func partDeclaration(name: String, type: String) -> String {
+    return ""
+  }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
@@ -87,7 +91,7 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String) -> String? {
+  static func thingDeclaration(name: String, components: [String]) -> String? {
     return nil
   }
   static func enumerationTypeDeclaration(

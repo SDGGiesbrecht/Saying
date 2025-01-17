@@ -45,6 +45,10 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
+  static func partDeclaration(name: String, type: String) -> String {
+    return "\(type) \(name);"
+  }
+
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
     if simple {
       return "\(type)_\(name)"
@@ -89,10 +93,13 @@ enum C: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String) -> String? {
+  static func thingDeclaration(name: String, components: [String]) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
     ]
+    for component in components {
+      result.append("\(indent)\(component)")
+    }
     result.append(contentsOf: [
       "} \(name);"
     ])
@@ -126,11 +133,11 @@ enum C: Platform {
       }
       result.append(contentsOf: [
         "} \(name)_value;",
-        "typedef struct \(name) {",
-        "\(indent)\(name)_case enumeration_case;",
-        "\(indent)\(name)_value value;",
-        "} \(name);",
       ])
+      result.append(thingDeclaration(name: name, components: [
+        partDeclaration(name: "enumeration_case", type: "\(name)_case"),
+        partDeclaration(name: "value", type: "\(name)_value"),
+      ])!)
       
       return result.joined(separator: "\n")
     }

@@ -20,6 +20,12 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
+  // Parts
+  static func partDeclaration(
+    name: String,
+    type: String
+  ) -> String
+
   // Cases
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String
   static func caseDeclaration(
@@ -43,7 +49,8 @@ protocol Platform {
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
   static func thingDeclaration(
-    name: String
+    name: String,
+    components: [String]
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -329,7 +336,15 @@ extension Platform {
       leading: true
     )
     if thing.cases.isEmpty {
-      return thingDeclaration(name: name)
+      let components = thing.parts.map({ part in
+        let name = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
+        return partDeclaration(name: name, type: type)
+      })
+      return thingDeclaration(name: name, components: components)
     } else {
       var cases: [String] = []
       var storageCases: [String] = []

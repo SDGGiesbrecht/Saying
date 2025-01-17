@@ -5,6 +5,7 @@ struct Thing {
   var parameters: Interpolation<ThingParameterIntermediate>
   var access: AccessIntermediate
   var testOnlyAccess: Bool
+  var parts: [PartIntermediate]
   var cases: [CaseIntermediate]
   var c: NativeThingImplementationIntermediate?
   var cSharp: NativeThingImplementationIntermediate?
@@ -105,6 +106,21 @@ extension Thing {
     let access = AccessIntermediate(declaration.access)
     let testOnlyAccess = declaration.testAccess?.keyword is ParsedTestsKeyword
 
+    var parts: [PartIntermediate] = []
+    for part in declaration.parts {
+      switch PartIntermediate.construct(
+        part,
+        namespace: thingNamespace,
+        access: access,
+        testOnlyAccess: testOnlyAccess
+      ) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ .brokenPartImplementation($0) }))
+      case .success(let constructed):
+        parts.append(constructed)
+      }
+    }
+
     var cases: [CaseIntermediate] = []
     for enumerationCase in declaration.enumerationCases {
       switch CaseIntermediate.construct(
@@ -167,6 +183,7 @@ extension Thing {
         parameters: parameters,
         access: access,
         testOnlyAccess: testOnlyAccess,
+        parts: parts,
         cases: cases,
         c: c,
         cSharp: cSharp,
@@ -196,6 +213,7 @@ extension Thing {
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
+      parts: parts.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       cases: cases.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       c: c?.resolvingExtensionContext(typeLookup: typeLookup),
       cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
@@ -213,6 +231,13 @@ extension Thing {
     specializationNamespace: [Set<StrictString>]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
+    let newParts = parts.map({ part in
+      return part.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      )
+    })
     let newCases = cases.map({ enumerationCase in
       return enumerationCase.specializing(
         for: use,
@@ -231,6 +256,7 @@ extension Thing {
       parameters: mappedParameters,
       access: access,
       testOnlyAccess: testOnlyAccess,
+      parts: newParts,
       cases: newCases,
       c: c?.specializing(typeLookup: typeLookup),
       cSharp: cSharp?.specializing(typeLookup: typeLookup),
