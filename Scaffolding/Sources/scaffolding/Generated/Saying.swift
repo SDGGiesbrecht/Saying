@@ -1,3 +1,6 @@
+struct UnicodeText {
+}
+
 struct ParagraphBreakSyntax {
 }
 

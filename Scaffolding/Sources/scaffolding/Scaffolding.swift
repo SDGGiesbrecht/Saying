@@ -74,6 +74,7 @@ import Foundation
       mode: .release,
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
+        "UnicodeText",
 
         "DownArrowSyntax",
         "LeftArrowSyntax",

@@ -2,6 +2,8 @@ import SDGText
 
 struct PartIntermediate {
   var names: Set<StrictString>
+  var access: AccessIntermediate
+  var testOnlyAccess: Bool
   var contents: ParsedTypeReference
   var documentation: DocumentationIntermediate?
   var declaration: ParsedPartDeclaration
@@ -21,6 +23,9 @@ extension PartIntermediate {
     for name in declaration.name.names.names {
       names.insert(name.name.identifierText())
     }
+
+    let access = AccessIntermediate(declaration.access)
+    let testOnlyAccess = declaration.testAccess?.keyword is ParsedTestsKeyword
 
     let partNamespace = namespace.appending(names)
 
@@ -44,6 +49,8 @@ extension PartIntermediate {
     return .success(
       PartIntermediate(
         names: names,
+        access: access,
+        testOnlyAccess: testOnlyAccess,
         contents: contents,
         documentation: attachedDocumentation,
         declaration: declaration
@@ -59,6 +66,8 @@ extension PartIntermediate {
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
+      access: access,
+      testOnlyAccess: testOnlyAccess,
       contents: contents.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
@@ -72,6 +81,8 @@ extension PartIntermediate {
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
+      access: access,
+      testOnlyAccess: testOnlyAccess,
       contents: contents.specializing(typeLookup: typeLookup),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,

@@ -1162,6 +1162,8 @@ extension Node {
             name: "PartDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "PartKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),
               Child(name: "name", type: "PartName", kind: .required),
