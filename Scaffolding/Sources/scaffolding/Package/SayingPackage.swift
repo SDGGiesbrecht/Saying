@@ -27,7 +27,7 @@ struct Package {
 
   func modules() throws -> [Module] {
     return try FileManager.default.contents(ofDirectory: sourceDirectory)
-      .lazy.filter({ Package.ignoredFiles.contains($0.lastPathComponent) })
+      .lazy.filter({ !Package.ignoredFiles.contains($0.lastPathComponent) })
       .lazy.filter({ $0.hasDirectoryPath == true })
       .lazy.filter({ url in
         return try FileManager.default.deepFileEnumeration(in: url)
