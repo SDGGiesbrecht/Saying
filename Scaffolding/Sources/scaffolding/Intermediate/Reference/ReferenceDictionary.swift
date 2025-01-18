@@ -431,6 +431,11 @@ extension ReferenceDictionary {
           foundSomething = true
           found.insert(thing.globallyUniqueIdentifier(referenceLookup: [self]))
           _ = optimized.add(thing: thing)
+          for child in thing.requiredIdentifiers(moduleReferenceDictionary: self) {
+            if !found.contains(child) {
+              stillRequired.insert(child)
+            }
+          }
         }
         let identifier = thing.globallyUniqueIdentifier(referenceLookup: [self])
         if stillRequired.contains(identifier) {
@@ -438,6 +443,11 @@ extension ReferenceDictionary {
           foundSomething = true
           found.insert(identifier)
           _ = optimized.add(thing: thing)
+          for child in thing.requiredIdentifiers(moduleReferenceDictionary: self) {
+            if !found.contains(child) {
+              stillRequired.insert(child)
+            }
+          }
         }
       }
       for action in allActions() {

@@ -1,4 +1,5 @@
 struct UnicodeText {
+  var scalars: String
 }
 
 struct ParagraphBreakSyntax {

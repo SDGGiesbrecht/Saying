@@ -268,3 +268,18 @@ extension Thing {
     )
   }
 }
+
+extension Thing {
+
+  func requiredIdentifiers(
+    moduleReferenceDictionary: ReferenceDictionary
+  ) -> [StrictString] {
+    var result: [StrictString] = []
+    for part in parts {
+      result.append(
+        contentsOf: part.contents.requiredIdentifiers(referenceDictionary: moduleReferenceDictionary)
+      )
+    }
+    return result
+  }
+}
