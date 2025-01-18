@@ -1,4 +1,3 @@
-import SDGCollections
 import SDGText
 
 struct Ability {

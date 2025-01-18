@@ -1,5 +1,3 @@
-import SDGCollections
-
 struct LiteralIntermediate {
   var string: String
 }
@@ -31,7 +29,7 @@ extension LiteralIntermediate {
       case .escape(let symbol):
         let code = symbol.code
         let codeSource = code.source()
-        if !codeSource.allSatisfy({ $0 ∈ codeCharacters }) {
+        if !codeSource.allSatisfy({ codeCharacters.contains($0) }) {
           errors.append(.escapeCodeNotHexadecimal(code))
         }
         if let value = UInt32(String(codeSource), radix: 16),

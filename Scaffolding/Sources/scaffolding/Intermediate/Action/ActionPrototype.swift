@@ -1,4 +1,3 @@
-import SDGCollections
 import SDGText
 
 struct ActionPrototype {
@@ -91,9 +90,9 @@ extension ActionPrototype {
           .appending(names)
       )
       attachedDocumentation = intermediateDocumentation
-      let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0 ∪ $1.names })
+      let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
       for parameter in intermediateDocumentation.parameters.joined() {
-        if parameter.name.identifierText() ∉ existingParameters {
+        if !existingParameters.contains(parameter.name.identifierText()) {
           errors.append(ConstructionError.documentedParameterNotFound(parameter))
         }
       }

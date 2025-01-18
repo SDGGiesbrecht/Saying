@@ -1,4 +1,3 @@
-import SDGCollections
 import SDGText
 
 struct Interpolation<InterpolationParameter>
@@ -83,7 +82,7 @@ extension Interpolation {
           while let next = parameterReferences[resolving] {
             checked.insert(resolving)
             resolving = next
-            if next ∈ checked {
+            if checked.contains(next) {
               if parameterIndices[resolving] == nil {
                 errors.append(.cyclicalParameterReference(parameter))
               }

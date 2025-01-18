@@ -1,4 +1,3 @@
-import SDGCollections
 import SDGText
 
 struct ParameterIntermediate {
@@ -100,7 +99,7 @@ extension ParameterIntermediate {
   }
   func merging(requirement: ParameterIntermediate) -> ParameterIntermediate {
     return ParameterIntermediate(
-      names: names ∪ requirement.names,
+      names: names.union(requirement.names),
       type: type,
       isThrough: isThrough,
       passAction: passAction,

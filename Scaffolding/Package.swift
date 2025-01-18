@@ -13,7 +13,6 @@ let package = Package(
       name: "scaffolding",
       dependencies: [
         .product(name: "Source", package: "Source"), // Just so that IDEs show the files.
-        .product(name: "SDGCollections", package: "SDGCornerstone"),
         .product(name: "SDGText", package: "SDGCornerstone"),
         .product(name: "SDGPersistence", package: "SDGCornerstone"),
         .product(name: "SDGExternalProcess", package: "SDGCornerstone"),

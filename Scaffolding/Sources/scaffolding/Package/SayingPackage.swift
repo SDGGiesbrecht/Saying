@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGCollections
 import SDGText
 import SDGPersistence
 import SDGExternalProcess
@@ -28,7 +27,7 @@ struct Package {
 
   func modules() throws -> [Module] {
     return try FileManager.default.contents(ofDirectory: sourceDirectory)
-      .lazy.filter({ $0.lastPathComponent ∉ Package.ignoredFiles })
+      .lazy.filter({ Package.ignoredFiles.contains($0.lastPathComponent) })
       .lazy.filter({ $0.hasDirectoryPath == true })
       .lazy.filter({ url in
         return try FileManager.default.deepFileEnumeration(in: url)
@@ -40,8 +39,8 @@ struct Package {
 
   func files() throws -> [URL] {
     return try FileManager.default.deepFileEnumeration(in: location)
-      .lazy.filter({ $0.path(relativeTo: location).truncated(before: "/") ∉ Package.ignoredDirectories })
-      .lazy.filter({ $0.lastPathComponent ∉ Package.ignoredFiles })
+      .lazy.filter({ !Package.ignoredDirectories.contains($0.path(relativeTo: location).truncated(before: "/")) })
+      .lazy.filter({ !Package.ignoredFiles.contains($0.lastPathComponent) })
       .sorted(by: { $0.path < $1.path })
   }
 

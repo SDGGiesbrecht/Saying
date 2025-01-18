@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGCollections
 import SDGText
 
 protocol Platform {
@@ -139,8 +138,9 @@ extension Platform {
   }
   static var allowedIdentifierContinuationCharacters: Set<Unicode.Scalar> {
     return compute({
-      allowedIdentifierStartCharacters
-      ∪ filterUnsafe(characters: additionalAllowedIdentifierContinuationCharacterPoints)
+      allowedIdentifierStartCharacters.union(
+        filterUnsafe(characters: additionalAllowedIdentifierContinuationCharacterPoints)
+      )
     }, cachingIn: &_allowedIdentifierContinuationCharactersCache)
   }
   static var disallowedStringLiteralCharacters: Set<Unicode.Scalar> {
@@ -152,29 +152,29 @@ extension Platform {
     }, cachingIn: &_disallowedStringLiteralCharactersCache)
   }
   static func allowedAsIdentifierStart(_ scalar: Unicode.Scalar) -> Bool {
-    return (scalar ∈ allowedIdentifierStartCharacters)
+    return (allowedIdentifierStartCharacters.contains(scalar))
     ||
     (
       (
         (allowsAllUnicodeIdentifiers && scalar.properties.isIDStart)
         ||
-        (scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories)
+        (allowedIdentifierStartGeneralCategories.contains(scalar.properties.generalCategory))
       )
       &&
       (!scalar.isVulnerableToNormalization)
     )
   }
   static func allowedAsIdentifierContinuation(_ scalar: Unicode.Scalar) -> Bool {
-    return (scalar ∈ allowedIdentifierContinuationCharacters)
+    return (allowedIdentifierContinuationCharacters.contains(scalar))
     ||
     (
       (
         (allowsAllUnicodeIdentifiers && scalar.properties.isIDContinue)
         ||
         (
-          scalar.properties.generalCategory ∈ allowedIdentifierStartGeneralCategories
+          allowedIdentifierStartGeneralCategories.contains(scalar.properties.generalCategory)
           ||
-          scalar.properties.generalCategory ∈ additionalAllowedIdentifierContinuationGeneralCategories
+          additionalAllowedIdentifierContinuationGeneralCategories.contains(scalar.properties.generalCategory)
         )
       )
       &&
@@ -182,7 +182,7 @@ extension Platform {
     )
   }
   static func disallowedInStringLiterals(_ scalar: Unicode.Scalar) -> Bool {
-    return scalar ∈ disallowedStringLiteralCharacters
+    return disallowedStringLiteralCharacters.contains(scalar)
     || Character(scalar).isNewline
     || scalar.isVulnerableToNormalization
   }
@@ -500,7 +500,7 @@ extension Platform {
             }
           } else {
             let name = parameter.name
-            let argumentIndex = usedParameters.firstIndex(where: { name ∈ $0.names })!
+            let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(name) })!
             let argument = reference.arguments[argumentIndex]
             switch argument {
             case .action(let actionArgument):
@@ -1054,7 +1054,7 @@ extension Platform {
     for module in modules {
       imports.formUnion(nativeImports(for: module.referenceDictionary))
     }
-    imports ∪= importsNeededByTestScaffolding
+    imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
