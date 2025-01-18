@@ -1,4 +1,3 @@
-import SDGCollections
 import SDGText
 
 struct ActionIntermediate {
@@ -589,7 +588,7 @@ extension ActionIntermediate {
       ActionIntermediate(
         prototype: ActionPrototype(
           isFlow: isFlow,
-          names: names ∪ requirement.names,
+          names: names.union(requirement.names),
           namespace: prototype.namespace,
           parameters: mergedParameters,
           returnValue: returnValue,

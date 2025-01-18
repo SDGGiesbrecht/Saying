@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGCollections
 import SDGText
 
 enum C: Platform {

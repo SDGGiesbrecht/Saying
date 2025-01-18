@@ -1,4 +1,3 @@
-import SDGCollections
 import SDGText
 
 struct ReferenceDictionary {
@@ -27,7 +26,7 @@ extension ReferenceDictionary {
   }
 
   func languageIsKnown(_ language: StrictString) -> Bool {
-    return language ∈ self.languages
+    return self.languages.contains(language)
   }
 }
 
