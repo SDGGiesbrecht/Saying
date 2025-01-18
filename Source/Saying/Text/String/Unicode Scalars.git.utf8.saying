@@ -1,0 +1,17 @@
+thing (clients)
+ [
+  [
+   English: An unnormalized sequence of Unicode scalars.
+  ]
+  [
+   English: {Unicode scalars} always preserves the exact scalar representation; it does not consider canonical or compatibility equivalence and does not apply normalization.
+  ]
+ ]
+ (
+  English: Unicode scalars
+ )
+ C♯: “string”
+ Kotlin: “String”
+ Swift: “String”
+ {
+ }
