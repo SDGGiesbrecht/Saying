@@ -1,4 +1,18 @@
 thing (clients)
+ [
+  [
+   English: A natural number stored in a fixed amound of memory.
+  ]
+  [
+   English: It is generally recommended to use the simpler {natural number} and {integer} instead.
+  ]
+  [
+   English: As fixed‐width representations, {platform fixed‐width natural number} and {platform fixed‐width integer} can be more efficiently processed and stored, but they can only represent a limited number of values. Using them requires consideration of overflow.
+  ]
+  [
+   English: The actual size of {platform fixed‐width natural number} and {platform fixed‐width integer} are determined by each platform’s individual recommendation.
+  ]
+ ]
  (
   English: platform fixed‐width natural number
  )

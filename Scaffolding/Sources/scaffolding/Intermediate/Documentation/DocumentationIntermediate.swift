@@ -113,11 +113,17 @@ extension DocumentationIntermediate {
               if referenceLookup.lookupAction(
                 identifier.identifierText(),
                 signature: [],
-                specifiedReturnValue: .none) == nil
+                specifiedReturnValue: .none
+              ) == nil
                   && referenceLookup.lookupActions(
                     identifier.identifierText(),
                     signature: [],
-                    specifiedReturnValue: .none).isEmpty {
+                    specifiedReturnValue: .none
+                  ).isEmpty
+                  && referenceLookup.lookupThing(
+                    identifier.identifierText(),
+                    components: []
+                  ) == nil {
                 errors.append(.noSuchIdentifier(identifier))
               }
             }

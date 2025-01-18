@@ -1,4 +1,12 @@
 thing (clients)
+ [
+  [
+   English: An integer; a natural number or a negation thereof.
+  ]
+  [
+   English: {integer} makes the same design tradeoffs as {natural number}. See {natural number} for more information.
+  ]
+ ]
  (
   español: número entero
   English: integer
