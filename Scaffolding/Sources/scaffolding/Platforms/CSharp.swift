@@ -50,7 +50,8 @@ enum CSharp: Platform {
   }
 
   static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
-    let access = accessModifier.map({ "\($0) " }) ?? ""
+    let modifier = accessModifier == "file" ? "internal" : accessModifier
+    var access = modifier.map({ "\($0) " }) ?? ""
     return "\(access)\(type) \(name);"
   }
 
