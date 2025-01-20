@@ -51,8 +51,18 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func partDeclaration(name: String, type: String) -> String {
-    return "var \(name): \(type)"
+  static func accessModifier(for access: AccessIntermediate) -> String? {
+    switch access {
+    case .file:
+      return "private"
+    case .clients:
+      return "internal"
+    }
+  }
+
+  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
+    return "\(access)var \(name): \(type)"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {

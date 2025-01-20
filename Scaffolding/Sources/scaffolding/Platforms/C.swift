@@ -44,7 +44,11 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func partDeclaration(name: String, type: String) -> String {
+  static func accessModifier(for access: AccessIntermediate) -> String? {
+    return nil
+  }
+
+  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
     return "\(type) \(name);"
   }
 
@@ -134,8 +138,8 @@ enum C: Platform {
         "} \(name)_value;",
       ])
       result.append(thingDeclaration(name: name, components: [
-        partDeclaration(name: "enumeration_case", type: "\(name)_case"),
-        partDeclaration(name: "value", type: "\(name)_value"),
+        partDeclaration(name: "enumeration_case", type: "\(name)_case", accessModifier: nil),
+        partDeclaration(name: "value", type: "\(name)_value", accessModifier: nil),
       ])!)
       
       return result.joined(separator: "\n")

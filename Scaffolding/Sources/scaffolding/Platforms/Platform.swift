@@ -19,10 +19,14 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
+  // Access
+  static func accessModifier(for access: AccessIntermediate) -> String?
+
   // Parts
   static func partDeclaration(
     name: String,
-    type: String
+    type: String,
+    accessModifier: String?
   ) -> String
 
   // Cases
@@ -342,7 +346,8 @@ extension Platform {
           leading: true
         )
         let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
-        return partDeclaration(name: name, type: type)
+        let access = accessModifier(for: part.access)
+        return partDeclaration(name: name, type: type, accessModifier: access)
       })
       return thingDeclaration(name: name, components: components)
     } else {
