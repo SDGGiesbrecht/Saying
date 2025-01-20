@@ -13,7 +13,7 @@ struct Thing {
   var swift: NativeThingImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclarationProtocol
-  var swiftName: StrictString?
+  var swiftName: UnicodeText?
 }
 
 extension Thing {
@@ -23,30 +23,32 @@ extension Thing {
 }
 
 extension Thing {
-  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
+  func unresolvedGloballyUniqueIdentifierComponents() -> [UnicodeText] {
     if parameters.inAnyOrder.isEmpty {
       return [self.names.identifier()]
     } else {
       let simple = names.identifier()
-      var result: [StrictString] = ["("]
+      var result: [UnicodeText] = ["("].map({ UnicodeText($0) })
       result.append(simple)
       result.append(contentsOf: parameters.ordered(for: simple)
         .lazy.flatMap({ $0.resolvedType!.unresolvedGloballyUniqueIdentifierComponents() }))
-      result.append(")")
+      result.append(UnicodeText(")"))
       return result
     }
   }
 
   func resolve(
-    globallyUniqueIdentifierComponents: [StrictString],
+    globallyUniqueIdentifierComponents: [UnicodeText],
     referenceLookup: [ReferenceDictionary]
-  ) -> StrictString {
-    return globallyUniqueIdentifierComponents
-        .lazy.map({ referenceLookup.resolve(identifier: $0) })
+  ) -> UnicodeText {
+    return UnicodeText(
+      globallyUniqueIdentifierComponents
+        .lazy.map({ StrictString(referenceLookup.resolve(identifier: $0)) })
         .joined(separator: ":")
+      )
   }
 
-  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString {
+  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
     return resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       referenceLookup: referenceLookup
@@ -90,13 +92,13 @@ extension Thing {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    var swiftName: StrictString?
+    var swiftName: UnicodeText?
     for (language, signature) in namesDictionary {
       let name = signature.name()
       if language == "Swift" {
         swiftName = name
       }
-      names.insert(name)
+      names.insert(StrictString(name))
     }
 
     let thingNamespace = namespace.appending(names)
@@ -150,7 +152,7 @@ extension Thing {
       case .success(let result):
         constructed = result
       }
-      switch implementation.language.identifierText() {
+      switch StrictString(implementation.language.identifierText()) {
       case "C":
         c = constructed
       case "C♯":
@@ -200,13 +202,13 @@ extension Thing {
 extension Thing {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters({ parameter in
       let identifier = parameter.names
         .lazy.compactMap({ typeLookup[$0] })
         .first!
-      return ThingParameterIntermediate(names: [identifier])
+      return ThingParameterIntermediate(names: [StrictString(identifier)])
     })
     return Thing(
       names: names,
@@ -273,8 +275,8 @@ extension Thing {
 
   func requiredIdentifiers(
     moduleReferenceDictionary: ReferenceDictionary
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     for part in parts {
       result.append(
         contentsOf: part.contents.requiredIdentifiers(referenceDictionary: moduleReferenceDictionary)

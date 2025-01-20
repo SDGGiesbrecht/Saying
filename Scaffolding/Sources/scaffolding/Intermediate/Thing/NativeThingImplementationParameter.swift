@@ -1,7 +1,7 @@
 import SDGText
 
 struct NativeThingImplementationParameter {
-  var name: StrictString
+  var name: UnicodeText
   var syntaxNode: ParsedUninterruptedIdentifier
   var resolvedType: ParsedTypeReference?
 }
@@ -20,7 +20,7 @@ extension NativeThingImplementationParameter {
     return NativeThingImplementationParameter(
       name: name,
       syntaxNode: syntaxNode,
-      resolvedType: typeLookup[name] ?? resolvedType?.specializing(typeLookup: typeLookup)
+      resolvedType: typeLookup[StrictString(name)] ?? resolvedType?.specializing(typeLookup: typeLookup)
     )
   }
 }

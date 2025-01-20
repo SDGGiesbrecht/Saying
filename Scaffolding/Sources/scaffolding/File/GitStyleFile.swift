@@ -5,21 +5,22 @@ import SDGPersistence
 
 struct GitStyleFile {
 
-  init(source: StrictString) {
+  init(source: UnicodeText) {
     self.source = source
   }
 
   init(from url: URL) throws {
-    self.init(source: try StrictString(from: url))
+    self.init(source: UnicodeText(try StrictString(from: url)))
   }
 
-  let source: StrictString
+  let source: UnicodeText
 
   private func registerSegment(
     in segments: inout [UTF8Segment],
     segmentStart: inout (offset: Int, index: StrictString.Index)?,
     cursor: (offset: Int, index: StrictString.Index)
   ) {
+    let source = StrictString(self.source)
     if let segmentStart = segmentStart,
        segmentStart.offset != cursor.offset {
       var segment = source[segmentStart.index..<cursor.index]
@@ -31,7 +32,7 @@ struct GitStyleFile {
       segments.append(
         UTF8Segment(
           offset: adjustedOffset,
-          source: StrictString(segment)
+          source: UnicodeText(StrictString(segment))
         )
       )
     }
@@ -39,6 +40,7 @@ struct GitStyleFile {
   }
 
   func parsed() -> UTF8Segments {
+    let source = StrictString(self.source)
     var segmentStart: (offset: Int, index: StrictString.Index)? = nil
     var segments: [UTF8Segment] = []
     let lastIndex = source.indices.last
@@ -51,11 +53,11 @@ struct GitStyleFile {
           cursor: (offset: offset, index: index)
         )
         if index != lastIndex {
-          if segments.last?.source == "\u{2028}" {
+          if (segments.last?.source).map({ StrictString($0) }) == "\u{2028}" {
             let first = segments.removeLast()
-            segments.append(UTF8Segment(offset: first.offset, source: "\u{2029}"))
+            segments.append(UTF8Segment(offset: first.offset, source: UnicodeText("\u{2029}")))
           } else {
-            segments.append(UTF8Segment(offset: offset, source: "\u{2028}"))
+            segments.append(UTF8Segment(offset: offset, source: UnicodeText("\u{2028}")))
           }
         }
       } else {

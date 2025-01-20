@@ -1,9 +1,9 @@
 import SDGText
 
 struct NativeThingImplementationIntermediate {
-  var textComponents: [StrictString]
+  var textComponents: [UnicodeText]
   var parameters: [NativeThingImplementationParameter]
-  var requiredImport: StrictString?
+  var requiredImport: UnicodeText?
 }
 
 extension NativeThingImplementationIntermediate {
@@ -13,7 +13,7 @@ extension NativeThingImplementationIntermediate {
   ) -> Result<NativeThingImplementationIntermediate, ErrorList<ConstructionError>> {
     var errors: [ConstructionError] = []
     let components = implementation.type.components
-    var textComponents: [StrictString] = []
+    var textComponents: [UnicodeText] = []
     var parameters: [NativeThingImplementationParameter] = []
     for index in components.indices {
       let element = components[index]
@@ -25,7 +25,7 @@ extension NativeThingImplementationIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
         case .success(let literal):
-          textComponents.append(StrictString(literal.string))
+          textComponents.append(UnicodeText(StrictString(literal.string)))
         }
       }
     }
@@ -43,11 +43,11 @@ extension NativeThingImplementationIntermediate {
 extension NativeThingImplementationIntermediate {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> NativeThingImplementationIntermediate {
     let mappedParameters = parameters.map({ parameter in
       return NativeThingImplementationParameter(
-        name: typeLookup[parameter.name] ?? parameter.name,
+        name: typeLookup[StrictString(parameter.name)] ?? parameter.name,
         syntaxNode: parameter.syntaxNode
       )
     })

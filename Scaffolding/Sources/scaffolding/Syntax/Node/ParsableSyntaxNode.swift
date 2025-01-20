@@ -1,5 +1,3 @@
-import SDGText
-
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
   associatedtype ParseError: DiagnosticError
   static func diagnosticParseNext(
@@ -27,7 +25,7 @@ extension ParsableSyntaxNode {
       return .success(parsed.result)
     }
   }
-  static func diagnosticParse(source: StrictString) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
+  static func diagnosticParse(source: UnicodeText) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
     return diagnosticParse(source: UTF8Segments(source))
   }
 
@@ -42,7 +40,7 @@ extension ParsableSyntaxNode {
     }
     return parsed
   }
-  static func fastParse(source: StrictString) -> Self? {
+  static func fastParse(source: UnicodeText) -> Self? {
     return fastParse(source: UTF8Segments(source))
   }
 
@@ -52,7 +50,7 @@ extension ParsableSyntaxNode {
     }
     self = parsed
   }
-  init?(source: StrictString) {
+  init?(source: UnicodeText) {
     self.init(source: UTF8Segments(source))
   }
 }

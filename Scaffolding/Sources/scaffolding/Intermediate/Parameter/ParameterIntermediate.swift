@@ -6,7 +6,7 @@ struct ParameterIntermediate {
   var isThrough: Bool
   var passAction: ActionIntermediate
   var executeAction: ActionIntermediate?
-  var swiftLabel: StrictString?
+  var swiftLabel: UnicodeText?
 
   init(
     names: Set<StrictString>,
@@ -14,7 +14,7 @@ struct ParameterIntermediate {
     isThrough: Bool,
     passAction: ActionIntermediate,
     executeAction: ActionIntermediate?,
-    swiftLabel: StrictString?
+    swiftLabel: UnicodeText?
   ) {
     self.names = names
     self.type = type
@@ -49,7 +49,7 @@ extension ParameterIntermediate {
     nestedParameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference,
     isThrough: Bool,
-    swiftLabel: StrictString?
+    swiftLabel: UnicodeText?
   ) {
     let actionParameters = nestedParameters.ordered(for: names.identifier())
     let passedType: ParsedTypeReference
@@ -86,7 +86,7 @@ extension ParameterIntermediate {
 
 extension ParameterIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
@@ -132,9 +132,9 @@ extension ParameterIntermediate {
 }
 
 extension ParameterIntermediate {
-  func prefixing(with prefix: StrictString) -> ParameterIntermediate {
+  func prefixing(with prefix: UnicodeText) -> ParameterIntermediate {
     return ParameterIntermediate(
-      names: Set(names.map({ "\(prefix)\($0)" })),
+      names: Set(names.map({ "\(StrictString(prefix))\($0)" })),
       type: type,
       isThrough: isThrough,
       passAction: passAction,

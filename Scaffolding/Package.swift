@@ -31,7 +31,6 @@ let package = Package(
     .executableTarget(
       name: "generate‐syntax",
       dependencies: [
-        .product(name: "SDGText", package: "SDGCornerstone"),
         .product(name: "SDGPersistence", package: "SDGCornerstone"),
       ]
     )

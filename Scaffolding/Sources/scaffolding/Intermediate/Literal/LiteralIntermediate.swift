@@ -1,3 +1,5 @@
+import SDGText
+
 struct LiteralIntermediate {
   var string: String
 }
@@ -25,10 +27,10 @@ extension LiteralIntermediate {
     for segment in contents {
       switch segment {
       case .segment(let text):
-        string.append(contentsOf: String(text.source()))
+        string.append(contentsOf: String(StrictString(text.source())))
       case .escape(let symbol):
         let code = symbol.code
-        let codeSource = code.source()
+        let codeSource = StrictString(code.source())
         if !codeSource.allSatisfy({ codeCharacters.contains($0) }) {
           errors.append(.escapeCodeNotHexadecimal(code))
         }

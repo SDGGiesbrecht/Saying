@@ -12,8 +12,8 @@ struct ActionIntermediate {
   var isReferenceWrapper: Bool = false
   var isEnumerationCaseWrapper: Bool = false
   var isEnumerationValueWrapper: Bool = false
-  var originalUnresolvedCoverageRegionIdentifierComponents: [StrictString]?
-  var coveredIdentifier: StrictString?
+  var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
+  var coveredIdentifier: UnicodeText?
 
   var isFlow: Bool {
     return prototype.isFlow
@@ -36,7 +36,7 @@ struct ActionIntermediate {
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
-  var swiftName: StrictString? {
+  var swiftName: UnicodeText? {
     return prototype.swiftName
   }
   func allNativeImplementations() -> [NativeActionImplementationIntermediate] {
@@ -51,7 +51,7 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
+  func unresolvedGloballyUniqueIdentifierComponents() -> [UnicodeText] {
     let identifier = names.identifier()
     let signature = signature(orderedFor: identifier)
     let resolvedParameters: [ParsedTypeReference]
@@ -74,15 +74,17 @@ extension ActionIntermediate {
   }
 
   func resolve(
-    globallyUniqueIdentifierComponents: [StrictString],
+    globallyUniqueIdentifierComponents: [UnicodeText],
     referenceLookup: [ReferenceDictionary]
-  ) -> StrictString {
-    return globallyUniqueIdentifierComponents
-        .lazy.map({ referenceLookup.resolve(identifier: $0) })
+  ) -> UnicodeText {
+    return UnicodeText(
+      globallyUniqueIdentifierComponents
+        .lazy.map({ StrictString(referenceLookup.resolve(identifier: $0)) })
         .joined(separator: ":")
+    )
   }
 
-  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString {
+  func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
     return resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       referenceLookup: referenceLookup
@@ -145,7 +147,7 @@ extension ActionIntermediate {
 
   static func enumerationWrap(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString,
+    caseIdentifier: UnicodeText,
     valueType: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool,
@@ -173,39 +175,39 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["((", ") {", ", ", "})"],
+        textComponents: ["((", ") {", ", ", "})"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, typeInstead: enumerationType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, typeInstead: enumerationType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["new ", "(", ")"],
+        textComponents: ["new ", "(", ")"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", " })"],
+        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", " })"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
         ]
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["", "(", ")"],
+        textComponents: ["", "(", ")"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
         ]
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["", "(", ")"],
+        textComponents: ["", "(", ")"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!)
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
         ]
       ),
       isEnumerationValueWrapper: true
@@ -246,7 +248,7 @@ extension ActionIntermediate {
 
   static func enumerationUnwrap(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString,
+    caseIdentifier: UnicodeText,
     valueType: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool,
@@ -274,53 +276,53 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"],
+        textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!, typeInstead: enumerationType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!, typeInstead: enumerationType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"],
+        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!, typeInstead: valueType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["let enumeration = ", "; if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"],
+        textComponents: ["let enumeration = ", "; if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"],
+        textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["if case ", "(let ", ") = ", " {", "}"],
+        textComponents: ["if case ", "(let ", ") = ", " {", "}"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "value")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "consequence")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       )
     )
@@ -328,7 +330,7 @@ extension ActionIntermediate {
 
   static func enumerationCheck(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString,
+    caseIdentifier: UnicodeText,
     empty: Bool,
     access: AccessIntermediate,
     testOnlyAccess: Bool,
@@ -350,45 +352,45 @@ extension ActionIntermediate {
         names: parameters.names(),
         namespace: [],
         parameters: parameters,
-        returnValue: .simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: "truth value")!)),
+        returnValue: .simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: UnicodeText("truth value"))!)),
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ").enumeration_case == ", ""],
+        textComponents: ["(", ").enumeration_case == ", ""].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ") is ", ""],
+        textComponents: ["(", ") is ", ""].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
         ]
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ").enumerationCase == ", ""],
+        textComponents: ["(", ").enumerationCase == ", ""].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
         ]
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ") is ", ""],
+        textComponents: ["(", ") is ", ""].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
         ]
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["{ if case ", " = ", " { return true } else { return false } }()"],
+        textComponents: ["{ if case ", " = ", " { return true } else { return false } }()"].map({ UnicodeText($0) }),
         parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "case")!, caseInstead: caseInstead),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: "enumeration")!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
         ]
       )
     )
@@ -422,7 +424,7 @@ extension ActionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
-          switch implementation.language.identifierText() {
+          switch StrictString(implementation.language.identifierText()) {
           case "C":
             c = constructed
           case "C♯":
@@ -448,19 +450,19 @@ extension ActionIntermediate {
       implementation = StatementListIntermediate(source.statements)
     } else {
       if c == nil {
-        errors.append(ConstructionError.missingImplementation(language: "C", action: declaration.name))
+        errors.append(ConstructionError.missingImplementation(language: UnicodeText("C"), action: declaration.name))
       }
       if cSharp == nil {
-        errors.append(ConstructionError.missingImplementation(language: "C♯", action: declaration.name))
+        errors.append(ConstructionError.missingImplementation(language: UnicodeText("C♯"), action: declaration.name))
       }
       if javaScript == nil {
-        errors.append(ConstructionError.missingImplementation(language: "JavaScript", action: declaration.name))
+        errors.append(ConstructionError.missingImplementation(language: UnicodeText("JavaScript"), action: declaration.name))
       }
       if kotlin == nil {
-        errors.append(ConstructionError.missingImplementation(language: "Kotlin", action: declaration.name))
+        errors.append(ConstructionError.missingImplementation(language: UnicodeText("Kotlin"), action: declaration.name))
       }
       if swift == nil {
-        errors.append(ConstructionError.missingImplementation(language: "Swift", action: declaration.name))
+        errors.append(ConstructionError.missingImplementation(language: UnicodeText("Swift"), action: declaration.name))
       }
     }
     if !errors.isEmpty {
@@ -516,7 +518,7 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in
       return parameter.resolvingExtensionContext(typeLookup: typeLookup)
@@ -667,11 +669,11 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
+  func lookupParameter(_ identifier: UnicodeText) -> ParameterIntermediate? {
     return prototype.lookupParameter(identifier)
   }
 
-  func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
+  func signature(orderedFor name: UnicodeText) -> [ParsedTypeReference] {
     return prototype.signature(orderedFor: name)
   }
 }
@@ -703,8 +705,8 @@ extension ActionIntermediate {
     return coveredIdentifier != nil
   }
 
-  func coverageTrackingIdentifier() -> StrictString {
-    return "☐\(prototype.names.identifier())"
+  func coverageTrackingIdentifier() -> UnicodeText {
+    return UnicodeText("☐\(StrictString(prototype.names.identifier()))")
   }
   func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate? {
     if let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
@@ -713,11 +715,11 @@ extension ActionIntermediate {
       return ActionIntermediate(
         prototype: ActionPrototype(
           isFlow: isFlow,
-          names: [wrapperName],
+          names: [StrictString(wrapperName)],
           namespace: [],
           parameters: prototype.parameters
             .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
-            .prefixingEach(with: "→"),
+            .prefixingEach(with: UnicodeText("→")),
           returnValue: prototype.returnValue,
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
@@ -731,7 +733,7 @@ extension ActionIntermediate {
               action: ActionUse(
                 actionName: baseName,
                 arguments: prototype.parameters
-                  .prefixingEach(with: "→")
+                  .prefixingEach(with: UnicodeText("→"))
                   .ordered(for: baseName).map({ parameter in
                   return .action(
                     ActionUse(
@@ -756,30 +758,32 @@ extension ActionIntermediate {
     }
   }
 
-  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> StrictString? {
+  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     let namespace = prototype.namespace
-      .lazy.map({ $0.identifier() })
+      .lazy.map({ StrictString($0.identifier()) })
       .joined(separator: ":")
-    let identifier: StrictString
+    let identifier: UnicodeText
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
       identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceLookup: referenceLookup)
     } else {
       identifier = globallyUniqueIdentifier(referenceLookup: referenceLookup)
     }
-    return [namespace, identifier]
-      .joined(separator: ":")
+    return UnicodeText(
+      [namespace, StrictString(identifier)]
+        .joined(separator: ":")
+    )
   }
 
   func allCoverageRegionIdentifiers(
     referenceLookup: [ReferenceDictionary],
     skippingSubregions: Bool
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     if let base = coverageRegionIdentifier(referenceLookup: referenceLookup) {
       result.append(base)
       if !skippingSubregions {
         for entry in 0 ..< countCoverageSubregions() {
-          result.append("\(base):{\((entry + 1).inDigits())}")
+          result.append(UnicodeText("\(StrictString(base)):{\((entry + 1).inDigits())}"))
         }
       }
     }
@@ -794,8 +798,8 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func swiftIdentifier() -> StrictString? {
-    guard var name = swiftName else {
+  func swiftIdentifier() -> UnicodeText? {
+    guard var name = swiftName.map({ StrictString($0) }) else {
       return nil
     }
     guard let firstSpace = name.firstIndex(of: " ") else {
@@ -803,10 +807,10 @@ extension ActionIntermediate {
     }
     let functionName = StrictString(name[..<firstSpace])
     name.removeSubrange(...firstSpace)
-    var parameterNames: [StrictString] = []
+    var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
       if name.hasPrefix("()".scalars.literal()) {
-        parameterNames.append("_")
+        parameterNames.append(UnicodeText("_"))
         name.removeFirst(2)
       } else {
         guard let next = name.firstIndex(of: "(") else {
@@ -817,7 +821,7 @@ extension ActionIntermediate {
         if parameterName.last == " " {
           parameterName.removeLast()
         }
-        parameterNames.append(parameterName)
+        parameterNames.append(UnicodeText(parameterName))
         if name.hasPrefix("()") {
           name.removeFirst(2)
         }
@@ -826,11 +830,11 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    return "\(functionName)(\(parameterNames.joined(separator: ":")):)"
+    return UnicodeText("\(functionName)(\(parameterNames.map({ StrictString($0) }).joined(separator: ":")):)")
   }
-  func swiftSignature(referenceLookup: [ReferenceDictionary]) -> StrictString? {
+  func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = swiftName,
-      let identifier = swiftIdentifier() else {
+      let identifier = swiftIdentifier().map({ StrictString($0) }) else {
       return nil
     }
     let components = identifier.components(separatedBy: ":")
@@ -845,7 +849,7 @@ extension ActionIntermediate {
       result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
     }
     result.append(contentsOf: components.last!.contents)
-    return result
+    return UnicodeText(result)
   }
 }
 
@@ -853,8 +857,8 @@ extension ActionIntermediate {
 
   func requiredIdentifiers(
     moduleReferenceDictionary: ReferenceDictionary
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     result.append(
       contentsOf: prototype.requiredIdentifiers(
         referenceDictionary: moduleReferenceDictionary

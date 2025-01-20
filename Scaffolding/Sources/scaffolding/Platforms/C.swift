@@ -207,7 +207,7 @@ enum C: Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode

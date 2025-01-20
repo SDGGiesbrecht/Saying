@@ -104,7 +104,7 @@ extension ActionUseArgument {
 
 extension ActionUseArgument {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> ActionUseArgument {
     switch self {
     case .action(let action):
@@ -142,8 +142,8 @@ extension ActionUseArgument {
 
   func requiredIdentifiers(
     context: [ReferenceDictionary]
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     switch self {
     case .action(let action):
       result.append(

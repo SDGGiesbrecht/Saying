@@ -12,7 +12,9 @@ extension ParsedUseSignature {
     return result
   }
 
-  func name() -> StrictString {
-    return identifierSegments().lazy.map({ $0?.identifierText() ?? "" }).joined(separator: "()")
+  func name() -> UnicodeText {
+    return UnicodeText(
+      identifierSegments().lazy.map({ ($0?.identifierText()).map({ StrictString($0 )}) ?? "" }).joined(separator: "()")
+    )
   }
 }

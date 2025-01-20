@@ -1,5 +1,3 @@
-import SDGText
-
 extension ModuleIntermediate {
 
   enum ConstructionError: DiagnosticError {

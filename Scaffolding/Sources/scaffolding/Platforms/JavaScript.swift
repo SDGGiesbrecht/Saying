@@ -136,14 +136,14 @@ enum JavaScript: Platform {
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "let "
-    let name = sanitize(identifier: StrictString(argument), leading: true)
+    let name = sanitize(identifier: UnicodeText(StrictString(argument)), leading: true)
     return "\(keyword)\(name)Reference = { value: \(argument) }; "
   }
   static func passReference(to argument: String) -> String {
-    return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
+    return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
   }
   static func unpackReference(to argument: String) -> String? {
-    return " \(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference.value;"
+    return " \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference.value;"
   }
   static func dereference(throughParameter: String) -> String {
     return "\(throughParameter).value"
@@ -173,7 +173,7 @@ enum JavaScript: Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode

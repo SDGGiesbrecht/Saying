@@ -1,9 +1,9 @@
 import SDGText
 
 struct NativeActionImplementationIntermediate {
-  var textComponents: [StrictString]
+  var textComponents: [UnicodeText]
   var parameters: [NativeActionImplementationParameter]
-  var requiredImport: StrictString?
+  var requiredImport: UnicodeText?
 }
 
 extension NativeActionImplementationIntermediate {
@@ -12,7 +12,7 @@ extension NativeActionImplementationIntermediate {
     implementation: ParsedNativeAction
   ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
     let components = implementation.expression.components
-    var textComponents: [StrictString] = []
+    var textComponents: [UnicodeText] = []
     var parameters: [NativeActionImplementationParameter] = []
     var errors: [ConstructionError] = []
     for index in components.indices {
@@ -25,7 +25,7 @@ extension NativeActionImplementationIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
         case .success(let literal):
-          textComponents.append(StrictString(literal.string))
+          textComponents.append(UnicodeText(StrictString(literal.string)))
         }
       }
     }

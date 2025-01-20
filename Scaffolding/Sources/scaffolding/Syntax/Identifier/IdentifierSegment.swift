@@ -1,12 +1,10 @@
-import SDGText
-
 protocol ParsedIdentifierSegment: ParsedSyntaxNode {
   var identifierSegmentKind: ParsedIdentifierSegmentKind { get }
 }
 
 extension ParsedIdentifierSegment {
 
-  func identifierText() -> StrictString {
+  func identifierText() -> UnicodeText {
     return source()
   }
 }

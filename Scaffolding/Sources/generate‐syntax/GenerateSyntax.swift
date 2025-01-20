@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGText
 import SDGPersistence
 
 @main struct GenerateSyntax {
@@ -9,7 +8,7 @@ import SDGPersistence
     try source().save(to: destination)
   }
 
-  static func source() -> StrictString {
+  static func source() -> String {
     return [
       "import SDGText",
       "",

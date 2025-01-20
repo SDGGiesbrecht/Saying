@@ -1,5 +1,3 @@
-import SDGText
-
 extension ExtensionIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenThing(Thing.ConstructionError)

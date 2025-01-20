@@ -73,3 +73,17 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
   cache = (result) as Set<Unicode.Scalar>?
   return result
 }
+
+import SDGText
+
+extension StrictString {
+  init(_ text: UnicodeText) {
+    self.init(text.scalars)
+  }
+}
+
+extension UnicodeText {
+  init(_ string: StrictString) {
+    scalars = String(string)
+  }
+}

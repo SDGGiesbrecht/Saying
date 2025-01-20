@@ -22,7 +22,7 @@ extension TestIntermediate {
 
 extension TestIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location,

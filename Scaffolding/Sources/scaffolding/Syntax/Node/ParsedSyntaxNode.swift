@@ -14,11 +14,11 @@ protocol ParsedSyntaxNode {
 
 extension ParsedSyntaxNode {
 
-  func source() -> StrictString {
-    return StrictString(location)
+  func source() -> UnicodeText {
+    return UnicodeText(StrictString(location))
   }
 
-  func formattedGitStyleSource() -> StrictString {
+  func formattedGitStyleSource() -> UnicodeText {
     return mutableNode().formattedGitStyleSource()
   }
 

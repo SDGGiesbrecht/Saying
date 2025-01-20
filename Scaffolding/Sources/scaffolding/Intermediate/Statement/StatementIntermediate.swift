@@ -50,7 +50,7 @@ extension StatementIntermediate {
 
 extension StatementIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> StatementIntermediate {
     return StatementIntermediate(
       isReturn: isReturn,
@@ -82,7 +82,7 @@ extension StatementIntermediate {
 
   func requiredIdentifiers(
     context: [ReferenceDictionary]
-  ) -> [StrictString] {
+  ) -> [UnicodeText] {
     return action.requiredIdentifiers(
       context: context
     )

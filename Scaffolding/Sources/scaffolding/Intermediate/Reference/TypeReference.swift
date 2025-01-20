@@ -12,10 +12,10 @@ extension TypeReference {
   func resolving(fromReferenceLookup referenceLookup: [ReferenceDictionary]) -> TypeReference {
     switch self {
     case .simple(let identifier):
-      return .simple(referenceLookup.resolve(identifier: identifier))
+      return .simple(StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier))))
     case .compound(identifier: let identifier, components: let components):
       return .compound(
-        identifier: referenceLookup.resolve(identifier: identifier),
+        identifier: StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier))),
         components: components.map({ $0.resolving(fromReferenceLookup: referenceLookup) })
       )
     case .action(parameters: let parameters, returnValue: let returnValue):
@@ -28,7 +28,7 @@ extension TypeReference {
     case .enumerationCase(let type, let identifier):
       return .enumerationCase(
         type.resolving(fromReferenceLookup: referenceLookup),
-        identifier: referenceLookup.resolve(identifier: identifier)
+        identifier: StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier)))
       )
     }
   }

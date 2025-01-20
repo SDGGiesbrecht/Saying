@@ -1,12 +1,10 @@
-import SDGText
-
 extension ActionIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenPrototype(ActionPrototype.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeActionImplementation)
-    case missingImplementation(language: StrictString, action: ParsedActionName)
+    case missingImplementation(language: UnicodeText, action: ParsedActionName)
 
     var message: String {
       switch self {

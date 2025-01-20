@@ -4,12 +4,12 @@ import SDGText
 
 struct UTF8File {
 
-  init(source: StrictString) {
+  init(source: UnicodeText) {
     self.source = UTF8Segments(source)
   }
 
   init(from url: URL) throws {
-    self.init(source: try StrictString(from: url))
+    self.init(source: UnicodeText(try StrictString(from: url)))
   }
 
   init(gitStyle: GitStyleFile) {

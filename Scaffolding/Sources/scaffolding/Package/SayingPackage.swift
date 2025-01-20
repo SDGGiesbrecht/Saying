@@ -44,19 +44,19 @@ struct Package {
       .sorted(by: { $0.path < $1.path })
   }
 
-  func format(reportProgress: (StrictString) -> Void) throws {
+  func format(reportProgress: (UnicodeText) -> Void) throws {
     for fileURL in try files() {
       let relativePath = fileURL.path(relativeTo: location)
       switch fileURL.sourceFormat {
       case .utf8(let gitStyle):
         switch gitStyle {
         case false:
-          reportProgress("¬\(relativePath)")
+          reportProgress(UnicodeText("¬\(relativePath)"))
         case true:
-          reportProgress(" \(relativePath)")
+          reportProgress(UnicodeText(" \(relativePath)"))
           let file = try File(from: fileURL)
           let formatted = try file.formattedGitStyleSource()
-          try formatted.appending("\n").save(to: fileURL)
+          try StrictString(formatted).appending("\n").save(to: fileURL)
         }
       }
     }

@@ -162,14 +162,14 @@ enum Kotlin: Platform {
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "var "
-    let name = sanitize(identifier: StrictString(argument), leading: true)
+    let name = sanitize(identifier: UnicodeText(StrictString(argument)), leading: true)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
   }
   static func passReference(to argument: String) -> String {
-    return "\(sanitize(identifier: StrictString(argument), leading: true))Reference"
+    return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
   }
   static func unpackReference(to argument: String) -> String? {
-    return "; \(argument) = \(sanitize(identifier: StrictString(argument), leading: true))Reference[0]"
+    return "; \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference[0]"
   }
   static func dereference(throughParameter: String) -> String {
     return "\(throughParameter)[0]"
@@ -199,7 +199,7 @@ enum Kotlin: Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode

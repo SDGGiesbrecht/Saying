@@ -137,7 +137,7 @@ enum Swift: Platform {
   }
 
   static func nativeName(of thing: Thing) -> String? {
-    return thing.swiftName.map { String($0) }
+    return thing.swiftName.map { String(StrictString($0)) }
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
@@ -180,11 +180,11 @@ enum Swift: Platform {
   }
 
   static func nativeName(of action: ActionIntermediate) -> String? {
-    let found = action.swiftIdentifier()?.prefix(upTo: "(".scalars.literal())?.contents
+    let found = action.swiftIdentifier().map({ StrictString($0) })?.prefix(upTo: "(".scalars.literal())?.contents
     return found.map { String(StrictString($0)) }
   }
   static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
-    return parameter.swiftLabel.map({ String($0) })
+    return parameter.swiftLabel.map({ String(StrictString($0)) })
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
@@ -238,7 +238,7 @@ enum Swift: Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode

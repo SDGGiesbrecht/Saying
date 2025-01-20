@@ -88,7 +88,7 @@ protocol Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
@@ -191,8 +191,8 @@ extension Platform {
     || scalar.isVulnerableToNormalization
   }
 
-  static func sanitize(identifier: StrictString, leading: Bool) -> String {
-    var result: String = identifier.lazy
+  static func sanitize(identifier: UnicodeText, leading: Bool) -> String {
+    var result: String = StrictString(identifier).lazy
       .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
     if leading,
@@ -204,8 +204,8 @@ extension Platform {
     return result
   }
 
-  static func sanitize(stringLiteral: StrictString) -> String {
-    return stringLiteral.lazy
+  static func sanitize(stringLiteral: UnicodeText) -> String {
+    return StrictString(stringLiteral).lazy
       .map({ !disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
       .joined()
   }
@@ -233,7 +233,7 @@ extension Platform {
     case .simple(let simple):
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
-        return String(native.textComponents.joined())
+        return String(native.textComponents.lazy.map({ StrictString($0) }).joined())
       } else {
         return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
       }
@@ -245,7 +245,7 @@ extension Platform {
       if let native = nativeType(of: type) {
         var result = ""
         for index in native.textComponents.indices {
-          result.append(contentsOf: String(native.textComponents[index]))
+          result.append(contentsOf: String(StrictString(native.textComponents[index])))
           if index != native.textComponents.indices.last {
             let type = native.parameters[index].resolvedType!
             result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
@@ -372,13 +372,13 @@ extension Platform {
   }
 
   static func flowCoverageRegistration(
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int
   ) -> String? {
     coverageRegionCounter += 1
     if let coverage = contextCoverageIdentifier {
-      let appendedIdentifier: StrictString = "\(coverage):{\(coverageRegionCounter.inDigits())}"
-      return "\n\(self.coverageRegistration(identifier: sanitize(stringLiteral: appendedIdentifier)))"
+      let appendedIdentifier: StrictString = "\(StrictString(coverage)):{\(coverageRegionCounter.inDigits())}"
+      return "\n\(self.coverageRegistration(identifier: sanitize(stringLiteral: UnicodeText(appendedIdentifier))))"
     } else {
       return nil
     }
@@ -389,13 +389,13 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
-    if let inlined = inliningArguments[reference.actionName] {
+    if let inlined = inliningArguments[StrictString(reference.actionName)] {
       return inlined
     } else if reference.passage == .out {
       return String(sanitize(identifier: reference.actionName, leading: true))
@@ -473,8 +473,8 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    parameterName: StrictString?,
-    contextCoverageIdentifier: StrictString?,
+    parameterName: UnicodeText?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
@@ -484,7 +484,7 @@ extension Platform {
       var result = ""
       var local = ReferenceDictionary()
       for index in native.textComponents.indices {
-        result.append(contentsOf: String(native.textComponents[index]))
+        result.append(contentsOf: String(StrictString(native.textComponents[index])))
         if index != native.textComponents.indices.last {
           let parameter = native.parameters[index]
           if let type = parameter.typeInstead {
@@ -505,7 +505,7 @@ extension Platform {
             }
           } else {
             let name = parameter.name
-            let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(name) })!
+            let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(StrictString(name)) })!
             let argument = reference.arguments[argumentIndex]
             switch argument {
             case .action(let actionArgument):
@@ -578,7 +578,7 @@ extension Platform {
         let argument = reference.arguments[index]
         switch argument {
         case .action(let action):
-          newInliningArguments[parameter.names.identifier()] = call(
+          newInliningArguments[StrictString(parameter.names.identifier())] = call(
             to: action,
             context: context,
             localLookup: localLookup.appending(locals),
@@ -612,7 +612,7 @@ extension Platform {
           ) {
             source.prepend(coverage)
           }
-          newInliningArguments[parameter.names.identifier()] = source.joined(separator: "\n")
+          newInliningArguments[StrictString(parameter.names.identifier())] = source.joined(separator: "\n")
         }
       }
       return source(
@@ -687,7 +687,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: StrictString?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     inliningArguments: [StrictString: String],
     existingReferences: inout Set<String>,
@@ -976,12 +976,12 @@ extension Platform {
     var imports: Set<String> = []
     for thing in referenceDictionary.allThings() {
       if let requiredImport = nativeType(of: thing)?.requiredImport {
-        imports.insert(String(requiredImport))
+        imports.insert(String(StrictString(requiredImport)))
       }
     }
     for action in referenceDictionary.allActions() {
       if let requiredImport = nativeImplementation(of: action)?.requiredImport {
-        imports.insert(String(requiredImport))
+        imports.insert(String(StrictString(requiredImport)))
       }
     }
     return imports
@@ -994,10 +994,10 @@ extension Platform {
         return !action.isCoverageWrapper
         && !(action.isFlow && action.returnValue != nil)
       })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
     return Set([
       actionRegions,
       choiceRegions
@@ -1074,7 +1074,7 @@ extension Platform {
       }
       let regions = regionSet
         .sorted()
-        .map({ sanitize(stringLiteral: $0) })
+        .map({ sanitize(stringLiteral: UnicodeText($0)) })
       result.append(contentsOf: coverageRegionSet(regions: regions))
       result.append(contentsOf: registerCoverageAction)
     }

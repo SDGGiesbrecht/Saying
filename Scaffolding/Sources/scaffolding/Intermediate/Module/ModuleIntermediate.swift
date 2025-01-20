@@ -15,7 +15,7 @@ extension ModuleIntermediate {
     } else {
       var dictionary: [StrictString: TestIntermediate] = [:]
       for entry in tests {
-        dictionary[entry.location.map({ $0.identifier() }).joined(separator: ":")] = entry
+        dictionary[entry.location.map({ StrictString($0.identifier()) }).joined(separator: ":")] = entry
       }
       return dictionary.keys.sorted().map({ dictionary[$0]! })
     }
@@ -70,10 +70,10 @@ extension ModuleIntermediate {
       }
       let abilityIdentifier = ability.names.identifier()
 
-      var extensionTypes: [StrictString: StrictString] = [:]
+      var extensionTypes: [StrictString: UnicodeText] = [:]
       for (index, parameter) in ability.parameters.ordered(for: extensionBlock.ability).enumerated() {
         let argument = extensionBlock.arguments[index]
-        extensionTypes[argument.identifier] = parameter.names.identifier()
+        extensionTypes[StrictString(argument.identifier)] = parameter.names.identifier()
       }
 
       for thing in extensionBlock.things {
@@ -148,9 +148,9 @@ extension ModuleIntermediate {
     let specializationNamespace: [Set<StrictString>] = ability.parameters
       .ordered(for: ability.names.identifier())
       .flatMap({ parameter in
-        let components: [StrictString] = useTypes[parameter.names.identifier()]!
+        let components: [UnicodeText] = useTypes[StrictString(parameter.names.identifier())]!
           .unresolvedGloballyUniqueIdentifierComponents()
-        return components.map({ Set([$0]) })
+        return components.map({ Set([StrictString($0)]) })
       })
 
     var prototypeActions = use.actions
@@ -170,7 +170,7 @@ extension ModuleIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors)
         }
-      } else if let provision = ability.defaults[requirement.names.identifier()] {
+      } else if let provision = ability.defaults[StrictString(requirement.names.identifier())] {
         let specialized = provision.specializing(
           for: use,
           typeLookup: useTypes,
@@ -259,15 +259,15 @@ extension ModuleIntermediate {
       }
     }
     for language in languageNodes {
-      var identifier = language.identifierText()
+      var identifier = StrictString(language.identifierText())
       if identifier == "Swift" {
         continue
       }
       if identifier.hasSuffix(" +") {
         identifier.removeLast(2)
       }
-      if !moduleWideImports.contains(where: { $0.referenceDictionary.languageIsKnown(identifier) }),
-        !referenceDictionary.languageIsKnown(identifier) {
+      if !moduleWideImports.contains(where: { $0.referenceDictionary.languageIsKnown(UnicodeText(identifier)) }),
+        !referenceDictionary.languageIsKnown(UnicodeText(identifier)) {
         errors.append(.noSuchLanguage(language))
       }
     }

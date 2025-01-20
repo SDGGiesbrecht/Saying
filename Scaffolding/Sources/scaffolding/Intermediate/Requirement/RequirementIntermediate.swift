@@ -58,7 +58,7 @@ extension RequirementIntermediate {
 }
 
 extension RequirementIntermediate {
-  func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
+  func lookupParameter(_ identifier: UnicodeText) -> ParameterIntermediate? {
     return prototype.lookupParameter(identifier)
   }
 }
