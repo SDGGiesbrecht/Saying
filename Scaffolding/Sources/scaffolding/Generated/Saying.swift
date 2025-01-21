@@ -65,6 +65,69 @@ struct SpaceSyntax {
 struct SymbolInsertionMarkSyntax {
 }
 
+struct ReplacementParsedBulletCharacterSyntax {
+}
+
+struct ReplacementParsedClosingBraceSyntax {
+}
+
+struct ReplacementParsedClosingBracketSyntax {
+}
+
+struct ReplacementParsedClosingParenthesisSyntax {
+}
+
+struct ReplacementParsedColonCharacterSyntax {
+}
+
+struct ReplacementParsedDownArrowSyntax {
+}
+
+struct ReplacementParsedLeftArrowSyntax {
+}
+
+struct ReplacementParsedLineBreakSyntax {
+}
+
+struct ReplacementParsedLowQuotationMarkSyntax {
+}
+
+struct ReplacementParsedNinesQuotationMarkSyntax {
+}
+
+struct ReplacementParsedOpeningBraceSyntax {
+}
+
+struct ReplacementParsedOpeningBracketSyntax {
+}
+
+struct ReplacementParsedParagraphBreakSyntax {
+}
+
+struct ReplacementParsedRightArrowSyntax {
+}
+
+struct ReplacementParsedSixesQuotationMarkSyntax {
+}
+
+struct ReplacementParsedSlashSyntax {
+}
+
+struct ReplacementParsedSpaceSyntax {
+}
+
+struct ReplacementParsedSymbolInsertionMarkSyntax {
+}
+
+struct ReplacementParsedLeftChevronQuotationMarkSyntax {
+}
+
+struct ReplacementParsedOpeningParenthesisSyntax {
+}
+
+struct ReplacementParsedRightChevronQuotationMarkSyntax {
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached

@@ -10,6 +10,9 @@ struct Module {
   var isSayingModule: Bool {
     return directory.lastPathComponent == "Saying"
   }
+  var isSayingSyntaxModule: Bool {
+    return directory.lastPathComponent == "Saying Syntax"
+  }
 
   func sourceFiles() throws -> [URL] {
     return try FileManager.default.deepFileEnumeration(in: directory)
@@ -27,6 +30,9 @@ struct Module {
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
       try module.add(file: File(from: sourceFile).parse())
+    }
+    if isSayingSyntaxModule {
+      try module.unfoldSyntax()
     }
     try module.resolveExtensions()
     try module.resolveUses()
