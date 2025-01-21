@@ -1,5 +1,5 @@
 struct UnicodeText {
-  var scalars: String
+  fileprivate var scalars: String
 }
 
 struct ParagraphBreakSyntax {

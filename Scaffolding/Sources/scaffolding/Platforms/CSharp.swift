@@ -40,8 +40,19 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func partDeclaration(name: String, type: String) -> String {
-    return "\(type) \(name);"
+  static func accessModifier(for access: AccessIntermediate) -> String? {
+    switch access {
+    case .file:
+      return "file"
+    case .clients:
+      return nil // internal
+    }
+  }
+
+  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+    let modifier = accessModifier == "file" ? "internal" : accessModifier
+    var access = modifier.map({ "\($0) " }) ?? ""
+    return "\(access)\(type) \(name);"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {

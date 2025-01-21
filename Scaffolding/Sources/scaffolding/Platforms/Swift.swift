@@ -95,12 +95,22 @@ enum Swift: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
+  static func accessModifier(for access: AccessIntermediate) -> String? {
+    switch access {
+    case .file:
+      return "fileprivate"
+    case .clients:
+      return nil // internal
+    }
+  }
+
   static var isTyped: Bool {
     return true
   }
 
-  static func partDeclaration(name: String, type: String) -> String {
-    return "var \(name): \(type)"
+  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
+    return "\(access)var \(name): \(type)"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
