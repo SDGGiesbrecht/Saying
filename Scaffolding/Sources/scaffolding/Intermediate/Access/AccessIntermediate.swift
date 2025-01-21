@@ -1,6 +1,7 @@
 enum AccessIntermediate: Comparable {
   static var inferred: AccessIntermediate { .file }
   case file
+  case unit
   case clients
 }
 
@@ -10,6 +11,8 @@ extension AccessIntermediate {
       switch node.keyword {
       case .file:
         self = .file
+      case .unit:
+        self = .unit
       case .clients:
         self = .clients
       }

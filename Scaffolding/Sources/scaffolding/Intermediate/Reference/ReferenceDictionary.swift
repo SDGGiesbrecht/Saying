@@ -414,8 +414,10 @@ extension ReferenceDictionary {
 
 extension ReferenceDictionary {
   mutating func removeUnreachable(
-    fromEntryPoints entryPoints: Set<StrictString>
+    fromEntryPoints entryPoints: inout Set<StrictString>,
+    externalReferenceLookup: [ReferenceDictionary]
   ) {
+    let referenceLookup = externalReferenceLookup.appending(self)
     var optimized = ReferenceDictionary()
     optimized.languages = self.languages // For temporary simplicity; not output anyway.
     var found: Set<StrictString> = []
@@ -428,21 +430,21 @@ extension ReferenceDictionary {
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true
-          found.insert(StrictString(thing.globallyUniqueIdentifier(referenceLookup: [self])))
+          found.insert(StrictString(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
           _ = optimized.add(thing: thing)
-          for child in thing.requiredIdentifiers(moduleReferenceDictionary: self).lazy.map({ StrictString($0) }) {
+          for child in thing.requiredIdentifiers(moduleAndExternalReferenceLookup: referenceLookup).lazy.map({ StrictString($0) }) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }
           }
         }
-        let identifier = StrictString(thing.globallyUniqueIdentifier(referenceLookup: [self]))
+        let identifier = StrictString(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup))
         if stillRequired.contains(identifier) {
           stillRequired.remove(identifier)
           foundSomething = true
           found.insert(identifier)
           _ = optimized.add(thing: thing)
-          for child in thing.requiredIdentifiers(moduleReferenceDictionary: self).lazy.map({ StrictString($0) }) {
+          for child in thing.requiredIdentifiers(moduleAndExternalReferenceLookup: referenceLookup).lazy.map({ StrictString($0) }) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }
@@ -450,27 +452,27 @@ extension ReferenceDictionary {
         }
       }
       for action in allActions() {
-        if let swift = action.swiftSignature(referenceLookup: [self]).map({ StrictString($0) }),
+        if let swift = action.swiftSignature(referenceLookup: referenceLookup).map({ StrictString($0) }),
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true
-          found.insert(StrictString(action.globallyUniqueIdentifier(referenceLookup: [self])))
+          found.insert(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
           _ = optimized.add(action: action)
           for identifer in action.requiredIdentifiers(
-            moduleReferenceDictionary: self
+            moduleAndExternalReferenceLookup: referenceLookup
           ).lazy.map({ StrictString($0) }) {
             if !found.contains(identifer) {
               stillRequired.insert(identifer)
             }
           }
         }
-        let identifier = StrictString(action.globallyUniqueIdentifier(referenceLookup: [self]))
+        let identifier = StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))
         if stillRequired.contains(identifier) {
           stillRequired.remove(identifier)
           foundSomething = true
           found.insert(identifier)
           _ = optimized.add(action: action)
-          for child in action.requiredIdentifiers(moduleReferenceDictionary: self).lazy.map({ StrictString($0) }) {
+          for child in action.requiredIdentifiers(moduleAndExternalReferenceLookup: referenceLookup).lazy.map({ StrictString($0) }) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }
@@ -479,5 +481,6 @@ extension ReferenceDictionary {
       }
     } while !stillRequired.isEmpty && foundSomething
     self = optimized
+    entryPoints = stillRequired
   }
 }

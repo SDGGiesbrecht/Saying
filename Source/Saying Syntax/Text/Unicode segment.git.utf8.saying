@@ -1,0 +1,17 @@
+thing (unit)
+ (
+  English: Unicode segment
+ )
+ {
+  part (unit)
+   (
+    English: scalar offset
+   )
+   natural number
+
+  part (unit)
+   (
+    English: source
+   )
+   Unicode text
+ }

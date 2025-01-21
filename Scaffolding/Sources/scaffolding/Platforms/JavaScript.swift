@@ -94,7 +94,7 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String]) -> String? {
+  static func thingDeclaration(name: String, components: [String], accessModifier: String?) -> String? {
     return nil
   }
   static func enumerationTypeDeclaration(

@@ -23,7 +23,7 @@ struct Module {
 
   func build(
     mode: CompilationMode,
-    entryPoints: Set<StrictString>?,
+    entryPoints: inout Set<StrictString>?,
     moduleWideImports: [ModuleIntermediate]
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
@@ -45,7 +45,15 @@ struct Module {
     case .debugging, .dependency:
       return module
     case .release:
-      return module.removingUnreachable(fromEntryPoints: entryPoints)
+      guard var entries = entryPoints else {
+        fatalError("General reachability checks without specifying entry points are not implemented yet.")
+      }
+      let result = module.removingUnreachable(
+        fromEntryPoints: &entries,
+        externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary })
+      )
+      entryPoints = entries
+      return result
     }
   }
 }

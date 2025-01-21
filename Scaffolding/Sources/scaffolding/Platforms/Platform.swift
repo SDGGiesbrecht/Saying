@@ -53,7 +53,8 @@ protocol Platform {
   static func actionReferencePrefix(isVariable: Bool) -> String?
   static func thingDeclaration(
     name: String,
-    components: [String]
+    components: [String],
+    accessModifier: String?
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -349,7 +350,8 @@ extension Platform {
         let access = accessModifier(for: part.access)
         return partDeclaration(name: name, type: type, accessModifier: access)
       })
-      return thingDeclaration(name: name, components: components)
+      let access = accessModifier(for: thing.access)
+      return thingDeclaration(name: name, components: components, accessModifier: access)
     } else {
       var cases: [String] = []
       var storageCases: [String] = []
@@ -1003,12 +1005,15 @@ extension Platform {
       choiceRegions
     ].joined())
   }
-  static func typesSource(for module: ModuleIntermediate) -> String {
+  static func typesSource(
+    for module: ModuleIntermediate,
+    moduleWideImports: [ReferenceDictionary]
+  ) -> String {
     var result: [String] = []
-    let moduleReferenceLookup = module.referenceDictionary
+    let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
     let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
-      if let declaration = self.declaration(for: thing, externalReferenceLookup: [moduleReferenceLookup]) {
+      if let declaration = self.declaration(for: thing, externalReferenceLookup: moduleReferenceLookup) {
         result.append(contentsOf: [
           "",
           declaration
@@ -1052,7 +1057,13 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
-  static func source(for modules: [ModuleIntermediate], mode: CompilationMode) -> String {
+  static func source(
+    for modules: [ModuleIntermediate],
+    mode: CompilationMode,
+    moduleWideImports: [ModuleIntermediate]
+  ) -> String {
+    let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
+    
     var result: [String] = []
 
     var imports: Set<String> = []
@@ -1080,7 +1091,7 @@ extension Platform {
     }
 
     for module in modules {
-      result.append(typesSource(for: module))
+      result.append(typesSource(for: module, moduleWideImports: moduleWideImportDictionary))
     }
 
     if let start = actionDeclarationsContainerStart {
@@ -1121,22 +1132,34 @@ extension Platform {
     location: URL? = nil
   ) throws {
     let sourceModules = try package.modules()
-    let sayingModule = try sourceModules.first(where: { $0.isSayingModule })?
-      .build(mode: mode, entryPoints: entryPoints, moduleWideImports: [])
+    var noEntryPoints: Set<StrictString>? = nil
+    let sayingModule = sourceModules.first(where: { $0.isSayingModule })
+    let builtSayingModule = try sayingModule?.build(
+      mode: .dependency,
+      entryPoints: &noEntryPoints,
+      moduleWideImports: []
+    )
+    var entryPoints = entryPoints
     var builtModules = try sourceModules
       .lazy.filter({ !$0.isSayingModule })
       .map({ module in
         return try module.build(
           mode: mode,
-          entryPoints: entryPoints,
-          moduleWideImports: sayingModule.map({ [$0] }) ?? []) }
+          entryPoints: &entryPoints,
+          moduleWideImports: builtSayingModule.map({ [$0] }) ?? []) }
       )
     if let saying = sayingModule {
-      builtModules.prepend(saying)
+      builtModules.prepend(
+        try saying.build(
+          mode: mode,
+          entryPoints: &entryPoints,
+          moduleWideImports: []
+        )
+      )
     }
 
     var source: [String] = [
-      self.source(for: builtModules, mode: mode)
+      self.source(for: builtModules, mode: mode, moduleWideImports: builtSayingModule.map({ [$0] }) ?? [])
     ]
 
     switch mode {
