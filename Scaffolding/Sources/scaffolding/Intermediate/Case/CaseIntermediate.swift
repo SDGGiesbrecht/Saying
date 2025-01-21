@@ -33,7 +33,7 @@ extension CaseIntermediate {
 
     var names: Set<StrictString> = []
     for name in declaration.name.names.names {
-      names.insert(name.name.identifierText())
+      names.insert(StrictString(name.name.identifierText()))
     }
 
     let caseNamespace = namespace.appending(names)
@@ -77,7 +77,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch StrictString(implementation.language.identifierText()) {
             case "C":
               cStore = constructed
             case "C♯":
@@ -105,7 +105,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch StrictString(implementation.language.identifierText()) {
             case "C":
               cStore = constructed
             case "C♯":
@@ -130,7 +130,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch StrictString(implementation.language.identifierText()) {
             case "C":
               cRetrieve = constructed
             case "C♯":
@@ -155,7 +155,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch StrictString(implementation.language.identifierText()) {
             case "C":
               cCheck = constructed
             case "C♯":
@@ -260,7 +260,7 @@ extension CaseIntermediate {
 extension CaseIntermediate {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> CaseIntermediate {
     return CaseIntermediate(
       names: names,

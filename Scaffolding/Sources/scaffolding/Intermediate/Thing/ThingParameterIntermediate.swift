@@ -14,7 +14,7 @@ extension ThingParameterIntermediate {
     let identifier = names.identifier()
     return ThingParameterIntermediate(
       names: names,
-      resolvedType: typeLookup[identifier] ?? resolvedType?.specializing(typeLookup: typeLookup)
+      resolvedType: typeLookup[StrictString(identifier)] ?? resolvedType?.specializing(typeLookup: typeLookup)
     )
   }
 }

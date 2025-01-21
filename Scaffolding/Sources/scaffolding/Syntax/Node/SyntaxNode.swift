@@ -3,38 +3,42 @@ import SDGText
 protocol SyntaxNode {
   var nodeKind: SyntaxNodeKind { get }
   var children: [SyntaxNode] { get }
-  func source() -> StrictString
+  func source() -> UnicodeText
 
   func parsedNode() -> ParsedSyntaxNode
 }
 
 extension SyntaxNode {
 
-  func source() -> StrictString {
-    return children.lazy.map({ $0.source() }).joined()
+  func source() -> UnicodeText {
+    return UnicodeText(children.lazy.map({ StrictString($0.source()) }).joined())
   }
 
-  func formattedGitStyleSource() -> StrictString {
+  func formattedGitStyleSource() -> UnicodeText {
     return formattedGitStyleSource(indent: 0)
   }
-  private func formattedGitStyleSource(indent: Int) -> StrictString {
+  private func formattedGitStyleSource(indent: Int) -> UnicodeText {
     switch nodeKind {
     case .paragraphBreakSyntax:
-      return "\n\n" + StrictString(repeating: " ", count: indent)
+      return UnicodeText("\n\n" + StrictString(repeating: " ", count: indent))
     case .lineBreakSyntax:
-      return "\n" + StrictString(repeating: " ", count: indent)
+      return UnicodeText("\n" + StrictString(repeating: " ", count: indent))
     case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .parameterDocumentation, .partDeclaration, .requirementDeclaration, .thingDeclaration, .use:
-      return children.lazy.map({ $0.formattedGitStyleSource(indent: indent + 1) }).joined()
+      return UnicodeText(children.lazy.map({ StrictString($0.formattedGitStyleSource(indent: indent + 1)) }).joined())
     case .abilityName, .caseName, .cases, .documentation, .flowArgument, .fulfillments, .longTestImplementation, .multipleActionNames, .parameterDetails, .paragraph, .partName, .provisions, .requirements, .sourceActionImplementation, .sourceThingImplementation, .thingName:
-      return [
-        children.dropLast(2).map({ $0.formattedGitStyleSource(indent: indent + 1) }).joined(),
-        children.suffix(2).map({ $0.formattedGitStyleSource(indent: indent) }).joined(),
-      ].joined()
+      return UnicodeText(
+        [
+          children.dropLast(2).map({ StrictString($0.formattedGitStyleSource(indent: indent + 1)) }).joined(),
+          children.suffix(2).map({ StrictString($0.formattedGitStyleSource(indent: indent)) }).joined(),
+        ].joined()
+      )
     default:
       if self is SyntaxLeaf {
         return source()
       } else {
-        return children.lazy.map({ $0.formattedGitStyleSource(indent: indent) }).joined()
+        return UnicodeText(
+          children.lazy.map({ StrictString($0.formattedGitStyleSource(indent: indent)) }).joined()
+        )
       }
     }
   }

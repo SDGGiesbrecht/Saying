@@ -1,5 +1,3 @@
-import SDGText
-
 extension Node {
 
   static let nodes: [Node] = Array(
@@ -1442,12 +1440,12 @@ extension Node {
   )
 
   static func separatedList(
-    name: StrictString,
-    entryName: StrictString,
-    entryNamePlural: StrictString,
-    entryType: StrictString,
-    separatorName: StrictString,
-    separatorType: StrictString,
+    name: String,
+    entryName: String,
+    entryNamePlural: String,
+    entryType: String,
+    separatorName: String,
+    separatorType: String,
     fixedSeparator: Bool,
     isIdentifierSegment: Bool = false
   ) -> [Node] {

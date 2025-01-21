@@ -5,7 +5,7 @@ indirect enum ParsedTypeReference {
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])
   case action(parameters: [ParsedTypeReference], returnValue: ParsedTypeReference?)
   case statements
-  case enumerationCase(enumeration: ParsedTypeReference, identifier: StrictString)
+  case enumerationCase(enumeration: ParsedTypeReference, identifier: UnicodeText)
 }
 
 extension ParsedTypeReference {
@@ -89,26 +89,26 @@ extension ParsedTypeReference {
   var key: TypeReference {
     switch self {
     case .simple(let simple):
-      return .simple(simple.identifier)
+      return .simple(StrictString(simple.identifier))
     case .compound(identifier: let identifier, components: let components):
-      return .compound(identifier: identifier.name(), components: components.map({ $0.key }))
+      return .compound(identifier: StrictString(identifier.name()), components: components.map({ $0.key }))
     case .action(parameters: let parameters, returnValue: let returnValue):
       return .action(parameters: parameters.map({ $0.key }), returnValue: returnValue.map({ $0.key }))
     case .statements:
       return .statements
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
-      return .enumerationCase(enumeration.key, identifier: identifier)
+      return .enumerationCase(enumeration.key, identifier: StrictString(identifier))
     }
   }
 }
 
 extension ParsedTypeReference {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> ParsedTypeReference {
     switch self {
     case .simple(let simple):
-      if let found = typeLookup[simple.identifier] {
+      if let found = typeLookup[StrictString(simple.identifier)] {
         var modified = simple
         modified.identifier = found
         return .simple(modified)
@@ -138,7 +138,7 @@ extension ParsedTypeReference {
   func specializing(typeLookup: [StrictString: ParsedTypeReference]) -> ParsedTypeReference {
     switch self {
     case .simple(let simple):
-      if let found = typeLookup[simple.identifier] {
+      if let found = typeLookup[StrictString(simple.identifier)] {
         return found
       } else {
         return self
@@ -236,45 +236,45 @@ extension ParsedTypeReference {
 }
 
 extension ParsedTypeReference {
-  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
+  func unresolvedGloballyUniqueIdentifierComponents() -> [UnicodeText] {
     switch self {
     case .simple(let simple):
       return [simple.identifier]
     case .compound(identifier: let identifier, components: let components):
-      var result: [StrictString] = ["("]
+      var result: [UnicodeText] = ["("].map({ UnicodeText($0) })
       result.append(identifier.name())
       result.append(contentsOf: components.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
-      result.append(")")
+      result.append(UnicodeText(")"))
       return result
     case .action(parameters: let parameters, returnValue: let returnValue):
-      var result: [StrictString] = ["(("]
+      var result: [UnicodeText] = ["(("].map({ UnicodeText($0) })
       result.append(contentsOf: parameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
       result.append(contentsOf: returnValue.unresolvedGloballyUniqueIdentifierComponents())
-      result.append("))")
+      result.append(UnicodeText("))"))
       return result
     case .statements:
-      return ["{}"]
+      return ["{}"].map({ UnicodeText($0) })
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
-      var result: [StrictString] = ["((("]
+      var result: [UnicodeText] = ["((("].map({ UnicodeText($0) })
       result.append(contentsOf: enumeration.unresolvedGloballyUniqueIdentifierComponents())
-      result.append("•")
+      result.append(UnicodeText("•"))
       result.append(identifier)
-      result.append(")))")
+      result.append(UnicodeText(")))"))
       return result
     }
   }
 }
 extension Optional where Wrapped == ParsedTypeReference {
-  func unresolvedGloballyUniqueIdentifierComponents() -> [StrictString] {
-    return self?.unresolvedGloballyUniqueIdentifierComponents() ?? [""]
+  func unresolvedGloballyUniqueIdentifierComponents() -> [UnicodeText] {
+    return self?.unresolvedGloballyUniqueIdentifierComponents() ?? [""].map({ UnicodeText($0) })
   }
 }
 
 extension ParsedTypeReference {
   func requiredIdentifiers(
     referenceDictionary: ReferenceDictionary
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     switch self {
     case .simple(let simple):
       if let thing = referenceDictionary.lookupThing(simple.identifier, components: []) {

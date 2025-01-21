@@ -1,19 +1,17 @@
-import SDGText
-
 extension Node {
 
   struct Alternate {
-    let name: StrictString
-    let type: StrictString
+    let name: String
+    let type: String
   }
 }
 
 extension Node.Alternate {
 
-  var uppercasedName: StrictString {
+  var uppercasedName: String {
     var result = name
-    let first = result.removeFirst()
-    result.prepend(contentsOf: first.properties.titlecaseMapping.scalars)
+    let first = result.unicodeScalars.removeFirst()
+    result.unicodeScalars.prepend(contentsOf: first.properties.titlecaseMapping.scalars)
     return result
   }
 }

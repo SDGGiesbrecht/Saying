@@ -1,7 +1,7 @@
 import SDGText
 
 struct UseIntermediate {
-  var ability: StrictString
+  var ability: UnicodeText
   var arguments: [ParsedTypeReference]
   var actions: [ActionIntermediate]
   var access: AccessIntermediate
@@ -45,7 +45,7 @@ extension UseIntermediate {
 
 extension UseIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> UseIntermediate {
     return UseIntermediate(
       ability: ability,

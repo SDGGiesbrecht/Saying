@@ -1,8 +1,6 @@
-import SDGText
-
 extension ReferenceDictionary {
   struct RedeclaredIdentifierError {
-    var identifier: StrictString
+    var identifier: UnicodeText
     var triggeringDeclaration: ParsedDeclaration
     var conflictingDeclarations: [ParsedDeclaration]
   }

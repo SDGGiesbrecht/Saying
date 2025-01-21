@@ -1,7 +1,5 @@
-import SDGText
-
 struct SimpleTypeReference {
-  var identifier: StrictString
+  var identifier: UnicodeText
   var syntaxNode: ParsedUninterruptedIdentifier
 }
 

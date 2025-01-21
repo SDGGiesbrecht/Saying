@@ -1,11 +1,9 @@
-import SDGText
-
 extension Ability {
   enum ConstructionError: DiagnosticError {
     case brokenParameterInterpolation(Interpolation<AbilityParameterIntermediate>.ConstructionError)
     case brokenRequirement(RequirementIntermediate.ConstructionError)
     case brokenChoice(ActionIntermediate.ConstructionError)
-    case redeclaredIdentifier(StrictString, [ParsedRequirementDeclarationPrototype])
+    case redeclaredIdentifier(UnicodeText, [ParsedRequirementDeclarationPrototype])
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var range: Slice<UTF8Segments> {

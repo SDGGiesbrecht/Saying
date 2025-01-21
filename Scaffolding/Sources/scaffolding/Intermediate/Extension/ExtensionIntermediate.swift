@@ -1,7 +1,7 @@
 import SDGText
 
 struct ExtensionIntermediate {
-  var ability: StrictString
+  var ability: UnicodeText
   var arguments: [SimpleTypeReference]
   var things: [Thing]
   var actions: [ActionIntermediate]

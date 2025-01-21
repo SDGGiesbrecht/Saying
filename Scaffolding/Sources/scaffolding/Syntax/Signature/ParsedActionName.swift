@@ -7,7 +7,7 @@ extension ParsedActionName {
     case .multiple(let multiple):
       var dictionary: [StrictString: ParsedSignature] = [:]
       for entry in multiple.names.names {
-        dictionary[entry.language.identifierText()] = entry.name
+        dictionary[StrictString(entry.language.identifierText())] = entry.name
       }
       return dictionary
     case .single(let single):

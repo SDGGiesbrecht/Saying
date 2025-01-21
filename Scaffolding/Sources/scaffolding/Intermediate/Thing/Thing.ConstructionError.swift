@@ -1,5 +1,3 @@
-import SDGText
-
 extension Thing {
   enum ConstructionError: DiagnosticError {
     case brokenParameterInterpolation(Interpolation<ThingParameterIntermediate>.ConstructionError)

@@ -21,7 +21,7 @@ extension PartIntermediate {
 
     var names: Set<StrictString> = []
     for name in declaration.name.names.names {
-      names.insert(name.name.identifierText())
+      names.insert(StrictString(name.name.identifierText()))
     }
 
     let access = AccessIntermediate(declaration.access)
@@ -62,7 +62,7 @@ extension PartIntermediate {
 extension PartIntermediate {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,

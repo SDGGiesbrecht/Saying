@@ -1,5 +1,3 @@
-import SDGText
-
 extension UseIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenAction(ActionIntermediate.ConstructionError)

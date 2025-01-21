@@ -14,9 +14,9 @@ extension Interpolation {
 
   static func construct<Entries, ParameterNode, ParameterDefinition>(
     entries: Entries,
-    getEntryName: (Entries.Element) -> StrictString,
+    getEntryName: (Entries.Element) -> UnicodeText,
     getParameters: (Entries.Element) -> [ParameterNode],
-    getParameterName: (ParameterNode) -> StrictString,
+    getParameterName: (ParameterNode) -> UnicodeText,
     getDefinitionOrReference: (ParameterNode) -> DefinitionOrReference<ParameterDefinition>,
     getNestedSignature: (ParameterNode) -> ParsedSignature?,
     getNestedParameters: (ParsedSignature) -> [ParameterNode],
@@ -29,7 +29,7 @@ extension Interpolation {
   where Entries: Collection, Entries.Element: ParsedSyntaxNode, ParameterNode: ParsedSyntaxNode {
     var errors: [ConstructionError] = []
     var parameterIndices: [StrictString: Int] = [:]
-    var parameterReferences: [StrictString: StrictString] = [:]
+    var parameterReferences: [StrictString: UnicodeText] = [:]
     var foundDefinitionEntry = false
     for entry in entries {
       var isDefinitionEntry: Bool?
@@ -38,7 +38,7 @@ extension Interpolation {
         foundDefinitionEntry = true
       }
       for (index, parameter) in parameters.enumerated() {
-        let parameterName = getParameterName(parameter)
+        let parameterName = StrictString(getParameterName(parameter))
         switch getDefinitionOrReference(parameter) {
         case .definition:
           if index == 0,
@@ -66,7 +66,7 @@ extension Interpolation {
     var completeParameterIndexTable: [StrictString: Int] = parameterIndices
     for entry in entries {
       var reordering: [Int] = []
-      let entryName = getEntryName(entry)
+      let entryName = StrictString(getEntryName(entry))
       for (position, parameter) in getParameters(entry).enumerated() {
         let nestedSignature = getNestedSignature(parameter)
         switch getDefinitionOrReference(parameter) {
@@ -77,9 +77,9 @@ extension Interpolation {
             nestedSignatures[position, default: []].append(nested)
           }
         case .reference(let reference):
-          var resolving = reference.name.name()
+          var resolving = StrictString(reference.name.name())
           var checked: Set<StrictString> = []
-          while let next = parameterReferences[resolving] {
+          while let next = parameterReferences[resolving].map({ StrictString($0) }) {
             checked.insert(resolving)
             resolving = next
             if checked.contains(next) {
@@ -91,7 +91,7 @@ extension Interpolation {
           }
           if let index = parameterIndices[resolving] {
             reordering.append(index)
-            completeParameterIndexTable[getParameterName(parameter)] = index
+            completeParameterIndexTable[StrictString(getParameterName(parameter))] = index
             if let nested = nestedSignature {
               nestedSignatures[index, default: []].append(nested)
             }
@@ -143,8 +143,8 @@ extension Interpolation {
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
-  mutating func apply(swiftLabels: [StrictString], accordingTo name: StrictString) {
-    let indices = reorderings[name]!
+  mutating func apply(swiftLabels: [UnicodeText], accordingTo name: UnicodeText) {
+    let indices = reorderings[StrictString(name)]!
     for (index, label) in zip(indices, swiftLabels) {
       parameters[index].swiftLabel = label
     }
@@ -175,7 +175,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       }
       if let existing = mergedReorderings[name] {
         if existing != rearranged {
-          errors.append(.mismatchedParameters(name: name, declaration: provisionDeclarationName))
+          errors.append(.mismatchedParameters(name: UnicodeText(name), declaration: provisionDeclarationName))
         }
       } else {
         mergedReorderings[name] = rearranged
@@ -201,12 +201,12 @@ extension Interpolation {
 }
 
 extension Interpolation {
-  func parameter(named identifier: StrictString) -> InterpolationParameter? {
-    return parameters.first(where: { $0.names.contains(identifier) })
+  func parameter(named identifier: UnicodeText) -> InterpolationParameter? {
+    return parameters.first(where: { $0.names.contains(StrictString(identifier)) })
   }
 
-  func ordered(for name: StrictString) -> [InterpolationParameter] {
-    guard let reordering = reorderings[name] else {
+  func ordered(for name: UnicodeText) -> [InterpolationParameter] {
+    guard let reordering = reorderings[StrictString(name)] else {
       return []
     }
     return reordering.map({ parameters[$0] })
@@ -221,18 +221,18 @@ extension Interpolation {
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
   func removingOtherNamesAnd(
-    replacing originalName: StrictString,
-    with newName: StrictString
+    replacing originalName: UnicodeText,
+    with newName: UnicodeText
   ) -> Interpolation {
     return Interpolation(
       parameters: parameters,
       reorderings: reorderings == [:]
         ? [:]
-        : [newName: reorderings[originalName]!]
+        : [StrictString(newName): reorderings[StrictString(originalName)]!]
     )
   }
   func prefixingEach(
-    with prefix: StrictString
+    with prefix: UnicodeText
   ) -> Interpolation {
     return Interpolation(
       parameters: parameters.map({ $0.prefixing(with: prefix) }),
@@ -244,7 +244,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
   static func enumerationWrap(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString,
+    caseIdentifier: UnicodeText,
     valueType: ParsedTypeReference
   ) -> Interpolation {
     return Interpolation(
@@ -259,7 +259,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
   }
   static func enumerationUnwrap(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString,
+    caseIdentifier: UnicodeText,
     valueType: ParsedTypeReference
   ) -> Interpolation {
     return Interpolation(
@@ -276,7 +276,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
   }
   static func enumerationCheck(
     enumerationType: ParsedTypeReference,
-    caseIdentifier: StrictString,
+    caseIdentifier: UnicodeText,
     empty: Bool
   ) -> Interpolation {
     return Interpolation(

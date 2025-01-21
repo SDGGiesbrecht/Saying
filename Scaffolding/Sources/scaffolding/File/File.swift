@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 struct File {
 
   init(from url: URL) throws {
@@ -28,7 +26,7 @@ struct File {
     }
   }
 
-  func formattedGitStyleSource() throws -> StrictString {
+  func formattedGitStyleSource() throws -> UnicodeText {
     return try parse().formattedGitStyleSource()
   }
 }

@@ -1,5 +1,3 @@
-import SDGText
-
 protocol DiagnosticError: Error {
   var range: Slice<UTF8Segments> { get }
   var message: String { get }

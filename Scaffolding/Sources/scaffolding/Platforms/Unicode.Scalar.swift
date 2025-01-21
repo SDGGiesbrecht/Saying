@@ -1,5 +1,3 @@
-import SDGText
-
 extension Unicode.Scalar {
   
   var isVulnerableToNormalization: Bool {

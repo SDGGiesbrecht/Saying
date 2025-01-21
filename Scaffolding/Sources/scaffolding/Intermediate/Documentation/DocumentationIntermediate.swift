@@ -41,7 +41,7 @@ extension DocumentationIntermediate {
 
 extension DocumentationIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
       paragraphs: paragraphs,

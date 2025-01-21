@@ -9,7 +9,7 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
-  var swiftName: StrictString?
+  var swiftName: UnicodeText?
 
   init(
     isFlow: Bool,
@@ -20,7 +20,7 @@ struct ActionPrototype {
     access: AccessIntermediate,
     testOnlyAccess: Bool,
     documentation: DocumentationIntermediate?,
-    swiftName: StrictString?
+    swiftName: UnicodeText?
   ) {
     self.isFlow = isFlow
     self.names = names
@@ -61,12 +61,12 @@ extension ActionPrototype {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    var swiftName: StrictString?
+    var swiftName: UnicodeText?
     for (language, signature) in namesDictionary {
       let name = signature.name()
       if language == "Swift" {
         swiftName = name
-        let parameterList = name.dropping(through: " ")
+        let parameterList = StrictString(name).dropping(through: " ")
         let labels = parameterList.components(separatedBy: "()").dropLast()
           .map({ component in
             var label = StrictString(component.contents)
@@ -78,9 +78,9 @@ extension ActionPrototype {
             }
             return label
           })
-        parameters.apply(swiftLabels: labels, accordingTo: name)
+        parameters.apply(swiftLabels: labels.map({ UnicodeText($0) }), accordingTo: name)
       }
-      names.insert(name)
+      names.insert(StrictString(name))
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
@@ -92,7 +92,7 @@ extension ActionPrototype {
       attachedDocumentation = intermediateDocumentation
       let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
       for parameter in intermediateDocumentation.parameters.joined() {
-        if !existingParameters.contains(parameter.name.identifierText()) {
+        if !existingParameters.contains(StrictString(parameter.name.identifierText())) {
           errors.append(ConstructionError.documentedParameterNotFound(parameter))
         }
       }
@@ -134,7 +134,7 @@ extension ActionPrototype {
 }
 
 extension ActionPrototype {
-  func lookupParameter(_ identifier: StrictString) -> ParameterIntermediate? {
+  func lookupParameter(_ identifier: UnicodeText) -> ParameterIntermediate? {
     return parameters.parameter(named: identifier)
   }
 
@@ -152,7 +152,7 @@ extension ActionPrototype {
     return result
   }
 
-  func signature(orderedFor name: StrictString) -> [ParsedTypeReference] {
+  func signature(orderedFor name: UnicodeText) -> [ParsedTypeReference] {
     return parameters.ordered(for: name).map({ $0.type })
   }
 }
@@ -161,8 +161,8 @@ extension ActionPrototype {
 
   func requiredIdentifiers(
     referenceDictionary: ReferenceDictionary
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     for parameter in parameters.inAnyOrder {
       result.append(
         contentsOf: parameter.type.requiredIdentifiers(

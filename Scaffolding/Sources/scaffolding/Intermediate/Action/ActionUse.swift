@@ -1,7 +1,7 @@
 import SDGText
 
 struct ActionUse {
-  var actionName: StrictString
+  var actionName: UnicodeText
   var arguments: [ActionUseArgument]
   var source: ParsedAction?
   var passage: ParameterPassage
@@ -55,7 +55,7 @@ extension ActionUse {
 extension ActionUse {
   func localActions() -> [ActionIntermediate] {
     if passage == .out {
-      return [.parameterAction(names: [actionName], parameters: .none, returnValue: explicitResultType)]
+      return [.parameterAction(names: [StrictString(actionName)], parameters: .none, returnValue: explicitResultType)]
     } else {
       return arguments.flatMap { $0.localActions() }
     }
@@ -221,7 +221,7 @@ extension ActionUse {
 
 extension ActionUse {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,
@@ -247,9 +247,9 @@ extension ActionUse {
 }
 
 extension ActionUse {
-  static func isReferenceNotCall<T>(name: StrictString, arguments: [T]) -> Bool? {
+  static func isReferenceNotCall<T>(name: UnicodeText, arguments: [T]) -> Bool? {
     if arguments.isEmpty {
-      if name.contains("(") {
+      if StrictString(name).contains("(") {
         return true
       } else {
         return nil
@@ -272,8 +272,8 @@ extension ActionUse {
 
   func requiredIdentifiers(
     context: [ReferenceDictionary]
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     for argument in arguments {
       result.append(
         contentsOf: argument.requiredIdentifiers(

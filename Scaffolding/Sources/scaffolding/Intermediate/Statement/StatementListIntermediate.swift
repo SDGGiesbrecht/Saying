@@ -58,7 +58,7 @@ extension StatementListIntermediate {
 
 extension StatementListIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: StrictString]
+    typeLookup: [StrictString: UnicodeText]
   ) -> StatementListIntermediate {
     return StatementListIntermediate(
       statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
@@ -86,8 +86,8 @@ extension StatementListIntermediate {
 
   func requiredIdentifiers(
     context: [ReferenceDictionary]
-  ) -> [StrictString] {
-    var result: [StrictString] = []
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
     for statement in statements {
       result.append(
         contentsOf: statement.requiredIdentifiers(

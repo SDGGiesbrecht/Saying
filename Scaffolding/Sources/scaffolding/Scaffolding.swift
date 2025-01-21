@@ -1,5 +1,7 @@
 import Foundation
 
+import SDGText
+
 @main struct Scaffolding {
   static func main() throws {
     let thisFile = URL(fileURLWithPath: #filePath)
@@ -44,7 +46,7 @@ import Foundation
     case "rescaffold":
       try rescaffold(from: package, packageRoot: packageRoot)
     case "format":
-      try package.format(reportProgress: { print($0) })
+      try package.format(reportProgress: { print(StrictString($0)) })
     case "prepare‐c":
       try C.prepare(package: package, mode: .testing)
     case "prepare‐c‐sharp":
@@ -69,6 +71,12 @@ import Foundation
   }
 
   static func rescaffold(from package: Package, packageRoot: URL) throws {
+    let file = packageRoot
+      .appendingPathComponent("Scaffolding")
+      .appendingPathComponent("Sources")
+      .appendingPathComponent("scaffolding")
+      .appendingPathComponent("Generated")
+      .appendingPathComponent("Saying.swift")
     try Swift.prepare(
       package: package,
       mode: .release,
@@ -98,12 +106,26 @@ import Foundation
         "SpaceSyntax",
         "SymbolInsertionMarkSyntax",
       ],
-      location: packageRoot
-        .appendingPathComponent("Scaffolding")
-        .appendingPathComponent("Sources")
-        .appendingPathComponent("scaffolding")
-        .appendingPathComponent("Generated")
-        .appendingPathComponent("Saying.swift")
+      location: file
     )
+    var source = try String(from: file)
+    source.append(contentsOf: [
+      "",
+      "import SDGText",
+      "",
+      "extension StrictString {",
+      "  init(_ text: UnicodeText) {",
+      "    self.init(text.scalars)",
+      "  }",
+      "}",
+      "",
+      "extension UnicodeText {",
+      "  init(_ string: StrictString) {",
+      "    scalars = String(string)",
+      "  }",
+      "}",
+      "",
+    ].joined(separator: "\n"))
+    try source.save(to: file)
   }
 }
