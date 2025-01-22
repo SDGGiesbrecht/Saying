@@ -272,25 +272,25 @@ extension Optional where Wrapped == ParsedTypeReference {
 
 extension ParsedTypeReference {
   func requiredIdentifiers(
-    referenceDictionary: ReferenceDictionary
+    moduleAndExternalReferenceLookup: [ReferenceDictionary]
   ) -> [UnicodeText] {
     var result: [UnicodeText] = []
     switch self {
     case .simple(let simple):
-      if let thing = referenceDictionary.lookupThing(simple.identifier, components: []) {
-        result.append(thing.globallyUniqueIdentifier(referenceLookup: [referenceDictionary]))
+      if let thing = moduleAndExternalReferenceLookup.lookupThing(simple.identifier, components: []) {
+        result.append(thing.globallyUniqueIdentifier(referenceLookup: moduleAndExternalReferenceLookup))
       }
     case .compound(identifier: let identifier, components: let components):
-      if let thing = referenceDictionary.lookupThing(
+      if let thing = moduleAndExternalReferenceLookup.lookupThing(
         identifier.name(),
         components: components.map({ $0.key })
       ) {
-        result.append(thing.globallyUniqueIdentifier(referenceLookup: [referenceDictionary]))
+        result.append(thing.globallyUniqueIdentifier(referenceLookup: moduleAndExternalReferenceLookup))
       }
       for component in components {
         result.append(
           contentsOf: component.requiredIdentifiers(
-            referenceDictionary: referenceDictionary
+            moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
           )
         )
       }
@@ -298,14 +298,14 @@ extension ParsedTypeReference {
       for parameter in parameters {
         result.append(
           contentsOf: parameter.requiredIdentifiers(
-            referenceDictionary: referenceDictionary
+            moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
           )
         )
       }
       if let value = returnValue {
         result.append(
           contentsOf: value.requiredIdentifiers(
-            referenceDictionary: referenceDictionary
+            moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
           )
         )
       }
@@ -314,7 +314,7 @@ extension ParsedTypeReference {
     case .enumerationCase(enumeration: let enumeration, identifier: _):
       result.append(
         contentsOf: enumeration.requiredIdentifiers(
-          referenceDictionary: referenceDictionary
+          moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
         )
       )
     }

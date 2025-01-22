@@ -97,7 +97,7 @@ enum Swift: Platform {
 
   static func accessModifier(for access: AccessIntermediate) -> String? {
     switch access {
-    case .file:
+    case .file, .unit:
       return "fileprivate"
     case .clients:
       return nil // internal
@@ -149,9 +149,10 @@ enum Swift: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String]) -> String? {
+  static func thingDeclaration(name: String, components: [String], accessModifier: String?) -> String? {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
-      "struct \(name) {"
+      "\(access)struct \(name) {"
     ]
     for component in components {
       result.append("\(indent)\(component)")
@@ -265,9 +266,17 @@ enum Swift: Platform {
     return "; return returnValue"
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?,
+    accessModifier: String?,
+    coverageRegistration: String?,
+    implementation: [String]
+  ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
-      "func \(name)(\(parameters))\(returnSection ?? "") {",
+      "\(access)func \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)

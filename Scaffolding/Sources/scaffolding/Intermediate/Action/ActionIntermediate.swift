@@ -856,12 +856,12 @@ extension ActionIntermediate {
 extension ActionIntermediate {
 
   func requiredIdentifiers(
-    moduleReferenceDictionary: ReferenceDictionary
+    moduleAndExternalReferenceLookup: [ReferenceDictionary]
   ) -> [UnicodeText] {
     var result: [UnicodeText] = []
     result.append(
       contentsOf: prototype.requiredIdentifiers(
-        referenceDictionary: moduleReferenceDictionary
+        moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
       )
     )
     for native in allNativeImplementations() {
@@ -869,7 +869,7 @@ extension ActionIntermediate {
         if let typeInstead = parameterReference.typeInstead {
           result.append(
             contentsOf: typeInstead.requiredIdentifiers(
-              referenceDictionary: moduleReferenceDictionary
+              moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
             )
           )
         }
@@ -878,7 +878,7 @@ extension ActionIntermediate {
     if let implementation = self.implementation {
       result.append(
         contentsOf: implementation.requiredIdentifiers(
-          context: [moduleReferenceDictionary]
+          context: moduleAndExternalReferenceLookup
         )
       )
     }

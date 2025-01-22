@@ -96,7 +96,7 @@ enum C: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String]) -> String? {
+  static func thingDeclaration(name: String, components: [String], accessModifier: String?) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
     ]
@@ -137,10 +137,16 @@ enum C: Platform {
       result.append(contentsOf: [
         "} \(name)_value;",
       ])
-      result.append(thingDeclaration(name: name, components: [
-        partDeclaration(name: "enumeration_case", type: "\(name)_case", accessModifier: nil),
-        partDeclaration(name: "value", type: "\(name)_value", accessModifier: nil),
-      ])!)
+      result.append(
+        thingDeclaration(
+          name: name,
+          components: [
+            partDeclaration(name: "enumeration_case", type: "\(name)_case", accessModifier: nil),
+            partDeclaration(name: "value", type: "\(name)_value", accessModifier: nil),
+          ],
+          accessModifier: nil
+        )!
+      )
       
       return result.joined(separator: "\n")
     }
@@ -234,7 +240,14 @@ enum C: Platform {
     return " return returnValue;"
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?,
+    accessModifier: String?,
+    coverageRegistration: String?,
+    implementation: [String]
+  ) -> String {
     var result: [String] = [
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),
       "{",

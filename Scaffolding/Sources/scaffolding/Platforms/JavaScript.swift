@@ -94,7 +94,7 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String]) -> String? {
+  static func thingDeclaration(name: String, components: [String], accessModifier: String?) -> String? {
     return nil
   }
   static func enumerationTypeDeclaration(
@@ -200,7 +200,14 @@ enum JavaScript: Platform {
     return " return returnValue;"
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?,
+    accessModifier: String?,
+    coverageRegistration: String?,
+    implementation: [String]
+  ) -> String {
     var result: [String] = [
       "function \(name)(\(parameters)) {",
     ]

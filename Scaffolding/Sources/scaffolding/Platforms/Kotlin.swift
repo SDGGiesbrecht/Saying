@@ -53,7 +53,7 @@ enum Kotlin: Platform {
 
   static func accessModifier(for access: AccessIntermediate) -> String? {
     switch access {
-    case .file:
+    case .file, .unit:
       return "private"
     case .clients:
       return "internal"
@@ -113,10 +113,11 @@ enum Kotlin: Platform {
     }
   }
 
-  static func thingDeclaration(name: String, components: [String]) -> String? {
+  static func thingDeclaration(name: String, components: [String], accessModifier: String?) -> String? {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     let properties = components.joined(separator: ", ")
     let result: [String] = [
-      "class \(name)(\(properties)) {",
+      "\(access)class \(name)(\(properties)) {",
       "}",
     ]
     return result.joined(separator: "\n")
@@ -226,9 +227,17 @@ enum Kotlin: Platform {
     return "; return returnValue"
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?,
+    accessModifier: String?,
+    coverageRegistration: String?,
+    implementation: [String]
+  ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
-      "fun \(name)(\(parameters))\(returnSection ?? "") {",
+      "\(access)fun \(name)(\(parameters))\(returnSection ?? "") {",
     ]
     if let coverage = coverageRegistration {
       result.append(coverage)

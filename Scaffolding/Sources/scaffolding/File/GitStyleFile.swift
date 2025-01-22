@@ -16,7 +16,7 @@ struct GitStyleFile {
   let source: UnicodeText
 
   private func registerSegment(
-    in segments: inout [UTF8Segment],
+    in segments: inout [UnicodeSegment],
     segmentStart: inout (offset: Int, index: StrictString.Index)?,
     cursor: (offset: Int, index: StrictString.Index)
   ) {
@@ -30,8 +30,8 @@ struct GitStyleFile {
         adjustedOffset += 1
       }
       segments.append(
-        UTF8Segment(
-          offset: adjustedOffset,
+        UnicodeSegment(
+          scalarOffset: UInt64(adjustedOffset),
           source: UnicodeText(StrictString(segment))
         )
       )
@@ -42,7 +42,7 @@ struct GitStyleFile {
   func parsed() -> UTF8Segments {
     let source = StrictString(self.source)
     var segmentStart: (offset: Int, index: StrictString.Index)? = nil
-    var segments: [UTF8Segment] = []
+    var segments: [UnicodeSegment] = []
     let lastIndex = source.indices.last
     for (offset, index) in source.indices.enumerated() {
       let scalar = source[index]
@@ -55,9 +55,9 @@ struct GitStyleFile {
         if index != lastIndex {
           if (segments.last?.source).map({ StrictString($0) }) == "\u{2028}" {
             let first = segments.removeLast()
-            segments.append(UTF8Segment(offset: first.offset, source: UnicodeText("\u{2029}")))
+            segments.append(UnicodeSegment(scalarOffset: first.scalarOffset, source: UnicodeText("\u{2029}")))
           } else {
-            segments.append(UTF8Segment(offset: offset, source: UnicodeText("\u{2028}")))
+            segments.append(UnicodeSegment(scalarOffset: UInt64(offset), source: UnicodeText("\u{2028}")))
           }
         }
       } else {

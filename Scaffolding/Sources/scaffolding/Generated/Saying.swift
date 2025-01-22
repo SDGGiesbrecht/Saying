@@ -65,6 +65,11 @@ struct SpaceSyntax {
 struct SymbolInsertionMarkSyntax {
 }
 
+fileprivate struct Unicode_0020segment {
+  fileprivate var scalar_0020offset: UInt64
+  fileprivate var source: UnicodeText
+}
+
 struct ReplacementParsedBulletCharacterSyntax {
 }
 
@@ -148,5 +153,18 @@ extension StrictString {
 extension UnicodeText {
   init(_ string: StrictString) {
     scalars = String(string)
+  }
+}
+
+struct UnicodeSegment {
+  fileprivate var segment: Unicode_0020segment
+  init(scalarOffset: UInt64, source: UnicodeText) {
+    self.segment = Unicode_0020segment(scalar_0020offset: scalarOffset, source: source)
+  }
+  var scalarOffset: UInt64 {
+    return segment.scalar_0020offset
+  }
+  var source: UnicodeText {
+    return segment.source
   }
 }

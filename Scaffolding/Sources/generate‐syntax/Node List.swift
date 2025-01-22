@@ -38,6 +38,7 @@ extension Node {
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
           Node(name: "ExtensionKeyword", kind: .keyword(["extension", "Erweiterung", /* extension */ "επέκταση", "הרחבה"])),
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
+          Node(name: "UnitKeyword", kind: .keyword(["unit", "Einheit", "unité", "μονάδα", "יחידה"])),
           Node(name: "FileKeyword", kind: .keyword(["file", "Datei", "fichier", "αρχείο", "קובץ"])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
@@ -331,6 +332,7 @@ extension Node {
             name: "AccessDeclaration",
             kind: .alternates([
               Alternate(name: "file", type: "FileKeyword"),
+              Alternate(name: "unit", type: "UnitKeyword"),
               Alternate(name: "clients", type: "ClientsKeyword"),
             ])
           ),

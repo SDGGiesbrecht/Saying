@@ -2,7 +2,7 @@ import SDGText
 
 extension UTF8Segments {
   struct Index {
-    let segment: Array<UTF8Segment>.Index
+    let segment: Array<UnicodeSegment>.Index
     let scalar: StrictString.Index?
   }
 }

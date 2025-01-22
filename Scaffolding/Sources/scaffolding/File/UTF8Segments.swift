@@ -2,23 +2,23 @@ import SDGText
 
 internal struct UTF8Segments {
 
-  init(_ segments: [UTF8Segment]) {
+  init(_ segments: [UnicodeSegment]) {
     self.segments = segments
   }
 
   init(_ segment: UnicodeText) {
-    self.segments = [UTF8Segment(offset: 0, source: segment)]
+    self.segments = [UnicodeSegment(scalarOffset: 0, source: segment)]
   }
 
-  var segments: [UTF8Segment]
+  var segments: [UnicodeSegment]
 
   func underlyingScalarOffset(of index: Index) -> Int {
     let segmentIndex = index.segment
     if let scalar = index.scalar {
       let segment = segments[segmentIndex]
-      return segment.offset + StrictString(segment.source)[..<scalar].count
+      return Int(segment.scalarOffset) + StrictString(segment.source)[..<scalar].count
     } else if let lastSegment = segments.last {
-      return lastSegment.offset + StrictString(lastSegment.source).count
+      return Int(lastSegment.scalarOffset) + StrictString(lastSegment.source).count
     } else {
       return 0
     }

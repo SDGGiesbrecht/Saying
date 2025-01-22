@@ -290,13 +290,11 @@ extension ModuleIntermediate {
 
 extension ModuleIntermediate {
   func removingUnreachable(
-    fromEntryPoints entryPoints: Set<StrictString>? = nil
+    fromEntryPoints entryPoints: inout Set<StrictString>,
+    externalReferenceLookup: [ReferenceDictionary]
   ) -> ModuleIntermediate {
-    guard let entryPoints = entryPoints else {
-      fatalError("General reachability checks without specifying entry points are not implemented yet.")
-    }
     var result = self
-    result.referenceDictionary.removeUnreachable(fromEntryPoints: entryPoints)
+    result.referenceDictionary.removeUnreachable(fromEntryPoints: &entryPoints, externalReferenceLookup: externalReferenceLookup)
     result.resolveTypeIdentifiers()
     return result
   }

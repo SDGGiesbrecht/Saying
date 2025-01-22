@@ -160,20 +160,20 @@ extension ActionPrototype {
 extension ActionPrototype {
 
   func requiredIdentifiers(
-    referenceDictionary: ReferenceDictionary
+    moduleAndExternalReferenceLookup: [ReferenceDictionary]
   ) -> [UnicodeText] {
     var result: [UnicodeText] = []
     for parameter in parameters.inAnyOrder {
       result.append(
         contentsOf: parameter.type.requiredIdentifiers(
-          referenceDictionary: referenceDictionary
+          moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
         )
       )
     }
     if let value = returnValue {
       result.append(
         contentsOf: value.requiredIdentifiers(
-          referenceDictionary: referenceDictionary
+          moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
         )
       )
     }

@@ -274,12 +274,14 @@ extension Thing {
 extension Thing {
 
   func requiredIdentifiers(
-    moduleReferenceDictionary: ReferenceDictionary
+    moduleAndExternalReferenceLookup: [ReferenceDictionary]
   ) -> [UnicodeText] {
     var result: [UnicodeText] = []
     for part in parts {
       result.append(
-        contentsOf: part.contents.requiredIdentifiers(referenceDictionary: moduleReferenceDictionary)
+        contentsOf: part.contents.requiredIdentifiers(
+          moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
+        )
       )
     }
     return result
