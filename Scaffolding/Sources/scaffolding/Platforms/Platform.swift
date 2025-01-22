@@ -100,6 +100,7 @@ protocol Platform {
     name: String,
     parameters: String,
     returnSection: String?,
+    accessModifier: String?,
     coverageRegistration: String?,
     implementation: [String]
   ) -> String
@@ -906,6 +907,8 @@ extension Platform {
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
 
+    let access = accessModifier(for: action.access)
+
     let coverageRegistration: String?
     if mode == .testing,
       let identifier = action.coveredIdentifier {
@@ -928,6 +931,7 @@ extension Platform {
       name: name,
       parameters: parameters,
       returnSection: returnSection,
+      accessModifier: access,
       coverageRegistration: coverageRegistration,
       implementation: implementation
     )

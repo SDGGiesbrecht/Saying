@@ -42,16 +42,14 @@ enum CSharp: Platform {
 
   static func accessModifier(for access: AccessIntermediate) -> String? {
     switch access {
-    case .file, .unit:
-      return "file"
-    case .clients:
+    case .file, .unit, .clients:
+      // “file” is too new
       return nil // internal
     }
   }
 
   static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
-    let modifier = accessModifier == "file" ? "internal" : accessModifier
-    let access = modifier.map({ "\($0) " }) ?? ""
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     return "\(access)\(type) \(name);"
   }
 
@@ -264,9 +262,17 @@ enum CSharp: Platform {
     return " return returnValue;"
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?,
+    accessModifier: String?,
+    coverageRegistration: String?,
+    implementation: [String]
+  ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
-      "\(indent)static \(returnSection!) \(name)(\(parameters))",
+      "\(indent)\(access)static \(returnSection!) \(name)(\(parameters))",
       "\(indent){",
     ]
     if let coverage = coverageRegistration {

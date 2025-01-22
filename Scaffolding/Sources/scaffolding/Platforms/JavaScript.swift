@@ -200,7 +200,14 @@ enum JavaScript: Platform {
     return " return returnValue;"
   }
 
-  static func actionDeclaration(name: String, parameters: String, returnSection: String?, coverageRegistration: String?, implementation: [String]) -> String {
+  static func actionDeclaration(
+    name: String,
+    parameters: String,
+    returnSection: String?,
+    accessModifier: String?,
+    coverageRegistration: String?,
+    implementation: [String]
+  ) -> String {
     var result: [String] = [
       "function \(name)(\(parameters)) {",
     ]

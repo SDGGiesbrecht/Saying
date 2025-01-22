@@ -15,7 +15,7 @@ flow (clients)
 extension
  optional (thing)
  {
-  action
+  action (clients)
    [
     [
      English: Returns the result of a computation, using caching to improve efficiency upon repeated use.
