@@ -113,10 +113,10 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func resolveUses() throws {
+  mutating func resolveUses(externalLookup: [ReferenceDictionary]) throws {
     var errors: [ReferenceError] = []
     for use in uses {
-      resolve(use, errors: &errors)
+      resolve(use, externalLookup: externalLookup, errors: &errors)
     }
 
     for documentation in [
@@ -131,9 +131,14 @@ extension ModuleIntermediate {
       throw ErrorList(errors)
     }
   }
-  mutating func resolve(_ use: UseIntermediate, errors: inout [ReferenceError]) {
+  mutating func resolve(
+    _ use: UseIntermediate,
+    externalLookup: [ReferenceDictionary],
+    errors: inout [ReferenceError]
+  ) {
     let identifier = use.ability
-    guard let ability = referenceDictionary.lookupAbility(identifier: identifier) else {
+    guard let ability = externalLookup.appending(referenceDictionary)
+      .lookupAbility(identifier: identifier) else {
       errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
       return
     }
@@ -205,6 +210,7 @@ extension ModuleIntermediate {
     for use in ability.provisionUses {
       resolve(
         use.specializing(typeLookup: useTypes, specializationNamespace: specializationNamespace),
+        externalLookup: externalLookup,
         errors: &errors
       )
     }

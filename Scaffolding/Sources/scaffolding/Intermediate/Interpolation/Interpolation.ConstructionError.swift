@@ -7,7 +7,7 @@ extension Interpolation {
     case parameterNotFound(ParsedParameterReference)
     case rearrangedParameters(ParsedSyntaxNode)
 
-    var range: Slice<UTF8Segments> {
+    var range: Slice<UnicodeSegments> {
       switch self {
       case .multipleParameterDefinitionSets(let definition):
         return definition.location

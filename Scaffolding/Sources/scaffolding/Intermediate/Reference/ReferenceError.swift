@@ -52,7 +52,7 @@ enum ReferenceError: DiagnosticError {
     }
   }
 
-  var range: Slice<UTF8Segments> {
+  var range: Slice<UnicodeSegments> {
     switch self {
     case .noSuchThing(_, reference: let identifier):
       return identifier.location

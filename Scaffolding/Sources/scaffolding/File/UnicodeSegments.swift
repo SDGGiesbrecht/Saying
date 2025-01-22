@@ -1,23 +1,21 @@
 import SDGText
 
-internal struct UTF8Segments {
+extension UnicodeSegments {
 
   init(_ segments: [UnicodeSegment]) {
-    self.segments = segments
+    self.init(segments: segments)
   }
 
   init(_ segment: UnicodeText) {
-    self.segments = [UnicodeSegment(scalarOffset: 0, source: segment)]
+    self.init(segments: [UnicodeSegment(scalarOffset: 0, source: segment)])
   }
-
-  var segments: [UnicodeSegment]
 
   func underlyingScalarOffset(of index: Index) -> Int {
     let segmentIndex = index.segment
     if let scalar = index.scalar {
-      let segment = segments[segmentIndex]
+      let segment = segment(at: segmentIndex)
       return Int(segment.scalarOffset) + StrictString(segment.source)[..<scalar].count
-    } else if let lastSegment = segments.last {
+    } else if let lastSegment = segmentIndices.last.map({ segment(at: $0) }) {
       return Int(lastSegment.scalarOffset) + StrictString(lastSegment.source).count
     } else {
       return 0
@@ -25,39 +23,42 @@ internal struct UTF8Segments {
   }
 }
 
-extension UTF8Segments: Collection {
+extension UnicodeSegments: Collection {
   var startIndex: Index {
-    return Index(segment: segments.startIndex, scalar: (segments.first?.source).map({ StrictString($0) })?.startIndex)
+    return Index(
+      segment: segmentIndices.startIndex,
+      scalar: segmentIndices.first.map({ StrictString(segment(at: $0).source).startIndex })
+    )
   }
   var endIndex: Index {
-    return Index(segment: segments.endIndex, scalar: nil)
+    return Index(segment: segmentIndices.endIndex, scalar: nil)
   }
   func index(after i: Index) -> Index {
-    let segment = segments[i.segment]
+    let segment = segment(at: i.segment)
     let segmentSource = StrictString(segment.source)
     let nextIndex = segmentSource.index(after: i.scalar!)
     if nextIndex == segmentSource.endIndex {
-      let nextSegment = segments.index(after: i.segment)
+      let nextSegment = segmentIndices.index(after: i.segment)
       return Index(
         segment: nextSegment,
-        scalar: (segments[nextSegment...].first?.source).map({ StrictString($0) })?.startIndex
+        scalar: segmentIndices[nextSegment...].first.map({ StrictString(self.segment(at: $0).source).startIndex })
       )
     } else {
       return Index(segment: i.segment, scalar: nextIndex)
     }
   }
   subscript(position: Index) -> Unicode.Scalar {
-    StrictString(segments[position.segment].source)[position.scalar!]
+    StrictString(segment(at: position.segment).source)[position.scalar!]
   }
 }
 
-extension UTF8Segments: BidirectionalCollection {
+extension UnicodeSegments: BidirectionalCollection {
 
   func index(before i: Index) -> Index {
     guard let scalar = i.scalar else {
       return lastOfSegment(before: i.segment)
     }
-    let segment = StrictString(segments[i.segment].source)
+    let segment = StrictString(segment(at: i.segment).source)
     if scalar == segment.startIndex {
       return lastOfSegment(before: i.segment)
     }
@@ -65,8 +66,8 @@ extension UTF8Segments: BidirectionalCollection {
   }
 
   private func lastOfSegment(before segmentIndex: Int) -> Index {
-    let previousSegmentIndex = segments.indices[..<segmentIndex].last!
-    let previousSegment = StrictString(segments[previousSegmentIndex].source)
+    let previousSegmentIndex = segmentIndices[..<segmentIndex].last!
+    let previousSegment = StrictString(segment(at: previousSegmentIndex).source)
     return Index(
       segment: previousSegmentIndex,
       scalar: previousSegment.index(before: previousSegment.endIndex)

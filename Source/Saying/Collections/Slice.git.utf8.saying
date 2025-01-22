@@ -1,0 +1,18 @@
+ability (clients)
+ (
+  English: slices of (collection)
+ )
+ {
+ }
+
+extension
+ slices of (collection)
+ {
+  thing (clients)
+   (
+    English: slice of (collection)
+   )
+   Swift: “Slice<” collection “>”
+   {
+   }
+ }

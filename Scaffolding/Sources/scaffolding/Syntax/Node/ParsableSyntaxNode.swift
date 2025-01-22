@@ -1,14 +1,14 @@
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
   associatedtype ParseError: DiagnosticError
   static func diagnosticParseNext(
-    in remainder: Slice<UTF8Segments>
+    in remainder: Slice<UnicodeSegments>
   ) -> Result<DiagnosticParseResult<Self>, ErrorList<ParseError>>
-  static func fastParseNext(in remainder: Slice<UTF8Segments>) -> Self?
+  static func fastParseNext(in remainder: Slice<UnicodeSegments>) -> Self?
 }
 
 extension ParsableSyntaxNode {
 
-  static func diagnosticParse(source: UTF8Segments) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
+  static func diagnosticParse(source: UnicodeSegments) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
     var remainder = source[...]
     switch diagnosticParseNext(in: remainder) {
     case .failure(let errors):
@@ -26,10 +26,10 @@ extension ParsableSyntaxNode {
     }
   }
   static func diagnosticParse(source: UnicodeText) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
-    return diagnosticParse(source: UTF8Segments(source))
+    return diagnosticParse(source: UnicodeSegments(source))
   }
 
-  static func fastParse(source: UTF8Segments) -> Self? {
+  static func fastParse(source: UnicodeSegments) -> Self? {
     var remainder = source[...]
     guard let parsed = fastParseNext(in: remainder) else {
       return nil
@@ -41,16 +41,16 @@ extension ParsableSyntaxNode {
     return parsed
   }
   static func fastParse(source: UnicodeText) -> Self? {
-    return fastParse(source: UTF8Segments(source))
+    return fastParse(source: UnicodeSegments(source))
   }
 
-  init?(source: UTF8Segments) {
+  init?(source: UnicodeSegments) {
     guard let parsed = Self.fastParse(source: source) else {
       return nil
     }
     self = parsed
   }
   init?(source: UnicodeText) {
-    self.init(source: UTF8Segments(source))
+    self.init(source: UnicodeSegments(source))
   }
 }

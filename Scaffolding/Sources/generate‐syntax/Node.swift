@@ -161,7 +161,7 @@ struct Node {
     } else {
       switch kind {
       case .fixedLeaf, .keyword, .variableLeaf:
-        return "  let location: Slice<UTF8Segments>"
+        return "  let location: Slice<UnicodeSegments>"
       case .compound, .alternates:
         return nil
       }
@@ -183,22 +183,22 @@ struct Node {
     if parsed {
       result.append(contentsOf: [
         "",
-        "  var context: UTF8Segments {",
+        "  var context: UnicodeSegments {",
         contextImplementation(),
         "  }",
         "",
-        "  var startIndex: UTF8Segments.Index {",
+        "  var startIndex: UnicodeSegments.Index {",
         startIndexImplementation(),
         "  }",
         "",
-        "  var endIndex: UTF8Segments.Index {",
+        "  var endIndex: UnicodeSegments.Index {",
         endIndexImplementation(),
         "  }",
       ])
       if let location = locationImplementation() {
         result.append(contentsOf: [
           "",
-          "  var location: Slice<UTF8Segments> {",
+          "  var location: Slice<UnicodeSegments> {",
           location,
           "  }",
         ])
@@ -314,12 +314,12 @@ struct Node {
     result.append(contentsOf: [
       "",
       "  static func diagnosticParseNext(",
-      "    in remainder: Slice<UTF8Segments>",
+      "    in remainder: Slice<UnicodeSegments>",
       "  ) -> Result<DiagnosticParseResult<Parsed\(name)>, ErrorList<ParseError>> {",
       diagnosticParseImplementation(),
       "  }",
       "",
-      "  static func fastParseNext(in remainder: Slice<UTF8Segments>) -> Parsed\(name)? {",
+      "  static func fastParseNext(in remainder: Slice<UnicodeSegments>) -> Parsed\(name)? {",
       fastParseImplementation(),
       "  }",
       "}",
@@ -599,7 +599,7 @@ struct Node {
       "      }",
       "    }",
       "",
-      "    var range: Slice<UTF8Segments> {",
+      "    var range: Slice<UnicodeSegments> {",
       "      switch self {",
       parseDiagnosticRangeCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
       "      }",
@@ -613,7 +613,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return [
-        "case notA\(name)(Slice<UTF8Segments>)"
+        "case notA\(name)(Slice<UnicodeSegments>)"
       ]
     case .compound(let children):
       return children.compactMap { child in

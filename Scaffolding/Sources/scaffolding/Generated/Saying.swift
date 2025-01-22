@@ -70,6 +70,10 @@ fileprivate struct Unicode_0020segment {
   fileprivate var source: UnicodeText
 }
 
+struct UnicodeSegments {
+  fileprivate var segments: [Unicode_0020segment]
+}
+
 struct ReplacementParsedBulletCharacterSyntax {
 }
 
@@ -158,13 +162,28 @@ extension UnicodeText {
 
 struct UnicodeSegment {
   fileprivate var segment: Unicode_0020segment
+}
+
+extension UnicodeSegment {
   init(scalarOffset: UInt64, source: UnicodeText) {
-    self.segment = Unicode_0020segment(scalar_0020offset: scalarOffset, source: source)
+    self.init(segment: Unicode_0020segment(scalar_0020offset: scalarOffset, source: source))
   }
   var scalarOffset: UInt64 {
     return segment.scalar_0020offset
   }
   var source: UnicodeText {
     return segment.source
+  }
+}
+
+extension UnicodeSegments {
+  init(segments: [UnicodeSegment]) {
+    self.init(segments: segments.map({ $0.segment }))
+  }
+  var segmentIndices: Range<Int> {
+    return segments.indices
+  }
+  func segment(at index: Int) -> UnicodeSegment {
+    return UnicodeSegment(segment: segments[index])
   }
 }

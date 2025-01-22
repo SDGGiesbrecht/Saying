@@ -3,7 +3,7 @@ extension ActionPrototype {
     case brokenParameterInterpolation(Interpolation<ParameterIntermediate>.ConstructionError)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
-    var range: Slice<UTF8Segments> {
+    var range: Slice<UnicodeSegments> {
       switch self {
       case .brokenParameterInterpolation(let error):
         return error.range

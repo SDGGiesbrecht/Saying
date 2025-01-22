@@ -1,14 +1,14 @@
 import SDGText
 
-extension UTF8Segments {
+extension UnicodeSegments {
   struct Index {
     let segment: Array<UnicodeSegment>.Index
     let scalar: StrictString.Index?
   }
 }
 
-extension UTF8Segments.Index: Comparable {
-  static func < (lhs: UTF8Segments.Index, rhs: UTF8Segments.Index) -> Bool {
+extension UnicodeSegments.Index: Comparable {
+  static func < (lhs: UnicodeSegments.Index, rhs: UnicodeSegments.Index) -> Bool {
     guard let lhsScalar = lhs.scalar else {
       return false
     }

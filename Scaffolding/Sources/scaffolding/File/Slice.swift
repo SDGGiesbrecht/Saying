@@ -1,4 +1,4 @@
-extension Slice where Base == UTF8Segments {
+extension Slice where Base == UnicodeSegments {
 
   func underlyingScalarOffsetOfStart() -> Int {
     return base.underlyingScalarOffset(of: startIndex)

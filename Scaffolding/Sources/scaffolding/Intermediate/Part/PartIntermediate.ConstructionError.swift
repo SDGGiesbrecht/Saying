@@ -12,7 +12,7 @@ extension PartIntermediate {
       }
     }
 
-    var range: Slice<UTF8Segments> {
+    var range: Slice<UnicodeSegments> {
       switch self {
       case .unknownLanguage(let language):
         return language.location

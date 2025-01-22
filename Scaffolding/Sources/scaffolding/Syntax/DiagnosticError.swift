@@ -1,5 +1,5 @@
 protocol DiagnosticError: Error {
-  var range: Slice<UTF8Segments> { get }
+  var range: Slice<UnicodeSegments> { get }
   var message: String { get }
 }
 
