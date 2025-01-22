@@ -1,0 +1,28 @@
+ability (clients)
+ (
+  English: lists of (element)
+  Deutsch: Listen von (Element: [element])
+  français : listes de (élément: [element])
+  ελληνικά: κατάλογοι (στοιχείο: [element])
+  עברית: רשימות של (איבר: [element])
+ )
+ {
+ }
+
+extension
+ lists of (element)
+ {
+  thing (clients)
+   (
+    English: list of (element)
+    Deutsch: Liste von (Element: [element])
+    français : liste de (élément: [element])
+    ελληνικά: κατάλογος (στοιχείο: [element])
+    עברית: רשימה של (איבר: [element])
+   )
+   C♯: “List<” element “>”
+   Kotlin: “List<” element “>”
+   Swift: “¤(5B)” element “¤(5D)”
+   {
+   }
+ }
