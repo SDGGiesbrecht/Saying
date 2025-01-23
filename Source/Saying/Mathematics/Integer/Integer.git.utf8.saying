@@ -69,7 +69,7 @@ use (clients)
    C: “1”
    C♯: “1”
    JavaScript: “1”
-   Kotlin: “1”
+   Kotlin: “1L”
    Swift: “1”
 
   action (clients)
@@ -78,6 +78,6 @@ use (clients)
    C: “2”
    C♯: “2”
    JavaScript: “2”
-   Kotlin: “2”
+   Kotlin: “2L”
    Swift: “2”
  }
