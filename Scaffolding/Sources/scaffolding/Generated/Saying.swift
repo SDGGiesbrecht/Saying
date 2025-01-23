@@ -1,3 +1,7 @@
+struct ListIndex {
+  fileprivate var index: Int
+}
+
 struct UnicodeText {
   fileprivate var scalars: String
 }
@@ -74,6 +78,13 @@ struct UnicodeSegments {
   fileprivate var segments: [Unicode_0020segment]
 }
 
+extension UnicodeSegments {
+  struct Index {
+    fileprivate var segment: ListIndex
+    fileprivate var scalar: String.UnicodeScalarView.Index?
+  }
+}
+
 struct ReplacementParsedBulletCharacterSyntax {
 }
 
@@ -148,6 +159,15 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
 
 import SDGText
 
+extension ListIndex {
+  init(int: Int) {
+    self.index = int
+  }
+  var int: Int {
+    return index
+  }
+}
+
 extension StrictString {
   init(_ text: UnicodeText) {
     self.init(text.scalars)
@@ -176,6 +196,18 @@ extension UnicodeSegment {
   }
 }
 
+extension UnicodeSegments.Index {
+  init(_ segment: ListIndex, _ scalar: String.UnicodeScalarView.Index?) {
+    self.init(segment: segment, scalar: scalar)
+  }
+  var segmentIndex: ListIndex {
+    return segment
+  }
+  var scalarIndex: String.UnicodeScalarView.Index? {
+    return scalar
+  }
+}
+
 extension UnicodeSegments {
   init(segments: [UnicodeSegment]) {
     self.init(segments: segments.map({ $0.segment }))
@@ -183,7 +215,7 @@ extension UnicodeSegments {
   var segmentIndices: Range<Int> {
     return segments.indices
   }
-  func segment(at index: Int) -> UnicodeSegment {
-    return UnicodeSegment(segment: segments[index])
+  func segment(at index: ListIndex) -> UnicodeSegment {
+    return UnicodeSegment(segment: segments[index.int])
   }
 }

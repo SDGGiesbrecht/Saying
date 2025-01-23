@@ -17,8 +17,8 @@ struct GitStyleFile {
 
   private func registerSegment(
     in segments: inout [UnicodeSegment],
-    segmentStart: inout (offset: Int, index: StrictString.Index)?,
-    cursor: (offset: Int, index: StrictString.Index)
+    segmentStart: inout (offset: Int, index: String.UnicodeScalarView.Index)?,
+    cursor: (offset: Int, index: String.UnicodeScalarView.Index)
   ) {
     let source = StrictString(self.source)
     if let segmentStart = segmentStart,
@@ -41,7 +41,7 @@ struct GitStyleFile {
 
   func parsed() -> UnicodeSegments {
     let source = StrictString(self.source)
-    var segmentStart: (offset: Int, index: StrictString.Index)? = nil
+    var segmentStart: (offset: Int, index: String.UnicodeScalarView.Index)? = nil
     var segments: [UnicodeSegment] = []
     let lastIndex = source.indices.last
     for (offset, index) in source.indices.enumerated() {

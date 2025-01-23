@@ -1,0 +1,17 @@
+thing (clients)
+ [
+  [
+   English: A position of a Unicode scalar.
+  ]
+ ]
+ (
+  English: Unicode scalar index
+ )
+ Swift: “String.UnicodeScalarView.Index”
+ {
+ }
+
+use (clients)
+ optional (Unicode scalar index)
+ {
+ }

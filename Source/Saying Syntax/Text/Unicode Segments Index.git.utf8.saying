@@ -1,0 +1,18 @@
+thing (clients)
+ (
+  English: Unicode segments index
+  Swift: UnicodeSegments.Index
+ )
+ {
+  part (unit)
+   (
+    English: segment
+   )
+   list index
+
+  part (unit)
+   (
+    English: scalar
+   )
+   optional (Unicode scalar index)
+ }
