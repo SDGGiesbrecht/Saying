@@ -150,16 +150,28 @@ enum Swift: Platform {
   }
 
   static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+    var typeName = name
+    var extraIndent = ""
+    var result: [String] = []
+    if typeName.contains(".") {
+      let namespace = String(typeName.prefix(upTo: ".")!.contents)
+      typeName = typeName.dropping(through: ".")
+      extraIndent = indent
+      result.append("extension \(namespace) {")
+    }
     let access = accessModifier.map({ "\($0) " }) ?? ""
-    var result: [String] = [
-      "\(access)struct \(name) {"
-    ]
+    result.append(contentsOf: [
+      "\(extraIndent)\(access)struct \(typeName) {"
+    ])
     for component in components {
-      result.append("\(indent)\(component)")
+      result.append("\(extraIndent)\(indent)\(component)")
     }
     result.append(contentsOf: [
-      "}"
+      "\(extraIndent)}"
     ])
+    if extraIndent != "" {
+      result.append("}")
+    }
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(

@@ -1,0 +1,12 @@
+thing (clients)
+ (
+  English: list index
+  Swift: ListIndex
+ )
+ {
+  part (unit)
+   (
+    English: index
+   )
+   platform fixed‐width integer
+ }
