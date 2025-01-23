@@ -135,6 +135,7 @@ extension Node {
               values.append(contentsOf: 0x2212...0x2213) // −–∓
               values.append(contentsOf: 0x2227...0x222A) // ∧–∪
               values.append(0x2236) // ∶
+              values.append(contentsOf: 0x2264...0x2265) // ≤–≥
               values.append(0x22C5) // ⋅
               values.append(contentsOf: 0x266D...0x266F) // ♭–♯
               return Set(values.lazy.map({ Unicode.Scalar($0)! }))

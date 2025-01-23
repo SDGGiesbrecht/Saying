@@ -75,6 +75,53 @@ use (clients)
   action (clients)
    differing example
    integer
+   {
+    ← greater example
+   }
+ }
+
+use (clients)
+ comparison of (integer) for order
+ {
+  action (clients)
+   (first: integer) is less than (second: integer)
+   truth value
+   C: “¤(28)” first “ < ” second “¤(29)”
+   C♯: “¤(28)” first “ < ” second “¤(29)”
+   JavaScript: “¤(28)” first “ < ” second “¤(29)”
+   Kotlin: “¤(28)” first “ < ” second “¤(29)”
+   Swift: «¤(28)» first “ < ” second „¤(29)“
+
+  action (clients)
+   (first: integer) is greater than (second: integer)
+   truth value
+   C: “¤(28)” first “ > ” second “¤(29)”
+   C♯: “¤(28)” first “ > ” second “¤(29)”
+   JavaScript: “¤(28)” first “ > ” second “¤(29)”
+   Kotlin: “¤(28)” first “ > ” second “¤(29)”
+   Swift: «¤(28)» first “ > ” second „¤(29)“
+
+  action (clients)
+   (first: integer) is less than or equal to (second: integer)
+   truth value
+   C: “¤(28)” first “ <= ” second “¤(29)”
+   C♯: “¤(28)” first “ <= ” second “¤(29)”
+   JavaScript: “¤(28)” first “ <= ” second “¤(29)”
+   Kotlin: “¤(28)” first “ <= ” second “¤(29)”
+   Swift: «¤(28)» first “ <= ” second „¤(29)“
+
+  action (clients)
+   (first: integer) is greater than or equal to (second: integer)
+   truth value
+   C: “¤(28)” first “ >= ” second “¤(29)”
+   C♯: “¤(28)” first “ >= ” second “¤(29)”
+   JavaScript: “¤(28)” first “ >= ” second “¤(29)”
+   Kotlin: “¤(28)” first “ >= ” second “¤(29)”
+   Swift: «¤(28)» first “ >= ” second „¤(29)“
+
+  action (clients)
+   greater example
+   integer
    C: “2”
    C♯: “2”
    JavaScript: “2”
