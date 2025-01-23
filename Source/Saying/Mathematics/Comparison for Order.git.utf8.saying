@@ -1,0 +1,193 @@
+ability (clients)
+ (
+  English: comparison of (thing) for order
+ )
+ {
+  requirement (clients)
+   [
+    [
+     English: Compares two values to determine whether or not the first is less than the second.
+    ]
+    test {verify ((example: thing) is less than (greater example: thing))}
+    test {verify (not ((greater example: thing) is less than (example: thing)))}
+    test {verify (not ((example: thing) is less than (example: thing)))}
+    parameter: first
+     (
+      [
+       English: A value.
+       Deutsch: Eine Wert.
+      ]
+     )
+    parameter: second
+     (
+      [
+       English: Another value.
+       Deutsch: Eine weitere Wert.
+      ]
+     )
+   ]
+   (
+    English: (first: thing) is less than (second: thing)
+    English +: (first: [first]) < (second: [second])
+    Deutsch: (erste: [first]) ist kleiner als (zweite: [second])
+    Deutsch +: (erste: [first]) < (zweite: [second])
+    français : (première: [first]) est inférieur à (deuxième: [second])
+    français +: (première: [first]) < (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι μικρότερος από (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) < (δεύτερα: [second])
+    עברית: (ראשון: [first]) קטן מ(שני: [second])
+    עברית +: (ראשון: [first]) < (שני: [second])
+   )
+   truth value
+
+  choice (clients)
+   [
+    [
+     English: Compares two values to determine whether or not the first is greater than the second.
+    ]
+    test {verify ((greater example: thing) is greater than (example: thing))}
+    test {verify (not ((example: thing) is greater than (greater example: thing)))}
+    test {verify (not ((example: thing) is greater than (example: thing)))}
+    parameter: first
+     (
+      [
+       English: A truth value.
+       Deutsch: Eine Wahrheitswert.
+      ]
+     )
+    parameter: second
+     (
+      [
+       English: Another truth value.
+       Deutsch: Eine weitere Wahrheitswert.
+      ]
+     )
+   ]
+   (
+    English: (first: thing) is greater than (second: thing)
+    English +: (first: [first]) > (second: [second])
+    Deutsch: (erste: [first]) ist größer als (zweite: [second])
+    Deutsch +: (erste: [first]) > (zweite: [second])
+    français : (première: [first]) est supérieur à (deuxième: [second])
+    français +: (première: [first]) > (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι μεγαλύτερος από (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) > (δεύτερα: [second])
+    עברית: (ראשון: [first]) גדול מ(שני: [second])
+    עברית +: (ראשון: [first]) > (שני: [second])
+   )
+   truth value
+   {
+    ← (not ((first) is less than (second))) and (not ((first) is (second)))
+   }
+
+  choice (clients)
+   [
+    [
+     English: Compares two values to determine whether or not the first is less than or equal to the second.
+    ]
+    test {verify ((example: thing) is less than or equal to (greater example: thing))}
+    test {verify (not ((greater example: thing) is less than or equal to (example: thing)))}
+    test {verify ((example: thing) is less than or equal to (example: thing))}
+    parameter: first
+     (
+      [
+       English: A value.
+       Deutsch: Eine Wert.
+      ]
+     )
+    parameter: second
+     (
+      [
+       English: Another value.
+       Deutsch: Eine weitere Wert.
+      ]
+     )
+   ]
+   (
+    English: (first: thing) is less than or equal to (second: thing)
+    English +: (first: [first]) ≤ (second: [second])
+    Deutsch: (erste: [first]) ist kleiner oder gleich (zweite: [second])
+    Deutsch +: (erste: [first]) ≤ (zweite: [second])
+    français : (première: [first]) est inférieur ou égal à (deuxième: [second])
+    français +: (première: [first]) ≤ (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι μικρότερος ή ίσος με (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) ≤ (δεύτερα: [second])
+    עברית: (ראשון: [first]) קטן או שווה ל(שני: [second])
+    עברית +: (ראשון: [first]) ≤ (שני: [second])
+   )
+   truth value
+   {
+    ← not ((first) is greater than (second))
+   }
+
+  choice (clients)
+   [
+    [
+     English: Compares two values to determine whether or not the first is greater than or equal to the second.
+    ]
+    test {verify ((greater example: thing) is greater than or equal to (example: thing))}
+    test {verify (not ((example: thing) is greater than or equal to (greater example: thing)))}
+    test {verify ((example: thing) is greater than or equal to (example: thing))}
+    parameter: first
+     (
+      [
+       English: A value.
+       Deutsch: Eine Wert.
+      ]
+     )
+    parameter: second
+     (
+      [
+       English: Another value.
+       Deutsch: Eine weitere Wert.
+      ]
+     )
+   ]
+   (
+    English: (first: thing) is greater than or equal to (second: thing)
+    English +: (first: [first]) ≥ (second: [second])
+    Deutsch: (erste: [first]) ist größer oder gleich (zweite: [second])
+    Deutsch +: (erste: [first]) ≥ (zweite: [second])
+    français : (première: [first]) est supérieur ou égal à (deuxième: [second])
+    français +: (première: [first]) ≥ (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι μεγαλύτερος ή ίσος με (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) ≥ (δεύτερα: [second])
+    עברית: (ראשון: [first]) גדול או שווה ל(שני: [second])
+    עברית +: (ראשון: [first]) ≥ (שני: [second])
+   )
+   truth value
+   {
+    ← not ((first) is less than (second))
+   }
+
+  requirement (clients)
+   [
+    [
+     English: A separate example instance which is greater than the main example.
+    ]
+   ]
+   greater example
+   thing
+ }
+
+use
+ comparison of (comparison example) for order
+ {
+  action
+   (first: comparison example) is less than (second: comparison example)
+   truth value
+   C: “¤(28)” first “ < ” second “¤(29)”
+   C♯: “¤(28)” first “ < ” second “¤(29)”
+   JavaScript: “¤(28)” first “ < ” second “¤(29)”
+   Kotlin: “¤(28)” first “ < ” second “¤(29)”
+   Swift: «¤(28)» first “ < ” second „¤(29)“
+
+  action
+   greater example
+   comparison example
+   C: “2”
+   C♯: “2”
+   JavaScript: “2”
+   Kotlin: “2”
+   Swift: “2”
+ }

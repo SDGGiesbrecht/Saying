@@ -100,18 +100,18 @@ ability (clients)
 
 thing
  (
-  English: equality example
+  English: comparison example
  )
- C: “bool” (stdbool)
- C♯: “bool”
- Kotlin: “Boolean”
- Swift: “Bool”
+ C: “int”
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “Int”
 
 use
- comparison of (equality example) for equality
+ comparison of (comparison example) for equality
  {
   action
-   (first: equality example) is (second: equality example)
+   (first: comparison example) is (second: comparison example)
    truth value
    C: “¤(28)” first “ == ” second “¤(29)”
    C♯: “¤(28)” first “ == ” second “¤(29)”
@@ -121,19 +121,19 @@ use
 
   action
    example
-   equality example
-   C: “¤(28)true¤(29)” (stdbool)
-   C♯: “¤(28)true¤(29)”
-   JavaScript: “¤(28)true¤(29)”
-   Kotlin: “¤(28)true¤(29)”
-   Swift: “¤(28)true¤(29)”
+   comparison example
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1”
+   Swift: “1”
 
   action
    differing example
-   equality example
-   C: “¤(28)false¤(29)” (stdbool)
-   C♯: “¤(28)false¤(29)”
-   JavaScript: “¤(28)false¤(29)”
-   Kotlin: “¤(28)false¤(29)”
-   Swift: “¤(28)false¤(29)”
+   comparison example
+   C: “2”
+   C♯: “2”
+   JavaScript: “2”
+   Kotlin: “2”
+   Swift: “2”
  }

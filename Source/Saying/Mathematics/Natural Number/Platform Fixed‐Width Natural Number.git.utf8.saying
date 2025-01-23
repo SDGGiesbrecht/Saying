@@ -54,9 +54,56 @@ use (clients)
   action (clients)
    differing example
    platform fixed‐width natural number
+   {
+    ← greater example
+   }
+ }
+
+use (clients)
+ comparison of (platform fixed‐width natural number) for order
+ {
+  action (clients)
+   (first: platform fixed‐width natural number) is less than (second: platform fixed‐width natural number)
+   truth value
+   C: “¤(28)” first “ < ” second “¤(29)”
+   C♯: “¤(28)” first “ < ” second “¤(29)”
+   JavaScript: “¤(28)” first “ < ” second “¤(29)”
+   Kotlin: “¤(28)” first “ < ” second “¤(29)”
+   Swift: «¤(28)» first “ < ” second „¤(29)“
+
+  action (clients)
+   (first: platform fixed‐width natural number) is greater than (second: platform fixed‐width natural number)
+   truth value
+   C: “¤(28)” first “ > ” second “¤(29)”
+   C♯: “¤(28)” first “ > ” second “¤(29)”
+   JavaScript: “¤(28)” first “ > ” second “¤(29)”
+   Kotlin: “¤(28)” first “ > ” second “¤(29)”
+   Swift: «¤(28)» first “ > ” second „¤(29)“
+
+  action (clients)
+   (first: platform fixed‐width natural number) is less than or equal to (second: platform fixed‐width natural number)
+   truth value
+   C: “¤(28)” first “ <= ” second “¤(29)”
+   C♯: “¤(28)” first “ <= ” second “¤(29)”
+   JavaScript: “¤(28)” first “ <= ” second “¤(29)”
+   Kotlin: “¤(28)” first “ <= ” second “¤(29)”
+   Swift: «¤(28)» first “ <= ” second „¤(29)“
+
+  action (clients)
+   (first: platform fixed‐width natural number) is greater than or equal to (second: platform fixed‐width natural number)
+   truth value
+   C: “¤(28)” first “ >= ” second “¤(29)”
+   C♯: “¤(28)” first “ >= ” second “¤(29)”
+   JavaScript: “¤(28)” first “ >= ” second “¤(29)”
+   Kotlin: “¤(28)” first “ >= ” second “¤(29)”
+   Swift: «¤(28)» first “ >= ” second „¤(29)“
+
+  action (clients)
+   greater example
+   platform fixed‐width natural number
    C: “2”
    C♯: “2”
    JavaScript: “2”
-   Kotlin: “2u”
+   Kotlin: “2L”
    Swift: “2”
  }
