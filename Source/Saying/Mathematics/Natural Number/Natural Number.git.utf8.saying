@@ -47,3 +47,43 @@ thing (clients)
  C♯: “ulong”
  Kotlin: “ULong”
  Swift: “UInt64”
+
+use (clients)
+ comparison of (natural number) for equality
+ {
+  action (clients)
+   (first: natural number) is (second: natural number)
+   truth value
+   C: “¤(28)” first “ == ” second “¤(29)”
+   C♯: “¤(28)” first “ == ” second “¤(29)”
+   JavaScript: “¤(28)” first “ == ” second “¤(29)”
+   Kotlin: “¤(28)” first “ == ” second “¤(29)”
+   Swift: «¤(28)» first “ == ” second „¤(29)“
+
+  action (clients)
+   (first: natural number) is not (second: natural number)
+   truth value
+   C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+
+  action (clients)
+   example
+   natural number
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1uL”
+   Swift: “1”
+
+  action (clients)
+   differing example
+   natural number
+   C: “2”
+   C♯: “2”
+   JavaScript: “2”
+   Kotlin: “2uL”
+   Swift: “2”
+ }
