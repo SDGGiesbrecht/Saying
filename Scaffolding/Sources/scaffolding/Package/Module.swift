@@ -35,7 +35,7 @@ struct Module {
       try module.unfoldSyntax()
     }
     try module.resolveExtensions()
-    try module.resolveUses()
+    try module.resolveUses(externalLookup: moduleWideImports.map({ $0.referenceDictionary }))
     module.resolveTypeIdentifiers()
     module.resolveTypes()
     try module.validateReferences(moduleWideImports: moduleWideImports)

@@ -4,10 +4,10 @@ protocol ParsedSyntaxNode {
   var nodeKind: ParsedSyntaxNodeKind { get }
   var children: [ParsedSyntaxNode] { get }
 
-  var context: UTF8Segments { get }
-  var startIndex: UTF8Segments.Index { get }
-  var endIndex: UTF8Segments.Index { get }
-  var location: Slice<UTF8Segments> { get }
+  var context: UnicodeSegments { get }
+  var startIndex: UnicodeSegments.Index { get }
+  var endIndex: UnicodeSegments.Index { get }
+  var location: Slice<UnicodeSegments> { get }
 
   func mutableNode() -> SyntaxNode
 }

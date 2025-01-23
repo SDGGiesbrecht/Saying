@@ -9,7 +9,7 @@ extension UseIntermediate {
       }
     }
 
-    var range: Slice<UTF8Segments> {
+    var range: Slice<UnicodeSegments> {
       switch self {
       case .brokenAction(let error):
         return error.range

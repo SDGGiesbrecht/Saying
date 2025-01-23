@@ -129,7 +129,7 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?) -> String? {
+  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
       "\(access)struct \(name)",

@@ -54,7 +54,8 @@ protocol Platform {
   static func thingDeclaration(
     name: String,
     components: [String],
-    accessModifier: String?
+    accessModifier: String?,
+    constructorAccessModifier: String?
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -352,7 +353,8 @@ extension Platform {
         return partDeclaration(name: name, type: type, accessModifier: access)
       })
       let access = accessModifier(for: thing.access)
-      return thingDeclaration(name: name, components: components, accessModifier: access)
+      let constructorAccess = accessModifier(for: [thing.access].appending(contentsOf: thing.parts.lazy.map({ $0.access })).min()!)
+      return thingDeclaration(name: name, components: components, accessModifier: access, constructorAccessModifier: constructorAccess)
     } else {
       var cases: [String] = []
       var storageCases: [String] = []

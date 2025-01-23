@@ -39,7 +39,7 @@ struct GitStyleFile {
     segmentStart = nil
   }
 
-  func parsed() -> UTF8Segments {
+  func parsed() -> UnicodeSegments {
     let source = StrictString(self.source)
     var segmentStart: (offset: Int, index: StrictString.Index)? = nil
     var segments: [UnicodeSegment] = []
@@ -73,6 +73,6 @@ struct GitStyleFile {
         }
       }
     }
-    return UTF8Segments(segments)
+    return UnicodeSegments(segments)
   }
 }

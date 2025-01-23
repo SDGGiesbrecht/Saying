@@ -15,3 +15,8 @@ thing (unit)
    )
    Unicode text
  }
+
+use (unit)
+ lists of (Unicode segment)
+ {
+ }

@@ -342,6 +342,16 @@ extension ReferenceDictionary {
     return Array(abilities.values)
   }
 }
+extension Array where Element == ReferenceDictionary {
+  func lookupAbility(identifier: UnicodeText) -> Ability? {
+    for scope in reversed() {
+      if let found = scope.lookupAbility(identifier: identifier) {
+        return found
+      }
+    }
+    return nil
+  }
+}
 
 extension ReferenceDictionary {
   mutating func resolveTypeIdentifiers(externalLookup: [ReferenceDictionary]) {

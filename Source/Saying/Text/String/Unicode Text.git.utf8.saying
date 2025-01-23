@@ -18,3 +18,8 @@ thing (clients)
    )
    Unicode scalars
  }
+
+use (clients)
+ optional (Unicode text)
+ {
+ }

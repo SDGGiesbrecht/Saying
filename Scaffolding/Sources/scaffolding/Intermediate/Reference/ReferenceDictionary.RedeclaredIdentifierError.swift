@@ -7,7 +7,7 @@ extension ReferenceDictionary {
 }
 
 extension ReferenceDictionary.RedeclaredIdentifierError: DiagnosticError {
-  var range: Slice<UTF8Segments> {
+  var range: Slice<UnicodeSegments> {
     return triggeringDeclaration.location
   }
 

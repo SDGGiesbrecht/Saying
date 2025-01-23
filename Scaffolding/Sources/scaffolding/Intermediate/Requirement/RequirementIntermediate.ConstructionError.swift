@@ -9,7 +9,7 @@ extension RequirementIntermediate {
       }
     }
 
-    var range: Slice<UTF8Segments> {
+    var range: Slice<UnicodeSegments> {
       switch self {
       case .brokenPrototype(let error):
         return error.range
