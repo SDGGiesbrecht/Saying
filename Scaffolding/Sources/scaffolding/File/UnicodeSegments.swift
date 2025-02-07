@@ -15,7 +15,7 @@ extension UnicodeSegments {
     if let scalar = index.scalarIndex {
       let segment = segment(at: segmentIndex)
       return Int(segment.scalarOffset) + StrictString(segment.source)[..<scalar].count
-    } else if let lastSegment = segmentIndices.last.map({ segment(at: ListIndex(int: $0)) }) {
+    } else if let lastSegment = segmentIndices.last.map({ segment(at: ListIndex(index: $0)) }) {
       return Int(lastSegment.scalarOffset) + StrictString(lastSegment.source).count
     } else {
       return 0
@@ -26,12 +26,12 @@ extension UnicodeSegments {
 extension UnicodeSegments: Collection {
   var startIndex: Index {
     return Index(
-      ListIndex(int: segmentIndices.startIndex),
-      segmentIndices.first.map({ StrictString(segment(at: ListIndex(int: $0)).source).startIndex })
+      segment: ListIndex(index: segmentIndices.startIndex),
+      scalar: segmentIndices.first.map({ StrictString(segment(at: ListIndex(index: $0)).source).startIndex })
     )
   }
   var endIndex: Index {
-    return Index(ListIndex(int: segmentIndices.endIndex), nil)
+    return Index(segment: ListIndex(index: segmentIndices.endIndex), scalar: nil)
   }
   func index(after i: Index) -> Index {
     let segment = segment(at: i.segmentIndex)
@@ -40,11 +40,11 @@ extension UnicodeSegments: Collection {
     if nextIndex == segmentSource.endIndex {
       let nextSegment = segmentIndices.index(after: i.segmentIndex.int)
       return Index(
-        ListIndex(int: nextSegment),
-        segmentIndices[nextSegment...].first.map({ StrictString(self.segment(at: ListIndex(int: $0)).source).startIndex })
+        segment: ListIndex(index: nextSegment),
+        scalar: segmentIndices[nextSegment...].first.map({ StrictString(self.segment(at: ListIndex(index: $0)).source).startIndex })
       )
     } else {
-      return Index(i.segmentIndex, nextIndex)
+      return Index(segment: i.segmentIndex, scalar: nextIndex)
     }
   }
   subscript(position: Index) -> Unicode.Scalar {
@@ -62,15 +62,15 @@ extension UnicodeSegments: BidirectionalCollection {
     if scalar == segment.startIndex {
       return lastOfSegment(before: i.segmentIndex.int)
     }
-    return Index(i.segmentIndex, segment.index(before: scalar))
+    return Index(segment: i.segmentIndex, scalar: segment.index(before: scalar))
   }
 
   private func lastOfSegment(before segmentIndex: Int) -> Index {
     let previousSegmentIndex = segmentIndices[..<segmentIndex].last!
-    let previousSegment = StrictString(segment(at: ListIndex(int: previousSegmentIndex)).source)
+    let previousSegment = StrictString(segment(at: ListIndex(index: previousSegmentIndex)).source)
     return Index(
-      ListIndex(int: previousSegmentIndex),
-      previousSegment.index(before: previousSegment.endIndex)
+      segment: ListIndex(index: previousSegmentIndex),
+      scalar: previousSegment.index(before: previousSegment.endIndex)
     )
   }
 }

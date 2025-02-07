@@ -96,7 +96,14 @@ enum C: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
     ]
@@ -145,7 +152,9 @@ enum C: Platform {
             partDeclaration(name: "value", type: "\(name)_value", accessModifier: nil),
           ],
           accessModifier: nil,
-          constructorAccessModifier: nil
+          constructorParameters: [],
+          constructorAccessModifier: nil,
+          constructorSetters: []
         )!
       )
       

@@ -149,7 +149,14 @@ enum Swift: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     var typeName = name
     var extraIndent = ""
     var result: [String] = []
@@ -166,6 +173,13 @@ enum Swift: Platform {
     for component in components {
       result.append("\(extraIndent)\(indent)\(component)")
     }
+    let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
+    let constructorParameterList = constructorParameters.joined(separator: ", ")
+    result.append("\(extraIndent)\(indent)\(constructorAccess)init(\(constructorParameterList)) {")
+    for setter in constructorSetters {
+      result.append("\(extraIndent)\(indent)\(indent)\(setter)")
+    }
+    result.append("\(extraIndent)\(indent)}")
     result.append(contentsOf: [
       "\(extraIndent)}"
     ])

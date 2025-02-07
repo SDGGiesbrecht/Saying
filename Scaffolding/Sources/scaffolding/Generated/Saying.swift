@@ -1,151 +1,252 @@
 struct ListIndex {
   fileprivate var index: Int
+  fileprivate init(_ index: Int) {
+    self.index = index
+  }
 }
 
 struct UnicodeText {
   fileprivate var scalars: String
+  fileprivate init(_ scalars: String) {
+    self.scalars = scalars
+  }
 }
 
 struct ParagraphBreakSyntax {
+  init() {
+  }
 }
 
 struct BulletCharacterSyntax {
+  init() {
+  }
 }
 
 struct ClosingBraceSyntax {
+  init() {
+  }
 }
 
 struct ClosingBracketSyntax {
+  init() {
+  }
 }
 
 struct ClosingParenthesisSyntax {
+  init() {
+  }
 }
 
 struct ColonCharacterSyntax {
+  init() {
+  }
 }
 
 struct DownArrowSyntax {
+  init() {
+  }
 }
 
 struct LeftArrowSyntax {
+  init() {
+  }
 }
 
 struct LineBreakSyntax {
+  init() {
+  }
 }
 
 struct LeftChevronQuotationMarkSyntax {
+  init() {
+  }
 }
 
 struct LowQuotationMarkSyntax {
+  init() {
+  }
 }
 
 struct NinesQuotationMarkSyntax {
+  init() {
+  }
 }
 
 struct OpeningParenthesisSyntax {
+  init() {
+  }
 }
 
 struct OpeningBraceSyntax {
+  init() {
+  }
 }
 
 struct OpeningBracketSyntax {
+  init() {
+  }
 }
 
 struct RightChevronQuotationMarkSyntax {
+  init() {
+  }
 }
 
 struct RightArrowSyntax {
+  init() {
+  }
 }
 
 struct SixesQuotationMarkSyntax {
+  init() {
+  }
 }
 
 struct SlashSyntax {
+  init() {
+  }
 }
 
 struct SpaceSyntax {
+  init() {
+  }
 }
 
 struct SymbolInsertionMarkSyntax {
+  init() {
+  }
 }
 
 fileprivate struct Unicode_0020segment {
   fileprivate var scalar_0020offset: UInt64
   fileprivate var source: UnicodeText
+  fileprivate init(_ scalar_0020offset: UInt64, _ source: UnicodeText) {
+    self.scalar_0020offset = scalar_0020offset
+    self.source = source
+  }
 }
 
 struct UnicodeSegments {
   fileprivate var segments: [Unicode_0020segment]
+  fileprivate init(_ segments: [Unicode_0020segment]) {
+    self.segments = segments
+  }
 }
 
 extension UnicodeSegments {
   struct Index {
     fileprivate var segment: ListIndex
     fileprivate var scalar: String.UnicodeScalarView.Index?
+    fileprivate init(_ segment: ListIndex, _ scalar: String.UnicodeScalarView.Index?) {
+      self.segment = segment
+      self.scalar = scalar
+    }
   }
 }
 
 struct ReplacementParsedBulletCharacterSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedClosingBraceSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedClosingBracketSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedClosingParenthesisSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedColonCharacterSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedDownArrowSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedLeftArrowSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedLineBreakSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedLowQuotationMarkSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedNinesQuotationMarkSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedOpeningBraceSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedOpeningBracketSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedParagraphBreakSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedRightArrowSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedSixesQuotationMarkSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedSlashSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedSpaceSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedSymbolInsertionMarkSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedLeftChevronQuotationMarkSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedOpeningParenthesisSyntax {
+  fileprivate init() {
+  }
 }
 
 struct ReplacementParsedRightChevronQuotationMarkSyntax {
+  fileprivate init() {
+  }
 }
 
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
@@ -160,8 +261,8 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
 import SDGText
 
 extension ListIndex {
-  init(int: Int) {
-    self.index = int
+  init(index: Int) {
+    self.init(index)
   }
   var int: Int {
     return index
@@ -176,7 +277,7 @@ extension StrictString {
 
 extension UnicodeText {
   init(_ string: StrictString) {
-    scalars = String(string)
+    self.init(String(string))
   }
 }
 
@@ -186,7 +287,7 @@ struct UnicodeSegment {
 
 extension UnicodeSegment {
   init(scalarOffset: UInt64, source: UnicodeText) {
-    self.init(segment: Unicode_0020segment(scalar_0020offset: scalarOffset, source: source))
+    self.init(segment: Unicode_0020segment(scalarOffset, source))
   }
   var scalarOffset: UInt64 {
     return segment.scalar_0020offset
@@ -197,8 +298,8 @@ extension UnicodeSegment {
 }
 
 extension UnicodeSegments.Index {
-  init(_ segment: ListIndex, _ scalar: String.UnicodeScalarView.Index?) {
-    self.init(segment: segment, scalar: scalar)
+  init(segment: ListIndex, scalar: String.UnicodeScalarView.Index?) {
+    self.init(segment, scalar)
   }
   var segmentIndex: ListIndex {
     return segment
@@ -210,7 +311,7 @@ extension UnicodeSegments.Index {
 
 extension UnicodeSegments {
   init(segments: [UnicodeSegment]) {
-    self.init(segments: segments.map({ $0.segment }))
+    self.init(segments.map({ $0.segment }))
   }
   var segmentIndices: Range<Int> {
     return segments.indices

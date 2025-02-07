@@ -168,12 +168,12 @@ extension ParsedTypeReference {
   func validateReferences(
     requiredAccess: AccessIntermediate,
     allowTestOnlyAccess: Bool,
-    referenceDictionary: ReferenceDictionary,
+    referenceLookup: [ReferenceDictionary],
     errors: inout [ReferenceError]
   ) {
     switch self {
     case .simple(let simple):
-      if let thing = referenceDictionary.lookupThing(simple.identifier, components: []) {
+      if let thing = referenceLookup.lookupThing(simple.identifier, components: []) {
         if requiredAccess > thing.access {
           errors.append(.thingAccessNarrowerThanSignature(reference: simple.syntaxNode))
         }
@@ -185,7 +185,7 @@ extension ParsedTypeReference {
         errors.append(.noSuchThing(simple.identifier, reference: simple.syntaxNode))
       }
     case .compound(identifier: let identifier, components: let components):
-      if let thing = referenceDictionary.lookupThing(
+      if let thing = referenceLookup.lookupThing(
         identifier.name(),
         components: components.map({ $0.key })
       ) {
@@ -203,7 +203,7 @@ extension ParsedTypeReference {
         component.validateReferences(
           requiredAccess: requiredAccess,
           allowTestOnlyAccess: allowTestOnlyAccess,
-          referenceDictionary: referenceDictionary,
+          referenceLookup: referenceLookup,
           errors: &errors
         )
       }
@@ -212,14 +212,14 @@ extension ParsedTypeReference {
         parameter.validateReferences(
           requiredAccess: requiredAccess,
           allowTestOnlyAccess: allowTestOnlyAccess,
-          referenceDictionary: referenceDictionary,
+          referenceLookup: referenceLookup,
           errors: &errors
         )
       }
       returnValue?.validateReferences(
         requiredAccess: requiredAccess,
         allowTestOnlyAccess: allowTestOnlyAccess,
-        referenceDictionary: referenceDictionary,
+        referenceLookup: referenceLookup,
         errors: &errors
       )
     case .statements:
@@ -228,7 +228,7 @@ extension ParsedTypeReference {
       enumeration.validateReferences(
         requiredAccess: requiredAccess,
         allowTestOnlyAccess: allowTestOnlyAccess,
-        referenceDictionary: referenceDictionary,
+        referenceLookup: referenceLookup,
         errors: &errors
       )
     }

@@ -317,6 +317,40 @@ extension Array where Element == ReferenceDictionary {
 }
 
 extension ReferenceDictionary {
+  func lookupCreation(
+    of thing: TypeReference
+  ) -> ActionIntermediate? {
+    for (_, signatureGroup) in actions {
+      for (_, returnGroup) in signatureGroup {
+        for (returnValue, action) in returnGroup {
+          if returnValue == thing,
+            action.implementation == nil {
+            return action
+          }
+        }
+      }
+    }
+    return nil
+  }
+}
+extension Array where Element == ReferenceDictionary {
+  func lookupCreation(
+    of thing: Thing
+  ) -> ActionIntermediate? {
+    let reference = thing.reference(resolvingFromReferenceLookup: self)
+    for index in indices.reversed() {
+      let scope = self[index]
+      if let found = scope.lookupCreation(
+        of: reference
+      ) {
+        return found
+      }
+    }
+    return nil
+  }
+}
+
+extension ReferenceDictionary {
   mutating func add(ability: Ability) -> [RedeclaredIdentifierError] {
     var errors: [RedeclaredIdentifierError] = []
     let identifier = ability.names.identifier()
@@ -395,15 +429,19 @@ extension ReferenceDictionary {
     actions = newActions
   }
 
-  func validateReferencesAsModule(errors: inout [ReferenceError]) {
+  func validateReferencesAsModule(
+    moduleWideImports: [ModuleIntermediate],
+    errors: inout [ReferenceError]
+  ) {
+    let referenceLookup = moduleWideImports.map({ $0.referenceDictionary }).appending(self)
     for thing in allThings() {
-      thing.documentation?.validateReferences(referenceLookup: [self], errors: &errors)
+      thing.documentation?.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
     for action in allActions() {
-      action.validateReferences(moduleReferenceDictionary: self, errors: &errors)
+      action.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
     for ability in allAbilities() {
-      ability.documentation?.validateReferences(referenceLookup: [self], errors: &errors)
+      ability.documentation?.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
   }
 }

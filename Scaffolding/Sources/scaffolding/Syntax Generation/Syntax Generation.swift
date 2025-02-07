@@ -11,10 +11,40 @@ extension ModuleIntermediate {
         let ελληνικόΌνομα = (names["ελληνικά"]?.name()).map({ StrictString($0) })
         let swiftName = StrictString(names["Swift"]!.name())
         var newSource = [
+          "action",
+          " [",
+          "  test {verify (ignore \(englishName) (create \(englishName)))}",
+          " ]",
+          " (",
+          "  English: ignore \(englishName) (syntax: \(englishName))",
+          " )",
+          " truth value",
+          " {",
+          "  ← true",
+          " }",
+          "",
+          "action (clients)",
+          " (",
+          "  English: create \(englishName)",
+        ]
+        if let deutsch = deutscherName {
+          newSource.append("  Deutsch: \(deutsch) erstellen")
+        }
+        if let français = nomFrançais {
+          newSource.append("  français : créer \(français)")
+        }
+        if let ελληνικά = ελληνικόΌνομα {
+          newSource.append("  ελληνικά: δημιουργία σύνταξης \(StrictString(ελληνικά.dropFirst(9)))")
+        }
+        newSource.append(contentsOf: [
+          " )",
+          " \(englishName)",
+          " create",
+          "",
           "thing (clients)",
           " (",
           "  English: parsed \(englishName)",
-        ]
+        ])
         if let deutsch = deutscherName {
           newSource.append("  Deutsch: zerteilte \(deutsch)")
         }

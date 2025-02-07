@@ -55,7 +55,9 @@ protocol Platform {
     name: String,
     components: [String],
     accessModifier: String?,
-    constructorAccessModifier: String?
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -237,6 +239,8 @@ extension Platform {
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
         return String(native.textComponents.lazy.map({ StrictString($0) }).joined())
+      } else if let native = nativeName(of: type) {
+        return native
       } else {
         return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
       }
@@ -353,8 +357,30 @@ extension Platform {
         return partDeclaration(name: name, type: type, accessModifier: access)
       })
       let access = accessModifier(for: thing.access)
-      let constructorAccess = accessModifier(for: [thing.access].appending(contentsOf: thing.parts.lazy.map({ $0.access })).min()!)
-      return thingDeclaration(name: name, components: components, accessModifier: access, constructorAccessModifier: constructorAccess)
+      let constructorParameters = thing.parts.map({ part in
+        let name = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
+        return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
+      })
+      let constructorAccess = accessModifier(for: externalReferenceLookup.lookupCreation(of: thing)?.access ?? .file)
+      let constructorSetters = thing.parts.map({ part in
+        let name = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        return "self.\(name) = \(name)"
+      })
+      return thingDeclaration(
+        name: name,
+        components: components,
+        accessModifier: access,
+        constructorParameters: constructorParameters,
+        constructorAccessModifier: constructorAccess,
+        constructorSetters: constructorSetters
+      )
     } else {
       var cases: [String] = []
       var storageCases: [String] = []
@@ -682,7 +708,8 @@ extension Platform {
           }
         }
         let arguments = argumentsArray.joined(separator: ", ")
-        return "\(name)(\(arguments))"
+        let modifiedName = action.isCreation ? source(for: action.returnValue!, referenceLookup: referenceLookup) : name
+        return "\(modifiedName)(\(arguments))"
       }
     }
   }
@@ -891,6 +918,16 @@ extension Platform {
       return nil
     }
 
+    guard let actionImplementation = action.implementation else {
+      // creation
+      return nil
+    }
+
+    let name = nativeName(of: action)
+      ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
+        leading: true
+      )
     let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
@@ -902,26 +939,9 @@ extension Platform {
       returnValue = emptyReturnType
     }
 
-    let access = accessModifier(for: action.access)
-
-    if action.implementation == nil {
-      let partNames = action.parameters.ordered(for: action.names.identifier())
-        .map({ sanitize(identifier: $0.names.identifier(), leading: true) })
-      return constructorDeclaration(
-        type: returnValue!,
-        parameters: parameters,
-        access: access,
-        parts: partNames
-      )
-    }
-
-    let name = nativeName(of: action)
-      ?? sanitize(
-        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-        leading: true
-      )
-
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
+
+    let access = accessModifier(for: action.access)
 
     let coverageRegistration: String?
     if mode == .testing,
@@ -931,7 +951,7 @@ extension Platform {
       coverageRegistration = nil
     }
     let implementation = source(
-      for: action.implementation!.statements,
+      for: actionImplementation.statements,
       context: action,
       localLookup: [],
       referenceLookup: externalReferenceLookup.appending(
@@ -949,27 +969,6 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation
     )
-  }
-
-  static func constructorDeclaration(
-    type: String,
-    parameters: String,
-    access: String?,
-    parts: [String]
-  ) -> String? {
-    let accessModifier = access.map({ "\($0) " }) ?? ""
-    var result = [
-      "extension \(type) {",
-      "\(indent)\(accessModifier)init(\(parameters)) {"
-    ]
-    for part in parts {
-      result.append("\(indent)\(indent)self.\(part) = \(part)")
-    }
-    result.append(contentsOf: [
-      "\(indent)}",
-      "}",
-    ])
-    return result.joined(separator: "\n")
   }
 
   static func identifier(for test: TestIntermediate, leading: Bool) -> String {
@@ -1061,13 +1060,14 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
-  static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode) -> String {
+  static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode, moduleWideImports: [ReferenceDictionary]) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
+    let referenceLookup = moduleWideImports.appending(moduleReferenceLookup)
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
       for action in allActions where !action.isFlow {
-        if let declaration = forwardDeclaration(for: action, referenceLookup: [moduleReferenceLookup]) {
+        if let declaration = forwardDeclaration(for: action, referenceLookup: referenceLookup) {
           result.append(contentsOf: [
             "",
             declaration
@@ -1078,7 +1078,7 @@ extension Platform {
     for action in allActions where !action.isFlow {
       if let declaration = self.declaration(
         for: action,
-        externalReferenceLookup: [moduleReferenceLookup],
+        externalReferenceLookup: referenceLookup,
         mode: mode
       ) {
         result.append(contentsOf: [
@@ -1091,7 +1091,7 @@ extension Platform {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
         result.append("")
-        result.append(contentsOf: source(of: test, referenceLookup: [moduleReferenceLookup]))
+        result.append(contentsOf: source(of: test, referenceLookup: referenceLookup))
       }
     }
     return result.joined(separator: "\n")
@@ -1138,7 +1138,7 @@ extension Platform {
       result.append(contentsOf: start)
     }
     for module in modules {
-      result.append(self.actionsSource(for: module, mode: mode))
+      result.append(self.actionsSource(for: module, mode: mode, moduleWideImports: moduleWideImportDictionary))
     }
     if mode == .testing {
       var allTests: [TestIntermediate] = []
@@ -1174,7 +1174,7 @@ extension Platform {
     var noEntryPoints: Set<StrictString>? = nil
     let sayingModule = sourceModules.first(where: { $0.isSayingModule })
     let builtSayingModule = try sayingModule?.build(
-      mode: .dependency,
+      mode: mode == .release ? .dependency : mode,
       entryPoints: &noEntryPoints,
       moduleWideImports: []
     )
