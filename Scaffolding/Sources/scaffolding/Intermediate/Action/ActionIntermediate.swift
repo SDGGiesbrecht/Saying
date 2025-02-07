@@ -447,7 +447,13 @@ extension ActionIntermediate {
     }
     var implementation: StatementListIntermediate?
     if let source = declaration.implementation.source {
-      implementation = StatementListIntermediate(source.statements)
+      switch source {
+      case .source(let source):
+        implementation = StatementListIntermediate(source.statements)
+      case .creation:
+        #warning("Dropping creation.")
+        break
+      }
     } else {
       if c == nil {
         errors.append(ConstructionError.missingImplementation(language: UnicodeText("C"), action: declaration.name))

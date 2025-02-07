@@ -22,3 +22,22 @@ thing
    )
    truth value
  }
+
+action
+ [
+  test {verify (use example thing (create example thing with A as (true) and B as (false)))}
+ ]
+ (
+  English: create example thing with A as (part A: truth value) and B as (part B: truth value)
+ )
+ example thing
+ create
+
+action
+ (
+  English: use example thing (thing: example thing)
+ )
+ truth value
+ {
+  ← true
+ }

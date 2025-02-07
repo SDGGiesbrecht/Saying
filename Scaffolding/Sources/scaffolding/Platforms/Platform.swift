@@ -891,11 +891,6 @@ extension Platform {
       return nil
     }
 
-    let name = nativeName(of: action)
-      ?? sanitize(
-        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-        leading: true
-      )
     let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
@@ -907,9 +902,26 @@ extension Platform {
       returnValue = emptyReturnType
     }
 
-    let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
-
     let access = accessModifier(for: action.access)
+
+    if action.implementation == nil {
+      let partNames = action.parameters.ordered(for: action.names.identifier())
+        .map({ sanitize(identifier: $0.names.identifier(), leading: true) })
+      return constructorDeclaration(
+        type: returnValue!,
+        parameters: parameters,
+        access: access,
+        parts: partNames
+      )
+    }
+
+    let name = nativeName(of: action)
+      ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
+        leading: true
+      )
+
+    let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
 
     let coverageRegistration: String?
     if mode == .testing,
@@ -937,6 +949,27 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation
     )
+  }
+
+  static func constructorDeclaration(
+    type: String,
+    parameters: String,
+    access: String?,
+    parts: [String]
+  ) -> String? {
+    let accessModifier = access.map({ "\($0) " }) ?? ""
+    var result = [
+      "extension \(type) {",
+      "\(indent)\(accessModifier)init(\(parameters)) {"
+    ]
+    for part in parts {
+      result.append("\(indent)\(indent)self.\(part) = \(part)")
+    }
+    result.append(contentsOf: [
+      "\(indent)}",
+      "}",
+    ])
+    return result.joined(separator: "\n")
   }
 
   static func identifier(for test: TestIntermediate, leading: Bool) -> String {
