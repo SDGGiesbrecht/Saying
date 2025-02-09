@@ -165,7 +165,7 @@ enum C: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -178,6 +178,9 @@ enum C: Platform {
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
+  }
+  static func constructorSetter(name: String) -> String {
+    return ""
   }
   static func createInstance(of type: String, parts: String) -> String {
     return "((\(type)) {\(parts)})"

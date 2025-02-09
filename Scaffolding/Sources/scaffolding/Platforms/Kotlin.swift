@@ -154,7 +154,7 @@ enum Kotlin: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -170,6 +170,9 @@ enum Kotlin: Platform {
   }
   static func createInstance(of type: String, parts: String) -> String {
     return "\(type)(\(parts))"
+  }
+  static func constructorSetter(name: String) -> String {
+    return ""
   }
   static var needsReferencePreparation: Bool {
     return true

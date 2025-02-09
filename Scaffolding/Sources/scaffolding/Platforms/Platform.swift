@@ -68,11 +68,12 @@ protocol Platform {
 
   // Actions
   static func nativeName(of action: ActionIntermediate) -> String?
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String?
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
   static func createInstance(of type: String, parts: String) -> String
+  static func constructorSetter(name: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String) -> String
@@ -372,7 +373,7 @@ extension Platform {
           identifier: part.names.identifier(),
           leading: true
         )
-        return "self.\(name) = \(name)"
+        return constructorSetter(name: name)
       })
       return thingDeclaration(
         name: name,
@@ -671,7 +672,7 @@ extension Platform {
         for argumentIndex in reference.arguments.indices {
           let argument = reference.arguments[argumentIndex]
           let parameter = parameters[argumentIndex]
-          let parameterLabel = nativeLabel(of: parameter)
+          let parameterLabel = nativeLabel(of: parameter, isCreation: action.isCreation)
             .map({ $0 == "" ? "" : "\($0): " }) ?? ""
           switch argument {
           case .action(let actionArgument):
@@ -816,11 +817,11 @@ extension Platform {
     } else {
       switch parameter.type {
       case .simple, .compound:
-        let label = nativeLabel(of: parameter)
+        let label = nativeLabel(of: parameter, isCreation: false)
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
         return parameterDeclaration(label: label, name: name, type: typeSource, isThrough: parameter.isThrough)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
-        let label = nativeLabel(of: parameter)
+        let label = nativeLabel(of: parameter, isCreation: false)
         let parameters = actionParameters
           .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
           .joined(separator: ", ")

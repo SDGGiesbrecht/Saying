@@ -173,6 +173,7 @@ enum Swift: Platform {
     for component in components {
       result.append("\(extraIndent)\(indent)\(component)")
     }
+    result.append("")
     let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
     let constructorParameterList = constructorParameters.joined(separator: ", ")
     result.append("\(extraIndent)\(indent)\(constructorAccess)init(\(constructorParameterList)) {")
@@ -210,7 +211,7 @@ enum Swift: Platform {
     let found = action.swiftIdentifier().map({ StrictString($0) })?.prefix(upTo: "(".scalars.literal())?.contents
     return found.map { String(StrictString($0)) }
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return parameter.swiftLabel.map({ String(StrictString($0)) })
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -227,6 +228,9 @@ enum Swift: Platform {
   }
   static func createInstance(of type: String, parts: String) -> String {
     return "\(type)(\(parts))"
+  }
+  static func constructorSetter(name: String) -> String {
+    return "self.\(name) = \(name)"
   }
   static var needsReferencePreparation: Bool {
     return false

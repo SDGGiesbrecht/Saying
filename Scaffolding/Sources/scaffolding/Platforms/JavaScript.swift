@@ -125,8 +125,12 @@ enum JavaScript: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
-    return nil
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
+    if isCreation {
+      return sanitize(identifier: parameter.names.identifier(), leading: true)
+    } else {
+      return nil
+    }
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.javaScript
@@ -139,7 +143,10 @@ enum JavaScript: Platform {
     return name
   }
   static func createInstance(of type: String, parts: String) -> String {
-    return "[...]"
+    return "{\(parts)}"
+  }
+  static func constructorSetter(name: String) -> String {
+    return ""
   }
   static var needsReferencePreparation: Bool {
     return true

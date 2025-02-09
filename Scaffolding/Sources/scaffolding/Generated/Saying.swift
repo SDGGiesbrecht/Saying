@@ -1,5 +1,6 @@
 struct ListIndex {
   fileprivate var index: Int
+
   fileprivate init(_ index: Int) {
     self.index = index
   }
@@ -7,112 +8,134 @@ struct ListIndex {
 
 struct UnicodeText {
   fileprivate var scalars: String
+
   fileprivate init(_ scalars: String) {
     self.scalars = scalars
   }
 }
 
 struct ParagraphBreakSyntax {
+
   init() {
   }
 }
 
 struct BulletCharacterSyntax {
+
   init() {
   }
 }
 
 struct ClosingBraceSyntax {
+
   init() {
   }
 }
 
 struct ClosingBracketSyntax {
+
   init() {
   }
 }
 
 struct ClosingParenthesisSyntax {
+
   init() {
   }
 }
 
 struct ColonCharacterSyntax {
+
   init() {
   }
 }
 
 struct DownArrowSyntax {
+
   init() {
   }
 }
 
 struct LeftArrowSyntax {
+
   init() {
   }
 }
 
 struct LineBreakSyntax {
+
   init() {
   }
 }
 
 struct LeftChevronQuotationMarkSyntax {
+
   init() {
   }
 }
 
 struct LowQuotationMarkSyntax {
+
   init() {
   }
 }
 
 struct NinesQuotationMarkSyntax {
+
   init() {
   }
 }
 
 struct OpeningParenthesisSyntax {
+
   init() {
   }
 }
 
 struct OpeningBraceSyntax {
+
   init() {
   }
 }
 
 struct OpeningBracketSyntax {
+
   init() {
   }
 }
 
 struct RightChevronQuotationMarkSyntax {
+
   init() {
   }
 }
 
 struct RightArrowSyntax {
+
   init() {
   }
 }
 
 struct SixesQuotationMarkSyntax {
+
   init() {
   }
 }
 
 struct SlashSyntax {
+
   init() {
   }
 }
 
 struct SpaceSyntax {
+
   init() {
   }
 }
 
 struct SymbolInsertionMarkSyntax {
+
   init() {
   }
 }
@@ -120,6 +143,7 @@ struct SymbolInsertionMarkSyntax {
 fileprivate struct Unicode_0020segment {
   fileprivate var scalar_0020offset: UInt64
   fileprivate var source: UnicodeText
+
   fileprivate init(_ scalar_0020offset: UInt64, _ source: UnicodeText) {
     self.scalar_0020offset = scalar_0020offset
     self.source = source
@@ -128,6 +152,7 @@ fileprivate struct Unicode_0020segment {
 
 struct UnicodeSegments {
   fileprivate var segments: [Unicode_0020segment]
+
   fileprivate init(_ segments: [Unicode_0020segment]) {
     self.segments = segments
   }
@@ -137,6 +162,7 @@ extension UnicodeSegments {
   struct Index {
     fileprivate var segment: ListIndex
     fileprivate var scalar: String.UnicodeScalarView.Index?
+
     fileprivate init(_ segment: ListIndex, _ scalar: String.UnicodeScalarView.Index?) {
       self.segment = segment
       self.scalar = scalar
@@ -145,106 +171,127 @@ extension UnicodeSegments {
 }
 
 struct ReplacementParsedBulletCharacterSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedClosingBraceSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedClosingBracketSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedClosingParenthesisSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedColonCharacterSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedDownArrowSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedLeftArrowSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedLineBreakSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedLowQuotationMarkSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedNinesQuotationMarkSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedOpeningBraceSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedOpeningBracketSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedParagraphBreakSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedRightArrowSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedSixesQuotationMarkSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedSlashSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedSpaceSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedSymbolInsertionMarkSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedLeftChevronQuotationMarkSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedOpeningParenthesisSyntax {
+
   fileprivate init() {
   }
 }
 
 struct ReplacementParsedRightChevronQuotationMarkSyntax {
+
   fileprivate init() {
   }
 }

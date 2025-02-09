@@ -145,6 +145,14 @@ enum CSharp: Platform {
     for component in components {
       result.append("\(indent)\(component)")
     }
+    result.append("")
+    let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
+    let constructorParameterList = constructorParameters.joined(separator: ", ")
+    result.append("\(indent)\(constructorAccess)\(name)(\(constructorParameterList)) {")
+    for setter in constructorSetters {
+      result.append("\(indent)\(indent)\(setter)")
+    }
+    result.append("\(indent)}")
     result.append(contentsOf: [
       "}"
     ])
@@ -188,7 +196,7 @@ enum CSharp: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -202,8 +210,11 @@ enum CSharp: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
   }
+  static func constructorSetter(name: String) -> String {
+    return "this.\(name) = \(name);"
+  }
   static func createInstance(of type: String, parts: String) -> String {
-    return "[...]"
+    return "new \(type)(\(parts))"
   }
   static var needsReferencePreparation: Bool {
     return false
