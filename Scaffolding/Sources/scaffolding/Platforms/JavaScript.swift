@@ -138,6 +138,9 @@ enum JavaScript: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return name
   }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "[...]"
+  }
   static var needsReferencePreparation: Bool {
     return true
   }

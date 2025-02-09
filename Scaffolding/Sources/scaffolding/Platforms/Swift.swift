@@ -225,6 +225,9 @@ enum Swift: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "\(type)(\(parts))"
+  }
   static var needsReferencePreparation: Bool {
     return false
   }

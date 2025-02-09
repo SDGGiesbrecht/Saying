@@ -179,6 +179,9 @@ enum C: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
   }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "((\(type)) {\(parts)})"
+  }
   static var needsReferencePreparation: Bool {
     return false
   }

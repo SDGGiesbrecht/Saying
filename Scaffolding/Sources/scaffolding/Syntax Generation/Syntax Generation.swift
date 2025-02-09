@@ -37,6 +37,7 @@ extension ModuleIntermediate {
           newSource.append("  ελληνικά: δημιουργία σύνταξης \(StrictString(ελληνικά.dropFirst(9)))")
         }
         newSource.append(contentsOf: [
+          "  Swift: \(swiftName).init",
           " )",
           " \(englishName)",
           " create",

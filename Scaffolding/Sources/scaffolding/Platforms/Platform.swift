@@ -72,6 +72,7 @@ protocol Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
+  static func createInstance(of type: String, parts: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String) -> String
@@ -708,8 +709,12 @@ extension Platform {
           }
         }
         let arguments = argumentsArray.joined(separator: ", ")
-        let modifiedName = action.isCreation ? source(for: action.returnValue!, referenceLookup: referenceLookup) : name
-        return "\(modifiedName)(\(arguments))"
+        if action.isCreation {
+          let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+          return createInstance(of: type, parts: arguments)
+        } else {
+          return "\(name)(\(arguments))"
+        }
       }
     }
   }

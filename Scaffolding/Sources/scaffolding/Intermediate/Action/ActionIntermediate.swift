@@ -822,11 +822,16 @@ extension ActionIntermediate {
     guard var name = swiftName.map({ StrictString($0) }) else {
       return nil
     }
-    guard let firstSpace = name.firstIndex(of: " ") else {
-      fatalError("Swift name lacks space to indicate end of function name (where the opening parenthesis should be in Swift.")
+    let firstSpace = name.firstIndex(of: " ")
+    var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
+    if let space = firstSpace {
+      name.removeSubrange(...space)
+    } else {
+      name.removeSubrange(..<name.endIndex)
     }
-    let functionName = StrictString(name[..<firstSpace])
-    name.removeSubrange(...firstSpace)
+    if functionName.hasSuffix(".init") {
+      functionName = "init"
+    }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
       if name.hasPrefix("()".scalars.literal()) {
@@ -850,7 +855,8 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    return UnicodeText("\(functionName)(\(parameterNames.map({ StrictString($0) }).joined(separator: ":")):)")
+    let parameterSection = parameterNames.map({ "\(StrictString($0)):" }).joined()
+    return UnicodeText("\(functionName)(\(parameterSection))")
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = swiftName,
@@ -869,6 +875,10 @@ extension ActionIntermediate {
       result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
     }
     result.append(contentsOf: components.last!.contents)
+    if result.hasPrefix("init(") {
+      result.prepend(contentsOf: ".".scalars)
+      result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).scalars)
+    }
     return UnicodeText(result)
   }
 }
