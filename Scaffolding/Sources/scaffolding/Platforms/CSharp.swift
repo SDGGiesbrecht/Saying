@@ -145,14 +145,16 @@ enum CSharp: Platform {
     for component in components {
       result.append("\(indent)\(component)")
     }
-    result.append("")
-    let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
-    let constructorParameterList = constructorParameters.joined(separator: ", ")
-    result.append("\(indent)\(constructorAccess)\(name)(\(constructorParameterList)) {")
-    for setter in constructorSetters {
-      result.append("\(indent)\(indent)\(setter)")
+    if !components.isEmpty {
+      result.append("")
+      let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
+      let constructorParameterList = constructorParameters.joined(separator: ", ")
+      result.append("\(indent)\(constructorAccess)\(name)(\(constructorParameterList)) {")
+      for setter in constructorSetters {
+        result.append("\(indent)\(indent)\(setter)")
+      }
+      result.append("\(indent)}")
     }
-    result.append("\(indent)}")
     result.append(contentsOf: [
       "}"
     ])
