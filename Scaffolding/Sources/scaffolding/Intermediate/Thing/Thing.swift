@@ -127,6 +127,7 @@ extension Thing {
       switch PartIntermediate.construct(
         part,
         namespace: thingNamespace,
+        containerType: selfReference,
         access: access,
         testOnlyAccess: testOnlyAccess
       ) {

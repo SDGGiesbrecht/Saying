@@ -5,6 +5,7 @@ indirect enum ParsedTypeReference {
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])
   case action(parameters: [ParsedTypeReference], returnValue: ParsedTypeReference?)
   case statements
+  case partReference(container: ParsedTypeReference, identifier: UnicodeText)
   case enumerationCase(enumeration: ParsedTypeReference, identifier: UnicodeText)
 }
 
@@ -96,6 +97,8 @@ extension ParsedTypeReference {
       return .action(parameters: parameters.map({ $0.key }), returnValue: returnValue.map({ $0.key }))
     case .statements:
       return .statements
+    case .partReference(container: let container, identifier: let identifier):
+      return .partReference(container.key, identifier: StrictString(identifier))
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
       return .enumerationCase(enumeration.key, identifier: StrictString(identifier))
     }
@@ -127,6 +130,11 @@ extension ParsedTypeReference {
       )
     case .statements:
       return .statements
+    case .partReference(container: let container, identifier: let identifier):
+      return .partReference(
+        container: container.resolvingExtensionContext(typeLookup: typeLookup),
+        identifier: identifier
+      )
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
       return .enumerationCase(
         enumeration: enumeration.resolvingExtensionContext(typeLookup: typeLookup),
@@ -155,6 +163,11 @@ extension ParsedTypeReference {
       )
     case .statements:
       return .statements
+    case .partReference(container: let container, identifier: let identifier):
+      return .partReference(
+        container: container.specializing(typeLookup: typeLookup),
+        identifier: identifier
+      )
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
       return .enumerationCase(
         enumeration: enumeration.specializing(typeLookup: typeLookup),
@@ -224,8 +237,9 @@ extension ParsedTypeReference {
       )
     case .statements:
       break
-    case .enumerationCase(enumeration: let enumeration, identifier: _):
-      enumeration.validateReferences(
+    case .partReference(container: let type, identifier: _),
+      .enumerationCase(enumeration: let type, identifier: _):
+      type.validateReferences(
         requiredAccess: requiredAccess,
         allowTestOnlyAccess: allowTestOnlyAccess,
         referenceLookup: referenceLookup,
@@ -254,9 +268,10 @@ extension ParsedTypeReference {
       return result
     case .statements:
       return ["{}"].map({ UnicodeText($0) })
-    case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
+    case .partReference(container: let type, identifier: let identifier),
+      .enumerationCase(enumeration: let type, identifier: let identifier):
       var result: [UnicodeText] = ["((("].map({ UnicodeText($0) })
-      result.append(contentsOf: enumeration.unresolvedGloballyUniqueIdentifierComponents())
+      result.append(contentsOf: type.unresolvedGloballyUniqueIdentifierComponents())
       result.append(UnicodeText("•"))
       result.append(identifier)
       result.append(UnicodeText(")))"))
@@ -311,9 +326,10 @@ extension ParsedTypeReference {
       }
     case .statements:
       break
-    case .enumerationCase(enumeration: let enumeration, identifier: _):
+    case .partReference(container: let type, identifier: _),
+      .enumerationCase(enumeration: let type, identifier: _):
       result.append(
-        contentsOf: enumeration.requiredIdentifiers(
+        contentsOf: type.requiredIdentifiers(
           moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
         )
       )

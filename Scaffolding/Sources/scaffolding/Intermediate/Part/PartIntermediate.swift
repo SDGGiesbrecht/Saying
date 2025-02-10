@@ -5,6 +5,8 @@ struct PartIntermediate {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var contents: ParsedTypeReference
+  var referenceAction: ActionIntermediate
+  var accessor: ActionIntermediate
   var documentation: DocumentationIntermediate?
   var declaration: ParsedPartDeclaration
 }
@@ -14,6 +16,7 @@ extension PartIntermediate {
   static func construct(
     _ declaration: ParsedPartDeclaration,
     namespace: [Set<StrictString>],
+    containerType: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool
   ) -> Result<PartIntermediate, ErrorList<PartIntermediate.ConstructionError>> {
@@ -41,7 +44,33 @@ extension PartIntermediate {
       }
     }
 
+    let c: NativeActionImplementationIntermediate? = nil
+    let cSharp: NativeActionImplementationIntermediate? = nil
+    let javaScript: NativeActionImplementationIntermediate? = nil
+    let kotlin: NativeActionImplementationIntermediate? = nil
+    let swift: NativeActionImplementationIntermediate? = nil
+
     let contents = ParsedTypeReference(declaration.type)
+
+    let referenceAction = ActionIntermediate.partReference(
+      names: names,
+      containerType: containerType,
+      access: access,
+      testOnlyAccess: testOnlyAccess
+    )
+
+    let accessor = ActionIntermediate.accessor(
+      containerType: containerType,
+      partIdentifier: names.identifier(),
+      partType: contents,
+      access: access,
+      testOnlyAccess: testOnlyAccess,
+      c: c,
+      cSharp: cSharp,
+      javaScript: javaScript,
+      kotlin: kotlin,
+      swift: swift
+    )
 
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -52,6 +81,8 @@ extension PartIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         contents: contents,
+        referenceAction: referenceAction,
+        accessor: accessor,
         documentation: attachedDocumentation,
         declaration: declaration
       )
@@ -69,6 +100,8 @@ extension PartIntermediate {
       access: access,
       testOnlyAccess: testOnlyAccess,
       contents: contents.resolvingExtensionContext(typeLookup: typeLookup),
+      referenceAction: referenceAction.resolvingExtensionContext(typeLookup: typeLookup),
+      accessor: accessor.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
     )
@@ -84,6 +117,16 @@ extension PartIntermediate {
       access: access,
       testOnlyAccess: testOnlyAccess,
       contents: contents.specializing(typeLookup: typeLookup),
+      referenceAction: referenceAction.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      accessor: accessor.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace

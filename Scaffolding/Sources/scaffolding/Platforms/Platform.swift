@@ -231,7 +231,7 @@ extension Platform {
         identifier.name(),
         components: components.map({ $0.key })
       )!
-    case .action, .statements, .enumerationCase:
+    case .action, .statements, .partReference, .enumerationCase:
       return false
     }
     return intermediate.isSimple
@@ -279,6 +279,8 @@ extension Platform {
       )
     case .statements:
       fatalError("Statements have no platform type.")
+    case .partReference(container: let container, identifier: _):
+      return source(for: container, referenceLookup: referenceLookup)
     case .enumerationCase(enumeration: let enumeration, identifier: _):
       return source(for: enumeration, referenceLookup: referenceLookup)
     }
@@ -526,7 +528,7 @@ extension Platform {
             result.append(contentsOf: typeSource)
           } else if let enumerationCase = parameter.caseInstead {
             switch enumerationCase {
-            case .simple, .compound, .action, .statements:
+            case .simple, .compound, .action, .statements, .partReference:
               fatalError("Only enumeration cases should be stored in “caseInstead”.")
             case .enumerationCase(enumeration: let type, identifier: let identifier):
               let reference = caseReference(
@@ -594,15 +596,19 @@ extension Platform {
         }
       }
       return result
-    } else if action.isEnumerationCaseWrapper {
+    } else if action.isMemberWrapper {
       let name = sanitize(identifier: action.names.identifier(), leading: true)
-      let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
-      return caseReference(
-        name: name,
-        type: type,
-        simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
-        ignoringValue: (action.isFlow && action.isEnumerationCaseWrapper) || action.isEnumerationValueWrapper
-      )
+      if case .partReference = action.returnValue! {
+        return name
+      } else {
+        let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+        return caseReference(
+          name: name,
+          type: type,
+          simple: isSimpleEnumeration(action.returnValue!, referenceLookup: referenceLookup),
+          ignoringValue: (action.isFlow && action.isMemberWrapper) || action.isEnumerationValueWrapper
+        )
+      }
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
       var newInliningArguments: [StrictString: String] = [:]
@@ -840,6 +846,8 @@ extension Platform {
         )
       case .statements:
         fatalError("Statements should have been handled elsewhere.")
+      case .partReference:
+        fatalError("Part references should have been handled elsewhere.")
       case .enumerationCase:
         fatalError("Enumeration cases should have been handled elsewhere.")
       }
@@ -851,7 +859,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary]
   ) -> String? {
     if nativeImplementation(of: action) != nil
-      || action.isEnumerationCaseWrapper {
+      || action.isMemberWrapper {
       return nil
     }
 
@@ -921,7 +929,7 @@ extension Platform {
     mode: CompilationMode
   ) -> String? {
     if nativeImplementation(of: action) != nil
-      || action.isEnumerationCaseWrapper {
+      || action.isMemberWrapper {
       return nil
     }
 

@@ -80,6 +80,10 @@ extension ReferenceDictionary {
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
       .map({ $0.resolvedType!.key })
     things[StrictString(identifier), default: [:]][parameters] = thing
+    for part in thing.parts {
+      errors.append(contentsOf: add(action: part.referenceAction))
+      errors.append(contentsOf: add(action: part.accessor))
+    }
     for enumerationCase in thing.cases {
       if let action = enumerationCase.referenceAction {
         errors.append(contentsOf: add(action: action))
@@ -107,7 +111,7 @@ extension ReferenceDictionary {
       return lookupThing(UnicodeText(simple), components: [])
     case .compound(identifier: let identifier, components: let components):
       return lookupThing(UnicodeText(identifier), components: components.map({ $0 }))
-    case .action, .enumerationCase, .statements:
+    case .action, .partReference, .enumerationCase, .statements:
       return nil
     }
   }
@@ -231,7 +235,7 @@ extension ReferenceDictionary {
         if set.count == 1 {
           return Array(set.values)
         } else {
-          return set.values.filter({ $0.isEnumerationCaseWrapper })
+          return set.values.filter({ $0.isMemberWrapper })
         }
       }
     }
