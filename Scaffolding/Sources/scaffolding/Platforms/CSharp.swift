@@ -40,11 +40,15 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
     case .file, .unit, .clients:
       // “file” is too new
-      return nil // internal
+      if memberScope {
+        return "internal"
+      } else {
+        return nil // internal
+      }
     }
   }
 

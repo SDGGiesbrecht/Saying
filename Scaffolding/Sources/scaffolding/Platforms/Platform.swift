@@ -20,7 +20,7 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
 
   // Access
-  static func accessModifier(for access: AccessIntermediate) -> String?
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
 
   // Parts
   static func partDeclaration(
@@ -356,10 +356,10 @@ extension Platform {
           leading: true
         )
         let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
-        let access = accessModifier(for: part.access)
+        let access = accessModifier(for: part.access, memberScope: true)
         return partDeclaration(name: name, type: type, accessModifier: access)
       })
-      let access = accessModifier(for: thing.access)
+      let access = accessModifier(for: thing.access, memberScope: false)
       let constructorParameters = thing.parts.map({ part in
         let name = sanitize(
           identifier: part.names.identifier(),
@@ -368,7 +368,7 @@ extension Platform {
         let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
         return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
       })
-      let constructorAccess = accessModifier(for: externalReferenceLookup.lookupCreation(of: thing)?.access ?? .file)
+      let constructorAccess = accessModifier(for: externalReferenceLookup.lookupCreation(of: thing)?.access ?? .file, memberScope: true)
       let constructorSetters = thing.parts.map({ part in
         let name = sanitize(
           identifier: part.names.identifier(),
@@ -948,7 +948,7 @@ extension Platform {
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
 
-    let access = accessModifier(for: action.access)
+    let access = accessModifier(for: action.access, memberScope: false)
 
     let coverageRegistration: String?
     if mode == .testing,

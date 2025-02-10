@@ -42,7 +42,7 @@ enum JavaScript: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
   
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
   }
   

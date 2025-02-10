@@ -44,7 +44,7 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
   }
 

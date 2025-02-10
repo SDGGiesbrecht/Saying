@@ -51,7 +51,7 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
     case .file, .unit:
       return "private"
