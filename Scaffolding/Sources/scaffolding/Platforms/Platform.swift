@@ -111,6 +111,7 @@ protocol Platform {
   ) -> String
 
   // Imports
+  static var fileSettings: String? { get }
   static func statementImporting(_ importTarget: String) -> String
 
   // Module
@@ -1110,6 +1111,11 @@ extension Platform {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
     
     var result: [String] = []
+
+    if let settings = fileSettings {
+      result.append(settings)
+      result.append("")
+    }
 
     var imports: Set<String> = []
     for module in modules {
