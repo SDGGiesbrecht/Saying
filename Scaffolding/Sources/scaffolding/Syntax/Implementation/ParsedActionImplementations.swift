@@ -1,6 +1,6 @@
 extension ParsedActionImplementations {
 
-  var source: ParsedSourceActionImplementation? {
+  var source: ParsedSourceOrCreationActionImplementation? {
     switch self {
     case .source(let source):
       return source

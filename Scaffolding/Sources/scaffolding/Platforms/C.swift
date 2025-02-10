@@ -44,7 +44,7 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
   }
 
@@ -96,7 +96,14 @@ enum C: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
     ]
@@ -145,7 +152,9 @@ enum C: Platform {
             partDeclaration(name: "value", type: "\(name)_value", accessModifier: nil),
           ],
           accessModifier: nil,
-          constructorAccessModifier: nil
+          constructorParameters: [],
+          constructorAccessModifier: nil,
+          constructorSetters: []
         )!
       )
       
@@ -156,7 +165,7 @@ enum C: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -169,6 +178,12 @@ enum C: Platform {
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
+  }
+  static func constructorSetter(name: String) -> String {
+    return ""
+  }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "((\(type)) {\(parts)})"
   }
   static var needsReferencePreparation: Bool {
     return false
@@ -267,6 +282,9 @@ enum C: Platform {
     return result.joined(separator: "\n")
   }
 
+  static var fileSettings: String? {
+    return nil
+  }
   static func statementImporting(_ importTarget: String) -> String {
     return "#include <\(importTarget).h>"
   }

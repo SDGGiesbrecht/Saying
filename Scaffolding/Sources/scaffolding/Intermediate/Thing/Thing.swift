@@ -23,6 +23,20 @@ extension Thing {
 }
 
 extension Thing {
+  func reference(resolvingFromReferenceLookup referenceLookup: [ReferenceDictionary]) -> TypeReference {
+    let identifier = StrictString(names.identifier())
+    let parameters = parameters.ordered(for: names.identifier())
+    let result: TypeReference
+    if parameters.isEmpty {
+      result = .simple(identifier)
+    } else {
+      result = .compound(identifier: identifier, components: parameters.map({ $0.resolvedType!.key }))
+    }
+    return result.resolving(fromReferenceLookup: referenceLookup)
+  }
+}
+
+extension Thing {
   func unresolvedGloballyUniqueIdentifierComponents() -> [UnicodeText] {
     if parameters.inAnyOrder.isEmpty {
       return [self.names.identifier()]

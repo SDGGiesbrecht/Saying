@@ -34,6 +34,7 @@ extension Node {
           Node(name: "FlowKeyword", kind: .keyword(["flow", "Ablauf", "déroulement", "ροή", "זרימה"])),
           Node(name: "RequirementKeyword", kind: .keyword(["requirement", "Bedingung", "condition", "απαίτηση", "צורך"])),
           Node(name: "ChoiceKeyword", kind: .keyword(["choice", "Wahl", "choix", "επιλογή", "בחירה"])),
+          Node(name: "CreateKeyword", kind: .keyword(["create", "erstellen", "créer", "δημιουργία", "צור"])),
           Node(name: "AbilityKeyword", kind: .keyword(["ability", "Fähigkeit", "capacité", "ικανότητα", "יכולת"])),
           Node(name: "UseKeyword", kind: .keyword(["use", "Verwendung", "utilisation", "χρήση", "שימוש"])),
           Node(name: "ExtensionKeyword", kind: .keyword(["extension", "Erweiterung", /* extension */ "επέκταση", "הרחבה"])),
@@ -1032,6 +1033,13 @@ extension Node {
               Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
+          Node(
+            name: "SourceOrCreationActionImplementation",
+            kind: .alternates([
+              Alternate(name: "source", type: "SourceActionImplementation"),
+              Alternate(name: "creation", type: "CreateKeyword"),
+            ])
+          ),
         ],
           Node.separatedList(
             name: "NativeThingImplementations",
@@ -1080,7 +1088,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "native", type: "NativeActionImplementations", kind: .required),
               Child(name: "lineBreak", type: "LineBreakSyntax", kind: .fixed),
-              Child(name: "source", type: "SourceActionImplementation", kind: .required),
+              Child(name: "source", type: "SourceOrCreationActionImplementation", kind: .required),
             ])
           ),
           Node(
@@ -1115,7 +1123,7 @@ extension Node {
           Node(
             name: "ActionImplementations",
             kind: .alternates([
-              Alternate(name: "source", type: "SourceActionImplementation"),
+              Alternate(name: "source", type: "SourceOrCreationActionImplementation"),
               Alternate(name: "dual", type: "DualActionImplementation"),
               Alternate(name: "native", type: "NativeActionImplementations"),
             ])

@@ -115,19 +115,19 @@ extension ActionPrototype {
     )
   }
 
-  func validateReferences(referenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
+  func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
     for parameter in parameters.inAnyOrder {
       parameter.type.validateReferences(
         requiredAccess: access,
         allowTestOnlyAccess: testOnlyAccess,
-        referenceDictionary: referenceDictionary,
+        referenceLookup: referenceLookup,
         errors: &errors
       )
     }
     returnValue?.validateReferences(
       requiredAccess: access,
       allowTestOnlyAccess: testOnlyAccess,
-      referenceDictionary: referenceDictionary,
+      referenceLookup: referenceLookup,
       errors: &errors
     )
   }

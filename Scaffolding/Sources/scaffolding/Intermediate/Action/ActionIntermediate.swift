@@ -9,6 +9,7 @@ struct ActionIntermediate {
   var swift: NativeActionImplementationIntermediate?
   var implementation: StatementListIntermediate?
   var declaration: ParsedActionDeclarationPrototype?
+  var isCreation: Bool
   var isReferenceWrapper: Bool = false
   var isEnumerationCaseWrapper: Bool = false
   var isEnumerationValueWrapper: Bool = false
@@ -119,7 +120,8 @@ extension ActionIntermediate {
         testOnlyAccess: false,
         documentation: nil,
         swiftName: nil
-      )
+      ),
+      isCreation: false
     )
   }
 
@@ -141,6 +143,7 @@ extension ActionIntermediate {
         documentation: nil,
         swiftName: nil
       ),
+      isCreation: false,
       isEnumerationCaseWrapper: true
     )
   }
@@ -210,6 +213,7 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
         ]
       ),
+      isCreation: false,
       isEnumerationValueWrapper: true
     )
   }
@@ -242,6 +246,7 @@ extension ActionIntermediate {
       javaScript: javaScript,
       kotlin: kotlin,
       swift: swift,
+      isCreation: false,
       isEnumerationCaseWrapper: true
     )
   }
@@ -324,7 +329,8 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
-      )
+      ),
+      isCreation: false
     )
   }
 
@@ -392,7 +398,8 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
         ]
-      )
+      ),
+      isCreation: false
     )
   }
 
@@ -445,9 +452,16 @@ extension ActionIntermediate {
         }
       }
     }
+    var isCreation = false
     var implementation: StatementListIntermediate?
     if let source = declaration.implementation.source {
-      implementation = StatementListIntermediate(source.statements)
+      switch source {
+      case .source(let source):
+        implementation = StatementListIntermediate(source.statements)
+      case .creation:
+        isCreation = true
+        break
+      }
     } else {
       if c == nil {
         errors.append(ConstructionError.missingImplementation(language: UnicodeText("C"), action: declaration.name))
@@ -477,14 +491,15 @@ extension ActionIntermediate {
         kotlin: kotlin,
         swift: swift,
         implementation: implementation,
-        declaration: declaration
+        declaration: declaration,
+        isCreation: isCreation
       )
     )
   }
 
-  func validateReferences(moduleReferenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
+  func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
     prototype.validateReferences(
-      referenceDictionary: moduleReferenceDictionary,
+      referenceLookup: referenceLookup,
       errors: &errors
     )
     for native in allNativeImplementations() {
@@ -493,7 +508,7 @@ extension ActionIntermediate {
           typeInstead.validateReferences(
             requiredAccess: access,
             allowTestOnlyAccess: testOnlyAccess,
-            referenceDictionary: moduleReferenceDictionary,
+            referenceLookup: referenceLookup,
             errors: &errors
           )
         } else {
@@ -503,7 +518,7 @@ extension ActionIntermediate {
         }
       }
     }
-    let externalAndParameters = [moduleReferenceDictionary, self.parameterReferenceDictionary(externalLookup: [moduleReferenceDictionary])]
+    let externalAndParameters = referenceLookup.appending(self.parameterReferenceDictionary(externalLookup: referenceLookup))
     implementation?.validateReferences(
       context: externalAndParameters,
       testContext: false,
@@ -546,6 +561,7 @@ extension ActionIntermediate {
       swift: swift,
       implementation: implementation,
       declaration: declaration,
+      isCreation: isCreation,
       isReferenceWrapper: isReferenceWrapper,
       isEnumerationCaseWrapper: isEnumerationCaseWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
@@ -606,6 +622,7 @@ extension ActionIntermediate {
         swift: swift,
         implementation: implementation,
         declaration: nil,
+        isCreation: isCreation,
         isReferenceWrapper: isReferenceWrapper,
         isEnumerationCaseWrapper: isEnumerationCaseWrapper,
         isEnumerationValueWrapper: isEnumerationValueWrapper,
@@ -659,6 +676,7 @@ extension ActionIntermediate {
       swift: swift?.specializing(typeLookup: implementationTypeLookup),
       implementation: implementation?.specializing(typeLookup: implementationTypeLookup),
       declaration: nil,
+      isCreation: isCreation,
       isReferenceWrapper: isReferenceWrapper,
       isEnumerationCaseWrapper: isEnumerationCaseWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
@@ -694,6 +712,7 @@ extension ActionIntermediate {
         documentation: nil,
         swiftName: nil
       ),
+      isCreation: false,
       isReferenceWrapper: true
     )
   }
@@ -750,6 +769,7 @@ extension ActionIntermediate {
             )
           ]
         ),
+        isCreation: false,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier
       )
@@ -802,11 +822,16 @@ extension ActionIntermediate {
     guard var name = swiftName.map({ StrictString($0) }) else {
       return nil
     }
-    guard let firstSpace = name.firstIndex(of: " ") else {
-      fatalError("Swift name lacks space to indicate end of function name (where the opening parenthesis should be in Swift.")
+    let firstSpace = name.firstIndex(of: " ")
+    var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
+    if let space = firstSpace {
+      name.removeSubrange(...space)
+    } else {
+      name.removeSubrange(..<name.endIndex)
     }
-    let functionName = StrictString(name[..<firstSpace])
-    name.removeSubrange(...firstSpace)
+    if functionName.hasSuffix(".init") {
+      functionName = "init"
+    }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
       if name.hasPrefix("()".scalars.literal()) {
@@ -830,7 +855,8 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    return UnicodeText("\(functionName)(\(parameterNames.map({ StrictString($0) }).joined(separator: ":")):)")
+    let parameterSection = parameterNames.map({ "\(StrictString($0)):" }).joined()
+    return UnicodeText("\(functionName)(\(parameterSection))")
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = swiftName,
@@ -849,6 +875,10 @@ extension ActionIntermediate {
       result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
     }
     result.append(contentsOf: components.last!.contents)
+    if result.hasPrefix("init(") {
+      result.prepend(contentsOf: ".".scalars)
+      result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).scalars)
+    }
     return UnicodeText(result)
   }
 }

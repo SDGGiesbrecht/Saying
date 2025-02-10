@@ -51,7 +51,7 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
     case .file, .unit:
       return "private"
@@ -113,7 +113,14 @@ enum Kotlin: Platform {
     }
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let constructorAccess = constructorAccessModifier == accessModifier
       ? ""
@@ -147,7 +154,7 @@ enum Kotlin: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -160,6 +167,12 @@ enum Kotlin: Platform {
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+  }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "\(type)(\(parts))"
+  }
+  static func constructorSetter(name: String) -> String {
+    return ""
   }
   static var needsReferencePreparation: Bool {
     return true
@@ -256,6 +269,9 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
+  static var fileSettings: String? {
+    return nil
+  }
   static func statementImporting(_ importTarget: String) -> String {
     return importTarget
   }

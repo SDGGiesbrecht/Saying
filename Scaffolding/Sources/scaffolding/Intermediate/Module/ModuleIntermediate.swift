@@ -216,19 +216,23 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func resolveTypeIdentifiers() {
-    referenceDictionary.resolveTypeIdentifiers(externalLookup: [])
+  mutating func resolveTypeIdentifiers(externalReferenceLookup: [ReferenceDictionary]) {
+    referenceDictionary.resolveTypeIdentifiers(externalLookup: externalReferenceLookup)
   }
 
-  mutating func resolveTypes() {
-    referenceDictionary.resolveTypes(parentContexts: [])
+  mutating func resolveTypes(
+    moduleWideImports: [ModuleIntermediate]
+  ) {
+    let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
+    referenceDictionary.resolveTypes(parentContexts: parentContexts)
+    let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
     for testIndex in tests.indices {
       var locals = ReferenceDictionary()
       for statementIndex in tests[testIndex].statements.indices {
         let statement = tests[testIndex].statements[statementIndex]
         tests[testIndex].statements[statementIndex].resolveTypes(
           context: nil,
-          referenceLookup: [referenceDictionary, locals],
+          referenceLookup: externalAndModuleLookup.appending(locals),
           finalReturnValue: .none
         )
         let newActions = statement.action.localActions()
@@ -236,7 +240,7 @@ extension ModuleIntermediate {
           _ = locals.add(action: local)
         }
         if !newActions.isEmpty {
-          locals.resolveTypeIdentifiers(externalLookup: [referenceDictionary])
+          locals.resolveTypeIdentifiers(externalLookup: externalAndModuleLookup)
         }
       }
     }
@@ -246,12 +250,17 @@ extension ModuleIntermediate {
     moduleWideImports: [ModuleIntermediate]
   ) throws {
     var errors: [ReferenceError] = []
-    referenceDictionary.validateReferencesAsModule(errors: &errors)
+    referenceDictionary.validateReferencesAsModule(
+      moduleWideImports: moduleWideImports,
+      errors: &errors
+    )
+    let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
+    let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
     for test in tests {
       var locals = ReferenceDictionary()
       for statement in test.statements {
         statement.validateReferences(
-          context: [referenceDictionary].appending(locals),
+          context: externalAndModuleLookup.appending(locals),
           testContext: true,
           errors: &errors
         )
@@ -260,7 +269,7 @@ extension ModuleIntermediate {
           _ = locals.add(action: local)
         }
         if !newActions.isEmpty {
-          locals.resolveTypeIdentifiers(externalLookup: [referenceDictionary])
+          locals.resolveTypeIdentifiers(externalLookup: externalAndModuleLookup)
         }
       }
     }
@@ -285,9 +294,9 @@ extension ModuleIntermediate {
 
 extension ModuleIntermediate {
 
-  func applyingTestCoverageTracking() -> ModuleIntermediate {
+  func applyingTestCoverageTracking(externalReferenceLookup: [ReferenceDictionary]) -> ModuleIntermediate {
     return ModuleIntermediate(
-      referenceDictionary: referenceDictionary.applyingTestCoverageTracking(externalLookup: []),
+      referenceDictionary: referenceDictionary.applyingTestCoverageTracking(externalLookup: externalReferenceLookup),
       uses: uses,
       tests: tests
     )
@@ -301,7 +310,7 @@ extension ModuleIntermediate {
   ) -> ModuleIntermediate {
     var result = self
     result.referenceDictionary.removeUnreachable(fromEntryPoints: &entryPoints, externalReferenceLookup: externalReferenceLookup)
-    result.resolveTypeIdentifiers()
+    result.resolveTypeIdentifiers(externalReferenceLookup: externalReferenceLookup)
     return result
   }
 }

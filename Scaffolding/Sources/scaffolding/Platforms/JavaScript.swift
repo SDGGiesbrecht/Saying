@@ -42,7 +42,7 @@ enum JavaScript: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
   
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
   }
   
@@ -94,7 +94,14 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     return nil
   }
   static func enumerationTypeDeclaration(
@@ -118,8 +125,12 @@ enum JavaScript: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
-    return nil
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
+    if isCreation {
+      return sanitize(identifier: parameter.names.identifier(), leading: true)
+    } else {
+      return nil
+    }
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.javaScript
@@ -130,6 +141,12 @@ enum JavaScript: Platform {
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return name
+  }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "{\(parts)}"
+  }
+  static func constructorSetter(name: String) -> String {
+    return ""
   }
   static var needsReferencePreparation: Bool {
     return true
@@ -225,6 +242,9 @@ enum JavaScript: Platform {
     return result.joined(separator: "\n")
   }
   
+  static var fileSettings: String? {
+    return nil
+  }
   static func statementImporting(_ importTarget: String) -> String {
     return importTarget
   }

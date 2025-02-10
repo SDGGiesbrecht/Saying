@@ -52,8 +52,8 @@ extension RequirementIntermediate {
     )
   }
 
-  func validateReferences(referenceDictionary: ReferenceDictionary, errors: inout [ReferenceError]) {
-    prototype.validateReferences(referenceDictionary: referenceDictionary, errors: &errors)
+  func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
+    prototype.validateReferences(referenceLookup: referenceLookup, errors: &errors)
   }
 }
 

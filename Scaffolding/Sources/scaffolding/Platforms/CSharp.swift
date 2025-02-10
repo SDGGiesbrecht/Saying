@@ -40,11 +40,15 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
     case .file, .unit, .clients:
       // “file” is too new
-      return nil // internal
+      if memberScope {
+        return "internal"
+      } else {
+        return nil // internal
+      }
     }
   }
 
@@ -129,7 +133,14 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
       "\(access)struct \(name)",
@@ -137,6 +148,16 @@ enum CSharp: Platform {
     ]
     for component in components {
       result.append("\(indent)\(component)")
+    }
+    if !components.isEmpty {
+      result.append("")
+      let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
+      let constructorParameterList = constructorParameters.joined(separator: ", ")
+      result.append("\(indent)\(constructorAccess)\(name)(\(constructorParameterList)) {")
+      for setter in constructorSetters {
+        result.append("\(indent)\(indent)\(setter)")
+      }
+      result.append("\(indent)}")
     }
     result.append(contentsOf: [
       "}"
@@ -181,7 +202,7 @@ enum CSharp: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -194,6 +215,12 @@ enum CSharp: Platform {
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
+  }
+  static func constructorSetter(name: String) -> String {
+    return "this.\(name) = \(name);"
+  }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "new \(type)(\(parts))"
   }
   static var needsReferencePreparation: Bool {
     return false
@@ -289,6 +316,9 @@ enum CSharp: Platform {
     return result.joined(separator: "\n")
   }
 
+  static var fileSettings: String? {
+    return "#nullable enable"
+  }
   static func statementImporting(_ importTarget: String) -> String {
     return "using \(importTarget);"
   }

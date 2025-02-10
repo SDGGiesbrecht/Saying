@@ -95,7 +95,7 @@ enum Swift: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
-  static func accessModifier(for access: AccessIntermediate) -> String? {
+  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
     case .file, .unit:
       return "fileprivate"
@@ -149,7 +149,14 @@ enum Swift: Platform {
     return nil
   }
 
-  static func thingDeclaration(name: String, components: [String], accessModifier: String?, constructorAccessModifier: String?) -> String? {
+  static func thingDeclaration(
+    name: String,
+    components: [String],
+    accessModifier: String?,
+    constructorParameters: [String],
+    constructorAccessModifier: String?,
+    constructorSetters: [String]
+  ) -> String? {
     var typeName = name
     var extraIndent = ""
     var result: [String] = []
@@ -166,6 +173,14 @@ enum Swift: Platform {
     for component in components {
       result.append("\(extraIndent)\(indent)\(component)")
     }
+    result.append("")
+    let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
+    let constructorParameterList = constructorParameters.joined(separator: ", ")
+    result.append("\(extraIndent)\(indent)\(constructorAccess)init(\(constructorParameterList)) {")
+    for setter in constructorSetters {
+      result.append("\(extraIndent)\(indent)\(indent)\(setter)")
+    }
+    result.append("\(extraIndent)\(indent)}")
     result.append(contentsOf: [
       "\(extraIndent)}"
     ])
@@ -196,7 +211,7 @@ enum Swift: Platform {
     let found = action.swiftIdentifier().map({ StrictString($0) })?.prefix(upTo: "(".scalars.literal())?.contents
     return found.map { String(StrictString($0)) }
   }
-  static func nativeLabel(of parameter: ParameterIntermediate) -> String? {
+  static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return parameter.swiftLabel.map({ String(StrictString($0)) })
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
@@ -210,6 +225,12 @@ enum Swift: Platform {
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
+  }
+  static func createInstance(of type: String, parts: String) -> String {
+    return "\(type)(\(parts))"
+  }
+  static func constructorSetter(name: String) -> String {
+    return "self.\(name) = \(name)"
   }
   static var needsReferencePreparation: Bool {
     return false
@@ -304,6 +325,9 @@ enum Swift: Platform {
     return result.joined(separator: "\n")
   }
 
+  static var fileSettings: String? {
+    return nil
+  }
   static func statementImporting(_ importTarget: String) -> String {
     return importTarget
   }
