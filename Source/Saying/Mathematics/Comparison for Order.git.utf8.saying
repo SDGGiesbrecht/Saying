@@ -169,25 +169,3 @@ ability (clients)
    greater example
    thing
  }
-
-use
- comparison of (comparison example) for order
- {
-  action
-   (first: comparison example) is less than (second: comparison example)
-   truth value
-   C: “¤(28)” first “ < ” second “¤(29)”
-   C♯: “¤(28)” first “ < ” second “¤(29)”
-   JavaScript: “¤(28)” first “ < ” second “¤(29)”
-   Kotlin: “¤(28)” first “ < ” second “¤(29)”
-   Swift: «¤(28)» first “ < ” second „¤(29)“
-
-  action
-   greater example
-   comparison example
-   C: “2”
-   C♯: “2”
-   JavaScript: “2”
-   Kotlin: “2”
-   Swift: “2”
- }

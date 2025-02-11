@@ -433,6 +433,57 @@ extension ReferenceDictionary {
     actions = newActions
   }
 
+  mutating func resolveSpecializedAccess(externalLookup: [ReferenceDictionary]) {
+    while performOnePassResolvingSpecializedAccess(externalLookup: externalLookup) {}
+  }
+  mutating func performOnePassResolvingSpecializedAccess(externalLookup: [ReferenceDictionary]) -> Bool {
+    let allLookup = externalLookup.appending(self)
+    var changedSomething = false
+    for (thingName, group) in things {
+      for (signature, thing) in group {
+        let parameters = thing.parameters.inAnyOrder
+        if !parameters.isEmpty {
+          let parameterAccess: [(access: AccessIntermediate, testOnly: Bool)] = parameters.lazy.compactMap { parameter in
+            guard let type = parameter.resolvedType else {
+              return nil
+            }
+            return (access: type.derivedAccessLimit(referenceLookup: allLookup), testOnly: type.derivedTestAccess(referenceLookup: allLookup))
+          }
+          let access = min(thing.access, parameterAccess.lazy.map({ $0.access }).min() ?? .clients)
+          if access != thing.access {
+            things[thingName]![signature]!.access = access
+            changedSomething = true
+          }
+          let testOnly = thing.testOnlyAccess || parameterAccess.contains(where: { $0.testOnly })
+          if testOnly != thing.testOnlyAccess {
+            things[thingName]![signature]!.testOnlyAccess = testOnly
+            changedSomething = true
+          }
+        }
+      }
+    }
+    for (actionName, group) in actions {
+      for (signature, returnOverloads) in group {
+        for (overload, action) in returnOverloads {
+          if action.isSpecialized {
+            let proxy = ParsedTypeReference.action(parameters: action.parameters.inAnyOrder.map({ $0.type }), returnValue: action.returnValue)
+            let access = proxy.derivedAccessLimit(referenceLookup: allLookup)
+            if access != action.access {
+              actions[actionName]![signature]![overload]!.access = access
+              changedSomething = true
+            }
+            let testOnly = proxy.derivedTestAccess(referenceLookup: allLookup)
+            if testOnly != action.testOnlyAccess {
+              actions[actionName]![signature]![overload]!.testOnlyAccess = testOnly
+              changedSomething = true
+            }
+          }
+        }
+      }
+    }
+    return changedSomething
+  }
+
   func validateReferencesAsModule(
     moduleWideImports: [ModuleIntermediate],
     errors: inout [ReferenceError]

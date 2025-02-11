@@ -15,6 +15,7 @@ struct ActionIntermediate {
   var isEnumerationValueWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
   var coveredIdentifier: UnicodeText?
+  var isSpecialized: Bool
 
   var isFlow: Bool {
     return prototype.isFlow
@@ -32,10 +33,20 @@ struct ActionIntermediate {
     return prototype.returnValue
   }
   var access: AccessIntermediate {
-    return prototype.access
+    get {
+      return prototype.access
+    }
+    set {
+      prototype.access = newValue
+    }
   }
   var testOnlyAccess: Bool {
-    return prototype.testOnlyAccess
+    get {
+      return prototype.testOnlyAccess
+    }
+    set {
+      prototype.testOnlyAccess = newValue
+    }
   }
   var swiftName: UnicodeText? {
     return prototype.swiftName
@@ -121,7 +132,8 @@ extension ActionIntermediate {
         documentation: nil,
         swiftName: nil
       ),
-      isCreation: false
+      isCreation: false,
+      isSpecialized: false
     )
   }
 
@@ -144,7 +156,8 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       isCreation: false,
-      isMemberWrapper: true
+      isMemberWrapper: true,
+      isSpecialized: false
     )
   }
 
@@ -211,7 +224,8 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
         ]
       ),
-      isCreation: false
+      isCreation: false,
+      isSpecialized: false
     )
   }
 
@@ -234,7 +248,8 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       isCreation: false,
-      isMemberWrapper: true
+      isMemberWrapper: true,
+      isSpecialized: false
     )
   }
 
@@ -304,7 +319,8 @@ extension ActionIntermediate {
         ]
       ),
       isCreation: false,
-      isEnumerationValueWrapper: true
+      isEnumerationValueWrapper: true,
+      isSpecialized: false
     )
   }
 
@@ -337,7 +353,8 @@ extension ActionIntermediate {
       kotlin: kotlin,
       swift: swift,
       isCreation: false,
-      isMemberWrapper: true
+      isMemberWrapper: true,
+      isSpecialized: false
     )
   }
 
@@ -420,7 +437,8 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       ),
-      isCreation: false
+      isCreation: false,
+      isSpecialized: false
     )
   }
 
@@ -489,7 +507,8 @@ extension ActionIntermediate {
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
         ]
       ),
-      isCreation: false
+      isCreation: false,
+      isSpecialized: false
     )
   }
 
@@ -582,7 +601,8 @@ extension ActionIntermediate {
         swift: swift,
         implementation: implementation,
         declaration: declaration,
-        isCreation: isCreation
+        isCreation: isCreation,
+        isSpecialized: false
       )
     )
   }
@@ -656,7 +676,8 @@ extension ActionIntermediate {
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
-      coveredIdentifier: coveredIdentifier
+      coveredIdentifier: coveredIdentifier,
+      isSpecialized: isSpecialized
     )
   }
 
@@ -717,7 +738,8 @@ extension ActionIntermediate {
         isMemberWrapper: isMemberWrapper,
         isEnumerationValueWrapper: isEnumerationValueWrapper,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
-        coveredIdentifier: coveredIdentifier
+        coveredIdentifier: coveredIdentifier,
+        isSpecialized: isSpecialized
       )
     )
   }
@@ -771,7 +793,8 @@ extension ActionIntermediate {
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
-      coveredIdentifier: coveredIdentifier
+      coveredIdentifier: coveredIdentifier,
+      isSpecialized: true
     )
   }
 }
@@ -803,7 +826,8 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       isCreation: false,
-      isReferenceWrapper: true
+      isReferenceWrapper: true,
+      isSpecialized: isSpecialized
     )
   }
 }
@@ -861,7 +885,8 @@ extension ActionIntermediate {
         ),
         isCreation: false,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
-        coveredIdentifier: coverageIdentifier
+        coveredIdentifier: coverageIdentifier,
+        isSpecialized: isSpecialized
       )
     } else {
       return nil

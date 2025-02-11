@@ -98,42 +98,11 @@ ability (clients)
    thing
  }
 
-thing
- (
-  English: comparison example
- )
- C: “int”
- C♯: “int”
- Kotlin: “Int”
- Swift: “Int”
-
-use
- comparison of (comparison example) for equality
+extension
+ comparison of (thing) for equality
  {
-  action
-   (first: comparison example) is (second: comparison example)
-   truth value
-   C: “¤(28)” first “ == ” second “¤(29)”
-   C♯: “¤(28)” first “ == ” second “¤(29)”
-   JavaScript: “¤(28)” first “ == ” second “¤(29)”
-   Kotlin: “¤(28)” first “ == ” second “¤(29)”
-   Swift: «¤(28)» first “ == ” second „¤(29)“
-
-  action
-   example
-   comparison example
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1”
-   Swift: “1”
-
-  action
-   differing example
-   comparison example
-   C: “2”
-   C♯: “2”
-   JavaScript: “2”
-   Kotlin: “2”
-   Swift: “2”
+  use (clients)
+   optional (thing)
+   {
+   }
  }

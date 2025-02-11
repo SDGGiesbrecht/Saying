@@ -246,6 +246,10 @@ extension ModuleIntermediate {
     }
   }
 
+  mutating func resolveSpecializedAccess(moduleWideImports: [ModuleIntermediate]) {
+    referenceDictionary.resolveSpecializedAccess(externalLookup: moduleWideImports.map({ $0.referenceDictionary }))
+  }
+
   func validateReferences(
     moduleWideImports: [ModuleIntermediate]
   ) throws {
