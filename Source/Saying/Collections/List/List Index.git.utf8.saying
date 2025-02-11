@@ -17,3 +17,28 @@ action
  )
  list index
  create
+
+use (clients)
+ comparison of (list index) for equality
+ {
+  action (clients)
+   (first: list index) is (second: list index)
+   truth value
+   {
+    ← ((index) of (first)) is ((index) of (second))
+   }
+
+  action (clients)
+   example
+   list index
+   {
+    ← list index at (example: platform fixed‐width integer)
+   }
+
+  action (clients)
+   differing example
+   list index
+   {
+    ← list index at (differing example: platform fixed‐width integer)
+   }
+ }
