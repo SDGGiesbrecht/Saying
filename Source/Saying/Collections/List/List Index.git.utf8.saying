@@ -42,3 +42,21 @@ use (clients)
     ← list index at (differing example: platform fixed‐width integer)
    }
  }
+
+use (clients)
+ comparison of (list index) for order
+ {
+  action (clients)
+   (first: list index) is less than (second: list index)
+   truth value
+   {
+    ← ((index) of (first)) is less than ((index) of (second))
+   }
+
+  action (clients)
+   greater example
+   list index
+   {
+    ← list index at (greater example: platform fixed‐width integer)
+   }
+ }
