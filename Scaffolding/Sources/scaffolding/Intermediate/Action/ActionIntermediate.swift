@@ -11,7 +11,7 @@ struct ActionIntermediate {
   var declaration: ParsedActionDeclarationPrototype?
   var isCreation: Bool
   var isReferenceWrapper: Bool = false
-  var isEnumerationCaseWrapper: Bool = false
+  var isMemberWrapper: Bool = false
   var isEnumerationValueWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
   var coveredIdentifier: UnicodeText?
@@ -59,7 +59,7 @@ extension ActionIntermediate {
     let resolvedReturnValue: ParsedTypeReference?
     if isReferenceWrapper {
       switch returnValue {
-      case .simple, .compound, .statements, .enumerationCase, .none:
+      case .simple, .compound, .statements, .partReference, .enumerationCase, .none:
         fatalError("A real action reference would produce an action.")
       case .action(parameters: let parameters, returnValue: let returnValue):
         resolvedParameters = parameters
@@ -125,6 +125,96 @@ extension ActionIntermediate {
     )
   }
 
+  static func partReference(
+    names: Set<StrictString>,
+    containerType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool
+  ) -> ActionIntermediate {
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: names,
+        namespace: [],
+        parameters: .none,
+        returnValue: .partReference(container: containerType, identifier: names.identifier()),
+        access: access,
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
+      ),
+      isCreation: false,
+      isMemberWrapper: true
+    )
+  }
+
+  static func accessor(
+    containerType: ParsedTypeReference,
+    partIdentifier: UnicodeText,
+    partType: ParsedTypeReference,
+    access: AccessIntermediate,
+    testOnlyAccess: Bool,
+    c: NativeActionImplementationIntermediate?,
+    cSharp: NativeActionImplementationIntermediate?,
+    javaScript: NativeActionImplementationIntermediate?,
+    kotlin: NativeActionImplementationIntermediate?,
+    swift: NativeActionImplementationIntermediate?
+  ) -> ActionIntermediate {
+    let parameters = Interpolation<ParameterIntermediate>.accessor(
+      containerType: containerType,
+      partIdentifier: partIdentifier
+    )
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: true,
+        names: parameters.names(),
+        namespace: [],
+        parameters: parameters,
+        returnValue: partType,
+        access: access,
+        testOnlyAccess: testOnlyAccess,
+        documentation: nil,
+        swiftName: nil
+      ),
+      c: c ?? NativeActionImplementationIntermediate(
+        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+        ]
+      ),
+      cSharp: cSharp ?? NativeActionImplementationIntermediate(
+        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+        ]
+      ),
+      javaScript: javaScript ?? NativeActionImplementationIntermediate(
+        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+        ]
+      ),
+      kotlin: kotlin ?? NativeActionImplementationIntermediate(
+        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+        ]
+      ),
+      swift: swift ?? NativeActionImplementationIntermediate(
+        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+        parameters: [
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+        ]
+      ),
+      isCreation: false
+    )
+  }
+
   static func enumerationCase(
     names: Set<StrictString>,
     enumerationType: ParsedTypeReference,
@@ -144,7 +234,7 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       isCreation: false,
-      isEnumerationCaseWrapper: true
+      isMemberWrapper: true
     )
   }
 
@@ -247,7 +337,7 @@ extension ActionIntermediate {
       kotlin: kotlin,
       swift: swift,
       isCreation: false,
-      isEnumerationCaseWrapper: true
+      isMemberWrapper: true
     )
   }
 
@@ -563,7 +653,7 @@ extension ActionIntermediate {
       declaration: declaration,
       isCreation: isCreation,
       isReferenceWrapper: isReferenceWrapper,
-      isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+      isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier
@@ -624,7 +714,7 @@ extension ActionIntermediate {
         declaration: nil,
         isCreation: isCreation,
         isReferenceWrapper: isReferenceWrapper,
-        isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+        isMemberWrapper: isMemberWrapper,
         isEnumerationValueWrapper: isEnumerationValueWrapper,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier
@@ -678,7 +768,7 @@ extension ActionIntermediate {
       declaration: nil,
       isCreation: isCreation,
       isReferenceWrapper: isReferenceWrapper,
-      isEnumerationCaseWrapper: isEnumerationCaseWrapper,
+      isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier

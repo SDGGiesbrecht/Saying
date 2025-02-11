@@ -242,6 +242,24 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
+  static func accessor(
+    containerType: ParsedTypeReference,
+    partIdentifier: UnicodeText
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: [
+        .nativeParameterStub(names: ["part"], type: .partReference(container: containerType, identifier: partIdentifier)),
+        .nativeParameterStub(names: ["container"], type: containerType),
+      ],
+      reorderings: [
+        "() of ()": [0, 1],
+        "() von ()": [0, 1],
+        "() de ()": [0, 1],
+        "() של ()": [0, 1],
+      ]
+    )
+  }
+
   static func enumerationWrap(
     enumerationType: ParsedTypeReference,
     caseIdentifier: UnicodeText,
