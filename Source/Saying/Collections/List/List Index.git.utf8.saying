@@ -10,3 +10,10 @@ thing (clients)
    )
    platform fixed‐width integer
  }
+
+action
+ (
+  English: list index at (index: platform fixed‐width integer)
+ )
+ list index
+ create
