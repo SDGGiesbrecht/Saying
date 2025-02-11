@@ -16,6 +16,11 @@ thing (clients)
    platform fixed‐width integer
  }
 
+use (clients)
+ optional (Unicode scalar index)
+ {
+ }
+
 action
  [
   [
@@ -35,11 +40,6 @@ action
  Unicode scalar index
  Swift: “¤(22)¤(22).startIndex”
  create
-
-use (clients)
- optional (Unicode scalar index)
- {
- }
 
 use (clients)
  comparison of (Unicode scalar index) for equality
