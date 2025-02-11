@@ -55,7 +55,8 @@ enum Kotlin: Platform {
     switch access {
     case .file, .unit:
       if memberScope {
-        return "internal"
+        // “private” limits to class; “internal” leaks out of the file, erroring if parameters are “private” to file.
+        return nil // as visible as class and parameters both permit
       } else {
         return "private"
       }
