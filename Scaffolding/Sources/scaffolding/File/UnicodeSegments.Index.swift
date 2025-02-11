@@ -10,8 +10,4 @@ extension UnicodeSegments.Index: Comparable {
   }
 }
 
-extension UnicodeSegments.Index: Equatable {
-  static func == (lhs: UnicodeSegments.Index, rhs: UnicodeSegments.Index) -> Bool {
-    (lhs.segmentIndex.int, lhs.scalarIndex) == (rhs.segmentIndex.int, rhs.scalarIndex)
-  }
-}
+extension UnicodeSegments.Index: Equatable {}

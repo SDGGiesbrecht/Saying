@@ -83,7 +83,7 @@ import SDGText
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
 
-        "UnicodeSegments.Index",
+        "==(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
         "UnicodeSegments",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",

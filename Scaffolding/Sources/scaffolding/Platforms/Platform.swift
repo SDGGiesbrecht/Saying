@@ -1094,17 +1094,18 @@ extension Platform {
     return imports
   }
 
-  static func coverageRegions(for module: ModuleIntermediate) -> Set<StrictString> {
+  static func coverageRegions(for module: ModuleIntermediate, moduleWideImports: [ReferenceDictionary]) -> Set<StrictString> {
     let moduleReferenceLookup = module.referenceDictionary
+    let allLookup = moduleWideImports.appending(moduleReferenceLookup)
     let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
       .lazy.filter({ action in
         return !action.isCoverageWrapper
         && !(action.isFlow && action.returnValue != nil)
       })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
     let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: [moduleReferenceLookup], skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
     return Set([
       actionRegions,
       choiceRegions
@@ -1224,7 +1225,7 @@ extension Platform {
     if mode == .testing {
       var regionSet: Set<StrictString> = []
       for module in modules {
-        regionSet.formUnion(self.coverageRegions(for: module))
+        regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
       }
       let regions = regionSet
         .sorted()
