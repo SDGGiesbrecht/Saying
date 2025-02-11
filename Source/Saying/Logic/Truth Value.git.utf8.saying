@@ -222,11 +222,6 @@ action (clients)
  Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
 
 use (clients)
- optional (truth value)
- {
- }
-
-use (clients)
  comparison of (truth value) for equality
  {
   action (clients)

@@ -16,11 +16,6 @@ thing (clients)
    platform fixed‐width integer
  }
 
-use (clients)
- optional (Unicode scalar index)
- {
- }
-
 action
  [
   [

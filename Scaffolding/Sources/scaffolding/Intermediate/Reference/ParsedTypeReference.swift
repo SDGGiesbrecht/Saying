@@ -178,6 +178,73 @@ extension ParsedTypeReference {
 }
 
 extension ParsedTypeReference {
+  func derivedAccessLimit(referenceLookup: [ReferenceDictionary]) -> AccessIntermediate {
+    switch self {
+    case .simple(let simple):
+      return referenceLookup.lookupThing(simple.identifier, components: [])?.access ?? .clients
+    case .compound(identifier: let identifier, components: let components):
+      var limit: AccessIntermediate = .clients
+      if let thing = referenceLookup.lookupThing(
+        identifier.name(),
+        components: components.map({ $0.key })
+      ) {
+        limit = min(limit, thing.access)
+      }
+      for component in components {
+        limit = min(limit, component.derivedAccessLimit(referenceLookup: referenceLookup))
+      }
+      return limit
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      var limit: AccessIntermediate = .clients
+      for parameter in parameters {
+        limit = min(limit, parameter.derivedAccessLimit(referenceLookup: referenceLookup))
+      }
+      if let childLimit = returnValue?.derivedAccessLimit(referenceLookup: referenceLookup) {
+        limit = min(limit, childLimit)
+      }
+      return limit
+    case .statements:
+      return .clients
+    case .partReference(container: let type, identifier: _),
+      .enumerationCase(enumeration: let type, identifier: _):
+      return type.derivedAccessLimit(referenceLookup: referenceLookup)
+    }
+  }
+  func derivedTestAccess(referenceLookup: [ReferenceDictionary]) -> Bool {
+    switch self {
+    case .simple(let simple):
+      return referenceLookup.lookupThing(simple.identifier, components: [])?.testOnlyAccess ?? false
+    case .compound(identifier: let identifier, components: let components):
+      var limit = false
+      if let thing = referenceLookup.lookupThing(
+        identifier.name(),
+        components: components.map({ $0.key })
+      ) {
+        limit = limit || thing.testOnlyAccess
+      }
+      for component in components {
+        limit = limit || component.derivedTestAccess(referenceLookup: referenceLookup)
+      }
+      return limit
+    case .action(parameters: let parameters, returnValue: let returnValue):
+      var limit = false
+      for parameter in parameters {
+        limit = limit || parameter.derivedTestAccess(referenceLookup: referenceLookup)
+      }
+      if let childLimit = returnValue?.derivedTestAccess(referenceLookup: referenceLookup) {
+        limit = limit || childLimit
+      }
+      return limit
+    case .statements:
+      return false
+    case .partReference(container: let type, identifier: _),
+      .enumerationCase(enumeration: let type, identifier: _):
+      return type.derivedTestAccess(referenceLookup: referenceLookup)
+    }
+  }
+}
+
+extension ParsedTypeReference {
   func validateReferences(
     requiredAccess: AccessIntermediate,
     allowTestOnlyAccess: Bool,
