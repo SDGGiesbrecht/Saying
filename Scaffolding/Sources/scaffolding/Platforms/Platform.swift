@@ -716,12 +716,18 @@ extension Platform {
             fatalError("Statement parameters are only supported in native implementations (so far).")
           }
         }
-        let arguments = argumentsArray.joined(separator: ", ")
         if action.isCreation {
           let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+          let arguments = argumentsArray.joined(separator: ", ")
           return createInstance(of: type, parts: arguments)
         } else {
-          return "\(name)(\(arguments))"
+          let nameStart = name.unicodeScalars.first(where: { $0 != "_" }).map({ String($0) }) ?? ""
+          if sanitize(identifier: UnicodeText(StrictString(nameStart)), leading: false) != nameStart {
+            return "(\(argumentsArray.joined(separator: " \(name) ")))"
+          } else {
+            let arguments = argumentsArray.joined(separator: ", ")
+            return "\(name)(\(arguments))"
+          }
         }
       }
     }
@@ -1075,6 +1081,46 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
+  static func conformancesSource(
+    for module: ModuleIntermediate,
+    moduleWideImports: [ReferenceDictionary]
+  ) -> String {
+    var result: [String] = []
+    let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
+    for use in module.uses {
+      let ability = moduleReferenceLookup.lookupAbility(identifier: use.ability)!
+      if let native = ability.swiftName {
+        let conformances = String(StrictString(native)).components(separatedBy: "() ").dropFirst().map({ String($0) })
+        let parameters = ability.parameters.ordered(for: native)
+        var arguments = [ParsedTypeReference?](repeating: nil, count: parameters.count)
+        for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
+          let argument = use.arguments[index]
+          let newIndex = parameters.firstIndex(where: { $0.names.contains(StrictString(parameter.names.identifier())) })!
+          arguments[newIndex] = argument
+        }
+        for (parameter, conformances) in zip(arguments.compactMap({ $0 }), conformances) {
+          switch parameter.key {
+          case .simple(let identifier):
+            if let thing = moduleReferenceLookup.lookupThing(UnicodeText(identifier), components: []),
+              thing.swift == nil {
+              let type = source(for: parameter, referenceLookup: moduleReferenceLookup)
+              result.append(contentsOf: [
+                "",
+                "extension \(type): \(conformances) {}",
+              ])
+            }
+          case .compound, .action, .statements, .partReference, .enumerationCase:
+            break
+          }
+        }
+      }
+    }
+    if !result.isEmpty {
+      return result.joined(separator: "\n")
+    } else {
+      return ""
+    }
+  }
   static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode, moduleWideImports: [ReferenceDictionary]) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
@@ -1151,6 +1197,13 @@ extension Platform {
 
     for module in modules {
       result.append(typesSource(for: module, moduleWideImports: moduleWideImportDictionary))
+    }
+
+    for module in modules {
+      let conformances = conformancesSource(for: module, moduleWideImports: moduleWideImportDictionary)
+      if !conformances.isEmpty {
+        result.append(conformances)
+      }
     }
 
     if let start = actionDeclarationsContainerStart {

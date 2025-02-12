@@ -22,6 +22,9 @@ struct RequirementIntermediate {
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
+  var swiftName: UnicodeText? {
+    return prototype.swiftName
+  }
 }
 
 extension RequirementIntermediate {

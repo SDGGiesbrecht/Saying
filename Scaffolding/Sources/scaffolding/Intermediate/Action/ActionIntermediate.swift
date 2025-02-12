@@ -724,7 +724,7 @@ extension ActionIntermediate {
           access: access,
           testOnlyAccess: testOnlyAccess,
           documentation: mergedDocumentation,
-          swiftName: swiftName
+          swiftName: swiftName ?? requirement.swiftName
         ),
         c: c,
         cSharp: cSharp,

@@ -1,6 +1,7 @@
 ability (clients)
  (
   English: comparison of (thing) for order
+  Swift: (thing: [thing]) Comparable
  )
  {
   requirement (clients)
@@ -37,6 +38,7 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) < (δεύτερα: [second])
     עברית: (ראשון: [first]) קטן מ(שני: [second])
     עברית +: (ראשון: [first]) < (שני: [second])
+    Swift: < (lhs: [first]) (rhs: [second])
    )
    truth value
 
@@ -74,6 +76,7 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) > (δεύτερα: [second])
     עברית: (ראשון: [first]) גדול מ(שני: [second])
     עברית +: (ראשון: [first]) > (שני: [second])
+    Swift: > (lhs: [first]) (rhs: [second])
    )
    truth value
    {
@@ -114,6 +117,7 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) ≤ (δεύτερα: [second])
     עברית: (ראשון: [first]) קטן או שווה ל(שני: [second])
     עברית +: (ראשון: [first]) ≤ (שני: [second])
+    Swift: <= (lhs: [first]) (rhs: [second])
    )
    truth value
    {
@@ -154,6 +158,7 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) ≥ (δεύτερα: [second])
     עברית: (ראשון: [first]) גדול או שווה ל(שני: [second])
     עברית +: (ראשון: [first]) ≥ (שני: [second])
+    Swift: >= (lhs: [first]) (rhs: [second])
    )
    truth value
    {
