@@ -110,6 +110,9 @@ protocol Platform {
     implementation: [String]
   ) -> String
 
+  // Conformances
+  static func conformances(for use: UseIntermediate, moduleReferenceLookup: [ReferenceDictionary]) -> [String]
+
   // Imports
   static var fileSettings: String? { get }
   static func statementImporting(_ importTarget: String) -> String
@@ -1088,32 +1091,7 @@ extension Platform {
     var result: [String] = []
     let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
     for use in module.uses {
-      let ability = moduleReferenceLookup.lookupAbility(identifier: use.ability)!
-      if let native = ability.swiftName {
-        let conformances = String(StrictString(native)).components(separatedBy: "() ").dropFirst().map({ String($0) })
-        let parameters = ability.parameters.ordered(for: native)
-        var arguments = [ParsedTypeReference?](repeating: nil, count: parameters.count)
-        for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
-          let argument = use.arguments[index]
-          let newIndex = parameters.firstIndex(where: { $0.names.contains(StrictString(parameter.names.identifier())) })!
-          arguments[newIndex] = argument
-        }
-        for (parameter, conformances) in zip(arguments.compactMap({ $0 }), conformances) {
-          switch parameter.key {
-          case .simple(let identifier):
-            if let thing = moduleReferenceLookup.lookupThing(UnicodeText(identifier), components: []),
-              thing.swift == nil {
-              let type = source(for: parameter, referenceLookup: moduleReferenceLookup)
-              result.append(contentsOf: [
-                "",
-                "extension \(type): \(conformances) {}",
-              ])
-            }
-          case .compound, .action, .statements, .partReference, .enumerationCase:
-            break
-          }
-        }
-      }
+      result.append(contentsOf: conformances(for: use, moduleReferenceLookup: moduleReferenceLookup))
     }
     if !result.isEmpty {
       return result.joined(separator: "\n")

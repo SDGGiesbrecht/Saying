@@ -270,6 +270,10 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func conformances(for use: UseIntermediate, moduleReferenceLookup: [ReferenceDictionary]) -> [String] {
+    return []
+  }
+
   static var fileSettings: String? {
     return nil
   }
