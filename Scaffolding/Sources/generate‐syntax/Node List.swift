@@ -931,6 +931,15 @@ extension Node {
               Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
+          Node(
+            name: "NativeRequirements",
+            kind: .compound(children: [
+              Child(name: "space", type: "SpaceSyntax", kind: .required),
+              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
+              Child(name: "requirements", type: "NativeActionExpression", kind: .required),
+              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
+            ])
+          ),
         ],
         Node.separatedList(
           name: "NativeThingReference",
@@ -954,6 +963,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "type", type: "NativeThingReference", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
+              Child(name: "requirementsNode", type: "NativeRequirements", kind: .optional),
             ])
           ),
           Node(
@@ -961,6 +971,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "expression", type: "NativeActionExpression", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
+              Child(name: "requirementsNode", type: "NativeRequirements", kind: .optional),
             ])
           ),
           Node(

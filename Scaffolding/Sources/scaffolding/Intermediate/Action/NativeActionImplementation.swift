@@ -4,6 +4,7 @@ struct NativeActionImplementationIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeActionImplementationParameter]
   var requiredImport: UnicodeText?
+  var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
 }
 
 extension NativeActionImplementationIntermediate {
@@ -30,6 +31,15 @@ extension NativeActionImplementationIntermediate {
       }
     }
     let requiredImport = implementation.importNode?.importNode.identifierText()
+    var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
+    if let requirements = implementation.requirementsNode?.requirements {
+      switch NativeRequirementImplementationIntermediate.construct(implementation: requirements) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeRequirementError($0) }))
+      case .success(let constructed):
+        requiredDeclarations.append(constructed)
+      }
+    }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -37,7 +47,8 @@ extension NativeActionImplementationIntermediate {
       NativeActionImplementationIntermediate(
         textComponents: textComponents,
         parameters: parameters,
-        requiredImport: requiredImport
+        requiredImport: requiredImport,
+        requiredDeclarations: requiredDeclarations
       )
     )
   }
@@ -50,7 +61,8 @@ extension NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
       textComponents: textComponents,
       parameters: parameters.map({ $0.specializing(typeLookup: typeLookup) }),
-      requiredImport: requiredImport
+      requiredImport: requiredImport,
+      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })
     )
   }
 }

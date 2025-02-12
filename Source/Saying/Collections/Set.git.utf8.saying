@@ -22,7 +22,7 @@ extension
    )
    C♯: “HashSet<” element “>”
    Kotlin: “Set<” element “>”
-   Swift: “Set<” element “>”
+   Swift: “Set<” element “>” {“extension ” thing “: Equatable ¤(7B)¤(7D)”}
    {
    }
 
