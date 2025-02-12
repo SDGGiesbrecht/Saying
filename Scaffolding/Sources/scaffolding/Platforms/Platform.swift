@@ -110,6 +110,9 @@ protocol Platform {
     implementation: [String]
   ) -> String
 
+  // Conformances
+  static func conformances(for use: UseIntermediate, moduleReferenceLookup: [ReferenceDictionary]) -> [String]
+
   // Imports
   static var fileSettings: String? { get }
   static func statementImporting(_ importTarget: String) -> String
@@ -716,12 +719,18 @@ extension Platform {
             fatalError("Statement parameters are only supported in native implementations (so far).")
           }
         }
-        let arguments = argumentsArray.joined(separator: ", ")
         if action.isCreation {
           let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+          let arguments = argumentsArray.joined(separator: ", ")
           return createInstance(of: type, parts: arguments)
         } else {
-          return "\(name)(\(arguments))"
+          let nameStart = name.unicodeScalars.first(where: { $0 != "_" }).map({ String($0) }) ?? ""
+          if sanitize(identifier: UnicodeText(StrictString(nameStart)), leading: false) != nameStart {
+            return "(\(argumentsArray.joined(separator: " \(name) ")))"
+          } else {
+            let arguments = argumentsArray.joined(separator: ", ")
+            return "\(name)(\(arguments))"
+          }
         }
       }
     }
@@ -1075,6 +1084,21 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
+  static func conformancesSource(
+    for module: ModuleIntermediate,
+    moduleWideImports: [ReferenceDictionary]
+  ) -> String {
+    var result: [String] = []
+    let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
+    for use in module.uses {
+      result.append(contentsOf: conformances(for: use, moduleReferenceLookup: moduleReferenceLookup))
+    }
+    if !result.isEmpty {
+      return result.joined(separator: "\n")
+    } else {
+      return ""
+    }
+  }
   static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode, moduleWideImports: [ReferenceDictionary]) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
@@ -1151,6 +1175,13 @@ extension Platform {
 
     for module in modules {
       result.append(typesSource(for: module, moduleWideImports: moduleWideImportDictionary))
+    }
+
+    for module in modules {
+      let conformances = conformancesSource(for: module, moduleWideImports: moduleWideImportDictionary)
+      if !conformances.isEmpty {
+        result.append(conformances)
+      }
     }
 
     if let start = actionDeclarationsContainerStart {

@@ -13,6 +13,7 @@ struct Ability {
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
+  var swiftName: UnicodeText?
 }
 
 extension Ability {
@@ -22,7 +23,7 @@ extension Ability {
     namespace: [Set<StrictString>]
   ) -> Result<Ability, ErrorList<Ability.ConstructionError>> {
     var errors: [Ability.ConstructionError] = []
-    let namesSyntax = declaration.name.names.names
+    let namesDictionary = declaration.name.namesDictionary
     let parameters: Interpolation<AbilityParameterIntermediate>
     switch Interpolation.construct(
       entries: declaration.name.names.names,
@@ -41,8 +42,13 @@ extension Ability {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    for name in namesSyntax {
-      names.insert(StrictString(name.name.name()))
+    var swiftName: UnicodeText?
+    for (language, signature) in namesDictionary {
+      let name = signature.name()
+      if language == "Swift" {
+        swiftName = name
+      }
+      names.insert(StrictString(name))
     }
     var identifierMapping: [StrictString: UnicodeText] = [:]
     var requirements: [StrictString: RequirementIntermediate] = [:]
@@ -119,7 +125,8 @@ extension Ability {
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
-        declaration: declaration
+        declaration: declaration,
+        swiftName: swiftName
       )
     )
   }

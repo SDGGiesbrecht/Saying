@@ -78,7 +78,7 @@ extension ActionPrototype {
             }
             return label
           })
-        parameters.apply(swiftLabels: labels.map({ UnicodeText($0) }), accordingTo: name)
+        parameters.apply(swiftLabels: labels.map({ $0.isEmpty ? nil : UnicodeText($0) }), accordingTo: name)
       }
       names.insert(StrictString(name))
     }

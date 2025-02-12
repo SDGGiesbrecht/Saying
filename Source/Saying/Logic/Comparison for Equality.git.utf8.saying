@@ -2,6 +2,7 @@ ability (clients)
  (
   English: comparison of (thing) for equality
   Deutsch: Vergleich von (Ding: [thing]) auf Gleichheit
+  Swift: (thing: [thing]) Equatable
  )
  {
   requirement (clients)
@@ -37,6 +38,7 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
     עברית: (ראשון: [first]) (שני: [second])
     עברית +: (ראשון: [first]) = (שני: [second])
+    Swift: == (lhs: [first]) (rhs: [second])
    )
    truth value
 
