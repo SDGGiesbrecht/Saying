@@ -317,7 +317,7 @@ enum CSharp: Platform {
   }
 
   static var fileSettings: String? {
-    return "#nullable enable"
+    return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
     return "using \(importTarget);"
