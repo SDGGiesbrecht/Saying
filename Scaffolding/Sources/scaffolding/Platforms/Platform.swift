@@ -644,6 +644,7 @@ extension Platform {
             for: flow.statements,
             context: context,
             localLookup: localLookup.appending(locals),
+            coverageRegionCounter: &coverageRegionCounter,
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments,
             mode: mode,
@@ -659,10 +660,12 @@ extension Platform {
           newInliningArguments[StrictString(parameter.names.identifier())] = source.joined(separator: "\n")
         }
       }
+      var newCoverageRegionCounter = 0
       return source(
         for: action.implementation!.statements,
         context: action,
         localLookup: localLookup,
+        coverageRegionCounter: &newCoverageRegionCounter,
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments,
         mode: mode,
@@ -901,13 +904,13 @@ extension Platform {
     for statements: [StatementIntermediate],
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
+    coverageRegionCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [StrictString: String],
     mode: CompilationMode,
     indentationLevel: Int
   ) -> [String] {
     var locals = ReferenceDictionary()
-    var coverageRegionCounter = 0
     var existingReferences: Set<String> = []
     return statements.map({ entry in
       let result = source(
@@ -978,10 +981,12 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
+    var coverageRegionCounter = 0
     let implementation = source(
       for: actionImplementation.statements,
       context: action,
       localLookup: [],
+      coverageRegionCounter: &coverageRegionCounter,
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),

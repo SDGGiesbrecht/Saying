@@ -368,6 +368,7 @@ enum C: Platform {
       "\(indent)for(int index = 0; index < NUMBER_OF_REGIONS; index++) {",
       "\(indent)\(indent)if (coverage_regions[index][0] != 0)",
       "\(indent)\(indent){",
+      "\(indent)\(indent)\(indent)printf(\u{22}%s\u{5C}n\u{22}, coverage_regions[index]);",
       "\(indent)\(indent)\(indent)any_remaining = true;",
       "\(indent)\(indent)}",
       "\(indent)}",
