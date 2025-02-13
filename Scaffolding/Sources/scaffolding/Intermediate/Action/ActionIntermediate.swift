@@ -400,7 +400,7 @@ extension ActionIntermediate {
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"].map({ UnicodeText($0) }),
+        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value; new Action(() => {", "})();}"].map({ UnicodeText($0) }),
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
