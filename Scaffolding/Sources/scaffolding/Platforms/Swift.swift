@@ -341,6 +341,7 @@ enum Swift: Platform {
     "extension Int: Equatable {}",
     "extension Int64: Equatable {}",
     "extension String.UnicodeScalarView.Index: Equatable {}",
+    "extension String.UnicodeScalarView.Index?: Equatable {}",
     "extension UInt: Equatable {}",
     "extension UInt64: Equatable {}",
     "extension Unicode.Scalar: Equatable {}",
