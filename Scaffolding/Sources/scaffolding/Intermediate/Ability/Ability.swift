@@ -13,7 +13,6 @@ struct Ability {
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
-  var swiftName: UnicodeText?
 }
 
 extension Ability {
@@ -42,12 +41,8 @@ extension Ability {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    var swiftName: UnicodeText?
-    for (language, signature) in namesDictionary {
+    for (_, signature) in namesDictionary {
       let name = signature.name()
-      if language == "Swift" {
-        swiftName = name
-      }
       names.insert(StrictString(name))
     }
     var identifierMapping: [StrictString: UnicodeText] = [:]
@@ -125,8 +120,7 @@ extension Ability {
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
-        declaration: declaration,
-        swiftName: swiftName
+        declaration: declaration
       )
     )
   }

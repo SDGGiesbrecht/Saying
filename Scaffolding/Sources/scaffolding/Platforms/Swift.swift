@@ -325,38 +325,6 @@ enum Swift: Platform {
     return result.joined(separator: "\n")
   }
 
-  static func conformances(for use: UseIntermediate, moduleReferenceLookup: [ReferenceDictionary]) -> [String] {
-    let ability = moduleReferenceLookup.lookupAbility(identifier: use.ability)!
-    guard let native = ability.swiftName else {
-      return []
-    }
-    let conformances = String(StrictString(native)).components(separatedBy: "() ").dropFirst().map({ String($0) })
-    let parameters = ability.parameters.ordered(for: native)
-    var arguments = [ParsedTypeReference?](repeating: nil, count: parameters.count)
-    for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
-      let argument = use.arguments[index]
-      let newIndex = parameters.firstIndex(where: { $0.names.contains(StrictString(parameter.names.identifier())) })!
-      arguments[newIndex] = argument
-    }
-    var result: [String] = []
-    for (parameter, conformances) in zip(arguments.compactMap({ $0 }), conformances) {
-      switch parameter.key {
-      case .simple(let identifier):
-        if let thing = moduleReferenceLookup.lookupThing(UnicodeText(identifier), components: []),
-           thing.swift == nil {
-          let type = source(for: parameter, referenceLookup: moduleReferenceLookup)
-          result.append(contentsOf: [
-            "",
-            "extension \(type): \(conformances) {}",
-          ])
-        }
-      case .compound, .action, .statements, .partReference, .enumerationCase:
-        break
-      }
-    }
-    return result
-  }
-
   static var fileSettings: String? {
     return nil
   }

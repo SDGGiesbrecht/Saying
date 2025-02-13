@@ -1,7 +1,6 @@
 ability (clients)
  (
   English: comparison of (thing) for order
-  Swift: (thing: [thing]) Comparable
  )
  {
   requirement (clients)
