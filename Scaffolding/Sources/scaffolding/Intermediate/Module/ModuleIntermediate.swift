@@ -315,7 +315,6 @@ extension ModuleIntermediate {
     var result = self
     result.referenceDictionary.removeUnreachable(fromEntryPoints: &entryPoints, externalReferenceLookup: externalReferenceLookup)
     result.resolveTypeIdentifiers(externalReferenceLookup: externalReferenceLookup)
-    result.uses = []
     return result
   }
 }
