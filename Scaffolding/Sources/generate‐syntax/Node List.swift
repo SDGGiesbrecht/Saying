@@ -936,7 +936,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "space", type: "SpaceSyntax", kind: .required),
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
-              Child(name: "requirements", type: "NativeActionExpression", kind: .required),
+              Child(name: "requirements", type: "NativeThingReference", kind: .required),
               Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),

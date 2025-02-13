@@ -490,7 +490,7 @@ extension ReferenceDictionary {
   ) {
     let referenceLookup = moduleWideImports.map({ $0.referenceDictionary }).appending(self)
     for thing in allThings() {
-      thing.documentation?.validateReferences(referenceLookup: referenceLookup, errors: &errors)
+      thing.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
     for action in allActions() {
       action.validateReferences(referenceLookup: referenceLookup, errors: &errors)

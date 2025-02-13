@@ -289,6 +289,8 @@ enum C: Platform {
     return "#include <\(importTarget).h>"
   }
 
+  static let preexistingNativeRequirements: Set<String> = []
+
   static var importsNeededByTestScaffolding: Set<String> {
     return [
       "assert",

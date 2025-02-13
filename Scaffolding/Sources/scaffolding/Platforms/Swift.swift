@@ -336,6 +336,16 @@ enum Swift: Platform {
     return []
   }
 
+  static let preexistingNativeRequirements: Set<String> = [
+    "extension Bool: Equatable {}",
+    "extension Int: Equatable {}",
+    "extension Int64: Equatable {}",
+    "extension String.UnicodeScalarView.Index: Equatable {}",
+    "extension UInt: Equatable {}",
+    "extension UInt64: Equatable {}",
+    "extension Unicode.Scalar: Equatable {}",
+  ]
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
       "var coverageRegions: Set<String> = [",

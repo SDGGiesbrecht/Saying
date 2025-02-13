@@ -2,23 +2,23 @@ import SDGText
 
 struct NativeRequirementImplementationIntermediate {
   var textComponents: [UnicodeText]
-  var parameters: [NativeActionImplementationParameter]
+  var parameters: [NativeThingImplementationParameter]
 }
 
 extension NativeRequirementImplementationIntermediate {
 
   static func construct(
-    implementation: ParsedNativeActionExpression
+    implementation: ParsedNativeThingReference
   ) -> Result<NativeRequirementImplementationIntermediate, ErrorList<ConstructionError>> {
     let components = implementation.components
     var textComponents: [UnicodeText] = []
-    var parameters: [NativeActionImplementationParameter] = []
+    var parameters: [NativeThingImplementationParameter] = []
     var errors: [ConstructionError] = []
     for index in components.indices {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        parameters.append(NativeActionImplementationParameter(parameter))
+        parameters.append(NativeThingImplementationParameter(parameter))
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
         case .failure(let error):
@@ -41,6 +41,21 @@ extension NativeRequirementImplementationIntermediate {
 }
 
 extension NativeRequirementImplementationIntermediate {
+  func resolvingExtensionContext(
+    typeLookup: [StrictString: UnicodeText]
+  ) -> NativeRequirementImplementationIntermediate {
+    let mappedParameters = parameters.map({ parameter in
+      return NativeThingImplementationParameter (
+        name: typeLookup[StrictString(parameter.name)] ?? parameter.name,
+        syntaxNode: parameter.syntaxNode
+      )
+    })
+    return NativeRequirementImplementationIntermediate(
+      textComponents: textComponents,
+      parameters: mappedParameters
+    )
+  }
+
   func specializing(
     typeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeRequirementImplementationIntermediate {

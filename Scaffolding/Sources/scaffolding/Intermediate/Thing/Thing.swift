@@ -14,6 +14,10 @@ struct Thing {
   var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclarationProtocol
   var swiftName: UnicodeText?
+
+  func allNativeImplementations() -> [NativeThingImplementationIntermediate] {
+    return [c, cSharp, kotlin, swift].compactMap({ $0 })
+  }
 }
 
 extension Thing {
@@ -210,6 +214,24 @@ extension Thing {
         declaration: declaration,
         swiftName: swiftName
       )
+    )
+  }
+}
+
+extension Thing {
+  func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
+    for native in allNativeImplementations() {
+      for parameterReference in [native.parameters]
+        .appending(contentsOf: native.requiredDeclarations.compactMap({ $0.parameters }))
+        .joined() {
+        if parameters.parameter(named: parameterReference.name) == nil {
+          errors.append(.noSuchParameter(parameterReference.syntaxNode))
+        }
+      }
+    }
+    documentation?.validateReferences(
+      referenceLookup: referenceLookup,
+      errors: &errors
     )
   }
 }

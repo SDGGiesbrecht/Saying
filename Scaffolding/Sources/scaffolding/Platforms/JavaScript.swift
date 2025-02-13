@@ -249,6 +249,8 @@ enum JavaScript: Platform {
     return importTarget
   }
 
+  static let preexistingNativeRequirements: Set<String> = []
+
   static var importsNeededByTestScaffolding: Set<String> {
     return []
   }

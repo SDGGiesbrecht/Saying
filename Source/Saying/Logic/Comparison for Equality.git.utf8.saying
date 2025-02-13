@@ -108,6 +108,13 @@ extension
    }
 
   action (clients)
+   [
+    test {verify ((wrap (example: thing) as (something)) is (wrap (example: thing) as (something)) according to optional)}
+    test {verify (not ((wrap (example: thing) as (something)) is (wrap (differing example: thing) as (something)) according to optional))}
+    test {verify (not ((wrap (example: thing) as (something)) is (nothing: optional (thing)) according to optional))}
+    test {verify (not ((nothing: optional (thing)) is (wrap (example: thing) as (something)) according to optional))}
+    test {verify ((nothing: optional (thing)) is (nothing: optional (thing)) according to optional)}
+   ]
    (
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
    )
@@ -126,6 +133,13 @@ extension
    }
 
   action (clients)
+   [
+    test {verify (not ((wrap (example: thing) as (something)) is not (wrap (example: thing) as (something)) according to optional))}
+    test {verify ((wrap (example: thing) as (something)) is not (wrap (differing example: thing) as (something)) according to optional)}
+    test {verify ((wrap (example: thing) as (something)) is not (nothing: optional (thing)) according to optional)}
+    test {verify ((nothing: optional (thing)) is not (wrap (example: thing) as (something)) according to optional)}
+    test {verify (not ((nothing: optional (thing)) is not (nothing: optional (thing)) according to optional))}
+   ]
    (
     English: (first: optional (thing)) is not (second: optional (thing)) according to optional
    )

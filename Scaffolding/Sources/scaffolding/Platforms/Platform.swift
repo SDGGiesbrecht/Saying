@@ -114,6 +114,9 @@ protocol Platform {
   static var fileSettings: String? { get }
   static func statementImporting(_ importTarget: String) -> String
 
+  // Native Requirements
+  static var preexistingNativeRequirements: Set<String> { get }
+
   // Module
   static var importsNeededByTestScaffolding: Set<String> { get }
   static func coverageRegionSet(regions: [String]) -> [String]
@@ -331,14 +334,15 @@ extension Platform {
   }
   static func declaration(
     for thing: Thing,
-    externalReferenceLookup: [ReferenceDictionary]
+    externalReferenceLookup: [ReferenceDictionary],
+    alreadyHandledNativeRequirements: inout Set<String>
   ) -> String? {
     if !isTyped,
       thing.cases.isEmpty {
       return nil
     }
-    if nativeType(of: thing) != nil {
-      return nil
+    if let native = nativeType(of: thing) {
+      return source(for: native.requiredDeclarations, referenceLookup: externalReferenceLookup, alreadyHandled: &alreadyHandledNativeRequirements)
     }
     if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
@@ -932,11 +936,14 @@ extension Platform {
   static func declaration(
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary],
-    mode: CompilationMode
+    mode: CompilationMode,
+    alreadyHandledNativeRequirements: inout Set<String>
   ) -> String? {
-    if nativeImplementation(of: action) != nil
-      || action.isMemberWrapper {
+    if action.isMemberWrapper {
       return nil
+    }
+    if let native = nativeImplementation(of: action) {
+      return source(for: native.requiredDeclarations, referenceLookup: externalReferenceLookup, alreadyHandled: &alreadyHandledNativeRequirements)
     }
 
     guard let actionImplementation = action.implementation else {
@@ -1064,15 +1071,43 @@ extension Platform {
       choiceRegions
     ].joined())
   }
+
+  static func source(
+    for nativeRequirements: [NativeRequirementImplementationIntermediate],
+    referenceLookup: [ReferenceDictionary],
+    alreadyHandled: inout Set<String>
+  ) -> String? {
+    var result: [String] = []
+    for declaration in nativeRequirements {
+      var line = ""
+      for index in declaration.textComponents.indices {
+        line.append(contentsOf: String(StrictString(declaration.textComponents[index])))
+        if index != declaration.textComponents.indices.last {
+          let type = declaration.parameters[index].resolvedType!
+          line.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
+        }
+      }
+      if alreadyHandled.insert(line).inserted {
+        result.append(line)
+      }
+    }
+    if result.isEmpty {
+      return nil
+    } else {
+      return result.joined(separator: "\n")
+    }
+  }
+
   static func typesSource(
     for module: ModuleIntermediate,
-    moduleWideImports: [ReferenceDictionary]
+    moduleWideImports: [ReferenceDictionary],
+    alreadyHandledNativeRequirements: inout Set<String>
   ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
     let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
-      if let declaration = self.declaration(for: thing, externalReferenceLookup: moduleReferenceLookup) {
+      if let declaration = self.declaration(for: thing, externalReferenceLookup: moduleReferenceLookup, alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements) {
         result.append(contentsOf: [
           "",
           declaration
@@ -1081,7 +1116,8 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
-  static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode, moduleWideImports: [ReferenceDictionary]) -> String {
+
+  static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode, moduleWideImports: [ReferenceDictionary], alreadyHandledNativeRequirements: inout Set<String>) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
     let referenceLookup = moduleWideImports.appending(moduleReferenceLookup)
@@ -1100,7 +1136,8 @@ extension Platform {
       if let declaration = self.declaration(
         for: action,
         externalReferenceLookup: referenceLookup,
-        mode: mode
+        mode: mode,
+        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
         result.append(contentsOf: [
           "",
@@ -1117,13 +1154,15 @@ extension Platform {
     }
     return result.joined(separator: "\n")
   }
+
   static func source(
     for modules: [ModuleIntermediate],
     mode: CompilationMode,
     moduleWideImports: [ModuleIntermediate]
   ) -> String {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
-    
+    var alreadyHandledNativeRequirements: Set<String> = preexistingNativeRequirements
+
     var result: [String] = []
 
     if let settings = fileSettings {
@@ -1156,7 +1195,7 @@ extension Platform {
     }
 
     for module in modules {
-      result.append(typesSource(for: module, moduleWideImports: moduleWideImportDictionary))
+      result.append(typesSource(for: module, moduleWideImports: moduleWideImportDictionary, alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements))
     }
 
     if let start = actionDeclarationsContainerStart {
@@ -1164,7 +1203,7 @@ extension Platform {
       result.append(contentsOf: start)
     }
     for module in modules {
-      result.append(self.actionsSource(for: module, mode: mode, moduleWideImports: moduleWideImportDictionary))
+      result.append(self.actionsSource(for: module, mode: mode, moduleWideImports: moduleWideImportDictionary, alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements))
     }
     if mode == .testing {
       var allTests: [TestIntermediate] = []
