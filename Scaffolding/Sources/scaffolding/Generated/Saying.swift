@@ -296,6 +296,10 @@ struct ReplacementParsedRightChevronQuotationMarkSyntax {
   }
 }
 
+func ==(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
+  return (lhs.index == rhs.index)
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -303,6 +307,10 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
   let result: Set<Unicode.Scalar> = compute()
   cache = (result) as Set<Unicode.Scalar>?
   return result
+}
+
+func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
+  return ((lhs.segment == rhs.segment) && (lhs.scalar == rhs.scalar))
 }
 
 import SDGText

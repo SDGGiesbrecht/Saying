@@ -16,3 +16,35 @@ thing (clients)
    )
    optional (Unicode scalar index)
  }
+
+action (unit)
+ (
+  English: Unicode segments index at segment (segment: list index), scalar (scalar: optional (Unicode scalar index))
+ )
+ Unicode segments index
+ create
+
+use (clients)
+ comparison of (Unicode segments index) for equality
+ {
+  action (clients)
+   (first: Unicode segments index) is (second: Unicode segments index)
+   truth value
+   {
+    ← (((segment) of (first)) is ((segment) of (second))) and (((scalar) of (first)) is ((scalar) of (second)))
+   }
+
+  action (clients)
+   example
+   Unicode segments index
+   {
+    ← Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))
+   }
+
+  action (clients)
+   differing example
+   Unicode segments index
+   {
+    ← Unicode segments index at segment (example: list index), scalar (differing example: optional (Unicode scalar index))
+   }
+ }
