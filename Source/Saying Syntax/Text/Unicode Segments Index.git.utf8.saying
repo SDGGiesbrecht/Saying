@@ -48,3 +48,47 @@ use (clients)
     ← Unicode segments index at segment (example: list index), scalar (differing example: optional (Unicode scalar index))
    }
  }
+
+use (clients)
+ comparison of (Unicode segments index) for order
+ {
+  action (clients)
+   (first: Unicode segments index) is less than (second: Unicode segments index)
+   truth value
+   {
+    if (((segment) of (first)) is less than ((segment) of (second))), {
+     ← true
+    }
+    if (((segment) of (first)) is greater than ((segment) of (second))), {
+     ← false
+    }
+    if ((scalar) of (first)) exists, unwrap it as (• first scalar: Unicode scalar index), {
+     if ((scalar) of (second)) exists, unwrap it as (• second scalar: Unicode scalar index), {
+      ← (first scalar: Unicode scalar index) is less than (second scalar: Unicode scalar index)
+     }
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   greater example
+   Unicode segments index
+   {
+    ← Unicode segments index at segment (example: list index), scalar (nothing: optional (Unicode scalar index))
+   }
+ }
+
+action (file)
+ [
+  test {verify (hidden Unicode segments index tests)}
+  test {verify ((Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))) is less than (Unicode segments index at segment (greater example: list index), scalar (example: optional (Unicode scalar index))))}
+  test {verify (not ((Unicode segments index at segment (greater example: list index), scalar (example: optional (Unicode scalar index))) is less than (Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index)))))}
+ ]
+ (
+  English: hidden Unicode segments index tests
+ )
+ truth value
+ {
+  ← true
+ }

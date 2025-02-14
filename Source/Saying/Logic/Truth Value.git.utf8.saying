@@ -52,11 +52,11 @@ enumeration (clients)
     ελληνικά: αληθής
     עברית: אמת
    )
-   C: “¤(28)true¤(29)” (stdbool)
-   C♯: “¤(28)true¤(29)”
-   JavaScript: “¤(28)true¤(29)”
-   Kotlin: “¤(28)true¤(29)”
-   Swift: “¤(28)true¤(29)”
+   C: “true” (stdbool)
+   C♯: “true”
+   JavaScript: “true”
+   Kotlin: “true”
+   Swift: “true”
 
   case
    [
@@ -91,11 +91,11 @@ enumeration (clients)
     ελληνικά: ψευδής
     עברית: שקר
    )
-   C: “¤(28)false¤(29)” (stdbool)
-   C♯: “¤(28)false¤(29)”
-   JavaScript: “¤(28)false¤(29)”
-   Kotlin: “¤(28)false¤(29)”
-   Swift: “¤(28)false¤(29)”
+   C: “false” (stdbool)
+   C♯: “false”
+   JavaScript: “false”
+   Kotlin: “false”
+   Swift: “false”
  }
 
 action (clients)
