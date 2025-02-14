@@ -96,6 +96,7 @@ protocol Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String
@@ -431,6 +432,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
@@ -465,6 +467,7 @@ extension Platform {
           parameterName: parameter.names.identifier(),
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
           inliningArguments: [:],
           mode: mode
         )
@@ -492,6 +495,7 @@ extension Platform {
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
           inliningArguments: inliningArguments,
           mode: mode
         )
@@ -516,9 +520,16 @@ extension Platform {
     parameterName: UnicodeText?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
+    var didUseClashAvoidance = false
+    defer {
+      if didUseClashAvoidance {
+        clashAvoidanceCounter += 1
+      }
+    }
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
       var result = ""
@@ -557,6 +568,7 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
+                    clashAvoidanceCounter: &clashAvoidanceCounter,
                     inliningArguments: inliningArguments,
                     mode: mode
                   )
@@ -580,6 +592,7 @@ extension Platform {
                       referenceLookup: referenceLookup,
                       contextCoverageIdentifier: contextCoverageIdentifier,
                       coverageRegionCounter: &coverageRegionCounter,
+                      clashAvoidanceCounter: &clashAvoidanceCounter,
                       inliningArguments: inliningArguments,
                       existingReferences: &existingReferences,
                       mode: mode,
@@ -600,7 +613,8 @@ extension Platform {
               if StrictString(name) != "+" {
                 fatalError()
               }
-              result.append(String(coverageRegionCounter))
+              result.append(String(clashAvoidanceCounter))
+              didUseClashAvoidance = true
             }
           }
         }
@@ -635,6 +649,7 @@ extension Platform {
             referenceLookup: referenceLookup,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
             inliningArguments: inliningArguments,
             mode: mode
           )
@@ -651,6 +666,7 @@ extension Platform {
             context: context,
             localLookup: localLookup.appending(locals),
             coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments,
             mode: mode,
@@ -672,6 +688,7 @@ extension Platform {
         context: action,
         localLookup: localLookup,
         coverageRegionCounter: &newCoverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments,
         mode: mode,
@@ -706,6 +723,7 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
+                    clashAvoidanceCounter: &clashAvoidanceCounter,
                     inliningArguments: inliningArguments,
                     mode: mode
                   )
@@ -720,6 +738,7 @@ extension Platform {
                   referenceLookup: referenceLookup,
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
+                  clashAvoidanceCounter: &clashAvoidanceCounter,
                   inliningArguments: inliningArguments,
                   mode: mode
                 )
@@ -753,6 +772,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     inliningArguments: [StrictString: String],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
@@ -769,6 +789,7 @@ extension Platform {
           referenceLookup: referenceLookup,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
           inliningArguments: inliningArguments,
           mode: mode
         )
@@ -803,6 +824,7 @@ extension Platform {
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
         inliningArguments: inliningArguments,
         mode: mode
       )
@@ -911,6 +933,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [StrictString: String],
     mode: CompilationMode,
@@ -926,6 +949,7 @@ extension Platform {
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
         mode: mode,
@@ -988,11 +1012,13 @@ extension Platform {
       coverageRegistration = nil
     }
     var coverageRegionCounter = 0
+    var clashAvoidanceCounter = 0
     let implementation = source(
       for: actionImplementation.statements,
       context: action,
       localLookup: [],
       coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
@@ -1018,6 +1044,7 @@ extension Platform {
 
   static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
     var coverageRegionCounter = 0
+    var clashAvoidanceCounter = 0
     var locals = ReferenceDictionary()
     var existingReferences: Set<String> = []
     return testSource(
@@ -1030,6 +1057,7 @@ extension Platform {
           referenceLookup: referenceLookup,
           contextCoverageIdentifier: nil,
           coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
           inliningArguments: [:],
           existingReferences: &existingReferences,
           mode: .testing,

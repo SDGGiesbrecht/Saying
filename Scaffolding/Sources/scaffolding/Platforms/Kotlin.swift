@@ -219,6 +219,7 @@ enum Kotlin: Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
@@ -229,6 +230,7 @@ enum Kotlin: Platform {
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
       inliningArguments: inliningArguments,
       mode: mode
     )
