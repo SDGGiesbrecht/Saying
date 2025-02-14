@@ -79,7 +79,7 @@ ability (clients)
    )
    truth value
    {
-    ← (not ((first) is less than (second))) and (not ((first) is (second)))
+    ← (second) is less than (first)
    }
 
   choice (clients)

@@ -10,7 +10,7 @@ flow (clients)
  C♯: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
  JavaScript: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
  Kotlin: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
- Swift: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
+ Swift: “if ” condition “ ¤(7B)” consequence “¤(7D)”
 
 extension
  optional (thing)

@@ -84,6 +84,7 @@ import SDGText
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
 
         "==(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
+        "<(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
         "UnicodeSegments",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",
