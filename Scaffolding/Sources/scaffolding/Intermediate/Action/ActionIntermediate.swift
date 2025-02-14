@@ -400,12 +400,14 @@ extension ActionIntermediate {
         ]
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", " is ", " enumerationCase) { ", " ", " = enumerationCase.Value;", "}"].map({ UnicodeText($0) }),
+        textComponents: ["if (", " is ", " enumerationCase", ") { ", " ", " = enumerationCase", ".Value;", "}"].map({ UnicodeText($0) }),
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"))!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"))!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
         ]
       ),
@@ -622,7 +624,8 @@ extension ActionIntermediate {
             errors: &errors
           )
         } else {
-          if prototype.parameters.parameter(named: parameterReference.name) == nil {
+          if prototype.parameters.parameter(named: parameterReference.name) == nil,
+            StrictString(parameterReference.name) != "+" {
             errors.append(.noSuchParameter(parameterReference.syntaxNode))
           }
         }

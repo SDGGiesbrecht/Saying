@@ -545,56 +545,62 @@ extension Platform {
             }
           } else {
             let name = parameter.name
-            let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(StrictString(name)) })!
-            let argument = reference.arguments[argumentIndex]
-            switch argument {
-            case .action(let actionArgument):
-              result.append(
-                contentsOf: call(
-                  to: actionArgument,
-                  context: context,
-                  localLookup: localLookup.appending(local),
-                  referenceLookup: referenceLookup,
-                  contextCoverageIdentifier: contextCoverageIdentifier,
-                  coverageRegionCounter: &coverageRegionCounter,
-                  inliningArguments: inliningArguments,
-                  mode: mode
-                )
-              )
-            case .flow(let statements):
-              if mode == .testing,
-                let coverage = flowCoverageRegistration(
-                contextCoverageIdentifier: contextCoverageIdentifier,
-                coverageRegionCounter: &coverageRegionCounter
-              ) {
-                result.append(coverage)
-              }
-              result.append("\n")
-              var existingReferences: Set<String> = []
-              for statement in statements.statements {
+            if let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(StrictString(name)) }) {
+              let argument = reference.arguments[argumentIndex]
+              switch argument {
+              case .action(let actionArgument):
                 result.append(
-                  source(
-                    for: statement,
+                  contentsOf: call(
+                    to: actionArgument,
                     context: context,
                     localLookup: localLookup.appending(local),
                     referenceLookup: referenceLookup,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     inliningArguments: inliningArguments,
-                    existingReferences: &existingReferences,
-                    mode: mode,
-                    indentationLevel: 1
+                    mode: mode
                   )
                 )
+              case .flow(let statements):
+                if mode == .testing,
+                   let coverage = flowCoverageRegistration(
+                    contextCoverageIdentifier: contextCoverageIdentifier,
+                    coverageRegionCounter: &coverageRegionCounter
+                   ) {
+                  result.append(coverage)
+                }
                 result.append("\n")
+                var existingReferences: Set<String> = []
+                for statement in statements.statements {
+                  result.append(
+                    source(
+                      for: statement,
+                      context: context,
+                      localLookup: localLookup.appending(local),
+                      referenceLookup: referenceLookup,
+                      contextCoverageIdentifier: contextCoverageIdentifier,
+                      coverageRegionCounter: &coverageRegionCounter,
+                      inliningArguments: inliningArguments,
+                      existingReferences: &existingReferences,
+                      mode: mode,
+                      indentationLevel: 1
+                    )
+                  )
+                  result.append("\n")
+                }
               }
-            }
-            let newActions = argument.localActions()
-            for new in newActions {
-              _ = local.add(action: new)
-            }
-            if !newActions.isEmpty {
-              local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
+              let newActions = argument.localActions()
+              for new in newActions {
+                _ = local.add(action: new)
+              }
+              if !newActions.isEmpty {
+                local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
+              }
+            } else {
+              if StrictString(name) != "+" {
+                fatalError()
+              }
+              result.append(String(coverageRegionCounter))
             }
           }
         }
