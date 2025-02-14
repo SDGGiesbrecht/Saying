@@ -39,11 +39,9 @@ use (clients)
   action (clients)
    example
    platform fixed‐width integer
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1”
-   Swift: “1”
+   {
+    ← zero
+   }
 
   action (clients)
    differing example
@@ -95,9 +93,33 @@ use (clients)
   action (clients)
    greater example
    platform fixed‐width integer
-   C: “2”
-   C♯: “2”
-   JavaScript: “2”
-   Kotlin: “2”
-   Swift: “2”
+   {
+    ← one
+   }
+ }
+
+use (clients)
+ additive arithmetic with (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: zero
+   )
+   platform fixed‐width integer
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
+   Swift: “0”
+
+  action (clients)
+   (
+    English: one
+   )
+   platform fixed‐width integer
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1”
+   Swift: “1”
  }
