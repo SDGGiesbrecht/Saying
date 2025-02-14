@@ -264,6 +264,7 @@ enum CSharp: Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
@@ -274,6 +275,7 @@ enum CSharp: Platform {
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
       coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
       inliningArguments: inliningArguments,
       mode: mode
     ).appending(";")
@@ -317,7 +319,7 @@ enum CSharp: Platform {
   }
 
   static var fileSettings: String? {
-    return "#nullable enable"
+    return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
     return "using \(importTarget);"

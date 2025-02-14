@@ -72,6 +72,40 @@ use (clients)
  }
 
 use (clients)
+ comparison of (optional (Unicode scalar index)) for equality
+ {
+  action (clients)
+   (first: optional (Unicode scalar index)) is (second: optional (Unicode scalar index))
+   truth value
+   Swift: “¤(28)” first “ == ” second “¤(29)”
+   {
+    ← (first) is (second) according to optional
+   }
+
+  action (clients)
+   (first: optional (Unicode scalar index)) is not (second: optional (Unicode scalar index))
+   truth value
+   Swift: “¤(28)” first “ ¤(21)= ” second “¤(29)”
+   {
+    ← (first) is not (second) according to optional
+   }
+
+  action (clients)
+   example
+   optional (Unicode scalar index)
+   {
+    ← wrap (example: Unicode scalar index) as (something)
+   }
+
+  action (clients)
+   differing example
+   optional (Unicode scalar index)
+   {
+    ← wrap (differing example: Unicode scalar index) as (something)
+   }
+ }
+
+use (clients)
  comparison of (Unicode scalar index) for order
  {
   action (clients)
