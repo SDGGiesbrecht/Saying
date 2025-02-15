@@ -72,6 +72,7 @@ extension Node {
               values.append(contentsOf: 0x152...0x153) // Œ–œ
               values.append(0x18F) // Ə
               values.append(0x259) // ə
+              values.append(contentsOf: 0x2BB...0x2BC) // ʻ–ʼ
               values.append(contentsOf: 0x300...0x304) // ◌̀–◌̄
               values.append(contentsOf: 0x306...0x30C) // ◌̆–◌̌
               values.append(0x31B) // ◌̛
@@ -91,7 +92,18 @@ extension Node {
               values.append(contentsOf: 0x454...0x456) // є–і
               values.append(contentsOf: 0x458...0x45B) // ј–ћ
               values.append(0x45F) // џ
-              values.append(contentsOf: 0x490...0x491) // Ґ–ґ
+              values.append(contentsOf: 0x490...0x493) // Ґ–ғ
+              values.append(contentsOf: 0x49A...0x49B) // Қ–қ
+              values.append(contentsOf: 0x4A2...0x4A3) // Ң–ң
+              values.append(contentsOf: 0x4AE...0x4B1) // Ү–ұ
+              values.append(contentsOf: 0x4B6...0x4B7) // Ҷ–ҷ
+              values.append(contentsOf: 0x4BA...0x4BB) // Һ–һ
+              values.append(contentsOf: 0x4D8...0x4D9) // Ә–ә
+              values.append(contentsOf: 0x4E8...0x4E9) // Ө–ө
+              values.append(contentsOf: 0x531...0x556) // Ա–Ֆ
+              values.append(0x55D) // ՝
+              values.append(contentsOf: 0x561...0x586) // ա–ֆ
+              values.append(contentsOf: 0x589...0x58A) // ։–֊
               values.append(contentsOf: 0x5D0...0x5EA) // א–ת
               values.append(0x60C) // ،
               values.append(0x61B) // ؛
@@ -128,6 +140,7 @@ extension Node {
               values.append(contentsOf: 0x94B...0x94D) // ◌ो–◌्
               values.append(0x964) // ।
               values.append(contentsOf: 0x966...0x96F) // ०–९
+              values.append(contentsOf: 0x10D0...0x10F0) // ა–ჰ
               values.append(contentsOf: 0x1100...0x1112) // ᄀ–ᄒ
               values.append(contentsOf: 0x1161...0x1175) // ᅡ–ᅵ
               values.append(contentsOf: 0x11A8...0x11C2) // ᆨ–ᇂ
