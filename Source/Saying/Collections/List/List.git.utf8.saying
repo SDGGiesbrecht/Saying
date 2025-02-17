@@ -20,8 +20,8 @@ extension
     ελληνικά: κατάλογος (στοιχείο: [element])
     עברית: רשימה של (איבר: [element])
    )
-   C: “GArray” (glib)
-   C♯: “List<” element “>”
+   C: “GArray” (“glib”)
+   C♯: “List<” element “>” (“System.Collections.Generic”)
    Kotlin: “List<” element “>”
    Swift: “¤(5B)” element “¤(5D)”
    {
@@ -37,7 +37,7 @@ action (file)
  )
  list of (integer)
  C: “...”
- C♯: “¤(5B)1, 2, 3¤(5D)”
+ C♯: “¤(28)¤(28)Func<List<long>>¤(29) ¤(28)¤(28)¤(29) => ¤(7B) List<long> list = new List<long>¤(28)¤(29); list.Add¤(28)1¤(29); list.Add¤(28)2¤(29); list.Add¤(28)3¤(29); return list; ¤(7D)¤(29)¤(29)¤(28)¤(29)” (“System.Collections.Generic”)
  JavaScript: “¤(5B)1, 2, 3¤(5D)”
  Kotlin: “listOf¤(28)1, 2, 3¤(29)”
  Swift: “¤(5B)1, 2, 3¤(5D)”

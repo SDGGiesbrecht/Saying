@@ -39,13 +39,22 @@ extension NativeThingImplementationIntermediate {
         requiredDeclarations.append(constructed)
       }
     }
+    var requiredImport: UnicodeText?
+    if let importLiteral = implementation.importNode?.importNode {
+      switch LiteralIntermediate.construct(literal: importLiteral) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+      case .success(let literal):
+        requiredImport = UnicodeText(StrictString(literal.string))
+      }
+    }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
     return .success(NativeThingImplementationIntermediate(
       textComponents: textComponents,
       parameters: parameters,
-      requiredImport: implementation.importNode?.importNode.identifierText(),
+      requiredImport: requiredImport,
       requiredDeclarations: requiredDeclarations
     ))
   }

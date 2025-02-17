@@ -7,7 +7,7 @@ action (clients) (tests)
  (
   English: verify (condition: truth value)
  )
- C: “assert¤(28)” condition “¤(29)” (assert)
+ C: “assert¤(28)” condition “¤(29)” (“assert”)
  C♯: “Assert¤(28)” condition “, ¤(22)¤(22)¤(29)”
  JavaScript: “console.assert¤(28)” condition “¤(29)”
  Kotlin: “assert¤(28)” condition “¤(29)”

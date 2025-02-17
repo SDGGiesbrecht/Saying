@@ -20,7 +20,7 @@ extension
     ελληνικά: σύνολο (στοιχείο: [element])
     עברית: קבוצה של (איבר: [element])
    )
-   C♯: “HashSet<” element “>”
+   C♯: “HashSet<” element “>” (“System.Collections.Generic”)
    Kotlin: “Set<” element “>”
    Swift: “Set<” element “>” {“extension ” element “: Equatable ¤(7B)¤(7D)”}
    {
