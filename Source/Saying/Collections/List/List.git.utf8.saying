@@ -20,9 +20,33 @@ extension
     ελληνικά: κατάλογος (στοιχείο: [element])
     עברית: רשימה של (איבר: [element])
    )
+   C: “GArray” (glib)
    C♯: “List<” element “>”
    Kotlin: “List<” element “>”
    Swift: “¤(5B)” element “¤(5D)”
    {
    }
+ }
+
+action (file)
+ [
+  test {verify (use list (example: list of (integer)))}
+ ]
+ (
+  English: example
+ )
+ list of (integer)
+ C: “...”
+ C♯: “¤(5B)1, 2, 3¤(5D)”
+ JavaScript: “¤(5B)1, 2, 3¤(5D)”
+ Kotlin: “listOf¤(28)1, 2, 3¤(29)”
+ Swift: “¤(5B)1, 2, 3¤(5D)”
+
+action (file)
+ (
+  English: use list (list: list of (integer))
+ )
+ truth value
+ {
+  ← true
  }

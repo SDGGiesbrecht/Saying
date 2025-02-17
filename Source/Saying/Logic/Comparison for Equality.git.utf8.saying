@@ -107,6 +107,11 @@ extension
    {
    }
 
+  use (clients)
+   lists of (thing)
+   {
+   }
+
   action (clients)
    [
     test {verify ((wrap (example: thing) as (something)) is (wrap (example: thing) as (something)) according to optional)}
