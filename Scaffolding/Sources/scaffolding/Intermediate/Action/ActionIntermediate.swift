@@ -283,7 +283,7 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["((", ") {", ", ", "})"].map({ UnicodeText($0) }),
+        textComponents: ["((", ") {", ", {", "}})"].map({ UnicodeText($0) }),
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, typeInstead: enumerationType),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
