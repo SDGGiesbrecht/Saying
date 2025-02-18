@@ -23,7 +23,7 @@ import SDGText
     // Web: HTML, JavaScript
     // (1991‐08‐06)
 
-    // Ubuntu: GNOME Builder (Meson), GNOME, C
+    // Ubuntu: GNOME Builder (Meson), GNOME, GTK, GLib, C
     // (2004‐10‐20)
 
     // tvOS: from macOS, Xcode (Swift Package Manager), Swift
@@ -35,7 +35,7 @@ import SDGText
     // Android: from Linux, Android Studio (Gradle), Kotlin
     // (2008‐09‐23)
 
-    // Amazon Linux: MATE, Developer Tools (GNU Compiler Collection (gcc)), C
+    // Amazon Linux: MATE, Development Tools, GTK, GLib, C
     // (2011‐09‐26)
 
     // watchOS: from macOS, Xcode (Swift Package Manager), Swift
