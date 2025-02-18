@@ -21,10 +21,8 @@ jobs:
         run: |
           set -x
           cd .Construction/C
-          meson setup build
-          cd build
-          ninja
-          ./test-executable
+          make
+          ./test
     - name: Check repository for changes
       shell: bash
       run: |

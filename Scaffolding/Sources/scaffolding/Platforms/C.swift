@@ -398,7 +398,7 @@ enum C: Platform {
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
-    var dependencyList = dependencies
+    let dependencyList = dependencies
       .compactMap({ importTarget in
         if importTarget.contains("-") {
           return importTarget
@@ -406,15 +406,19 @@ enum C: Platform {
           return nil
         }
       })
-      .map({ "dependency('\($0)')" })
-      .joined(separator: ", ")
-    if !dependencyList.isEmpty {
-      dependencyList = ", dependencies : \(dependencyList)"
-    }
+    let cFlags = dependencyList
+      .map({ "$(shell pkg-config --cflags \($0))" })
+      .joined(separator: " ")
+    let libs = dependencyList
+      .map({ "$(shell pkg-config --libs \($0))" })
+      .joined(separator: " ")
     try ([
-      "project('project', 'c')",
-      "executable('test-executable', 'test.c'\(dependencyList))",
+      "CFLAGS = \(cFlags)",
+      "LIBS = \(libs)",
+      "",
+      "test: test.c",
+      "\u{9}cc $(CFLAGS) test.c -o test $(LIBS)",
     ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("meson.build"))
+      .save(to: projectDirectory.appendingPathComponent("Makefile"))
   }
 }
