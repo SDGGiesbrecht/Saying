@@ -82,7 +82,6 @@ extension CaseIntermediate {
               cStore = constructed
             case "C♯":
               cSharpStore = constructed
-              disallowImports(in: implementation.expression, errors: &errors)
             case "JavaScript":
               javaScriptStore = constructed
               disallowImports(in: implementation.expression, errors: &errors)
@@ -110,7 +109,6 @@ extension CaseIntermediate {
               cStore = constructed
             case "C♯":
               cSharpStore = constructed
-              disallowImports(in: implementation.expressions.store, errors: &errors)
             case "JavaScript":
               javaScriptStore = constructed
               disallowImports(in: implementation.expressions.store, errors: &errors)
@@ -135,7 +133,6 @@ extension CaseIntermediate {
               cRetrieve = constructed
             case "C♯":
               cSharpRetrieve = constructed
-              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             case "JavaScript":
               javaScriptRetrieve = constructed
               disallowImports(in: implementation.expressions.retrieve, errors: &errors)
@@ -160,7 +157,6 @@ extension CaseIntermediate {
               cCheck = constructed
             case "C♯":
               cSharpCheck = constructed
-              disallowImports(in: implementation.expressions.check, errors: &errors)
             case "JavaScript":
               javaScriptCheck = constructed
               disallowImports(in: implementation.expressions.check, errors: &errors)

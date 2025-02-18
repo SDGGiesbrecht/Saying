@@ -37,7 +37,7 @@ thing (clients)
   català: nombre enter
   Gaeilge: slánuimhir
  )
- C: “intmax¤(5F)t” (stdint)
+ C: “intmax¤(5F)t” (“stdint”)
  C♯: “long”
  Kotlin: “Long”
  Swift: “Int64”

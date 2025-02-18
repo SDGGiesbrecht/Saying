@@ -356,7 +356,7 @@ enum Kotlin: Platform {
     return "app/src/main/kotlin/Test.kt"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "android.useAndroidX=true",
     ] as [String]).joined(separator: "\n").appending("\n")

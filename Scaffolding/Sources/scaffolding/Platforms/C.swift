@@ -288,7 +288,11 @@ enum C: Platform {
     return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
-    return "#include <\(importTarget).h>"
+    var target = importTarget
+    if target.contains("-") {
+      target = String(target.prefix(upTo: "-")!.contents)
+    }
+    return "#include <\(target).h>"
   }
 
   static let preexistingNativeRequirements: Set<String> = []
@@ -393,11 +397,28 @@ enum C: Platform {
     return "test.c"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
+    let dependencyList = dependencies
+      .compactMap({ importTarget in
+        if importTarget.contains("-") {
+          return importTarget
+        } else {
+          return nil
+        }
+      })
+    let cFlags = dependencyList
+      .map({ "$(shell pkg-config --cflags \($0))" })
+      .joined(separator: " ")
+    let libs = dependencyList
+      .map({ "$(shell pkg-config --libs \($0))" })
+      .joined(separator: " ")
     try ([
-      "project('project', 'c')",
-      "executable('test-executable', 'test.c')",
+      "CFLAGS = \(cFlags)",
+      "LIBS = \(libs)",
+      "",
+      "test: test.c",
+      "\u{9}cc $(CFLAGS) test.c -o test $(LIBS)",
     ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("meson.build"))
+      .save(to: projectDirectory.appendingPathComponent("Makefile"))
   }
 }

@@ -428,7 +428,7 @@ enum CSharp: Platform {
     return "Test.cs"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "<Project>",
       "  <ItemGroup>",

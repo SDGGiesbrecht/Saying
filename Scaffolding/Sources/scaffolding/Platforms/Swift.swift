@@ -416,7 +416,7 @@ enum Swift: Platform {
     return "Sources/Products/Source.swift"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "// swift-tools-version: 5.7",
       "",

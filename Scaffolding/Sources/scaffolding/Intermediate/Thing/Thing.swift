@@ -175,7 +175,6 @@ extension Thing {
       case "C":
         c = constructed
       case "C♯":
-        disallowImports(in: implementation, errors: &errors)
         cSharp = constructed
       case "Kotlin":
         disallowImports(in: implementation, errors: &errors)

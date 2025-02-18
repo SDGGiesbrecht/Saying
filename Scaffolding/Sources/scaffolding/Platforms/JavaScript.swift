@@ -326,7 +326,7 @@ enum JavaScript: Platform {
     "Package.js"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "<html>",
       "  <head>",

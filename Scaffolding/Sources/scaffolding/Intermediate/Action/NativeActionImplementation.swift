@@ -30,7 +30,15 @@ extension NativeActionImplementationIntermediate {
         }
       }
     }
-    let requiredImport = implementation.importNode?.importNode.identifierText()
+    var requiredImport: UnicodeText?
+    if let importLiteral = implementation.importNode?.importNode {
+      switch LiteralIntermediate.construct(literal: importLiteral) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+      case .success(let literal):
+        requiredImport = UnicodeText(StrictString(literal.string))
+      }
+    }
     var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
     if let requirements = implementation.requirementsNode?.requirements {
       switch NativeRequirementImplementationIntermediate.construct(implementation: requirements) {

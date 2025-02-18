@@ -14,7 +14,7 @@ enumeration (clients)
   ελληνικά: αληθοτιμή
   עברית: ערך אמת
  )
- C: “bool” (stdbool)
+ C: “bool” (“stdbool”)
  C♯: “bool”
  Kotlin: “Boolean”
  Swift: “Bool”
@@ -52,7 +52,7 @@ enumeration (clients)
     ελληνικά: αληθής
     עברית: אמת
    )
-   C: “true” (stdbool)
+   C: “true”
    C♯: “true”
    JavaScript: “true”
    Kotlin: “true”
@@ -91,7 +91,7 @@ enumeration (clients)
     ελληνικά: ψευδής
     עברית: שקר
    )
-   C: “false” (stdbool)
+   C: “false”
    C♯: “false”
    JavaScript: “false”
    Kotlin: “false”

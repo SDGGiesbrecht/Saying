@@ -547,7 +547,6 @@ extension ActionIntermediate {
             c = constructed
           case "C♯":
             cSharp = constructed
-            disallowImports(in: implementation, errors: &errors)
           case "JavaScript":
             javaScript = constructed
             disallowImports(in: implementation, errors: &errors)

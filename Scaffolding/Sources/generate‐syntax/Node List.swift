@@ -940,7 +940,7 @@ extension Node {
             kind: .compound(children: [
               Child(name: "space", type: "SpaceSyntax", kind: .required),
               Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
-              Child(name: "importNode", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "importNode", type: "Literal", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
