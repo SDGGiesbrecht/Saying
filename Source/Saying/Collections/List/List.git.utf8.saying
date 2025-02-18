@@ -20,7 +20,7 @@ extension
     ελληνικά: κατάλογος (στοιχείο: [element])
     עברית: רשימה של (איבר: [element])
    )
-   C: “GArray” (“glib”)
+   C: “GArray” (“glib¤(2D)2.0”)
    C♯: “List<” element “>” (“System.Collections.Generic”)
    Kotlin: “List<” element “>”
    Swift: “¤(5B)” element “¤(5D)”

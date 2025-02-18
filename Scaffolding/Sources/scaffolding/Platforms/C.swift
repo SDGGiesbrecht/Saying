@@ -288,7 +288,11 @@ enum C: Platform {
     return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
-    return "#include <\(importTarget).h>"
+    var target = importTarget
+    if target.contains("-") {
+      target = String(target.prefix(upTo: "-")!.contents)
+    }
+    return "#include <\(target).h>"
   }
 
   static let preexistingNativeRequirements: Set<String> = []
@@ -393,10 +397,23 @@ enum C: Platform {
     return "test.c"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
+    var dependencyList = dependencies
+      .compactMap({ importTarget in
+        if importTarget.contains("-") {
+          return importTarget
+        } else {
+          return nil
+        }
+      })
+      .map({ "dependency('\($0)')" })
+      .joined(separator: ", ")
+    if !dependencyList.isEmpty {
+      dependencyList = ", dependencies : \(dependencyList)"
+    }
     try ([
       "project('project', 'c')",
-      "executable('test-executable', 'test.c')",
+      "executable('test-executable', 'test.c'\(dependencyList))",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("meson.build"))
   }
