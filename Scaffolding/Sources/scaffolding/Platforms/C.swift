@@ -393,5 +393,11 @@ enum C: Platform {
     return "test.c"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {}
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
+    try ([
+      "project('project', 'c')",
+      "executable('test-executable', 'test.c')",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("meson.build"))
+  }
 }
