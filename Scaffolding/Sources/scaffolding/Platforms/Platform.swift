@@ -610,11 +610,15 @@ extension Platform {
                 local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
               }
             } else {
-              if StrictString(name) != "+" {
+              if StrictString(name) == "+" {
+                result.append(String(clashAvoidanceCounter))
+                didUseClashAvoidance = true
+              } else if StrictString(name) == "−" {
+                  #warning("Not implemented yet.")
+                  result.append("−")
+              } else {
                 fatalError()
               }
-              result.append(String(clashAvoidanceCounter))
-              didUseClashAvoidance = true
             }
           }
         }
