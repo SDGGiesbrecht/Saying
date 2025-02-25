@@ -63,7 +63,7 @@ flow (clients)
    at clean‐up, {
     verify ((value) is (true))
    }
-   change (↓ value) to (true)
+   change (value) to (true)
   }
  ]
  (
