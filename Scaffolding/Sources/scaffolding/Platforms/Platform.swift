@@ -983,7 +983,9 @@ extension Platform {
     if inOrder.isEmpty {
       inOrder.append(cleanUpCode)
     } else {
-      inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+      if !cleanUpCode.isEmpty {
+        inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+      }
     }
     return inOrder
   }
