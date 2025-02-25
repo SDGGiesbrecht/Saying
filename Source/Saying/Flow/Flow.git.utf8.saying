@@ -72,7 +72,7 @@ flow (clients)
   français : lors du rangement, (rangement: [clean‐up])
   ελληνικά: στη συγύρισμα (συγύρισμα: [clean‐up])
  )
- C: “goto”
+ C: “” − “” clean‐up “”
  C♯: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
  JavaScript: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
  Kotlin: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
