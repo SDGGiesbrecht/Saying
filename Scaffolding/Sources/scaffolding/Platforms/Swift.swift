@@ -267,28 +267,8 @@ enum Swift: Platform {
     return "registerCoverage(\u{22}\(identifier)\u{22})"
   }
 
-  static func statement(
-    expression: ActionUse,
-    context: ActionIntermediate?,
-    localLookup: [ReferenceDictionary],
-    referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
-    coverageRegionCounter: inout Int,
-    clashAvoidanceCounter: inout Int,
-    inliningArguments: [StrictString: String],
-    mode: CompilationMode
-  ) -> String {
-    return call(
-      to: expression,
-      context: context,
-      localLookup: localLookup,
-      referenceLookup: referenceLookup,
-      contextCoverageIdentifier: contextCoverageIdentifier,
-      coverageRegionCounter: &coverageRegionCounter,
-      clashAvoidanceCounter: &clashAvoidanceCounter,
-      inliningArguments: inliningArguments,
-      mode: mode
-    )
+  static func statement(expression: String) -> String {
+    expression
   }
   static func returnDelayStorage(type: String?) -> String {
     if type != nil {

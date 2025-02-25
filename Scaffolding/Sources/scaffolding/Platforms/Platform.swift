@@ -89,17 +89,7 @@ protocol Platform {
     returnSection: String?
   ) -> String?
   static func coverageRegistration(identifier: String) -> String
-  static func statement(
-    expression: ActionUse,
-    context: ActionIntermediate?,
-    localLookup: [ReferenceDictionary],
-    referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
-    coverageRegionCounter: inout Int,
-    clashAvoidanceCounter: inout Int,
-    inliningArguments: [StrictString: String],
-    mode: CompilationMode
-  ) -> String
+  static func statement(expression: String) -> String
   static func returnDelayStorage(type: String?) -> String
   static var delayedReturn: String { get }
   static func actionDeclaration(
@@ -433,6 +423,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
@@ -468,6 +459,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
           mode: mode
         )
@@ -496,6 +488,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           mode: mode
         )
@@ -521,6 +514,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
@@ -532,15 +526,16 @@ extension Platform {
     }
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
-      var result = ""
+      var accumulator = ""
+      var beforeCleanUp: String? = nil
       var local = ReferenceDictionary()
       for index in native.textComponents.indices {
-        result.append(contentsOf: String(StrictString(native.textComponents[index])))
+        accumulator.append(contentsOf: String(StrictString(native.textComponents[index])))
         if index != native.textComponents.indices.last {
           let parameter = native.parameters[index]
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
-            result.append(contentsOf: typeSource)
+            accumulator.append(contentsOf: typeSource)
           } else if let enumerationCase = parameter.caseInstead {
             switch enumerationCase {
             case .simple, .compound, .action, .statements, .partReference:
@@ -552,7 +547,7 @@ extension Platform {
                 simple: false,
                 ignoringValue: true
               )
-              result.append(contentsOf: reference)
+              accumulator.append(contentsOf: reference)
             }
           } else {
             let name = parameter.name
@@ -560,7 +555,7 @@ extension Platform {
               let argument = reference.arguments[argumentIndex]
               switch argument {
               case .action(let actionArgument):
-                result.append(
+                accumulator.append(
                   contentsOf: call(
                     to: actionArgument,
                     context: context,
@@ -569,6 +564,7 @@ extension Platform {
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
+                    cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
                   )
@@ -579,12 +575,12 @@ extension Platform {
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter
                    ) {
-                  result.append(coverage)
+                  accumulator.append(coverage)
                 }
-                result.append("\n")
+                accumulator.append("\n")
                 var existingReferences: Set<String> = []
                 for statement in statements.statements {
-                  result.append(
+                  accumulator.append(
                     source(
                       for: statement,
                       context: context,
@@ -593,13 +589,14 @@ extension Platform {
                       contextCoverageIdentifier: contextCoverageIdentifier,
                       coverageRegionCounter: &coverageRegionCounter,
                       clashAvoidanceCounter: &clashAvoidanceCounter,
+                      cleanUpCode: &cleanUpCode,
                       inliningArguments: inliningArguments,
                       existingReferences: &existingReferences,
                       mode: mode,
                       indentationLevel: 1
                     )
                   )
-                  result.append("\n")
+                  accumulator.append("\n")
                 }
               }
               let newActions = argument.localActions()
@@ -610,16 +607,25 @@ extension Platform {
                 local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
               }
             } else {
-              if StrictString(name) != "+" {
+              if StrictString(name) == "+" {
+                accumulator.append(String(clashAvoidanceCounter))
+                didUseClashAvoidance = true
+              } else if StrictString(name) == "−" {
+                beforeCleanUp = accumulator
+                accumulator = ""
+              } else {
                 fatalError()
               }
-              result.append(String(clashAvoidanceCounter))
-              didUseClashAvoidance = true
             }
           }
         }
       }
-      return result
+      if let before = beforeCleanUp {
+        cleanUpCode = accumulator
+        return before
+      } else {
+        return accumulator
+      }
     } else if action.isMemberWrapper {
       let name = sanitize(identifier: action.names.identifier(), leading: true)
       if case .partReference = action.returnValue! {
@@ -650,6 +656,7 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
           )
@@ -724,6 +731,7 @@ extension Platform {
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
+                    cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
                   )
@@ -739,6 +747,7 @@ extension Platform {
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
+                  cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
                   mode: mode
                 )
@@ -773,6 +782,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
@@ -790,6 +800,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           mode: mode
         )
@@ -818,15 +829,18 @@ extension Platform {
     let before = coverageRegionCounter
     entry.append(
       contentsOf: self.statement(
-        expression: statement.action,
-        context: context,
-        localLookup: localLookup,
-        referenceLookup: referenceLookup,
-        contextCoverageIdentifier: contextCoverageIdentifier,
-        coverageRegionCounter: &coverageRegionCounter,
-        clashAvoidanceCounter: &clashAvoidanceCounter,
-        inliningArguments: inliningArguments,
-        mode: mode
+        expression: call(
+          to: statement.action,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: contextCoverageIdentifier,
+          coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
+          cleanUpCode: &cleanUpCode,
+          inliningArguments: inliningArguments,
+          mode: mode
+        )
       )
     )
     if mode == .testing,
@@ -940,8 +954,9 @@ extension Platform {
     indentationLevel: Int
   ) -> [String] {
     var locals = ReferenceDictionary()
+    var cleanUpCode = ""
     var existingReferences: Set<String> = []
-    return statements.map({ entry in
+    var inOrder = statements.map({ entry in
       let result = source(
         for: entry,
         context: context,
@@ -950,6 +965,7 @@ extension Platform {
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
         mode: mode,
@@ -964,6 +980,14 @@ extension Platform {
       }
       return result
     })
+    if inOrder.isEmpty {
+      inOrder.append(cleanUpCode)
+    } else {
+      if !cleanUpCode.isEmpty {
+        inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+      }
+    }
+    return inOrder
   }
 
   static func declaration(
@@ -1045,33 +1069,19 @@ extension Platform {
   static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
-    var locals = ReferenceDictionary()
-    var existingReferences: Set<String> = []
     return testSource(
       identifier: identifier(for: test, leading: false),
-      statements: test.statements.map({ statement in
-        let result = self.source(
-          for: statement,
-          context: nil,
-          localLookup: [locals],
-          referenceLookup: referenceLookup,
-          contextCoverageIdentifier: nil,
-          coverageRegionCounter: &coverageRegionCounter,
-          clashAvoidanceCounter: &clashAvoidanceCounter,
-          inliningArguments: [:],
-          existingReferences: &existingReferences,
-          mode: .testing,
-          indentationLevel: 0
-        )
-        let newActions = statement.action.localActions()
-        for local in newActions {
-          _ = locals.add(action: local)
-        }
-        if !newActions.isEmpty {
-          locals.resolveTypeIdentifiers(externalLookup: referenceLookup)
-        }
-        return result
-      })
+      statements: source(
+        for: test.statements,
+        context: nil,
+        localLookup: [],
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        referenceLookup: referenceLookup,
+        inliningArguments: [:],
+        mode: .testing,
+        indentationLevel: 0
+      )
     )
   }
 

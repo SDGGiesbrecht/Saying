@@ -624,7 +624,8 @@ extension ActionIntermediate {
           )
         } else {
           if prototype.parameters.parameter(named: parameterReference.name) == nil,
-            StrictString(parameterReference.name) != "+" {
+            StrictString(parameterReference.name) != "+",
+            StrictString(parameterReference.name) != "−" {
             errors.append(.noSuchParameter(parameterReference.syntaxNode))
           }
         }

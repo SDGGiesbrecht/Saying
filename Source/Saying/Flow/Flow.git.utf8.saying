@@ -55,3 +55,25 @@ extension
     ← result
    }
  }
+
+flow (clients)
+ [
+  test {
+   let (• value: truth value) start as (false)
+   at clean‐up, {
+    verify ((value) is (true))
+   }
+   change (value) to (true)
+  }
+ ]
+ (
+  English: at clean‐up, (clean‐up: {})
+  Deutsch: beim Aufräumen (Aufräumen: [clean‐up])
+  français : lors du rangement, (rangement: [clean‐up])
+  ελληνικά: στη συγύρισμα (συγύρισμα: [clean‐up])
+ )
+ C: “” − “” clean‐up “”
+ C♯: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
+ JavaScript: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
+ Kotlin: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
+ Swift: “defer ¤(7B)” clean‐up “¤(7D)”

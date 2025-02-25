@@ -42,7 +42,7 @@ extension StatementListIntermediate {
     for statement in statements {
       statement.validateReferences(
         context: context.appending(local),
-        testContext: false,
+        testContext: testContext,
         errors: &errors
       )
       let newActions = statement.localActions()
