@@ -774,6 +774,42 @@ extension Platform {
     }
   }
 
+  static func parametersExtractedForReferenceCounting(
+    from action: ActionUse,
+    context: ActionIntermediate?,
+    referenceLookup: [ReferenceDictionary]
+  ) -> [String] {
+    var entries: [String] = []
+    for argument in action.arguments {
+      switch argument {
+      case .action(let action):
+        if context?.lookupParameter(action.actionName) != nil {
+          continue
+        } else {
+          entries.append(
+            contentsOf: parametersExtractedForReferenceCounting(
+              from: action,
+              context: context,
+              referenceLookup: referenceLookup
+            )
+          )
+        }
+      case .flow:
+        break
+      }
+
+      if let result = argument.resolvedResultType,
+        let actualResult = result,
+        let type = referenceLookup.lookupThing(actualResult.key),
+        let native = nativeType(of: type),
+        let release = native.release {
+        #warning("Not implemented yet.")
+        entries.append(String(release.textComponents.map({ StrictString($0) }).joined()))
+      }
+    }
+    return entries
+  }
+
   static func source(
     for statement: StatementIntermediate,
     context: ActionIntermediate?,
@@ -813,6 +849,16 @@ extension Platform {
           entry.append(preparation)
         }
       }
+    }
+    let extractedParameters = parametersExtractedForReferenceCounting(
+      from: statement.action,
+      context: context,
+      referenceLookup: referenceLookup
+    )
+    if !extractedParameters.isEmpty {
+      entry.append(
+        contentsOf: extractedParameters.joined(separator: "\n").appending("\n")
+      )
     }
     if statement.isReturn {
       if referenceList.isEmpty {

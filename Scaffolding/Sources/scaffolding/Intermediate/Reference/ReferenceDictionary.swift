@@ -171,6 +171,14 @@ extension Array where Element == ReferenceDictionary {
     }
     return nil
   }
+  func lookupThing(_ reference: TypeReference) -> Thing? {
+    for scope in reversed() {
+      if let found = scope.lookupThing(reference) {
+        return found
+      }
+    }
+    return nil
+  }
 }
 
 extension ReferenceDictionary {
