@@ -36,19 +36,3 @@ ability (clients)
    )
    thing
  }
-
-extension
- use of (thing) as list indexed by (index)
- {
-  action (file)
-   [
-    test {verify (use list (empty: thing))}
-   ]
-   (
-    English: use list (list: thing)
-   )
-   truth value
-   {
-    ← true
-   }
- }
