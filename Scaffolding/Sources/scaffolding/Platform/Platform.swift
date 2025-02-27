@@ -423,6 +423,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    extractedArguments: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
@@ -459,6 +460,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          extractedArguments: &extractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
           mode: mode
@@ -477,6 +479,13 @@ extension Platform {
           signature: signature,
           specifiedReturnValue: reference.resolvedResultType
         )!
+      if !extractedArguments.isEmpty,
+        let result = action.returnValue,
+        let type = referenceLookup.lookupThing(result.key),
+        let native = nativeType(of: type),
+        native.release != nil {
+        return extractedArguments.removeFirst()
+      }
       var result: [String] = [
         call(
           to: bareAction.isFlow ? bareAction : action,
@@ -488,6 +497,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          extractedArguments: &extractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           mode: mode
@@ -514,6 +524,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    extractedArguments: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
@@ -564,6 +575,7 @@ extension Platform {
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
+                    extractedArguments: &extractedArguments,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
@@ -656,6 +668,7 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            extractedArguments: &extractedArguments,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
@@ -731,6 +744,7 @@ extension Platform {
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
+                    extractedArguments: &extractedArguments,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
@@ -747,6 +761,7 @@ extension Platform {
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
+                  extractedArguments: &extractedArguments,
                   cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
                   mode: mode
@@ -774,12 +789,19 @@ extension Platform {
     }
   }
 
-  static func parametersExtractedForReferenceCounting(
+  static func argumentsExtractedForReferenceCounting(
     from action: ActionUse,
     context: ActionIntermediate?,
-    referenceLookup: [ReferenceDictionary]
-  ) -> [String] {
-    var entries: [String] = []
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentifier: UnicodeText?,
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    cleanUpCode: inout String,
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode
+  ) -> [ReferenceCountedReturn] {
+    var entries: [ReferenceCountedReturn] = []
     for argument in action.arguments {
       switch argument {
       case .action(let action):
@@ -787,24 +809,53 @@ extension Platform {
           continue
         } else {
           entries.append(
-            contentsOf: parametersExtractedForReferenceCounting(
+            contentsOf: argumentsExtractedForReferenceCounting(
               from: action,
               context: context,
-              referenceLookup: referenceLookup
+              localLookup: localLookup,
+              referenceLookup: referenceLookup,
+              contextCoverageIdentifier: contextCoverageIdentifier,
+              coverageRegionCounter: &coverageRegionCounter,
+              clashAvoidanceCounter: &clashAvoidanceCounter,
+              cleanUpCode: &cleanUpCode,
+              inliningArguments: inliningArguments,
+              mode: mode
+            )
+          )
+        }
+
+        if let result = argument.resolvedResultType,
+          let actualResult = result,
+          let type = referenceLookup.lookupThing(actualResult.key),
+          let native = nativeType(of: type),
+           let release = native.release {
+          let localName = "local"
+          let typeName = source(for: actualResult, referenceLookup: referenceLookup)
+          var extracted: [String] = []
+          let call = self.call(
+            to: action,
+            context: context,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
+            extractedArguments: &extracted,
+            cleanUpCode: &cleanUpCode,
+            inliningArguments: inliningArguments,
+            mode: mode
+          )
+          let releaseName = String(release.textComponents.map({ StrictString($0) }).joined())
+          entries.append(
+            ReferenceCountedReturn(
+              localStorageDeclaration: "const \(typeName) \(localName) = \(call);",
+              localName: localName,
+              releaseStatement: "\(releaseName)(\(localName));"
             )
           )
         }
       case .flow:
         break
-      }
-
-      if let result = argument.resolvedResultType,
-        let actualResult = result,
-        let type = referenceLookup.lookupThing(actualResult.key),
-        let native = nativeType(of: type),
-        let release = native.release {
-        #warning("Not implemented yet.")
-        entries.append(String(release.textComponents.map({ StrictString($0) }).joined()))
       }
     }
     return entries
@@ -828,6 +879,7 @@ extension Platform {
     var referenceList: [String] = []
     if needsReferencePreparation {
       referenceList = statement.passedReferences().map { reference in
+        var extracted: [String] = []
         return call(
           to: reference,
           context: context,
@@ -836,6 +888,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          extractedArguments: &extracted,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           mode: mode
@@ -850,15 +903,23 @@ extension Platform {
         }
       }
     }
-    let extractedParameters = parametersExtractedForReferenceCounting(
+    let extractedArguments = argumentsExtractedForReferenceCounting(
       from: statement.action,
       context: context,
-      referenceLookup: referenceLookup
+      localLookup: localLookup,
+      referenceLookup: referenceLookup,
+      contextCoverageIdentifier: contextCoverageIdentifier,
+      coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
+      cleanUpCode: &cleanUpCode,
+      inliningArguments: inliningArguments,
+      mode: mode
     )
-    if !extractedParameters.isEmpty {
-      entry.append(
-        contentsOf: extractedParameters.joined(separator: "\n").appending("\n")
-      )
+    if !extractedArguments.isEmpty {
+      for argument in extractedArguments {
+        entry.append(argument.localStorageDeclaration.appending("\n"))
+        cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
+      }
     }
     if statement.isReturn {
       if referenceList.isEmpty {
@@ -873,6 +934,7 @@ extension Platform {
       }
     }
     let before = coverageRegionCounter
+    var remainingExtractedArguments = extractedArguments.map({ $0.localName })
     entry.append(
       contentsOf: self.statement(
         expression: call(
@@ -883,6 +945,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          extractedArguments: &remainingExtractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           mode: mode
