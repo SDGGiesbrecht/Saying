@@ -27,9 +27,32 @@ extension
    {
    }
 
-  use
-   use of (list of (element)) as list
+  use (clients)
+   storage of (list of (element))
    {
+   }
+
+  use
+   use of (list of (element)) as list indexed by (list index)
+   {
+    action (clients)
+     (
+      English: beginning of (list: list of (element))
+     )
+     list index
+     {
+      ← list index at (platform index at end of (list))
+     }
+
+    action (clients)
+     (
+      English: end of (list: list of (element))
+     )
+     list index
+     {
+      ← list index at (platform index at beginning of (list))
+     }
+
     action (clients)
      (
       English: empty
@@ -41,4 +64,26 @@ extension
      Kotlin: “listOf¤(28)¤(29)”
      Swift: “¤(5B)¤(5D)”
    }
+
+  action (file)
+   (
+    English: platform index at beginning of (list: list of (element))
+   )
+   platform fixed‐width integer
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
+   Swift: “” list “.startIndex”
+
+  action (file)
+   (
+    English: platform index at end of (list: list of (element))
+   )
+   platform fixed‐width integer
+   C: “” list “¤(2D)>len”
+   C♯: “” list “.Count”
+   JavaScript: “” list “.length”
+   Kotlin: “” list “.size”
+   Swift: “” list “.endIndex”
  }
