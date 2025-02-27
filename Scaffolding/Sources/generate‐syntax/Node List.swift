@@ -976,9 +976,9 @@ extension Node {
             kind: .compound(children: [
               Child(name: "type", type: "NativeThingReference", kind: .required),
               Child(name: "firstSlash", type: "SlashSyntax", kind: .required),
-              Child(name: "hold", type: "NativeAction", kind: .required),
+              Child(name: "hold", type: "Literal", kind: .required),
               Child(name: "secondSlash", type: "SlashSyntax", kind: .required),
-              Child(name: "release", type: "NativeAction", kind: .required),
+              Child(name: "release", type: "Literal", kind: .required),
             ])
           ),
           Node(

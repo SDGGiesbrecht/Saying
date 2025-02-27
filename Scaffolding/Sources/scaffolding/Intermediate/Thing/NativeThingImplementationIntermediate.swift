@@ -3,8 +3,8 @@ import SDGText
 struct NativeThingImplementationIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeThingImplementationParameter]
-  var hold: NativeActionImplementationIntermediate?
-  var release: NativeActionImplementationIntermediate?
+  var hold: UnicodeText?
+  var release: UnicodeText?
   var requiredImport: UnicodeText?
   var requiredDeclarations: [NativeRequirementImplementationIntermediate]
 }
@@ -16,8 +16,8 @@ extension NativeThingImplementationIntermediate {
   ) -> Result<NativeThingImplementationIntermediate, ErrorList<ConstructionError>> {
     var errors: [ConstructionError] = []
     let type: ParsedNativeThingReference
-    var holdAction: ParsedNativeAction?
-    var releaseAction: ParsedNativeAction?
+    var holdAction: ParsedLiteral?
+    var releaseAction: ParsedLiteral?
     switch implementation.type {
     case .referenceCounted(let referenceCounted):
       type = referenceCounted.type
@@ -43,13 +43,22 @@ extension NativeThingImplementationIntermediate {
         }
       }
     }
-    var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
-    if let requirements = implementation.requirementsNode?.requirements {
-      switch NativeRequirementImplementationIntermediate.construct(implementation: requirements) {
+    var nativeHold: UnicodeText?
+    if let hold = holdAction {
+      switch LiteralIntermediate.construct(literal: hold) {
       case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeRequirementError($0) }))
-      case .success(let constructed):
-        requiredDeclarations.append(constructed)
+        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+      case .success(let success):
+        nativeHold = UnicodeText(StrictString(success.string))
+      }
+    }
+    var nativeRelease: UnicodeText?
+    if let release = releaseAction {
+      switch LiteralIntermediate.construct(literal: release) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+      case .success(let success):
+        nativeRelease = UnicodeText(StrictString(success.string))
       }
     }
     var requiredImport: UnicodeText?
@@ -61,26 +70,15 @@ extension NativeThingImplementationIntermediate {
         requiredImport = UnicodeText(StrictString(literal.string))
       }
     }
-
-    var nativeHold: NativeActionImplementationIntermediate?
-    if let hold = holdAction {
-      switch NativeActionImplementationIntermediate.construct(implementation: hold) {
+    var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
+    if let requirements = implementation.requirementsNode?.requirements {
+      switch NativeRequirementImplementationIntermediate.construct(implementation: requirements) {
       case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeActionError($0) }))
-      case .success(let success):
-        nativeHold = success
+        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeRequirementError($0) }))
+      case .success(let constructed):
+        requiredDeclarations.append(constructed)
       }
     }
-    var nativeRelease: NativeActionImplementationIntermediate?
-    if let release = releaseAction {
-      switch NativeActionImplementationIntermediate.construct(implementation: release) {
-      case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeActionError($0) }))
-      case .success(let success):
-        nativeRelease = success
-      }
-    }
-
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -123,8 +121,8 @@ extension NativeThingImplementationIntermediate {
     return NativeThingImplementationIntermediate(
       textComponents: textComponents,
       parameters: mappedParameters,
-      hold: hold?.specializing(typeLookup: typeLookup),
-      release: release?.specializing(typeLookup: typeLookup),
+      hold: hold,
+      release: release,
       requiredImport: requiredImport,
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })
     )

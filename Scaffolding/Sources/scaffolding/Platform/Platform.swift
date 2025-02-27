@@ -845,7 +845,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             mode: mode
           )
-          let releaseName = String(release.textComponents.map({ StrictString($0) }).joined())
+          let releaseName = String(StrictString(release))
           entries.append(
             ReferenceCountedReturn(
               localStorageDeclaration: "const \(typeName) \(localName) = \(call);",
