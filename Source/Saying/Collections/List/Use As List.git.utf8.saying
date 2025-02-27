@@ -1,0 +1,30 @@
+ability (clients)
+ (
+  English: use of (thing) as list
+ )
+ {
+  requirement (clients)
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   thing
+ }
+
+extension
+ use of (thing) as list
+ {
+  action (file)
+   [
+    test {verify (use list (empty: thing))}
+   ]
+   (
+    English: use list (list: thing)
+   )
+   truth value
+   {
+    ← true
+   }
+ }

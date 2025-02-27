@@ -27,29 +27,18 @@ extension
    {
    }
 
-  action (file)
-   (
-    English: empty
-    Deutsch: leer
-    français : vide
-    ελληνικά: άδειος
-   )
-   list of (element)
-   C: “g¤(5F)array¤(5F)new¤(28)FALSE, FALSE, sizeof¤(28)” element “¤(29)¤(29)”
-   C♯: “new List<” element “>¤(28)¤(29)”
-   JavaScript: “¤(5B)¤(5D)”
-   Kotlin: “listOf¤(28)¤(29)”
-   Swift: “¤(5B)¤(5D)”
- }
-
-action (file)
- [
-  test {verify (use list (empty: list of (integer)))}
- ]
- (
-  English: use list (list: list of (integer))
- )
- truth value
- {
-  ← true
+  use
+   use of (list of (element)) as list
+   {
+    action (clients)
+     (
+      English: empty
+     )
+     list of (element)
+     C: “g¤(5F)array¤(5F)new¤(28)FALSE, FALSE, sizeof¤(28)” element “¤(29)¤(29)”
+     C♯: “new List<” element “>¤(28)¤(29)”
+     JavaScript: “¤(5B)¤(5D)”
+     Kotlin: “listOf¤(28)¤(29)”
+     Swift: “¤(5B)¤(5D)”
+   }
  }
