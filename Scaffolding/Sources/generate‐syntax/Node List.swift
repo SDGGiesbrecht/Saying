@@ -972,9 +972,26 @@ extension Node {
         ),
         [
           Node(
-            name: "NativeThing",
+            name: "NativeReferenceCountedThing",
             kind: .compound(children: [
               Child(name: "type", type: "NativeThingReference", kind: .required),
+              Child(name: "firstSlash", type: "SlashSyntax", kind: .required),
+              Child(name: "hold", type: "Literal", kind: .required),
+              Child(name: "secondSlash", type: "SlashSyntax", kind: .required),
+              Child(name: "release", type: "Literal", kind: .required),
+            ])
+          ),
+          Node(
+            name: "AnyNativeThing",
+            kind: .alternates([
+              Alternate(name: "referenceCounted", type: "NativeReferenceCountedThing"),
+              Alternate(name: "simple", type: "NativeThingReference"),
+            ])
+          ),
+          Node(
+            name: "NativeThing",
+            kind: .compound(children: [
+              Child(name: "type", type: "AnyNativeThing", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
               Child(name: "requirementsNode", type: "NativeRequirements", kind: .optional),
             ])
