@@ -19,7 +19,21 @@ thing (clients)
    Unicode scalars
  }
 
+action (file)
+ (
+  English: Unicode text skipping normalization of (scalars: Unicode scalars)
+ )
+ Unicode text
+ create
+
 use (clients)
  optional (Unicode text)
  {
+ }
+
+action (unit)
+ example text
+ Unicode text
+ {
+  ← Unicode text skipping normalization of (example scalars)
  }

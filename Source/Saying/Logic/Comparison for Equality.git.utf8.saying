@@ -110,6 +110,12 @@ extension
   use (clients)
    lists of (thing)
    {
+    action (clients)
+     example element
+     thing
+     {
+      ← example
+     }
    }
 
   action (clients)

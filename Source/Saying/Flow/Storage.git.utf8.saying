@@ -51,6 +51,17 @@ extension
    JavaScript: “” storage “ = ” value “”
    Kotlin: “” storage “ = ” value “”
    Swift: “” storage “ = ” value “”
+
+  flow (clients)
+   (
+    English: ignore (result: thing)
+    Deutsch: (Ergebnis: [result]) nicht beachten
+   )
+   C: “” result “”
+   C♯: “” result “”
+   JavaScript: “” result “”
+   Kotlin: “” result “”
+   Swift: “¤(5F) = ” result “”
  }
 
 action

@@ -1,11 +1,11 @@
 ability (clients)
  (
-  English: use of (thing) as list indexed by (index)
+  English: use of (list) as list of (element) indexed by (index)
  )
  {
   requirement (clients)
    (
-    English: beginning of (list: thing)
+    English: beginning of (list: list)
     Deutsch: Anfang von (Liste: [list])
     français : début de (liste: [list])
     ελληνικά: αρχή (κατάλογος: [list])
@@ -14,7 +14,7 @@ ability (clients)
 
   requirement (clients)
    (
-    English: end of (list: thing)
+    English: end of (list: list)
     Deutsch: Ende von (Liste: [list])
     français : fin de (liste: [list])
     ελληνικά: τέλος (κατάλογος: [list])
@@ -22,9 +22,15 @@ ability (clients)
    index
 
   requirement (clients)
+   (
+    English: entry at (index: index) in (list: list)
+   )
+   element
+
+  requirement (clients)
    [
     test {
-     let (• empty list: thing) be (empty: thing)
+     let (• empty list: list) be (empty: list)
      verify ((beginning of (empty list)) is (end of (empty list)))
     }
    ]
@@ -34,5 +40,17 @@ ability (clients)
     français : vide
     ελληνικά: άδειος
    )
-   thing
+   list
+
+  requirement (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     append (example element: element) to (↓ list)
+     ignore (entry at (beginning of (list)) in (list))
+    }
+   ]
+   (
+    English: append (element: element) to (list: ↓ list)
+   )
  }

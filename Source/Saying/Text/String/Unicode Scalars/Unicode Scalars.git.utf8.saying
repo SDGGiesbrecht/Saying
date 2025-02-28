@@ -15,3 +15,13 @@ thing (clients)
  Swift: “String”
  {
  }
+
+action (unit)
+ (
+  English: example scalars
+ )
+ Unicode scalars
+ C♯: “¤(22)¤(22)”
+ Kotlin: “¤(22)¤(22)”
+ Swift: “¤(22)¤(22)”
+ create
