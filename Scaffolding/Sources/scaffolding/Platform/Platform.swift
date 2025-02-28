@@ -805,7 +805,16 @@ extension Platform {
     for argument in action.arguments {
       switch argument {
       case .action(let action):
-        if context?.lookupParameter(action.actionName) != nil {
+        if action.passage == .out {
+          continue
+        } else if localLookup.lookupAction(
+          action.actionName,
+          signature: action.arguments.map({ $0.resolvedResultType!! }),
+          specifiedReturnValue: action.resolvedResultType,
+          externalLookup: referenceLookup
+        ) != nil {
+          continue
+        } else if context?.lookupParameter(action.actionName) != nil {
           continue
         } else {
           entries.append(

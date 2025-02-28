@@ -1,9 +1,33 @@
 ability (clients)
  (
-  English: use of (thing) as list
+  English: use of (thing) as list indexed by (index)
  )
  {
   requirement (clients)
+   (
+    English: beginning of (list: thing)
+    Deutsch: Anfang von (Liste: [list])
+    français : début de (liste: [list])
+    ελληνικά: αρχή (κατάλογος: [list])
+   )
+   index
+
+  requirement (clients)
+   (
+    English: end of (list: thing)
+    Deutsch: Ende von (Liste: [list])
+    français : fin de (liste: [list])
+    ελληνικά: τέλος (κατάλογος: [list])
+   )
+   index
+
+  requirement (clients)
+   [
+    test {
+     let (• empty list: thing) be (empty: thing)
+     verify ((beginning of (empty list)) is (end of (empty list)))
+    }
+   ]
    (
     English: empty
     Deutsch: leer
@@ -11,20 +35,4 @@ ability (clients)
     ελληνικά: άδειος
    )
    thing
- }
-
-extension
- use of (thing) as list
- {
-  action (file)
-   [
-    test {verify (use list (empty: thing))}
-   ]
-   (
-    English: use list (list: thing)
-   )
-   truth value
-   {
-    ← true
-   }
  }
