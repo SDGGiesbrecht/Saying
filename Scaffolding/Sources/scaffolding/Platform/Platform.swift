@@ -805,7 +805,9 @@ extension Platform {
     for argument in action.arguments {
       switch argument {
       case .action(let action):
-        if localLookup.lookupAction(
+        if action.passage == .out {
+          continue
+        } else if localLookup.lookupAction(
           action.actionName,
           signature: action.arguments.map({ $0.resolvedResultType!! }),
           specifiedReturnValue: action.resolvedResultType,
