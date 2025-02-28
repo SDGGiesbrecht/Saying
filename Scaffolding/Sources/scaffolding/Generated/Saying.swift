@@ -1,7 +1,7 @@
 struct ListIndex {
   fileprivate var platform_0020index: Int
 
-  init(_ platform_0020index: Int) {
+  fileprivate init(_ platform_0020index: Int) {
     self.platform_0020index = platform_0020index
   }
 }

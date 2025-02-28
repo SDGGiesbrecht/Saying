@@ -141,7 +141,7 @@ import SDGText
       "    self.init(index)",
       "  }",
       "  var int: Int {",
-      "    return index",
+      "    return platform_0020index",
       "  }",
       "}",
       "",
