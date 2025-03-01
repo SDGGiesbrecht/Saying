@@ -336,7 +336,7 @@ extension ReferenceDictionary {
       for (_, returnGroup) in signatureGroup {
         for (returnValue, action) in returnGroup {
           if returnValue == thing,
-            action.implementation == nil {
+            action.isCreation {
             return action
           }
         }
