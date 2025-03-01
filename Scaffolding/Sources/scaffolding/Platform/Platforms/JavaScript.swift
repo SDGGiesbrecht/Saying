@@ -156,14 +156,16 @@ enum JavaScript: Platform {
     let name = sanitize(identifier: UnicodeText(StrictString(argument)), leading: true)
     return "\(keyword)\(name)Reference = { value: \(argument) }; "
   }
-  static func passReference(to argument: String) -> String {
-    return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
+  static func passReference(to argument: String, forwarding: Bool) -> String {
+    let suffix = forwarding ? "" : "Reference"
+    return "\(argument)\(suffix)"
   }
   static func unpackReference(to argument: String) -> String? {
     return " \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference.value;"
   }
-  static func dereference(throughParameter: String) -> String {
-    return "\(throughParameter).value"
+  static func dereference(throughParameter: String, forwarding: Bool) -> String {
+    let suffix = forwarding ? "" : ".value"
+    return "\(throughParameter)\(suffix)"
   }
 
   static var emptyReturnType: String? {
