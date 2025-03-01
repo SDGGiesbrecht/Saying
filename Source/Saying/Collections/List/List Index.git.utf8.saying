@@ -13,7 +13,7 @@ thing (clients)
 
 action (unit)
  (
-  English: list index at (index: platform fixed‐width integer)
+  English: list index at (platform index: platform fixed‐width integer)
  )
  list index
  create
