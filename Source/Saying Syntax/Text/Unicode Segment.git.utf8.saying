@@ -16,7 +16,20 @@ thing (unit)
    Unicode text
  }
 
+action (unit)
+ (
+  English: Unicode segment at (scalar offset: natural number) containing (source: Unicode text)
+ )
+ Unicode segment
+ create
+
 use (unit)
  lists of (Unicode segment)
  {
+  action (unit)
+   example element
+   Unicode segment
+   {
+    ← Unicode segment at (zero: natural number) containing (example text)
+   }
  }

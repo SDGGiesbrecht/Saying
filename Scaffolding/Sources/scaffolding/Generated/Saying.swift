@@ -1,8 +1,8 @@
 struct ListIndex {
-  fileprivate var index: Int
+  fileprivate var platform_0020index: Int
 
-  fileprivate init(_ index: Int) {
-    self.index = index
+  fileprivate init(_ platform_0020index: Int) {
+    self.platform_0020index = platform_0020index
   }
 }
 
@@ -297,11 +297,11 @@ struct ReplacementParsedRightChevronQuotationMarkSyntax {
 }
 
 func ==(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return (lhs.index == rhs.index)
+  return (lhs.platform_0020index == rhs.platform_0020index)
 }
 
 func <(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return (lhs.index < rhs.index)
+  return (lhs.platform_0020index < rhs.platform_0020index)
 }
 
 func >(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
@@ -344,7 +344,7 @@ extension ListIndex {
     self.init(index)
   }
   var int: Int {
-    return index
+    return platform_0020index
   }
 }
 

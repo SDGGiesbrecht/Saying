@@ -6,14 +6,14 @@ thing (clients)
  {
   part (unit)
    (
-    English: index
+    English: platform index
    )
    platform fixed‐width integer
  }
 
 action (unit)
  (
-  English: list index at (index: platform fixed‐width integer)
+  English: list index at (platform index: platform fixed‐width integer)
  )
  list index
  create
@@ -25,7 +25,7 @@ use (clients)
    (first: list index) is (second: list index)
    truth value
    {
-    ← ((index) of (first)) is ((index) of (second))
+    ← ((platform index) of (first)) is ((platform index) of (second))
    }
 
   action (clients)
@@ -50,7 +50,7 @@ use (clients)
    (first: list index) is less than (second: list index)
    truth value
    {
-    ← ((index) of (first)) is less than ((index) of (second))
+    ← ((platform index) of (first)) is less than ((platform index) of (second))
    }
 
   action (clients)

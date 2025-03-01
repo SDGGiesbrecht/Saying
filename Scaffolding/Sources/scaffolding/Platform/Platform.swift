@@ -76,9 +76,9 @@ protocol Platform {
   static func constructorSetter(name: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
-  static func passReference(to argument: String) -> String
+  static func passReference(to argument: String, forwarding: Bool) -> String
   static func unpackReference(to argument: String) -> String?
-  static func dereference(throughParameter: String) -> String
+  static func dereference(throughParameter: String, forwarding: Bool) -> String
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String) -> String?
@@ -420,6 +420,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
+    isNativeArgument: Bool,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
@@ -445,7 +446,10 @@ extension Platform {
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         let name = String(sanitize(identifier: parameter.names.identifier(), leading: true))
         if parameter.isThrough {
-          return dereference(throughParameter: name)
+          return dereference(
+            throughParameter: name,
+            forwarding: reference.passage == .through && !isNativeArgument
+          )
         } else {
           return name
         }
@@ -572,6 +576,7 @@ extension Platform {
                     context: context,
                     localLookup: localLookup.appending(local),
                     referenceLookup: referenceLookup,
+                    isNativeArgument: true,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -665,6 +670,7 @@ extension Platform {
             context: context,
             localLookup: localLookup.appending(locals),
             referenceLookup: referenceLookup,
+            isNativeArgument: false,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -741,6 +747,7 @@ extension Platform {
                     context: context,
                     localLookup: localLookup,
                     referenceLookup: referenceLookup,
+                    isNativeArgument: false,
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -748,7 +755,8 @@ extension Platform {
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
-                  )
+                  ),
+                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true
                 )
               )
             } else {
@@ -758,6 +766,7 @@ extension Platform {
                   context: context,
                   localLookup: localLookup,
                   referenceLookup: referenceLookup,
+                  isNativeArgument: false,
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -846,6 +855,7 @@ extension Platform {
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
+            isNativeArgument: false,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -887,22 +897,27 @@ extension Platform {
     var entry = ""
     var referenceList: [String] = []
     if needsReferencePreparation {
-      referenceList = statement.passedReferences().map { reference in
-        var extracted: [String] = []
-        return call(
-          to: reference,
-          context: context,
-          localLookup: localLookup,
-          referenceLookup: referenceLookup,
-          contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter,
-          clashAvoidanceCounter: &clashAvoidanceCounter,
-          extractedArguments: &extracted,
-          cleanUpCode: &cleanUpCode,
-          inliningArguments: inliningArguments,
-          mode: mode
-        )
-      }
+      referenceList = statement.passedReferences()
+        .filter({ reference in
+          return context?.parameters.parameter(named: reference.actionName)?.isThrough != true
+        })
+        .map({ reference in
+          var extracted: [String] = []
+          return call(
+            to: reference,
+            context: context,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            isNativeArgument: false,
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
+            extractedArguments: &extracted,
+            cleanUpCode: &cleanUpCode,
+            inliningArguments: inliningArguments,
+            mode: mode
+          )
+        })
       for reference in referenceList {
         if let preparation = prepareReference(
           to: reference,
@@ -951,6 +966,7 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
+          isNativeArgument: false,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,

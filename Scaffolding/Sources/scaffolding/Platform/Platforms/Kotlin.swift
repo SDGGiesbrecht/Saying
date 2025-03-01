@@ -183,14 +183,16 @@ enum Kotlin: Platform {
     let name = sanitize(identifier: UnicodeText(StrictString(argument)), leading: true)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
   }
-  static func passReference(to argument: String) -> String {
-    return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
+  static func passReference(to argument: String, forwarding: Bool) -> String {
+    let suffix = forwarding ? "" : "Reference"
+    return "\(argument)\(suffix)"
   }
   static func unpackReference(to argument: String) -> String? {
     return "; \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference[0]"
   }
-  static func dereference(throughParameter: String) -> String {
-    return "\(throughParameter)[0]"
+  static func dereference(throughParameter: String, forwarding: Bool) -> String {
+    let suffix = forwarding ? "" : "[0]"
+    return "\(throughParameter)\(suffix)"
   }
 
   static var emptyReturnType: String? {

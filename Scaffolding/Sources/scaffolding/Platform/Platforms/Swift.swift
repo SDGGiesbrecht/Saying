@@ -238,13 +238,13 @@ enum Swift: Platform {
   static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
-  static func passReference(to argument: String) -> String {
+  static func passReference(to argument: String, forwarding: Bool) -> String {
     return "&\(argument)"
   }
   static func unpackReference(to argument: String) -> String? {
     return nil
   }
-  static func dereference(throughParameter: String) -> String {
+  static func dereference(throughParameter: String, forwarding: Bool) -> String {
     return throughParameter
   }
 
