@@ -1,0 +1,47 @@
+ability (clients)
+ (
+  English: use of (list) as changeable list of (element) indexed by (index)
+ )
+ {
+  requirement (clients)
+   [
+    test {
+     let (• empty list: list) be (empty: list)
+     verify ((beginning of (empty list)) is (end of (empty list)))
+    }
+   ]
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   list
+
+  requirement (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     append (example element: element) to (↓ list)
+     ignore (entry at (beginning of (list)) in (list))
+    }
+   ]
+   (
+    English: append (element: element) to (list: ↓ list)
+   )
+ }
+
+extension
+ use of (list) as changeable list of (element) indexed by (index)
+ {
+  action (clients)
+   (
+    English: non‐empty example according to use as changeable list
+   )
+   list
+   {
+    let (• list: list) start as (empty: list)
+    append (example element: element) to (↓ list)
+    ← list
+   }
+ }

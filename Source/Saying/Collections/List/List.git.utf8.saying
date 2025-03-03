@@ -77,24 +77,12 @@ extension
 
     action (clients)
      (
-      English: empty
+      English: non‐empty example
      )
      list of (element)
-     C: “g¤(5F)array¤(5F)new¤(28)FALSE, FALSE, sizeof¤(28)” element “¤(29)¤(29)”
-     C♯: “new List<” element “>¤(28)¤(29)”
-     JavaScript: “¤(5B)¤(5D)”
-     Kotlin: “listOf¤(28)¤(29)”
-     Swift: “¤(5B)¤(5D)”
-
-    action (clients)
-     (
-      English: append (element: element) to (list: ↓ list of (element))
-     )
-     C: “g¤(5F)array¤(5F)append¤(5F)val¤(28)” list “, ” element “¤(29)”
-     C♯: “” list “.Add¤(28)” element “¤(29)”
-     JavaScript: “” list “.push¤(28)” element “¤(29)”
-     Kotlin: “” list “ += ” element “”
-     Swift: “” list “.append¤(28)” element “¤(29)”
+     {
+      ← non‐empty example according to use as changeable list
+     }
    }
 
   action (file)
@@ -129,4 +117,29 @@ extension
    JavaScript: “” list “¤(5B)” index “¤(5D)”
    Kotlin: “” list “¤(5B)” index “¤(5D)”
    Swift: “” list “¤(5B)” index “¤(5D)”
+
+  use
+   use of (list of (element)) as changeable list of (element) indexed by (list index)
+   {
+    action (clients)
+     (
+      English: empty
+     )
+     list of (element)
+     C: “g¤(5F)array¤(5F)new¤(28)FALSE, FALSE, sizeof¤(28)” element “¤(29)¤(29)”
+     C♯: “new List<” element “>¤(28)¤(29)”
+     JavaScript: “¤(5B)¤(5D)”
+     Kotlin: “listOf¤(28)¤(29)”
+     Swift: “¤(5B)¤(5D)”
+
+    action (clients)
+     (
+      English: append (element: element) to (list: ↓ list of (element))
+     )
+     C: “g¤(5F)array¤(5F)append¤(5F)val¤(28)” list “, ” element “¤(29)”
+     C♯: “” list “.Add¤(28)” element “¤(29)”
+     JavaScript: “” list “.push¤(28)” element “¤(29)”
+     Kotlin: “” list “ += ” element “”
+     Swift: “” list “.append¤(28)” element “¤(29)”
+   }
  }
