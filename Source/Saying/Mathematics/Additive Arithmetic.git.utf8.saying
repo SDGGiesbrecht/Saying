@@ -206,3 +206,34 @@ ability (clients)
    )
    number
  }
+
+extension
+ additive arithmetic with (number)
+ {
+  action (clients)
+   (
+    English: example augend according to additive arithmetic
+   )
+   number
+   {
+    ← zero
+   }
+
+  action (clients)
+   (
+    English: example addend according to additive arithmetic
+   )
+   number
+   {
+    ← one
+   }
+
+  action (clients)
+   (
+    English: example sum according to additive arithmetic
+   )
+   number
+   {
+    ← one
+   }
+ }

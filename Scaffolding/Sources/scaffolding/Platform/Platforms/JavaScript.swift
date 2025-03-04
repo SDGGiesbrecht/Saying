@@ -157,8 +157,11 @@ enum JavaScript: Platform {
     return "\(keyword)\(name)Reference = { value: \(argument) }; "
   }
   static func passReference(to argument: String, forwarding: Bool) -> String {
-    let suffix = forwarding ? "" : "Reference"
-    return "\(argument)\(suffix)"
+    if forwarding {
+      return argument
+    } else {
+      return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
+    }
   }
   static func unpackReference(to argument: String) -> String? {
     return " \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference.value;"

@@ -132,6 +132,58 @@ use (clients)
  }
 
 use (clients)
+ addition of (natural number)
+ {
+  action (clients)
+   (
+    English: add (addend: natural number) to (cumulative sum: ↓ natural number)
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “” cumulative sum “ += ” addend “”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: natural number) plus (addend: natural number)
+   )
+   natural number
+   C: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   C♯: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   JavaScript: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   Kotlin: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   Swift: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+
+  action (clients)
+   (
+    English: example augend
+   )
+   natural number
+   {
+    ← example augend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example addend
+   )
+   natural number
+   {
+    ← example addend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example sum
+   )
+   natural number
+   {
+    ← example sum according to additive arithmetic
+   }
+ }
+
+use (clients)
  additive arithmetic with (natural number)
  {
   action (clients)
