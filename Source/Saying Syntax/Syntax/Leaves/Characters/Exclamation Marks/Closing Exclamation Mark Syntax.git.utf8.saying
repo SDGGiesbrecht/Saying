@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: closing exclamation mark syntax
+  Deutsch: Schließausrufezeichensyntax
+  français : syntaxe de point d’exclamation fermant
+  Swift: ClosingExclamationMarkSyntax
+ )
+ {
+ }

@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: opening question mark syntax
+  Deutsch: Offenfragezeichensyntax
+  français : syntaxe de point d’interrogation ouvrant
+  Swift: OpeningQuestionMarkSyntax
+ )
+ {
+ }

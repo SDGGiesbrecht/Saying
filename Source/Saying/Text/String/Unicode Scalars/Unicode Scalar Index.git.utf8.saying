@@ -50,7 +50,7 @@ use (clients)
   action (clients)
    (first: Unicode scalar index) is not (second: Unicode scalar index)
    truth value
-   Swift: “” first “ ¤(21)= ” second “”
+   Swift: “” first “ != ” second “”
    {
     ← not ((first) is (second))
    }
@@ -85,7 +85,7 @@ use (clients)
   action (clients)
    (first: optional (Unicode scalar index)) is not (second: optional (Unicode scalar index))
    truth value
-   Swift: “” first “ ¤(21)= ” second “”
+   Swift: “” first “ != ” second “”
    {
     ← (first) is not (second) according to optional
    }
