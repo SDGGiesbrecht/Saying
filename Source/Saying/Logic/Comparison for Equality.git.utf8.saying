@@ -130,7 +130,7 @@ extension
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
    )
    truth value
-   Swift: «¤(28)» first “ == ” second „¤(29)“ {“extension ” thing “: Equatable ¤(7B)¤(7D)”}
+   Swift: «» first “ == ” second „“ {“extension ” thing “: Equatable ¤(7B)¤(7D)”}
    {
     if (first) exists, unwrap it as (• first value: thing), {
      if (second) exists, unwrap it as (• second value: thing), {
@@ -153,7 +153,7 @@ extension
     English: (first: optional (thing)) is not (second: optional (thing)) according to optional
    )
    truth value
-   Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“ {“extension ” thing “: Equatable ¤(7B)¤(7D)”}
+   Swift: «» first “ ¤(21)= ” second „“ {“extension ” thing “: Equatable ¤(7B)¤(7D)”}
    {
     ← not ((first) is (second) according to optional)
    }

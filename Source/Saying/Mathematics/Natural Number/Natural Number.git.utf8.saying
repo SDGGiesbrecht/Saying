@@ -54,20 +54,20 @@ use (clients)
   action (clients)
    (first: natural number) is (second: natural number)
    truth value
-   C: “¤(28)” first “ == ” second “¤(29)”
-   C♯: “¤(28)” first “ == ” second “¤(29)”
-   JavaScript: “¤(28)” first “ == ” second “¤(29)”
-   Kotlin: “¤(28)” first “ == ” second “¤(29)”
-   Swift: «¤(28)» first “ == ” second „¤(29)“
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
 
   action (clients)
    (first: natural number) is not (second: natural number)
    truth value
-   C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+   C: “” first “ ¤(21)= ” second “”
+   C♯: “” first “ ¤(21)= ” second “”
+   JavaScript: “” first “ ¤(21)= ” second “”
+   Kotlin: “” first “ ¤(21)= ” second “”
+   Swift: «» first “ ¤(21)= ” second „“
 
   action (clients)
    example
@@ -90,38 +90,38 @@ use (clients)
   action (clients)
    (first: natural number) is less than (second: natural number)
    truth value
-   C: “¤(28)” first “ < ” second “¤(29)”
-   C♯: “¤(28)” first “ < ” second “¤(29)”
-   JavaScript: “¤(28)” first “ < ” second “¤(29)”
-   Kotlin: “¤(28)” first “ < ” second “¤(29)”
-   Swift: «¤(28)» first “ < ” second „¤(29)“
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
+   Swift: «» first “ < ” second „“
 
   action (clients)
    (first: natural number) is greater than (second: natural number)
    truth value
-   C: “¤(28)” first “ > ” second “¤(29)”
-   C♯: “¤(28)” first “ > ” second “¤(29)”
-   JavaScript: “¤(28)” first “ > ” second “¤(29)”
-   Kotlin: “¤(28)” first “ > ” second “¤(29)”
-   Swift: «¤(28)» first “ > ” second „¤(29)“
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: «» first “ > ” second „“
 
   action (clients)
    (first: natural number) is less than or equal to (second: natural number)
    truth value
-   C: “¤(28)” first “ <= ” second “¤(29)”
-   C♯: “¤(28)” first “ <= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ <= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ <= ” second “¤(29)”
-   Swift: «¤(28)» first “ <= ” second „¤(29)“
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: «» first “ <= ” second „“
 
   action (clients)
    (first: natural number) is greater than or equal to (second: natural number)
    truth value
-   C: “¤(28)” first “ >= ” second “¤(29)”
-   C♯: “¤(28)” first “ >= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ >= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ >= ” second “¤(29)”
-   Swift: «¤(28)» first “ >= ” second „¤(29)“
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: «» first “ >= ” second „“
 
   action (clients)
    greater example
@@ -149,11 +149,11 @@ use (clients)
     English: (augend: natural number) plus (addend: natural number)
    )
    natural number
-   C: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
-   C♯: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
-   JavaScript: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
-   Kotlin: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
-   Swift: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   C: “” augend “ + ” addend “”
+   C♯: “” augend “ + ” addend “”
+   JavaScript: “” augend “ + ” addend “”
+   Kotlin: “” augend “ + ” addend “”
+   Swift: “” augend “ + ” addend “”
 
   action (clients)
    (

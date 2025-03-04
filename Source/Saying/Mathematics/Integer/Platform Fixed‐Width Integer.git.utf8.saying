@@ -21,20 +21,20 @@ use (clients)
   action (clients)
    (first: platform fixed‐width integer) is (second: platform fixed‐width integer)
    truth value
-   C: “¤(28)” first “ == ” second “¤(29)”
-   C♯: “¤(28)” first “ == ” second “¤(29)”
-   JavaScript: “¤(28)” first “ == ” second “¤(29)”
-   Kotlin: “¤(28)” first “ == ” second “¤(29)”
-   Swift: «¤(28)» first “ == ” second „¤(29)“
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
 
   action (clients)
    (first: platform fixed‐width integer) is not (second: platform fixed‐width integer)
    truth value
-   C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+   C: “” first “ ¤(21)= ” second “”
+   C♯: “” first “ ¤(21)= ” second “”
+   JavaScript: “” first “ ¤(21)= ” second “”
+   Kotlin: “” first “ ¤(21)= ” second “”
+   Swift: «» first “ ¤(21)= ” second „“
 
   action (clients)
    example
@@ -57,38 +57,38 @@ use (clients)
   action (clients)
    (first: platform fixed‐width integer) is less than (second: platform fixed‐width integer)
    truth value
-   C: “¤(28)” first “ < ” second “¤(29)”
-   C♯: “¤(28)” first “ < ” second “¤(29)”
-   JavaScript: “¤(28)” first “ < ” second “¤(29)”
-   Kotlin: “¤(28)” first “ < ” second “¤(29)”
-   Swift: «¤(28)» first “ < ” second „¤(29)“
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
+   Swift: «» first “ < ” second „“
 
   action (clients)
    (first: platform fixed‐width integer) is greater than (second: platform fixed‐width integer)
    truth value
-   C: “¤(28)” first “ > ” second “¤(29)”
-   C♯: “¤(28)” first “ > ” second “¤(29)”
-   JavaScript: “¤(28)” first “ > ” second “¤(29)”
-   Kotlin: “¤(28)” first “ > ” second “¤(29)”
-   Swift: «¤(28)» first “ > ” second „¤(29)“
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: «» first “ > ” second „“
 
   action (clients)
    (first: platform fixed‐width integer) is less than or equal to (second: platform fixed‐width integer)
    truth value
-   C: “¤(28)” first “ <= ” second “¤(29)”
-   C♯: “¤(28)” first “ <= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ <= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ <= ” second “¤(29)”
-   Swift: «¤(28)» first “ <= ” second „¤(29)“
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: «» first “ <= ” second „“
 
   action (clients)
    (first: platform fixed‐width integer) is greater than or equal to (second: platform fixed‐width integer)
    truth value
-   C: “¤(28)” first “ >= ” second “¤(29)”
-   C♯: “¤(28)” first “ >= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ >= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ >= ” second “¤(29)”
-   Swift: «¤(28)» first “ >= ” second „¤(29)“
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: «» first “ >= ” second „“
 
   action (clients)
    greater example

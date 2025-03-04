@@ -127,11 +127,11 @@ action (clients)
   עברית +: ¬(ערך: [negand])
  )
  truth value
- C: “¤(28)¤(21)” negand “¤(29)”
- C♯: “¤(28)¤(21)” negand “¤(29)”
- JavaScript: “¤(28)¤(21)” negand “¤(29)”
- Kotlin: “¤(28)¤(21)” negand “¤(29)”
- Swift: «¤(28)¤(21)» negand “¤(29)”
+ C: “¤(21)” negand “”
+ C♯: “¤(21)” negand “”
+ JavaScript: “¤(21)” negand “”
+ Kotlin: “¤(21)” negand “”
+ Swift: «¤(21)» negand “”
 
 action (clients)
  [
@@ -171,11 +171,11 @@ action (clients)
   עברית +: (ראשון: [first]) ∧ (שני: [second])
  )
  truth value
- C: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
- C♯: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
- JavaScript: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
- Kotlin: “¤(28)” first “ ¤(26)¤(26) ” second “¤(29)”
- Swift: «¤(28)» first “ ¤(26)¤(26) ” second „¤(29)“
+ C: “” first “ ¤(26)¤(26) ” second “”
+ C♯: “” first “ ¤(26)¤(26) ” second “”
+ JavaScript: “” first “ ¤(26)¤(26) ” second “”
+ Kotlin: “” first “ ¤(26)¤(26) ” second “”
+ Swift: «» first “ ¤(26)¤(26) ” second „“
 
 action (clients)
  [
@@ -215,11 +215,11 @@ action (clients)
   עברית +: (ראשון: [first]) ∨ (שני: [second])
  )
  truth value
- C: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
- C♯: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
- JavaScript: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
- Kotlin: “¤(28)” first “ ¤(7C)¤(7C) ” second “¤(29)”
- Swift: «¤(28)» first “ ¤(7C)¤(7C) ” second „¤(29)“
+ C: “” first “ ¤(7C)¤(7C) ” second “”
+ C♯: “” first “ ¤(7C)¤(7C) ” second “”
+ JavaScript: “” first “ ¤(7C)¤(7C) ” second “”
+ Kotlin: “” first “ ¤(7C)¤(7C) ” second “”
+ Swift: «» first “ ¤(7C)¤(7C) ” second „“
 
 use (clients)
  comparison of (truth value) for equality
@@ -233,11 +233,11 @@ use (clients)
    ]
    (first: truth value) is (second: truth value)
    truth value
-   C: “¤(28)” first “ == ” second “¤(29)”
-   C♯: “¤(28)” first “ == ” second “¤(29)”
-   JavaScript: “¤(28)” first “ == ” second “¤(29)”
-   Kotlin: “¤(28)” first “ == ” second “¤(29)”
-   Swift: «¤(28)» first “ == ” second „¤(29)“
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
 
   action (clients)
    [
@@ -248,11 +248,11 @@ use (clients)
    ]
    (first: truth value) is not (second: truth value)
    truth value
-   C: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   C♯: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   JavaScript: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   Kotlin: “¤(28)” first “ ¤(21)= ” second “¤(29)”
-   Swift: «¤(28)» first “ ¤(21)= ” second „¤(29)“
+   C: “” first “ ¤(21)= ” second “”
+   C♯: “” first “ ¤(21)= ” second “”
+   JavaScript: “” first “ ¤(21)= ” second “”
+   Kotlin: “” first “ ¤(21)= ” second “”
+   Swift: «» first “ ¤(21)= ” second „“
 
   action (clients)
    example
