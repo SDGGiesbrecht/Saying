@@ -305,7 +305,7 @@ func <(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
 }
 
 func >(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return (rhs < lhs)
+  return rhs < lhs
 }
 
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
@@ -318,14 +318,14 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
 }
 
 func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
-  return (lhs.segment == rhs.segment) && lhs.scalar == rhs.scalar
+  return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
 
 func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
-  if (lhs.segment < rhs.segment) {
+  if lhs.segment < rhs.segment {
     return true
   }
-  if (lhs.segment > rhs.segment) {
+  if lhs.segment > rhs.segment {
     return false
   }
   if let first_0020scalar = lhs.scalar {

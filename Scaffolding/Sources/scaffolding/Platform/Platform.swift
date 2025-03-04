@@ -515,6 +515,9 @@ extension Platform {
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
         )
       }
+      if result.joined().contains("(rhs < lhs)") {
+        print("519", result.joined())
+      }
       return result.joined(separator: "\n\(indent)")
     }
   }
@@ -636,6 +639,9 @@ extension Platform {
             }
           }
         }
+      }
+      if accumulator.contains("(rhs < lhs)") {
+        print("644", accumulator)
       }
       if let before = beforeCleanUp {
         cleanUpCode = accumulator
@@ -788,7 +794,7 @@ extension Platform {
         } else {
           let nameStart = name.unicodeScalars.first(where: { $0 != "_" }).map({ String($0) }) ?? ""
           if sanitize(identifier: UnicodeText(StrictString(nameStart)), leading: false) != nameStart {
-            return "(\(argumentsArray.joined(separator: " \(name) ")))"
+            return "\(argumentsArray.joined(separator: " \(name) "))"
           } else {
             let arguments = argumentsArray.joined(separator: ", ")
             return "\(name)(\(arguments))"
@@ -1000,6 +1006,9 @@ extension Platform {
     }
     let presentIndent = String(repeating: indent, count: indentationLevel)
     entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)
+    if entry.contains("(rhs < lhs)") {
+      print("1004", entry)
+    }
     return entry.prepending(contentsOf: presentIndent)
   }
 
@@ -1120,6 +1129,9 @@ extension Platform {
       if !cleanUpCode.isEmpty {
         inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
       }
+    }
+    if inOrder.joined().contains("(rhs < lhs)") {
+      print("1125", inOrder.joined())
     }
     return inOrder
   }
