@@ -190,7 +190,7 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+        textComponents: ["(", ").", ""].map({ UnicodeText($0) }),
         parameters: [
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
           NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
