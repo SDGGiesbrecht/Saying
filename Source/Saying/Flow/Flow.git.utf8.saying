@@ -6,11 +6,11 @@ flow (clients)
   ελληνικά: αν (όρος: [condition]), (επακόλουθο: [consequence])
   עברית: אם (תנאי: [condition]), (תוצאה: [consequence])
  )
- C: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
- C♯: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
- JavaScript: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
- Kotlin: “if ¤(28)” condition “¤(29) ¤(7B)” consequence “¤(7D)”
- Swift: “if ” condition “ ¤(7B)” consequence “¤(7D)”
+ C: “if (” condition “) {” consequence “}”
+ C♯: “if (” condition “) {” consequence “}”
+ JavaScript: “if (” condition “) {” consequence “}”
+ Kotlin: “if (” condition “) {” consequence “}”
+ Swift: “if ” condition “ {” consequence “}”
 
 extension
  optional (thing)
@@ -73,7 +73,7 @@ flow (clients)
   ελληνικά: στη συγύρισμα (συγύρισμα: [clean‐up])
  )
  C: “” − “” clean‐up “”
- C♯: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
- JavaScript: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
- Kotlin: “try ¤(7B)” − “¤(7D) finally ¤(7B)” clean‐up “¤(7D)”
- Swift: “defer ¤(7B)” clean‐up “¤(7D)”
+ C♯: “try {” − “} finally {” clean‐up “}”
+ JavaScript: “try {” − “} finally {” clean‐up “}”
+ Kotlin: “try {” − “} finally {” clean‐up “}”
+ Swift: “defer {” clean‐up “}”

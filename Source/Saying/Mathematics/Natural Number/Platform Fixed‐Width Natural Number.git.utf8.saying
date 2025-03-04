@@ -36,11 +36,11 @@ use (clients)
   action (clients)
    (first: platform fixed‐width natural number) is not (second: platform fixed‐width natural number)
    truth value
-   C: “” first “ ¤(21)= ” second “”
-   C♯: “” first “ ¤(21)= ” second “”
-   JavaScript: “” first “ ¤(21)= ” second “”
-   Kotlin: “” first “ ¤(21)= ” second “”
-   Swift: «» first “ ¤(21)= ” second „“
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
 
   action (clients)
    example

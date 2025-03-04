@@ -44,6 +44,12 @@ struct ClosingParenthesisSyntax {
   }
 }
 
+struct ClosingQuestionMarkSyntax {
+
+  init() {
+  }
+}
+
 struct ColonCharacterSyntax {
 
   init() {
@@ -86,6 +92,18 @@ struct NinesQuotationMarkSyntax {
   }
 }
 
+struct OpeningExclamationMarkSyntax {
+
+  init() {
+  }
+}
+
+struct OpeningQuestionMarkSyntax {
+
+  init() {
+  }
+}
+
 struct OpeningParenthesisSyntax {
 
   init() {
@@ -111,6 +129,18 @@ struct RightChevronQuotationMarkSyntax {
 }
 
 struct RightArrowSyntax {
+
+  init() {
+  }
+}
+
+struct RightToLeftQuestionMarkSyntax {
+
+  init() {
+  }
+}
+
+struct ClosingExclamationMarkSyntax {
 
   init() {
   }

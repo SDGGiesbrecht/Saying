@@ -1,0 +1,9 @@
+thing (clients)
+ (
+  English: opening exclamation mark syntax
+  Deutsch: Offenausrufezeichensyntax
+  français : syntaxe de point d’exclamation ouvrant
+  Swift: OpeningExclamationMarkSyntax
+ )
+ {
+ }

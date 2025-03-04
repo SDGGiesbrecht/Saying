@@ -127,11 +127,11 @@ action (clients)
   עברית +: ¬(ערך: [negand])
  )
  truth value
- C: “¤(21)” negand “”
- C♯: “¤(21)” negand “”
- JavaScript: “¤(21)” negand “”
- Kotlin: “¤(21)” negand “”
- Swift: «¤(21)» negand “”
+ C: “!” negand “”
+ C♯: “!” negand “”
+ JavaScript: “!” negand “”
+ Kotlin: “!” negand “”
+ Swift: «!» negand “”
 
 action (clients)
  [
@@ -248,11 +248,11 @@ use (clients)
    ]
    (first: truth value) is not (second: truth value)
    truth value
-   C: “” first “ ¤(21)= ” second “”
-   C♯: “” first “ ¤(21)= ” second “”
-   JavaScript: “” first “ ¤(21)= ” second “”
-   Kotlin: “” first “ ¤(21)= ” second “”
-   Swift: «» first “ ¤(21)= ” second „“
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
 
   action (clients)
    example
