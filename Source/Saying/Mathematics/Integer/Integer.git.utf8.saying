@@ -126,6 +126,58 @@ use (clients)
  }
 
 use (clients)
+ addition of (integer)
+ {
+  action (clients)
+   (
+    English: add (addend: integer) to (cumulative sum: ↓ integer)
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “” cumulative sum “ += ” addend “”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: integer) plus (addend: integer)
+   )
+   integer
+   C: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   C♯: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   JavaScript: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   Kotlin: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+   Swift: “¤(28)” augend “¤(29) + ¤(28)” addend “¤(29)”
+
+  action (clients)
+   (
+    English: example augend
+   )
+   integer
+   {
+    ← example augend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example addend
+   )
+   integer
+   {
+    ← example addend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example sum
+   )
+   integer
+   {
+    ← example sum according to additive arithmetic
+   }
+ }
+
+use (clients)
  additive arithmetic with (integer)
  {
   action (clients)
