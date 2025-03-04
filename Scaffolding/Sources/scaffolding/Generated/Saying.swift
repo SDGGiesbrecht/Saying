@@ -297,15 +297,15 @@ struct ReplacementParsedRightChevronQuotationMarkSyntax {
 }
 
 func ==(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return (lhs.platform_0020index == rhs.platform_0020index)
+  return lhs.platform_0020index == rhs.platform_0020index
 }
 
 func <(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return (lhs.platform_0020index < rhs.platform_0020index)
+  return lhs.platform_0020index < rhs.platform_0020index
 }
 
 func >(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return (rhs < lhs)
+  return rhs < lhs
 }
 
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
@@ -313,24 +313,24 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
     return cached
   }
   let result: Set<Unicode.Scalar> = compute()
-  cache = (result) as Set<Unicode.Scalar>?
+  cache = result as Set<Unicode.Scalar>?
   return result
 }
 
 func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
-  return ((lhs.segment == rhs.segment) && (lhs.scalar == rhs.scalar))
+  return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
 
 func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
-  if (lhs.segment < rhs.segment) {
+  if lhs.segment < rhs.segment {
     return true
   }
-  if (lhs.segment > rhs.segment) {
+  if lhs.segment > rhs.segment {
     return false
   }
   if let first_0020scalar = lhs.scalar {
     if let second_0020scalar = rhs.scalar {
-      return (first_0020scalar < second_0020scalar)
+      return first_0020scalar < second_0020scalar
     }
     return true
   }

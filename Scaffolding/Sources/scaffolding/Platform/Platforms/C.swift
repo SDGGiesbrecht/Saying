@@ -59,7 +59,7 @@ enum C: Platform {
       if ignoringValue {
         return "\(type)_case_\(name)"
       } else {
-        return "((\(type)) {\(type)_case_\(name)})"
+        return "(\(type)) {\(type)_case_\(name)}"
       }
     }
   }
@@ -183,7 +183,7 @@ enum C: Platform {
     return ""
   }
   static func createInstance(of type: String, parts: String) -> String {
-    return "((\(type)) {\(parts)})"
+    return "(\(type)) {\(parts)}"
   }
   static var needsReferencePreparation: Bool {
     return false

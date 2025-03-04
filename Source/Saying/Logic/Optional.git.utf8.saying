@@ -23,9 +23,9 @@ extension
       ελληνικά: κάτι
      )
      thing
-     JavaScript: “¤(28)” value “¤(29)”/“let resolvedOptional = ” enumeration “; if ¤(28)resolvedOptional ¤(21)== null¤(29) ¤(7B) const ” value “ = resolvedOptional; ¤(7B)” consequence “¤(7D)¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)== null”
-     Kotlin: “¤(28)” value “¤(29)”/“val resolvedOptional = ” enumeration “; if ¤(28)resolvedOptional ¤(21)= null¤(29) ¤(7B) val ” value “ = resolvedOptional;” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= null”
-     Swift: “¤(28)” value “¤(29) as ” thing “¤(3F)”/“if let ” value “ = ¤(28)” enumeration “¤(29) ¤(7B)” consequence “¤(7D)”/“¤(28)” enumeration “¤(29) ¤(21)= nil”
+     JavaScript: “” value “”/“let resolvedOptional = ” enumeration “; if ¤(28)resolvedOptional ¤(21)== null¤(29) ¤(7B) const ” value “ = resolvedOptional; ¤(7B)” consequence “¤(7D)¤(7D)”/“” enumeration “ ¤(21)== null”
+     Kotlin: “” value “”/“val resolvedOptional = ” enumeration “; if ¤(28)resolvedOptional ¤(21)= null¤(29) ¤(7B) val ” value “ = resolvedOptional;” consequence “¤(7D)”/“” enumeration “ ¤(21)= null”
+     Swift: “” value “ as ” thing “¤(3F)”/“if let ” value “ = ” enumeration “ ¤(7B)” consequence “¤(7D)”/“” enumeration “ ¤(21)= nil”
 
     case
      (
@@ -34,9 +34,9 @@ extension
       français : rien
       ελληνικά: τίποτα
      )
-     JavaScript: “¤(28)null¤(29)”
-     Kotlin: “¤(28)null¤(29)”
-     Swift: “¤(28)nil¤(29)”
+     JavaScript: “null”
+     Kotlin: “null”
+     Swift: “nil”
    }
 
   use (clients)
@@ -61,9 +61,9 @@ extension
     עברית: יש (דבר: [thing])
    )
    truth value
-   JavaScript: “¤(28)” thing “¤(29) ¤(21)== null”
-   Kotlin: “¤(28)” thing “¤(29) ¤(21)= null”
-   Swift: “¤(28)” thing “¤(29) ¤(21)= nil”
+   JavaScript: “” thing “ ¤(21)== null”
+   Kotlin: “” thing “ ¤(21)= null”
+   Swift: “” thing “ ¤(21)= nil”
    {
     ← (thing) is case (something)
    }
@@ -80,9 +80,9 @@ extension
     עברית: אין (דבר: [thing])
    )
    truth value
-   JavaScript: “¤(28)” thing “¤(29) === null”
-   Kotlin: “¤(28)” thing “¤(29) == null”
-   Swift: “¤(28)” thing “¤(29) == nil”
+   JavaScript: “” thing “ === null”
+   Kotlin: “” thing “ == null”
+   Swift: “” thing “ == nil”
    {
     ← (thing) is case (nothing)
    }
