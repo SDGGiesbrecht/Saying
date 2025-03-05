@@ -6,8 +6,7 @@ ability (clients)
   requirement (clients)
    [
     test {
-     let (• empty list: list) be (empty: list)
-     verify ((beginning of (empty list)) is (end of (empty list)))
+     verify ((empty: list) is empty)
     }
    ]
    (
