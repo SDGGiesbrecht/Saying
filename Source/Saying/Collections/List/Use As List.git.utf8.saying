@@ -55,6 +55,23 @@ ability (clients)
    )
    element
 
+  choice (clients)
+   [
+    test {
+     verify (not ((non‐empty example: list) is empty))
+    }
+   ]
+   (
+    English: (list: list) is empty
+    Deutsch: (Liste: [list]) ist leer
+    français : (liste: [list]) est vide
+    ελληνικά: (κατάλογος: [list]) είναι άδειος
+   )
+   truth value
+   {
+    ← (beginning of (list)) is (end of (list))
+   }
+
   requirement (clients)
    (
     English: non‐empty example
