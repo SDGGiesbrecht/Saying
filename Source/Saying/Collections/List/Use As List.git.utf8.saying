@@ -31,6 +31,22 @@ ability (clients)
    [
     test {
      let (• non‐empty: list) be (non‐empty example: list)
+     let (• beginning: index) be (beginning of (non‐empty))
+     verify ((index after (beginning) in (non‐empty)) is not (beginning))
+    }
+   ]
+   (
+    English: index after (index: index) in (list: list)
+    Deutsch : Index nach (Index: [index]) in (Liste: [list])
+    français : indice après (indice: [index]) dans (liste: [list])
+    ελληνικά: δείκτης μετά (δείκτης: [index]) σε (κατάλογος: [list])
+   )
+   index
+
+  requirement (clients)
+   [
+    test {
+     let (• non‐empty: list) be (non‐empty example: list)
      ignore (entry at (beginning of (non‐empty)) in (non‐empty))
     }
    ]
