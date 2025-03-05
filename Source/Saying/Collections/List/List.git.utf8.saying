@@ -68,6 +68,15 @@ extension
 
     action (clients)
      (
+      English: index after (index: list index) in (list: list of (element))
+     )
+     list index
+     {
+      ← list index at (platform index after ((platform index) of (index)) in (list))
+     }
+
+    action (clients)
+     (
       English: entry at (index: list index) in (list: list of (element))
      )
      element
@@ -106,6 +115,17 @@ extension
    JavaScript: “” list “.length”
    Kotlin: “” list “.size”
    Swift: “” list “.endIndex”
+
+  action (file)
+   (
+    English: platform index after (index: platform fixed‐width integer) in (list: list of (element))
+   )
+   platform fixed‐width integer
+   C: “” index “ + 1”
+   C♯: “” index “ + 1”
+   JavaScript: “” index “ + 1”
+   Kotlin: “” index “ + 1”
+   Swift: “” list “.index(after: ” index “)”
 
   action (file)
    (
