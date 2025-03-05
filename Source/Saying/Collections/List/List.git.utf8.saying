@@ -97,6 +97,17 @@ extension
 
     action (clients)
      (
+      English: (list: list of (element)) is not empty
+     )
+     truth value
+     C: “” list “¤(2D)>len != 0”
+     C♯: “” list “.Count != 0”
+     JavaScript: “” list “.length != 0”
+     Kotlin: “” list “.isNotEmpty()”
+     Swift: “!” list “.isEmpty”
+
+    action (clients)
+     (
       English: non‐empty example
      )
      list of (element)
