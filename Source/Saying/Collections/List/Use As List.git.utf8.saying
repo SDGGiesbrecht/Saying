@@ -9,6 +9,7 @@ ability (clients)
     Deutsch: Anfang von (Liste: [list])
     français : début de (liste: [list])
     ελληνικά: αρχή (κατάλογος: [list])
+    Swift: var (self: [list]).startIndex
    )
    index
 
@@ -24,6 +25,7 @@ ability (clients)
     Deutsch: Ende von (Liste: [list])
     français : fin de (liste: [list])
     ελληνικά: τέλος (κατάλογος: [list])
+    Swift: var (self: [list]).endIndex
    )
    index
 

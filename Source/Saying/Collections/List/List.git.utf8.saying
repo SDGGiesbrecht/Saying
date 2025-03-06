@@ -53,36 +53,44 @@ extension
       English: beginning of (list: list of (element))
      )
      list index
-     {
-      ← list index at (platform index at beginning of (list))
-     }
+     C: “0”
+     C♯: “0”
+     JavaScript: “0”
+     Kotlin: “0”
+     Swift: “” list “.startIndex”
 
     action (clients)
      (
       English: end of (list: list of (element))
      )
      list index
-     {
-      ← list index at (platform index at end of (list))
-     }
+     C: “” list “¤(2D)>len”
+     C♯: “” list “.Count”
+     JavaScript: “” list “.length”
+     Kotlin: “” list “.size”
+     Swift: “” list “.endIndex”
 
     action (clients)
      (
       English: index after (index: list index) in (list: list of (element))
      )
      list index
-     {
-      ← list index at (platform index after ((platform index) of (index)) in (list))
-     }
+     C: “” index “ + 1”
+     C♯: “” index “ + 1”
+     JavaScript: “” index “ + 1”
+     Kotlin: “” index “ + 1”
+     Swift: “” list “.index(after: ” index “)”
 
     action (clients)
      (
       English: entry at (index: list index) in (list: list of (element))
      )
      element
-     {
-      ← entry at ((platform index) of (index: list index)) in (list)
-     }
+     C: “g¤(5F)array¤(5F)index(” list “, ” element “, ” index “)”
+     C♯: “” list “[” index “]”
+     JavaScript: “” list “[” index “]”
+     Kotlin: “” list “[” index “]”
+     Swift: “” list “[” index “]”
 
     action (clients)
      (
@@ -114,50 +122,6 @@ extension
       ← non‐empty example according to use as changeable list
      }
    }
-
-  action (file)
-   (
-    English: platform index at beginning of (list: list of (element))
-   )
-   platform fixed‐width integer
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0”
-   Swift: “” list “.startIndex”
-
-  action (file)
-   (
-    English: platform index at end of (list: list of (element))
-   )
-   platform fixed‐width integer
-   C: “” list “¤(2D)>len”
-   C♯: “” list “.Count”
-   JavaScript: “” list “.length”
-   Kotlin: “” list “.size”
-   Swift: “” list “.endIndex”
-
-  action (file)
-   (
-    English: platform index after (index: platform fixed‐width integer) in (list: list of (element))
-   )
-   platform fixed‐width integer
-   C: “” index “ + 1”
-   C♯: “” index “ + 1”
-   JavaScript: “” index “ + 1”
-   Kotlin: “” index “ + 1”
-   Swift: “” list “.index(after: ” index “)”
-
-  action (file)
-   (
-    English: entry at (index: platform fixed‐width integer) in (list: list of (element))
-   )
-   element
-   C: “g¤(5F)array¤(5F)index(” list “, ” element “, ” index “)”
-   C♯: “” list “[” index “]”
-   JavaScript: “” list “[” index “]”
-   Kotlin: “” list “[” index “]”
-   Swift: “” list “[” index “]”
 
   use
    use of (list of (element)) as changeable list of (element) indexed by (list index)

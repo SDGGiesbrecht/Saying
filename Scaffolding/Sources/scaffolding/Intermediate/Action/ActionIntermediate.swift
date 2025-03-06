@@ -940,6 +940,14 @@ extension ActionIntermediate {
     guard var name = swiftName.map({ StrictString($0) }) else {
       return nil
     }
+    var isVariable = false
+    if name.hasPrefix("var ") {
+      name.removeFirst(4)
+      isVariable = true
+    }
+    if name.hasPrefix("().") {
+      name.removeFirst(3)
+    }
     let firstSpace = name.firstIndex(of: " ")
     var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
     if let space = firstSpace {
@@ -973,8 +981,9 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    let parameterSection = parameterNames.map({ "\(StrictString($0)):" }).joined()
-    return UnicodeText("\(functionName)(\(parameterSection))")
+    let parameters = parameterNames.map({ "\(StrictString($0)):" }).joined()
+    let parameterSection = isVariable ? "" : "(\(parameters))"
+    return UnicodeText("\(functionName)\(parameterSection)")
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = swiftName,
@@ -982,8 +991,13 @@ extension ActionIntermediate {
       return nil
     }
     let components = identifier.components(separatedBy: ":")
-    let parameters = self.parameters.ordered(for: name)
+    var parameters = self.parameters.ordered(for: name)
     var result: StrictString = ""
+    if components.count == parameters.count {
+      let selfType = parameters.removeFirst()
+      result.prepend(contentsOf: Swift.source(for: selfType.type, referenceLookup: referenceLookup).scalars)
+      result.append(".")
+    }
     for index in parameters.indices {
       if index != parameters.startIndex {
         result.append(contentsOf: ", ")
