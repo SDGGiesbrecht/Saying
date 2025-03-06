@@ -76,6 +76,7 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
+   Swift: “” first “ != ” second “” {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
    }

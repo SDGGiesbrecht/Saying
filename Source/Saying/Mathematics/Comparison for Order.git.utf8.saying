@@ -78,6 +78,7 @@ ability (clients)
     Swift: > (lhs: [first]) (rhs: [second])
    )
    truth value
+   Swift: «» first “ > ” second „“ {“extension ” thing “: Comparable {}”}
    {
     ← (second) is less than (first)
    }
@@ -119,6 +120,7 @@ ability (clients)
     Swift: <= (lhs: [first]) (rhs: [second])
    )
    truth value
+   Swift: «» first “ <= ” second „“ {“extension ” thing “: Comparable {}”}
    {
     ← not ((first) is greater than (second))
    }
@@ -160,6 +162,7 @@ ability (clients)
     Swift: >= (lhs: [first]) (rhs: [second])
    )
    truth value
+   Swift: «» first “ >= ” second „“ {“extension ” thing “: Comparable {}”}
    {
     ← not ((first) is less than (second))
    }
