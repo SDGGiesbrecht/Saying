@@ -1,22 +1,11 @@
 thing (clients)
  (
   English: list index
-  Swift: ListIndex
  )
- {
-  part (unit)
-   (
-    English: platform index
-   )
-   platform fixed‐width integer
- }
-
-action (unit)
- (
-  English: list index at (platform index: platform fixed‐width integer)
- )
- list index
- create
+ C: “guint” (“glib¤(2D)2.0”)
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “Int”
 
 use (clients)
  comparison of (list index) for equality
@@ -24,22 +13,35 @@ use (clients)
   action (clients)
    (first: list index) is (second: list index)
    truth value
-   {
-    ← ((platform index) of (first)) is ((platform index) of (second))
-   }
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: list index) is not (second: list index)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
 
   action (clients)
    example
    list index
-   {
-    ← list index at (example: platform fixed‐width integer)
-   }
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
+   Swift: “0”
 
   action (clients)
    differing example
    list index
    {
-    ← list index at (differing example: platform fixed‐width integer)
+    ← greater example
    }
  }
 
@@ -49,14 +51,45 @@ use (clients)
   action (clients)
    (first: list index) is less than (second: list index)
    truth value
-   {
-    ← ((platform index) of (first)) is less than ((platform index) of (second))
-   }
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
+   Swift: «» first “ < ” second „“
+
+  action (clients)
+   (first: list index) is greater than (second: list index)
+   truth value
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: «» first “ > ” second „“
+
+  action (clients)
+   (first: list index) is less than or equal to (second: list index)
+   truth value
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: «» first “ <= ” second „“
+
+  action (clients)
+   (first: list index) is greater than or equal to (second: list index)
+   truth value
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: «» first “ >= ” second „“
 
   action (clients)
    greater example
    list index
-   {
-    ← list index at (greater example: platform fixed‐width integer)
-   }
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1”
+   Swift: “1”
  }

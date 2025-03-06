@@ -1,11 +1,3 @@
-struct ListIndex {
-  fileprivate var platform_0020index: Int
-
-  fileprivate init(_ platform_0020index: Int) {
-    self.platform_0020index = platform_0020index
-  }
-}
-
 struct UnicodeText {
   fileprivate var scalars: String
 
@@ -190,10 +182,10 @@ struct UnicodeSegments {
 
 extension UnicodeSegments {
   struct Index {
-    fileprivate var segment: ListIndex
+    fileprivate var segment: Int
     fileprivate var scalar: String.UnicodeScalarView.Index?
 
-    fileprivate init(_ segment: ListIndex, _ scalar: String.UnicodeScalarView.Index?) {
+    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
       self.segment = segment
       self.scalar = scalar
     }
@@ -326,16 +318,6 @@ struct ReplacementParsedRightChevronQuotationMarkSyntax {
   }
 }
 
-func ==(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return lhs.platform_0020index == rhs.platform_0020index
-}
-
-func <(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return lhs.platform_0020index < rhs.platform_0020index
-}
-
-extension ListIndex: Comparable {}
-
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -367,15 +349,6 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
 
 import SDGText
 
-extension ListIndex {
-  init(index: Int) {
-    self.init(index)
-  }
-  var int: Int {
-    return platform_0020index
-  }
-}
-
 extension StrictString {
   init(_ text: UnicodeText) {
     self.init(text.scalars)
@@ -405,10 +378,10 @@ extension UnicodeSegment {
 }
 
 extension UnicodeSegments.Index {
-  init(segment: ListIndex, scalar: String.UnicodeScalarView.Index?) {
+  init(segment: Int, scalar: String.UnicodeScalarView.Index?) {
     self.init(segment, scalar)
   }
-  var segmentIndex: ListIndex {
+  var segmentIndex: Int {
     return segment
   }
   var scalarIndex: String.UnicodeScalarView.Index? {
@@ -423,7 +396,7 @@ extension UnicodeSegments {
   var segmentIndices: Range<Int> {
     return segments.indices
   }
-  func segment(at index: ListIndex) -> UnicodeSegment {
-    return UnicodeSegment(segment: segments[index.int])
+  func segment(at index: Int) -> UnicodeSegment {
+    return UnicodeSegment(segment: segments[index])
   }
 }

@@ -1316,6 +1316,7 @@ extension Platform {
         }
       }
     }
+    var handledActionDeclarations: Set<String> = []
     for action in allActions where !action.isFlow {
       if let declaration = self.declaration(
         for: action,
@@ -1323,10 +1324,12 @@ extension Platform {
         mode: mode,
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
-        result.append(contentsOf: [
-          "",
-          declaration
-        ])
+        if handledActionDeclarations.insert(declaration).inserted {
+          result.append(contentsOf: [
+            "",
+            declaration
+          ])
+        }
       }
     }
     if mode == .testing {
