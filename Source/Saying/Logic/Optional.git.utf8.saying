@@ -111,38 +111,6 @@ extension
 
 action
  [
-  test {verify (unwrapping (wrap (true) as (something)) works)}
-  test {verify (not (unwrapping (nothing) works))}
- ]
- (
-  English: unwrapping (optional: optional (truth value)) works
- )
- truth value
- {
-  if (optional) exists, unwrap it as (• unwrapped: truth value), {
-   ← unwrapped
-  }
-  ← false
- }
-
-action
- [
-  test {verify (using optional storage works)}
- ]
- (
-  English: using optional storage works
- )
- truth value
- {
-  let (• storage: optional (truth value)) start as (wrap (true) as (something))
-  change (storage) to (nothing)
-  change (storage) to (true)
-  change (storage) to (nothing)
-  ← (storage) does not exist
- }
-
-action
- [
   test {verify (not (use optional (nothing: optional (truth value))))}
   test {verify (use optional (wrap (true) as (something)))}
  ]
@@ -155,17 +123,4 @@ action
    ← unwrapped
   }
   ← false
- }
-
-action
- [
-  test {verify (not (check optional (nothing: optional (truth value))))}
-  test {verify (check optional (wrap (true) as (something)))}
- ]
- (
-  English: check optional (optional: optional (truth value))
- )
- truth value
- {
-  ← (optional) is case (something)
  }

@@ -334,9 +334,7 @@ func <(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
   return lhs.platform_0020index < rhs.platform_0020index
 }
 
-func >(_ lhs: ListIndex, _ rhs: ListIndex) -> Bool {
-  return rhs < lhs
-}
+extension ListIndex: Comparable {}
 
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {

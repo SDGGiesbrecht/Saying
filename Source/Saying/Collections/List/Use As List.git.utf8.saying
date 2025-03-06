@@ -69,7 +69,7 @@ ability (clients)
    )
    truth value
    {
-    ← (beginning of (list)) is (end of (list))
+    ← (list) is empty according to default use as list
    }
 
   choice (clients)
@@ -86,7 +86,7 @@ ability (clients)
    )
    truth value
    {
-    ← not ((list) is empty)
+    ← (list) is not empty according to default use as list
    }
 
   requirement (clients)
@@ -94,6 +94,38 @@ ability (clients)
     English: non‐empty example
    )
    list
+ }
+
+extension
+ use of (list) as list of (element) indexed by (index)
+ {
+  action (clients)
+   [
+    test {
+     verify (not ((non‐empty example: list) is empty according to default use as list))
+    }
+   ]
+   (
+    English: (list: list) is empty according to default use as list
+   )
+   truth value
+   {
+    ← (end of (list)) is (beginning of (list))
+   }
+
+  action (clients)
+   [
+    test {
+     verify ((non‐empty example: list) is not empty according to default use as list)
+    }
+   ]
+   (
+    English: (list: list) is not empty according to default use as list
+   )
+   truth value
+   {
+    ← not ((list) is empty)
+   }
  }
 
 thing (file)

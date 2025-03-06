@@ -89,22 +89,21 @@ extension
       English: (list: list of (element)) is empty
      )
      truth value
-     C: “” list “¤(2D)>len == 0”
-     C♯: “” list “.Count == 0”
-     JavaScript: “” list “.length == 0”
      Kotlin: “” list “.isEmpty()”
      Swift: “” list “.isEmpty”
+     {
+      ← (list) is empty according to default use as list
+     }
 
     action (clients)
      (
       English: (list: list of (element)) is not empty
      )
      truth value
-     C: “” list “¤(2D)>len != 0”
-     C♯: “” list “.Count != 0”
-     JavaScript: “” list “.length != 0”
      Kotlin: “” list “.isNotEmpty()”
-     Swift: “!” list “.isEmpty”
+     {
+      ← (list) is not empty according to default use as list
+     }
 
     action (clients)
      (

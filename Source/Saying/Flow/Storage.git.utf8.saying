@@ -63,25 +63,3 @@ extension
    Kotlin: “” result “”
    Swift: “¤(5F) = ” result “”
  }
-
-action
- (
-  English: make (storage: ↓ truth value) true
- )
- {
-  change (storage) to (true)
- }
-
-action
- [
-  test {verify (pass through argument)}
- ]
- (
-  English: pass through argument
- )
- truth value
- {
-  let (• storage: truth value) start as (false)
-  make (↓ storage) true
-  ← storage
- }
