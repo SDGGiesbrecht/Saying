@@ -211,6 +211,18 @@ extension Interpolation {
     }
     return reordering.map({ parameters[$0] })
   }
+  func reordering(from origin: UnicodeText, to destination: UnicodeText) -> [Int] {
+    if parameters.isEmpty {
+      return []
+    }
+    let baseToOrigin = reorderings[StrictString(origin)]!
+    let originToBase: [Int] = baseToOrigin.indices.map({ baseToOrigin.firstIndex(of: $0)! })
+    let baseToDestination = reorderings[StrictString(destination)]!
+    return baseToDestination.map({ originToBase[$0] })
+  }
+}
+func order<Element>(_ parameters: [Element], for reordering: [Int]) -> [Element] {
+  return reordering.map({ parameters[$0] })
 }
 
 extension Interpolation {

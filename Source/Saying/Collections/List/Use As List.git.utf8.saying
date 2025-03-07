@@ -42,6 +42,7 @@ ability (clients)
     Deutsch : Index nach (Index: [index]) in (Liste: [list])
     français : indice après (indice: [index]) dans (liste: [list])
     ελληνικά: δείκτης μετά (δείκτης: [index]) σε (κατάλογος: [list])
+    Swift: (self: [list]).index after (i: [index])
    )
    index
 

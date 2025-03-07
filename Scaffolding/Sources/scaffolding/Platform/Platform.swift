@@ -465,6 +465,7 @@ extension Platform {
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier(),
+          coverageRedirectParameterReordering: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -480,11 +481,19 @@ extension Platform {
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
-      let action = mode != .testing || (context?.isCoverageWrapper ?? false)
+      let redirectingToCoverageWrapper = mode == .testing && !(context?.isCoverageWrapper ?? false)
+      var redirectionParameterReorder: [Int]?
+      if redirectingToCoverageWrapper {
+        redirectionParameterReorder = bareAction.parameters.reordering(
+          from: reference.actionName,
+          to: bareAction.names.identifier()
+        )
+      }
+      let action = !redirectingToCoverageWrapper
         ? bareAction
         : referenceLookup.lookupAction(
           bareAction.coverageTrackingIdentifier(),
-          signature: signature,
+          signature: order(signature, for: redirectionParameterReorder!),
           specifiedReturnValue: reference.resolvedResultType
         )!
       if !extractedArguments.isEmpty,
@@ -502,6 +511,7 @@ extension Platform {
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: nil,
+          coverageRedirectParameterReordering: redirectionParameterReorder,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -529,6 +539,7 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     parameterName: UnicodeText?,
+    coverageRedirectParameterReordering: [Int]?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
@@ -736,8 +747,12 @@ extension Platform {
       } else {
         var argumentsArray: [String] = []
         let parameters = action.parameters.ordered(for: action.names.identifier())
-        for argumentIndex in reference.arguments.indices {
-          let argument = reference.arguments[argumentIndex]
+        var arguments = reference.arguments
+        if let reorder = coverageRedirectParameterReordering {
+          arguments = order(arguments, for: reorder)
+        }
+        for argumentIndex in arguments.indices {
+          let argument = arguments[argumentIndex]
           let parameter = parameters[argumentIndex]
           let parameterLabel = nativeLabel(of: parameter, isCreation: action.isCreation)
             .map({ $0 == "" ? "" : "\($0): " }) ?? ""

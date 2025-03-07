@@ -2,7 +2,7 @@ import SDGText
 
 struct ReferenceDictionary {
   private var languages: Set<StrictString>
-  private var identifierMapping: [StrictString: UnicodeText]
+  private var identifierMapping: [StrictString: MappedIdentifier]
   private var things: [StrictString: [[TypeReference]: Thing]]
   private var actions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
   private var abilities: [StrictString: Ability]
@@ -32,7 +32,7 @@ extension ReferenceDictionary {
 
 extension ReferenceDictionary {
   func resolveIfKnown(identifier: UnicodeText) -> UnicodeText? {
-    return identifierMapping[StrictString(identifier)]
+    return identifierMapping[StrictString(identifier)]?.identifier
   }
   func resolve(identifier: UnicodeText) -> UnicodeText {
     return resolveIfKnown(identifier: identifier) ?? identifier
@@ -72,10 +72,10 @@ extension ReferenceDictionary {
     let identifier = thing.names.identifier()
     for name in thing.names {
       if identifierMapping[StrictString(name)] != nil,
-        identifierMapping[StrictString(name)].map({ StrictString($0) }) != StrictString(identifier) {
+        identifierMapping[StrictString(name)].map({ StrictString($0.identifier) }) != StrictString(identifier) {
         errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: thing.declaration.genericDeclaration, conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: [], specifiedReturnValue: nil, parentContexts: [])!]))
       }
-      identifierMapping[name] = identifier
+      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: thing.parameters.reordering(from: UnicodeText(name), to: identifier))
     }
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
       .map({ $0.resolvedType!.key })
@@ -99,10 +99,13 @@ extension ReferenceDictionary {
 
   func lookupThing(_ identifier: UnicodeText, components: [TypeReference]) -> Thing? {
     guard let mappedIdentifier = identifierMapping[StrictString(identifier)],
-      let group = things[StrictString(mappedIdentifier)] else {
+      let group = things[StrictString(mappedIdentifier.identifier)] else {
       return nil
     }
-    let mappedComponents = components.map({ $0.resolving(fromReferenceLookup: [self]) })
+    let mappedComponents = order(
+      components.map({ $0.resolving(fromReferenceLookup: [self]) }),
+      for: mappedIdentifier.reordering
+    )
     return group[mappedComponents]
   }
   func lookupThing(_ reference: TypeReference) -> Thing? {
@@ -187,10 +190,10 @@ extension ReferenceDictionary {
     let identifier = action.names.identifier()
     for name in action.names {
       if identifierMapping[name] != nil,
-        identifierMapping[name].map({ StrictString($0) }) != StrictString(identifier) {
+        identifierMapping[name].map({ StrictString($0.identifier) }) != StrictString(identifier) {
         errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: .action(action.declaration as! ParsedActionDeclaration), conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: action.signature(orderedFor: UnicodeText(name)), specifiedReturnValue: action.returnValue, parentContexts: [])!]))
       }
-      identifierMapping[name] = identifier
+      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: action.parameters.reordering(from: UnicodeText(name), to: identifier))
     }
     actions[StrictString(identifier), default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = action
     return errors
@@ -215,10 +218,13 @@ extension ReferenceDictionary {
     parentContexts: [ReferenceDictionary]
   ) -> [ActionIntermediate] {
     guard let mappedIdentifier = identifierMapping[StrictString(identifier)],
-      let group = actions[StrictString(mappedIdentifier)] else {
+      let group = actions[StrictString(mappedIdentifier.identifier)] else {
       return []
     }
-    let mappedSignature = signature.map({ $0.key.resolving(fromReferenceLookup: parentContexts.appending(self)) })
+    let mappedSignature = signature.isEmpty ? [] : order(
+      signature.map({ $0.key.resolving(fromReferenceLookup: parentContexts.appending(self)) }),
+      for: mappedIdentifier.reordering
+    )
     let returnOverloads: [() -> [TypeReference?: ActionIntermediate]]
     switch ActionUse.isReferenceNotCall(name: identifier, arguments: mappedSignature) {
     case .some(true):
@@ -370,7 +376,7 @@ extension ReferenceDictionary {
       if identifierMapping[name] != nil {
         errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: .ability(ability.declaration), conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: ability.parameters.ordered(for: UnicodeText(name)).map({ _ in nil }), specifiedReturnValue: nil, parentContexts: [])!]))
       }
-      identifierMapping[name] = identifier
+      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: ability.parameters.reordering(from: UnicodeText(name), to: identifier))
     }
     abilities[StrictString(identifier)] = ability
     return errors
@@ -380,7 +386,7 @@ extension ReferenceDictionary {
     return abilities[StrictString(resolve(identifier: identifier))]
   }
   mutating func modifyAbility(identifier: UnicodeText, transformation: (inout Ability) -> Void) {
-    let realIdentifier = identifierMapping[StrictString(identifier)] ?? identifier
+    let realIdentifier = identifierMapping[StrictString(identifier)]?.identifier ?? identifier
     transformation(&abilities[StrictString(realIdentifier)]!)
   }
 
