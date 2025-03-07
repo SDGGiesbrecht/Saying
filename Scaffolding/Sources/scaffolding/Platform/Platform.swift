@@ -812,16 +812,21 @@ extension Platform {
             var result: String = ""
             if nativeIsMember(action: action) {
               let first = argumentsArray.removeFirst()
-              result.append(contentsOf: "\(first).")
+              result.append(contentsOf: first)
+              if name != "subscript" {
+                result.append(contentsOf: ".")
+              }
             }
-            let argumentsSection: String
             if nativeIsProperty(action: action) {
-              argumentsSection = ""
+              result.append(contentsOf: name)
             } else {
               let arguments = argumentsArray.joined(separator: ", ")
-              argumentsSection = "(\(arguments))"
+              if name == "subscript" {
+                result.append(contentsOf: "[\(arguments)]")
+              } else {
+                result.append(contentsOf: "\(name)(\(arguments))")
+              }
             }
-            result.append(contentsOf: "\(name)\(argumentsSection)")
             return result
           }
         }
