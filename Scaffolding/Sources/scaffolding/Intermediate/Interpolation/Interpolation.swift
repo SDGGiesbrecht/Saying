@@ -204,6 +204,7 @@ extension Interpolation {
   func parameter(named identifier: UnicodeText) -> InterpolationParameter? {
     return parameters.first(where: { $0.names.contains(StrictString(identifier)) })
   }
+
   func ordered(for name: UnicodeText) -> [InterpolationParameter] {
     guard let reordering = reorderings[StrictString(name)] else {
       return []
