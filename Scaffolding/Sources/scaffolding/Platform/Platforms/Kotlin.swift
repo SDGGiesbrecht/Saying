@@ -155,6 +155,12 @@ enum Kotlin: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
+  static func nativeIsMember(action: ActionIntermediate) -> Bool {
+    return false
+  }
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    return false
+  }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
@@ -204,7 +210,7 @@ enum Kotlin: Platform {
   static var emptyReturnTypeForActionType: String {
     return "Unit"
   }
-  static func returnSection(with returnValue: String) -> String? {
+  static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return ": \(returnValue)"
   }
 
@@ -237,7 +243,9 @@ enum Kotlin: Platform {
     returnSection: String?,
     accessModifier: String?,
     coverageRegistration: String?,
-    implementation: [String]
+    implementation: [String],
+    parentType: String?,
+    propertyInstead: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [

@@ -208,8 +208,27 @@ enum Swift: Platform {
   }
 
   static func nativeName(of action: ActionIntermediate) -> String? {
-    let found = action.swiftIdentifier().map({ StrictString($0) })?.prefix(upTo: "(".scalars.literal())?.contents
-    return found.map { String(StrictString($0)) }
+    if let identifier = action.swiftIdentifier() {
+      if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {
+        return String(StrictString(functionName.contents))
+      } else {
+        return  String(StrictString(identifier))
+      }
+    } else {
+      return nil
+    }
+  }
+  static func nativeIsMember(action: ActionIntermediate) -> Bool {
+    if let name = action.swiftName.map({ StrictString($0) }) {
+      if name.hasPrefix("().")
+        || name.hasPrefix("var ().") {
+        return true
+      }
+    }
+    return false
+  }
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    return action.swiftName.map({ StrictString($0) })?.hasPrefix("var ") ?? false
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return parameter.swiftLabel.map({ String(StrictString($0)) })
@@ -254,8 +273,12 @@ enum Swift: Platform {
   static var emptyReturnTypeForActionType: String {
     return "Void"
   }
-  static func returnSection(with returnValue: String) -> String? {
-    return " -> \(returnValue)"
+  static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
+    if isProperty {
+      return ": \(returnValue)"
+    } else {
+      return " -> \(returnValue)"
+    }
   }
 
   static var needsForwardDeclarations: Bool { false }
@@ -287,12 +310,24 @@ enum Swift: Platform {
     returnSection: String?,
     accessModifier: String?,
     coverageRegistration: String?,
-    implementation: [String]
+    implementation: [String],
+    parentType: String?,
+    propertyInstead: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
-    var result: [String] = [
-      "\(access)func \(name)(\(parameters))\(returnSection ?? "") {",
-    ]
+    let keyword = propertyInstead ? "var" : "func"
+    let signature = propertyInstead
+      ? returnSection!
+      : "(\(parameters))\(returnSection ?? "")"
+    var result: [String] = []
+    if let parent = parentType {
+      result.append(contentsOf: [
+        "extension \(parent) {",
+      ])
+    }
+    result.append(contentsOf: [
+      "\(access)\(keyword) \(name)\(signature) {",
+    ])
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
@@ -304,6 +339,11 @@ enum Swift: Platform {
     result.append(contentsOf: [
       "}",
     ])
+    if parentType != nil {
+      result.append(contentsOf: [
+        "}",
+      ])
+    }
     return result.joined(separator: "\n")
   }
 

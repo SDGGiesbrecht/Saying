@@ -165,6 +165,12 @@ enum C: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
+  static func nativeIsMember(action: ActionIntermediate) -> Bool {
+    return false
+  }
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    return false
+  }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
@@ -207,7 +213,7 @@ enum C: Platform {
   static var emptyReturnTypeForActionType: String {
     return "void"
   }
-  static func returnSection(with returnValue: String) -> String? {
+  static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return "\(returnValue)"
   }
 
@@ -244,7 +250,9 @@ enum C: Platform {
     returnSection: String?,
     accessModifier: String?,
     coverageRegistration: String?,
-    implementation: [String]
+    implementation: [String],
+    parentType: String?,
+    propertyInstead: Bool
   ) -> String {
     var result: [String] = [
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),

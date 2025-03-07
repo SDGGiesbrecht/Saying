@@ -202,6 +202,12 @@ enum CSharp: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
+  static func nativeIsMember(action: ActionIntermediate) -> Bool {
+    return false
+  }
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    return false
+  }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
   }
@@ -244,7 +250,7 @@ enum CSharp: Platform {
   static var emptyReturnTypeForActionType: String {
     return "void"
   }
-  static func returnSection(with returnValue: String) -> String? {
+  static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return "\(returnValue)"
   }
 
@@ -277,7 +283,9 @@ enum CSharp: Platform {
     returnSection: String?,
     accessModifier: String?,
     coverageRegistration: String?,
-    implementation: [String]
+    implementation: [String],
+    parentType: String?,
+    propertyInstead: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [

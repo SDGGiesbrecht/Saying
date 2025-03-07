@@ -125,6 +125,12 @@ enum JavaScript: Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }
+  static func nativeIsMember(action: ActionIntermediate) -> Bool {
+    return false
+  }
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    return false
+  }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     if isCreation {
       return sanitize(identifier: parameter.names.identifier(), leading: true)
@@ -177,7 +183,7 @@ enum JavaScript: Platform {
   static var emptyReturnTypeForActionType: String {
     return ""
   }
-  static func returnSection(with returnValue: String) -> String? {
+  static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return nil
   }
 
@@ -210,7 +216,9 @@ enum JavaScript: Platform {
     returnSection: String?,
     accessModifier: String?,
     coverageRegistration: String?,
-    implementation: [String]
+    implementation: [String],
+    parentType: String?,
+    propertyInstead: Bool
   ) -> String {
     var result: [String] = [
       "function \(name)(\(parameters)) {",
