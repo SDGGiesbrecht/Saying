@@ -68,6 +68,8 @@ protocol Platform {
 
   // Actions
   static func nativeName(of action: ActionIntermediate) -> String?
+  static func nativeIsMember(action: ActionIntermediate) -> Bool
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
@@ -81,7 +83,7 @@ protocol Platform {
   static func dereference(throughParameter: String, forwarding: Bool) -> String
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
-  static func returnSection(with returnValue: String) -> String?
+  static func returnSection(with returnValue: String, isProperty: Bool) -> String?
   static var needsForwardDeclarations: Bool { get }
   static func forwardActionDeclaration(
     name: String,
@@ -98,7 +100,9 @@ protocol Platform {
     returnSection: String?,
     accessModifier: String?,
     coverageRegistration: String?,
-    implementation: [String]
+    implementation: [String],
+    parentType: String?,
+    propertyInstead: Bool
   ) -> String
 
   // Imports
@@ -790,8 +794,20 @@ extension Platform {
           if sanitize(identifier: UnicodeText(StrictString(nameStart)), leading: false) != nameStart {
             return "\(argumentsArray.joined(separator: " \(name) "))"
           } else {
-            let arguments = argumentsArray.joined(separator: ", ")
-            return "\(name)(\(arguments))"
+            var result: String = ""
+            if nativeIsMember(action: action) {
+              let first = argumentsArray.removeFirst()
+              result.append(contentsOf: "\(first).")
+            }
+            let argumentsSection: String
+            if nativeIsProperty(action: action) {
+              argumentsSection = ""
+            } else {
+              let arguments = argumentsArray.joined(separator: ", ")
+              argumentsSection = "(\(arguments))"
+            }
+            result.append(contentsOf: "\(name)\(argumentsSection)")
+            return result
           }
         }
       }
@@ -1067,7 +1083,7 @@ extension Platform {
       returnValue = emptyReturnType
     }
 
-    let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
+    let returnSection = returnValue.flatMap({ self.returnSection(with: $0, isProperty: false) })
 
     return forwardActionDeclaration(
       name: name,
@@ -1147,7 +1163,17 @@ extension Platform {
         identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
         leading: true
       )
-    let parameters = action.parameters.ordered(for: action.names.identifier())
+    let isProperty = nativeIsProperty(action: action)
+
+    var parameterEntries = action.parameters.ordered(for: action.names.identifier())
+    var parentType: String?
+    var selfParameter: StrictString?
+    if nativeIsMember(action: action) {
+      let first = parameterEntries.removeFirst()
+      parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
+      selfParameter = StrictString(first.names.identifier())
+    }
+    let parameters: String = parameterEntries
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
 
@@ -1158,7 +1184,7 @@ extension Platform {
       returnValue = emptyReturnType
     }
 
-    let returnSection = returnValue.flatMap({ self.returnSection(with: $0) })
+    let returnSection = returnValue.flatMap({ self.returnSection(with: $0, isProperty: isProperty) })
 
     let access = accessModifier(for: action.access, memberScope: false)
 
@@ -1171,6 +1197,10 @@ extension Platform {
     }
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
+    var inliningArguments: [StrictString: String] = [:]
+    if let replaced = selfParameter {
+      inliningArguments[replaced] = "self"
+    }
     let implementation = source(
       for: actionImplementation.statements,
       context: action,
@@ -1180,7 +1210,7 @@ extension Platform {
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
-      inliningArguments: [:],
+      inliningArguments: inliningArguments,
       mode: mode,
       indentationLevel: 1
     )
@@ -1190,7 +1220,9 @@ extension Platform {
       returnSection: returnSection,
       accessModifier: access,
       coverageRegistration: coverageRegistration,
-      implementation: implementation
+      implementation: implementation,
+      parentType: parentType,
+      propertyInstead: isProperty
     )
   }
 
