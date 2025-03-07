@@ -66,18 +66,29 @@ extension ActionPrototype {
       let name = signature.name()
       if language == "Swift" {
         swiftName = name
-        let parameterList = StrictString(name).dropping(through: " ")
-        let labels = parameterList.components(separatedBy: "()").dropLast()
-          .map({ component in
-            var label = StrictString(component.contents)
-            if label.first == " " {
-              label.removeFirst()
-            }
-            if label.last == " " {
-              label.removeLast()
-            }
-            return label
-          })
+        var remainder = StrictString(name)
+        if remainder.hasPrefix("var ") {
+          remainder.removeFirst(4)
+        }
+        var labels: [StrictString] = []
+        if remainder.hasPrefix("().") {
+          remainder.removeFirst(3)
+          labels.append("")
+        }
+        let parameterList = remainder.dropping(through: " ")
+        labels.append(
+          contentsOf: parameterList.components(separatedBy: "()").dropLast()
+            .map({ component in
+              var label = StrictString(component.contents)
+              if label.first == " " {
+                label.removeFirst()
+              }
+              if label.last == " " {
+                label.removeLast()
+              }
+              return label
+            })
+        )
         parameters.apply(swiftLabels: labels.map({ $0.isEmpty ? nil : UnicodeText($0) }), accordingTo: name)
       }
       names.insert(StrictString(name))

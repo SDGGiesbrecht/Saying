@@ -104,7 +104,7 @@ extension ParameterIntermediate {
       isThrough: isThrough,
       passAction: passAction,
       executeAction: executeAction,
-      swiftLabel: swiftLabel
+      swiftLabel: swiftLabel ?? requirement.swiftLabel
     )
   }
   func specializing(
