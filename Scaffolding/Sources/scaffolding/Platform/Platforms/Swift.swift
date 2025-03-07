@@ -315,7 +315,9 @@ enum Swift: Platform {
     propertyInstead: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
-    let keyword = propertyInstead ? "var" : "func"
+    let keyword = propertyInstead
+      ? "var "
+      : name == "subscript" ? "" : "func "
     let signature = propertyInstead
       ? returnSection!
       : "(\(parameters))\(returnSection ?? "")"
@@ -326,7 +328,7 @@ enum Swift: Platform {
       ])
     }
     result.append(contentsOf: [
-      "\(access)\(keyword) \(name)\(signature) {",
+      "\(access)\(keyword)\(name)\(signature) {",
     ])
     if let coverage = coverageRegistration {
       result.append(coverage)

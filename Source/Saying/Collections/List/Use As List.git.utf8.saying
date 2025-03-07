@@ -55,6 +55,7 @@ ability (clients)
    ]
    (
     English: entry at (index: index) in (list: list)
+    Swift: (self: [list]).subscript (position: [index])
    )
    element
 
