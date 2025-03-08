@@ -70,8 +70,10 @@ ability (clients)
     Deutsch: (Liste: [list]) ist leer
     français : (liste: [list]) est vide
     ελληνικά: (κατάλογος: [list]) είναι άδειος
+    Swift: var (self: [list]).isEmpty
    )
    truth value
+   Swift: “” list “.isEmpty” {“extension ” list “: Collection {}”}
    {
     ← (list) is empty according to default use as list
    }

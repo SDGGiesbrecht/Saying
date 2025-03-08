@@ -64,13 +64,14 @@ extension NativeActionImplementationIntermediate {
 
 extension NativeActionImplementationIntermediate {
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    implementationTypeLookup: [StrictString: ParsedTypeReference],
+    requiredDeclarationTypeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
       textComponents: textComponents,
-      parameters: parameters.map({ $0.specializing(typeLookup: typeLookup) }),
+      parameters: parameters.map({ $0.specializing(typeLookup: implementationTypeLookup) }),
       requiredImport: requiredImport,
-      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })
+      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) })
     )
   }
 }
