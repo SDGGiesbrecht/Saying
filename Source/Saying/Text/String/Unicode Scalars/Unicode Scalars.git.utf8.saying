@@ -10,7 +10,7 @@ thing (clients)
  (
   English: Unicode scalars
  )
- C: “GString¤(2A)”/“g¤(5F)rc¤(5F)box¤(5F)acquire”/“g¤(5F)rc¤(5F)box¤(5F)release¤(5F)full(¤(A4), g¤(5F)string¤(5F)free)” (“glib¤(2D)2.0”)
+ C: “GString¤(2A)”/“g¤(5F)rc¤(5F)box¤(5F)acquire(” string “)”/“g¤(5F)rc¤(5F)box¤(5F)release¤(5F)full(” string “, g¤(5F)string¤(5F)free)” (“glib¤(2D)2.0”)
  C♯: “string”
  Kotlin: “String”
  Swift: “String.UnicodeScalarView”
