@@ -190,39 +190,49 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ").", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["(", ").", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+          ]
+        )
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+          ]
+        )
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+          ]
+        )
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+          ]
+        )
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", ".", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"))!),
+          ]
+        )
       ),
       isCreation: false,
       isSpecialized: false
@@ -283,40 +293,50 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["(", ") {", ", {", "}}"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, typeInstead: enumerationType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["(", ") {", ", {", "}}"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, typeInstead: enumerationType),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
+          ]
+        )
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["new ", "(", ")"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["new ", "(", ")"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
+          ]
+        )
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", " })"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["Object.freeze({ enumerationCase: ", ", value: ", " })"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
+          ]
+        )
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["", "(", ")"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", "(", ")"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
+          ]
+        )
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["", "(", ")"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", "(", ")"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!)
+          ]
+        )
       ),
       isCreation: false,
       isEnumerationValueWrapper: true,
@@ -388,56 +408,66 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!, typeInstead: enumerationType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!, typeInstead: enumerationType),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
+          ]
+        )
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", " is ", " enumerationCase", ") { ", " ", " = enumerationCase", ".Value;", "}"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["if (", " is ", " enumerationCase", ") { ", " ", " = enumerationCase", ".Value;", "}"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!, typeInstead: valueType),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
+          ]
+        )
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["let enumeration = ", "; if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["let enumeration = ", "; if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
+          ]
+        )
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["if (", " is ", ") { val ", " = ", ".value", "}"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
+          ]
+        )
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["if case ", "(let ", ") = ", " {", "}"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["if case ", "(let ", ") = ", " {", "}"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"))!),
+          ]
+        )
       ),
       isCreation: false,
       isSpecialized: false
@@ -475,39 +505,49 @@ extension ActionIntermediate {
         swiftName: nil
       ),
       c: c ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".enumeration_case == ", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", ".enumeration_case == ", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
+          ]
+        )
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
-        textComponents: ["", " is ", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", " is ", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
+          ]
+        )
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
-        textComponents: ["", ".enumerationCase == ", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", ".enumerationCase == ", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
+          ]
+        )
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
-        textComponents: ["", " is ", ""].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["", " is ", ""].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
+          ]
+        )
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
-        textComponents: ["{ if case ", " = ", " { return true } else { return false } }()"].map({ UnicodeText($0) }),
-        parameters: [
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
-          NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
-        ]
+        expression: NativeActionExpressionIntermediate(
+          textComponents: ["{ if case ", " = ", " { return true } else { return false } }()"].map({ UnicodeText($0) }),
+          parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"))!, caseInstead: caseInstead),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"))!),
+          ]
+        )
       ),
       isCreation: false,
       isSpecialized: false
@@ -614,7 +654,7 @@ extension ActionIntermediate {
       errors: &errors
     )
     for native in allNativeImplementations() {
-      for parameterReference in native.parameters {
+      for parameterReference in native.expression.parameters {
         if let typeInstead = parameterReference.typeInstead {
           typeInstead.validateReferences(
             requiredAccess: access,
@@ -1027,7 +1067,7 @@ extension ActionIntermediate {
       )
     )
     for native in allNativeImplementations() {
-      for parameterReference in native.parameters {
+      for parameterReference in native.expression.parameters {
         if let typeInstead = parameterReference.typeInstead {
           result.append(
             contentsOf: typeInstead.requiredIdentifiers(

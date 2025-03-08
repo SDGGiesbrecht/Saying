@@ -3,8 +3,8 @@ import SDGText
 struct NativeThingImplementationIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeThingImplementationParameter]
-  var hold: UnicodeText?
-  var release: UnicodeText?
+  var hold: NativeActionExpressionIntermediate?
+  var release: NativeActionExpressionIntermediate?
   var requiredImport: UnicodeText?
   var requiredDeclarations: [NativeRequirementImplementationIntermediate]
 }
@@ -16,8 +16,8 @@ extension NativeThingImplementationIntermediate {
   ) -> Result<NativeThingImplementationIntermediate, ErrorList<ConstructionError>> {
     var errors: [ConstructionError] = []
     let type: ParsedNativeThingReference
-    var holdAction: ParsedLiteral?
-    var releaseAction: ParsedLiteral?
+    var holdAction: ParsedNativeActionExpression?
+    var releaseAction: ParsedNativeActionExpression?
     switch implementation.type {
     case .referenceCounted(let referenceCounted):
       type = referenceCounted.type
@@ -43,22 +43,22 @@ extension NativeThingImplementationIntermediate {
         }
       }
     }
-    var nativeHold: UnicodeText?
+    var nativeHold: NativeActionExpressionIntermediate?
     if let hold = holdAction {
-      switch LiteralIntermediate.construct(literal: hold) {
+      switch NativeActionExpressionIntermediate.construct(expression: hold) {
       case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeExpressionError($0) }))
       case .success(let success):
-        nativeHold = UnicodeText(StrictString(success.string))
+        nativeHold = success
       }
     }
-    var nativeRelease: UnicodeText?
+    var nativeRelease: NativeActionExpressionIntermediate?
     if let release = releaseAction {
-      switch LiteralIntermediate.construct(literal: release) {
+      switch NativeActionExpressionIntermediate.construct(expression: release) {
       case .failure(let error):
-        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeExpressionError($0) }))
       case .success(let success):
-        nativeRelease = UnicodeText(StrictString(success.string))
+        nativeRelease = success
       }
     }
     var requiredImport: UnicodeText?

@@ -28,7 +28,7 @@ extension
     ελληνικά: κατάλογος (στοιχείο: [element])
     עברית: רשימה של (איבר: [element])
    )
-   C: “GArray¤(2A)”/“g¤(5F)array¤(5F)ref”/“g¤(5F)array¤(5F)unref” (“glib¤(2D)2.0”)
+   C: “GArray¤(2A)”/“g¤(5F)array¤(5F)ref(” array “)”/“g¤(5F)array¤(5F)unref(” array “)” (“glib¤(2D)2.0”)
    C♯: “List<” element “>” (“System.Collections.Generic”)
    Kotlin: “List<” element “>”
    Swift: “[” element “]”

@@ -1,8 +1,7 @@
 import SDGText
 
 struct NativeActionImplementationIntermediate {
-  var textComponents: [UnicodeText]
-  var parameters: [NativeActionImplementationParameter]
+  var expression: NativeActionExpressionIntermediate
   var requiredImport: UnicodeText?
   var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
 }
@@ -12,23 +11,16 @@ extension NativeActionImplementationIntermediate {
   static func construct(
     implementation: ParsedNativeAction
   ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
-    let components = implementation.expression.components
-    var textComponents: [UnicodeText] = []
-    var parameters: [NativeActionImplementationParameter] = []
     var errors: [ConstructionError] = []
-    for index in components.indices {
-      let element = components[index]
-      switch element {
-      case .parameter(let parameter):
-        parameters.append(NativeActionImplementationParameter(parameter))
-      case .literal(let literal):
-        switch LiteralIntermediate.construct(literal: literal) {
-        case .failure(let error):
-          errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
-        case .success(let literal):
-          textComponents.append(UnicodeText(StrictString(literal.string)))
-        }
-      }
+    let expression: NativeActionExpressionIntermediate
+    switch NativeActionExpressionIntermediate.construct(
+      expression: implementation.expression
+    ) {
+    case .failure(let error):
+      errors.append(contentsOf: error.errors.map({ ConstructionError.nativeExpressionError($0) }))
+      return .failure(ErrorList(errors))
+    case .success(let constructed):
+      expression = constructed
     }
     var requiredImport: UnicodeText?
     if let importLiteral = implementation.importNode?.importNode {
@@ -53,8 +45,7 @@ extension NativeActionImplementationIntermediate {
     }
     return .success(
       NativeActionImplementationIntermediate(
-        textComponents: textComponents,
-        parameters: parameters,
+        expression: expression,
         requiredImport: requiredImport,
         requiredDeclarations: requiredDeclarations
       )
@@ -68,8 +59,7 @@ extension NativeActionImplementationIntermediate {
     requiredDeclarationTypeLookup: [StrictString: ParsedTypeReference]
   ) -> NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
-      textComponents: textComponents,
-      parameters: parameters.map({ $0.specializing(typeLookup: implementationTypeLookup) }),
+      expression: expression.specializing(typeLookup: implementationTypeLookup),
       requiredImport: requiredImport,
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) })
     )

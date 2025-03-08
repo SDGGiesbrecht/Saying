@@ -1,7 +1,7 @@
 struct UnicodeText {
-  fileprivate var scalars: String
+  fileprivate var scalars: String.UnicodeScalarView
 
-  fileprivate init(_ scalars: String) {
+  fileprivate init(_ scalars: String.UnicodeScalarView) {
     self.scalars = scalars
   }
 }
@@ -357,7 +357,7 @@ extension StrictString {
 
 extension UnicodeText {
   init(_ string: StrictString) {
-    self.init(String(string))
+    self.init(String(string).unicodeScalars)
   }
 }
 
