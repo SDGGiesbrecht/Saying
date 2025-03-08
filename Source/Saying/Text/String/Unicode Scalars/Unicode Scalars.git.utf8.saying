@@ -10,9 +10,10 @@ thing (clients)
  (
   English: Unicode scalars
  )
+ C: “GString¤(2A)”/“g¤(5F)rc¤(5F)box¤(5F)acquire”/“g¤(5F)rc¤(5F)box¤(5F)release¤(5F)full(¤(A4), g¤(5F)string¤(5F)free)” (“glib¤(2D)2.0”)
  C♯: “string”
  Kotlin: “String”
- Swift: “String”
+ Swift: “String.UnicodeScalarView”
  {
  }
 
@@ -21,7 +22,9 @@ action (unit)
   English: example scalars
  )
  Unicode scalars
+ C: “g¤(5F)rc¤(5F)box¤(5F)new0(GString)”
  C♯: “¤(22)¤(22)”
+ JavaScript: “¤(22)¤(22)”
  Kotlin: “¤(22)¤(22)”
- Swift: “¤(22)¤(22)”
+ Swift: “¤(22)¤(22).unicodeScalars”
  create
