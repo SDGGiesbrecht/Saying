@@ -419,6 +419,7 @@ enum CSharp: Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "<Project>",
+      "  <TargetFramework>netcoreapp3.0</TargetFramework>",
       "  <ItemGroup>",
       "    <Compile Include=\u{22}Test.cs\u{22} />",
       "  </ItemGroup>",
