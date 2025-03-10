@@ -3,7 +3,6 @@ thing (clients)
   English: Unicode scalar
  )
  C: “gunichar” (“glib¤(2D)2.0”)
- C♯: “Rune” (“System.Text”)
  Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
