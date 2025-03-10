@@ -2,6 +2,8 @@ thing (clients)
  (
   English: Unicode scalar
  )
+ C: “gunichar” (“glib¤(2D)2.0”)
+ Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
  }

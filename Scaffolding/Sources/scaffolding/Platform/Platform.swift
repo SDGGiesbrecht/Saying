@@ -559,10 +559,11 @@ extension Platform {
       var accumulator = ""
       var beforeCleanUp: String? = nil
       var local = ReferenceDictionary()
-      for index in native.textComponents.indices {
-        accumulator.append(contentsOf: String(StrictString(native.textComponents[index])))
-        if index != native.textComponents.indices.last {
-          let parameter = native.parameters[index]
+      let nativeExpression = native.expression
+      for index in nativeExpression.textComponents.indices {
+        accumulator.append(contentsOf: String(StrictString(nativeExpression.textComponents[index])))
+        if index != nativeExpression.textComponents.indices.last {
+          let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
             accumulator.append(contentsOf: typeSource)
@@ -900,12 +901,13 @@ extension Platform {
             inliningArguments: inliningArguments,
             mode: mode
           )
-          let releaseName = String(StrictString(release))
+          let releaseExpression = release.textComponents.lazy.map({ String(StrictString($0)) })
+            .joined(separator: localName)
           entries.append(
             ReferenceCountedReturn(
               localStorageDeclaration: "const \(typeName) \(localName) = \(call);",
               localName: localName,
-              releaseStatement: "\(releaseName)(\(localName));"
+              releaseStatement: "\(releaseExpression);"
             )
           )
         }
