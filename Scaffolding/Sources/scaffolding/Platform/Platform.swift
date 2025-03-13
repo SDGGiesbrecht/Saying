@@ -113,7 +113,9 @@ protocol Platform {
   static var preexistingNativeRequirements: Set<String> { get }
 
   // Module
+  static var importsNeededByMemoryManagement: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
+  static var memoryManagement: String? { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
@@ -1415,11 +1417,17 @@ extension Platform {
     for module in modules {
       imports.formUnion(nativeImports(for: module.referenceDictionary))
     }
+    imports.formUnion(importsNeededByMemoryManagement)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
       }
+      result.append("")
+    }
+
+    if let memoryManagement = memoryManagement {
+      result.append(memoryManagement)
       result.append("")
     }
 
