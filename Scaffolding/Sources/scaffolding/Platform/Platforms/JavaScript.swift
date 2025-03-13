@@ -246,8 +246,16 @@ enum JavaScript: Platform {
 
   static let preexistingNativeRequirements: Set<String> = []
 
+  static var importsNeededByMemoryManagement: Set<String> {
+    return []
+  }
+
   static var importsNeededByTestScaffolding: Set<String> {
     return []
+  }
+
+  static var memoryManagement: String? {
+    return nil
   }
 
   static func coverageRegionSet(regions: [String]) -> [String] {

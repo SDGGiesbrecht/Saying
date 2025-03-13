@@ -356,8 +356,16 @@ enum Swift: Platform {
     return importTarget
   }
 
+  static var importsNeededByMemoryManagement: Set<String> {
+    return []
+  }
+
   static var importsNeededByTestScaffolding: Set<String> {
     return []
+  }
+
+  static var memoryManagement: String? {
+    return nil
   }
 
   static let preexistingNativeRequirements: Set<String> = [
