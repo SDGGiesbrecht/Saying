@@ -179,8 +179,9 @@ enum C: Platform {
   }
 
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
+    let constant = isThrough ? "" : "const "
     let pointer = isThrough ? "*" : ""
-    return "\(type)\(pointer) \(name)"
+    return "\(constant)\(type)\(pointer) \(name)"
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
@@ -214,7 +215,7 @@ enum C: Platform {
     return "void"
   }
   static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
-    return "\(returnValue)"
+    return returnValue
   }
 
   static func actionDeclarationBase(name: String, parameters: String, returnSection: String?) -> String {

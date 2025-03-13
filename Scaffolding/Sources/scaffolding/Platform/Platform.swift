@@ -905,7 +905,7 @@ extension Platform {
             .joined(separator: localName)
           entries.append(
             ReferenceCountedReturn(
-              localStorageDeclaration: "const \(typeName) \(localName) = \(call);",
+              localStorageDeclaration: "\(typeName) \(localName) = \(call);",
               localName: localName,
               releaseStatement: "\(releaseExpression);"
             )
