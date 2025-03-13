@@ -215,7 +215,7 @@ enum C: Platform {
     return "void"
   }
   static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
-    return "\(returnValue)"
+    return "const \(returnValue)"
   }
 
   static func actionDeclarationBase(name: String, parameters: String, returnSection: String?) -> String {
