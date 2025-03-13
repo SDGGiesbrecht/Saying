@@ -304,7 +304,7 @@ enum C: Platform {
 
   static var memoryManagement: String? {
     return [
-      "#define REFERENCE_COUNTING(type, name, clean_up) \u{5C}",
+      "#define REFERENCE_COUNTING(type, name, clean_up, ...) \u{5C}",
       "typedef struct reference_counted_ ## name { \u{5C}",
       "\(indent)type target; \u{5C}",
       "\(indent)unsigned references; \u{5C}",
@@ -328,7 +328,7 @@ enum C: Platform {
       "void release_ ## name(reference_counted_ ## name* reference) { \u{5C}",
       "\(indent)reference->references -= 1; \u{5C}",
       "\(indent)if (reference->references == 0) { \u{5C}",
-      "\(indent)\(indent)clean_up(reference->target); \u{5C}",
+      "\(indent)\(indent)clean_up(reference->target, __VA_ARGS__); \u{5C}",
       "\(indent)\(indent)free(reference); \u{5C}",
       "\(indent)} \u{5C}",
       "}",
