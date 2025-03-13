@@ -190,7 +190,7 @@ enum C: Platform {
     return ""
   }
   static func createInstance(of type: String, parts: String) -> String {
-    return "(\(type)) {\(parts)}"
+    return "(const \(type)) {\(parts)}"
   }
   static var needsReferencePreparation: Bool {
     return false
