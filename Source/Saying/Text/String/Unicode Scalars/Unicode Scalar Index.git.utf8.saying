@@ -7,34 +7,10 @@ thing (clients)
  (
   English: Unicode scalar index
  )
+ C: “gsize” (“glib¤(2D)2.0”)
+ C♯: “int”
+ Kotlin: “Int”
  Swift: “String.UnicodeScalarView.Index”
- {
-  part (unit)
-   (
-    English: index
-   )
-   platform fixed‐width integer
- }
-
-action
- [
-  [
-   English: Wraps a platform index on platforms that use integers; returns a nonsense index elsewhere.
-  ]
-  [
-   English: Only intended for internal use by {Unicode scalars} to create its own indices. In general, indices should be obtained from the collection instead.
-  ]
-  test {
-   let (• index: Unicode scalar index) be (Unicode scalar index at (example: platform fixed‐width integer))
-   verify ((index) is (index))
-  }
- ]
- (
-  English: Unicode scalar index at (index: platform fixed‐width integer)
- )
- Unicode scalar index
- Swift: “¤(22)¤(22).startIndex”
- create
 
 use (clients)
  comparison of (Unicode scalar index) for equality
@@ -42,18 +18,29 @@ use (clients)
   action (clients)
    (first: Unicode scalar index) is (second: Unicode scalar index)
    truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
    Swift: “” first “ == ” second “”
-   {
-    ← ((index) of (first)) is ((index) of (second))
-   }
+
+  action (clients)
+   (first: Unicode scalar index) is not (second: Unicode scalar index)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: “” first “ != ” second “”
 
   action (clients)
    example
    Unicode scalar index
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
    Swift: “¤(22) ¤(22).startIndex”
-   {
-    ← Unicode scalar index at (example: platform fixed‐width integer)
-   }
 
   action (clients)
    differing example
@@ -95,16 +82,45 @@ use (clients)
   action (clients)
    (first: Unicode scalar index) is less than (second: Unicode scalar index)
    truth value
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
    Swift: “” first “ < ” second “”
-   {
-    ← ((index) of (first)) is less than ((index) of (second))
-   }
+
+  action (clients)
+   (first: Unicode scalar index) is greater than (second: Unicode scalar index)
+   truth value
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: “” first “ > ” second “”
+
+  action (clients)
+   (first: Unicode scalar index) is less than or equal to (second: Unicode scalar index)
+   truth value
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: “” first “ <= ” second “”
+
+  action (clients)
+   (first: Unicode scalar index) is greater than or equal to (second: Unicode scalar index)
+   truth value
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: “” first “ >= ” second “”
 
   action (clients)
    greater example
    Unicode scalar index
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1”
    Swift: “¤(22) ¤(22).endIndex”
-   {
-    ← Unicode scalar index at (greater example: platform fixed‐width integer)
-   }
  }
