@@ -116,9 +116,7 @@ use (clients)
   action (clients)
    greater example
    Unicode scalar index
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1”
-   Swift: “¤(22) ¤(22).endIndex”
+   {
+    ← end of (...non‐empty example: Unicode scalars)...
+   }
  }

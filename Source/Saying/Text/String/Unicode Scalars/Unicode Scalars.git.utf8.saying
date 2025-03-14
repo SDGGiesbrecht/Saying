@@ -35,6 +35,17 @@ action (unit)
 
 action (unit)
  (
+  English: end of (list: Unicode scalars)...
+ )
+ Unicode scalar index
+ C: “” list “¤(2D)>target¤(2D)>len”
+ C♯: “” list “.Length”
+ JavaScript: “” list “.length”
+ Kotlin: “” list “.length”
+ Swift: “” list “.endIndex”
+
+action (unit)
+ (
   English: ...non‐empty example
  )
  Unicode scalars
