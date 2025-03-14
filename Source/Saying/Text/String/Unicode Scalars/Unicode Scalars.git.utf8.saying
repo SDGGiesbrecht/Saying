@@ -49,7 +49,7 @@ action (unit)
   English: index after (index: Unicode scalar index) in (list: Unicode scalars)...
  )
  Unicode scalar index
- C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len)”
+ C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” index “, ” list “¤(2D)>target¤(2D)>str + ” list “¤(2D)>target¤(2D)>len)”
  C♯: “” index “ + 1”
  JavaScript: “” index “ + 1”
  Kotlin: “” index “ + 1”
