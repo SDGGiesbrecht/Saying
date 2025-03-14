@@ -50,8 +50,8 @@ action (unit)
  )
  Unicode scalar index
  C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)”
- C♯: “” list “[” index “] >= 0xD800 ¤(26)¤(26) ” list “[” index “] < 0xDC00 ? index + 2 : index + 1”
- JavaScript: “” list “[” index “] >= 0xD800 ¤(26)¤(26) ” list “[” index “] < 0xDC00 ? index + 2 : index + 1”
+ C♯: “” list “[” index “] >= 0xD800 ¤(26)¤(26) ” list “[” index “] < 0xDC00 ? ” index “ + 2 : ” index “ + 1”
+ JavaScript: “” list “[” index “] >= 0xD800 ¤(26)¤(26) ” list “[” index “] < 0xDC00 ? ” index “ + 2 : ” index “ + 1”
  Kotlin: “” list “.offsetByCodePoints(” index “, 1)”
  Swift: “” list “.index(after: ” index “)”
 
