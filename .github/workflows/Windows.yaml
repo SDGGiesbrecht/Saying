@@ -53,7 +53,7 @@ jobs:
       run: |
         echo on
         .Construction\C♯\bin\Debug\net48\win-x86\Project.exe
-    - name: Test with .NET Core
+    - name: Test with .NET
       shell: cmd
       run: |
         echo on
