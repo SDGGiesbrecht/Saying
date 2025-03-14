@@ -7,7 +7,7 @@ thing (clients)
  (
   English: Unicode scalar index
  )
- C: “gsize” (“glib¤(2D)2.0”)
+ C: “gchar¤(2A)” (“glib¤(2D)2.0”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “String.UnicodeScalarView.Index”

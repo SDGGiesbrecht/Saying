@@ -27,7 +27,7 @@ action (unit)
   English: ...beginning of (list: Unicode scalars)
  )
  Unicode scalar index
- C: “0”
+ C: “” list “¤(2D)>target¤(2D)>str”
  C♯: “0”
  JavaScript: “0”
  Kotlin: “0”
@@ -38,11 +38,22 @@ action (unit)
   English: end of (list: Unicode scalars)...
  )
  Unicode scalar index
- C: “” list “¤(2D)>target¤(2D)>len”
+ C: “NULL”
  C♯: “” list “.Length”
  JavaScript: “” list “.length”
  Kotlin: “” list “.length”
  Swift: “” list “.endIndex”
+
+action (unit)
+ (
+  English: index after (index: Unicode scalar index) in (list: Unicode scalars)...
+ )
+ Unicode scalar index
+ C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len)”
+ C♯: “” index “ + 1”
+ JavaScript: “” index “ + 1”
+ Kotlin: “” index “ + 1”
+ Swift: “” list “.index(after: ” index “)”
 
 action (unit)
  (
@@ -63,4 +74,22 @@ action (unit)
  JavaScript: “¤(22) ¤(22)”
  Kotlin: “¤(22) ¤(22)”
  Swift: “¤(22) ¤(22).unicodeScalars”
+ create
+
+action (file)
+ [
+  test {
+   let (• supplementary: Unicode scalars) be (example with one supplementary plane scalar)
+   verify ((index after (...beginning of (supplementary)) in (supplementary)...) is (end of (supplementary)...))
+  }
+ ]
+ (
+  English: example with one supplementary plane scalar
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22)¤(10000)¤(22)))”
+ C♯: “¤(22)¤(10000)¤(22)”
+ JavaScript: “¤(22)¤(10000)¤(22)”
+ Kotlin: “¤(22)¤(10000)¤(22)”
+ Swift: “¤(22)¤(10000)¤(22).unicodeScalars”
  create
