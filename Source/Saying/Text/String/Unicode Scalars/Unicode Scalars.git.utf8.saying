@@ -17,14 +17,31 @@ thing (clients)
  {
  }
 
+use
+ storage of (Unicode scalars)
+ {
+ }
+
 action (unit)
+ [
+  test {ignore (...non‐empty example)}
+ ]
  (
-  English: example scalars
+  English: ...non‐empty example
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22)¤(22)))”
- C♯: “¤(22)¤(22)”
- JavaScript: “¤(22)¤(22)”
- Kotlin: “¤(22)¤(22)”
- Swift: “¤(22)¤(22).unicodeScalars”
+ {
+  ← non‐empty NFKD example
+ }
+
+action (unit)
+ (
+  English: non‐empty NFKD example
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22) ¤(22)))”
+ C♯: “¤(22) ¤(22)”
+ JavaScript: “¤(22) ¤(22)”
+ Kotlin: “¤(22) ¤(22)”
+ Swift: “¤(22) ¤(22).unicodeScalars”
  create
