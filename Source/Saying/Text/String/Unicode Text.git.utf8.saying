@@ -35,5 +35,5 @@ action (unit)
  example text
  Unicode text
  {
-  ← Unicode text skipping normalization of (example scalars)
+  ← Unicode text skipping normalization of (non‐empty NFKD example)
  }
