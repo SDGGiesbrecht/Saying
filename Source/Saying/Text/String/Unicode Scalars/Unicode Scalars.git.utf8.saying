@@ -27,7 +27,7 @@ action (unit)
   English: ...beginning of (list: Unicode scalars)
  )
  Unicode scalar index
- C: “” list “¤(2D)>target¤(2D)>str”
+ C: “0”
  C♯: “0”
  JavaScript: “0”
  Kotlin: “0”
@@ -38,7 +38,7 @@ action (unit)
   English: end of (list: Unicode scalars)...
  )
  Unicode scalar index
- C: “NULL”
+ C: “” list “¤(2D)>target¤(2D)>len”
  C♯: “” list “.Length”
  JavaScript: “” list “.length”
  Kotlin: “” list “.length”
