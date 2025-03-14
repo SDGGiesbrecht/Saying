@@ -23,9 +23,17 @@ use
  }
 
 action (unit)
- [
-  test {ignore (...non‐empty example)}
- ]
+ (
+  English: ...beginning of (list: Unicode scalars)
+ )
+ Unicode scalar index
+ C: “0”
+ C♯: “0”
+ JavaScript: “0”
+ Kotlin: “0”
+ Swift: “” list “.startIndex”
+
+action (unit)
  (
   English: ...non‐empty example
  )
