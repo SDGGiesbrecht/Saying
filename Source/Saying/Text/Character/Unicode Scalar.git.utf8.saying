@@ -3,7 +3,7 @@ thing (clients)
   English: Unicode scalar
  )
  C: “gunichar” (“glib¤(2D)2.0”)
- C♯: “Rune” (“System.Text”)
+ C♯: “Rune” (“System.Text”) {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public readonly struct Rune {}¤(A)¤(23)endif”}
  Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
