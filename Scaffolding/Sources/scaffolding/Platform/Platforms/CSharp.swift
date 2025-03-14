@@ -426,13 +426,13 @@ enum CSharp: Platform {
 
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
-      "<Project>",
-      "  <ItemGroup>",
-      "    <Compile Include=\u{22}Test.cs\u{22} />",
-      "  </ItemGroup>",
-      "  <Target Name=\u{22}Test\u{22}>",
-      "    <Csc Sources=\u{22}@(Compile)\u{22} />",
-      "  </Target>",
+      "<Project Sdk=\u{22}Microsoft.NET.Sdk\u{22}>",
+      "  <PropertyGroup>",
+      "    <OutputType>Exe</OutputType>",
+      "    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>",
+      "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
+      "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
+      "  </PropertyGroup>",
       "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Project.csproj"))

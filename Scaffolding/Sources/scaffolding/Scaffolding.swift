@@ -19,6 +19,10 @@ import SDGText
 
     // Windows: Visual Studio (MSBuild), Windows App SDK, C#
     // (1981‐08‐12 MS‐DOS)
+    // • .NET Framework
+    // (2002‐02‐13)
+    // • .NET
+    // (2016‐06‐27 .NET Core)
 
     // Web: HTML, JavaScript
     // (1991‐08‐06)

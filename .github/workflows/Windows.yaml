@@ -43,9 +43,18 @@ jobs:
       uses: microsoft/setup-msbuild@v2
       with:
         vs-version: '[16.11,16.12)'
-    - name: Test
+    - name: Build All
       shell: cmd
       run: |
         echo on
-        msbuild .Construction\C♯\Project.csproj -target:Test
-        .Construction\C♯\Test.exe
+        msbuild .Construction\C♯\Project.csproj -target:Build -restore
+    - name: Test with .NET Framework
+      shell: cmd
+      run: |
+        echo on
+        .Construction\C♯\bin\Debug\net48\win-x86\Project.exe
+    - name: Test with .NET
+      shell: cmd
+      run: |
+        echo on
+        .Construction\C♯\bin\Debug\netcoreapp3.0\win-x86\Project.exe
