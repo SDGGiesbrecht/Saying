@@ -36,11 +36,9 @@ use (clients)
   action (clients)
    example
    Unicode scalar index
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0”
-   Swift: “¤(22) ¤(22).startIndex”
+   {
+    ← ...beginning of (...non‐empty example: Unicode scalars)
+   }
 
   action (clients)
    differing example
