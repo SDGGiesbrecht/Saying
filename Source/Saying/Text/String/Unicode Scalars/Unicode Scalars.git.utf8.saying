@@ -71,6 +71,17 @@ use
 
   action (clients)
    (
+    English: first in (list: Unicode scalars)
+   )
+   optional (Unicode scalar)
+   Kotlin: “” list “.firstOrNull()”
+   Swift: “” list “.first”
+   {
+    ← first in (list) according to default use as list
+   }
+
+  action (clients)
+   (
     English: (list: Unicode scalars) is empty
    )
    truth value

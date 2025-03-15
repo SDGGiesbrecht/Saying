@@ -72,6 +72,15 @@ use
 
   action (clients)
    (
+    English: first in (list: Unicode text)
+   )
+   optional (Unicode scalar)
+   {
+    ← first in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
     English: (list: Unicode text) is empty
    )
    truth value
