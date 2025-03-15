@@ -84,6 +84,17 @@ extension
 
     action (clients)
      (
+      English: first in (list: list of (element))
+     )
+     optional (element)
+     Kotlin: “” list “.firstOrNull()”
+     Swift: “” list “.first”
+     {
+      ← first in (list) according to default use as list
+     }
+
+    action (clients)
+     (
       English: (list: list of (element)) is empty
      )
      truth value

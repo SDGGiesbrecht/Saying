@@ -62,6 +62,25 @@ ability (clients)
   choice (clients)
    [
     test {
+     verify ((first in (non‐empty example: list)) exists)
+    }
+   ]
+   (
+    English: first in (list: list)
+    Deutsch: erster in (Liste: [list])
+    français : premier dans (liste: [list])
+    ελληνικά: πρώτος σε (κατάλογος: [list])
+    Swift: var (self: [list]).first
+   )
+   optional (element)
+   Swift: “” list “.first” {“extension ” list “: Collection {}”}
+   {
+    ← first in (list) according to default use as list
+   }
+
+  choice (clients)
+   [
+    test {
      verify (not ((non‐empty example: list) is empty))
     }
    ]
@@ -114,11 +133,33 @@ extension
    storage of (list)
    {
    }
+
+  use (clients)
+   optional (element)
+   {
+   }
  }
 
 extension
  use of (list) as list of (element) indexed by (index)
  {
+  action (clients)
+   [
+    test {
+     verify ((first in (non‐empty example: list) according to default use as list) exists)
+    }
+   ]
+   (
+    English: first in (list: list) according to default use as list
+   )
+   optional (element)
+   {
+    if ((list) is empty), {
+     ← nothing
+    }
+    ← wrap (entry at (beginning of (list)) in (list)) as (something)
+   }
+
   action (clients)
    [
     test {
@@ -219,4 +260,18 @@ use
    {
     ← minimal list example wrapping (non‐empty example: list of (truth value))
    }
+ }
+
+action (file)
+ [
+  test {
+   verify ((first in (empty minimal list example) according to default use as list) does not exist)
+  }
+ ]
+ (
+  English: empty minimal list example
+ )
+ minimal list example
+ {
+  ← minimal list example wrapping (empty: list of (truth value))
  }
