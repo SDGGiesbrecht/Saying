@@ -46,6 +46,17 @@ action (unit)
 
 action (unit)
  (
+  English: index after (index: Unicode scalar index) in (list: Unicode scalars)...
+ )
+ Unicode scalar index
+ C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)”
+ C♯: “0xD800 <= ” list “[” index “] ¤(26)¤(26) ” list “[” index “] < 0xDC00 ? ” index “ + 2 : ” index “ + 1”
+ JavaScript: “0xD800 <= ” list “.charCodeAt(” index “) ¤(26)¤(26) ” list “.charCodeAt(” index “) < 0xDC00 ? ” index “ + 2 : ” index “ + 1”
+ Kotlin: “” list “.offsetByCodePoints(” index “, 1)”
+ Swift: “” list “.index(after: ” index “)”
+
+action (unit)
+ (
   English: ...non‐empty example
  )
  Unicode scalars
@@ -63,4 +74,40 @@ action (unit)
  JavaScript: “¤(22) ¤(22)”
  Kotlin: “¤(22) ¤(22)”
  Swift: “¤(22) ¤(22).unicodeScalars”
+ create
+
+action (file)
+ [
+  test {
+   let (• ASCII: Unicode scalars) be (example with one ASCII scalar)
+   verify ((index after (...beginning of (ASCII)) in (ASCII)...) is (end of (ASCII)...))
+  }
+ ]
+ (
+  English: example with one ASCII scalar
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22) ¤(22)))”
+ C♯: “¤(22) ¤(22)”
+ JavaScript: “¤(22) ¤(22)”
+ Kotlin: “¤(22) ¤(22)”
+ Swift: “¤(22) ¤(22).unicodeScalars”
+ create
+
+action (file)
+ [
+  test {
+   let (• supplementary: Unicode scalars) be (example with one supplementary plane scalar)
+   verify ((index after (...beginning of (supplementary)) in (supplementary)...) is (end of (supplementary)...))
+  }
+ ]
+ (
+  English: example with one supplementary plane scalar
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22)¤(10000)¤(22)))”
+ C♯: “¤(22)¤(10000)¤(22)”
+ JavaScript: “¤(22)¤(10000)¤(22)”
+ Kotlin: “¤(22)¤(10000)¤(22)”
+ Swift: “¤(22)¤(10000)¤(22).unicodeScalars”
  create
