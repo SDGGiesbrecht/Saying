@@ -105,6 +105,20 @@ ability (clients)
 extension
  use of (list) as list of (element) indexed by (index)
  {
+  use (clients)
+   storage of (element)
+   {
+   }
+
+  use (clients)
+   storage of (list)
+   {
+   }
+ }
+
+extension
+ use of (list) as list of (element) indexed by (index)
+ {
   action (clients)
    [
     test {
