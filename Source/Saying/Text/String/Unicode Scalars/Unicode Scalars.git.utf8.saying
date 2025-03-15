@@ -64,7 +64,7 @@ use
    )
    Unicode scalar
    C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “)”
-   C♯: “GetRuneAt(” list “, ” index “)”
+   C♯: “GetRuneAt(” list “, ” index “)” {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public static Rune GetRuneAt(string input, int index)¤(A){¤(A)uint returnValue = input[index];¤(A)if (0xD800U <= returnValue ¤(26)¤(26) returnValue <= 0xDFFFU)¤(A){¤(A)uint potentialLowSurrogate = input[index + 1];¤(A)returnValue = (returnValue << 10) + potentialLowSurrogate ¤(2D) ((0xD800U << 10) + 0xDC00U ¤(2D) (1 << 16));¤(A)}¤(A)return Rune.UnsafeCreate(returnValue);¤(A)}¤(A)¤(23)endif”}
    JavaScript: “” list “.codePointAt(” index “)”
    Kotlin: “” list “.codePointAt(” index “)”
    Swift: “” list “[” index “]”
