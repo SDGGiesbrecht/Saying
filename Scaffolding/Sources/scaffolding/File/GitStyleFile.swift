@@ -20,7 +20,6 @@ struct GitStyleFile {
     segmentStart: inout (offset: Int, index: String.UnicodeScalarView.Index)?,
     cursor: (offset: Int, index: String.UnicodeScalarView.Index)
   ) {
-    let source = StrictString(self.source)
     if let segmentStart = segmentStart,
        segmentStart.offset != cursor.offset {
       var segment = source[segmentStart.index..<cursor.index]

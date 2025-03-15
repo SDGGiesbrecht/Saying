@@ -14,9 +14,9 @@ extension UnicodeSegments {
     let segmentIndex = index.segmentIndex
     if let scalar = index.scalarIndex {
       let segment = segment(at: segmentIndex)
-      return Int(segment.scalarOffset) + StrictString(segment.source)[..<scalar].count
+      return Int(segment.scalarOffset) + segment.source[..<scalar].count
     } else if let lastSegment = segmentIndices.last.map({ segment(at: $0) }) {
-      return Int(lastSegment.scalarOffset) + StrictString(lastSegment.source).count
+      return Int(lastSegment.scalarOffset) + lastSegment.source.count
     } else {
       return 0
     }
@@ -27,7 +27,7 @@ extension UnicodeSegments: Collection {
   var startIndex: Index {
     return Index(
       segment: segmentIndices.startIndex,
-      scalar: segmentIndices.first.map({ StrictString(segment(at: $0).source).startIndex })
+      scalar: segmentIndices.first.map({ segment(at: $0).source.startIndex })
     )
   }
   var endIndex: Index {
@@ -35,20 +35,19 @@ extension UnicodeSegments: Collection {
   }
   func index(after i: Index) -> Index {
     let segment = segment(at: i.segmentIndex)
-    let segmentSource = StrictString(segment.source)
-    let nextIndex = segmentSource.index(after: i.scalarIndex!)
-    if nextIndex == segmentSource.endIndex {
+    let nextIndex = segment.source.index(after: i.scalarIndex!)
+    if nextIndex == segment.source.endIndex {
       let nextSegment = segmentIndices.index(after: i.segmentIndex)
       return Index(
         segment: nextSegment,
-        scalar: segmentIndices[nextSegment...].first.map({ StrictString(self.segment(at: $0).source).startIndex })
+        scalar: segmentIndices[nextSegment...].first.map({ self.segment(at: $0).source.startIndex })
       )
     } else {
       return Index(segment: i.segmentIndex, scalar: nextIndex)
     }
   }
   subscript(position: Index) -> Unicode.Scalar {
-    StrictString(segment(at: position.segmentIndex).source)[position.scalarIndex!]
+    segment(at: position.segmentIndex).source[position.scalarIndex!]
   }
 }
 

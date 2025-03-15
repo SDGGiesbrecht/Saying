@@ -249,7 +249,7 @@ extension ActionUse {
 extension ActionUse {
   static func isReferenceNotCall<T>(name: UnicodeText, arguments: [T]) -> Bool? {
     if arguments.isEmpty {
-      if StrictString(name).contains("(") {
+      if name.contains("(") {
         return true
       } else {
         return nil
