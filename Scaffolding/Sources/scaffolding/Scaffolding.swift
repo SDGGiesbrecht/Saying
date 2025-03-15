@@ -86,6 +86,10 @@ import SDGText
       mode: .release,
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
+        "UnicodeText.startIndex",
+        "UnicodeText.endIndex",
+        "UnicodeText.index(after: String.UnicodeScalarView.Index)",
+        "UnicodeText.subscript(_: String.UnicodeScalarView.Index)",
 
         "==(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
         "<(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",

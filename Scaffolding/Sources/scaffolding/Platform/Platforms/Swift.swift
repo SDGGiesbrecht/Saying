@@ -322,24 +322,26 @@ enum Swift: Platform {
       ? returnSection!
       : "(\(parameters))\(returnSection ?? "")"
     var result: [String] = []
+    var extraIndent = ""
     if let parent = parentType {
+      extraIndent = indent
       result.append(contentsOf: [
         "extension \(parent) {",
       ])
     }
     result.append(contentsOf: [
-      "\(access)\(keyword)\(name)\(signature) {",
+      "\(extraIndent)\(access)\(keyword)\(name)\(signature) {",
     ])
     if let coverage = coverageRegistration {
-      result.append(coverage)
+      result.append("\(extraIndent)\(coverage)")
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(statement)",
+        "\(extraIndent)\(statement)",
       ])
     }
     result.append(contentsOf: [
-      "}",
+      "\(extraIndent)}",
     ])
     if parentType != nil {
       result.append(contentsOf: [

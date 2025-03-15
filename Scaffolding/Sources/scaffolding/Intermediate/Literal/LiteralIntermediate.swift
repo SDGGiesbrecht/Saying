@@ -1,5 +1,3 @@
-import SDGText
-
 struct LiteralIntermediate {
   var string: String
 }
@@ -27,14 +25,14 @@ extension LiteralIntermediate {
     for segment in contents {
       switch segment {
       case .segment(let text):
-        string.append(contentsOf: String(StrictString(text.source())))
+        string.unicodeScalars.append(contentsOf: text.source())
       case .escape(let symbol):
         let code = symbol.code
-        let codeSource = StrictString(code.source())
+        let codeSource = code.source()
         if !codeSource.allSatisfy({ codeCharacters.contains($0) }) {
           errors.append(.escapeCodeNotHexadecimal(code))
         }
-        if let value = UInt32(String(codeSource), radix: 16),
+        if let value = UInt32(String(String.UnicodeScalarView(codeSource)), radix: 16),
            let scalar = Unicode.Scalar(value) {
           string.unicodeScalars.append(scalar)
         } else {

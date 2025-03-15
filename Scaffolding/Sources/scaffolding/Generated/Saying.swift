@@ -327,6 +327,30 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
   return result
 }
 
+extension UnicodeText {
+  func index(after i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+    return self.scalars.index(after: i)
+  }
+}
+
+extension UnicodeText {
+  subscript(_ index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+    return self.scalars[index]
+  }
+}
+
+extension UnicodeText {
+  var endIndex: String.UnicodeScalarView.Index {
+    return self.scalars.endIndex
+  }
+}
+
+extension UnicodeText {
+  var startIndex: String.UnicodeScalarView.Index {
+    return self.scalars.startIndex
+  }
+}
+
 func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }

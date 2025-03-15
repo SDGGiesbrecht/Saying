@@ -30,6 +30,6 @@ use (unit)
    example element
    Unicode segment
    {
-    ← Unicode segment at (zero: natural number) containing (example text)
+    ← Unicode segment at (zero: natural number) containing (non‐empty example: Unicode text)
    }
  }

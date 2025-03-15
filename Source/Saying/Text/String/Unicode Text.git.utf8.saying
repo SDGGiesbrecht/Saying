@@ -31,9 +31,69 @@ use (clients)
  {
  }
 
-action (unit)
- example text
- Unicode text
+use
+ use of (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index)
  {
-  ← Unicode text skipping normalization of (non‐empty NFKD example)
+  action (clients)
+   (
+    English: beginning of (list: Unicode text)
+   )
+   Unicode scalar index
+   {
+    ← beginning of ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: end of (list: Unicode text)
+   )
+   Unicode scalar index
+   {
+    ← end of ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: index after (index: Unicode scalar index) in (list: Unicode text)
+   )
+   Unicode scalar index
+   {
+    ← index after (index) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: entry at (index: Unicode scalar index) in (list: Unicode text)
+   )
+   Unicode scalar
+   {
+    ← entry at (index) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode text) is empty
+   )
+   truth value
+   {
+    ← ((scalars) of (list)) is empty
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode text) is not empty
+   )
+   truth value
+   {
+    ← ((scalars) of (list)) is not empty
+   }
+
+  action (clients)
+   (
+    English: non‐empty example
+   )
+   Unicode text
+   {
+    ← Unicode text skipping normalization of (non‐empty NFKD example)
+   }
  }
