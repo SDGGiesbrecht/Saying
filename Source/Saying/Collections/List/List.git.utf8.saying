@@ -36,16 +36,6 @@ extension
    }
 
   use (clients)
-   storage of (element)
-   {
-   }
-
-  use (clients)
-   storage of (list of (element))
-   {
-   }
-
-  use
    use of (list of (element)) as list of (element) indexed by (list index)
    {
     action (clients)
@@ -123,7 +113,7 @@ extension
      }
    }
 
-  use
+  use (clients)
    use of (list of (element)) as changeable list of (element) indexed by (list index)
    {
     action (clients)

@@ -37,7 +37,7 @@ use (clients)
    example
    Unicode scalar index
    {
-    ← ...beginning of (...non‐empty example: Unicode scalars)
+    ← beginning of (non‐empty example: Unicode scalars)
    }
 
   action (clients)
@@ -117,6 +117,6 @@ use (clients)
    greater example
    Unicode scalar index
    {
-    ← end of (...non‐empty example: Unicode scalars)...
+    ← end of (non‐empty example: Unicode scalars)
    }
  }
