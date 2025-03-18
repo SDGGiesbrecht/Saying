@@ -15,6 +15,7 @@ action (unit)
  [
   test {ignore (prototype beginning of (Unicode segments (empty: list of (Unicode segment))))}
   test {ignore (prototype beginning of (Unicode segments (non‐empty example: list of (Unicode segment))))}
+  test {ignore (prototype end of (Unicode segments (empty: list of (Unicode segment))))}
  ]
  (
   English: Unicode segments (segments: list of (Unicode segment))
@@ -35,6 +36,16 @@ action (clients)
    ← Unicode segments index at segment (segment index), scalar (wrap (beginning of ((source) of (first segment: Unicode segment))) into optional)
   }
   ← Unicode segments index at segment (segment index), scalar (nothing: optional (Unicode scalar index))
+ }
+
+action (clients)
+ (
+  English: prototype end of (list: Unicode segments)
+  Swift: var (self: [list]).prototypeEndIndex
+ )
+ Unicode segments index
+ {
+  ← Unicode segments index at segment (end of ((segments) of (list))), scalar (nothing: optional (Unicode scalar index))
  }
 
 use (clients)
