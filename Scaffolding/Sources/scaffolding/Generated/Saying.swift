@@ -371,6 +371,17 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
   return false
 }
 
+extension UnicodeSegments {
+  var prototypeStartIndex: UnicodeSegments.Index {
+    let segment_0020list: [Unicode_0020segment] = self.segments
+    let segment_0020index: Int = segment_0020list.startIndex
+    if let first_0020segment = segment_0020list.first {
+      return UnicodeSegments.Index(segment_0020index, first_0020segment.source.startIndex)
+    }
+    return UnicodeSegments.Index(segment_0020index, nil)
+  }
+}
+
 import SDGText
 
 extension StrictString {

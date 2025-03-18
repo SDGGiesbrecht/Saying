@@ -121,10 +121,10 @@ extension
 
   action (clients)
    [
-    test {verify ((wrap (example: thing) as (something)) is (wrap (example: thing) as (something)) according to optional)}
-    test {verify (not ((wrap (example: thing) as (something)) is (wrap (differing example: thing) as (something)) according to optional))}
-    test {verify (not ((wrap (example: thing) as (something)) is (nothing: optional (thing)) according to optional))}
-    test {verify (not ((nothing: optional (thing)) is (wrap (example: thing) as (something)) according to optional))}
+    test {verify ((wrap (example: thing) into optional) is (wrap (example: thing) into optional) according to optional)}
+    test {verify (not ((wrap (example: thing) into optional) is (wrap (differing example: thing) into optional) according to optional))}
+    test {verify (not ((wrap (example: thing) into optional) is (nothing: optional (thing)) according to optional))}
+    test {verify (not ((nothing: optional (thing)) is (wrap (example: thing) into optional) according to optional))}
     test {verify ((nothing: optional (thing)) is (nothing: optional (thing)) according to optional)}
    ]
    (
@@ -144,10 +144,10 @@ extension
 
   action (clients)
    [
-    test {verify (not ((wrap (example: thing) as (something)) is not (wrap (example: thing) as (something)) according to optional))}
-    test {verify ((wrap (example: thing) as (something)) is not (wrap (differing example: thing) as (something)) according to optional)}
-    test {verify ((wrap (example: thing) as (something)) is not (nothing: optional (thing)) according to optional)}
-    test {verify ((nothing: optional (thing)) is not (wrap (example: thing) as (something)) according to optional)}
+    test {verify (not ((wrap (example: thing) into optional) is not (wrap (example: thing) into optional) according to optional))}
+    test {verify ((wrap (example: thing) into optional) is not (wrap (differing example: thing) into optional) according to optional)}
+    test {verify ((wrap (example: thing) into optional) is not (nothing: optional (thing)) according to optional)}
+    test {verify ((nothing: optional (thing)) is not (wrap (example: thing) into optional) according to optional)}
     test {verify (not ((nothing: optional (thing)) is not (nothing: optional (thing)) according to optional))}
    ]
    (

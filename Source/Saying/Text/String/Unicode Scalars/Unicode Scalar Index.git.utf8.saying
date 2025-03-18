@@ -63,14 +63,14 @@ use (clients)
    example
    optional (Unicode scalar index)
    {
-    ← wrap (example: Unicode scalar index) as (something)
+    ← wrap (example: Unicode scalar index) into optional
    }
 
   action (clients)
    differing example
    optional (Unicode scalar index)
    {
-    ← wrap (differing example: Unicode scalar index) as (something)
+    ← wrap (differing example: Unicode scalar index) into optional
    }
  }
 

@@ -1057,16 +1057,18 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
 
-  func requiredIdentifiers(
-    moduleAndExternalReferenceLookup: [ReferenceDictionary]
-  ) -> [UnicodeText] {
+  func requiredIdentifiers<P>(
+    moduleAndExternalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) -> [UnicodeText]
+  where P: Platform {
     var result: [UnicodeText] = []
     result.append(
       contentsOf: prototype.requiredIdentifiers(
         moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
       )
     )
-    for native in allNativeImplementations() {
+    if let native = platform.nativeImplementation(of: self) {
       for parameterReference in native.expression.parameters {
         if let typeInstead = parameterReference.typeInstead {
           result.append(
@@ -1076,8 +1078,7 @@ extension ActionIntermediate {
           )
         }
       }
-    }
-    if let implementation = self.implementation {
+    } else if let implementation = self.implementation {
       result.append(
         contentsOf: implementation.requiredIdentifiers(
           context: moduleAndExternalReferenceLookup

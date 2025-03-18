@@ -629,7 +629,7 @@ extension Platform {
                       existingReferences: &existingReferences,
                       mode: mode,
                       indentationLevel: 1
-                    )
+                    ).joined(separator: "\n")
                   )
                   accumulator.append("\n")
                 }
@@ -933,7 +933,7 @@ extension Platform {
     existingReferences: inout Set<String>,
     mode: CompilationMode,
     indentationLevel: Int
-  ) -> String {
+  ) -> [String] {
     var entry = ""
     var referenceList: [String] = []
     if needsReferencePreparation {
@@ -1040,7 +1040,7 @@ extension Platform {
     }
     let presentIndent = String(repeating: indent, count: indentationLevel)
     entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)
-    return entry.prepending(contentsOf: presentIndent)
+    return entry.prepending(contentsOf: presentIndent).components(separatedBy: "\n")
   }
 
   static func source(
@@ -1130,7 +1130,7 @@ extension Platform {
     var locals = ReferenceDictionary()
     var cleanUpCode = ""
     var existingReferences: Set<String> = []
-    var inOrder = statements.map({ entry in
+    var inOrder = statements.flatMap({ entry in
       let result = source(
         for: entry,
         context: context,
