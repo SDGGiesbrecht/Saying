@@ -100,6 +100,18 @@ extension
     }
    }
 
+  action (clients)
+   (
+    English: wrap (value: thing) into optional
+   )
+   optional (thing)
+   JavaScript: “” value “”
+   Kotlin: “” value “”
+   Swift: “” value “”
+   {
+    ← wrap (value) as (something)
+   }
+
   flow (clients)
    (
     English: change (storage: optional (thing)) to (value: thing)
@@ -112,7 +124,7 @@ extension
 action
  [
   test {verify (not (use optional (nothing: optional (truth value))))}
-  test {verify (use optional (wrap (true) as (something)))}
+  test {verify (use optional (wrap (true) into optional))}
  ]
  (
   English: use optional (optional: optional (truth value))

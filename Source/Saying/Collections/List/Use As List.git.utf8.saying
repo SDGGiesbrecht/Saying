@@ -157,7 +157,7 @@ extension
     if ((list) is empty), {
      ← nothing
     }
-    ← wrap (entry at (beginning of (list)) in (list)) as (something)
+    ← wrap (entry at (beginning of (list)) in (list)) into optional
    }
 
   action (clients)

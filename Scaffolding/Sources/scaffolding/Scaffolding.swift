@@ -94,6 +94,7 @@ import SDGText
         "==(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
         "<(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
         "UnicodeSegments",
+        "UnicodeSegments.prototypeStartIndex",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",
         "RightArrowSyntax.init()",

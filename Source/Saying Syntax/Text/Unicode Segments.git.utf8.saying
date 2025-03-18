@@ -11,6 +11,32 @@ thing (clients)
    list of (Unicode segment)
  }
 
+action (unit)
+ [
+  test {ignore (prototype beginning of (Unicode segments (empty: list of (Unicode segment))))}
+  test {ignore (prototype beginning of (Unicode segments (non‐empty example: list of (Unicode segment))))}
+ ]
+ (
+  English: Unicode segments (segments: list of (Unicode segment))
+ )
+ Unicode segments
+ create
+
+action (clients)
+ (
+  English: prototype beginning of (list: Unicode segments)
+  Swift: var (self: [list]).prototypeStartIndex
+ )
+ Unicode segments index
+ {
+  let (• segment list: list of (Unicode segment)) be ((segments) of (list))
+  let (• segment index: list index) be (beginning of (segment list))
+  if (first in (segment list)) exists, unwrap it as (• first segment: Unicode segment), {
+   ← Unicode segments index at segment (segment index), scalar (wrap (beginning of ((source) of (first segment: Unicode segment))) into optional)
+  }
+  ← Unicode segments index at segment (segment index), scalar (nothing: optional (Unicode scalar index))
+ }
+
 use (clients)
  slices of (Unicode segments)
  {

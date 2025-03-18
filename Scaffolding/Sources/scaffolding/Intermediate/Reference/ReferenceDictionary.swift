@@ -576,7 +576,8 @@ extension ReferenceDictionary {
           found.insert(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
           _ = optimized.add(action: action)
           for identifer in action.requiredIdentifiers(
-            moduleAndExternalReferenceLookup: referenceLookup
+            moduleAndExternalReferenceLookup: referenceLookup,
+            platform: Swift.self
           ).lazy.map({ StrictString($0) }) {
             if !found.contains(identifer) {
               stillRequired.insert(identifer)
@@ -589,7 +590,10 @@ extension ReferenceDictionary {
           foundSomething = true
           found.insert(identifier)
           _ = optimized.add(action: action)
-          for child in action.requiredIdentifiers(moduleAndExternalReferenceLookup: referenceLookup).lazy.map({ StrictString($0) }) {
+          for child in action.requiredIdentifiers(
+            moduleAndExternalReferenceLookup: referenceLookup,
+            platform: Swift.self
+          ).lazy.map({ StrictString($0) }) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }

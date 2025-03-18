@@ -25,10 +25,7 @@ extension UnicodeSegments {
 
 extension UnicodeSegments: Collection {
   var startIndex: Index {
-    return Index(
-      segment: segmentIndices.startIndex,
-      scalar: segmentIndices.first.map({ segment(at: $0).source.startIndex })
-    )
+    return prototypeStartIndex
   }
   var endIndex: Index {
     return Index(segment: segmentIndices.endIndex, scalar: nil)
