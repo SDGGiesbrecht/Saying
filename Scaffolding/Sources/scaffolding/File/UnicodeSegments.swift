@@ -28,7 +28,7 @@ extension UnicodeSegments: Collection {
     return prototypeStartIndex
   }
   var endIndex: Index {
-    return Index(segment: segmentIndices.endIndex, scalar: nil)
+    return prototypeEndIndex
   }
   func index(after i: Index) -> Index {
     let segment = segment(at: i.segmentIndex)

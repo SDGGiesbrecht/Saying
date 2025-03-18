@@ -382,6 +382,12 @@ extension UnicodeSegments {
   }
 }
 
+extension UnicodeSegments {
+  var prototypeEndIndex: UnicodeSegments.Index {
+    return UnicodeSegments.Index(self.segments.endIndex, nil)
+  }
+}
+
 import SDGText
 
 extension StrictString {
