@@ -2,22 +2,31 @@ import SDGText
 
 struct StatementIntermediate {
   var isReturn: Bool
-  var action: ActionUse
+  var action: ActionUse?
+  var isDeadEnd: Bool {
+    return action == nil
+  }
 }
 
 extension StatementIntermediate {
   init(_ statement: ParsedStatement) {
-    isReturn = statement.yieldArrow != nil
-    action = ActionUse(statement.action)
+    switch statement {
+    case .valid(let valid):
+      isReturn = valid.yieldArrow != nil
+      action = ActionUse(valid.action)
+    case .deadEnd:
+      isReturn = false
+      action = nil
+    }
   }
 }
 
 extension StatementIntermediate {
   func localActions() -> [ActionIntermediate] {
-    return action.localActions()
+    return action?.localActions() ?? []
   }
   func passedReferences() -> [ActionUse] {
-    return action.passedReferences()
+    return action?.passedReferences() ?? []
   }
 }
 
@@ -27,7 +36,7 @@ extension StatementIntermediate {
     referenceLookup: [ReferenceDictionary],
     finalReturnValue: ParsedTypeReference?
   ) {
-    action.resolveTypes(
+    action?.resolveTypes(
       context: context,
       referenceLookup: referenceLookup,
       specifiedReturnValue: isReturn ? .some(finalReturnValue) : .some(.none),
@@ -40,7 +49,7 @@ extension StatementIntermediate {
     testContext: Bool,
     errors: inout [ReferenceError]
   ) {
-    action.validateReferences(
+    action?.validateReferences(
       context: context,
       testContext: testContext,
       errors: &errors
@@ -54,7 +63,7 @@ extension StatementIntermediate {
   ) -> StatementIntermediate {
     return StatementIntermediate(
       isReturn: isReturn,
-      action: action.resolvingExtensionContext(typeLookup: typeLookup)
+      action: action?.resolvingExtensionContext(typeLookup: typeLookup)
     )
   }
 
@@ -63,18 +72,26 @@ extension StatementIntermediate {
   ) -> StatementIntermediate {
     return StatementIntermediate(
       isReturn: isReturn,
-      action: action.specializing(typeLookup: typeLookup)
+      action: action?.specializing(typeLookup: typeLookup)
     )
   }
 }
 
 extension StatementIntermediate {
-  func countCoverageSubregions(count: inout Int) {
-    let before = count
-    action.countCoverageSubregions(count: &count)
-    if count != before {
-      count += 1 // afterward (since could have returned)
+  func coverageSubregions(
+    counter: inout Int,
+    followingStatements: Array<StatementIntermediate>.SubSequence
+  ) -> [Int] {
+    var list: [Int] = []
+    let before = counter
+    list.append(contentsOf: action?.coverageSubregions(counter: &counter) ?? [])
+    if counter != before {
+      counter += 1 // afterward (since could have returned)
+      if followingStatements.first?.isDeadEnd != true {
+        list.append(counter)
+      }
     }
+    return list
   }
 }
 
@@ -83,8 +100,8 @@ extension StatementIntermediate {
   func requiredIdentifiers(
     context: [ReferenceDictionary]
   ) -> [UnicodeText] {
-    return action.requiredIdentifiers(
+    return action?.requiredIdentifiers(
       context: context
-    )
+    ) ?? []
   }
 }

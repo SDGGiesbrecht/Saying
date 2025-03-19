@@ -960,18 +960,17 @@ extension ActionIntermediate {
     if let base = coverageRegionIdentifier(referenceLookup: referenceLookup) {
       result.append(base)
       if !skippingSubregions {
-        for entry in 0 ..< countCoverageSubregions() {
-          result.append(UnicodeText("\(StrictString(base)):{\((entry + 1).inDigits())}"))
+        for entry in coverageSubregions() {
+          result.append(UnicodeText("\(StrictString(base)):{\(entry.inDigits())}"))
         }
       }
     }
     return result
   }
 
-  func countCoverageSubregions() -> Int {
-    var count: Int = 0
-    implementation?.countCoverageSubregions(count: &count)
-    return count
+  func coverageSubregions() -> [Int] {
+    var counter: Int = 0
+    return implementation?.coverageSubregions(counter: &counter) ?? []
   }
 }
 

@@ -106,7 +106,7 @@ extension DocumentationIntermediate {
         for span in languageEntry.text.spans {
           for segment in [span.first].appending(contentsOf: span.continuations) {
             switch segment {
-            case .identifierCharacters, .openingParenthesis, .closingParenthesis:
+            case .identifierCharacters, .openingParenthesis, .closingParenthesis, .openingQuestionMark, .closingQuestionMark, .rightToLeftQuestionMark, .greekQuestionMark, .openingExclamationMark, .closingExclamationMark:
               break
             case .reference(let reference):
               let identifier = reference.identifier

@@ -1,0 +1,10 @@
+thing (clients)
+ (
+  English: Greek question mark syntax
+  Deutsch: Griechischfragezeichensyntax
+  français : syntaxe de point d’interrogation grec
+  ελληνικά: σύνταξη ελληνικού ερωτηματικού
+  Swift: GreekQuestionMarkSyntax
+ )
+ {
+ }

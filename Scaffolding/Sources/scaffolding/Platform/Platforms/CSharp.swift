@@ -266,6 +266,9 @@ enum CSharp: Platform {
   static func statement(expression: String) -> String {
     return expression.appending(";")
   }
+  static func deadEnd() -> String {
+    "Environment.FailFast(null);"
+  }
   static func returnDelayStorage(type: String?) -> String {
     if let type = type {
       return "\(type) returnValue = "
@@ -318,7 +321,11 @@ enum CSharp: Platform {
   static var importsNeededByMemoryManagement: Set<String> {
     return []
   }
-
+  static var importsNeededByDeadEnd: Set<String> {
+    return [
+      "System",
+    ]
+  }
   static var importsNeededByTestScaffolding: Set<String> {
     return [
       "System",

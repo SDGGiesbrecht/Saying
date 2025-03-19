@@ -127,14 +127,19 @@ extension ActionUseArgument {
 }
 
 extension ActionUseArgument {
-  func countCoverageSubregions(count: inout Int) {
+  func coverageSubregions(counter: inout Int) -> [Int] {
+    var list: [Int] = []
     switch self {
     case .action:
       break
     case .flow(let statements):
-      count += 1
-      statements.countCoverageSubregions(count: &count)
+      counter += 1
+      if statements.statements.first?.isDeadEnd != true {
+        list.append(counter)
+      }
+      list.append(contentsOf: statements.coverageSubregions(counter: &counter))
     }
+    return list
   }
 }
 
