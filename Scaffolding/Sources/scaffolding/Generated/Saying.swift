@@ -378,6 +378,18 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
 }
 
 extension UnicodeSegments {
+  func prototypeIndex(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
+    let segments: [Unicode_0020segment] = self.segments
+    let segment_0020index: Int = i.segment
+    let segment: UnicodeText = segments[segment_0020index].source
+    if let scalar_0020index = i.scalar {
+      _ = true
+    }
+    fatalError()
+  }
+}
+
+extension UnicodeSegments {
   var prototypeStartIndex: UnicodeSegments.Index {
     let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020index: Int = segment_0020list.startIndex

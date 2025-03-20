@@ -40,6 +40,22 @@ action (clients)
 
 action (clients)
  (
+  English: prototype index after (index: Unicode segments index) in (list: Unicode segments)
+  Swift: (self: [list]).prototypeIndex after (i: [index])
+ )
+ Unicode segments index
+ {
+  let (• segments: list of (Unicode segment)) be ((segments) of (list))
+  let (• segment index: list index) be ((segment) of (index))
+  let (• segment: Unicode text) be ((source) of (entry at (segment index) in (segments)))
+  if ((scalar) of (index)) exists, unwrap it as (• scalar index: Unicode scalar index), {
+   let (• next scalar: Unicode scalar index) be (index after (scalar index) in (segment))
+  }
+  !
+ }
+
+action (clients)
+ (
   English: prototype end of (list: Unicode segments)
   Swift: var (self: [list]).prototypeEndIndex
  )
