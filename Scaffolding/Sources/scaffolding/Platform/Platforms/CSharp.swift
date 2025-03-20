@@ -267,7 +267,7 @@ enum CSharp: Platform {
     return expression.appending(";")
   }
   static func deadEnd() -> String {
-    "Environment.FailFast(null);"
+    "Environment.FailFast(null); throw new Exception();"
   }
   static func returnDelayStorage(type: String?) -> String {
     if let type = type {
