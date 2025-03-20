@@ -162,6 +162,9 @@ enum C: Platform {
     }
   }
 
+  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+    return nil
+  }
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }

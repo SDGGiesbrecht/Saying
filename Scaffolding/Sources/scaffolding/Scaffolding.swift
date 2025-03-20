@@ -95,6 +95,7 @@ import SDGText
         "UnicodeSegments.prototypeStartIndex",
         "UnicodeSegments.prototypeEndIndex",
         "UnicodeSegments.prototypeIndex(after: UnicodeSegments.Index)",
+        "UnicodeSegments.prototypeSubscript(_: UnicodeSegments.Index)",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",
         "RightArrowSyntax.init()",

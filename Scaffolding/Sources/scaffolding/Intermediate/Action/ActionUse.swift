@@ -125,6 +125,7 @@ extension ActionUse {
     specifiedReturnValue: ParsedTypeReference??,
     finalReturnValue: ParsedTypeReference?
   ) {
+    var local = ReferenceDictionary()
     for index in arguments.indices {
       let explicitArgumentReturnValue: ParsedTypeReference??
       switch arguments[index].explicitResultType {
@@ -135,18 +136,26 @@ extension ActionUse {
       }
       arguments[index].resolveTypes(
         context: context,
-        referenceLookup: referenceLookup,
+        referenceLookup: referenceLookup.appending(local),
         specifiedReturnValue: explicitArgumentReturnValue,
         finalReturnValue: finalReturnValue
       )
+      let newActions = arguments[index].localActions()
+      for new in newActions {
+        _ = local.add(action: new)
+      }
+      if !newActions.isEmpty {
+        local.resolveTypeIdentifiers(externalLookup: referenceLookup)
+      }
     }
+    let referenceLookupWithFlowLocals = referenceLookup.appending(local)
     switch specifiedReturnValue {
     case .some(.some(let value)):
       resolvedResultType = value
       if arguments.contains(where: { $0.resolvedResultType == nil }) {
         _ = resolveArgumentTypes(
           specifiedReturnValue: specifiedReturnValue,
-          referenceLookup: referenceLookup
+          referenceLookup: referenceLookupWithFlowLocals
         )
       }
     case .some(.none):
@@ -154,7 +163,7 @@ extension ActionUse {
       if arguments.contains(where: { $0.resolvedResultType == nil }) {
         _ = resolveArgumentTypes(
           specifiedReturnValue: specifiedReturnValue,
-          referenceLookup: referenceLookup
+          referenceLookup: referenceLookupWithFlowLocals
         )
       }
     case .none:
@@ -163,13 +172,13 @@ extension ActionUse {
         if arguments.contains(where: { $0.resolvedResultType == nil }) {
           _ = resolveArgumentTypes(
             specifiedReturnValue: specifiedReturnValue,
-            referenceLookup: referenceLookup
+            referenceLookup: referenceLookupWithFlowLocals
           )
         }
       } else {
         switch resolveArgumentTypes(
           specifiedReturnValue: specifiedReturnValue,
-          referenceLookup: referenceLookup
+          referenceLookup: referenceLookupWithFlowLocals
         ) {
         case .resolved(let resolved):
           resolvedResultType = resolved

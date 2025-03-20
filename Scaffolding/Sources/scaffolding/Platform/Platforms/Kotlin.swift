@@ -152,6 +152,9 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+    return nil
+  }
   static func nativeName(of action: ActionIntermediate) -> String? {
     return nil
   }

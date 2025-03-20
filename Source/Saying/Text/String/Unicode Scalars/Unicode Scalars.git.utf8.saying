@@ -110,7 +110,6 @@ action (unit)
  JavaScript: “¤(22) ¤(22)”
  Kotlin: “¤(22) ¤(22)”
  Swift: “¤(22) ¤(22).unicodeScalars”
- create
 
 action (file)
  [
@@ -128,7 +127,6 @@ action (file)
  JavaScript: “¤(22) ¤(22)”
  Kotlin: “¤(22) ¤(22)”
  Swift: “¤(22) ¤(22).unicodeScalars”
- create
 
 action (file)
  [
@@ -146,4 +144,14 @@ action (file)
  JavaScript: “¤(22)¤(10000)¤(22)”
  Kotlin: “¤(22)¤(10000)¤(22)”
  Swift: “¤(22)¤(10000)¤(22).unicodeScalars”
- create
+
+action (unit)
+ (
+  English: example with two NFKD scalars
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22)  ¤(22)))”
+ C♯: “¤(22)  ¤(22)”
+ JavaScript: “¤(22)  ¤(22)”
+ Kotlin: “¤(22)  ¤(22)”
+ Swift: “¤(22)  ¤(22).unicodeScalars”

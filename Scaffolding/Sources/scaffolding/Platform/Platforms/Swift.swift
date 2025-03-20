@@ -207,6 +207,9 @@ enum Swift: Platform {
     return result.joined(separator: "\n")
   }
 
+  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+    return action.swiftName
+  }
   static func nativeName(of action: ActionIntermediate) -> String? {
     if let identifier = action.swiftIdentifier() {
       if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {

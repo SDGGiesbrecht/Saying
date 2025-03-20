@@ -379,11 +379,28 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
 
 extension UnicodeSegments {
   func prototypeIndex(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
-    let segments: [Unicode_0020segment] = self.segments
+    let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020index: Int = i.segment
-    let segment: UnicodeText = segments[segment_0020index].source
+    let segment: UnicodeText = segment_0020list[segment_0020index].source
     if let scalar_0020index = i.scalar {
-      _ = true
+      let next_0020scalar: String.UnicodeScalarView.Index = segment.index(after: scalar_0020index)
+      if next_0020scalar == segment.endIndex {
+        let next_0020segment_0020index: Int = segment_0020list.index(after: segment_0020index)
+        if next_0020segment_0020index == segment_0020list.endIndex {
+          return UnicodeSegments.Index(next_0020segment_0020index, nil)
+        }
+        return UnicodeSegments.Index(next_0020segment_0020index, segment_0020list[next_0020segment_0020index].source.startIndex)
+      }
+      return UnicodeSegments.Index(segment_0020index, next_0020scalar)
+    }
+    fatalError()
+  }
+}
+
+extension UnicodeSegments {
+  func prototypeSubscript(_ index: UnicodeSegments.Index) -> Unicode.Scalar {
+    if let scalar_0020index = index.scalar {
+      return self.segments[index.segment].source[scalar_0020index]
     }
     fatalError()
   }
