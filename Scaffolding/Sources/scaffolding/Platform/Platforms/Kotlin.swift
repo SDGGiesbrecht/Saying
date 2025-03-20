@@ -272,7 +272,7 @@ enum Kotlin: Platform {
     return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
-    return importTarget
+    return "import \(importTarget).*"
   }
 
   static let preexistingNativeRequirements: Set<String> = []
@@ -281,7 +281,7 @@ enum Kotlin: Platform {
     return []
   }
   static var importsNeededByDeadEnd: Set<String> {
-    return []
+    return ["kotlin.system"]
   }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
