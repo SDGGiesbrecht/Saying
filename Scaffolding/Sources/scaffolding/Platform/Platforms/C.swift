@@ -234,6 +234,9 @@ enum C: Platform {
   static func statement(expression: String) -> String {
     return expression.appending(";")
   }
+  static func deadEnd() -> String {
+    "abort();"
+  }
   static func returnDelayStorage(type: String?) -> String {
     if let type = type {
       return "\(type) returnValue = "
@@ -292,7 +295,11 @@ enum C: Platform {
       "stdlib",
     ]
   }
-
+  static var importsNeededByDeadEnd: Set<String> {
+    return [
+      "stdlib",
+    ]
+  }
   static var importsNeededByTestScaffolding: Set<String> {
     return [
       "assert",

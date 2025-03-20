@@ -75,9 +75,12 @@ extension StatementListIntermediate {
 }
 
 extension StatementListIntermediate {
-  func countCoverageSubregions(count: inout Int) {
-    for statement in statements {
-      statement.countCoverageSubregions(count: &count)
+  func coverageSubregions(counter: inout Int) -> [Int] {
+    return statements.indices.flatMap { index in
+      return statements[index].coverageSubregions(
+        counter: &counter,
+        followingStatements: statements[index...].dropFirst()
+      )
     }
   }
 }

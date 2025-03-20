@@ -226,6 +226,9 @@ enum Kotlin: Platform {
   static func statement(expression: String) -> String {
     return expression
   }
+  static func deadEnd() -> String {
+    "exitProcess(1)"
+  }
   static func returnDelayStorage(type: String?) -> String {
     if type != nil {
       return "val returnValue = "
@@ -269,7 +272,7 @@ enum Kotlin: Platform {
     return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
-    return importTarget
+    return "import \(importTarget).*"
   }
 
   static let preexistingNativeRequirements: Set<String> = []
@@ -277,7 +280,9 @@ enum Kotlin: Platform {
   static var importsNeededByMemoryManagement: Set<String> {
     return []
   }
-
+  static var importsNeededByDeadEnd: Set<String> {
+    return ["kotlin.system"]
+  }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
   }

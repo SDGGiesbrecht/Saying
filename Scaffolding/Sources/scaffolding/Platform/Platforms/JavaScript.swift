@@ -199,6 +199,9 @@ enum JavaScript: Platform {
   static func statement(expression: String) -> String {
     return expression.appending(";")
   }
+  static func deadEnd() -> String {
+    "throw new Error();"
+  }
   static func returnDelayStorage(type: String?) -> String {
     if type != nil {
       return "const returnValue = "
@@ -249,7 +252,9 @@ enum JavaScript: Platform {
   static var importsNeededByMemoryManagement: Set<String> {
     return []
   }
-
+  static var importsNeededByDeadEnd: Set<String> {
+    return []
+  }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
   }

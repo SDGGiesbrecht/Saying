@@ -235,7 +235,7 @@ extension ModuleIntermediate {
           referenceLookup: externalAndModuleLookup.appending(locals),
           finalReturnValue: .none
         )
-        let newActions = statement.action.localActions()
+        let newActions = statement.action?.localActions() ?? []
         for local in newActions {
           _ = locals.add(action: local)
         }
@@ -268,7 +268,7 @@ extension ModuleIntermediate {
           testContext: true,
           errors: &errors
         )
-        let newActions = statement.action.localActions()
+        let newActions = statement.action?.localActions() ?? []
         for local in newActions {
           _ = locals.add(action: local)
         }

@@ -109,6 +109,7 @@ import SDGText
         "OpeningQuestionMarkSyntax.init()",
         "ClosingQuestionMarkSyntax.init()",
         "RightToLeftQuestionMarkSyntax.init()",
+        "GreekQuestionMarkSyntax.init()",
         "OpeningExclamationMarkSyntax.init()",
         "ClosingExclamationMarkSyntax.init()",
         "ColonCharacterSyntax.init()",

@@ -293,6 +293,9 @@ enum Swift: Platform {
   static func statement(expression: String) -> String {
     expression
   }
+  static func deadEnd() -> String {
+    return "fatalError()"
+  }
   static func returnDelayStorage(type: String?) -> String {
     if type != nil {
       return "let returnValue = "
@@ -361,7 +364,9 @@ enum Swift: Platform {
   static var importsNeededByMemoryManagement: Set<String> {
     return []
   }
-
+  static var importsNeededByDeadEnd: Set<String> {
+    return []
+  }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
   }

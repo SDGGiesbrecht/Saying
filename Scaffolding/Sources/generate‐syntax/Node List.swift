@@ -20,6 +20,7 @@ extension Node {
           Node(name: "OpeningQuestionMarkSyntax", kind: .fixedLeaf("¿")),
           Node(name: "ClosingQuestionMarkSyntax", kind: .fixedLeaf("?")),
           Node(name: "RightToLeftQuestionMarkSyntax", kind: .fixedLeaf("؟")),
+          Node(name: "GreekQuestionMarkSyntax", kind: .fixedLeaf(";")),
           Node(name: "OpeningExclamationMarkSyntax", kind: .fixedLeaf("¡")),
           Node(name: "ClosingExclamationMarkSyntax", kind: .fixedLeaf("!")),
           Node(name: "ColonCharacterSyntax", kind: .fixedLeaf(":")),
@@ -56,7 +57,7 @@ extension Node {
               values.append(contentsOf: 0x2B...0x2C) // +–,
               values.append(0x2E) // .
               values.append(contentsOf: 0x30...0x39) // 0–9
-              values.append(contentsOf: 0x3B...0x3E) // ;–>
+              values.append(contentsOf: 0x3C...0x3E) // <–>
               values.append(contentsOf: 0x41...0x5A) // A–Z
               values.append(contentsOf: 0x61...0x7A) // a–z
               values.append(0xAC) // ¬
@@ -106,7 +107,7 @@ extension Node {
               values.append(contentsOf: 0x4D8...0x4D9) // Ә–ә
               values.append(contentsOf: 0x4E8...0x4E9) // Ө–ө
               values.append(contentsOf: 0x531...0x556) // Ա–Ֆ
-              values.append(0x55D) // ՝
+              values.append(contentsOf: 0x55B...0x55E) // ՛–՞
               values.append(contentsOf: 0x561...0x586) // ա–ֆ
               values.append(contentsOf: 0x589...0x58A) // ։–֊
               values.append(contentsOf: 0x5D0...0x5EA) // א–ת
@@ -212,6 +213,13 @@ extension Node {
               Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
+          Node(
+            name: "EmptyExclamation",
+            kind: .compound(children: [
+              Child(name: "openingExclamationMark", type: "OpeningExclamationMarkSyntax", kind: .optional),
+              Child(name: "closingExclamationMark", type: "ClosingExclamationMarkSyntax", kind: .fixed),
+            ])
+          ),
 
         ],
         Node.separatedList(
@@ -271,6 +279,12 @@ extension Node {
               Alternate(name: "identifierCharacters", type: "IdentifierComponent"),
               Alternate(name: "openingParenthesis", type: "OpeningParenthesisSyntax"),
               Alternate(name: "closingParenthesis", type: "ClosingParenthesisSyntax"),
+              Alternate(name: "openingQuestionMark", type: "OpeningQuestionMarkSyntax"),
+              Alternate(name: "closingQuestionMark", type: "ClosingQuestionMarkSyntax"),
+              Alternate(name: "rightToLeftQuestionMark", type: "RightToLeftQuestionMarkSyntax"),
+              Alternate(name: "greekQuestionMark", type: "GreekQuestionMarkSyntax"),
+              Alternate(name: "openingExclamationMark", type: "OpeningExclamationMarkSyntax"),
+              Alternate(name: "closingExclamationMark", type: "ClosingExclamationMarkSyntax"),
               Alternate(name: "reference", type: "DocumentationReference")
             ])
           ),
@@ -305,6 +319,7 @@ extension Node {
               Alternate(name: "openingQuestionMark", type: "OpeningQuestionMarkSyntax"),
               Alternate(name: "closingQuestionMark", type: "ClosingQuestionMarkSyntax"),
               Alternate(name: "rightToLeftQuestionMark", type: "RightToLeftQuestionMarkSyntax"),
+              Alternate(name: "greekQuestionMark", type: "GreekQuestionMarkSyntax"),
               Alternate(name: "openingExclamationMark", type: "OpeningExclamationMarkSyntax"),
               Alternate(name: "closingExclamationMark", type: "ClosingExclamationMarkSyntax"),
               Alternate(name: "colon", type: "ColonCharacterSyntax"),
@@ -1069,10 +1084,17 @@ extension Node {
             ])
           ),
           Node(
-            name: "Statement",
+            name: "ValidStatement",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
+            ])
+          ),
+          Node(
+            name: "Statement",
+            kind: .alternates([
+              Alternate(name: "valid", type: "ValidStatement"),
+              Alternate(name: "deadEnd", type: "EmptyExclamation"),
             ])
           ),
         ],

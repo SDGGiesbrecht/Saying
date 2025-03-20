@@ -54,6 +54,12 @@ struct DownArrowSyntax {
   }
 }
 
+struct GreekQuestionMarkSyntax {
+
+  init() {
+  }
+}
+
 struct LeftArrowSyntax {
 
   init() {

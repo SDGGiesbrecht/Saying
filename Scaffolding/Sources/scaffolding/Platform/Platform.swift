@@ -92,6 +92,7 @@ protocol Platform {
   ) -> String?
   static func coverageRegistration(identifier: String) -> String
   static func statement(expression: String) -> String
+  static func deadEnd() -> String
   static func returnDelayStorage(type: String?) -> String
   static var delayedReturn: String { get }
   static func actionDeclaration(
@@ -114,6 +115,7 @@ protocol Platform {
 
   // Module
   static var importsNeededByMemoryManagement: Set<String> { get }
+  static var importsNeededByDeadEnd: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
   static var memoryManagement: String? { get }
   static func coverageRegionSet(regions: [String]) -> [String]
@@ -410,10 +412,12 @@ extension Platform {
 
   static func flowCoverageRegistration(
     contextCoverageIdentifier: UnicodeText?,
-    coverageRegionCounter: inout Int
+    coverageRegionCounter: inout Int,
+    statements: Array<StatementIntermediate>.SubSequence
   ) -> String? {
     coverageRegionCounter += 1
-    if let coverage = contextCoverageIdentifier {
+    if let coverage = contextCoverageIdentifier,
+      statements.first?.isDeadEnd != true {
       let appendedIdentifier: StrictString = "\(StrictString(coverage)):{\(coverageRegionCounter.inDigits())}"
       return "\n\(self.coverageRegistration(identifier: sanitize(stringLiteral: UnicodeText(appendedIdentifier))))"
     } else {
@@ -608,13 +612,15 @@ extension Platform {
                 if mode == .testing,
                    let coverage = flowCoverageRegistration(
                     contextCoverageIdentifier: contextCoverageIdentifier,
-                    coverageRegionCounter: &coverageRegionCounter
+                    coverageRegionCounter: &coverageRegionCounter,
+                    statements: statements.statements[...]
                    ) {
                   accumulator.append(coverage)
                 }
                 accumulator.append("\n")
                 var existingReferences: Set<String> = []
-                for statement in statements.statements {
+                for statementIndex in statements.statements.indices {
+                  let statement = statements.statements[statementIndex]
                   accumulator.append(
                     source(
                       for: statement,
@@ -623,6 +629,7 @@ extension Platform {
                       referenceLookup: referenceLookup,
                       contextCoverageIdentifier: contextCoverageIdentifier,
                       coverageRegionCounter: &coverageRegionCounter,
+                      followingStatements: statements.statements[statementIndex...].dropFirst(),
                       clashAvoidanceCounter: &clashAvoidanceCounter,
                       cleanUpCode: &cleanUpCode,
                       inliningArguments: inliningArguments,
@@ -719,7 +726,8 @@ extension Platform {
           if mode == .testing,
             let coverage = flowCoverageRegistration(
             contextCoverageIdentifier: contextCoverageIdentifier,
-            coverageRegionCounter: &coverageRegionCounter
+            coverageRegionCounter: &coverageRegionCounter,
+            statements: flow.statements[...]
           ) {
             source.prepend(coverage)
           }
@@ -927,6 +935,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    followingStatements: Array<StatementIntermediate>.SubSequence,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
@@ -934,6 +943,10 @@ extension Platform {
     mode: CompilationMode,
     indentationLevel: Int
   ) -> [String] {
+    guard let action = statement.action else {
+      return [deadEnd()]
+    }
+
     var entry = ""
     var referenceList: [String] = []
     if needsReferencePreparation {
@@ -968,7 +981,7 @@ extension Platform {
       }
     }
     let extractedArguments = argumentsExtractedForReferenceCounting(
-      from: statement.action,
+      from: action,
       context: context,
       localLookup: localLookup,
       referenceLookup: referenceLookup,
@@ -991,7 +1004,7 @@ extension Platform {
       } else {
         entry.append(
           contentsOf: returnDelayStorage(
-            type: statement.action.resolvedResultType!
+            type: action.resolvedResultType!
               .map({ source(for: $0, referenceLookup: referenceLookup) })
           )
         )
@@ -1002,7 +1015,7 @@ extension Platform {
     entry.append(
       contentsOf: self.statement(
         expression: call(
-          to: statement.action,
+          to: action,
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
@@ -1021,7 +1034,8 @@ extension Platform {
       coverageRegionCounter != before,
        let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
-        coverageRegionCounter: &coverageRegionCounter
+        coverageRegionCounter: &coverageRegionCounter,
+        statements: followingStatements
        ) {
       entry.append(coverage)
     }
@@ -1130,7 +1144,8 @@ extension Platform {
     var locals = ReferenceDictionary()
     var cleanUpCode = ""
     var existingReferences: Set<String> = []
-    var inOrder = statements.flatMap({ entry in
+    var inOrder = statements.indices.flatMap({ entryIndex in
+      let entry = statements[entryIndex]
       let result = source(
         for: entry,
         context: context,
@@ -1138,6 +1153,7 @@ extension Platform {
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
+        followingStatements: statements[entryIndex...].dropFirst(),
         clashAvoidanceCounter: &clashAvoidanceCounter,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
@@ -1418,6 +1434,7 @@ extension Platform {
       imports.formUnion(nativeImports(for: module.referenceDictionary))
     }
     imports.formUnion(importsNeededByMemoryManagement)
+    imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
       for importTarget in imports.sorted() {
