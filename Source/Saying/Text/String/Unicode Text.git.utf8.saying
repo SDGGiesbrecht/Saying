@@ -106,3 +106,12 @@ use
     ← Unicode text skipping normalization of (non‐empty NFKD example)
    }
  }
+
+action (clients)
+ (
+  English: example with two scalars
+ )
+ Unicode text
+ {
+  ← Unicode text skipping normalization of (example with two NFKD scalars)
+ }

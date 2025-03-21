@@ -67,6 +67,7 @@ protocol Platform {
   ) -> String
 
   // Actions
+  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText?
   static func nativeName(of action: ActionIntermediate) -> String?
   static func nativeIsMember(action: ActionIntermediate) -> Bool
   static func nativeIsProperty(action: ActionIntermediate) -> Bool
@@ -466,12 +467,12 @@ extension Platform {
       } else {
         return call(
           to: parameter.executeAction!,
+          bareAction: parameter.executeAction!,
           reference: reference,
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: parameter.names.identifier(),
-          coverageRedirectParameterReordering: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -488,18 +489,17 @@ extension Platform {
         specifiedReturnValue: reference.resolvedResultType
       )!
       let redirectingToCoverageWrapper = mode == .testing && !(context?.isCoverageWrapper ?? false)
-      var redirectionParameterReorder: [Int]?
-      if redirectingToCoverageWrapper {
-        redirectionParameterReorder = bareAction.parameters.reordering(
-          from: reference.actionName,
-          to: bareAction.names.identifier()
-        )
-      }
       let action = !redirectingToCoverageWrapper
         ? bareAction
         : referenceLookup.lookupAction(
           bareAction.coverageTrackingIdentifier(),
-          signature: order(signature, for: redirectionParameterReorder!),
+          signature: order(
+            signature,
+            for: bareAction.parameters.reordering(
+              from: reference.actionName,
+              to: bareAction.names.identifier()
+            )
+          ),
           specifiedReturnValue: reference.resolvedResultType
         )!
       if !extractedArguments.isEmpty,
@@ -512,12 +512,12 @@ extension Platform {
       var result: [String] = [
         call(
           to: bareAction.isFlow ? bareAction : action,
+          bareAction: bareAction,
           reference: reference,
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: nil,
-          coverageRedirectParameterReordering: redirectionParameterReorder,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -540,12 +540,12 @@ extension Platform {
   }
   static func call(
     to action: ActionIntermediate,
+    bareAction: ActionIntermediate,
     reference: ActionUse,
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     parameterName: UnicodeText?,
-    coverageRedirectParameterReordering: [Int]?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
@@ -618,28 +618,20 @@ extension Platform {
                   accumulator.append(coverage)
                 }
                 accumulator.append("\n")
-                var existingReferences: Set<String> = []
-                for statementIndex in statements.statements.indices {
-                  let statement = statements.statements[statementIndex]
-                  accumulator.append(
-                    source(
-                      for: statement,
-                      context: context,
-                      localLookup: localLookup.appending(local),
-                      referenceLookup: referenceLookup,
-                      contextCoverageIdentifier: contextCoverageIdentifier,
-                      coverageRegionCounter: &coverageRegionCounter,
-                      followingStatements: statements.statements[statementIndex...].dropFirst(),
-                      clashAvoidanceCounter: &clashAvoidanceCounter,
-                      cleanUpCode: &cleanUpCode,
-                      inliningArguments: inliningArguments,
-                      existingReferences: &existingReferences,
-                      mode: mode,
-                      indentationLevel: 1
-                    ).joined(separator: "\n")
-                  )
-                  accumulator.append("\n")
-                }
+                accumulator.append(
+                  contentsOf: source(
+                    for: statements.statements,
+                    context: context,
+                    localLookup: localLookup.appending(local),
+                    coverageRegionCounter: &coverageRegionCounter,
+                    clashAvoidanceCounter: &clashAvoidanceCounter,
+                    referenceLookup: referenceLookup,
+                    inliningArguments: inliningArguments,
+                    mode: mode,
+                    indentationLevel: 1
+                  ).joined(separator: "\n")
+                )
+                accumulator.append("\n")
               }
               let newActions = argument.localActions()
               for new in newActions {
@@ -757,11 +749,9 @@ extension Platform {
         return "\(prefix)\(name)"
       } else {
         var argumentsArray: [String] = []
-        let parameters = action.parameters.ordered(for: action.names.identifier())
-        var arguments = reference.arguments
-        if let reorder = coverageRedirectParameterReordering {
-          arguments = order(arguments, for: reorder)
-        }
+        let outputName = nativeIdentifier(of: action) ?? bareAction.names.identifier()
+        let parameters = bareAction.parameters.ordered(for: outputName)
+        let arguments = order(reference.arguments, for: bareAction.parameters.reordering(from: reference.actionName, to: outputName))
         for argumentIndex in arguments.indices {
           let argument = arguments[argumentIndex]
           let parameter = parameters[argumentIndex]
@@ -943,21 +933,76 @@ extension Platform {
     mode: CompilationMode,
     indentationLevel: Int
   ) -> [String] {
-    guard let action = statement.action else {
-      return [deadEnd()]
-    }
-
     var entry = ""
-    var referenceList: [String] = []
-    if needsReferencePreparation {
-      referenceList = statement.passedReferences()
-        .filter({ reference in
-          return context?.parameters.parameter(named: reference.actionName)?.isThrough != true
-        })
-        .map({ reference in
-          var extracted: [String] = []
-          return call(
+    if let action = statement.action {
+      var referenceList: [String] = []
+      if needsReferencePreparation {
+        referenceList = statement.passedReferences()
+          .filter({ reference in
+            return context?.parameters.parameter(named: reference.actionName)?.isThrough != true
+          })
+          .map({ reference in
+            var extracted: [String] = []
+            return call(
+              to: reference,
+              context: context,
+              localLookup: localLookup,
+              referenceLookup: referenceLookup,
+              isNativeArgument: false,
+              contextCoverageIdentifier: contextCoverageIdentifier,
+              coverageRegionCounter: &coverageRegionCounter,
+              clashAvoidanceCounter: &clashAvoidanceCounter,
+              extractedArguments: &extracted,
+              cleanUpCode: &cleanUpCode,
+              inliningArguments: inliningArguments,
+              mode: mode
+            )
+          })
+        for reference in referenceList {
+          if let preparation = prepareReference(
             to: reference,
+            update: existingReferences.contains(reference)
+          ) {
+            entry.append(preparation)
+          }
+        }
+      }
+      let extractedArguments = argumentsExtractedForReferenceCounting(
+        from: action,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        mode: mode
+      )
+      if !extractedArguments.isEmpty {
+        for argument in extractedArguments {
+          entry.append(argument.localStorageDeclaration.appending("\n"))
+          cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
+        }
+      }
+      if statement.isReturn {
+        if referenceList.isEmpty {
+          entry.append(contentsOf: "return ")
+        } else {
+          entry.append(
+            contentsOf: returnDelayStorage(
+              type: action.resolvedResultType!
+                .map({ source(for: $0, referenceLookup: referenceLookup) })
+            )
+          )
+        }
+      }
+      let before = coverageRegionCounter
+      var remainingExtractedArguments = extractedArguments.map({ $0.localName })
+      entry.append(
+        contentsOf: self.statement(
+          expression: call(
+            to: action,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
@@ -965,92 +1010,37 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
-            extractedArguments: &extracted,
+            extractedArguments: &remainingExtractedArguments,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
           )
-        })
-      for reference in referenceList {
-        if let preparation = prepareReference(
-          to: reference,
-          update: existingReferences.contains(reference)
-        ) {
-          entry.append(preparation)
-        }
-      }
-    }
-    let extractedArguments = argumentsExtractedForReferenceCounting(
-      from: action,
-      context: context,
-      localLookup: localLookup,
-      referenceLookup: referenceLookup,
-      contextCoverageIdentifier: contextCoverageIdentifier,
-      coverageRegionCounter: &coverageRegionCounter,
-      clashAvoidanceCounter: &clashAvoidanceCounter,
-      cleanUpCode: &cleanUpCode,
-      inliningArguments: inliningArguments,
-      mode: mode
-    )
-    if !extractedArguments.isEmpty {
-      for argument in extractedArguments {
-        entry.append(argument.localStorageDeclaration.appending("\n"))
-        cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
-      }
-    }
-    if statement.isReturn {
-      if referenceList.isEmpty {
-        entry.append(contentsOf: "return ")
-      } else {
-        entry.append(
-          contentsOf: returnDelayStorage(
-            type: action.resolvedResultType!
-              .map({ source(for: $0, referenceLookup: referenceLookup) })
-          )
-        )
-      }
-    }
-    let before = coverageRegionCounter
-    var remainingExtractedArguments = extractedArguments.map({ $0.localName })
-    entry.append(
-      contentsOf: self.statement(
-        expression: call(
-          to: action,
-          context: context,
-          localLookup: localLookup,
-          referenceLookup: referenceLookup,
-          isNativeArgument: false,
-          contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter,
-          clashAvoidanceCounter: &clashAvoidanceCounter,
-          extractedArguments: &remainingExtractedArguments,
-          cleanUpCode: &cleanUpCode,
-          inliningArguments: inliningArguments,
-          mode: mode
         )
       )
-    )
-    if mode == .testing,
-      coverageRegionCounter != before,
-       let coverage = flowCoverageRegistration(
-        contextCoverageIdentifier: contextCoverageIdentifier,
-        coverageRegionCounter: &coverageRegionCounter,
-        statements: followingStatements
-       ) {
-      entry.append(coverage)
-    }
-    for reference in referenceList.reversed() {
-      if let unpack = unpackReference(to: reference) {
-        entry.append(unpack)
+      if mode == .testing,
+         coverageRegionCounter != before,
+         let coverage = flowCoverageRegistration(
+          contextCoverageIdentifier: contextCoverageIdentifier,
+          coverageRegionCounter: &coverageRegionCounter,
+          statements: followingStatements
+         ) {
+        entry.append(coverage)
       }
-    }
-    if !referenceList.isEmpty {
-      if statement.isReturn {
-        entry.append(contentsOf: delayedReturn)
+      for reference in referenceList.reversed() {
+        if let unpack = unpackReference(to: reference) {
+          entry.append(unpack)
+        }
       }
-      for reference in referenceList {
-        existingReferences.insert(reference)
+      if !referenceList.isEmpty {
+        if statement.isReturn {
+          entry.append(contentsOf: delayedReturn)
+        }
+        for reference in referenceList {
+          existingReferences.insert(reference)
+        }
       }
+    } else {
+      entry.append(contentsOf: deadEnd())
     }
     let presentIndent = String(repeating: indent, count: indentationLevel)
     entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)

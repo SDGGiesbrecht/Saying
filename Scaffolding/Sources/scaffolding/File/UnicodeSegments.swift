@@ -31,20 +31,10 @@ extension UnicodeSegments: Collection {
     return prototypeEndIndex
   }
   func index(after i: Index) -> Index {
-    let segment = segment(at: i.segmentIndex)
-    let nextIndex = segment.source.index(after: i.scalarIndex!)
-    if nextIndex == segment.source.endIndex {
-      let nextSegment = segmentIndices.index(after: i.segmentIndex)
-      return Index(
-        segment: nextSegment,
-        scalar: segmentIndices[nextSegment...].first.map({ self.segment(at: $0).source.startIndex })
-      )
-    } else {
-      return Index(segment: i.segmentIndex, scalar: nextIndex)
-    }
+    return prototypeIndex(after: i)
   }
   subscript(position: Index) -> Unicode.Scalar {
-    segment(at: position.segmentIndex).source[position.scalarIndex!]
+    return prototypeSubscript(position)
   }
 }
 
