@@ -23,20 +23,7 @@ extension UnicodeSegments {
   }
 }
 
-extension UnicodeSegments: Collection {
-  var startIndex: Index {
-    return prototypeStartIndex
-  }
-  var endIndex: Index {
-    return prototypeEndIndex
-  }
-  func index(after i: Index) -> Index {
-    return prototypeIndex(after: i)
-  }
-  subscript(position: Index) -> Unicode.Scalar {
-    return prototypeSubscript(position)
-  }
-}
+extension UnicodeSegments: Collection {}
 
 extension UnicodeSegments: BidirectionalCollection {
 

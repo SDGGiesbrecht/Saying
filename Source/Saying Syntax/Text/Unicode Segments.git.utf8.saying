@@ -23,109 +23,109 @@ use (clients)
  {
  }
 
-action (clients)
- [
-  test {ignore (prototype beginning of (Unicode segments (empty: list of (Unicode segment))))}
-  test {ignore (prototype beginning of (prototype non‐empty example: Unicode segments))}
- ]
- (
-  English: prototype beginning of (list: Unicode segments)
-  Swift: var (self: [list]).prototypeStartIndex
- )
- Unicode segments index
+use
+ use of (Unicode segments) as list of (Unicode scalar) indexed by (Unicode segments index)
  {
-  let (• segment list: list of (Unicode segment)) be ((segments) of (list))
-  let (• segment index: list index) be (beginning of (segment list))
-  if (first in (segment list)) exists, unwrap it as (• first segment: Unicode segment), {
-   ← Unicode segments index at segment (segment index), scalar (wrap (beginning of ((source) of (first segment: Unicode segment))) into optional)
-  }
-  ← Unicode segments index at segment (segment index), scalar (nothing: optional (Unicode scalar index))
- }
-
-action (clients)
- [
-  test {ignore (prototype end of (prototype non‐empty example: Unicode segments))}
- ]
- (
-  English: prototype end of (list: Unicode segments)
-  Swift: var (self: [list]).prototypeEndIndex
- )
- Unicode segments index
- {
-  ← Unicode segments index at segment (end of ((segments) of (list))), scalar (nothing: optional (Unicode scalar index))
- }
-
-action (clients)
- [
-  test {
-   let (• non‐empty: Unicode segments) be (prototype non‐empty example: Unicode segments)
-   ignore (prototype index after (prototype beginning of (non‐empty)) in (non‐empty))
-  }
-  test {
-   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-   append (example element: Unicode segment) to (↓ segment list)
-   append (example element: Unicode segment) to (↓ segment list)
-   let (• two segments: Unicode segments) be (Unicode segments (segment list))
-   let (• first offset: Unicode segments index) be (prototype index after (prototype beginning of (two segments)) in (two segments))
-   ignore (prototype index after (first offset) in (two segments))
-  }
-  test {
-   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-   append (Unicode segment at (zero: natural number) containing (example with two scalars)) to (↓ segment list)
-   let (• long segment: Unicode segments) be (Unicode segments (segment list))
-   let (• first offset: Unicode segments index) be (prototype index after (prototype beginning of (long segment)) in (long segment))
-   ignore (prototype index after (first offset) in (long segment))
-  }
- ]
- (
-  English: prototype index after (index: Unicode segments index) in (list: Unicode segments)
-  Swift: (self: [list]).prototypeIndex after (i: [index])
- )
- Unicode segments index
- {
-  let (• segment list: list of (Unicode segment)) be ((segments) of (list))
-  let (• segment index: list index) be ((segment) of (index))
-  let (• segment: Unicode text) be ((source) of (entry at (segment index) in (segment list)))
-  if ((scalar) of (index)) exists, unwrap it as (• scalar index: Unicode scalar index), {
-   let (• next scalar: Unicode scalar index) be (index after (scalar index) in (segment))
-   if ((next scalar) is (end of (segment))), {
-    let (• next segment index: list index) be (index after (segment index) in (segment list))
-    if ((next segment index) is (end of (segment list))), {
-     ← Unicode segments index at segment (next segment index), scalar (nothing: optional (Unicode scalar index))
+  action (clients)
+   [
+    test {ignore (beginning of (Unicode segments (empty: list of (Unicode segment))))}
+    test {ignore (beginning of (non‐empty example: Unicode segments))}
+   ]
+   (
+    English: beginning of (list: Unicode segments)
+   )
+   Unicode segments index
+   {
+    let (• segment list: list of (Unicode segment)) be ((segments) of (list))
+    let (• segment index: list index) be (beginning of (segment list))
+    if (first in (segment list)) exists, unwrap it as (• first segment: Unicode segment), {
+     ← Unicode segments index at segment (segment index), scalar (wrap (beginning of ((source) of (first segment: Unicode segment))) into optional)
     }
-    ← Unicode segments index at segment (next segment index), scalar (wrap (beginning of ((source) of (entry at (next segment index) in (segment list)))) into optional)
+    ← Unicode segments index at segment (segment index), scalar (nothing: optional (Unicode scalar index))
    }
-   ← Unicode segments index at segment (segment index), scalar (wrap (next scalar) into optional)
-  }
-  !
- }
 
-action (clients)
- [
-  test {
-   let (• non‐empty: Unicode segments) be (prototype non‐empty example: Unicode segments)
-   ignore (prototype entry at (prototype beginning of (non‐empty)) in (non‐empty))
-  }
- ]
- (
-  English: prototype entry at (index: Unicode segments index) in (list: Unicode segments)
-  Swift: (self: [list]).prototypeSubscript (position: [index])
- )
- Unicode scalar
- {
-  if ((scalar) of (index)) exists, unwrap it as (• scalar index: Unicode scalar index), {
-   ← entry at (scalar index) in ((source) of (entry at ((segment) of (index)) in ((segments) of (list))))
-  }
-  !
- }
+  action (clients)
+   [
+    test {ignore (end of (non‐empty example: Unicode segments))}
+   ]
+   (
+    English: end of (list: Unicode segments)
+   )
+   Unicode segments index
+   {
+    ← Unicode segments index at segment (end of ((segments) of (list))), scalar (nothing: optional (Unicode scalar index))
+   }
 
-action (clients)
- (
-  English: prototype non‐empty example
- )
- Unicode segments
- {
-  ← Unicode segments (non‐empty example: list of (Unicode segment))
+  action (clients)
+   [
+    test {
+     let (• non‐empty: Unicode segments) be (non‐empty example: Unicode segments)
+     ignore (index after (beginning of (non‐empty)) in (non‐empty))
+    }
+    test {
+     let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+     append (example element: Unicode segment) to (↓ segment list)
+     append (example element: Unicode segment) to (↓ segment list)
+     let (• two segments: Unicode segments) be (Unicode segments (segment list))
+     let (• first offset: Unicode segments index) be (index after (beginning of (two segments)) in (two segments))
+     ignore (index after (first offset) in (two segments))
+    }
+    test {
+     let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+     append (Unicode segment at (zero: natural number) containing (example with two scalars)) to (↓ segment list)
+     let (• long segment: Unicode segments) be (Unicode segments (segment list))
+     let (• first offset: Unicode segments index) be (index after (beginning of (long segment)) in (long segment))
+     ignore (index after (first offset) in (long segment))
+    }
+   ]
+   (
+    English: index after (index: Unicode segments index) in (list: Unicode segments)
+   )
+   Unicode segments index
+   {
+    let (• segment list: list of (Unicode segment)) be ((segments) of (list))
+    let (• segment index: list index) be ((segment) of (index))
+    let (• segment: Unicode text) be ((source) of (entry at (segment index) in (segment list)))
+    if ((scalar) of (index)) exists, unwrap it as (• scalar index: Unicode scalar index), {
+     let (• next scalar: Unicode scalar index) be (index after (scalar index) in (segment))
+     if ((next scalar) is (end of (segment))), {
+      let (• next segment index: list index) be (index after (segment index) in (segment list))
+      if ((next segment index) is (end of (segment list))), {
+       ← Unicode segments index at segment (next segment index), scalar (nothing: optional (Unicode scalar index))
+      }
+      ← Unicode segments index at segment (next segment index), scalar (wrap (beginning of ((source) of (entry at (next segment index) in (segment list)))) into optional)
+     }
+     ← Unicode segments index at segment (segment index), scalar (wrap (next scalar) into optional)
+    }
+    !
+   }
+
+  action (clients)
+   [
+    test {
+     let (• non‐empty: Unicode segments) be (non‐empty example: Unicode segments)
+     ignore (entry at (beginning of (non‐empty)) in (non‐empty))
+    }
+   ]
+   (
+    English: entry at (index: Unicode segments index) in (list: Unicode segments)
+   )
+   Unicode scalar
+   {
+    if ((scalar) of (index)) exists, unwrap it as (• scalar index: Unicode scalar index), {
+     ← entry at (scalar index) in ((source) of (entry at ((segment) of (index)) in ((segments) of (list))))
+    }
+    !
+   }
+
+  action (clients)
+   (
+    English: non‐empty example
+   )
+   Unicode segments
+   {
+    ← Unicode segments (non‐empty example: list of (Unicode segment))
+   }
  }
 
 use (clients)
