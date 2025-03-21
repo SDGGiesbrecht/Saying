@@ -105,7 +105,7 @@ protocol Platform {
     implementation: [String],
     parentType: String?,
     propertyInstead: Bool
-  ) -> String
+  ) -> UniqueDeclaration
 
   // Imports
   static var fileSettings: String? { get }
@@ -1175,12 +1175,13 @@ extension Platform {
     externalReferenceLookup: [ReferenceDictionary],
     mode: CompilationMode,
     alreadyHandledNativeRequirements: inout Set<String>
-  ) -> String? {
+  ) -> UniqueDeclaration? {
     if action.isMemberWrapper {
       return nil
     }
     if let native = nativeImplementation(of: action) {
       return source(for: native.requiredDeclarations, referenceLookup: externalReferenceLookup, alreadyHandled: &alreadyHandledNativeRequirements)
+        .map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
     }
 
     guard let actionImplementation = action.implementation else {
@@ -1386,10 +1387,10 @@ extension Platform {
         mode: mode,
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
-        if handledActionDeclarations.insert(declaration).inserted {
+        if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
           result.append(contentsOf: [
             "",
-            declaration
+            declaration.full
           ])
         }
       }

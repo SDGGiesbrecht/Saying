@@ -225,7 +225,7 @@ enum JavaScript: Platform {
     implementation: [String],
     parentType: String?,
     propertyInstead: Bool
-  ) -> String {
+  ) -> UniqueDeclaration {
     var result: [String] = [
       "function \(name)(\(parameters)) {",
     ]
@@ -240,7 +240,10 @@ enum JavaScript: Platform {
     result.append(contentsOf: [
       "}",
     ])
-    return result.joined(separator: "\n")
+    return UniqueDeclaration(
+      full: result.joined(separator: "\n"),
+      uniquenessDefinition: result.joined(separator: "\n")
+    )
   }
   
   static var fileSettings: String? {

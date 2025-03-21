@@ -292,7 +292,7 @@ enum CSharp: Platform {
     implementation: [String],
     parentType: String?,
     propertyInstead: Bool
-  ) -> String {
+  ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
       "\(indent)\(access)static \(returnSection!) \(name)(\(parameters))",
@@ -309,7 +309,10 @@ enum CSharp: Platform {
     result.append(contentsOf: [
       "\(indent)}",
     ])
-    return result.joined(separator: "\n")
+    return UniqueDeclaration(
+      full: result.joined(separator: "\n"),
+      uniquenessDefinition: result.joined(separator: "\n")
+    )
   }
 
   static var fileSettings: String? {
