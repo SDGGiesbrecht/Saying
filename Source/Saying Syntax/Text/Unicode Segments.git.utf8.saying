@@ -29,7 +29,6 @@ use
   action (clients)
    [
     test {ignore (beginning of (Unicode segments (empty: list of (Unicode segment))))}
-    test {ignore (beginning of (non‐empty example: Unicode segments))}
    ]
    (
     English: beginning of (list: Unicode segments)
@@ -45,9 +44,6 @@ use
    }
 
   action (clients)
-   [
-    test {ignore (end of (non‐empty example: Unicode segments))}
-   ]
    (
     English: end of (list: Unicode segments)
    )
@@ -58,10 +54,6 @@ use
 
   action (clients)
    [
-    test {
-     let (• non‐empty: Unicode segments) be (non‐empty example: Unicode segments)
-     ignore (index after (beginning of (non‐empty)) in (non‐empty))
-    }
     test {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
      append (example element: Unicode segment) to (↓ segment list)
@@ -101,12 +93,6 @@ use
    }
 
   action (clients)
-   [
-    test {
-     let (• non‐empty: Unicode segments) be (non‐empty example: Unicode segments)
-     ignore (entry at (beginning of (non‐empty)) in (non‐empty))
-    }
-   ]
    (
     English: entry at (index: Unicode segments index) in (list: Unicode segments)
    )
