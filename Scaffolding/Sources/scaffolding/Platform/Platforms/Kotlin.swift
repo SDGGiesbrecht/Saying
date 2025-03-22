@@ -252,7 +252,7 @@ enum Kotlin: Platform {
     implementation: [String],
     parentType: String?,
     propertyInstead: Bool
-  ) -> String {
+  ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
       "\(access)fun \(name)(\(parameters))\(returnSection ?? "") {",
@@ -268,7 +268,10 @@ enum Kotlin: Platform {
     result.append(contentsOf: [
       "}",
     ])
-    return result.joined(separator: "\n")
+    return UniqueDeclaration(
+      full: result.joined(separator: "\n"),
+      uniquenessDefinition: result.joined(separator: "\n")
+    )
   }
 
   static var fileSettings: String? {

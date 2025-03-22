@@ -319,7 +319,7 @@ enum Swift: Platform {
     implementation: [String],
     parentType: String?,
     propertyInstead: Bool
-  ) -> String {
+  ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let keyword = propertyInstead
       ? "var "
@@ -338,6 +338,7 @@ enum Swift: Platform {
     result.append(contentsOf: [
       "\(extraIndent)\(access)\(keyword)\(name)\(signature) {",
     ])
+    let uniquenessDefinition = result
     if let coverage = coverageRegistration {
       result.append("\(extraIndent)\(coverage)")
     }
@@ -354,7 +355,10 @@ enum Swift: Platform {
         "}",
       ])
     }
-    return result.joined(separator: "\n")
+    return UniqueDeclaration(
+      full: result.joined(separator: "\n"),
+      uniquenessDefinition: uniquenessDefinition.joined(separator: "\n")
+    )
   }
 
   static var fileSettings: String? {

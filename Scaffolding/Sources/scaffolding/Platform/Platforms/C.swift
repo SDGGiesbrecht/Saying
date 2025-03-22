@@ -260,7 +260,7 @@ enum C: Platform {
     implementation: [String],
     parentType: String?,
     propertyInstead: Bool
-  ) -> String {
+  ) -> UniqueDeclaration {
     var result: [String] = [
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),
       "{",
@@ -276,7 +276,10 @@ enum C: Platform {
     result.append(contentsOf: [
       "}",
     ])
-    return result.joined(separator: "\n")
+    return UniqueDeclaration(
+      full: result.joined(separator: "\n"),
+      uniquenessDefinition: result.joined(separator: "\n")
+    )
   }
 
   static var fileSettings: String? {

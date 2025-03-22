@@ -117,7 +117,7 @@ extension
     English: change (storage: optional (thing)) to (value: thing)
    )
    {
-    change (storage) to (wrap (value) as (something))
+    change (storage) to (wrap (value) into optional)
    }
  }
 
