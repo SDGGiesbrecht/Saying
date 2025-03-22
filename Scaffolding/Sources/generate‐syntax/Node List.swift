@@ -422,20 +422,10 @@ extension Node {
             ])
           ),
           Node(
-            name: "FlowArgument",
-            kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
-              Child(name: "statements", type: "StatementList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
-            ])
-          ),
-          Node(
             name: "Argument",
             kind: .alternates([
               Alternate(name: "passed", type: "PassedArgument"),
-              Alternate(name: "flow", type: "FlowArgument"),
+              Alternate(name: "flow", type: "BracedStatementList"),
             ])
           ),
         ],
@@ -563,20 +553,10 @@ extension Node {
             ])
           ),
           Node(
-            name: "LongTestImplementation",
-            kind: .compound(children: [
-              Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
-              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
-              Child(name: "test", type: "StatementList", kind: .required),
-              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
-              Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
-            ])
-          ),
-          Node(
             name: "TestImplemenation",
             kind: .alternates([
               Alternate(name: "short", type: "ShortTestImplementation"),
-              Alternate(name: "long", type: "LongTestImplementation"),
+              Alternate(name: "long", type: "BracedStatementList"),
             ])
           ),
           Node(
@@ -1108,7 +1088,7 @@ extension Node {
           ),
         [
           Node(
-            name: "SourceActionImplementation",
+            name: "NonEmptyBracedStatementList",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
               Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
@@ -1118,9 +1098,16 @@ extension Node {
             ])
           ),
           Node(
+            name: "BracedStatementList",
+            kind: .alternates([
+              Alternate(name: "empty", type: "EmptyBraces"),
+              Alternate(name: "nonEmpty", type: "NonEmptyBracedStatementList"),
+            ])
+          ),
+          Node(
             name: "SourceOrCreationActionImplementation",
             kind: .alternates([
-              Alternate(name: "source", type: "SourceActionImplementation"),
+              Alternate(name: "source", type: "BracedStatementList"),
               Alternate(name: "creation", type: "CreateKeyword"),
             ])
           ),

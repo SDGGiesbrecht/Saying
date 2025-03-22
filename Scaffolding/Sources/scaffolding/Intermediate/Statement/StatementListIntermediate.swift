@@ -5,7 +5,7 @@ struct StatementListIntermediate {
 }
 
 extension StatementListIntermediate {
-  init(_ statements: ParsedStatementList) {
+  init(_ statements: ParsedBracedStatementList) {
     self.statements = statements.statements.map { StatementIntermediate($0) }
   }
 }
