@@ -28,7 +28,7 @@ use
  {
   action (clients)
    [
-    test {ignore (beginning of (Unicode segments (empty: list of (Unicode segment))))}
+    test {ignore (beginning of (empty: Unicode segments))}
    ]
    (
     English: beginning of (list: Unicode segments)
@@ -112,4 +112,16 @@ use
    {
     ← Unicode segments (non‐empty example: list of (Unicode segment))
    }
+ }
+
+action (clients)
+ (
+  English: empty
+  Deutsch: leer
+  français : vide
+  ελληνικά: άδειος
+ )
+ Unicode segments
+ {
+  ← Unicode segments (empty: list of (Unicode segment))
  }

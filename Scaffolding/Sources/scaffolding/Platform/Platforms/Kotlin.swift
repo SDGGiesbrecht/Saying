@@ -103,6 +103,9 @@ enum Kotlin: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.kotlin
   }
+  static func repair(compoundNativeType: String) -> String {
+    return compoundNativeType
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }

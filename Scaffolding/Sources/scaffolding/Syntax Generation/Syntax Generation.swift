@@ -30,7 +30,19 @@ extension ModuleIntermediate {
             deutscherName: deutscherName,
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
-            swiftName: swiftName
+            swiftName: swiftName,
+            parsed: false
+          )
+        )
+        newSource.append("")
+        newSource.append(
+          contentsOf: syntaxNodeCreation(
+            englishName: englishName,
+            deutscherName: deutscherName,
+            nomFrançais: nomFrançais,
+            ελληνικόΌνομα: ελληνικόΌνομα,
+            swiftName: swiftName,
+            parsed: true
           )
         )
         newSource.append("")

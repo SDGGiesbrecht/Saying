@@ -89,6 +89,9 @@ enum C: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.c
   }
+  static func repair(compoundNativeType: String) -> String {
+    return compoundNativeType
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "\(returnValue) (*)(\(parameters))"
   }

@@ -142,6 +142,15 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
   }
+  static func repair(compoundNativeType: String) -> String {
+    if compoundNativeType.contains("].") {
+      return compoundNativeType
+        .replacingMatches(for: "[", with: "Array<")
+        .replacingMatches(for: "].", with: ">.")
+    } else {
+      return compoundNativeType
+    }
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }

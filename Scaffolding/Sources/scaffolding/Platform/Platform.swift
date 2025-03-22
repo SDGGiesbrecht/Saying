@@ -49,6 +49,7 @@ protocol Platform {
   static var isTyped: Bool { get }
   static func nativeName(of thing: Thing) -> String?
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
+  static func repair(compoundNativeType: String) -> String
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
   static func thingDeclaration(
@@ -265,7 +266,7 @@ extension Platform {
             result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
           }
         }
-        return result
+        return repair(compoundNativeType: result)
       } else {
         return sanitize(
           identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),

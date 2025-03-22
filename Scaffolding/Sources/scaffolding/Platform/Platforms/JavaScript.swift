@@ -87,6 +87,9 @@ enum JavaScript: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return nil
   }
+  static func repair(compoundNativeType: String) -> String {
+    return compoundNativeType
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return ""
   }

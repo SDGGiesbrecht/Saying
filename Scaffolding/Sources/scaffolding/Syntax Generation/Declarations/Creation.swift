@@ -5,29 +5,52 @@ func syntaxNodeCreation(
   deutscherName: StrictString?,
   nomFrançais: StrictString?,
   ελληνικόΌνομα: StrictString?,
-  swiftName: StrictString
+  swiftName: StrictString,
+  parsed: Bool
 ) -> [String] {
   var source: [String] = [
-    "action (clients)",
+    "action (\(parsed ? "unit" : "clients"))",
     " [",
-    "  test {ignore (create \(englishName))}",
-    " ]",
-    " (",
-    "  English: create \(englishName)",
   ]
-  if let deutsch = deutscherName {
-    source.append("  Deutsch: \(deutsch) erstellen")
-  }
-  if let français = nomFrançais {
-    source.append("  français : créer \(français)")
-  }
-  if let ελληνικά = ελληνικόΌνομα {
-    source.append("  ελληνικά: δημιουργία σύνταξης \(StrictString(ελληνικά.dropFirst(9)))")
+  if parsed {
+    source.append(contentsOf: [
+      "  test {ignore (location of (parsed \(englishName) (entirety of (empty: Unicode segments))))}",
+    ])
+  } else {
+    source.append(contentsOf: [
+      "  test {ignore (create \(englishName))}",
+    ])
   }
   source.append(contentsOf: [
-    "  Swift: \(swiftName).init",
+    " ]",
+    " (",
+  ])
+  if parsed {
+    source.append(contentsOf: [
+      "  English: parsed \(englishName) (location: slice of (Unicode segments))",
+    ])
+  } else {
+    source.append(contentsOf: [
+      "  English: create \(englishName)",
+    ])
+  }
+  if !parsed {
+    if let deutsch = deutscherName {
+      source.append("  Deutsch: \(deutsch) erstellen")
+    }
+    if let français = nomFrançais {
+      source.append("  français : créer \(français)")
+    }
+    if let ελληνικά = ελληνικόΌνομα {
+      source.append("  ελληνικά: δημιουργία σύνταξης \(StrictString(ελληνικά.dropFirst(9)))")
+    }
+    source.append(contentsOf: [
+      "  Swift: \(swiftName).init",
+    ])
+  }
+  source.append(contentsOf: [
     " )",
-    " \(englishName)",
+    " \(parsed ? "parsed " : "")\(englishName)",
     " create",
   ])
   return source
