@@ -254,6 +254,9 @@ enum JavaScript: Platform {
   }
 
   static let preexistingNativeRequirements: Set<String> = []
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
+    return false
+  }
 
   static var importsNeededByMemoryManagement: Set<String> {
     return []

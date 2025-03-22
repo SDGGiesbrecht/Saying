@@ -113,6 +113,7 @@ protocol Platform {
 
   // Native Requirements
   static var preexistingNativeRequirements: Set<String> { get }
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool
 
   // Module
   static var importsNeededByMemoryManagement: Set<String> { get }
@@ -1334,7 +1335,8 @@ extension Platform {
           line.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
         }
       }
-      if alreadyHandled.insert(line).inserted {
+      if alreadyHandled.insert(line).inserted,
+       !isAlgorithmicallyPreexistingNativeRequirement(source: line) {
         result.append(line)
       }
     }

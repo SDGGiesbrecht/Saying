@@ -113,8 +113,3 @@ use
     ← Unicode segments (non‐empty example: list of (Unicode segment))
    }
  }
-
-use (clients)
- slices of (Unicode segments)
- {
- }
