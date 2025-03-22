@@ -21,7 +21,7 @@ extension ActionUse {
         case .passed(let passed):
           return .action(ActionUse(passed.argument))
         case .flow(let flow):
-          return .flow(StatementListIntermediate(flow.statements))
+          return .flow(StatementListIntermediate(flow))
         }
       }
     case .reference:

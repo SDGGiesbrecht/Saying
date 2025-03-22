@@ -25,7 +25,7 @@ extension SyntaxNode {
       return UnicodeText("\n" + StrictString(repeating: " ", count: indent))
     case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .parameterDocumentation, .partDeclaration, .requirementDeclaration, .thingDeclaration, .use:
       return UnicodeText(children.lazy.map({ StrictString($0.formattedGitStyleSource(indent: indent + 1)) }).joined())
-    case .abilityName, .caseName, .cases, .documentation, .flowArgument, .fulfillments, .longTestImplementation, .multipleActionNames, .parameterDetails, .paragraph, .partName, .provisions, .requirements, .sourceActionImplementation, .sourceThingImplementation, .thingName:
+    case .abilityName, .caseName, .cases, .documentation, .fulfillments, .multipleActionNames, .nonEmptyBracedStatementList, .parameterDetails, .paragraph, .partName, .provisions, .requirements, .sourceThingImplementation, .thingName:
       return UnicodeText(
         [
           children.dropLast(2).map({ StrictString($0.formattedGitStyleSource(indent: indent + 1)) }).joined(),

@@ -13,7 +13,7 @@ extension TestIntermediate {
     case .short(let short):
       self.statements = [StatementIntermediate(isReturn: false, action: ActionUse(short.test))]
     case .long(let long):
-      self.statements = long.test.statements.map { statement in
+      self.statements = long.statements.map { statement in
         return StatementIntermediate(statement)
       }
     }

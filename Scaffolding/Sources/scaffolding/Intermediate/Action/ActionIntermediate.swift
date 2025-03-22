@@ -607,7 +607,7 @@ extension ActionIntermediate {
     if let source = declaration.implementation.source {
       switch source {
       case .source(let source):
-        implementation = StatementListIntermediate(source.statements)
+        implementation = StatementListIntermediate(source)
       case .creation:
         isCreation = true
         break
