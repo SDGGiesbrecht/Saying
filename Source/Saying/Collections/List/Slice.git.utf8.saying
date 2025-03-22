@@ -1,0 +1,11 @@
+extension
+ use of (list) as list of (element) indexed by (index)
+ {
+  thing (clients)
+   (
+    English: slice of (list)
+   )
+   Swift: “Slice<” list “>” {“extension ” list “: Collection {}”}
+   {
+   }
+ }

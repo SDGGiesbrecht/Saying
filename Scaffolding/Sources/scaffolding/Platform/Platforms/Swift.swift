@@ -389,11 +389,17 @@ enum Swift: Platform {
     "extension String.UnicodeScalarView: Collection {}",
     "extension String.UnicodeScalarView.Index: Comparable {}",
     "extension String.UnicodeScalarView.Index: Equatable {}",
-    "extension String.UnicodeScalarView.Index?: Equatable {}",
     "extension UInt: Equatable {}",
     "extension UInt64: Equatable {}",
     "extension Unicode.Scalar: Equatable {}",
   ]
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
+    if source.hasSuffix("?: Equatable {}")
+      || source.hasSuffix("]: Collection {}") {
+      return true
+    }
+    return false
+  }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
