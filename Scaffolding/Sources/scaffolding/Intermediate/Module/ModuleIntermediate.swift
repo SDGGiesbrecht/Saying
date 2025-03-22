@@ -197,7 +197,14 @@ extension ModuleIntermediate {
         typeLookup: useTypes,
         specializationNamespace: specializationNamespace
       )
-      _ = referenceDictionary.add(thing: specialized)
+      if externalLookup.lookupThing(
+        specialized.names.identifier(),
+        components: specialized.parameters.ordered(
+          for: specialized.names.identifier()
+        ).map({ $0.resolvedType?.key ?? .simple(StrictString($0.names.identifier())) })
+      ) == nil {
+        _ = referenceDictionary.add(thing: specialized)
+      }
     }
     for action in ability.provisionActions {
       let specialized = action.specializing(
@@ -205,7 +212,13 @@ extension ModuleIntermediate {
         typeLookup: useTypes,
         specializationNamespace: specializationNamespace
       )
-      _ = referenceDictionary.add(action: specialized)
+      if externalLookup.lookupAction(
+        specialized.names.identifier(),
+        signature: specialized.signature(orderedFor: specialized.names.identifier()),
+        specifiedReturnValue: specialized.returnValue
+      ) == nil {
+        _ = referenceDictionary.add(action: specialized)
+      }
     }
     for use in ability.provisionUses {
       resolve(
