@@ -378,7 +378,7 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
 }
 
 extension UnicodeSegments {
-  func prototypeIndex(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
+  func index(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
     let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020index: Int = i.segment
     let segment: UnicodeText = segment_0020list[segment_0020index].source
@@ -398,7 +398,7 @@ extension UnicodeSegments {
 }
 
 extension UnicodeSegments {
-  func prototypeSubscript(_ index: UnicodeSegments.Index) -> Unicode.Scalar {
+  subscript(_ index: UnicodeSegments.Index) -> Unicode.Scalar {
     if let scalar_0020index = index.scalar {
       return self.segments[index.segment].source[scalar_0020index]
     }
@@ -407,19 +407,19 @@ extension UnicodeSegments {
 }
 
 extension UnicodeSegments {
-  var prototypeStartIndex: UnicodeSegments.Index {
+  var endIndex: UnicodeSegments.Index {
+    return UnicodeSegments.Index(self.segments.endIndex, nil)
+  }
+}
+
+extension UnicodeSegments {
+  var startIndex: UnicodeSegments.Index {
     let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020index: Int = segment_0020list.startIndex
     if let first_0020segment = segment_0020list.first {
       return UnicodeSegments.Index(segment_0020index, first_0020segment.source.startIndex)
     }
     return UnicodeSegments.Index(segment_0020index, nil)
-  }
-}
-
-extension UnicodeSegments {
-  var prototypeEndIndex: UnicodeSegments.Index {
-    return UnicodeSegments.Index(self.segments.endIndex, nil)
   }
 }
 
