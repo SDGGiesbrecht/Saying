@@ -118,6 +118,9 @@ enum CSharp: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.cSharp
   }
+  static func repair(compoundNativeType: String) -> String {
+    return compoundNativeType
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     if returnValue == emptyReturnTypeForActionType {
       return "Action<\(parameters)>"
@@ -323,6 +326,9 @@ enum CSharp: Platform {
   }
 
   static let preexistingNativeRequirements: Set<String> = []
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
+    return false
+  }
 
   static var importsNeededByMemoryManagement: Set<String> {
     return []

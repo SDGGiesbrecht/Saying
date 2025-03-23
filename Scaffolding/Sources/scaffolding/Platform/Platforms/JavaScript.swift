@@ -87,6 +87,9 @@ enum JavaScript: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return nil
   }
+  static func repair(compoundNativeType: String) -> String {
+    return compoundNativeType
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return ""
   }
@@ -254,6 +257,9 @@ enum JavaScript: Platform {
   }
 
   static let preexistingNativeRequirements: Set<String> = []
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
+    return false
+  }
 
   static var importsNeededByMemoryManagement: Set<String> {
     return []

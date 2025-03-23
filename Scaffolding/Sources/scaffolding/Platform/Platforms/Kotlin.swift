@@ -103,6 +103,9 @@ enum Kotlin: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.kotlin
   }
+  static func repair(compoundNativeType: String) -> String {
+    return compoundNativeType
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }
@@ -282,6 +285,9 @@ enum Kotlin: Platform {
   }
 
   static let preexistingNativeRequirements: Set<String> = []
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
+    return false
+  }
 
   static var importsNeededByMemoryManagement: Set<String> {
     return []

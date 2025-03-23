@@ -74,13 +74,11 @@ struct Node {
   }
 
   func declarationSource(parsed: Bool) -> String {
-    if !parsed {
-      switch kind {
-      case .fixedLeaf:
-        return ""
-      case .keyword, .variableLeaf, .compound, .alternates:
-        break
-      }
+    switch kind {
+    case .fixedLeaf:
+      return ""
+    case .keyword, .variableLeaf, .compound, .alternates:
+      break
     }
 
     var result: [String] = [

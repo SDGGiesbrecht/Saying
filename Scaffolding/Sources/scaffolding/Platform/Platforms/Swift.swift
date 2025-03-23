@@ -142,6 +142,15 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
   }
+  static func repair(compoundNativeType: String) -> String {
+    if compoundNativeType.contains("].") {
+      return compoundNativeType
+        .replacingMatches(for: "[", with: "Array<")
+        .replacingMatches(for: "].", with: ">.")
+    } else {
+      return compoundNativeType
+    }
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }
@@ -389,11 +398,17 @@ enum Swift: Platform {
     "extension String.UnicodeScalarView: Collection {}",
     "extension String.UnicodeScalarView.Index: Comparable {}",
     "extension String.UnicodeScalarView.Index: Equatable {}",
-    "extension String.UnicodeScalarView.Index?: Equatable {}",
     "extension UInt: Equatable {}",
     "extension UInt64: Equatable {}",
     "extension Unicode.Scalar: Equatable {}",
   ]
+  static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
+    if source.hasSuffix("?: Equatable {}")
+      || source.hasSuffix("]: Collection {}") {
+      return true
+    }
+    return false
+  }
 
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [

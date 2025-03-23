@@ -1,0 +1,29 @@
+extension
+ use of (list) as list of (element) indexed by (index)
+ {
+  thing (clients)
+   (
+    English: slice of (list)
+   )
+   Swift: “Slice<” list “>” {“extension ” list “: Collection {}”}
+   {
+    part (file)
+     (
+      English: whole
+     )
+     list
+   }
+
+  action (clients)
+   (
+    English: entirety of (list: list)
+   )
+   slice of (list)
+   Swift: “Slice(base: ” list “, bounds: ” list “.startIndex ..< ” list “.endIndex)”
+   create
+
+  use
+   storage of (slice of (list))
+   {
+   }
+ }

@@ -23,8 +23,6 @@ extension UnicodeSegments {
   }
 }
 
-extension UnicodeSegments: Collection {}
-
 extension UnicodeSegments: BidirectionalCollection {
 
   func index(before i: Index) -> Index {

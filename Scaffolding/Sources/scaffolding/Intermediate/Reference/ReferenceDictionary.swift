@@ -120,14 +120,18 @@ extension ReferenceDictionary {
   }
 
   func otherThingsRequiredByDeclaration(of thing: Thing) -> [UnicodeText] {
-    var result: [UnicodeText] = []
+    var requirements: [ParsedTypeReference] = []
     for enumerationCase in thing.cases {
-      if let contents = enumerationCase.contents,
-         let contentThing = lookupThing(contents.key) {
-        result.append(contentThing.globallyUniqueIdentifier(referenceLookup: [self]))
+      if let contents = enumerationCase.contents {
+        requirements.append(contents)
       }
     }
-    return result
+    for part in thing.parts {
+      requirements.append(part.contents)
+    }
+    return requirements.compactMap { requirement in
+      return lookupThing(requirement.key)?.globallyUniqueIdentifier(referenceLookup: [self])
+    }
   }
   func allThings(sorted: Bool = false) -> [Thing] {
     let unsorted =
