@@ -22,8 +22,8 @@ extension
    Swift: “Slice(base: ” list “, bounds: ” list “.startIndex ..< ” list “.endIndex)”
    create
 
-   use
-    storage of (slice of (list))
-    {
-    }
+  use
+   storage of (slice of (list))
+   {
+   }
  }
