@@ -6,8 +6,6 @@ struct UnicodeText {
   }
 }
 
-extension UnicodeSegments: Collection {}
-
 struct ParagraphBreakSyntax {
 
   init() {
@@ -121,6 +119,86 @@ struct OpeningBracketSyntax {
   init() {
   }
 }
+
+struct RightChevronQuotationMarkSyntax {
+
+  init() {
+  }
+}
+
+struct RightArrowSyntax {
+
+  init() {
+  }
+}
+
+struct RightToLeftQuestionMarkSyntax {
+
+  init() {
+  }
+}
+
+struct ClosingExclamationMarkSyntax {
+
+  init() {
+  }
+}
+
+struct SixesQuotationMarkSyntax {
+
+  init() {
+  }
+}
+
+struct SlashSyntax {
+
+  init() {
+  }
+}
+
+struct SpaceSyntax {
+
+  init() {
+  }
+}
+
+struct SymbolInsertionMarkSyntax {
+
+  init() {
+  }
+}
+
+fileprivate struct Unicode_0020segment {
+  fileprivate var scalar_0020offset: UInt64
+  fileprivate var source: UnicodeText
+
+  fileprivate init(_ scalar_0020offset: UInt64, _ source: UnicodeText) {
+    self.scalar_0020offset = scalar_0020offset
+    self.source = source
+  }
+}
+
+struct UnicodeSegments {
+  fileprivate var segments: [Unicode_0020segment]
+
+  fileprivate init(_ segments: [Unicode_0020segment]) {
+    self.segments = segments
+  }
+}
+
+extension UnicodeSegments {
+  struct Index {
+    fileprivate var segment: Int
+    fileprivate var scalar: String.UnicodeScalarView.Index?
+
+    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
+      self.segment = segment
+      self.scalar = scalar
+    }
+  }
+}
+
+extension UnicodeSegments: Collection {}
 
 struct ParsedBulletCharacterSyntax {
   fileprivate var stored_0020location: Slice<UnicodeSegments>
@@ -319,84 +397,6 @@ struct ParsedSymbolInsertionMarkSyntax {
 
   fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
     self.stored_0020location = stored_0020location
-  }
-}
-
-struct RightChevronQuotationMarkSyntax {
-
-  init() {
-  }
-}
-
-struct RightArrowSyntax {
-
-  init() {
-  }
-}
-
-struct RightToLeftQuestionMarkSyntax {
-
-  init() {
-  }
-}
-
-struct ClosingExclamationMarkSyntax {
-
-  init() {
-  }
-}
-
-struct SixesQuotationMarkSyntax {
-
-  init() {
-  }
-}
-
-struct SlashSyntax {
-
-  init() {
-  }
-}
-
-struct SpaceSyntax {
-
-  init() {
-  }
-}
-
-struct SymbolInsertionMarkSyntax {
-
-  init() {
-  }
-}
-
-fileprivate struct Unicode_0020segment {
-  fileprivate var scalar_0020offset: UInt64
-  fileprivate var source: UnicodeText
-
-  fileprivate init(_ scalar_0020offset: UInt64, _ source: UnicodeText) {
-    self.scalar_0020offset = scalar_0020offset
-    self.source = source
-  }
-}
-
-struct UnicodeSegments {
-  fileprivate var segments: [Unicode_0020segment]
-
-  fileprivate init(_ segments: [Unicode_0020segment]) {
-    self.segments = segments
-  }
-}
-
-extension UnicodeSegments {
-  struct Index {
-    fileprivate var segment: Int
-    fileprivate var scalar: String.UnicodeScalarView.Index?
-
-    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
-      self.segment = segment
-      self.scalar = scalar
-    }
   }
 }
 
