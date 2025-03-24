@@ -53,6 +53,8 @@ enum Kotlin: Platform {
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
+    case .nowhere:
+      return "private"
     case .file, .unit:
       // Cannot be “private”, due to differences in meaning between classes and members. A “private” member can only be used within the same class, not in the rest of the file as required. Once members are elevated to “internal”, their signatures cannot reference “private” classes as required. Elevating classes to “internal” means everything is just “internal” anyway.
       return "internal"
@@ -61,9 +63,15 @@ enum Kotlin: Platform {
     }
   }
 
-  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+  static func partDeclaration(
+    name: String,
+    type: String,
+    accessModifier: String?,
+    noSetter: Bool
+  ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
-    return "\(access)var \(name): \(type)"
+    let keyword = noSetter ? "val" : "var"
+    return "\(access)\(keyword) \(name): \(type)"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {

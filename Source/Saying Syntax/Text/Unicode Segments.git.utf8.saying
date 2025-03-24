@@ -4,7 +4,7 @@ thing (clients)
   Swift: UnicodeSegments
  )
  {
-  part (unit)
+  part (unit/nowhere)
    (
     English: segments
    )

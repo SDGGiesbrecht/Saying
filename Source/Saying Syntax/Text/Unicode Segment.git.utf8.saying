@@ -3,13 +3,13 @@ thing (unit)
   English: Unicode segment
  )
  {
-  part (unit)
+  part (unit/nowhere)
    (
     English: scalar offset
    )
    natural number
 
-  part (unit)
+  part (unit/nowhere)
    (
     English: source
    )

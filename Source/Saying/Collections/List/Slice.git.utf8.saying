@@ -7,7 +7,7 @@ extension
    )
    Swift: “Slice<” list “>” {“extension ” list “: Collection {}”}
    {
-    part (file)
+    part (clients/nowhere)
      (
       English: whole
      )

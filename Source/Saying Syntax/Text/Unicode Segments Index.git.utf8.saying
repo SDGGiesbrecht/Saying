@@ -4,13 +4,13 @@ thing (clients)
   Swift: UnicodeSegments.Index
  )
  {
-  part (unit)
+  part (unit/nowhere)
    (
     English: segment
    )
    list index
 
-  part (unit)
+  part (unit/nowhere)
    (
     English: scalar
    )

@@ -48,8 +48,14 @@ enum C: Platform {
     return nil
   }
 
-  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
-    return "\(type) \(name);"
+  static func partDeclaration(
+    name: String,
+    type: String,
+    accessModifier: String?,
+    noSetter: Bool
+  ) -> String {
+    let const = noSetter ? "const " : ""
+    return "\(const)\(type) \(name);"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
@@ -151,8 +157,18 @@ enum C: Platform {
         thingDeclaration(
           name: name,
           components: [
-            partDeclaration(name: "enumeration_case", type: "\(name)_case", accessModifier: nil),
-            partDeclaration(name: "value", type: "\(name)_value", accessModifier: nil),
+            partDeclaration(
+              name: "enumeration_case",
+              type: "\(name)_case",
+              accessModifier: nil,
+              noSetter: true
+            ),
+            partDeclaration(
+              name: "value",
+              type: "\(name)_value",
+              accessModifier: nil,
+              noSetter: true
+            ),
           ],
           accessModifier: nil,
           constructorParameters: [],

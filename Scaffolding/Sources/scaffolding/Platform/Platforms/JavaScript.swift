@@ -46,7 +46,12 @@ enum JavaScript: Platform {
     return nil
   }
   
-  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+  static func partDeclaration(
+    name: String,
+    type: String,
+    accessModifier: String?,
+    noSetter: Bool
+  ) -> String {
     return ""
   }
 

@@ -26,7 +26,8 @@ protocol Platform {
   static func partDeclaration(
     name: String,
     type: String,
-    accessModifier: String?
+    accessModifier: String?,
+    noSetter: Bool
   ) -> String
 
   // Cases
@@ -364,8 +365,13 @@ extension Platform {
           leading: true
         )
         let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
-        let access = accessModifier(for: part.access, memberScope: true)
-        return partDeclaration(name: name, type: type, accessModifier: access)
+        let access = accessModifier(for: part.readAccess, memberScope: true)
+        return partDeclaration(
+          name: name,
+          type: type,
+          accessModifier: access,
+          noSetter: part.writeAccess == .nowhere
+        )
       })
       let access = accessModifier(for: thing.access, memberScope: false)
       let constructorParameters = thing.parts.map({ part in

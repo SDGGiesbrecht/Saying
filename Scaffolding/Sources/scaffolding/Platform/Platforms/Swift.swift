@@ -97,6 +97,8 @@ enum Swift: Platform {
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
+    case .nowhere:
+      return "private"
     case .file, .unit:
       return "fileprivate"
     case .clients:
@@ -108,9 +110,15 @@ enum Swift: Platform {
     return true
   }
 
-  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+  static func partDeclaration(
+    name: String,
+    type: String,
+    accessModifier: String?,
+    noSetter: Bool
+  ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
-    return "\(access)var \(name): \(type)"
+    let keyword = noSetter ? "let" : "var"
+    return "\(access)\(keyword) \(name): \(type)"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {

@@ -42,6 +42,8 @@ enum CSharp: Platform {
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
+    case .nowhere:
+      return "private"
     case .file, .unit, .clients:
       // “file” is too new
       if memberScope {
@@ -52,9 +54,15 @@ enum CSharp: Platform {
     }
   }
 
-  static func partDeclaration(name: String, type: String, accessModifier: String?) -> String {
+  static func partDeclaration(
+    name: String,
+    type: String,
+    accessModifier: String?,
+    noSetter: Bool
+  ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
-    return "\(access)\(type) \(name);"
+    let readonly = noSetter ? "readonly " : ""
+    return "\(access)\(readonly)\(type) \(name);"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
