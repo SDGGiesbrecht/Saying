@@ -58,7 +58,7 @@ extension
     Deutsch: (Ergebnis: [result]) nicht beachten
    )
    C: “” result “”
-   C♯: “” result “”
+   C♯: “¤(5F) = ” result “”
    JavaScript: “” result “”
    Kotlin: “” result “”
    Swift: “¤(5F) = ” result “”
