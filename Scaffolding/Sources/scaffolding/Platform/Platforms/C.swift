@@ -54,8 +54,7 @@ enum C: Platform {
     accessModifier: String?,
     noSetter: Bool
   ) -> String {
-    let const = noSetter ? "const " : ""
-    return "\(const)\(type) \(name);"
+    return "\(type) \(name);"
   }
 
   static func caseReference(name: String, type: String, simple: Bool, ignoringValue: Bool) -> String {
