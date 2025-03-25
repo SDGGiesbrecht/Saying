@@ -22,8 +22,6 @@ extension ModuleIntermediate {
           )
         )
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeParsedLocation(englishName: englishName))
-        newSource.append("")
         newSource.append(
           contentsOf: syntaxNodeCreation(
             englishName: englishName,

@@ -47,6 +47,7 @@ extension Node {
           Node(name: "ClientsKeyword", kind: .keyword(["clients", "Kunden", /* clients */ "πελάτες", "לקוחות"])),
           Node(name: "UnitKeyword", kind: .keyword(["unit", "Einheit", "unité", "μονάδα", "יחידה"])),
           Node(name: "FileKeyword", kind: .keyword(["file", "Datei", "fichier", "αρχείο", "קובץ"])),
+          Node(name: "NowhereKeyword", kind: .keyword(["nowhere", "nirgendwo", "nulle" /* part */, "πουθενά", "אין" /* גישה */])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
           Node(name: "ParameterKeyword", kind: .keyword(["parameter", "Übergabewert", "paramètre", "παράμετρος", "פרמטר"])),
@@ -388,11 +389,42 @@ extension Node {
             ])
           ),
           Node(
+            name: "WriteAccessDeclaration",
+            kind: .alternates([
+              Alternate(name: "nowhere", type: "NowhereKeyword"),
+              Alternate(name: "general", type: "AccessDeclaration"),
+            ])
+          ),
+          Node(
+            name: "ReadWriteAccessDeclaration",
+            kind: .compound(children: [
+              Child(name: "read", type: "AccessDeclaration", kind: .required),
+              Child(name: "slash", type: "SlashSyntax", kind: .required),
+              Child(name: "write", type: "WriteAccessDeclaration", kind: .required),
+            ])
+          ),
+          Node(
+            name: "StorageAccessDeclaration",
+            kind: .alternates([
+              Alternate(name: "differing", type: "ReadWriteAccessDeclaration"),
+              Alternate(name: "same", type: "AccessDeclaration"),
+            ])
+          ),
+          Node(
             name: "Access",
             kind: .compound(children: [
               Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "keyword", type: "AccessDeclaration", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "StorageAccess",
+            kind: .compound(children: [
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "keywords", type: "StorageAccessDeclaration", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
@@ -1242,7 +1274,7 @@ extension Node {
             name: "PartDeclaration",
             kind: .compound(children: [
               Child(name: "keyword", type: "PartKeyword", kind: .required),
-              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "access", type: "StorageAccess", kind: .optional),
               Child(name: "testAccess", type: "TestAccess", kind: .optional),
               Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "documentation", type: "AttachedDocumentation", kind: .optional),

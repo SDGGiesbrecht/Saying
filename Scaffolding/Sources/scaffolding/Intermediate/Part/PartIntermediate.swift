@@ -2,7 +2,8 @@ import SDGText
 
 struct PartIntermediate {
   var names: Set<StrictString>
-  var access: AccessIntermediate
+  var readAccess: AccessIntermediate
+  var writeAccess: AccessIntermediate
   var testOnlyAccess: Bool
   var contents: ParsedTypeReference
   var referenceAction: ActionIntermediate
@@ -27,7 +28,8 @@ extension PartIntermediate {
       names.insert(StrictString(name.name.identifierText()))
     }
 
-    let access = AccessIntermediate(declaration.access)
+    let readAccess = AccessIntermediate(readAccessFrom: declaration.access?.keywords)
+    let writeAccess = AccessIntermediate(writeAccessFrom: declaration.access?.keywords)
     let testOnlyAccess = declaration.testAccess?.keyword is ParsedTestsKeyword
 
     let partNamespace = namespace.appending(names)
@@ -63,7 +65,7 @@ extension PartIntermediate {
       containerType: containerType,
       partIdentifier: names.identifier(),
       partType: contents,
-      access: access,
+      access: readAccess,
       testOnlyAccess: testOnlyAccess,
       c: c,
       cSharp: cSharp,
@@ -78,7 +80,8 @@ extension PartIntermediate {
     return .success(
       PartIntermediate(
         names: names,
-        access: access,
+        readAccess: readAccess,
+        writeAccess: writeAccess,
         testOnlyAccess: testOnlyAccess,
         contents: contents,
         referenceAction: referenceAction,
@@ -97,7 +100,8 @@ extension PartIntermediate {
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
-      access: access,
+      readAccess: readAccess,
+      writeAccess: writeAccess,
       testOnlyAccess: testOnlyAccess,
       contents: contents.resolvingExtensionContext(typeLookup: typeLookup),
       referenceAction: referenceAction.resolvingExtensionContext(typeLookup: typeLookup),
@@ -114,7 +118,8 @@ extension PartIntermediate {
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
-      access: access,
+      readAccess: readAccess,
+      writeAccess: writeAccess,
       testOnlyAccess: testOnlyAccess,
       contents: contents.specializing(typeLookup: typeLookup),
       referenceAction: referenceAction.specializing(

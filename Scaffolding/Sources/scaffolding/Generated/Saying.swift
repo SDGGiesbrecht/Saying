@@ -169,8 +169,8 @@ struct SymbolInsertionMarkSyntax {
 }
 
 fileprivate struct Unicode_0020segment {
-  fileprivate var scalar_0020offset: UInt64
-  fileprivate var source: UnicodeText
+  fileprivate let scalar_0020offset: UInt64
+  fileprivate let source: UnicodeText
 
   fileprivate init(_ scalar_0020offset: UInt64, _ source: UnicodeText) {
     self.scalar_0020offset = scalar_0020offset
@@ -179,7 +179,7 @@ fileprivate struct Unicode_0020segment {
 }
 
 struct UnicodeSegments {
-  fileprivate var segments: [Unicode_0020segment]
+  fileprivate let segments: [Unicode_0020segment]
 
   fileprivate init(_ segments: [Unicode_0020segment]) {
     self.segments = segments
@@ -188,8 +188,8 @@ struct UnicodeSegments {
 
 extension UnicodeSegments {
   struct Index {
-    fileprivate var segment: Int
-    fileprivate var scalar: String.UnicodeScalarView.Index?
+    fileprivate let segment: Int
+    fileprivate let scalar: String.UnicodeScalarView.Index?
 
     fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
       self.segment = segment
@@ -201,218 +201,218 @@ extension UnicodeSegments {
 extension UnicodeSegments: Collection {}
 
 struct ParsedBulletCharacterSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedClosingBraceSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedClosingBracketSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedClosingExclamationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedClosingParenthesisSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedClosingQuestionMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedColonCharacterSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedDownArrowSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedGreekQuestionMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedLeftArrowSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedLineBreakSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedLowQuotationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedNinesQuotationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedOpeningBraceSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedOpeningBracketSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedOpeningExclamationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedOpeningParenthesisSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedOpeningQuestionMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedParagraphBreakSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedRightArrowSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedRightToLeftQuestionMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedSixesQuotationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedSlashSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedSpaceSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedSymbolInsertionMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedLeftChevronQuotationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
 struct ParsedRightChevronQuotationMarkSyntax {
-  fileprivate var stored_0020location: Slice<UnicodeSegments>
+  let location: Slice<UnicodeSegments>
 
-  fileprivate init(_ stored_0020location: Slice<UnicodeSegments>) {
-    self.stored_0020location = stored_0020location
+  fileprivate init(_ location: Slice<UnicodeSegments>) {
+    self.location = location
   }
 }
 
@@ -501,168 +501,6 @@ extension UnicodeSegments {
 extension UnicodeSegments {
   var endIndex: UnicodeSegments.Index {
     return UnicodeSegments.Index(self.segments.endIndex, nil)
-  }
-}
-
-extension ParsedBulletCharacterSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedClosingBraceSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedClosingBracketSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedClosingExclamationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedClosingParenthesisSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedClosingQuestionMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedColonCharacterSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedDownArrowSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedGreekQuestionMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedLeftArrowSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedLineBreakSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedLowQuotationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedNinesQuotationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedOpeningBraceSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedOpeningBracketSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedOpeningExclamationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedOpeningParenthesisSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedOpeningQuestionMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedParagraphBreakSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedRightArrowSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedRightToLeftQuestionMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedSixesQuotationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedSlashSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedSpaceSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedSymbolInsertionMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedLeftChevronQuotationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
-  }
-}
-
-extension ParsedRightChevronQuotationMarkSyntax {
-  var location: Slice<UnicodeSegments> {
-    return self.stored_0020location
   }
 }
 
