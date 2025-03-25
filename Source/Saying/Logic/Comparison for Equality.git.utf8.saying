@@ -76,7 +76,7 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
-   Swift: “” first “ != ” second “” {“extension ” thing “: Equatable {}”}
+   Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
    }
@@ -131,7 +131,7 @@ extension
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
    )
    truth value
-   Swift: «» first “ == ” second „“ {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {
      if (second) exists, unwrap it as (• second value: thing), {
@@ -154,7 +154,7 @@ extension
     English: (first: optional (thing)) is not (second: optional (thing)) according to optional
    )
    truth value
-   Swift: «» first “ != ” second „“ {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second) according to optional)
    }

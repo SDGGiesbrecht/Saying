@@ -87,12 +87,6 @@ import SDGText
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
 
-        "==(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
-        "<(_: UnicodeSegments.Index, _: UnicodeSegments.Index)",
-        "UnicodeSegments.startIndex",
-        "UnicodeSegments.endIndex",
-        "UnicodeSegments.index(after: UnicodeSegments.Index)",
-        "UnicodeSegments.subscript(_: UnicodeSegments.Index)",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",
         "RightArrowSyntax.init()",

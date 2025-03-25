@@ -399,7 +399,7 @@ extension Node {
             name: "ReadWriteAccessDeclaration",
             kind: .compound(children: [
               Child(name: "read", type: "AccessDeclaration", kind: .required),
-              Child(name: "slash", type: "SlashSyntax", kind: .required),
+              Child(name: "slash", type: "SlashSyntax", kind: .fixed),
               Child(name: "write", type: "WriteAccessDeclaration", kind: .required),
             ])
           ),
@@ -986,18 +986,52 @@ extension Node {
           Node(
             name: "NativeImport",
             kind: .compound(children: [
-              Child(name: "space", type: "SpaceSyntax", kind: .required),
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
               Child(name: "importNode", type: "Literal", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
+        ],
+        Node.separatedList(
+          name: "NativeRequirementList",
+          entryName: "requirement", entryNamePlural: "requirements",
+          entryType: "NativeThingReference",
+          separatorName: "lineBreak",
+          separatorType: "LineBreakSyntax",
+          fixedSeparator: true
+        ),
+        [
           Node(
-            name: "NativeRequirements",
+            name: "SpacedNativeRequirementList",
             kind: .compound(children: [
-              Child(name: "space", type: "SpaceSyntax", kind: .required),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "requirements", type: "NativeRequirementList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "NativeRequirementContents",
+            kind: .alternates([
+              Alternate(name: "list", type: "SpacedNativeRequirementList"),
+              Alternate(name: "single", type: "NativeThingReference"),
+            ])
+          ),
+          Node(
+            name: "NativeIndirectRequirements",
+            kind: .compound(children: [
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
+              Child(name: "openingBracket", type: "OpeningBracketSyntax", kind: .fixed),
+              Child(name: "requirements", type: "NativeRequirementContents", kind: .required),
+              Child(name: "closingBracket", type: "ClosingBracketSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "NativeRequiredCode",
+            kind: .compound(children: [
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
-              Child(name: "requirements", type: "NativeThingReference", kind: .required),
+              Child(name: "requirements", type: "NativeRequirementContents", kind: .required),
               Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),
@@ -1023,9 +1057,9 @@ extension Node {
             name: "NativeReferenceCountedThing",
             kind: .compound(children: [
               Child(name: "type", type: "NativeThingReference", kind: .required),
-              Child(name: "firstSlash", type: "SlashSyntax", kind: .required),
+              Child(name: "firstSlash", type: "SlashSyntax", kind: .fixed),
               Child(name: "hold", type: "NativeActionExpression", kind: .required),
-              Child(name: "secondSlash", type: "SlashSyntax", kind: .required),
+              Child(name: "secondSlash", type: "SlashSyntax", kind: .fixed),
               Child(name: "release", type: "NativeActionExpression", kind: .required),
             ])
           ),
@@ -1041,7 +1075,8 @@ extension Node {
             kind: .compound(children: [
               Child(name: "type", type: "AnyNativeThing", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
-              Child(name: "requirementsNode", type: "NativeRequirements", kind: .optional),
+              Child(name: "indirectNode", type: "NativeIndirectRequirements", kind: .optional),
+              Child(name: "code", type: "NativeRequiredCode", kind: .optional),
             ])
           ),
           Node(
@@ -1049,16 +1084,17 @@ extension Node {
             kind: .compound(children: [
               Child(name: "expression", type: "NativeActionExpression", kind: .required),
               Child(name: "importNode", type: "NativeImport", kind: .optional),
-              Child(name: "requirementsNode", type: "NativeRequirements", kind: .optional),
+              Child(name: "indirectNode", type: "NativeIndirectRequirements", kind: .optional),
+              Child(name: "code", type: "NativeRequiredCode", kind: .optional),
             ])
           ),
           Node(
             name: "NativeStorageCase",
             kind: .compound(children: [
               Child(name: "store", type: "NativeAction", kind: .required),
-              Child(name: "firstSlash", type: "SlashSyntax", kind: .required),
+              Child(name: "firstSlash", type: "SlashSyntax", kind: .fixed),
               Child(name: "retrieve", type: "NativeAction", kind: .required),
-              Child(name: "secondSlash", type: "SlashSyntax", kind: .required),
+              Child(name: "secondSlash", type: "SlashSyntax", kind: .fixed),
               Child(name: "check", type: "NativeAction", kind: .required),
             ])
           ),

@@ -73,7 +73,18 @@ ability (clients)
     Swift: var (self: [list]).first
    )
    optional (element)
-   Swift: “” list “.first” {“extension ” list “: Collection {}”}
+   Swift: “” list “.first” [
+    “==(¤(5F): ” index “, ¤(5F): ” index “)”
+    “<(¤(5F): ” index “, ¤(5F): ” index “)”
+    “” list “.startIndex”
+    “” list “.endIndex”
+    “” list “.subscript(¤(5F): ” index “)”
+    “” list “.isEmpty”
+    “” list “.index(after: ” index “)”
+   ] {
+    “extension ” list “: Collection {}”
+    “extension ” index “: Comparable {}”
+   }
    {
     ← first in (list) according to default use as list
    }
@@ -92,7 +103,17 @@ ability (clients)
     Swift: var (self: [list]).isEmpty
    )
    truth value
-   Swift: “” list “.isEmpty” {“extension ” list “: Collection {}”}
+   Swift: “” list “.isEmpty” [
+    “==(¤(5F): ” index “, ¤(5F): ” index “)”
+    “<(¤(5F): ” index “, ¤(5F): ” index “)”
+    “” list “.startIndex”
+    “” list “.endIndex”
+    “” list “.subscript(¤(5F): ” index “)”
+    “” list “.index(after: ” index “)”
+   ] {
+    “extension ” list “: Collection {}”
+    “extension ” index “: Comparable {}”
+   }
    {
     ← (list) is empty according to default use as list
    }

@@ -199,6 +199,7 @@ extension UnicodeSegments {
 }
 
 extension UnicodeSegments: Collection {}
+extension UnicodeSegments.Index: Comparable {}
 
 struct ParsedBulletCharacterSyntax {
   let location: Slice<UnicodeSegments>

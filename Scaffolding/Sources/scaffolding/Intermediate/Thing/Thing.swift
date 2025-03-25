@@ -221,10 +221,20 @@ extension Thing {
   func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
     for native in allNativeImplementations() {
       for parameterReference in [native.parameters]
+        .appending(contentsOf: native.indirectRequirements.compactMap({ $0.parameters }))
         .appending(contentsOf: native.requiredDeclarations.compactMap({ $0.parameters }))
         .joined() {
-        if parameters.parameter(named: parameterReference.name) == nil {
-          errors.append(.noSuchParameter(parameterReference.syntaxNode))
+        if let typeInstead = parameterReference.resolvedType {
+          typeInstead.validateReferences(
+            requiredAccess: access,
+            allowTestOnlyAccess: testOnlyAccess,
+            referenceLookup: referenceLookup,
+            errors: &errors
+          )
+        } else {
+          if parameters.parameter(named: parameterReference.name) == nil {
+            errors.append(.noSuchParameter(parameterReference.syntaxNode))
+          }
         }
       }
     }
@@ -309,9 +319,11 @@ extension Thing {
 
 extension Thing {
 
-  func requiredIdentifiers(
-    moduleAndExternalReferenceLookup: [ReferenceDictionary]
-  ) -> [UnicodeText] {
+  func requiredIdentifiers<P>(
+    moduleAndExternalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) -> [UnicodeText]
+  where P: Platform {
     var result: [UnicodeText] = []
     for part in parts {
       result.append(
@@ -319,6 +331,17 @@ extension Thing {
           moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
         )
       )
+    }
+    if let native = platform.nativeType(of: self) {
+      for indirectRequirement in native.indirectRequirements {
+        result.append(
+          UnicodeText(
+            StrictString(
+              platform.source(for: indirectRequirement, referenceLookup: moduleAndExternalReferenceLookup)
+            )
+          )
+        )
+      }
     }
     return result
   }
