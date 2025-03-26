@@ -28,16 +28,16 @@ extension ParsedSyntaxNode {
     return list
   }
   private func findAllLanguageReferences(list: inout [ParsedUninterruptedIdentifier]) {
-    switch nodeKind {
-    case .abilityNameEntry(let name):
+    switch self {
+    case let name as ParsedAbilityNameEntry:
       list.append(name.language)
-    case .actionNameEntry(let name):
+    case let name as ParsedActionNameEntry:
       list.append(name.language)
-    case .thingNameEntry(let name):
+    case let name as ParsedThingNameEntry:
       list.append(name.language)
-    case .caseNameEntry(let name):
+    case let name as ParsedCaseNameEntry:
       list.append(name.language)
-    case .paragraphEntry(let paragraph):
+    case let paragraph as ParsedParagraphEntry:
       list.append(paragraph.language)
     default:
       if self is SyntaxLeaf {

@@ -3,6 +3,7 @@ import SDGText
 struct NativeActionImplementationIntermediate {
   var expression: NativeActionExpressionIntermediate
   var requiredImport: UnicodeText?
+  var indirectRequirements: [NativeRequirementImplementationIntermediate] = []
   var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
 }
 
@@ -31,9 +32,18 @@ extension NativeActionImplementationIntermediate {
         requiredImport = UnicodeText(StrictString(literal.string))
       }
     }
+    var indirectRequirments: [NativeRequirementImplementationIntermediate] = []
+    for requirement in implementation.indirectNode?.requirements.requirements ?? [] {
+      switch NativeRequirementImplementationIntermediate.construct(implementation: requirement) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeRequirementError($0) }))
+      case .success(let constructed):
+        indirectRequirments.append(constructed)
+      }
+    }
     var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
-    if let requirements = implementation.requirementsNode?.requirements {
-      switch NativeRequirementImplementationIntermediate.construct(implementation: requirements) {
+    for requirement in implementation.code?.requirements.requirements ?? [] {
+      switch NativeRequirementImplementationIntermediate.construct(implementation: requirement) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.nativeRequirementError($0) }))
       case .success(let constructed):
@@ -47,6 +57,7 @@ extension NativeActionImplementationIntermediate {
       NativeActionImplementationIntermediate(
         expression: expression,
         requiredImport: requiredImport,
+        indirectRequirements: indirectRequirments,
         requiredDeclarations: requiredDeclarations
       )
     )
@@ -61,6 +72,7 @@ extension NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
       expression: expression.specializing(typeLookup: implementationTypeLookup),
       requiredImport: requiredImport,
+      indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) })
     )
   }

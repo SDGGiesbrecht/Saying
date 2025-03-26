@@ -670,6 +670,22 @@ extension ActionIntermediate {
           }
         }
       }
+      for parameterReference in native.indirectRequirements.compactMap({ $0.parameters })
+        .appending(contentsOf: native.requiredDeclarations.compactMap({ $0.parameters }))
+        .joined() {
+        if let typeInstead = parameterReference.resolvedType {
+          typeInstead.validateReferences(
+            requiredAccess: access,
+            allowTestOnlyAccess: testOnlyAccess,
+            referenceLookup: referenceLookup,
+            errors: &errors
+          )
+        } else {
+          if parameters.parameter(named: parameterReference.name) == nil {
+            errors.append(.noSuchParameter(parameterReference.syntaxNode))
+          }
+        }
+      }
     }
     let externalAndParameters = referenceLookup.appending(self.parameterReferenceDictionary(externalLookup: referenceLookup))
     implementation?.validateReferences(
@@ -1076,6 +1092,15 @@ extension ActionIntermediate {
             )
           )
         }
+      }
+      for indirectRequirement in native.indirectRequirements {
+        result.append(
+          UnicodeText(
+            StrictString(
+              platform.source(for: indirectRequirement, referenceLookup: moduleAndExternalReferenceLookup)
+            )
+          )
+        )
       }
     } else if let implementation = self.implementation {
       result.append(

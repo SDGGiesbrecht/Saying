@@ -5,7 +5,18 @@ extension
    (
     English: slice of (list)
    )
-   Swift: “Slice<” list “>” {“extension ” list “: Collection {}”}
+   Swift: “Slice<” list “>” [
+    “==(¤(5F): ” index “, ¤(5F): ” index “)”
+    “<(¤(5F): ” index “, ¤(5F): ” index “)”
+    “” list “.startIndex”
+    “” list “.endIndex”
+    “” list “.subscript(¤(5F): ” index “)”
+    “” list “.isEmpty”
+    “” list “.index(after: ” index “)”
+   ] {
+    “extension ” list “: Collection {}”
+    “extension ” index “: Comparable {}”
+   }
    {
     part (clients/nowhere)
      (

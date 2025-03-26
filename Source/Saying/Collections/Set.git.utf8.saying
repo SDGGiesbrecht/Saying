@@ -22,7 +22,7 @@ extension
    )
    C♯: “HashSet<” element “>” (“System.Collections.Generic”)
    Kotlin: “Set<” element “>”
-   Swift: “Set<” element “>” {“extension ” element “: Equatable {}”}
+   Swift: “Set<” element “>” [“==(¤(5F): ” element “, ¤(5F): ” element “)”] {“extension ” element “: Equatable {}”}
    {
    }
 

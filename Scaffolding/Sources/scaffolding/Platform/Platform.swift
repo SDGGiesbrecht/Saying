@@ -1328,22 +1328,29 @@ extension Platform {
   }
 
   static func source(
+    for requirement: NativeRequirementImplementationIntermediate,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
+    var line = ""
+    for index in requirement.textComponents.indices {
+      line.append(contentsOf: String(StrictString(requirement.textComponents[index])))
+      if index != requirement.textComponents.indices.last {
+        let type = requirement.parameters[index].resolvedType!
+        line.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
+      }
+    }
+    return line
+  }
+  static func source(
     for nativeRequirements: [NativeRequirementImplementationIntermediate],
     referenceLookup: [ReferenceDictionary],
     alreadyHandled: inout Set<String>
   ) -> String? {
     var result: [String] = []
     for declaration in nativeRequirements {
-      var line = ""
-      for index in declaration.textComponents.indices {
-        line.append(contentsOf: String(StrictString(declaration.textComponents[index])))
-        if index != declaration.textComponents.indices.last {
-          let type = declaration.parameters[index].resolvedType!
-          line.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
-        }
-      }
+      let line = source(for: declaration, referenceLookup: referenceLookup)
       if alreadyHandled.insert(line).inserted,
-       !isAlgorithmicallyPreexistingNativeRequirement(source: line) {
+        !isAlgorithmicallyPreexistingNativeRequirement(source: line) {
         result.append(line)
       }
     }
