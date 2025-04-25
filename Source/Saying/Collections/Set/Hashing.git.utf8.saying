@@ -1,0 +1,24 @@
+ability (clients)
+ (
+  English: hashing (key)
+  Deutsch: Verstreuung von (Schlüssel: [key])
+  français : hachage de (clé: [key])
+  ελληνικά: κατακερματισμός (κλειδί: [key])
+  עברית: גיבוב של (מפתח: [key])
+ )
+ {
+  requirement (clients)
+   [
+    test {
+     let (• hasher: hasher) start as (create hasher)
+     hash (example: key) with (↓ hasher)
+    }
+   ]
+   (
+    English: hash (key: key) with (hasher: ↓ hasher)
+    Deutsch: mit (Verstreuer: [hasher]) (Schlüssel: [key]) zerhacken
+    français : hacher (clé: [key]) avec (hacheur: [hasher])
+    ελληνικά: κατατεμαχισμός (κλειδί: [key]) με (κατακερματιστής: [hasher])
+    Swift: (self: [key]).hash into (hasher: [hasher])
+   )
+ }
