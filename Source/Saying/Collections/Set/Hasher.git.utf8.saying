@@ -1,0 +1,23 @@
+thing (clients)
+ (
+  English: hasher
+  Deutsch: Verstreuer
+  français : hacheur
+  ελληνικά: κατακερματιστής
+ )
+ Swift: “Hasher”
+ {
+ }
+
+action (clients)
+ (
+  English: create hasher
+ )
+ hasher
+ Swift: “Hasher()”
+ create
+
+use (clients)
+ storage of (hasher)
+ {
+ }

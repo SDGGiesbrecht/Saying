@@ -268,3 +268,12 @@ use (clients)
     ← false
    }
  }
+
+use (clients)
+ hashing (truth value)
+ {
+  action (clients)
+   hash (key: truth value) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {}
+ }
