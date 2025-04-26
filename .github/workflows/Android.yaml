@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   Android_Build:
     name: Android (Build)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Check out
       uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
         git diff --exit-code
   Android_Test:
     name: Android (Test)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: Android_Build
     steps:
     - name: Check out
