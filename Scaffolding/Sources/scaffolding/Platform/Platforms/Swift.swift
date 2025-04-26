@@ -225,7 +225,7 @@ enum Swift: Platform {
   }
 
   static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
-    return action.swiftName
+    return action.nativeNames.swift
   }
   static func nativeName(of action: ActionIntermediate) -> String? {
     if let identifier = action.swiftIdentifier() {
@@ -239,7 +239,7 @@ enum Swift: Platform {
     }
   }
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    if let name = action.swiftName.map({ StrictString($0) }) {
+    if let name = action.nativeNames.swift.map({ StrictString($0) }) {
       if name.hasPrefix("().")
         || name.hasPrefix("var ().") {
         return true
@@ -248,7 +248,7 @@ enum Swift: Platform {
     return false
   }
   static func nativeIsProperty(action: ActionIntermediate) -> Bool {
-    return action.swiftName.map({ StrictString($0) })?.hasPrefix("var ") ?? false
+    return action.nativeNames.swift.map({ StrictString($0) })?.hasPrefix("var ") ?? false
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return parameter.swiftLabel.map({ String(StrictString($0)) })

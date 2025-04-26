@@ -9,7 +9,7 @@ struct ActionPrototype {
   var access: AccessIntermediate
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
-  var swiftName: UnicodeText?
+  var nativeNames: NativeActionNamesIntermediate
 
   init(
     isFlow: Bool,
@@ -20,7 +20,7 @@ struct ActionPrototype {
     access: AccessIntermediate,
     testOnlyAccess: Bool,
     documentation: DocumentationIntermediate?,
-    swiftName: UnicodeText?
+    nativeNames: NativeActionNamesIntermediate
   ) {
     self.isFlow = isFlow
     self.names = names
@@ -30,7 +30,7 @@ struct ActionPrototype {
     self.access = access
     self.testOnlyAccess = testOnlyAccess
     self.documentation = documentation
-    self.swiftName = swiftName
+    self.nativeNames = nativeNames
   }
 }
 
@@ -61,11 +61,14 @@ extension ActionPrototype {
       parameters = constructed
     }
     var names: Set<StrictString> = []
-    var swiftName: UnicodeText?
+    var nativeNames = NativeActionNamesIntermediate.none
     for (language, signature) in namesDictionary {
       let name = signature.name()
-      if language == "Swift" {
-        swiftName = name
+      switch language {
+      case "Kotlin":
+        nativeNames.kotlin = name
+      case "Swift":
+        nativeNames.swift = name
         var remainder = StrictString(name)
         if remainder.hasPrefix("var ") {
           remainder.removeFirst(4)
@@ -90,6 +93,8 @@ extension ActionPrototype {
             })
         )
         parameters.apply(swiftLabels: labels.map({ $0.isEmpty ? nil : UnicodeText($0) }), accordingTo: name)
+      default:
+        break
       }
       names.insert(StrictString(name))
     }
@@ -121,7 +126,7 @@ extension ActionPrototype {
         access: AccessIntermediate(declaration.access),
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
-        swiftName: swiftName
+        nativeNames: nativeNames
       )
     )
   }

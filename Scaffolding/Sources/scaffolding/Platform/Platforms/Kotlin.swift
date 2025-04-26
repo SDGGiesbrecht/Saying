@@ -164,10 +164,15 @@ enum Kotlin: Platform {
   }
 
   static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
-    return nil
+    return action.nativeNames.kotlin
   }
   static func nativeName(of action: ActionIntermediate) -> String? {
-    return nil
+    if let identifier = action.kotlinIdentifier() {
+      #warning("Not implemented yet.")
+      return String(StrictString(identifier))
+    } else {
+      return nil
+    }
   }
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
     return false
