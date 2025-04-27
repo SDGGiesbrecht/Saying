@@ -131,17 +131,24 @@ enum Kotlin: Platform {
     accessModifier: String?,
     constructorParameters: [String],
     constructorAccessModifier: String?,
-    constructorSetters: [String]
+    constructorSetters: [String],
+    otherMembers: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let constructorAccess = constructorAccessModifier == accessModifier
       ? ""
       : constructorAccessModifier.map({ " \($0) constructor" }) ?? ""
     let properties = components.joined(separator: ", ")
-    let result: [String] = [
+    var result: [String] = [
       "\(access)class \(name)\(constructorAccess)(\(properties)) {",
-      "}",
     ]
+    for member in otherMembers {
+      result.append("")
+      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
+    }
+    result.append(contentsOf: [
+      "}",
+    ])
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(
@@ -163,19 +170,8 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
-  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+  static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return action.nativeNames.kotlin
-  }
-  static func nativeName(of action: ActionIntermediate) -> String? {
-    if let identifier = action.kotlinIdentifier() {
-      #warning("Not implemented yet.")
-      return String(StrictString(identifier))
-    } else {
-      return nil
-    }
-  }
-  static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    return false
   }
   static func nativeIsProperty(action: ActionIntermediate) -> Bool {
     return false
@@ -267,6 +263,7 @@ enum Kotlin: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isAbsorbedMember: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
@@ -460,5 +457,27 @@ enum Kotlin: Platform {
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.kt"))
+  }
+
+  static var permitsParameterLabels: Bool {
+    return false
+  }
+  static var emptyParameterLabel: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var parameterLabelSuffix: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var memberPrefix: UnicodeText? {
+    return UnicodeText(StrictString("()."))
+  }
+  static var variablePrefix: UnicodeText? {
+    return nil
+  }
+  static var initializerSuffix: UnicodeText? {
+    return nil
+  }
+  static var initializerName: UnicodeText {
+    return UnicodeText(StrictString(""))
   }
 }

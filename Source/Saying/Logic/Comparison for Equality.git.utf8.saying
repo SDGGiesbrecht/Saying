@@ -132,6 +132,7 @@ extension
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
    )
    truth value
+   Kotlin: «» first “ == ” second „“ [“” thing “.equals(” thing “)”]
    Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {

@@ -110,7 +110,8 @@ enum C: Platform {
     accessModifier: String?,
     constructorParameters: [String],
     constructorAccessModifier: String?,
-    constructorSetters: [String]
+    constructorSetters: [String],
+    otherMembers: [String]
   ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
@@ -172,7 +173,8 @@ enum C: Platform {
           accessModifier: nil,
           constructorParameters: [],
           constructorAccessModifier: nil,
-          constructorSetters: []
+          constructorSetters: [],
+          otherMembers: []
         )!
       )
       
@@ -180,14 +182,8 @@ enum C: Platform {
     }
   }
 
-  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+  static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return nil
-  }
-  static func nativeName(of action: ActionIntermediate) -> String? {
-    return nil
-  }
-  static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    return false
   }
   static func nativeIsProperty(action: ActionIntermediate) -> Bool {
     return false
@@ -277,6 +273,7 @@ enum C: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isAbsorbedMember: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     var result: [String] = [
@@ -483,5 +480,27 @@ enum C: Platform {
       "\u{9}cc $(CFLAGS) test.c -o test $(LIBS)",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Makefile"))
+  }
+
+  static var permitsParameterLabels: Bool {
+    return false
+  }
+  static var emptyParameterLabel: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var parameterLabelSuffix: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var memberPrefix: UnicodeText? {
+    return nil
+  }
+  static var variablePrefix: UnicodeText? {
+    return nil
+  }
+  static var initializerSuffix: UnicodeText? {
+    return nil
+  }
+  static var initializerName: UnicodeText {
+    return UnicodeText(StrictString(""))
   }
 }

@@ -150,7 +150,8 @@ enum CSharp: Platform {
     accessModifier: String?,
     constructorParameters: [String],
     constructorAccessModifier: String?,
-    constructorSetters: [String]
+    constructorSetters: [String],
+    otherMembers: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
@@ -210,14 +211,8 @@ enum CSharp: Platform {
     }
   }
 
-  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+  static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return nil
-  }
-  static func nativeName(of action: ActionIntermediate) -> String? {
-    return nil
-  }
-  static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    return false
   }
   static func nativeIsProperty(action: ActionIntermediate) -> Bool {
     return false
@@ -302,6 +297,7 @@ enum CSharp: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isAbsorbedMember: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
@@ -463,5 +459,27 @@ enum CSharp: Platform {
       "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
+  }
+
+  static var permitsParameterLabels: Bool {
+    return false
+  }
+  static var emptyParameterLabel: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var parameterLabelSuffix: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var memberPrefix: UnicodeText? {
+    return nil
+  }
+  static var variablePrefix: UnicodeText? {
+    return nil
+  }
+  static var initializerSuffix: UnicodeText? {
+    return nil
+  }
+  static var initializerName: UnicodeText {
+    return UnicodeText(StrictString(""))
   }
 }

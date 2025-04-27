@@ -54,6 +54,7 @@ use (clients)
   action (clients)
    (first: optional (Unicode scalar index)) is (second: optional (Unicode scalar index))
    truth value
+   Kotlin: “” first “ == ” second “”
    Swift: “” first “ == ” second “”
    {
     ← (first) is (second) according to optional

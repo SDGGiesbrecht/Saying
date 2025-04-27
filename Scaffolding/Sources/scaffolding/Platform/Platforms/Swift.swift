@@ -172,7 +172,8 @@ enum Swift: Platform {
     accessModifier: String?,
     constructorParameters: [String],
     constructorAccessModifier: String?,
-    constructorSetters: [String]
+    constructorSetters: [String],
+    otherMembers: [String]
   ) -> String? {
     var typeName = name
     var extraIndent = ""
@@ -198,6 +199,10 @@ enum Swift: Platform {
       result.append("\(extraIndent)\(indent)\(indent)\(setter)")
     }
     result.append("\(extraIndent)\(indent)}")
+    for member in otherMembers {
+      result.append("")
+      result.append("\(extraIndent)\(indent)\(member.replacingMatches(for: "\n", with: "\n\(extraIndent)\(indent)"))")
+    }
     result.append(contentsOf: [
       "\(extraIndent)}"
     ])
@@ -224,28 +229,8 @@ enum Swift: Platform {
     return result.joined(separator: "\n")
   }
 
-  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
+  static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return action.nativeNames.swift
-  }
-  static func nativeName(of action: ActionIntermediate) -> String? {
-    if let identifier = action.swiftIdentifier() {
-      if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {
-        return String(StrictString(functionName.contents))
-      } else {
-        return  String(StrictString(identifier))
-      }
-    } else {
-      return nil
-    }
-  }
-  static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    if let name = action.nativeNames.swift.map({ StrictString($0) }) {
-      if name.hasPrefix("().")
-        || name.hasPrefix("var ().") {
-        return true
-      }
-    }
-    return false
   }
   static func nativeIsProperty(action: ActionIntermediate) -> Bool {
     return action.nativeNames.swift.map({ StrictString($0) })?.hasPrefix("var ") ?? false
@@ -335,6 +320,7 @@ enum Swift: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isAbsorbedMember: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
@@ -345,8 +331,11 @@ enum Swift: Platform {
       ? returnSection!
       : "(\(parameters))\(returnSection ?? "")"
     var result: [String] = []
+    var isNested = false
     var extraIndent = ""
-    if let parent = parentType {
+    if let parent = parentType,
+      !isAbsorbedMember {
+      isNested = true
       extraIndent = indent
       result.append(contentsOf: [
         "extension \(parent) {",
@@ -367,7 +356,7 @@ enum Swift: Platform {
     result.append(contentsOf: [
       "\(extraIndent)}",
     ])
-    if parentType != nil {
+    if isNested {
       result.append(contentsOf: [
         "}",
       ])
@@ -544,5 +533,27 @@ enum Swift: Platform {
           .appendingPathComponent("WrappedTests")
           .appendingPathComponent("WrappedTests.swift")
       )
+  }
+
+  static var permitsParameterLabels: Bool {
+    return true
+  }
+  static var emptyParameterLabel: UnicodeText {
+    return UnicodeText(StrictString("_"))
+  }
+  static var parameterLabelSuffix: UnicodeText {
+    return UnicodeText(StrictString(":"))
+  }
+  static var memberPrefix: UnicodeText? {
+    return UnicodeText(StrictString("()."))
+  }
+  static var variablePrefix: UnicodeText? {
+    return UnicodeText(StrictString("var "))
+  }
+  static var initializerSuffix: UnicodeText? {
+    return UnicodeText(StrictString(".init"))
+  }
+  static var initializerName: UnicodeText {
+    return UnicodeText(StrictString("init"))
   }
 }

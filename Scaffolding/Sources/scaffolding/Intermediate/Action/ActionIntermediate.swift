@@ -991,24 +991,20 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func kotlinIdentifier() -> UnicodeText? {
-    guard var name = nativeNames.kotlin.map({ StrictString($0) }) else {
-      return nil
-    }
-    #warning("Not implemented yet.")
-    return UnicodeText(name)
-  }
-  func swiftIdentifier() -> UnicodeText? {
-    guard var name = nativeNames.swift.map({ StrictString($0) }) else {
+  func identifier<P>(for platform: P.Type) -> UnicodeText?
+  where P: Platform {
+    guard var name = platform.nativeNameDeclaration(of: self).map({ StrictString($0) }) else {
       return nil
     }
     var isVariable = false
-    if name.hasPrefix("var ") {
-      name.removeFirst(4)
-      isVariable = true
+    if let variablePrefix = platform.variablePrefix,
+      name.hasPrefix(StrictString(variablePrefix)) {
+        name.removeFirst(variablePrefix.count)
+        isVariable = true
     }
-    if name.hasPrefix("().") {
-      name.removeFirst(3)
+    if let memberPrefix = platform.memberPrefix,
+      name.hasPrefix(StrictString(memberPrefix)) {
+      name.removeFirst(memberPrefix.count)
     }
     let firstSpace = name.firstIndex(of: " ")
     var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
@@ -1017,17 +1013,21 @@ extension ActionIntermediate {
     } else {
       name.removeSubrange(..<name.endIndex)
     }
-    if functionName.hasSuffix(".init") {
-      functionName = "init"
+    if let initializerSuffix = platform.initializerSuffix,
+      functionName.hasSuffix(StrictString(initializerSuffix)) {
+      functionName = StrictString(platform.initializerName)
     }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
       if name.hasPrefix("()".scalars.literal()) {
-        parameterNames.append(UnicodeText("_"))
+        parameterNames.append(platform.emptyParameterLabel)
         name.removeFirst(2)
       } else {
         guard let next = name.firstIndex(of: "(") else {
-          fatalError("Swift cannot have postfix name components.")
+          fatalError("Illegal postfix name component: \(platform.nativeNameDeclaration(of: self)!)")
+        }
+        guard platform.permitsParameterLabels else {
+          fatalError("Illegal parameter label: \(platform.nativeNameDeclaration(of: self)!)")
         }
         var parameterName = StrictString(name[..<next])
         name.removeSubrange(..<next)
@@ -1043,13 +1043,13 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    let parameters = parameterNames.map({ "\(StrictString($0)):" }).joined()
+    let parameters = parameterNames.map({ "\(StrictString($0))\(StrictString(platform.parameterLabelSuffix))" }).joined()
     let parameterSection = isVariable ? "" : "(\(parameters))"
     return UnicodeText("\(functionName)\(parameterSection)")
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = nativeNames.swift,
-      let identifier = swiftIdentifier().map({ StrictString($0) }) else {
+      let identifier = identifier(for: Swift.self).map({ StrictString($0) }) else {
       return nil
     }
     let components = identifier.components(separatedBy: ":")
