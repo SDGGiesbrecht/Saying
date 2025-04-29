@@ -4,6 +4,22 @@ struct UnicodeText {
   fileprivate init(_ scalars: String.UnicodeScalarView) {
     self.scalars = scalars
   }
+
+  func index(after i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+    return self.scalars.index(after: i)
+  }
+
+  subscript(_ index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+    return self.scalars[index]
+  }
+
+  var endIndex: String.UnicodeScalarView.Index {
+    return self.scalars.endIndex
+  }
+
+  var startIndex: String.UnicodeScalarView.Index {
+    return self.scalars.startIndex
+  }
 }
 
 struct ParagraphBreakSyntax {
@@ -183,6 +199,44 @@ struct UnicodeSegments {
 
   fileprivate init(_ segments: [Unicode_0020segment]) {
     self.segments = segments
+  }
+
+  func index(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
+    let segment_0020list: [Unicode_0020segment] = self.segments
+    let segment_0020index: Int = i.segment
+    let segment: UnicodeText = segment_0020list[segment_0020index].source
+    if let scalar_0020index = i.scalar {
+      let next_0020scalar: String.UnicodeScalarView.Index = segment.index(after: scalar_0020index)
+      if next_0020scalar == segment.endIndex {
+        let next_0020segment_0020index: Int = segment_0020list.index(after: segment_0020index)
+        if next_0020segment_0020index == segment_0020list.endIndex {
+          return UnicodeSegments.Index(next_0020segment_0020index, nil)
+        }
+        return UnicodeSegments.Index(next_0020segment_0020index, segment_0020list[next_0020segment_0020index].source.startIndex)
+      }
+      return UnicodeSegments.Index(segment_0020index, next_0020scalar)
+    }
+    fatalError()
+  }
+
+  subscript(_ index: UnicodeSegments.Index) -> Unicode.Scalar {
+    if let scalar_0020index = index.scalar {
+      return self.segments[index.segment].source[scalar_0020index]
+    }
+    fatalError()
+  }
+
+  var endIndex: UnicodeSegments.Index {
+    return UnicodeSegments.Index(self.segments.endIndex, nil)
+  }
+
+  var startIndex: UnicodeSegments.Index {
+    let segment_0020list: [Unicode_0020segment] = self.segments
+    let segment_0020index: Int = segment_0020list.startIndex
+    if let first_0020segment = segment_0020list.first {
+      return UnicodeSegments.Index(segment_0020index, first_0020segment.source.startIndex)
+    }
+    return UnicodeSegments.Index(segment_0020index, nil)
   }
 }
 
@@ -426,30 +480,6 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
   return result
 }
 
-extension UnicodeText {
-  func index(after i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
-    return self.scalars.index(after: i)
-  }
-}
-
-extension UnicodeText {
-  subscript(_ index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
-    return self.scalars[index]
-  }
-}
-
-extension UnicodeText {
-  var endIndex: String.UnicodeScalarView.Index {
-    return self.scalars.endIndex
-  }
-}
-
-extension UnicodeText {
-  var startIndex: String.UnicodeScalarView.Index {
-    return self.scalars.startIndex
-  }
-}
-
 func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
@@ -468,52 +498,6 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
     return true
   }
   return false
-}
-
-extension UnicodeSegments {
-  func index(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
-    let segment_0020list: [Unicode_0020segment] = self.segments
-    let segment_0020index: Int = i.segment
-    let segment: UnicodeText = segment_0020list[segment_0020index].source
-    if let scalar_0020index = i.scalar {
-      let next_0020scalar: String.UnicodeScalarView.Index = segment.index(after: scalar_0020index)
-      if next_0020scalar == segment.endIndex {
-        let next_0020segment_0020index: Int = segment_0020list.index(after: segment_0020index)
-        if next_0020segment_0020index == segment_0020list.endIndex {
-          return UnicodeSegments.Index(next_0020segment_0020index, nil)
-        }
-        return UnicodeSegments.Index(next_0020segment_0020index, segment_0020list[next_0020segment_0020index].source.startIndex)
-      }
-      return UnicodeSegments.Index(segment_0020index, next_0020scalar)
-    }
-    fatalError()
-  }
-}
-
-extension UnicodeSegments {
-  subscript(_ index: UnicodeSegments.Index) -> Unicode.Scalar {
-    if let scalar_0020index = index.scalar {
-      return self.segments[index.segment].source[scalar_0020index]
-    }
-    fatalError()
-  }
-}
-
-extension UnicodeSegments {
-  var endIndex: UnicodeSegments.Index {
-    return UnicodeSegments.Index(self.segments.endIndex, nil)
-  }
-}
-
-extension UnicodeSegments {
-  var startIndex: UnicodeSegments.Index {
-    let segment_0020list: [Unicode_0020segment] = self.segments
-    let segment_0020index: Int = segment_0020list.startIndex
-    if let first_0020segment = segment_0020list.first {
-      return UnicodeSegments.Index(segment_0020index, first_0020segment.source.startIndex)
-    }
-    return UnicodeSegments.Index(segment_0020index, nil)
-  }
 }
 
 import SDGText

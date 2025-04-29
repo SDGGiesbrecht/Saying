@@ -1258,13 +1258,16 @@ extension Platform {
     if action.isMemberWrapper {
       return nil
     }
-    if !isAbsorbedMember,
-      let native = nativeImplementation(of: action) {
-      return source(
-        for: native.requiredDeclarations,
-        referenceLookup: externalReferenceLookup,
-        alreadyHandled: &alreadyHandledNativeRequirements
-      ).map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
+    if let native = nativeImplementation(of: action) {
+      if isAbsorbedMember {
+        return nil
+      } else {
+        return source(
+          for: native.requiredDeclarations,
+          referenceLookup: externalReferenceLookup,
+          alreadyHandled: &alreadyHandledNativeRequirements
+        ).map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
+      }
     }
     guard !hasBeenRelocated else {
       return nil
