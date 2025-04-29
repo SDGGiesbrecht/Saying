@@ -72,7 +72,7 @@ protocol Platform {
   // Actions
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText?
   static func nativeName(of action: ActionIntermediate) -> String?
-  static func nativeIsProperty(action: ActionIntermediate) -> Bool
+  static func nativeName(of parameter: ParameterIntermediate) -> String?
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
@@ -107,6 +107,7 @@ protocol Platform {
     implementation: [String],
     parentType: String?,
     isAbsorbedMember: Bool,
+    isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration
 
@@ -141,6 +142,7 @@ protocol Platform {
   static var emptyParameterLabel: UnicodeText { get }
   static var parameterLabelSuffix: UnicodeText { get }
   static var memberPrefix: UnicodeText? { get }
+  static var overridePrefix: UnicodeText? { get }
   static var variablePrefix: UnicodeText? { get }
   static var initializerSuffix: UnicodeText? { get }
   static var initializerName: UnicodeText { get }
@@ -313,9 +315,35 @@ extension Platform {
       return nil
     }
   }
+  
+  static func nativeIsOverride(action: ActionIntermediate) -> Bool {
+    if let name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      if let override = overridePrefix.map({ StrictString($0) }) {
+         return name.hasPrefix(override)
+      }
+    }
+    return false
+  }
+
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      if let override = overridePrefix.map({ StrictString($0) }),
+         name.hasPrefix(override) {
+        name.removeFirst(override.count)
+      }
+      if let variable = variablePrefix.map({ StrictString($0) }) {
+        return name.hasPrefix(variable)
+      }
+    }
+    return false
+  }
 
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
     if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      if let override = overridePrefix.map({ StrictString($0) }),
+         name.hasPrefix(override) {
+        name.removeFirst(override.count)
+      }
       if let variable = variablePrefix.map({ StrictString($0) }),
          name.hasPrefix(variable) {
         name.removeFirst(variable.count)
@@ -530,16 +558,16 @@ extension Platform {
     ) {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
+      let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
-        let name = String(sanitize(identifier: parameter.names.identifier(), leading: true))
         if parameter.isThrough {
           return dereference(
-            throughParameter: name,
+            throughParameter: parameterName,
             forwarding: reference.passage == .through && !isNativeArgument
           )
         } else {
-          return name
+          return parameterName
         }
       } else {
         return call(
@@ -549,7 +577,7 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
-          parameterName: parameter.names.identifier(),
+          parameterName: parameterName,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -622,7 +650,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    parameterName: UnicodeText?,
+    parameterName: String?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
@@ -738,7 +766,7 @@ extension Platform {
         return accumulator
       }
     } else if action.isMemberWrapper {
-      let name = sanitize(identifier: action.names.identifier(), leading: true)
+      let name = parameterName ?? sanitize(identifier: action.names.identifier(), leading: true)
       if case .partReference = action.returnValue! {
         return name
       } else {
@@ -816,9 +844,8 @@ extension Platform {
         indentationLevel: 0
       ).joined(separator: "\n")
     } else {
-      let name = nativeName(of: action) ?? sanitize(
-        identifier: parameterName
-          ?? action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+      let name = nativeName(of: action) ?? parameterName ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
         leading: true
       )
       if action.isReferenceWrapper {
@@ -1128,7 +1155,7 @@ extension Platform {
     for parameter: ParameterIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String {
-    let name = sanitize(identifier: parameter.names.identifier(), leading: true)
+    let name = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
     if !isTyped {
       return name
     } else {
@@ -1283,6 +1310,7 @@ extension Platform {
         identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
         leading: true
       )
+    let isOverride = nativeIsOverride(action: action)
     let isProperty = nativeIsProperty(action: action)
 
     var parameterEntries = action.parameters.ordered(for: action.names.identifier())
@@ -1343,6 +1371,7 @@ extension Platform {
       implementation: implementation,
       parentType: parentType,
       isAbsorbedMember: isAbsorbedMember,
+      isOverride: isOverride,
       propertyInstead: isProperty
     )
   }

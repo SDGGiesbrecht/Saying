@@ -232,8 +232,8 @@ enum Swift: Platform {
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return action.nativeNames.swift
   }
-  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
-    return action.nativeNames.swift.map({ StrictString($0) })?.hasPrefix("var ") ?? false
+  static func nativeName(of parameter: ParameterIntermediate) -> String? {
+    return parameter.nativeNames.swift.map({ String(StrictString($0)) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return parameter.swiftLabel.map({ String(StrictString($0)) })
@@ -321,6 +321,7 @@ enum Swift: Platform {
     implementation: [String],
     parentType: String?,
     isAbsorbedMember: Bool,
+    isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
@@ -546,6 +547,9 @@ enum Swift: Platform {
   }
   static var memberPrefix: UnicodeText? {
     return UnicodeText(StrictString("()."))
+  }
+  static var overridePrefix: UnicodeText? {
+    return nil
   }
   static var variablePrefix: UnicodeText? {
     return UnicodeText(StrictString("var "))

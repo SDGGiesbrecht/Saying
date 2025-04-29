@@ -996,6 +996,10 @@ extension ActionIntermediate {
     guard var name = platform.nativeNameDeclaration(of: self).map({ StrictString($0) }) else {
       return nil
     }
+    if let overridePrefix = platform.overridePrefix,
+      name.hasPrefix(StrictString(overridePrefix)) {
+      name.removeFirst(overridePrefix.count)
+    }
     var isVariable = false
     if let variablePrefix = platform.variablePrefix,
       name.hasPrefix(StrictString(variablePrefix)) {

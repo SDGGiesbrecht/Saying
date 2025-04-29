@@ -52,7 +52,7 @@ extension ActionPrototype {
       getDefinitionOrReference: { $0.definitionOrReference },
       getNestedSignature: { $0.name },
       getNestedParameters: { $0.parameters() },
-      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough, swiftLabel: nil) }
+      constructParameter: { ParameterIntermediate(names: $0, nestedParameters: $1!, returnValue: $2.type, isThrough: $2.isThrough, nativeNames: NativeActionNamesIntermediate.none, swiftLabel: nil) }
     ) {
     case .failure(let interpolationError):
       errors.append(contentsOf: interpolationError.errors.map({ .brokenParameterInterpolation($0) }))
@@ -64,9 +64,11 @@ extension ActionPrototype {
     var nativeNames = NativeActionNamesIntermediate.none
     for (language, signature) in namesDictionary {
       let name = signature.name()
+      let parameterNames = signature.parameters().map({ $0.name.name() })
       switch language {
       case "Kotlin":
         nativeNames.kotlin = name
+        parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.kotlin = $1 })
       case "Swift":
         nativeNames.swift = name
         var remainder = StrictString(name)
@@ -92,6 +94,7 @@ extension ActionPrototype {
               return label
             })
         )
+        parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.kotlin = $1 })
         parameters.apply(swiftLabels: labels.map({ $0.isEmpty ? nil : UnicodeText($0) }), accordingTo: name)
       default:
         break

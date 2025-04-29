@@ -185,8 +185,8 @@ enum C: Platform {
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return nil
   }
-  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
-    return false
+  static func nativeName(of parameter: ParameterIntermediate) -> String? {
+    return nil
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
@@ -274,6 +274,7 @@ enum C: Platform {
     implementation: [String],
     parentType: String?,
     isAbsorbedMember: Bool,
+    isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     var result: [String] = [
@@ -492,6 +493,9 @@ enum C: Platform {
     return UnicodeText(StrictString(""))
   }
   static var memberPrefix: UnicodeText? {
+    return nil
+  }
+  static var overridePrefix: UnicodeText? {
     return nil
   }
   static var variablePrefix: UnicodeText? {

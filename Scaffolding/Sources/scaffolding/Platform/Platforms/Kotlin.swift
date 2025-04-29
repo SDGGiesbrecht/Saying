@@ -173,8 +173,8 @@ enum Kotlin: Platform {
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
     return action.nativeNames.kotlin
   }
-  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
-    return false
+  static func nativeName(of parameter: ParameterIntermediate) -> String? {
+    return parameter.nativeNames.kotlin.map({ String(StrictString($0)) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
@@ -264,12 +264,26 @@ enum Kotlin: Platform {
     implementation: [String],
     parentType: String?,
     isAbsorbedMember: Bool,
+    isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
+    let override = isOverride ? "override " : ""
+    var isEqualsOperator = false
+    var adjustedParameters = parameters
+    if isOverride && name == "equals" {
+      isEqualsOperator = true
+      adjustedParameters = "other: Any?"
+    }
     var result: [String] = [
-      "\(access)fun \(name)(\(parameters))\(returnSection ?? "") {",
+      "\(access)\(override)fun \(name)(\(adjustedParameters))\(returnSection ?? "") {",
     ]
+    if isEqualsOperator {
+      result.append(contentsOf: [
+        "\(indent)if (this === other) return true",
+        "\(indent)if (other !is \(parentType!)) return false",
+      ])
+    }
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
@@ -470,6 +484,9 @@ enum Kotlin: Platform {
   }
   static var memberPrefix: UnicodeText? {
     return UnicodeText(StrictString("()."))
+  }
+  static var overridePrefix: UnicodeText? {
+    return UnicodeText(StrictString("override "))
   }
   static var variablePrefix: UnicodeText? {
     return nil

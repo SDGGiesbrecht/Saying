@@ -143,6 +143,16 @@ extension Interpolation {
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
+  mutating func apply(
+    nativeNames: [UnicodeText],
+    accordingTo name: UnicodeText,
+    apply: (inout NativeActionNamesIntermediate, UnicodeText) -> Void
+  ) {
+    let indices = reorderings[StrictString(name)]!
+    for (index, nativeName) in zip(indices, nativeNames) {
+      apply(&parameters[index].nativeNames, nativeName)
+    }
+  }
   mutating func apply(swiftLabels: [UnicodeText?], accordingTo name: UnicodeText) {
     let indices = reorderings[StrictString(name)]!
     for (index, label) in zip(indices, swiftLabels) {

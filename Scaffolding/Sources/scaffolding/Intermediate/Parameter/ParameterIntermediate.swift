@@ -6,6 +6,7 @@ struct ParameterIntermediate {
   var isThrough: Bool
   var passAction: ActionIntermediate
   var executeAction: ActionIntermediate?
+  var nativeNames: NativeActionNamesIntermediate
   var swiftLabel: UnicodeText?
 
   init(
@@ -14,6 +15,7 @@ struct ParameterIntermediate {
     isThrough: Bool,
     passAction: ActionIntermediate,
     executeAction: ActionIntermediate?,
+    nativeNames: NativeActionNamesIntermediate,
     swiftLabel: UnicodeText?
   ) {
     self.names = names
@@ -21,6 +23,7 @@ struct ParameterIntermediate {
     self.isThrough = isThrough
     self.passAction = passAction
     self.executeAction = executeAction
+    self.nativeNames = nativeNames
     self.swiftLabel = swiftLabel
   }
 }
@@ -36,6 +39,7 @@ extension ParameterIntermediate {
       isThrough: false,
       passAction: .parameterAction(names: names, parameters: .none, returnValue: type),
       executeAction: nil,
+      nativeNames: NativeActionNamesIntermediate.none,
       swiftLabel: nil
     )
   }
@@ -49,6 +53,7 @@ extension ParameterIntermediate {
     nestedParameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference,
     isThrough: Bool,
+    nativeNames: NativeActionNamesIntermediate,
     swiftLabel: UnicodeText?
   ) {
     let actionParameters = nestedParameters.ordered(for: names.identifier())
@@ -79,6 +84,7 @@ extension ParameterIntermediate {
       isThrough: isThrough,
       passAction: passAction,
       executeAction: executeAction,
+      nativeNames: nativeNames,
       swiftLabel: swiftLabel
     )
   }
@@ -94,6 +100,7 @@ extension ParameterIntermediate {
       isThrough: isThrough,
       passAction: passAction.resolvingExtensionContext(typeLookup: typeLookup),
       executeAction: executeAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      nativeNames: nativeNames,
       swiftLabel: swiftLabel
     )
   }
@@ -104,6 +111,7 @@ extension ParameterIntermediate {
       isThrough: isThrough,
       passAction: passAction,
       executeAction: executeAction,
+      nativeNames: nativeNames.merging(requirement: requirement.nativeNames),
       swiftLabel: swiftLabel ?? requirement.swiftLabel
     )
   }
@@ -126,6 +134,7 @@ extension ParameterIntermediate {
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace
       ),
+      nativeNames: nativeNames,
       swiftLabel: swiftLabel
     )
   }
@@ -139,6 +148,7 @@ extension ParameterIntermediate {
       isThrough: isThrough,
       passAction: passAction,
       executeAction: executeAction,
+      nativeNames: nativeNames,
       swiftLabel: swiftLabel
     )
   }
