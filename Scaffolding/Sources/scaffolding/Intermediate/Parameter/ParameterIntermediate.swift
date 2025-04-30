@@ -141,6 +141,11 @@ extension ParameterIntermediate {
 }
 
 extension ParameterIntermediate {
+  func removingNativeNames() -> ParameterIntermediate {
+    var copy = self
+    copy.nativeNames = .none
+    return copy
+  }
   func prefixing(with prefix: UnicodeText) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: Set(names.map({ "\(StrictString(prefix))\($0)" })),

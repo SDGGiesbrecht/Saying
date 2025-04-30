@@ -9,8 +9,8 @@ struct UnicodeText {
     return self.scalars.index(after: i)
   }
 
-  subscript(_ index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
-    return self.scalars[index]
+  subscript(_ position: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+    return self.scalars[position]
   }
 
   var endIndex: String.UnicodeScalarView.Index {
@@ -219,9 +219,9 @@ struct UnicodeSegments {
     fatalError()
   }
 
-  subscript(_ index: UnicodeSegments.Index) -> Unicode.Scalar {
-    if let scalar_0020index = index.scalar {
-      return self.segments[index.segment].source[scalar_0020index]
+  subscript(_ position: UnicodeSegments.Index) -> Unicode.Scalar {
+    if let scalar_0020index = position.scalar {
+      return self.segments[position.segment].source[scalar_0020index]
     }
     fatalError()
   }

@@ -247,7 +247,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
     with newName: UnicodeText
   ) -> Interpolation {
     return Interpolation(
-      parameters: parameters,
+      parameters: parameters.map({ $0.removingNativeNames() }),
       reorderings: reorderings == [:]
         ? [:]
         : [StrictString(newName): reorderings[StrictString(originalName)]!]
