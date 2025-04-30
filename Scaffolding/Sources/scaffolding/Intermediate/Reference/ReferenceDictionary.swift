@@ -278,13 +278,17 @@ extension ReferenceDictionary {
     }
   }
 
-  func allActions(sorted: Bool = false) -> [ActionIntermediate] {
+  func allActions(
+    filter: (ActionIntermediate) -> Bool = { _ in true },
+    sorted: Bool = false
+  ) -> [ActionIntermediate] {
     let result =
     actions.values
       .lazy.map({ $0.values })
       .joined()
       .lazy.map({ $0.values })
       .joined()
+      .lazy.filter(filter)
     if !sorted {
       return Array(result)
     } else {

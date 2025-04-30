@@ -239,6 +239,9 @@ import SDGText
         "}",
       ])
     }
+    appendix.append(contentsOf: [
+      "",
+    ])
     source.append(contentsOf: appendix.joined(separator: "\n"))
     try source.save(to: file)
   }

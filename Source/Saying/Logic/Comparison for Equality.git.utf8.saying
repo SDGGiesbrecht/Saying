@@ -37,6 +37,7 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
     עברית: (ראשון: [first]) (שני: [second])
     עברית +: (ראשון: [first]) = (שני: [second])
+    Kotlin: override (this: [first]).equals (other: [second])
     Swift: == (lhs: [first]) (rhs: [second])
    )
    truth value
@@ -131,6 +132,7 @@ extension
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
    )
    truth value
+   Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
    Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {

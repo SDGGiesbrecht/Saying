@@ -48,8 +48,8 @@ struct ActionIntermediate {
       prototype.testOnlyAccess = newValue
     }
   }
-  var swiftName: UnicodeText? {
-    return prototype.swiftName
+  var nativeNames: NativeActionNamesIntermediate {
+    return prototype.nativeNames
   }
   func allNativeImplementations() -> [NativeActionImplementationIntermediate] {
     return [c, cSharp, javaScript, kotlin, swift].compactMap({ $0 })
@@ -130,7 +130,7 @@ extension ActionIntermediate {
         access: .inferred,
         testOnlyAccess: false,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       isCreation: false,
       isSpecialized: false
@@ -153,7 +153,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       isCreation: false,
       isMemberWrapper: true,
@@ -187,7 +187,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       c: c ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -255,7 +255,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       isCreation: false,
       isMemberWrapper: true,
@@ -290,7 +290,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       c: c ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -365,7 +365,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       c: c,
       cSharp: cSharp,
@@ -405,7 +405,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       c: c ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -502,7 +502,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       c: c ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -721,7 +721,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: newDocumentation,
-        swiftName: swiftName
+        nativeNames: nativeNames
       ),
       c: c,
       cSharp: cSharp,
@@ -783,7 +783,7 @@ extension ActionIntermediate {
           access: access,
           testOnlyAccess: testOnlyAccess,
           documentation: mergedDocumentation,
-          swiftName: swiftName ?? requirement.swiftName
+          nativeNames: nativeNames.merging(requirement: requirement.nativeNames)
         ),
         c: c,
         cSharp: cSharp,
@@ -838,7 +838,7 @@ extension ActionIntermediate {
         access: min(self.access, use.access),
         testOnlyAccess: self.testOnlyAccess || use.testOnlyAccess,
         documentation: newDocumentation,
-        swiftName: swiftName
+        nativeNames: nativeNames
       ),
       c: c?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
       cSharp: cSharp?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
@@ -882,7 +882,7 @@ extension ActionIntermediate {
         access: access,
         testOnlyAccess: testOnlyAccess,
         documentation: nil,
-        swiftName: nil
+        nativeNames: .none
       ),
       isCreation: false,
       isReferenceWrapper: true,
@@ -916,7 +916,7 @@ extension ActionIntermediate {
           access: prototype.access,
           testOnlyAccess: prototype.testOnlyAccess,
           documentation: nil,
-          swiftName: nil
+          nativeNames: .none
         ),
         implementation: StatementListIntermediate(
           statements: [
@@ -991,17 +991,24 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func swiftIdentifier() -> UnicodeText? {
-    guard var name = swiftName.map({ StrictString($0) }) else {
+  func identifier<P>(for platform: P.Type) -> UnicodeText?
+  where P: Platform {
+    guard var name = platform.nativeNameDeclaration(of: self).map({ StrictString($0) }) else {
       return nil
     }
-    var isVariable = false
-    if name.hasPrefix("var ") {
-      name.removeFirst(4)
-      isVariable = true
+    if let overridePrefix = platform.overridePrefix,
+      name.hasPrefix(StrictString(overridePrefix)) {
+      name.removeFirst(overridePrefix.count)
     }
-    if name.hasPrefix("().") {
-      name.removeFirst(3)
+    var isVariable = false
+    if let variablePrefix = platform.variablePrefix,
+      name.hasPrefix(StrictString(variablePrefix)) {
+        name.removeFirst(variablePrefix.count)
+        isVariable = true
+    }
+    if let memberPrefix = platform.memberPrefix,
+      name.hasPrefix(StrictString(memberPrefix)) {
+      name.removeFirst(memberPrefix.count)
     }
     let firstSpace = name.firstIndex(of: " ")
     var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
@@ -1010,17 +1017,21 @@ extension ActionIntermediate {
     } else {
       name.removeSubrange(..<name.endIndex)
     }
-    if functionName.hasSuffix(".init") {
-      functionName = "init"
+    if let initializerSuffix = platform.initializerSuffix,
+      functionName.hasSuffix(StrictString(initializerSuffix)) {
+      functionName = StrictString(platform.initializerName)
     }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
       if name.hasPrefix("()".scalars.literal()) {
-        parameterNames.append(UnicodeText("_"))
+        parameterNames.append(platform.emptyParameterLabel)
         name.removeFirst(2)
       } else {
         guard let next = name.firstIndex(of: "(") else {
-          fatalError("Swift cannot have postfix name components.")
+          fatalError("Illegal postfix name component: \(platform.nativeNameDeclaration(of: self)!)")
+        }
+        guard platform.permitsParameterLabels else {
+          fatalError("Illegal parameter label: \(platform.nativeNameDeclaration(of: self)!)")
         }
         var parameterName = StrictString(name[..<next])
         name.removeSubrange(..<next)
@@ -1036,13 +1047,13 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    let parameters = parameterNames.map({ "\(StrictString($0)):" }).joined()
+    let parameters = parameterNames.map({ "\(StrictString($0))\(StrictString(platform.parameterLabelSuffix))" }).joined()
     let parameterSection = isVariable ? "" : "(\(parameters))"
     return UnicodeText("\(functionName)\(parameterSection)")
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
-    guard let name = swiftName,
-      let identifier = swiftIdentifier().map({ StrictString($0) }) else {
+    guard let name = nativeNames.swift,
+      let identifier = identifier(for: Swift.self).map({ StrictString($0) }) else {
       return nil
     }
     let components = identifier.components(separatedBy: ":")

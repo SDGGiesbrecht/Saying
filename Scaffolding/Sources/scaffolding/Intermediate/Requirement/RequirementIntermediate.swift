@@ -22,8 +22,8 @@ struct RequirementIntermediate {
   var testOnlyAccess: Bool {
     return prototype.testOnlyAccess
   }
-  var swiftName: UnicodeText? {
-    return prototype.swiftName
+  var nativeNames: NativeActionNamesIntermediate {
+    return prototype.nativeNames
   }
 }
 

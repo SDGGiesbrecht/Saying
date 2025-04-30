@@ -59,7 +59,8 @@ protocol Platform {
     accessModifier: String?,
     constructorParameters: [String],
     constructorAccessModifier: String?,
-    constructorSetters: [String]
+    constructorSetters: [String],
+    otherMembers: [String]
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -69,10 +70,9 @@ protocol Platform {
   ) -> String
 
   // Actions
-  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText?
+  static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText?
   static func nativeName(of action: ActionIntermediate) -> String?
-  static func nativeIsMember(action: ActionIntermediate) -> Bool
-  static func nativeIsProperty(action: ActionIntermediate) -> Bool
+  static func nativeName(of parameter: ParameterIntermediate) -> String?
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
@@ -106,6 +106,8 @@ protocol Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isAbsorbedMember: Bool,
+    isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration
 
@@ -134,6 +136,16 @@ protocol Platform {
   static func testEntryPoint() -> [String]?
   static var sourceFileName: String { get }
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
+
+  // Saying
+  static var permitsParameterLabels: Bool { get }
+  static var emptyParameterLabel: UnicodeText { get }
+  static var parameterLabelSuffix: UnicodeText { get }
+  static var memberPrefix: UnicodeText? { get }
+  static var overridePrefix: UnicodeText? { get }
+  static var variablePrefix: UnicodeText? { get }
+  static var initializerSuffix: UnicodeText? { get }
+  static var initializerName: UnicodeText { get }
 }
 
 extension Platform {
@@ -292,6 +304,57 @@ extension Platform {
     }
   }
 
+  static func nativeName(of action: ActionIntermediate) -> String? {
+    if let identifier = action.identifier(for: self) {
+      if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {
+        return String(StrictString(functionName.contents))
+      } else {
+        return String(StrictString(identifier))
+      }
+    } else {
+      return nil
+    }
+  }
+  
+  static func nativeIsOverride(action: ActionIntermediate) -> Bool {
+    if let name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      if let override = overridePrefix.map({ StrictString($0) }) {
+         return name.hasPrefix(override)
+      }
+    }
+    return false
+  }
+
+  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
+    if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      if let override = overridePrefix.map({ StrictString($0) }),
+         name.hasPrefix(override) {
+        name.removeFirst(override.count)
+      }
+      if let variable = variablePrefix.map({ StrictString($0) }) {
+        return name.hasPrefix(variable)
+      }
+    }
+    return false
+  }
+
+  static func nativeIsMember(action: ActionIntermediate) -> Bool {
+    if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      if let override = overridePrefix.map({ StrictString($0) }),
+         name.hasPrefix(override) {
+        name.removeFirst(override.count)
+      }
+      if let variable = variablePrefix.map({ StrictString($0) }),
+         name.hasPrefix(variable) {
+        name.removeFirst(variable.count)
+      }
+      if let member = memberPrefix.map({ StrictString($0) }) {
+        return name.hasPrefix(member)
+      }
+    }
+    return false
+  }
+
   static func declaration(
     for enumerationCase: CaseIntermediate,
     index: Int,
@@ -338,7 +401,10 @@ extension Platform {
   static func declaration(
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary],
-    alreadyHandledNativeRequirements: inout Set<String>
+    mode: CompilationMode,
+    relocatedActions: inout Set<String>,
+    alreadyHandledNativeRequirements: inout Set<String>,
+    modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String? {
     if !isTyped,
       thing.cases.isEmpty {
@@ -390,13 +456,44 @@ extension Platform {
         )
         return constructorSetter(name: name)
       })
+      var members: [String] = []
+      var handledActionDeclarations: Set<String> = []
+      for module in modulesToSearchForMembers {
+        let referenceLookup = externalReferenceLookup.appending(module.referenceDictionary)
+        for action in module.referenceDictionary.allActions(
+          filter: { action in
+            return nativeIsMember(action: action)
+            && name == source(
+              for: action.parameters.ordered(for: nativeNameDeclaration(of: action)!).first!
+                .type,
+              referenceLookup: referenceLookup
+            )
+          },
+          sorted: true
+        ) {
+          if let declaration = self.declaration(
+            for: action,
+            externalReferenceLookup: referenceLookup,
+            mode: mode,
+            isAbsorbedMember: true,
+            hasBeenRelocated: false,
+            alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+          ) {
+            if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
+              relocatedActions.insert(String(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))))
+              members.append(declaration.full)
+            }
+          }
+        }
+      }
       return thingDeclaration(
         name: name,
         components: components,
         accessModifier: access,
         constructorParameters: constructorParameters,
         constructorAccessModifier: constructorAccess,
-        constructorSetters: constructorSetters
+        constructorSetters: constructorSetters,
+        otherMembers: members
       )
     } else {
       var cases: [String] = []
@@ -461,16 +558,16 @@ extension Platform {
     ) {
       return String(sanitize(identifier: local.names.identifier(), leading: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
+      let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
-        let name = String(sanitize(identifier: parameter.names.identifier(), leading: true))
         if parameter.isThrough {
           return dereference(
-            throughParameter: name,
+            throughParameter: parameterName,
             forwarding: reference.passage == .through && !isNativeArgument
           )
         } else {
-          return name
+          return parameterName
         }
       } else {
         return call(
@@ -480,7 +577,7 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
-          parameterName: parameter.names.identifier(),
+          parameterName: parameterName,
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -553,7 +650,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    parameterName: UnicodeText?,
+    parameterName: String?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
@@ -669,7 +766,7 @@ extension Platform {
         return accumulator
       }
     } else if action.isMemberWrapper {
-      let name = sanitize(identifier: action.names.identifier(), leading: true)
+      let name = parameterName ?? sanitize(identifier: action.names.identifier(), leading: true)
       if case .partReference = action.returnValue! {
         return name
       } else {
@@ -747,9 +844,8 @@ extension Platform {
         indentationLevel: 0
       ).joined(separator: "\n")
     } else {
-      let name = nativeName(of: action) ?? sanitize(
-        identifier: parameterName
-          ?? action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+      let name = nativeName(of: action) ?? parameterName ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
         leading: true
       )
       if action.isReferenceWrapper {
@@ -757,7 +853,7 @@ extension Platform {
         return "\(prefix)\(name)"
       } else {
         var argumentsArray: [String] = []
-        let outputName = nativeIdentifier(of: action) ?? bareAction.names.identifier()
+        let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
         let parameters = bareAction.parameters.ordered(for: outputName)
         let arguments = order(reference.arguments, for: bareAction.parameters.reordering(from: reference.actionName, to: outputName))
         for argumentIndex in arguments.indices {
@@ -1059,7 +1155,7 @@ extension Platform {
     for parameter: ParameterIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String {
-    let name = sanitize(identifier: parameter.names.identifier(), leading: true)
+    let name = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
     if !isTyped {
       return name
     } else {
@@ -1182,14 +1278,26 @@ extension Platform {
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary],
     mode: CompilationMode,
+    isAbsorbedMember: Bool,
+    hasBeenRelocated: Bool,
     alreadyHandledNativeRequirements: inout Set<String>
   ) -> UniqueDeclaration? {
     if action.isMemberWrapper {
       return nil
     }
     if let native = nativeImplementation(of: action) {
-      return source(for: native.requiredDeclarations, referenceLookup: externalReferenceLookup, alreadyHandled: &alreadyHandledNativeRequirements)
-        .map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
+      if isAbsorbedMember {
+        return nil
+      } else {
+        return source(
+          for: native.requiredDeclarations,
+          referenceLookup: externalReferenceLookup,
+          alreadyHandled: &alreadyHandledNativeRequirements
+        ).map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
+      }
+    }
+    guard !hasBeenRelocated else {
+      return nil
     }
 
     guard let actionImplementation = action.implementation else {
@@ -1202,15 +1310,14 @@ extension Platform {
         identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
         leading: true
       )
+    let isOverride = nativeIsOverride(action: action)
     let isProperty = nativeIsProperty(action: action)
 
     var parameterEntries = action.parameters.ordered(for: action.names.identifier())
     var parentType: String?
-    var selfParameter: StrictString?
     if nativeIsMember(action: action) {
       let first = parameterEntries.removeFirst()
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
-      selfParameter = StrictString(first.names.identifier())
     }
     let parameters: String = parameterEntries
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
@@ -1236,10 +1343,6 @@ extension Platform {
     }
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
-    var inliningArguments: [StrictString: String] = [:]
-    if let replaced = selfParameter {
-      inliningArguments[replaced] = "self"
-    }
     let implementation = source(
       for: actionImplementation.statements,
       context: action,
@@ -1249,7 +1352,7 @@ extension Platform {
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
-      inliningArguments: inliningArguments,
+      inliningArguments: [:],
       mode: mode,
       indentationLevel: 1
     )
@@ -1261,6 +1364,8 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation,
       parentType: parentType,
+      isAbsorbedMember: isAbsorbedMember,
+      isOverride: isOverride,
       propertyInstead: isProperty
     )
   }
@@ -1364,13 +1469,23 @@ extension Platform {
   static func typesSource(
     for module: ModuleIntermediate,
     moduleWideImports: [ReferenceDictionary],
-    alreadyHandledNativeRequirements: inout Set<String>
+    mode: CompilationMode,
+    relocatedActions: inout Set<String>,
+    alreadyHandledNativeRequirements: inout Set<String>,
+    modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
     let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
-      if let declaration = self.declaration(for: thing, externalReferenceLookup: moduleReferenceLookup, alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements) {
+      if let declaration = self.declaration(
+        for: thing,
+        externalReferenceLookup: moduleReferenceLookup,
+        mode: mode,
+        relocatedActions: &relocatedActions,
+        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        modulesToSearchForMembers: modulesToSearchForMembers
+      ) {
         result.append(contentsOf: [
           "",
           declaration
@@ -1380,7 +1495,13 @@ extension Platform {
     return result.joined(separator: "\n")
   }
 
-  static func actionsSource(for module: ModuleIntermediate, mode: CompilationMode, moduleWideImports: [ReferenceDictionary], alreadyHandledNativeRequirements: inout Set<String>) -> String {
+  static func actionsSource(
+    for module: ModuleIntermediate,
+    mode: CompilationMode,
+    moduleWideImports: [ReferenceDictionary],
+    relocatedActions: Set<String>,
+    alreadyHandledNativeRequirements: inout Set<String>
+  ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
     let referenceLookup = moduleWideImports.appending(moduleReferenceLookup)
@@ -1401,6 +1522,9 @@ extension Platform {
         for: action,
         externalReferenceLookup: referenceLookup,
         mode: mode,
+        isAbsorbedMember: false,
+        hasBeenRelocated: relocatedActions
+          .contains(String(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))),
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
         if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
@@ -1467,8 +1591,18 @@ extension Platform {
       result.append(contentsOf: registerCoverageAction)
     }
 
+    var relocatedActions: Set<String> = []
     for module in modules {
-      result.append(typesSource(for: module, moduleWideImports: moduleWideImportDictionary, alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements))
+      result.append(
+        typesSource(
+          for: module,
+          moduleWideImports: moduleWideImportDictionary,
+          mode: mode,
+          relocatedActions: &relocatedActions,
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          modulesToSearchForMembers: modules
+        )
+      )
     }
 
     if let start = actionDeclarationsContainerStart {
@@ -1476,7 +1610,15 @@ extension Platform {
       result.append(contentsOf: start)
     }
     for module in modules {
-      result.append(self.actionsSource(for: module, mode: mode, moduleWideImports: moduleWideImportDictionary, alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements))
+      result.append(
+        self.actionsSource(
+          for: module,
+          mode: mode,
+          moduleWideImports: moduleWideImportDictionary,
+          relocatedActions: relocatedActions,
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+        )
+      )
     }
     if mode == .testing {
       var allTests: [TestIntermediate] = []

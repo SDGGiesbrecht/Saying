@@ -131,17 +131,24 @@ enum Kotlin: Platform {
     accessModifier: String?,
     constructorParameters: [String],
     constructorAccessModifier: String?,
-    constructorSetters: [String]
+    constructorSetters: [String],
+    otherMembers: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let constructorAccess = constructorAccessModifier == accessModifier
       ? ""
       : constructorAccessModifier.map({ " \($0) constructor" }) ?? ""
     let properties = components.joined(separator: ", ")
-    let result: [String] = [
+    var result: [String] = [
       "\(access)class \(name)\(constructorAccess)(\(properties)) {",
-      "}",
     ]
+    for member in otherMembers {
+      result.append("")
+      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
+    }
+    result.append(contentsOf: [
+      "}",
+    ])
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(
@@ -163,17 +170,11 @@ enum Kotlin: Platform {
     return result.joined(separator: "\n")
   }
 
-  static func nativeIdentifier(of action: ActionIntermediate) -> UnicodeText? {
-    return nil
+  static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
+    return action.nativeNames.kotlin
   }
-  static func nativeName(of action: ActionIntermediate) -> String? {
-    return nil
-  }
-  static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    return false
-  }
-  static func nativeIsProperty(action: ActionIntermediate) -> Bool {
-    return false
+  static func nativeName(of parameter: ParameterIntermediate) -> String? {
+    return parameter.nativeNames.kotlin.map({ String(StrictString($0)) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
@@ -262,12 +263,28 @@ enum Kotlin: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isAbsorbedMember: Bool,
+    isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
-    let access = accessModifier.map({ "\($0) " }) ?? ""
+    var access = accessModifier.map({ "\($0) " }) ?? ""
+    let override = isOverride ? "override " : ""
+    var isEqualsOperator = false
+    var adjustedParameters = parameters
+    if isOverride && name == "equals" {
+      isEqualsOperator = true
+      access = "public "
+      adjustedParameters = "other: Any?"
+    }
     var result: [String] = [
-      "\(access)fun \(name)(\(parameters))\(returnSection ?? "") {",
+      "\(access)\(override)fun \(name)(\(adjustedParameters))\(returnSection ?? "") {",
     ]
+    if isEqualsOperator {
+      result.append(contentsOf: [
+        "\(indent)if (this === other) return true",
+        "\(indent)if (other !is \(parentType!)) return false",
+      ])
+    }
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
@@ -455,5 +472,30 @@ enum Kotlin: Platform {
       "}",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.kt"))
+  }
+
+  static var permitsParameterLabels: Bool {
+    return false
+  }
+  static var emptyParameterLabel: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var parameterLabelSuffix: UnicodeText {
+    return UnicodeText(StrictString(""))
+  }
+  static var memberPrefix: UnicodeText? {
+    return UnicodeText(StrictString("()."))
+  }
+  static var overridePrefix: UnicodeText? {
+    return UnicodeText(StrictString("override "))
+  }
+  static var variablePrefix: UnicodeText? {
+    return nil
+  }
+  static var initializerSuffix: UnicodeText? {
+    return nil
+  }
+  static var initializerName: UnicodeText {
+    return UnicodeText(StrictString(""))
   }
 }
