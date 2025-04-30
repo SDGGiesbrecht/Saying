@@ -502,12 +502,6 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
 
 import SDGText
 
-extension StrictString {
-  init(_ text: UnicodeText) {
-    self.init(text.scalars)
-  }
-}
-
 extension UnicodeText {
   init(_ string: StrictString) {
     self.init(String(string).unicodeScalars)
