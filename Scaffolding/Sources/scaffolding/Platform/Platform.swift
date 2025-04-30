@@ -1315,11 +1315,9 @@ extension Platform {
 
     var parameterEntries = action.parameters.ordered(for: action.names.identifier())
     var parentType: String?
-    var selfParameter: StrictString?
     if nativeIsMember(action: action) {
       let first = parameterEntries.removeFirst()
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
-      selfParameter = StrictString(first.names.identifier())
     }
     let parameters: String = parameterEntries
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
@@ -1345,10 +1343,6 @@ extension Platform {
     }
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
-    var inliningArguments: [StrictString: String] = [:]
-    if let replaced = selfParameter {
-      inliningArguments[replaced] = "self"
-    }
     let implementation = source(
       for: actionImplementation.statements,
       context: action,
@@ -1358,7 +1352,7 @@ extension Platform {
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
-      inliningArguments: inliningArguments,
+      inliningArguments: [:],
       mode: mode,
       indentationLevel: 1
     )

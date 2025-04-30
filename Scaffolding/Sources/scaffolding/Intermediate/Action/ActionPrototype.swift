@@ -94,7 +94,7 @@ extension ActionPrototype {
               return label
             })
         )
-        parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.kotlin = $1 })
+        parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.swift = $1 })
         parameters.apply(swiftLabels: labels.map({ $0.isEmpty ? nil : UnicodeText($0) }), accordingTo: name)
       default:
         break
