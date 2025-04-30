@@ -77,6 +77,7 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
+   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
    Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
@@ -156,6 +157,7 @@ extension
     English: (first: optional (thing)) is not (second: optional (thing)) according to optional
    )
    truth value
+   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
    Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second) according to optional)
