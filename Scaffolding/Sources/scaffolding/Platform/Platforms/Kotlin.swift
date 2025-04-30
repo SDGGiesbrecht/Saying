@@ -267,12 +267,13 @@ enum Kotlin: Platform {
     isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
-    let access = accessModifier.map({ "\($0) " }) ?? ""
+    var access = accessModifier.map({ "\($0) " }) ?? ""
     let override = isOverride ? "override " : ""
     var isEqualsOperator = false
     var adjustedParameters = parameters
     if isOverride && name == "equals" {
       isEqualsOperator = true
+      access = "public "
       adjustedParameters = "other: Any?"
     }
     var result: [String] = [
