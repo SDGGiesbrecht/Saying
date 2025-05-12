@@ -5,6 +5,7 @@ extension ActionIntermediate {
     case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeActionImplementation)
     case missingImplementation(language: UnicodeText, action: ParsedActionName)
+    case brokenLiteral(LiteralIntermediate.ConstructionError)
 
     var message: String {
       switch self {
@@ -18,6 +19,8 @@ extension ActionIntermediate {
         return defaultMessage
       case .missingImplementation(let language, _):
         return "\(defaultMessage) (\(language))"
+      case .brokenLiteral(let error):
+        return error.message
       }
     }
 
@@ -33,6 +36,8 @@ extension ActionIntermediate {
         return implementation.location
       case .missingImplementation(_, action: let action):
         return action.location
+      case .brokenLiteral(let error):
+        return error.range
       }
     }
   }

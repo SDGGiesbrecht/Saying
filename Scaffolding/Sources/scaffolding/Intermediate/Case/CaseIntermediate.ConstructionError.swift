@@ -1,5 +1,6 @@
 extension CaseIntermediate {
   enum ConstructionError: DiagnosticError {
+    case brokenDocumentation(LiteralIntermediate.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeCaseImplementation(NativeActionImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeAction)
@@ -7,6 +8,8 @@ extension CaseIntermediate {
 
     var message: String {
       switch self {
+      case .brokenDocumentation(let error):
+        return error.message
       case .unknownLanguage:
         return defaultMessage
       case .brokenNativeCaseImplementation(let error):
@@ -20,6 +23,8 @@ extension CaseIntermediate {
 
     var range: Slice<UnicodeSegments> {
       switch self {
+      case .brokenDocumentation(let error):
+        return error.range
       case .unknownLanguage(let language):
         return language.location
       case .brokenNativeCaseImplementation(let error):

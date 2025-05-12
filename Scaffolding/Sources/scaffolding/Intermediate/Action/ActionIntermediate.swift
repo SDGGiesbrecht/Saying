@@ -607,7 +607,12 @@ extension ActionIntermediate {
     if let source = declaration.implementation.source {
       switch source {
       case .source(let source):
-        implementation = StatementListIntermediate(source)
+        switch StatementListIntermediate.construct(source) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenLiteral($0) }))
+        case .success(let constructed):
+          implementation = constructed
+        }
       case .creation:
         isCreation = true
         break

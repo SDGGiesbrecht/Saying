@@ -5,8 +5,23 @@ struct StatementListIntermediate {
 }
 
 extension StatementListIntermediate {
-  init(_ statements: ParsedBracedStatementList) {
-    self.statements = statements.statements.map { StatementIntermediate($0) }
+  static func construct(
+    _ statements: ParsedBracedStatementList
+  ) -> Result<StatementListIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
+    var errors: [LiteralIntermediate.ConstructionError] = []
+    let constructedStatements: [StatementIntermediate] = statements.statements.compactMap { statement in
+      switch StatementIntermediate.construct(statement) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors)
+        return nil
+      case .success(let constructed):
+        return constructed
+      }
+    }
+    if !errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(StatementListIntermediate(statements: constructedStatements))
   }
 }
 

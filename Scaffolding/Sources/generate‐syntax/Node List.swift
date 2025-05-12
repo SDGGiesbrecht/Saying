@@ -508,6 +508,7 @@ extension Node {
               Alternate(name: "compound", type: "CompoundAction"),
               Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
+              Alternate(name: "literal", type: "Literal")
             ]),
             isIndirect: true
           ),

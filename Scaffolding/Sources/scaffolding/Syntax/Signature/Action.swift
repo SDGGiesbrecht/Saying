@@ -22,6 +22,8 @@ extension Action {
       }
       result.append(reference.finalIdentifierSegment)
       return result
+    case .literal:
+      return []
     }
   }
 

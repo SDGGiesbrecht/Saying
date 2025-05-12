@@ -103,16 +103,20 @@ extension ActionPrototype {
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      let intermediateDocumentation = DocumentationIntermediate.construct(
+      switch DocumentationIntermediate.construct(
         documentation.documentation,
         namespace: namespace
           .appending(names)
-      )
-      attachedDocumentation = intermediateDocumentation
-      let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
-      for parameter in intermediateDocumentation.parameters.joined() {
-        if !existingParameters.contains(StrictString(parameter.name.identifierText())) {
-          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+      ) {
+      case .failure(let nested):
+        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
+      case .success(let intermediateDocumentation):
+        attachedDocumentation = intermediateDocumentation
+        let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
+        for parameter in intermediateDocumentation.parameters.joined() {
+          if !existingParameters.contains(StrictString(parameter.name.identifierText())) {
+            errors.append(ConstructionError.documentedParameterNotFound(parameter))
+          }
         }
       }
     }
