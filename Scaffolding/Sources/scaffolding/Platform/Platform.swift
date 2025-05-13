@@ -550,6 +550,12 @@ extension Platform {
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
+      if !extractedArguments.isEmpty,
+        let type = referenceLookup.lookupThing(.simple("Unicode scalars")),
+        let native = nativeType(of: type),
+        native.release != nil {
+        return extractedArguments.removeFirst()
+      }
       return self.literal(string: sanitize(stringLiteral: literal.string))
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
