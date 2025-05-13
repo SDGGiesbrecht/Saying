@@ -9,15 +9,28 @@ struct StatementIntermediate {
 }
 
 extension StatementIntermediate {
-  init(_ statement: ParsedStatement) {
+  static func construct(_ statement: ParsedStatement) -> Result<StatementIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
+    var errors: [LiteralIntermediate.ConstructionError] = []
+    let isReturn: Bool
+    let action: ActionUse?
     switch statement {
     case .valid(let valid):
       isReturn = valid.yieldArrow != nil
-      action = ActionUse(valid.action)
+      switch ActionUse.construct(valid.action) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors)
+        action = nil
+      case .success(let constructed):
+        action = constructed
+      }
     case .deadEnd:
       isReturn = false
       action = nil
     }
+    if !errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(StatementIntermediate(isReturn: isReturn, action: action))
   }
 }
 

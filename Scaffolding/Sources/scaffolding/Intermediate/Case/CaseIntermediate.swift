@@ -40,13 +40,17 @@ extension CaseIntermediate {
 
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      let intermediateDocumentation = DocumentationIntermediate.construct(
+      switch DocumentationIntermediate.construct(
         documentation.documentation,
         namespace: caseNamespace
-      )
-      attachedDocumentation = intermediateDocumentation
-      for parameter in intermediateDocumentation.parameters.joined() {
-        errors.append(ConstructionError.documentedParameterNotFound(parameter))
+      ) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
+        case .success(let intermediateDocumentation):
+        attachedDocumentation = intermediateDocumentation
+        for parameter in intermediateDocumentation.parameters.joined() {
+          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+        }
       }
     }
 

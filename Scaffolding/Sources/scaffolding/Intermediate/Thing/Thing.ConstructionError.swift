@@ -1,5 +1,6 @@
 extension Thing {
   enum ConstructionError: DiagnosticError {
+    case brokenDocumentation(LiteralIntermediate.ConstructionError)
     case brokenParameterInterpolation(Interpolation<ThingParameterIntermediate>.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeImplementation(NativeThingImplementationIntermediate.ConstructionError)
@@ -10,6 +11,8 @@ extension Thing {
 
     var message: String {
       switch self {
+      case .brokenDocumentation(let error):
+        return error.message
       case .brokenParameterInterpolation(let error):
         return error.message
       case .unknownLanguage:
@@ -29,6 +32,8 @@ extension Thing {
 
     var range: Slice<UnicodeSegments> {
       switch self {
+      case .brokenDocumentation(let error):
+        return error.range
       case .brokenParameterInterpolation(let error):
         return error.range
       case .unknownLanguage(let identifier):

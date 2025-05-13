@@ -95,6 +95,10 @@ enum Swift: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
+  static func literal(string: String) -> String {
+    return "\u{22}\(string)\u{22}.unicodeScalars"
+  }
+
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
     case .nowhere:

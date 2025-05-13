@@ -8,12 +8,11 @@ struct DocumentationIntermediate {
 }
 
 extension DocumentationIntermediate {
-
   static func construct(
     _ declaration: ParsedDocumentation,
     namespace: [Set<StrictString>]
-  ) -> DocumentationIntermediate {
-
+  ) -> Result<DocumentationIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
+    var errors: [LiteralIntermediate.ConstructionError] = []
     var paragraphs: [ParsedParagraph] = []
     var parameters: [ParsedParameterDocumentation] = []
     var testIndex = 1
@@ -23,18 +22,27 @@ extension DocumentationIntermediate {
       case .parameter(let parameter):
         parameters.append(parameter)
       case .test(let test):
-        tests.append(TestIntermediate(test, location: namespace, index: testIndex))
+        switch TestIntermediate.construct(test, location: namespace, index: testIndex) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors)
+        case .success(let constructed):
+          tests.append(constructed)
+        }
         testIndex += 1
       case .paragraph(let paragraph):
         paragraphs.append(paragraph)
       }
     }
-
-    return DocumentationIntermediate(
-      paragraphs: paragraphs,
-      parameters: [parameters],
-      tests: tests,
-      declaration: declaration
+    if !errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(
+      DocumentationIntermediate(
+        paragraphs: paragraphs,
+        parameters: [parameters],
+        tests: tests,
+        declaration: declaration
+      )
     )
   }
 }

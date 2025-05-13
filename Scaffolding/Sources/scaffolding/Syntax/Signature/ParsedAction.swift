@@ -22,6 +22,8 @@ extension ParsedAction {
       }
       result.append(reference.finalIdentifierSegment)
       return result
+    case .literal:
+      return []
     }
   }
 

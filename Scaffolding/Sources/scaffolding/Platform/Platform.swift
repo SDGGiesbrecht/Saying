@@ -18,6 +18,7 @@ protocol Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>? { get set }
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
+  static func literal(string: String) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -231,7 +232,10 @@ extension Platform {
   }
 
   static func sanitize(stringLiteral: UnicodeText) -> String {
-    return StrictString(stringLiteral).lazy
+    return sanitize(stringLiteral: String(StrictString(stringLiteral)))
+  }
+  static func sanitize(stringLiteral: String) -> String {
+    return stringLiteral.unicodeScalars.lazy
       .map({ !disallowedInStringLiterals($0) ? "\($0)" : escapeForStringLiteral(character: $0) })
       .joined()
   }
@@ -545,6 +549,9 @@ extension Platform {
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
+    if let literal = reference.literal {
+      return self.literal(string: sanitize(stringLiteral: literal.string))
+    }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[StrictString(reference.actionName)] {
       return inlined

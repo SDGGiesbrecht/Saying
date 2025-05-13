@@ -7,16 +7,38 @@ struct TestIntermediate {
 
 extension TestIntermediate {
 
-  init(_ test: ParsedTest, location: [Set<StrictString>], index: Int) {
-    self.location = location.appending([index.inDigits()])
+  static func construct(
+    _ test: ParsedTest,
+    location: [Set<StrictString>],
+    index: Int
+  ) -> Result<TestIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
+    var errors: [LiteralIntermediate.ConstructionError] = []
+    let nestedLocation = location.appending([index.inDigits()])
+    let statements: [StatementIntermediate]
     switch test.implementation {
     case .short(let short):
-      self.statements = [StatementIntermediate(isReturn: false, action: ActionUse(short.test))]
+      switch ActionUse.construct(short.test) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors)
+        statements = []
+      case .success(let action):
+        statements = [StatementIntermediate(isReturn: false, action: action)]
+      }
     case .long(let long):
-      self.statements = long.statements.map { statement in
-        return StatementIntermediate(statement)
+      statements = long.statements.compactMap { statement in
+        switch StatementIntermediate.construct(statement) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors)
+          return nil
+        case .success(let constructed):
+          return constructed
+        }
       }
     }
+    if !errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(TestIntermediate(location: nestedLocation, statements: statements))
   }
 }
 

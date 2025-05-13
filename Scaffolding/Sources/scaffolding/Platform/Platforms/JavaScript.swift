@@ -41,6 +41,10 @@ enum JavaScript: Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
+
+  static func literal(string: String) -> String {
+    return "\u{22}\(string)\u{22}"
+  }
   
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil

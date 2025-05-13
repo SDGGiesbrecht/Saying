@@ -96,20 +96,9 @@ use
    )
    Unicode scalars
    {
-    ← non‐empty NFKD example
+    ← “ ”
    }
  }
-
-action (unit)
- (
-  English: non‐empty NFKD example
- )
- Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22) ¤(22)))”
- C♯: “¤(22) ¤(22)”
- JavaScript: “¤(22) ¤(22)”
- Kotlin: “¤(22) ¤(22)”
- Swift: “¤(22) ¤(22).unicodeScalars”
 
 action (file)
  [
@@ -122,11 +111,9 @@ action (file)
   English: example with one ASCII scalar
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22) ¤(22)))”
- C♯: “¤(22) ¤(22)”
- JavaScript: “¤(22) ¤(22)”
- Kotlin: “¤(22) ¤(22)”
- Swift: “¤(22) ¤(22).unicodeScalars”
+ {
+  ← “ ”
+ }
 
 action (file)
  [
@@ -139,19 +126,6 @@ action (file)
   English: example with one supplementary plane scalar
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22)¤(10000)¤(22)))”
- C♯: “¤(22)¤(10000)¤(22)”
- JavaScript: “¤(22)¤(10000)¤(22)”
- Kotlin: “¤(22)¤(10000)¤(22)”
- Swift: “¤(22)¤(10000)¤(22).unicodeScalars”
-
-action (unit)
- (
-  English: example with two NFKD scalars
- )
- Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)new(¤(22)  ¤(22)))”
- C♯: “¤(22)  ¤(22)”
- JavaScript: “¤(22)  ¤(22)”
- Kotlin: “¤(22)  ¤(22)”
- Swift: “¤(22)  ¤(22).unicodeScalars”
+ {
+  ← “¤(10000)”
+ }

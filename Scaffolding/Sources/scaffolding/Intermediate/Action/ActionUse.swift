@@ -3,6 +3,7 @@ import SDGText
 struct ActionUse {
   var actionName: UnicodeText
   var arguments: [ActionUseArgument]
+  var literal: LiteralIntermediate?
   var source: ParsedAction?
   var passage: ParameterPassage
   var explicitResultType: ParsedTypeReference?
@@ -12,42 +13,81 @@ struct ActionUse {
 
 extension ActionUse {
 
-  init(_ use: ParsedAction) {
-    actionName = use.name()
+  static func construct(_ use: ParsedAction) -> Result<ActionUse, ErrorList<LiteralIntermediate.ConstructionError>> {
+    var errors: [LiteralIntermediate.ConstructionError] = []
+    let arguments: [ActionUseArgument]
+    let literal: LiteralIntermediate?
     switch use {
     case .compound(let compound):
-      arguments = compound.arguments.arguments.map { argument in
+      arguments = compound.arguments.arguments.compactMap { argument in
         switch argument {
         case .passed(let passed):
-          return .action(ActionUse(passed.argument))
+          switch ActionUse.construct(passed.argument) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors)
+            return nil
+          case .success(let action):
+            return .action(action)
+          }
         case .flow(let flow):
-          return .flow(StatementListIntermediate(flow))
+          switch StatementListIntermediate.construct(flow) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors)
+            return nil
+          case .success(let statements):
+            return .flow(statements)
+          }
         }
       }
+      literal = nil
     case .reference:
       arguments = []
+      literal = nil
     case .simple:
       arguments = []
+      literal = nil
+    case .literal(let literalSyntax):
+      arguments = []
+      switch LiteralIntermediate.construct(literal: literalSyntax) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors)
+        literal = nil
+      case .success(let constructed):
+        literal = constructed
+      }
     }
-    source = use
-    passage = .into
+    if !errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(
+      ActionUse(
+        actionName: use.name(),
+        arguments: arguments,
+        literal: literal,
+        source: use,
+        passage: .into
+      )
+    )
   }
 
-  init(_ use: ParsedAnnotatedAction) {
-    self = ActionUse(use.action)
-    let type = use.type.map({ ParsedTypeReference($0.type) })
-    if use.type?.yieldArrow != nil {
-      explicitResultType = .action(parameters: [], returnValue: type)
-    } else {
-      explicitResultType = type
-    }
-    switch use.passage {
-    case .none:
-      passage = .into
-    case .bullet:
-      passage = .out
-    case .throughArrow:
-      passage = .through
+  static func construct(_ use: ParsedAnnotatedAction) -> Result<ActionUse, ErrorList<LiteralIntermediate.ConstructionError>> {
+    return ActionUse.construct(use.action).map { action in
+      var annotated = action
+      let type = use.type.map({ ParsedTypeReference($0.type) })
+      if use.type?.yieldArrow != nil {
+        annotated.explicitResultType = .action(parameters: [], returnValue: type)
+      } else {
+        annotated.explicitResultType = type
+      }
+      switch use.passage {
+      case .none:
+        annotated.passage = .into
+      case .bullet:
+        annotated.passage = .out
+      case .throughArrow:
+        annotated.passage = .through
+      }
+      return annotated
     }
   }
 }
@@ -116,6 +156,11 @@ extension ActionUse {
       return .resolved(action.returnValue)
     } else if actions.count > 1 {
       return .narrowed(actions.map({ $0.1.returnValue }))
+    }
+    if literal != nil {
+      return .resolved(
+        .some(.some(.simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: UnicodeText(StrictString("Unicode scalars")))!))))
+      )
     }
     return .failed
   }
@@ -222,7 +267,9 @@ extension ActionUse {
           errors.append(.actionUnavailableOutsideTests(reference: source!))
         }
       } else {
-        errors.append(.noSuchAction(name: actionName, reference: source!))
+        if literal == nil {
+          errors.append(.noSuchAction(name: actionName, reference: source!))
+        }
       }
     }
   }

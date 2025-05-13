@@ -1,5 +1,6 @@
 extension Ability {
   enum ConstructionError: DiagnosticError {
+    case brokenDocumentation(LiteralIntermediate.ConstructionError)
     case brokenParameterInterpolation(Interpolation<AbilityParameterIntermediate>.ConstructionError)
     case brokenRequirement(RequirementIntermediate.ConstructionError)
     case brokenChoice(ActionIntermediate.ConstructionError)
@@ -8,6 +9,8 @@ extension Ability {
 
     var range: Slice<UnicodeSegments> {
       switch self {
+      case .brokenDocumentation(let error):
+        return error.range
       case .brokenParameterInterpolation(let error):
         return error.range
       case .brokenRequirement(let error):
@@ -23,6 +26,8 @@ extension Ability {
 
     var message: String {
       switch self {
+      case .brokenDocumentation(let error):
+        return error.message
       case .brokenParameterInterpolation(let error):
         return error.message
       case .brokenRequirement:

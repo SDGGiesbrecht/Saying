@@ -103,7 +103,7 @@ use
    )
    Unicode text
    {
-    ← Unicode text skipping normalization of (non‐empty NFKD example)
+    ← Unicode text skipping normalization of (“ ”)
    }
  }
 
@@ -113,5 +113,5 @@ action (clients)
  )
  Unicode text
  {
-  ← Unicode text skipping normalization of (example with two NFKD scalars)
+  ← Unicode text skipping normalization of (“  ”)
  }
