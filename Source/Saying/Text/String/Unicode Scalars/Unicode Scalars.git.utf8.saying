@@ -100,6 +100,23 @@ use
    }
  }
 
+action (clients)
+ [
+  [
+   English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
+  ]
+  test {verify ((compatibility decomposition of (“¤(A0)”)) is (“¤(20)”))}
+ ]
+ (
+  English: compatibility decomposition of (scalars: Unicode scalars)
+ )
+ Unicode scalars
+ C: “?”
+ C♯: “?”
+ JavaScript: “?”
+ Kotlin: “?”
+ Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
+
 action (file)
  [
   test {
