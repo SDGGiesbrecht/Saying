@@ -180,7 +180,6 @@ extension Thing {
         disallowImports(in: implementation, errors: &errors)
         kotlin = constructed
       case "Swift":
-        disallowImports(in: implementation, errors: &errors)
         swift = constructed
       default:
         errors.append(ConstructionError.unknownLanguage(implementation.language))

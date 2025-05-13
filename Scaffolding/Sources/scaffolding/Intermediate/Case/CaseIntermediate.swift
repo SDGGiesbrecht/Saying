@@ -94,7 +94,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expression, errors: &errors)
             case "Swift":
               swiftStore = constructed
-              disallowImports(in: implementation.expression, errors: &errors)
             default:
               errors.append(ConstructionError.unknownLanguage(implementation.language))
             }
@@ -121,7 +120,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.store, errors: &errors)
             case "Swift":
               swiftStore = constructed
-              disallowImports(in: implementation.expressions.store, errors: &errors)
             default:
               errors.append(ConstructionError.unknownLanguage(implementation.language))
             }
@@ -145,7 +143,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Swift":
               swiftRetrieve = constructed
-              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             default:
               errors.append(ConstructionError.unknownLanguage(implementation.language))
             }
@@ -169,7 +166,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.check, errors: &errors)
             case "Swift":
               swiftCheck = constructed
-              disallowImports(in: implementation.expressions.check, errors: &errors)
             default:
               errors.append(ConstructionError.unknownLanguage(implementation.language))
             }
