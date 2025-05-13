@@ -995,7 +995,8 @@ extension Platform {
           let type = referenceLookup.lookupThing(actualResult.key),
           let native = nativeType(of: type),
            let release = native.release {
-          let localName = "local"
+          clashAvoidanceCounter += 1
+          let localName = "local\(clashAvoidanceCounter)"
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
           var extracted: [String] = []
           let call = self.call(
