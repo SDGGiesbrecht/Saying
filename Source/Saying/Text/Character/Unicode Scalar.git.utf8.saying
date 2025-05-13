@@ -1,4 +1,13 @@
 thing (clients)
+ [
+  [
+   English: A Unicode scalar.
+  ]
+  [
+   English: {Unicode scalar} always preserves the exact scalar representation; it does not consider canonical or compatibility equivalence and does not apply normalization.
+  ]
+  test {verify ((first in (“¤(340)”)) is not (first in (“¤(300)”)))}
+ ]
  (
   English: Unicode scalar
  )
@@ -7,6 +16,75 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
+ }
+
+use (clients)
+ comparison of (Unicode scalar) for equality
+ {
+  action (clients)
+   (first: Unicode scalar) is (second: Unicode scalar)
+   truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: Unicode scalar) is not (second: Unicode scalar)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
+
+  action (clients)
+   example
+   Unicode scalar
+   {
+    if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
+     ← space
+    }
+    !
+   }
+
+  action (clients)
+   differing example
+   Unicode scalar
+   {
+    if (first in (“!”)) exists, unwrap it as (• exclamation mark: Unicode scalar), {
+     ← exclamation mark
+    }
+    !
+   }
+ }
+
+use (clients)
+ comparison of (optional (Unicode scalar)) for equality
+ {
+  action (clients)
+   (first: optional (Unicode scalar)) is (second: optional (Unicode scalar))
+   truth value
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “ == ” second “”
+   {
+    ← (first) is (second) according to optional
+   }
+
+  action (clients)
+   example
+   optional (Unicode scalar)
+   {
+    ← wrap (example: Unicode scalar) into optional
+   }
+
+  action (clients)
+   differing example
+   optional (Unicode scalar)
+   {
+    ← wrap (differing example: Unicode scalar) into optional
+   }
  }
 
 use (clients)
