@@ -6,6 +6,7 @@ thing (clients)
   [
    English: {Unicode scalars} always preserves the exact scalar representation; it does not consider canonical or compatibility equivalence and does not apply normalization.
   ]
+  test {verify ((“¤(C0)”) is not (“A¤(300)”))}
  ]
  (
   English: Unicode scalars
@@ -20,6 +21,44 @@ thing (clients)
 use (clients)
  storage of (Unicode scalars)
  {
+ }
+
+use (clients)
+ comparison of (Unicode scalars) for equality
+ {
+  action (clients)
+   (first: Unicode scalars) is (second: Unicode scalars)
+   truth value
+   C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “.elementsEqual(” second “)”
+
+  action (clients)
+   (first: Unicode scalars) is not (second: Unicode scalars)
+   truth value
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: “” first “ != ” second “” [“==(¤(5F): String.UnicodeScalarView, ¤(5F): String.UnicodeScalarView)”] {“extension String.UnicodeScalarView: Equatable {}”}
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
+
+  action (clients)
+   example
+   Unicode scalars
+   {
+    ← “ ”
+   }
+
+  action (clients)
+   differing example
+   Unicode scalars
+   {
+    ← “!”
+   }
  }
 
 use
