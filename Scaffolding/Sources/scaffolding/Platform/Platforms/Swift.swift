@@ -376,7 +376,7 @@ enum Swift: Platform {
     return nil
   }
   static func statementImporting(_ importTarget: String) -> String {
-    return importTarget
+    return "import \(importTarget)"
   }
 
   static var importsNeededByMemoryManagement: Set<String> {

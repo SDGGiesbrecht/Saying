@@ -595,7 +595,6 @@ extension ActionIntermediate {
             disallowImports(in: implementation, errors: &errors)
           case "Swift":
             swift = constructed
-            disallowImports(in: implementation, errors: &errors)
           default:
             errors.append(ConstructionError.unknownLanguage(implementation.language))
           }
