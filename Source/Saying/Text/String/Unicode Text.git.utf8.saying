@@ -1,7 +1,7 @@
 thing (clients)
  [
   [
-   English: A sequence of Unicode scalars in normalization form NFKD (compatibility decomposition).
+   English: A sequence of Unicode scalars in normalized form according to compatibility decomposition (NFKD).
   ]
   [
    English: Maintaining normalization means that insertions and removals may also expand or rearrange scalars. Positions and distances recorded before a change are no longer valid afterward.
