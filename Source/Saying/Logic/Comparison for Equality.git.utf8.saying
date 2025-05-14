@@ -106,6 +106,9 @@ extension
  comparison of (thing) for equality
  {
   action (clients)
+   [
+    test {verify ((example: thing) is not (differing example: thing) according to comparison for equality)}
+   ]
    (
     English: (first: thing) is not (second: thing) according to comparison for equality
    )
