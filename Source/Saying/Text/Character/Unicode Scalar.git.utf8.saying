@@ -4,7 +4,7 @@ thing (clients)
    English: A Unicode scalar.
   ]
   [
-   English: {Unicode scalar} always preserves the exact scalar representation; it does not consider canonical or compatibility equivalence and does not apply normalization.
+   English: {Unicode scalar} behaves the same as {Unicode scalars} with regards to equivalence and normalization.
   ]
   test {verify ((first in (“¤(340)”)) is not (first in (“¤(300)”)))}
  ]

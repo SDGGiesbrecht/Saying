@@ -328,7 +328,15 @@ enum Swift: Platform {
     isOverride: Bool,
     propertyInstead: Bool
   ) -> UniqueDeclaration {
-    let access = accessModifier.map({ "\($0) " }) ?? ""
+    var access = accessModifier.map({ "\($0) " }) ?? ""
+
+    // Hard‐coded for now; can this be generalized to detect all cases where it is needed?
+    if name == "==",
+       parameters == "_ lhs: String.UnicodeScalarView, _ rhs: String.UnicodeScalarView",
+       returnSection == " -> Bool" {
+      access = "public "
+    }
+
     let keyword = propertyInstead
       ? "var "
       : name == "subscript" ? "" : "func "
