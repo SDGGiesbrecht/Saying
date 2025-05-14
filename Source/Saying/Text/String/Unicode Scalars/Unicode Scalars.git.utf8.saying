@@ -169,8 +169,8 @@ action (clients)
  Unicode scalars
  C: “reference¤(5F)string(g¤(5F)string¤(5F)new¤(5F)take(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))”
  C♯: “” scalars “.Normalize(NormalizationForm.FormKD)” (
-  “System”
-  “System.Text”
+ “System”
+ “System.Text”
  )
  JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
  Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)”
