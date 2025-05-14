@@ -2,7 +2,7 @@ import SDGText
 
 struct NativeActionImplementationIntermediate {
   var expression: NativeActionExpressionIntermediate
-  var requiredImport: UnicodeText?
+  var requiredImports: [UnicodeText] = []
   var indirectRequirements: [NativeRequirementImplementationIntermediate] = []
   var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
 }
@@ -23,13 +23,13 @@ extension NativeActionImplementationIntermediate {
     case .success(let constructed):
       expression = constructed
     }
-    var requiredImport: UnicodeText?
-    if let importLiteral = implementation.importNode?.importNode {
+    var requiredImports: [UnicodeText] = []
+    for importLiteral in implementation.importNode?.imports.imports ?? [] {
       switch LiteralIntermediate.construct(literal: importLiteral) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
       case .success(let literal):
-        requiredImport = UnicodeText(StrictString(literal.string))
+        requiredImports.append(UnicodeText(StrictString(literal.string)))
       }
     }
     var indirectRequirments: [NativeRequirementImplementationIntermediate] = []
@@ -56,7 +56,7 @@ extension NativeActionImplementationIntermediate {
     return .success(
       NativeActionImplementationIntermediate(
         expression: expression,
-        requiredImport: requiredImport,
+        requiredImports: requiredImports,
         indirectRequirements: indirectRequirments,
         requiredDeclarations: requiredDeclarations
       )
@@ -71,7 +71,7 @@ extension NativeActionImplementationIntermediate {
   ) -> NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
       expression: expression.specializing(typeLookup: implementationTypeLookup),
-      requiredImport: requiredImport,
+      requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) })
     )
