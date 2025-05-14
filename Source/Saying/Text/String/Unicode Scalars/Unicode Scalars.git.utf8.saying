@@ -26,6 +26,18 @@ use (clients)
  {
  }
 
+action (file)
+ [
+  test {verify (implementation of (“”) is (“”))}
+ ]
+ implementation of (first: Unicode scalars) is (second: Unicode scalars)
+ truth value
+ C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)”
+ C♯: “” first “ == ” second “”
+ JavaScript: “” first “ == ” second “”
+ Kotlin: “” first “ == ” second “”
+ Swift: “” first “.elementsEqual(” second “)”
+
 use (clients)
  comparison of (Unicode scalars) for equality
  {
@@ -36,7 +48,9 @@ use (clients)
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
-   Swift: “” first “.elementsEqual(” second “)”
+   {
+    ← implementation of (first) is (second)
+   }
 
   action (clients)
    (first: Unicode scalars) is not (second: Unicode scalars)
