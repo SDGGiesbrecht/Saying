@@ -984,12 +984,37 @@ extension Node {
               Alternate(name: "literal", type: "Literal"),
             ])
           ),
+        ],
+        Node.separatedList(
+          name: "NativeImportList",
+          entryName: "importNode", entryNamePlural: "imports",
+          entryType: "Literal",
+          separatorName: "lineBreak",
+          separatorType: "LineBreakSyntax",
+          fixedSeparator: true
+        ),
+        [
+          Node(
+            name: "SpacedImportList",
+            kind: .compound(children: [
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "imports", type: "NativeImportList", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "NativeImportContents",
+            kind: .alternates([
+              Alternate(name: "list", type: "SpacedImportList"),
+              Alternate(name: "single", type: "Literal"),
+            ])
+          ),
           Node(
             name: "NativeImport",
             kind: .compound(children: [
               Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
-              Child(name: "importNode", type: "Literal", kind: .required),
+              Child(name: "imports", type: "NativeImportContents", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
