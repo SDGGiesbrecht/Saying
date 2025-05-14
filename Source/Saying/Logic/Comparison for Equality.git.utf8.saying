@@ -80,7 +80,7 @@ ability (clients)
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
    Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
-    ← not ((first) is (second))
+    ← (first) is not (second) according to comparison for equality
    }
 
   requirement (clients)
@@ -105,6 +105,20 @@ ability (clients)
 extension
  comparison of (thing) for equality
  {
+  action (clients)
+   [
+    test {verify ((example: thing) is not (differing example: thing) according to comparison for equality)}
+   ]
+   (
+    English: (first: thing) is not (second: thing) according to comparison for equality
+   )
+   truth value
+   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
+   Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   {
+    ← not ((first) is (second))
+   }
+
   use (clients)
    optional (thing)
    {
