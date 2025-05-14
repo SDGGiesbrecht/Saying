@@ -1416,12 +1416,12 @@ extension Platform {
   static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<String> {
     var imports: Set<String> = []
     for thing in referenceDictionary.allThings() {
-      if let requiredImport = nativeType(of: thing)?.requiredImport {
+      for requiredImport in nativeType(of: thing)?.requiredImports ?? [] {
         imports.insert(String(StrictString(requiredImport)))
       }
     }
     for action in referenceDictionary.allActions() {
-      if let requiredImport = nativeImplementation(of: action)?.requiredImport {
+      for requiredImport in nativeImplementation(of: action)?.requiredImports ?? [] {
         imports.insert(String(StrictString(requiredImport)))
       }
     }

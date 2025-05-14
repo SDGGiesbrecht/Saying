@@ -5,7 +5,7 @@ struct NativeThingImplementationIntermediate {
   var parameters: [NativeThingImplementationParameter]
   var hold: NativeActionExpressionIntermediate?
   var release: NativeActionExpressionIntermediate?
-  var requiredImport: UnicodeText?
+  var requiredImports: [UnicodeText]
   var indirectRequirements: [NativeRequirementImplementationIntermediate]
   var requiredDeclarations: [NativeRequirementImplementationIntermediate]
 }
@@ -62,13 +62,13 @@ extension NativeThingImplementationIntermediate {
         nativeRelease = success
       }
     }
-    var requiredImport: UnicodeText?
-    if let importLiteral = implementation.importNode?.importNode {
+    var requiredImports: [UnicodeText] = []
+    for importLiteral in implementation.importNode?.imports.imports ?? [] {
       switch LiteralIntermediate.construct(literal: importLiteral) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
       case .success(let literal):
-        requiredImport = UnicodeText(StrictString(literal.string))
+        requiredImports.append(UnicodeText(StrictString(literal.string)))
       }
     }
     var indirectRequirments: [NativeRequirementImplementationIntermediate] = []
@@ -97,7 +97,7 @@ extension NativeThingImplementationIntermediate {
       parameters: parameters,
       hold: nativeHold,
       release: nativeRelease,
-      requiredImport: requiredImport,
+      requiredImports: requiredImports,
       indirectRequirements: indirectRequirments,
       requiredDeclarations: requiredDeclarations
     ))
@@ -120,7 +120,7 @@ extension NativeThingImplementationIntermediate {
       parameters: mappedParameters,
       hold: hold,
       release: release,
-      requiredImport: requiredImport,
+      requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
     )
@@ -135,7 +135,7 @@ extension NativeThingImplementationIntermediate {
       parameters: mappedParameters,
       hold: hold,
       release: release,
-      requiredImport: requiredImport,
+      requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: typeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })
     )
