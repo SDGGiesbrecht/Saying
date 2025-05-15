@@ -26,6 +26,15 @@ action (file)
  Unicode text
  create
 
+action (clients)
+ (
+  English: Unicode text of (scalars: Unicode scalars)
+ )
+ Unicode text
+ {
+  ← Unicode text skipping normalization of (compatibility decomposition of (scalars))
+ }
+
 use (clients)
  optional (Unicode text)
  {
@@ -103,15 +112,6 @@ use
    )
    Unicode text
    {
-    ← Unicode text skipping normalization of (“ ”)
+    ← Unicode text of (“ ”)
    }
- }
-
-action (clients)
- (
-  English: example with two scalars
- )
- Unicode text
- {
-  ← Unicode text skipping normalization of (“  ”)
  }
