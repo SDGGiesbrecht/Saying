@@ -161,7 +161,11 @@ action (clients)
   [
    English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
   ]
-  test {verify ((compatibility decomposition of (“¤(A0)”)) is (“¤(20)”))}
+  test {
+   let (• A0: Unicode scalars) be (“¤(A0)”)
+   let (• 20: Unicode scalars) be (“¤(20)”)
+   verify ((compatibility decomposition of (A0)) is (20))
+  }
  ]
  (
   English: compatibility decomposition of (scalars: Unicode scalars)
