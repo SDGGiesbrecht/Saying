@@ -22,6 +22,7 @@ thing (clients)
 action (file)
  (
   English: Unicode text skipping normalization of (scalars: Unicode scalars)
+  Swift: UnicodeText.init skippingNormalizationOf (scalars: [scalars])
  )
  Unicode text
  create
