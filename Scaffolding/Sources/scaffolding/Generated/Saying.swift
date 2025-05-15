@@ -1,7 +1,7 @@
 struct UnicodeText {
   fileprivate var scalars: String.UnicodeScalarView
 
-  fileprivate init(_ scalars: String.UnicodeScalarView) {
+  fileprivate init(skippingNormalizationOf scalars: String.UnicodeScalarView) {
     self.scalars = scalars
   }
 
@@ -504,7 +504,7 @@ import SDGText
 
 extension UnicodeText {
   init(_ string: StrictString) {
-    self.init(String(string).unicodeScalars)
+    self.init(skippingNormalizationOf: String(string).unicodeScalars)
   }
 }
 

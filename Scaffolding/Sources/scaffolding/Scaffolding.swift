@@ -151,7 +151,7 @@ import SDGText
       "",
       "extension UnicodeText {",
       "  init(_ string: StrictString) {",
-      "    self.init(String(string).unicodeScalars)",
+      "    self.init(skippingNormalizationOf: String(string).unicodeScalars)",
       "  }",
       "}",
       "",
