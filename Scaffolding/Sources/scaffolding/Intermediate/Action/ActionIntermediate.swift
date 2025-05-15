@@ -592,7 +592,6 @@ extension ActionIntermediate {
             disallowImports(in: implementation, errors: &errors)
           case "Kotlin":
             kotlin = constructed
-            disallowImports(in: implementation, errors: &errors)
           case "Swift":
             swift = constructed
           default:

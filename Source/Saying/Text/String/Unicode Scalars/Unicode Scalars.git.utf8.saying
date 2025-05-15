@@ -156,6 +156,30 @@ use
    }
  }
 
+action (clients)
+ [
+  [
+   English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
+  ]
+  test {
+   let (• A0: Unicode scalars) be (“¤(A0)”)
+   let (• 20: Unicode scalars) be (“¤(20)”)
+   verify ((compatibility decomposition of (A0)) is (20))
+  }
+ ]
+ (
+  English: compatibility decomposition of (scalars: Unicode scalars)
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
+ C♯: “” scalars “.Normalize(NormalizationForm.FormKD)” (
+ “System”
+ “System.Text”
+ )
+ JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
+ Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
+ Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
+
 action (file)
  [
   test {
