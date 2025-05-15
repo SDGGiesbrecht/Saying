@@ -91,7 +91,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expression, errors: &errors)
             case "Kotlin":
               kotlinStore = constructed
-              disallowImports(in: implementation.expression, errors: &errors)
             case "Swift":
               swiftStore = constructed
             default:
@@ -117,7 +116,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.store, errors: &errors)
             case "Kotlin":
               kotlinStore = constructed
-              disallowImports(in: implementation.expressions.store, errors: &errors)
             case "Swift":
               swiftStore = constructed
             default:
@@ -140,7 +138,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Kotlin":
               kotlinRetrieve = constructed
-              disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Swift":
               swiftRetrieve = constructed
             default:
@@ -163,7 +160,6 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.check, errors: &errors)
             case "Kotlin":
               kotlinCheck = constructed
-              disallowImports(in: implementation.expressions.check, errors: &errors)
             case "Swift":
               swiftCheck = constructed
             default:

@@ -76,15 +76,6 @@ extension Thing {
 
 extension Thing {
 
-  static func disallowImports(
-    in implementation: ParsedNativeThingImplementation,
-    errors: inout [ConstructionError]
-  ) {
-    if implementation.implementation.importNode != nil {
-      errors.append(ConstructionError.invalidImport(implementation))
-    }
-  }
-
   static func construct<ThingNode>(
     _ declaration: ThingNode,
     namespace: [Set<StrictString>]
@@ -177,7 +168,6 @@ extension Thing {
       case "C♯":
         cSharp = constructed
       case "Kotlin":
-        disallowImports(in: implementation, errors: &errors)
         kotlin = constructed
       case "Swift":
         swift = constructed

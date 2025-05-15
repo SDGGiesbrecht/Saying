@@ -177,7 +177,7 @@ action (clients)
  “System.Text”
  )
  JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
- Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)”
+ Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
  Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
 
 action (file)
