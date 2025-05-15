@@ -545,12 +545,14 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
+    isArgumentExtraction: Bool = false,
     cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
-      if !extractedArguments.isEmpty,
+      if !isArgumentExtraction,
+        !extractedArguments.isEmpty,
         let type = referenceLookup.lookupThing(.simple("Unicode scalars")),
         let native = nativeType(of: type),
         native.release != nil {
@@ -620,7 +622,8 @@ extension Platform {
           ),
           specifiedReturnValue: reference.resolvedResultType
         )!
-      if !extractedArguments.isEmpty,
+      if !isArgumentExtraction,
+        !extractedArguments.isEmpty,
         let result = action.returnValue,
         let type = referenceLookup.lookupThing(result.key),
         let native = nativeType(of: type),
@@ -963,8 +966,36 @@ extension Platform {
     cleanUpCode: inout String,
     inliningArguments: [StrictString: String],
     mode: CompilationMode
-  ) -> [ReferenceCountedReturn] {
-    var entries: [ReferenceCountedReturn] = []
+  ) -> ReferenceCountedReturns {
+    var entries = ReferenceCountedReturns()
+    extractArgumentsForReferenceCounting(
+      from: action,
+      context: context,
+      localLookup: localLookup,
+      referenceLookup: referenceLookup,
+      contextCoverageIdentifier: contextCoverageIdentifier,
+      coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
+      cleanUpCode: &cleanUpCode,
+      inliningArguments: inliningArguments,
+      mode: mode,
+      entries: &entries
+    )
+    return entries
+  }
+  static func extractArgumentsForReferenceCounting(
+    from action: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentifier: UnicodeText?,
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    cleanUpCode: inout String,
+    inliningArguments: [StrictString: String],
+    mode: CompilationMode,
+    entries: inout ReferenceCountedReturns
+  ) {
     for argument in action.arguments {
       switch argument {
       case .action(let action):
@@ -980,19 +1011,18 @@ extension Platform {
         } else if context?.lookupParameter(action.actionName) != nil {
           continue
         } else {
-          entries.append(
-            contentsOf: argumentsExtractedForReferenceCounting(
-              from: action,
-              context: context,
-              localLookup: localLookup,
-              referenceLookup: referenceLookup,
-              contextCoverageIdentifier: contextCoverageIdentifier,
-              coverageRegionCounter: &coverageRegionCounter,
-              clashAvoidanceCounter: &clashAvoidanceCounter,
-              cleanUpCode: &cleanUpCode,
-              inliningArguments: inliningArguments,
-              mode: mode
-            )
+          extractArgumentsForReferenceCounting(
+            from: action,
+            context: context,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
+            cleanUpCode: &cleanUpCode,
+            inliningArguments: inliningArguments,
+            mode: mode,
+            entries: &entries
           )
         }
 
@@ -1004,7 +1034,6 @@ extension Platform {
           clashAvoidanceCounter += 1
           let localName = "local\(clashAvoidanceCounter)"
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
-          var extracted: [String] = []
           let call = self.call(
             to: action,
             context: context,
@@ -1014,7 +1043,8 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
-            extractedArguments: &extracted,
+            extractedArguments: &entries.unused,
+            isArgumentExtraction: true,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
@@ -1033,7 +1063,6 @@ extension Platform {
         break
       }
     }
-    return entries
   }
 
   static func source(
@@ -1097,8 +1126,8 @@ extension Platform {
         inliningArguments: inliningArguments,
         mode: mode
       )
-      if !extractedArguments.isEmpty {
-        for argument in extractedArguments {
+      if !extractedArguments.all.isEmpty {
+        for argument in extractedArguments.all {
           entry.append(argument.localStorageDeclaration.appending("\n"))
           cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
         }
@@ -1116,7 +1145,7 @@ extension Platform {
         }
       }
       let before = coverageRegionCounter
-      var remainingExtractedArguments = extractedArguments.map({ $0.localName })
+      var remainingExtractedArguments = extractedArguments.unused
       entry.append(
         contentsOf: self.statement(
           expression: call(
