@@ -148,14 +148,6 @@ import SDGText
     var source = try String(from: file)
     var appendix: [String] = [
       "",
-      "import SDGText",
-      "",
-      "extension UnicodeText {",
-      "  init(_ string: StrictString) {",
-      "    self.init(skippingNormalizationOf: String(string).unicodeScalars)",
-      "  }",
-      "}",
-      "",
       "struct UnicodeSegment {",
       "  fileprivate var segment: Unicode_0020segment",
       "}",
