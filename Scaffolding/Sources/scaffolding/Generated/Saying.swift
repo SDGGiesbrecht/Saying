@@ -507,14 +507,6 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
   return false
 }
 
-import SDGText
-
-extension UnicodeText {
-  init(_ string: StrictString) {
-    self.init(skippingNormalizationOf: String(string).unicodeScalars)
-  }
-}
-
 struct UnicodeSegment {
   fileprivate var segment: Unicode_0020segment
 }
