@@ -109,7 +109,8 @@ protocol Platform {
     parentType: String?,
     isAbsorbedMember: Bool,
     isOverride: Bool,
-    propertyInstead: Bool
+    propertyInstead: Bool,
+    initializerInstead: Bool
   ) -> UniqueDeclaration
 
   // Imports
@@ -342,6 +343,20 @@ extension Platform {
     return false
   }
 
+  static func nativeDeclarationIsInitializer(declaration: StrictString) -> Bool {
+    if let initializer = initializerSuffix.map({ StrictString($0) }),
+      (declaration.prefix(upTo: " ")?.contents ?? declaration[...]).hasSuffix(initializer.literal()) {
+      return true
+    }
+    return false
+  }
+  static func nativeIsInitializer(action: ActionIntermediate) -> Bool {
+    if let name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+      return nativeDeclarationIsInitializer(declaration: name)
+    }
+    return false
+  }
+
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
     if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
       if let override = overridePrefix.map({ StrictString($0) }),
@@ -352,8 +367,12 @@ extension Platform {
          name.hasPrefix(variable) {
         name.removeFirst(variable.count)
       }
-      if let member = memberPrefix.map({ StrictString($0) }) {
-        return name.hasPrefix(member)
+      if let member = memberPrefix.map({ StrictString($0) }),
+        name.hasPrefix(member) {
+        return true
+      }
+      if nativeDeclarationIsInitializer(declaration: name) {
+        return true
       }
     }
     return false
@@ -475,12 +494,22 @@ extension Platform {
         let referenceLookup = externalReferenceLookup.appending(module.referenceDictionary)
         for action in module.referenceDictionary.allActions(
           filter: { action in
-            return nativeIsMember(action: action)
-            && name == source(
-              for: action.parameters.ordered(for: nativeNameDeclaration(of: action)!).first!
-                .type,
-              referenceLookup: referenceLookup
-            )
+            if !action.isCreation,
+               nativeIsMember(action: action) {
+              let typeToCompare: ParsedTypeReference
+              if nativeIsInitializer(action: action) {
+                typeToCompare = action.returnValue!
+              } else {
+                typeToCompare = action.parameters.ordered(for: nativeNameDeclaration(of: action)!).first!.type
+              }
+              if name == source(
+                for: typeToCompare,
+                referenceLookup: referenceLookup
+              ) {
+                return true
+              }
+            }
+            return false
           },
           sorted: true
         ) {
@@ -940,7 +969,10 @@ extension Platform {
             return "\(argumentsArray.joined(separator: " \(name) "))"
           } else {
             var result: String = ""
-            if nativeIsMember(action: action) {
+            var modifiedName = name
+            if nativeIsInitializer(action: action) {
+              modifiedName = source(for: action.returnValue!, referenceLookup: referenceLookup)
+            } else if nativeIsMember(action: action) {
               let first = argumentsArray.removeFirst()
               result.append(contentsOf: first)
               if name != "subscript" {
@@ -954,7 +986,7 @@ extension Platform {
               if name == "subscript" {
                 result.append(contentsOf: "[\(arguments)]")
               } else {
-                result.append(contentsOf: "\(name)(\(arguments))")
+                result.append(contentsOf: "\(modifiedName)(\(arguments))")
               }
             }
             return result
@@ -1364,10 +1396,12 @@ extension Platform {
       )
     let isOverride = nativeIsOverride(action: action)
     let isProperty = nativeIsProperty(action: action)
+    let isInitializer = nativeIsInitializer(action: action)
 
     var parameterEntries = action.parameters.ordered(for: action.names.identifier())
     var parentType: String?
-    if nativeIsMember(action: action) {
+    if nativeIsMember(action: action),
+      !isInitializer {
       let first = parameterEntries.removeFirst()
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
     }
@@ -1376,7 +1410,8 @@ extension Platform {
       .joined(separator: ", ")
 
     let returnValue: String?
-    if let specified = action.returnValue {
+    if !isInitializer,
+      let specified = action.returnValue {
       returnValue = source(for: specified, referenceLookup: externalReferenceLookup)
     } else {
       returnValue = emptyReturnType
@@ -1418,7 +1453,8 @@ extension Platform {
       parentType: parentType,
       isAbsorbedMember: isAbsorbedMember,
       isOverride: isOverride,
-      propertyInstead: isProperty
+      propertyInstead: isProperty,
+      initializerInstead: isInitializer
     )
   }
 

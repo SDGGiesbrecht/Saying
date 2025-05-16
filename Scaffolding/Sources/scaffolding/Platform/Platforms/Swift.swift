@@ -326,7 +326,8 @@ enum Swift: Platform {
     parentType: String?,
     isAbsorbedMember: Bool,
     isOverride: Bool,
-    propertyInstead: Bool
+    propertyInstead: Bool,
+    initializerInstead: Bool
   ) -> UniqueDeclaration {
     var access = accessModifier.map({ "\($0) " }) ?? ""
 
@@ -337,9 +338,10 @@ enum Swift: Platform {
       access = "public "
     }
 
-    let keyword = propertyInstead
-      ? "var "
-      : name == "subscript" ? "" : "func "
+    let keyword = propertyInstead ? "var "
+      : initializerInstead ? ""
+      : name == "subscript" ? ""
+      : "func "
     let signature = propertyInstead
       ? returnSection!
       : "(\(parameters))\(returnSection ?? "")"
@@ -358,13 +360,30 @@ enum Swift: Platform {
       "\(extraIndent)\(access)\(keyword)\(name)\(signature) {",
     ])
     let uniquenessDefinition = result
+    let returnPrefix = "\(indent)return "
+    let rawInitializer = initializerInstead && implementation.lazy.filter({ $0.hasPrefix(returnPrefix) }).count == 1
+    let closureInitializer = initializerInstead && !rawInitializer
+    var secondExtraIndent = ""
+    if closureInitializer {
+      secondExtraIndent = indent
+      result.append("\(extraIndent)\(secondExtraIndent)self = {")
+    }
     if let coverage = coverageRegistration {
-      result.append("\(extraIndent)\(coverage)")
+      result.append("\(extraIndent)\(secondExtraIndent)\(coverage)")
     }
     for statement in implementation {
+      var modified = statement
+      if rawInitializer,
+         modified.hasPrefix(returnPrefix) {
+        modified.removeFirst(returnPrefix.count)
+        modified.prepend(contentsOf: "\(indent)self = ")
+      }
       result.append(contentsOf: [
-        "\(extraIndent)\(statement)",
+        "\(extraIndent)\(secondExtraIndent)\(modified)",
       ])
+    }
+    if closureInitializer {
+      result.append("\(extraIndent)\(secondExtraIndent)}()")
     }
     result.append(contentsOf: [
       "\(extraIndent)}",

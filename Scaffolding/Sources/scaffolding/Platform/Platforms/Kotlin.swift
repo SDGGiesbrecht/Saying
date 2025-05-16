@@ -269,7 +269,8 @@ enum Kotlin: Platform {
     parentType: String?,
     isAbsorbedMember: Bool,
     isOverride: Bool,
-    propertyInstead: Bool
+    propertyInstead: Bool,
+    initializerInstead: Bool
   ) -> UniqueDeclaration {
     var access = accessModifier.map({ "\($0) " }) ?? ""
     let override = isOverride ? "override " : ""

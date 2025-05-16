@@ -30,6 +30,7 @@ action (file)
 action (clients)
  (
   English: Unicode text of (scalars: Unicode scalars)
+  Swift: UnicodeText.init (scalars: [scalars])
  )
  Unicode text
  {
