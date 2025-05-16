@@ -303,7 +303,8 @@ enum CSharp: Platform {
     parentType: String?,
     isAbsorbedMember: Bool,
     isOverride: Bool,
-    propertyInstead: Bool
+    propertyInstead: Bool,
+    initializerInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [

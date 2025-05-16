@@ -1,3 +1,6 @@
+import Foundation
+
+
 struct UnicodeText {
   fileprivate var scalars: String.UnicodeScalarView
 
@@ -11,6 +14,10 @@ struct UnicodeText {
 
   subscript(_ position: String.UnicodeScalarView.Index) -> Unicode.Scalar {
     return self.scalars[position]
+  }
+
+  init(_ scalars: String.UnicodeScalarView) {
+    self = UnicodeText(skippingNormalizationOf: String(scalars).decomposedStringWithCompatibilityMapping.unicodeScalars)
   }
 
   var endIndex: String.UnicodeScalarView.Index {

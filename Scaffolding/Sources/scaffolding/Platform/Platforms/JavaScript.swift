@@ -233,7 +233,8 @@ enum JavaScript: Platform {
     parentType: String?,
     isAbsorbedMember: Bool,
     isOverride: Bool,
-    propertyInstead: Bool
+    propertyInstead: Bool,
+    initializerInstead: Bool
   ) -> UniqueDeclaration {
     var result: [String] = [
       "function \(name)(\(parameters)) {",

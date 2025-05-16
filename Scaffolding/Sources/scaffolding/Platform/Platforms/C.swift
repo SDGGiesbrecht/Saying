@@ -279,7 +279,8 @@ enum C: Platform {
     parentType: String?,
     isAbsorbedMember: Bool,
     isOverride: Bool,
-    propertyInstead: Bool
+    propertyInstead: Bool,
+    initializerInstead: Bool
   ) -> UniqueDeclaration {
     var result: [String] = [
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),

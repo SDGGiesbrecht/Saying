@@ -86,6 +86,7 @@ import SDGText
       mode: .release,
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
+        "UnicodeText.init(_: String.UnicodeScalarView)",
 
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",
