@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 enum C: Platform {
 
   static var directoryName: String {
@@ -492,10 +490,10 @@ enum C: Platform {
     return false
   }
   static var emptyParameterLabel: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
   static var parameterLabelSuffix: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
   static var memberPrefix: UnicodeText? {
     return nil
@@ -510,6 +508,6 @@ enum C: Platform {
     return nil
   }
   static var initializerName: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
 }

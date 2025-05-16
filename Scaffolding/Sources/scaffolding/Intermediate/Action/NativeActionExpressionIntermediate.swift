@@ -24,7 +24,7 @@ extension NativeActionExpressionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
         case .success(let literal):
-          textComponents.append(UnicodeText(StrictString(literal.string)))
+          textComponents.append(UnicodeText(literal.string))
         }
       }
     }

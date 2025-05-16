@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 enum Kotlin: Platform {
 
   static var directoryName: String {
@@ -178,7 +176,7 @@ enum Kotlin: Platform {
     return action.nativeNames.kotlin
   }
   static func nativeName(of parameter: ParameterIntermediate) -> String? {
-    return parameter.nativeNames.kotlin.map({ String(StrictString($0)) })
+    return parameter.nativeNames.kotlin.map({ String($0) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
@@ -205,18 +203,18 @@ enum Kotlin: Platform {
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "var "
-    let name = sanitize(identifier: UnicodeText(StrictString(argument)), leading: true)
+    let name = sanitize(identifier: UnicodeText(argument), leading: true)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
   }
   static func passReference(to argument: String, forwarding: Bool) -> String {
     if forwarding {
       return argument
     } else {
-      return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
+      return "\(sanitize(identifier: UnicodeText(argument), leading: true))Reference"
     }
   }
   static func unpackReference(to argument: String) -> String? {
-    return "; \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference[0]"
+    return "; \(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference[0]"
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
     let suffix = forwarding ? "" : "[0]"
@@ -483,16 +481,16 @@ enum Kotlin: Platform {
     return false
   }
   static var emptyParameterLabel: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
   static var parameterLabelSuffix: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
   static var memberPrefix: UnicodeText? {
-    return UnicodeText(StrictString("()."))
+    return "()."
   }
   static var overridePrefix: UnicodeText? {
-    return UnicodeText(StrictString("override "))
+    return "override "
   }
   static var variablePrefix: UnicodeText? {
     return nil
@@ -501,6 +499,6 @@ enum Kotlin: Platform {
     return nil
   }
   static var initializerName: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
 }

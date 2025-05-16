@@ -10,7 +10,7 @@ struct GitStyleFile {
   }
 
   init(from url: URL) throws {
-    self.init(source: UnicodeText(try StrictString(from: url)))
+    self.init(source: UnicodeText(try String(from: url)))
   }
 
   let source: UnicodeText
@@ -31,7 +31,7 @@ struct GitStyleFile {
       segments.append(
         UnicodeSegment(
           scalarOffset: UInt64(adjustedOffset),
-          source: UnicodeText(StrictString(segment))
+          source: UnicodeText(segment)
         )
       )
     }

@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 enum Swift: Platform {
 
   static var directoryName: String {
@@ -149,7 +147,7 @@ enum Swift: Platform {
   }
 
   static func nativeName(of thing: Thing) -> String? {
-    return thing.swiftName.map { String(StrictString($0)) }
+    return thing.swiftName.map { String($0) }
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
@@ -237,10 +235,10 @@ enum Swift: Platform {
     return action.nativeNames.swift
   }
   static func nativeName(of parameter: ParameterIntermediate) -> String? {
-    return parameter.nativeNames.swift.map({ String(StrictString($0)) })
+    return parameter.nativeNames.swift.map({ String($0) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
-    return parameter.swiftLabel.map({ String(StrictString($0)) })
+    return parameter.swiftLabel.map({ String($0) })
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.swift
@@ -571,24 +569,24 @@ enum Swift: Platform {
     return true
   }
   static var emptyParameterLabel: UnicodeText {
-    return UnicodeText(StrictString("_"))
+    return "_"
   }
   static var parameterLabelSuffix: UnicodeText {
-    return UnicodeText(StrictString(":"))
+    return ":"
   }
   static var memberPrefix: UnicodeText? {
-    return UnicodeText(StrictString("()."))
+    return "()."
   }
   static var overridePrefix: UnicodeText? {
     return nil
   }
   static var variablePrefix: UnicodeText? {
-    return UnicodeText(StrictString("var "))
+    return "var "
   }
   static var initializerSuffix: UnicodeText? {
-    return UnicodeText(StrictString(".init"))
+    return ".init"
   }
   static var initializerName: UnicodeText {
-    return UnicodeText(StrictString("init"))
+    return "init"
   }
 }

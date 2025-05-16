@@ -780,7 +780,7 @@ struct Node {
     case .fixedLeaf:
       break
     case .keyword, .variableLeaf:
-      arguments.append("text: UnicodeText(StrictString(location))")
+      arguments.append("text: UnicodeText(location)")
     case .compound(let children):
       for child in children {
         switch child.kind {

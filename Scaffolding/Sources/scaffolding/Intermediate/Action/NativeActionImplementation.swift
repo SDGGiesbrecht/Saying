@@ -29,7 +29,7 @@ extension NativeActionImplementationIntermediate {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
       case .success(let literal):
-        requiredImports.append(UnicodeText(StrictString(literal.string)))
+        requiredImports.append(UnicodeText(literal.string))
       }
     }
     var indirectRequirments: [NativeRequirementImplementationIntermediate] = []

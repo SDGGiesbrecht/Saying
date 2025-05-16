@@ -20,9 +20,9 @@ extension SyntaxNode {
   private func formattedGitStyleSource(indent: Int) -> UnicodeText {
     switch nodeKind {
     case .paragraphBreakSyntax:
-      return UnicodeText("\n\n" + StrictString(repeating: " ", count: indent))
+      return UnicodeText("\n\n" + String(repeating: " ", count: indent))
     case .lineBreakSyntax:
-      return UnicodeText("\n" + StrictString(repeating: " ", count: indent))
+      return UnicodeText("\n" + String(repeating: " ", count: indent))
     case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .parameterDocumentation, .partDeclaration, .requirementDeclaration, .thingDeclaration, .use:
       return UnicodeText(children.lazy.map({ StrictString($0.formattedGitStyleSource(indent: indent + 1)) }).joined())
     case .spacedNativeRequirementList:

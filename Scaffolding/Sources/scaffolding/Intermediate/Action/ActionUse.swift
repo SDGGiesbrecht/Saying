@@ -159,7 +159,7 @@ extension ActionUse {
     }
     if literal != nil {
       return .resolved(
-        .some(.some(.simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: UnicodeText(StrictString("Unicode scalars")))!))))
+        .some(.some(.simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: UnicodeText("Unicode scalars"))!))))
       )
     }
     return .failed

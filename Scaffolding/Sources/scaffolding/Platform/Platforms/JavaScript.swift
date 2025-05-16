@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 enum JavaScript: Platform {
 
   static var directoryName: String {
@@ -169,18 +167,18 @@ enum JavaScript: Platform {
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "let "
-    let name = sanitize(identifier: UnicodeText(StrictString(argument)), leading: true)
+    let name = sanitize(identifier: UnicodeText(argument), leading: true)
     return "\(keyword)\(name)Reference = { value: \(argument) }; "
   }
   static func passReference(to argument: String, forwarding: Bool) -> String {
     if forwarding {
       return argument
     } else {
-      return "\(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference"
+      return "\(sanitize(identifier: UnicodeText(argument), leading: true))Reference"
     }
   }
   static func unpackReference(to argument: String) -> String? {
-    return " \(argument) = \(sanitize(identifier: UnicodeText(StrictString(argument)), leading: true))Reference.value;"
+    return " \(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference.value;"
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
     let suffix = forwarding ? "" : ".value"
@@ -371,10 +369,10 @@ enum JavaScript: Platform {
     return false
   }
   static var emptyParameterLabel: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
   static var parameterLabelSuffix: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
   static var memberPrefix: UnicodeText? {
     return nil
@@ -389,6 +387,6 @@ enum JavaScript: Platform {
     return nil
   }
   static var initializerName: UnicodeText {
-    return UnicodeText(StrictString(""))
+    return ""
   }
 }

@@ -48,7 +48,7 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeStorage(englishName: englishName, parsed: true))
         let file = GitStyleFile(
-          source: UnicodeText(StrictString(newSource.joined(separator: "\n")))
+          source: UnicodeText(newSource.joined(separator: "\n"))
         ).parsed()
         try self.add(
           file: ParsedDeclarationList.fastParse(source: file)
