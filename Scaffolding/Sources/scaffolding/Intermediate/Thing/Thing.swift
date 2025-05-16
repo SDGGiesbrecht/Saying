@@ -329,9 +329,7 @@ extension Thing {
       for indirectRequirement in native.indirectRequirements {
         result.append(
           UnicodeText(
-            StrictString(
-              platform.source(for: indirectRequirement, referenceLookup: moduleAndExternalReferenceLookup)
-            )
+            platform.source(for: indirectRequirement, referenceLookup: moduleAndExternalReferenceLookup)
           )
         )
       }

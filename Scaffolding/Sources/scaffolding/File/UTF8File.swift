@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 struct UTF8File {
 
   init(source: UnicodeText) {
@@ -9,7 +7,7 @@ struct UTF8File {
   }
 
   init(from url: URL) throws {
-    self.init(source: UnicodeText(try StrictString(from: url)))
+    self.init(source: UnicodeText(try String(from: url)))
   }
 
   init(gitStyle: GitStyleFile) {

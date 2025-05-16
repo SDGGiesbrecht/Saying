@@ -220,7 +220,7 @@ extension Platform {
   }
 
   static func sanitize(identifier: UnicodeText, leading: Bool) -> String {
-    var result: String = StrictString(identifier).lazy
+    var result: String = identifier.lazy
       .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
     if leading,
@@ -233,7 +233,7 @@ extension Platform {
   }
 
   static func sanitize(stringLiteral: UnicodeText) -> String {
-    return sanitize(stringLiteral: String(StrictString(stringLiteral)))
+    return sanitize(stringLiteral: String(stringLiteral))
   }
   static func sanitize(stringLiteral: String) -> String {
     return stringLiteral.unicodeScalars.lazy
@@ -278,7 +278,7 @@ extension Platform {
       if let native = nativeType(of: type) {
         var result = ""
         for index in native.textComponents.indices {
-          result.append(contentsOf: String(StrictString(native.textComponents[index])))
+          result.append(contentsOf: String(native.textComponents[index]))
           if index != native.textComponents.indices.last {
             let type = native.parameters[index].resolvedType!
             result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
@@ -312,9 +312,9 @@ extension Platform {
   static func nativeName(of action: ActionIntermediate) -> String? {
     if let identifier = action.identifier(for: self) {
       if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {
-        return String(StrictString(functionName.contents))
+        return String(UnicodeText(functionName.contents))
       } else {
-        return String(StrictString(identifier))
+        return String(identifier)
       }
     } else {
       return nil
@@ -522,7 +522,7 @@ extension Platform {
             alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
           ) {
             if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
-              relocatedActions.insert(String(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))))
+              relocatedActions.insert(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
               members.append(declaration.full)
             }
           }
@@ -726,7 +726,7 @@ extension Platform {
       var local = ReferenceDictionary()
       let nativeExpression = native.expression
       for index in nativeExpression.textComponents.indices {
-        accumulator.append(contentsOf: String(StrictString(nativeExpression.textComponents[index])))
+        accumulator.append(contentsOf: String(nativeExpression.textComponents[index]))
         if index != nativeExpression.textComponents.indices.last {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
@@ -965,7 +965,7 @@ extension Platform {
           return createInstance(of: type, parts: arguments)
         } else {
           let nameStart = name.unicodeScalars.first(where: { $0 != "_" }).map({ String($0) }) ?? ""
-          if sanitize(identifier: UnicodeText(StrictString(nameStart)), leading: false) != nameStart {
+          if sanitize(identifier: UnicodeText(nameStart), leading: false) != nameStart {
             return "\(argumentsArray.joined(separator: " \(name) "))"
           } else {
             var result: String = ""
@@ -1090,7 +1090,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             mode: mode
           )
-          let releaseExpression = release.textComponents.lazy.map({ String(StrictString($0)) })
+          let releaseExpression = release.textComponents.lazy.map({ String($0) })
             .joined(separator: localName)
           entries.append(
             ReferenceCountedReturn(
@@ -1491,12 +1491,12 @@ extension Platform {
     var imports: Set<String> = []
     for thing in referenceDictionary.allThings() {
       for requiredImport in nativeType(of: thing)?.requiredImports ?? [] {
-        imports.insert(String(StrictString(requiredImport)))
+        imports.insert(String(requiredImport))
       }
     }
     for action in referenceDictionary.allActions() {
       for requiredImport in nativeImplementation(of: action)?.requiredImports ?? [] {
-        imports.insert(String(StrictString(requiredImport)))
+        imports.insert(String(requiredImport))
       }
     }
     return imports
@@ -1526,7 +1526,7 @@ extension Platform {
   ) -> String {
     var line = ""
     for index in requirement.textComponents.indices {
-      line.append(contentsOf: String(StrictString(requirement.textComponents[index])))
+      line.append(contentsOf: String(requirement.textComponents[index]))
       if index != requirement.textComponents.indices.last {
         let type = requirement.parameters[index].resolvedType!
         line.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
@@ -1612,7 +1612,7 @@ extension Platform {
         mode: mode,
         isAbsorbedMember: false,
         hasBeenRelocated: relocatedActions
-          .contains(String(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))),
+          .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
         if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {

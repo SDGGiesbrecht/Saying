@@ -15,7 +15,7 @@ protocol ParsedSyntaxNode {
 extension ParsedSyntaxNode {
 
   func source() -> UnicodeText {
-    return UnicodeText(StrictString(location))
+    return UnicodeText(location)
   }
 
   func formattedGitStyleSource() -> UnicodeText {
