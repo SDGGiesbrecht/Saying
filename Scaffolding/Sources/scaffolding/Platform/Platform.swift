@@ -444,15 +444,24 @@ extension Platform {
         )
       })
       let access = accessModifier(for: thing.access, memberScope: false)
-      let constructorParameters = thing.parts.map({ part in
-        let name = sanitize(
-          identifier: part.names.identifier(),
-          leading: true
-        )
-        let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
-        return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
-      })
-      let constructorAccess = accessModifier(for: externalReferenceLookup.lookupCreation(of: thing)?.access ?? .file, memberScope: true)
+      let specifiedConstructor = externalReferenceLookup.lookupCreation(of: thing)
+      let constructorParameters: [String]
+      if let specified = specifiedConstructor,
+        let native = nativeNameDeclaration(of: specified) {
+        constructorParameters = specified.parameters.ordered(for: native).map({ parameter in
+          return source(for: parameter, referenceLookup: externalReferenceLookup)
+        })
+      } else {
+        constructorParameters = thing.parts.map({ part in
+          let name = sanitize(
+            identifier: part.names.identifier(),
+            leading: true
+          )
+          let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
+          return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
+        })
+      }
+      let constructorAccess = accessModifier(for: specifiedConstructor?.access ?? .file, memberScope: true)
       let constructorSetters = thing.parts.map({ part in
         let name = sanitize(
           identifier: part.names.identifier(),
