@@ -92,7 +92,7 @@ thing (file)
 
 action (file)
  (
-  English: minimal hashing example wrapping (value: truth value)
+  English: minimal hashing example wrapping (wrapped truth value: truth value)
  )
  minimal hashing example
  create
