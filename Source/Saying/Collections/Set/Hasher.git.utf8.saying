@@ -5,6 +5,9 @@ thing (clients)
   français : hacheur
   ελληνικά: κατακερματιστής
  )
+ C: “guint” (“glib¤(2D)2.0”)
+ C♯: “int”
+ Kotlin: “Int”
  Swift: “Hasher”
  {
  }
@@ -14,10 +17,24 @@ action (clients)
   English: create hasher
  )
  hasher
+ C: “0”
+ C♯: “0”
+ JavaScript: “0”
+ Kotlin: “0”
  Swift: “Hasher()”
- create
 
 use (clients)
  storage of (hasher)
  {
  }
+
+action (unit)
+ (
+  English: final hash value from (hasher: hasher)
+ )
+ hash value
+ C: “” hasher “”
+ C♯: “” hasher “”
+ JavaScript: “” hasher “”
+ Kotlin: “” hasher “”
+ Swift: “” hasher “.finalize()”

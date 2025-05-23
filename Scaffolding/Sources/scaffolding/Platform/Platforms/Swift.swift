@@ -420,6 +420,7 @@ enum Swift: Platform {
 
   static let preexistingNativeRequirements: Set<String> = [
     "extension Bool: Equatable {}",
+    "extension Bool: Hashable {}",
     "extension Int: Comparable {}",
     "extension Int: Equatable {}",
     "extension Int64: Equatable {}",

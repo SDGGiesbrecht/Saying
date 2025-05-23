@@ -1,0 +1,13 @@
+thing (unit)
+ (
+  English: hash value
+ )
+ C: “guint” (“glib¤(2D)2.0”)
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “Int”
+
+use (unit)
+ storage of (hash value)
+ {
+ }

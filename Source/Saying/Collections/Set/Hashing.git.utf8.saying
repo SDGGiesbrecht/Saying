@@ -11,14 +11,123 @@ ability (clients)
    [
     test {
      let (• hasher: hasher) start as (create hasher)
-     hash (example: key) with (↓ hasher)
+     hash key (example: key) with (↓ hasher)
     }
    ]
    (
-    English: hash (key: key) with (hasher: ↓ hasher)
-    Deutsch: mit (Verstreuer: [hasher]) (Schlüssel: [key]) zerhacken
-    français : hacher (clé: [key]) avec (hacheur: [hasher])
-    ελληνικά: κατατεμαχισμός (κλειδί: [key]) με (κατακερματιστής: [hasher])
+    English: hash key (key: key) with (hasher: ↓ hasher)
+    Deutsch: mit (Verstreuer: [hasher]) Schlüssel (Schlüssel: [key]) zerhacken
+    français : hacher clé (clé: [key]) avec (hacheur: [hasher])
+    ελληνικά: κατατεμαχισμός κλειδί (κλειδί: [key]) με (κατακερματιστής: [hasher])
     Swift: (self: [key]).hash into (hasher: [hasher])
    )
+
+  choice (unit)
+   [
+    test {ignore (hash value of (example: key))}
+   ]
+   (
+    English: hash value of (key: key)
+    Kotlin: override (this: [key]).hashCode
+   )
+   hash value
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
+extension
+ hashing (key)
+ {
+  action (clients)
+   (
+    English: hash part (part: key) with (hasher: ↓ hasher)
+    Deutsch: mit (Verstreuer: [hasher]) Teil (Teil: [part]) zerhacken
+    français : hacher partie (partie: [part]) avec (hacheur: [hasher])
+    ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
+   )
+   Swift: “” hasher “.combine(” part “)” [
+    “==(¤(5F): ” key “, ¤(5F): ” key “)”
+    “” key “.hash(into: Hasher)”
+   ] {
+    “extension ” key “: Hashable {}”
+   }
+   {}
+
+  action (unit)
+   (
+    English: hash value of (key: key) according to default hashing
+   )
+   hash value
+   {
+    let (• hasher: hasher) start as (create hasher)
+    hash part (key) with (↓ hasher)
+    ← final hash value from (hasher)
+   }
+
+  action (unit)
+   [
+    test {
+     let (• hasher: hasher) start as (create hasher)
+     hash key (example: key) with (↓ hasher) according to reverse hashing
+    }
+   ]
+   (
+    English: hash key (key: key) with (hasher: ↓ hasher) according to reverse hashing
+   )
+   {}
+ }
+
+thing (file)
+ (
+  English: minimal hashing example
+ )
+ {
+  part (file)
+   (
+    English: wrapped truth value
+   )
+   truth value
+ }
+
+action (file)
+ (
+  English: minimal hashing example wrapping (wrapped truth value: truth value)
+ )
+ minimal hashing example
+ create
+
+use (file)
+ comparison of (minimal hashing example) for equality
+ {
+  action (file)
+   (first: minimal hashing example) is (second: minimal hashing example)
+   truth value
+   {
+    ← ((wrapped truth value) of (first)) is ((wrapped truth value) of (second))
+   }
+
+  action (file)
+   example
+   minimal hashing example
+   {
+    ← minimal hashing example wrapping (example: truth value)
+   }
+
+  action (file)
+   differing example
+   minimal hashing example
+   {
+    ← minimal hashing example wrapping (differing example: truth value)
+   }
+ }
+
+use (file)
+ hashing (minimal hashing example)
+ {
+  action (file)
+   hash key (key: minimal hashing example) with (hasher: ↓ hasher)
+   {
+    hash part ((wrapped truth value) of (key)) with (↓ hasher)
+   }
  }

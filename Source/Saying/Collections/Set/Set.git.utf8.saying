@@ -21,7 +21,10 @@ extension
     עברית: קבוצה של (איבר: [element])
    )
    C♯: “HashSet<” element “>” (“System.Collections.Generic”)
-   Kotlin: “Set<” element “>”
+   Kotlin: “Set<” element “>” [
+    “override ” element “.equals(” element “)”
+    “override ” element “.hashCode()”
+   ]
    Swift: “Set<” element “>” [
     “==(¤(5F): ” element “, ¤(5F): ” element “)”
     “” element “.hash(into: Hasher)”
