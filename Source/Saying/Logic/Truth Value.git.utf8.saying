@@ -273,7 +273,20 @@ use (clients)
  hashing (truth value)
  {
   action (clients)
-   hash (key: truth value) with (hasher: ↓ hasher)
+   hash key (key: truth value) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
-   {}
+   {
+    hash key (key) with (↓ hasher) according to reverse hashing
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: truth value)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
  }
