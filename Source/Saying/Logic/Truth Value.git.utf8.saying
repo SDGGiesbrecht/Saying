@@ -284,6 +284,7 @@ use (clients)
     English: hash value of (key: truth value)
    )
    hash value
+   C: “” key “ ? 1 : 0”
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
