@@ -20,6 +20,7 @@ extension
     ελληνικά: σύνολο (στοιχείο: [element])
     עברית: קבוצה של (איבר: [element])
    )
+   C: “GHashTable¤(2A)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” set “)”/“g¤(5F)hash¤(5F)table¤(5F)unref(” set “)” (“glib¤(2D)2.0”)
    C♯: “HashSet<” element “>” (“System.Collections.Generic”)
    Kotlin: “Set<” element “>” [
     “override ” element “.equals(” element “)”
