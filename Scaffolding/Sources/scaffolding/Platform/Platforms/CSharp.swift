@@ -167,11 +167,18 @@ enum CSharp: Platform {
       result.append("")
       let constructorAccess = constructorAccessModifier.map({ "\($0) " }) ?? ""
       let constructorParameterList = constructorParameters.joined(separator: ", ")
-      result.append("\(indent)\(constructorAccess)\(name)(\(constructorParameterList)) {")
+      result.append(contentsOf: [
+       "\(indent)\(constructorAccess)\(name)(\(constructorParameterList))",
+       "\(indent){",
+      ])
       for setter in constructorSetters {
         result.append("\(indent)\(indent)\(setter)")
       }
       result.append("\(indent)}")
+    }
+    for member in otherMembers {
+      result.append("")
+      result.append(member)
     }
     result.append(contentsOf: [
       "}"
@@ -214,10 +221,10 @@ enum CSharp: Platform {
   }
 
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
-    return nil
+    return action.nativeNames.cSharp
   }
   static func nativeName(of parameter: ParameterIntermediate) -> String? {
-    return nil
+    return parameter.nativeNames.cSharp.map({ String($0) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
@@ -305,10 +312,27 @@ enum CSharp: Platform {
     initializerInstead: Bool
   ) -> UniqueDeclaration {
     let access = accessModifier.map({ "\($0) " }) ?? ""
+    let override = isOverride ? "override " : ""
+    var isVirtualEquals = false
+    var adjustedParameters = parameters
+    if isOverride && name == "Equals" {
+      isVirtualEquals = true
+      adjustedParameters = "object? other"
+    }
+    let staticKeyword = isAbsorbedMember ? "" : "static "
     var result: [String] = [
-      "\(indent)\(access)static \(returnSection!) \(name)(\(parameters))",
+      "\(indent)\(access)\(override)\(staticKeyword)\(returnSection!) \(name)(\(adjustedParameters))",
       "\(indent){",
     ]
+    if isVirtualEquals {
+      result.append(contentsOf: [
+        "\(indent)\(indent)\(parentType!) obj = other as \(parentType!);",
+        "\(indent)\(indent)if (obj == null)",
+        "\(indent)\(indent){",
+        "\(indent)\(indent)\(indent)return false;",
+        "\(indent)\(indent)}",
+      ])
+    }
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
@@ -362,7 +386,8 @@ enum CSharp: Platform {
     var result: [String] = [
       "static class Coverage",
       "{",
-      "\(indent)internal static HashSet<string> Regions = new HashSet<string> {",
+      "\(indent)internal static HashSet<string> Regions = new HashSet<string>",
+      "\(indent){",
     ]
     for region in regions {
       result.append("\(indent)\(indent)\u{22}\(region)\u{22},")
@@ -421,7 +446,8 @@ enum CSharp: Platform {
 
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
-      "\(indent)internal static void Test() {",
+      "\(indent)internal static void Test()",
+      "\(indent){",
     ]
     for test in testCalls {
       result.append(contentsOf: [
@@ -475,10 +501,10 @@ enum CSharp: Platform {
     return ""
   }
   static var memberPrefix: UnicodeText? {
-    return nil
+    return "()."
   }
   static var overridePrefix: UnicodeText? {
-    return nil
+    return "override "
   }
   static var variablePrefix: UnicodeText? {
     return nil
