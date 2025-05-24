@@ -356,7 +356,7 @@ enum CSharp: Platform {
   }
 
   static var fileSettings: String? {
-    return nil
+    return "using static Tests;"
   }
   static func statementImporting(_ importTarget: String) -> String {
     return "using \(importTarget);"
