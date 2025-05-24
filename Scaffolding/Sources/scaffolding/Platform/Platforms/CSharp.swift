@@ -189,7 +189,8 @@ enum CSharp: Platform {
     name: String,
     cases: [String],
     simple: Bool,
-    storageCases: [String]
+    storageCases: [String],
+    otherMembers: [String]
   ) -> String {
     if simple {
       var result: [String] = [
@@ -212,6 +213,10 @@ enum CSharp: Platform {
       ]
       for enumerationCase in cases {
         result.append(enumerationCase)
+      }
+      for member in otherMembers {
+        result.append("")
+        result.append(member)
       }
       result.append(contentsOf: [
         "}"
