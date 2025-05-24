@@ -331,11 +331,11 @@ enum CSharp: Platform {
     ]
     if isVirtualEquals {
       result.append(contentsOf: [
-        "\(indent)\(indent)\(parentType!) obj = other as \(parentType!);",
-        "\(indent)\(indent)if (obj == null)",
+        "\(indent)\(indent)if (other is not \(parentType!))",
         "\(indent)\(indent){",
         "\(indent)\(indent)\(indent)return false;",
         "\(indent)\(indent)}",
+        "\(indent)\(indent)\(parentType!) obj = (\(parentType!))other;",
       ])
     }
     if let coverage = coverageRegistration {
