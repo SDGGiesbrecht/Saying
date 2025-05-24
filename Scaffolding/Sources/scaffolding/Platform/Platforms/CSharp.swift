@@ -316,7 +316,7 @@ enum CSharp: Platform {
     propertyInstead: Bool,
     initializerInstead: Bool
   ) -> UniqueDeclaration {
-    let access = isOverride ? "public " : accessModifier.map({ "\($0) " }) ?? ""
+    let access = isOverride ? "public " : accessModifier.map({ "\($0) " }) ?? "internal "
     let override = isOverride ? "override " : ""
     var isVirtualEquals = false
     var adjustedParameters = parameters
