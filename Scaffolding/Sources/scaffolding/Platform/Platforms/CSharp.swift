@@ -311,13 +311,13 @@ enum CSharp: Platform {
     propertyInstead: Bool,
     initializerInstead: Bool
   ) -> UniqueDeclaration {
-    let access = accessModifier.map({ "\($0) " }) ?? ""
+    let access = isOverride ? "public " : accessModifier.map({ "\($0) " }) ?? ""
     let override = isOverride ? "override " : ""
     var isVirtualEquals = false
     var adjustedParameters = parameters
     if isOverride && name == "Equals" {
       isVirtualEquals = true
-      adjustedParameters = "object? other"
+      adjustedParameters = "object other"
     }
     let staticKeyword = isAbsorbedMember ? "" : "static "
     var result: [String] = [
