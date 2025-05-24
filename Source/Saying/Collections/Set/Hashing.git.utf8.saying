@@ -28,6 +28,7 @@ ability (clients)
    ]
    (
     English: hash value of (key: key)
+    C♯: override (this: [key]).GetHashCode
     Kotlin: override (this: [key]).hashCode
    )
    hash value

@@ -67,7 +67,8 @@ protocol Platform {
     name: String,
     cases: [String],
     simple: Bool,
-    storageCases: [String]
+    storageCases: [String],
+    otherMembers: [String]
   ) -> String
 
   // Actions
@@ -447,6 +448,46 @@ extension Platform {
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
+    var members: [String] = []
+    var handledActionDeclarations: Set<String> = []
+    for module in modulesToSearchForMembers {
+      let referenceLookup = externalReferenceLookup.appending(module.referenceDictionary)
+      for action in module.referenceDictionary.allActions(
+        filter: { action in
+          if !action.isCreation,
+             nativeIsMember(action: action) {
+            let typeToCompare: ParsedTypeReference
+            if nativeIsInitializer(action: action) {
+              typeToCompare = action.returnValue!
+            } else {
+              typeToCompare = action.parameters.ordered(for: nativeNameDeclaration(of: action)!).first!.type
+            }
+            if name == source(
+              for: typeToCompare,
+              referenceLookup: referenceLookup
+            ) {
+              return true
+            }
+          }
+          return false
+        },
+        sorted: true
+      ) {
+        if let declaration = self.declaration(
+          for: action,
+          externalReferenceLookup: referenceLookup,
+          mode: mode,
+          isAbsorbedMember: true,
+          hasBeenRelocated: false,
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+        ) {
+          if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
+            relocatedActions.insert(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
+            members.append(declaration.full)
+          }
+        }
+      }
+    }
     if thing.cases.isEmpty {
       let components = thing.parts.map({ part in
         let name = sanitize(
@@ -488,46 +529,6 @@ extension Platform {
         )
         return constructorSetter(name: name)
       })
-      var members: [String] = []
-      var handledActionDeclarations: Set<String> = []
-      for module in modulesToSearchForMembers {
-        let referenceLookup = externalReferenceLookup.appending(module.referenceDictionary)
-        for action in module.referenceDictionary.allActions(
-          filter: { action in
-            if !action.isCreation,
-               nativeIsMember(action: action) {
-              let typeToCompare: ParsedTypeReference
-              if nativeIsInitializer(action: action) {
-                typeToCompare = action.returnValue!
-              } else {
-                typeToCompare = action.parameters.ordered(for: nativeNameDeclaration(of: action)!).first!.type
-              }
-              if name == source(
-                for: typeToCompare,
-                referenceLookup: referenceLookup
-              ) {
-                return true
-              }
-            }
-            return false
-          },
-          sorted: true
-        ) {
-          if let declaration = self.declaration(
-            for: action,
-            externalReferenceLookup: referenceLookup,
-            mode: mode,
-            isAbsorbedMember: true,
-            hasBeenRelocated: false,
-            alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
-          ) {
-            if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
-              relocatedActions.insert(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
-              members.append(declaration.full)
-            }
-          }
-        }
-      }
       return thingDeclaration(
         name: name,
         components: components,
@@ -554,7 +555,13 @@ extension Platform {
           storageCases.append(storage)
         }
       }
-      return enumerationTypeDeclaration(name: name, cases: cases, simple: thing.isSimple, storageCases: storageCases)
+      return enumerationTypeDeclaration(
+        name: name,
+        cases: cases,
+        simple: thing.isSimple,
+        storageCases: storageCases,
+        otherMembers: members
+      )
     }
   }
 

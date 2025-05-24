@@ -157,7 +157,8 @@ enum Kotlin: Platform {
     name: String,
     cases: [String],
     simple: Bool,
-    storageCases: [String]
+    storageCases: [String],
+    otherMembers: [String]
   ) -> String {
     let keyword = simple ? "enum" : "sealed"
     var result: [String] = [
@@ -165,6 +166,10 @@ enum Kotlin: Platform {
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
+    }
+    for member in otherMembers {
+      result.append("")
+      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
     }
     result.append(contentsOf: [
       "}"
@@ -270,8 +275,8 @@ enum Kotlin: Platform {
     propertyInstead: Bool,
     initializerInstead: Bool
   ) -> UniqueDeclaration {
-    let override = isOverride ? "override " : ""
     let access = isOverride ? "public " : accessModifier.map({ "\($0) " }) ?? ""
+    let override = isOverride ? "override " : ""
     var isEqualsOperator = false
     var adjustedParameters = parameters
     if isOverride && name == "equals" {

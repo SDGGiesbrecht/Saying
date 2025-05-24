@@ -286,6 +286,7 @@ use (clients)
    hash value
    C: “” key “ ? 1 : 0”
    C♯: “” key “.GetHashCode()”
+   JavaScript: “” key “ ? 1 : 0”
    Kotlin: “” key “.hashCode()”
    {
     ← hash value of (key) according to default hashing

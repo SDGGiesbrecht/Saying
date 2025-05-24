@@ -119,7 +119,8 @@ enum JavaScript: Platform {
     name: String,
     cases: [String],
     simple: Bool,
-    storageCases: [String]
+    storageCases: [String],
+    otherMembers: [String]
   ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"

@@ -130,7 +130,8 @@ enum C: Platform {
     name: String,
     cases: [String],
     simple: Bool,
-    storageCases: [String]
+    storageCases: [String],
+    otherMembers: [String]
   ) -> String {
     if simple {
       var result: [String] = [
@@ -146,7 +147,7 @@ enum C: Platform {
     } else {
       var result: [String] = []
       result.append(
-        enumerationTypeDeclaration(name: "\(name)_case", cases: cases, simple: true, storageCases: [])
+        enumerationTypeDeclaration(name: "\(name)_case", cases: cases, simple: true, storageCases: [], otherMembers: [])
       )
       result.append("typedef union \(name)_value {")
       for enumerationCase in storageCases {

@@ -217,13 +217,18 @@ enum Swift: Platform {
     name: String,
     cases: [String],
     simple: Bool,
-    storageCases: [String]
+    storageCases: [String],
+    otherMembers: [String]
   ) -> String {
     var result: [String] = [
       "enum \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
+    }
+    for member in otherMembers {
+      result.append("")
+      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
     }
     result.append(contentsOf: [
       "}"
