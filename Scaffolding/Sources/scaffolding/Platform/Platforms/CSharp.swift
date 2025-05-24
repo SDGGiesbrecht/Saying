@@ -331,7 +331,7 @@ enum CSharp: Platform {
     ]
     if isVirtualEquals {
       result.append(contentsOf: [
-        "\(indent)\(indent)if (other is not \(parentType!))",
+        "\(indent)\(indent)if (!(other is not \(parentType!)))",
         "\(indent)\(indent){",
         "\(indent)\(indent)\(indent)return false;",
         "\(indent)\(indent)}",
