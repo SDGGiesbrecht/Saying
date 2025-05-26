@@ -53,7 +53,9 @@ extension
    ] {
     “extension ” key “: Hashable {}”
    }
-   {}
+   {
+    hash key (part) with (↓ hasher)
+   }
 
   action (unit)
    (
