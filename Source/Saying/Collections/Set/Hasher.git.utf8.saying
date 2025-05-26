@@ -6,7 +6,7 @@ thing (clients)
   ελληνικά: κατακερματιστής
  )
  C: “guint” (“glib¤(2D)2.0”)
- C♯: “int”
+ C♯: “HashCode” (“System”)
  Kotlin: “Int”
  Swift: “Hasher”
  {
@@ -18,7 +18,7 @@ action (clients)
  )
  hasher
  C: “0”
- C♯: “0”
+ C♯: “new HashCode()”
  JavaScript: “0”
  Kotlin: “0”
  Swift: “Hasher()”
@@ -30,11 +30,21 @@ use (clients)
 
 action (unit)
  (
+  English: feed (hash: hash value) into (hasher: ↓ hasher)
+ )
+ C: “” hasher “ ¤(5E)= ” hash “”
+ C♯: “” hasher “.Add(” hash “)”
+ JavaScript: “” hasher “ ¤(5E)= ” hash “”
+ Kotlin: “” hasher “ = Arrays.hashCode(” hasher “, ” hash “)” (“java.util”)
+ Swift: “” hasher “.combine(” hash “)”
+
+action (unit)
+ (
   English: final hash value from (hasher: hasher)
  )
  hash value
  C: “” hasher “”
- C♯: “” hasher “”
+ C♯: “” hasher “.ToHashCode()”
  JavaScript: “” hasher “”
  Kotlin: “” hasher “”
  Swift: “” hasher “.finalize()”

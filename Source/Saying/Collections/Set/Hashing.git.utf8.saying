@@ -78,7 +78,9 @@ extension
    (
     English: hash key (key: key) with (hasher: ↓ hasher) according to reverse hashing
    )
-   {}
+   {
+    feed (hash value of (key)) into (↓ hasher)
+   }
  }
 
 thing (file)
