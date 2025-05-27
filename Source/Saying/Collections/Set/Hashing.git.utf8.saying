@@ -48,11 +48,11 @@ extension
     ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
    )
    Swift: “” hasher “.combine(” part “)” [
-    “==(¤(5F): ” key “, ¤(5F): ” key “)”
-    “” key “.hash(into: Hasher)”
-   ] {
-    “extension ” key “: Hashable {}”
-   }
+     “==(¤(5F): ” key “, ¤(5F): ” key “)”
+     “” key “.hash(into: Hasher)”
+    ] {
+     “extension ” key “: Hashable {}”
+    }
    {
     hash key (part) with (↓ hasher)
    }
@@ -78,7 +78,9 @@ extension
    (
     English: hash key (key: key) with (hasher: ↓ hasher) according to reverse hashing
    )
-   {}
+   {
+    feed (hash value of (key)) into (↓ hasher)
+   }
  }
 
 thing (file)

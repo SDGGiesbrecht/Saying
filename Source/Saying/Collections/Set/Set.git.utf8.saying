@@ -22,19 +22,19 @@ extension
    )
    C: “GHashTable¤(2A)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” set “)”/“g¤(5F)hash¤(5F)table¤(5F)unref(” set “)” (“glib¤(2D)2.0”)
    C♯: “HashSet<” element “>” (“System.Collections.Generic”) [
-    “override ” element “.Equals(” element “)”
-    “override ” element “.GetHashCode()”
-   ]
+     “override ” element “.Equals(” element “)”
+     “override ” element “.GetHashCode()”
+    ]
    Kotlin: “Set<” element “>” [
-    “override ” element “.equals(” element “)”
-    “override ” element “.hashCode()”
-   ]
+     “override ” element “.equals(” element “)”
+     “override ” element “.hashCode()”
+    ]
    Swift: “Set<” element “>” [
-    “==(¤(5F): ” element “, ¤(5F): ” element “)”
-    “” element “.hash(into: Hasher)”
-   ] {
-    “extension ” element “: Hashable {}”
-   }
+     “==(¤(5F): ” element “, ¤(5F): ” element “)”
+     “” element “.hash(into: Hasher)”
+    ] {
+     “extension ” element “: Hashable {}”
+    }
    {
    }
 

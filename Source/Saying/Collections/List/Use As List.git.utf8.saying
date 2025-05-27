@@ -74,17 +74,17 @@ ability (clients)
    )
    optional (element)
    Swift: “” list “.first” [
-    “==(¤(5F): ” index “, ¤(5F): ” index “)”
-    “<(¤(5F): ” index “, ¤(5F): ” index “)”
-    “” list “.startIndex”
-    “” list “.endIndex”
-    “” list “.subscript(¤(5F): ” index “)”
-    “” list “.isEmpty”
-    “” list “.index(after: ” index “)”
-   ] {
-    “extension ” list “: Collection {}”
-    “extension ” index “: Comparable {}”
-   }
+     “==(¤(5F): ” index “, ¤(5F): ” index “)”
+     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” index “)”
+     “” list “.isEmpty”
+     “” list “.index(after: ” index “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” index “: Comparable {}”
+    }
    {
     ← first in (list) according to default use as list
    }
@@ -104,16 +104,16 @@ ability (clients)
    )
    truth value
    Swift: “” list “.isEmpty” [
-    “==(¤(5F): ” index “, ¤(5F): ” index “)”
-    “<(¤(5F): ” index “, ¤(5F): ” index “)”
-    “” list “.startIndex”
-    “” list “.endIndex”
-    “” list “.subscript(¤(5F): ” index “)”
-    “” list “.index(after: ” index “)”
-   ] {
-    “extension ” list “: Collection {}”
-    “extension ” index “: Comparable {}”
-   }
+     “==(¤(5F): ” index “, ¤(5F): ” index “)”
+     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” index “)”
+     “” list “.index(after: ” index “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” index “: Comparable {}”
+    }
    {
     ← (list) is empty according to default use as list
    }
