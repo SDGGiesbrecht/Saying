@@ -428,6 +428,7 @@ enum Swift: Platform {
     "extension Bool: Hashable {}",
     "extension Int: Comparable {}",
     "extension Int: Equatable {}",
+    "extension Int: Hashable {}",
     "extension Int64: Equatable {}",
     "extension String.UnicodeScalarView: Collection {}",
     "extension String.UnicodeScalarView.Index: Comparable {}",

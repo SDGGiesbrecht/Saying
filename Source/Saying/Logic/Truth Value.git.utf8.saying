@@ -272,14 +272,18 @@ use (clients)
 action (file)
  [
   test {ignore (hashing proxy of (true))}
+  test {ignore (hashing proxy of (false))}
  ]
- hashing proxy of (truth value: truth value)
- hash value
- C: “” truth value “ ? 1 : 0”
- C♯: “” truth value “.GetHashCode()”
- JavaScript: “” truth value “ ? 1 : 0”
- Kotlin: “” truth value “.hashCode()”
- Swift: “” truth value “ ? 1 : 0”
+ hashing proxy of (value: truth value)
+ platform fixed‐width integer
+ C♯: “” value “.GetHashCode()”
+ Kotlin: “” value “.hashCode()”
+ {
+  if (value), {
+   ← 1
+  }
+  ← 0
+ }
 
 use (clients)
  hashing (truth value)
@@ -288,7 +292,7 @@ use (clients)
    hash key (key: truth value) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    feed (hashing proxy of (key)) into (↓ hasher)
+    hash part (hashing proxy of (key)) with (↓ hasher)
    }
 
   action (unit)
