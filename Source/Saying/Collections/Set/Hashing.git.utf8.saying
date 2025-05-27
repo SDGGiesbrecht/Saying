@@ -48,15 +48,15 @@ extension
     ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
    )
    C♯: “” hasher “.Add(” part “)” [
-    “override ” key “.Equals(” key “)”
-    “override ” key “.GetHashCode()”
-   ]
+     “override ” key “.Equals(” key “)”
+     “override ” key “.GetHashCode()”
+    ]
    Swift: “” hasher “.combine(” part “)” [
-    “==(¤(5F): ” key “, ¤(5F): ” key “)”
-    “” key “.hash(into: Hasher)”
-   ] {
-    “extension ” key “: Hashable {}”
-   }
+     “==(¤(5F): ” key “, ¤(5F): ” key “)”
+     “” key “.hash(into: Hasher)”
+    ] {
+     “extension ” key “: Hashable {}”
+    }
    {
     hash key (part) with (↓ hasher)
    }

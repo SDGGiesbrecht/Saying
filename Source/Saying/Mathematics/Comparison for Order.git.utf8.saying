@@ -79,11 +79,11 @@ ability (clients)
    )
    truth value
    Swift: «» first “ > ” second „“ [
-    “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “<=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-   ] {“extension ” thing “: Comparable {}”}
+     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “<=(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
+    ] {“extension ” thing “: Comparable {}”}
    {
     ← (second) is less than (first)
    }
@@ -126,11 +126,11 @@ ability (clients)
    )
    truth value
    Swift: «» first “ <= ” second „“ [
-    “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
-   ] {“extension ” thing “: Comparable {}”}
+     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
+    ] {“extension ” thing “: Comparable {}”}
    {
     ← not ((first) is greater than (second))
    }
@@ -173,11 +173,11 @@ ability (clients)
    )
    truth value
    Swift: «» first “ >= ” second „“ [
-    “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “<=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-    “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
-   ] {“extension ” thing “: Comparable {}”}
+     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “<=(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
+    ] {“extension ” thing “: Comparable {}”}
    {
     ← not ((first) is less than (second))
    }

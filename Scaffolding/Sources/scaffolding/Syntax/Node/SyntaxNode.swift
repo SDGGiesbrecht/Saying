@@ -23,7 +23,7 @@ extension SyntaxNode {
       return UnicodeText("\n\n" + String(repeating: " ", count: indent))
     case .lineBreakSyntax:
       return UnicodeText("\n" + String(repeating: " ", count: indent))
-    case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .parameterDocumentation, .partDeclaration, .requirementDeclaration, .thingDeclaration, .use:
+    case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .nativeImport, .nativeIndirectRequirements, .nativeRequiredCode, .parameterDocumentation, .partDeclaration, .requirementDeclaration, .thingDeclaration, .use:
       return UnicodeText(children.lazy.map({ StrictString($0.formattedGitStyleSource(indent: indent + 1)) }).joined())
     case .spacedNativeRequirementList:
       return UnicodeText(
