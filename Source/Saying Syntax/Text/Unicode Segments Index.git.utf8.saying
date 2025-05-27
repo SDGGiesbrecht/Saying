@@ -25,6 +25,17 @@ action (unit)
  create
 
 use (clients)
+ general containers of (Unicode segments index)
+ {
+  action (clients)
+   example
+   Unicode segments index
+   {
+    ← Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))
+   }
+ }
+
+use (clients)
  comparison of (Unicode segments index) for equality
  {
   action (clients)
@@ -32,13 +43,6 @@ use (clients)
    truth value
    {
     ← (((segment) of (first)) is ((segment) of (second))) and (((scalar) of (first)) is ((scalar) of (second)))
-   }
-
-  action (clients)
-   example
-   Unicode segments index
-   {
-    ← Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))
    }
 
   action (clients)

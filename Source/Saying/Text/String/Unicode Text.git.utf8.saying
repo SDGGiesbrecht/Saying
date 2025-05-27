@@ -38,8 +38,16 @@ action (clients)
  }
 
 use (clients)
- optional (Unicode text)
+ general containers of (Unicode text)
  {
+  action (clients)
+   (
+    English: example
+   )
+   Unicode text
+   {
+    ← non‐empty example
+   }
  }
 
 use

@@ -1,0 +1,23 @@
+ability (clients)
+ (
+  English: general containers of (thing)
+ )
+ {
+  requirement (clients)
+   [
+    [
+     English: An arbitrary example instance intended for use in tests.
+    ]
+   ]
+   example
+   thing
+ }
+
+extension
+ general containers of (thing)
+ {
+  use (clients)
+   general use of (thing)
+   {
+   }
+ }

@@ -8,6 +8,19 @@ thing (clients)
  Swift: “Int”
 
 use (clients)
+ general containers of (list index)
+ {
+  action (clients)
+   example
+   list index
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
+   Swift: “0”
+ }
+
+use (clients)
  comparison of (list index) for equality
  {
   action (clients)
@@ -27,15 +40,6 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
-
-  action (clients)
-   example
-   list index
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0”
-   Swift: “0”
 
   action (clients)
    differing example

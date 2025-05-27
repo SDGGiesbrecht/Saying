@@ -49,6 +49,17 @@ thing (clients)
  Swift: “UInt64”
 
 use (clients)
+ general containers of (natural number)
+ {
+  action (clients)
+   example
+   natural number
+   {
+    ← zero
+   }
+ }
+
+use (clients)
  comparison of (natural number) for equality
  {
   action (clients)
@@ -68,13 +79,6 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
-
-  action (clients)
-   example
-   natural number
-   {
-    ← zero
-   }
 
   action (clients)
    differing example

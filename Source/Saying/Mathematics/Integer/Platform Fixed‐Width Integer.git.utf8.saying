@@ -16,6 +16,17 @@ thing (clients)
  Swift: “Int”
 
 use (clients)
+ general containers of (platform fixed‐width integer)
+ {
+  action (clients)
+   example
+   platform fixed‐width integer
+   {
+    ← zero
+   }
+ }
+
+use (clients)
  comparison of (platform fixed‐width integer) for equality
  {
   action (clients)
@@ -35,13 +46,6 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
-
-  action (clients)
-   example
-   platform fixed‐width integer
-   {
-    ← zero
-   }
 
   action (clients)
    differing example

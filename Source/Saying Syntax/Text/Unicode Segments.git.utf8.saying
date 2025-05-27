@@ -18,11 +18,6 @@ action (unit)
  Unicode segments
  create
 
-use (clients)
- storage of (Unicode segments)
- {
- }
-
 use
  use of (Unicode segments) as list of (Unicode scalar) indexed by (Unicode segments index)
  {
@@ -56,8 +51,8 @@ use
    [
     test {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-     append (example element: Unicode segment) to (↓ segment list)
-     append (example element: Unicode segment) to (↓ segment list)
+     append (example: Unicode segment) to (↓ segment list)
+     append (example: Unicode segment) to (↓ segment list)
      let (• two segments: Unicode segments) be (Unicode segments (segment list))
      let (• first offset: Unicode segments index) be (index after (beginning of (two segments)) in (two segments))
      ignore (index after (first offset) in (two segments))

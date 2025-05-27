@@ -39,7 +39,27 @@ extension
    }
 
   use (clients)
-   optional (set of (element))
+   general containers of (set of (element))
    {
+    action (clients)
+     example
+     set of (element)
+     {
+      ← empty
+     }
    }
+
+  action (clients)
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   set of (element)
+   C: “NULL”
+   C♯: “new HashSet()”
+   Kotlin: “setOf()”
+   Swift: “[]”
+   create
  }

@@ -89,6 +89,17 @@ action (file)
  create
 
 use (file)
+ general containers of (minimal hashing example)
+ {
+  action (file)
+   example
+   minimal hashing example
+   {
+    ← minimal hashing example wrapping (example: truth value)
+   }
+ }
+
+use (file)
  comparison of (minimal hashing example) for equality
  {
   action (file)
@@ -96,13 +107,6 @@ use (file)
    truth value
    {
     ← ((wrapped truth value) of (first)) is ((wrapped truth value) of (second))
-   }
-
-  action (file)
-   example
-   minimal hashing example
-   {
-    ← minimal hashing example wrapping (example: truth value)
    }
 
   action (file)

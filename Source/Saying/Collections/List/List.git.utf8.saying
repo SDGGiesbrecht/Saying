@@ -1,46 +1,27 @@
-ability (clients)
- (
-  English: lists of (element)
-  Deutsch: Listen von (Element: [element])
-  français : listes de (élément: [element])
-  ελληνικά: κατάλογοι (στοιχείο: [element])
-  עברית: רשימות של (איבר: [element])
- )
- {
-  requirement (clients)
-   [
-    [
-     English: An arbitrary example element intended for use in tests.
-    ]
-   ]
-   example element
-   element
- }
-
 extension
- lists of (element)
+ general containers of (thing)
  {
   thing (clients)
    (
-    English: list of (element)
-    Deutsch: Liste von (Element: [element])
-    français : liste de (élément: [element])
-    ελληνικά: κατάλογος (στοιχείο: [element])
-    עברית: רשימה של (איבר: [element])
+    English: list of (thing)
+    Deutsch: Liste von (Ding: [thing])
+    français : liste de (chose: [thing])
+    ελληνικά: κατάλογος (πράγμα: [thing])
+    עברית: רשימה של (דבר: [thing])
    )
    C: “GArray¤(2A)”/“g¤(5F)array¤(5F)ref(” array “)”/“g¤(5F)array¤(5F)unref(” array “)” (“glib¤(2D)2.0”)
-   C♯: “List<” element “>” (“System.Collections.Generic”)
-   Kotlin: “List<” element “>”
-   Swift: “[” element “]”
+   C♯: “List<” thing “>” (“System.Collections.Generic”)
+   Kotlin: “List<” thing “>”
+   Swift: “[” thing “]”
    {
    }
 
   use (clients)
-   use of (list of (element)) as list of (element) indexed by (list index)
+   use of (list of (thing)) as list of (thing) indexed by (list index)
    {
     action (clients)
      (
-      English: beginning of (list: list of (element))
+      English: beginning of (list: list of (thing))
      )
      list index
      C: “0”
@@ -51,7 +32,7 @@ extension
 
     action (clients)
      (
-      English: end of (list: list of (element))
+      English: end of (list: list of (thing))
      )
      list index
      C: “” list “¤(2D)>len”
@@ -62,7 +43,7 @@ extension
 
     action (clients)
      (
-      English: index after (index: list index) in (list: list of (element))
+      English: index after (index: list index) in (list: list of (thing))
      )
      list index
      C: “” index “ + 1”
@@ -73,10 +54,10 @@ extension
 
     action (clients)
      (
-      English: entry at (index: list index) in (list: list of (element))
+      English: entry at (index: list index) in (list: list of (thing))
      )
-     element
-     C: “g¤(5F)array¤(5F)index(” list “, ” element “, ” index “)”
+     thing
+     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “)”
      C♯: “” list “[” index “]”
      JavaScript: “” list “[” index “]”
      Kotlin: “” list “[” index “]”
@@ -84,9 +65,9 @@ extension
 
     action (clients)
      (
-      English: first in (list: list of (element))
+      English: first in (list: list of (thing))
      )
-     optional (element)
+     optional (thing)
      Kotlin: “” list “.firstOrNull()”
      Swift: “” list “.first”
      {
@@ -95,7 +76,7 @@ extension
 
     action (clients)
      (
-      English: (list: list of (element)) is empty
+      English: (list: list of (thing)) is empty
      )
      truth value
      Kotlin: “” list “.isEmpty()”
@@ -106,7 +87,7 @@ extension
 
     action (clients)
      (
-      English: (list: list of (element)) is not empty
+      English: (list: list of (thing)) is not empty
      )
      truth value
      Kotlin: “” list “.isNotEmpty()”
@@ -118,29 +99,29 @@ extension
      (
       English: non‐empty example
      )
-     list of (element)
+     list of (thing)
      {
       ← non‐empty example according to use as changeable list
      }
    }
 
   use (clients)
-   use of (list of (element)) as changeable list of (element) indexed by (list index)
+   use of (list of (thing)) as changeable list of (thing) indexed by (list index)
    {
     action (clients)
      (
       English: empty
      )
-     list of (element)
-     C: “g¤(5F)array¤(5F)new(FALSE, FALSE, sizeof(” element “))”
-     C♯: “new List<” element “>()”
+     list of (thing)
+     C: “g¤(5F)array¤(5F)new(FALSE, FALSE, sizeof(” thing “))”
+     C♯: “new List<” thing “>()”
      JavaScript: “[]”
      Kotlin: “listOf()”
      Swift: “[]”
 
     action (clients)
      (
-      English: append (element: element) to (list: ↓ list of (element))
+      English: append (element: thing) to (list: ↓ list of (thing))
      )
      C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ” element “)”
      C♯: “” list “.Add(” element “)”

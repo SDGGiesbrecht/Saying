@@ -22,8 +22,14 @@ thing (clients)
  }
 
 use (clients)
- storage of (Unicode scalars)
+ general containers of (Unicode scalars)
  {
+  action (clients)
+   example
+   Unicode scalars
+   {
+    ← “ ”
+   }
  }
 
 action (file)
@@ -61,13 +67,6 @@ use (clients)
    Swift: “” first “ != ” second “” [“==(¤(5F): String.UnicodeScalarView, ¤(5F): String.UnicodeScalarView)”] {“extension String.UnicodeScalarView: Equatable {}”}
    {
     ← (first) is not (second) according to comparison for equality
-   }
-
-  action (clients)
-   example
-   Unicode scalars
-   {
-    ← “ ”
    }
 
   action (clients)

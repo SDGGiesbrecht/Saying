@@ -34,7 +34,7 @@ extension
    create
 
   use
-   storage of (slice of (list))
+   general use of (slice of (list))
    {
    }
  }

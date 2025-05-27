@@ -1,12 +1,5 @@
-ability (clients)
- (
-  English: optional (thing)
- )
- {
- }
-
 extension
- optional (thing)
+ general containers of (thing)
  {
   enumeration (clients)
    (
@@ -40,12 +33,7 @@ extension
    }
 
   use (clients)
-   storage of (thing)
-   {
-   }
-
-  use (clients)
-   storage of (optional (thing))
+   general use of (optional (thing))
    {
    }
 

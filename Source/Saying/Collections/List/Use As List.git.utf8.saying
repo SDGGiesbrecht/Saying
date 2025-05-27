@@ -146,17 +146,7 @@ extension
  use of (list) as list of (element) indexed by (index)
  {
   use (clients)
-   storage of (element)
-   {
-   }
-
-  use (clients)
-   storage of (list)
-   {
-   }
-
-  use (clients)
-   optional (element)
+   general use of (list)
    {
    }
  }
@@ -228,11 +218,6 @@ action (file)
  )
  minimal list example
  create
-
-use
- storage of (minimal list example)
- {
- }
 
 use
  use of (minimal list example) as list of (truth value) indexed by (list index)
