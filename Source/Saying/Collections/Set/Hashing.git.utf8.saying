@@ -47,6 +47,10 @@ extension
     français : hacher partie (partie: [part]) avec (hacheur: [hasher])
     ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
    )
+   C♯: “” hasher “.Add(” part “)” [
+    “override ” key “.Equals(” key “)”
+    “override ” key “.GetHashCode()”
+   ]
    Swift: “” hasher “.combine(” part “)” [
     “==(¤(5F): ” key “, ¤(5F): ” key “)”
     “” key “.hash(into: Hasher)”

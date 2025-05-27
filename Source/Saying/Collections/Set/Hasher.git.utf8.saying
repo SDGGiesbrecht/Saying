@@ -6,7 +6,7 @@ thing (clients)
   ελληνικά: κατακερματιστής
  )
  C: “guint” (“glib¤(2D)2.0”)
- C♯: “HashCode” (“System”)
+ C♯: “HashCode” (“System”) {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public struct HashCode¤(A){¤(A)private uint ¤(5F)v1;¤(A)public void Add<T>(T value)¤(A){¤(A)¤(5F)v1 ¤(5E)= unchecked((uint)(value?.GetHashCode() ?? 0));¤(A)}¤(A)public int ToHashCode()¤(A){¤(A)return unchecked((int)¤(5F)v1);¤(A)}¤(A)}¤(A)¤(23)endif”}
  Kotlin: “Int”
  Swift: “Hasher”
  {
