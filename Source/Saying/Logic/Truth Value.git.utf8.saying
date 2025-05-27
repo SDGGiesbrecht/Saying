@@ -269,6 +269,18 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (hashing proxy of (true))}
+ ]
+ hashing proxy of (truth value: truth value)
+ hash value
+ C: “” truth value “ ? 1 : 0”
+ C♯: “” truth value “.GetHashCode()”
+ JavaScript: “” truth value “ ? 1 : 0”
+ Kotlin: “” truth value “.hashCode()”
+ Swift: “” truth value “ ? 1 : 0”
+
 use (clients)
  hashing (truth value)
  {
@@ -276,7 +288,7 @@ use (clients)
    hash key (key: truth value) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash key (key) with (↓ hasher) according to reverse hashing
+    feed (hashing proxy of (key)) into (↓ hasher)
    }
 
   action (unit)
@@ -284,9 +296,7 @@ use (clients)
     English: hash value of (key: truth value)
    )
    hash value
-   C: “” key “ ? 1 : 0”
    C♯: “” key “.GetHashCode()”
-   JavaScript: “” key “ ? 1 : 0”
    Kotlin: “” key “.hashCode()”
    {
     ← hash value of (key) according to default hashing

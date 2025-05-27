@@ -29,6 +29,12 @@ use (clients)
  }
 
 action (unit)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   feed (hash value of (true)) into (↓ hasher)
+  }
+ ]
  (
   English: feed (hash: hash value) into (hasher: ↓ hasher)
  )

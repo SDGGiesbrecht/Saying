@@ -67,20 +67,6 @@ extension
     hash part (key) with (↓ hasher)
     ← final hash value from (hasher)
    }
-
-  action (unit)
-   [
-    test {
-     let (• hasher: hasher) start as (create hasher)
-     hash key (example: key) with (↓ hasher) according to reverse hashing
-    }
-   ]
-   (
-    English: hash key (key: key) with (hasher: ↓ hasher) according to reverse hashing
-   )
-   {
-    feed (hash value of (key)) into (↓ hasher)
-   }
  }
 
 thing (file)
