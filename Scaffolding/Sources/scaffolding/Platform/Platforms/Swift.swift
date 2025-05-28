@@ -575,6 +575,9 @@ enum Swift: Platform {
   static var permitsParameterLabels: Bool {
     return true
   }
+  static var permitsOverloads: Bool {
+    return true
+  }
   static var emptyParameterLabel: UnicodeText {
     return "_"
   }

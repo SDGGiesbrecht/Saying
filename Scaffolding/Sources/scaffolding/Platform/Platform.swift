@@ -73,7 +73,6 @@ protocol Platform {
 
   // Actions
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText?
-  static func nativeName(of action: ActionIntermediate) -> String?
   static func nativeName(of parameter: ParameterIntermediate) -> String?
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String?
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
@@ -142,6 +141,7 @@ protocol Platform {
 
   // Saying
   static var permitsParameterLabels: Bool { get }
+  static var permitsOverloads: Bool { get }
   static var emptyParameterLabel: UnicodeText { get }
   static var parameterLabelSuffix: UnicodeText { get }
   static var memberPrefix: UnicodeText? { get }
@@ -310,8 +310,8 @@ extension Platform {
     }
   }
 
-  static func nativeName(of action: ActionIntermediate) -> String? {
-    if let identifier = action.identifier(for: self) {
+  static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
+    if let identifier = action.identifier(for: self, referenceLookup: referenceLookup) {
       if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {
         return String(UnicodeText(functionName.contents))
       } else {
@@ -905,10 +905,12 @@ extension Platform {
         indentationLevel: 0
       ).joined(separator: "\n")
     } else {
-      let name = nativeName(of: action) ?? parameterName ?? sanitize(
-        identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-        leading: true
-      )
+      let name = nativeName(of: action, referenceLookup: referenceLookup)
+        ?? parameterName
+        ?? sanitize(
+          identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+          leading: true
+        )
       if action.isReferenceWrapper {
         let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
         return "\(prefix)\(name)"
@@ -1396,7 +1398,7 @@ extension Platform {
       return nil
     }
 
-    let name = nativeName(of: action)
+    let name = nativeName(of: action, referenceLookup: externalReferenceLookup)
       ?? sanitize(
         identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
         leading: true

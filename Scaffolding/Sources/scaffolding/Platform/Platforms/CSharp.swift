@@ -499,6 +499,9 @@ enum CSharp: Platform {
   static var permitsParameterLabels: Bool {
     return false
   }
+  static var permitsOverloads: Bool {
+    return true
+  }
   static var emptyParameterLabel: UnicodeText {
     return ""
   }

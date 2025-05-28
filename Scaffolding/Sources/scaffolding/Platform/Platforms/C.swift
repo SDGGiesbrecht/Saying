@@ -186,10 +186,10 @@ enum C: Platform {
   }
 
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {
-    return nil
+    return action.nativeNames.c
   }
   static func nativeName(of parameter: ParameterIntermediate) -> String? {
-    return nil
+    return parameter.nativeNames.c.map({ String($0) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     return nil
@@ -488,6 +488,9 @@ enum C: Platform {
   }
 
   static var permitsParameterLabels: Bool {
+    return false
+  }
+  static var permitsOverloads: Bool {
     return false
   }
   static var emptyParameterLabel: UnicodeText {
