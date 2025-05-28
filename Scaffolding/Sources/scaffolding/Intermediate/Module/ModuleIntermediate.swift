@@ -292,7 +292,7 @@ extension ModuleIntermediate {
     }
     for language in languageNodes {
       var identifier = StrictString(language.identifierText())
-      if identifier == "C♯" ||  identifier == "Kotlin" || identifier == "Swift" {
+      if identifier == "C" || identifier == "C♯" || identifier == "Kotlin" || identifier == "Swift" {
         continue
       }
       if identifier.hasSuffix(" +") {

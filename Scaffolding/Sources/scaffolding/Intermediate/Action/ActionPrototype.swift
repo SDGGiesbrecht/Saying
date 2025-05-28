@@ -66,6 +66,9 @@ extension ActionPrototype {
       let name = signature.name()
       let parameterNames = signature.parameters().map({ $0.name.name() })
       switch language {
+      case "C":
+        nativeNames.c = name
+        parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.c = $1 })
       case "C♯":
         nativeNames.cSharp = name
         parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.cSharp = $1 })

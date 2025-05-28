@@ -369,6 +369,9 @@ enum JavaScript: Platform {
   static var permitsParameterLabels: Bool {
     return false
   }
+  static var permitsOverloads: Bool {
+    return false
+  }
   static var emptyParameterLabel: UnicodeText {
     return ""
   }

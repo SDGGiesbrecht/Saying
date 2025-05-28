@@ -994,11 +994,12 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func identifier<P>(for platform: P.Type) -> UnicodeText?
+  func identifier<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
   where P: Platform {
-    guard var name = platform.nativeNameDeclaration(of: self).map({ StrictString($0) }) else {
+    guard let nameDeclaration = platform.nativeNameDeclaration(of: self) else {
       return nil
     }
+    var name = StrictString(nameDeclaration)
     if let overridePrefix = platform.overridePrefix,
       name.hasPrefix(StrictString(overridePrefix)) {
       name.removeFirst(overridePrefix.count)
@@ -1013,12 +1014,26 @@ extension ActionIntermediate {
       name.hasPrefix(StrictString(memberPrefix)) {
       name.removeFirst(memberPrefix.count)
     }
+    var disambiguatorParameter: Int?
+    if !platform.permitsOverloads,
+      let typePrefix = name.prefix(upTo: " "),
+      typePrefix.contents.allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
+      let parsedNumber = Int(String(StrictString(typePrefix.contents))) {
+      disambiguatorParameter = parsedNumber
+      name.removeFirst(typePrefix.contents.count)
+      name.removeFirst()
+    }
     let firstSpace = name.firstIndex(of: " ")
     var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
     if let space = firstSpace {
       name.removeSubrange(...space)
     } else {
       name.removeSubrange(..<name.endIndex)
+    }
+    if let parameterIndex = disambiguatorParameter {
+      let parameter = self.parameters.ordered(for: nameDeclaration)[parameterIndex - 1]
+      let type = platform.source(for: parameter.type, referenceLookup: referenceLookup)
+      functionName.prepend(contentsOf: "\(type)_".scalars)
     }
     if let initializerSuffix = platform.initializerSuffix,
       functionName.hasSuffix(StrictString(initializerSuffix)) {
@@ -1056,7 +1071,7 @@ extension ActionIntermediate {
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = nativeNames.swift,
-      let identifier = identifier(for: Swift.self).map({ StrictString($0) }) else {
+      let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup).map({ StrictString($0) }) else {
       return nil
     }
     let components = identifier.components(separatedBy: ":")
