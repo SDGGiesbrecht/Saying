@@ -37,7 +37,6 @@ ability (clients)
     ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
     עברית: (ראשון: [first]) (שני: [second])
     עברית +: (ראשון: [first]) = (שני: [second])
-    C: 1 equal (first: [first]) (second: [second])
     C♯: override (this: [first]).Equals (obj: [second])
     Kotlin: override (this: [first]).equals (other: [second])
     Swift: == (lhs: [first]) (rhs: [second])
@@ -98,6 +97,25 @@ ability (clients)
 extension
  comparison of (thing) for equality
  {
+  action (unit)
+   [
+    [
+     English: Forwards to an equality check.
+    ]
+    [
+     English: This alias exists to provide a predictable name for C’s set implementation to reference. The check’s C name cannot be specified on the requirement itself, because there it might be overridden by a native fulfillment.
+    ]
+    test {verify (predictably named (example: thing) is (example: thing))}
+   ]
+   (
+    English: predictably named (first: thing) is (second: thing)
+    C: 1 equal (first: [first]) (second: [second])
+   )
+   truth value
+   {
+    ← (first) is (second)
+   }
+
   action (clients)
    [
     test {verify ((example: thing) is not (differing example: thing) according to comparison for equality)}
