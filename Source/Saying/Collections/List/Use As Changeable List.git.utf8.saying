@@ -21,7 +21,7 @@ ability (clients)
    [
     test {
      let (• list: list) start as (empty: list)
-     append (example element: element) to (↓ list)
+     append (example: element) to (↓ list)
      ignore (entry at (beginning of (list)) in (list))
     }
    ]
@@ -40,7 +40,7 @@ extension
    list
    {
     let (• list: list) start as (empty: list)
-    append (example element: element) to (↓ list)
+    append (example: element) to (↓ list)
     ← list
    }
  }

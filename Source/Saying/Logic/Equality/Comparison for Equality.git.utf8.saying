@@ -87,15 +87,6 @@ ability (clients)
   requirement (clients)
    [
     [
-     English: An arbitrary example instance intended for use in tests.
-    ]
-   ]
-   example
-   thing
-
-  requirement (clients)
-   [
-    [
      English: A separate example instance which differs from the main example.
     ]
    ]
@@ -118,22 +109,6 @@ extension
    Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
-   }
-
-  use (clients)
-   optional (thing)
-   {
-   }
-
-  use (clients)
-   lists of (thing)
-   {
-    action (clients)
-     example element
-     thing
-     {
-      ← example
-     }
    }
 
   action (clients)

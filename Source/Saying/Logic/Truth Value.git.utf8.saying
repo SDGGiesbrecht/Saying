@@ -98,6 +98,17 @@ enumeration (clients)
    Swift: “false”
  }
 
+use (clients)
+ general containers of (truth value)
+ {
+  action (clients)
+   example
+   truth value
+   {
+    ← true
+   }
+ }
+
 action (clients)
  [
   [
@@ -253,13 +264,6 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
-
-  action (clients)
-   example
-   truth value
-   {
-    ← true
-   }
 
   action (clients)
    differing example

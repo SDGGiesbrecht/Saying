@@ -93,8 +93,14 @@ action (file)
  create
 
 use (file)
- storage of (minimal addition example)
+ general containers of (minimal addition example)
  {
+  action (file)
+   example
+   minimal addition example
+   {
+    ← example augend
+   }
  }
 
 use (file)
@@ -105,13 +111,6 @@ use (file)
    truth value
    {
     ← ((number) of (first)) is ((number) of (second))
-   }
-
-  action (file)
-   example
-   minimal addition example
-   {
-    ← example augend
    }
 
   action (file)

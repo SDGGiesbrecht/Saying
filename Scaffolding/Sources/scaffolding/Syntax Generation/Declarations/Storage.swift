@@ -1,12 +1,12 @@
 import SDGText
 
-func syntaxNodeStorage(
+func syntaxNodeGeneralUse(
   englishName: StrictString,
   parsed: Bool
 ) -> [String] {
   let source: [String] = [
     "use (clients)",
-    " storage of (\(parsed ? "parsed " : "")\(englishName))",
+    " general use of (\(parsed ? "parsed " : "")\(englishName))",
     " {",
     " }",
   ]

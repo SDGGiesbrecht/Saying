@@ -24,7 +24,7 @@ action (clients)
  Swift: “Hasher()”
 
 use (clients)
- storage of (hasher)
+ general use of (hasher)
  {
  }
 

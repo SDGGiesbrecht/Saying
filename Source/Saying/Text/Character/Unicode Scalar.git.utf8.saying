@@ -19,6 +19,20 @@ thing (clients)
  }
 
 use (clients)
+ general containers of (Unicode scalar)
+ {
+  action (clients)
+   example
+   Unicode scalar
+   {
+    if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
+     ← space
+    }
+    !
+   }
+ }
+
+use (clients)
  comparison of (Unicode scalar) for equality
  {
   action (clients)
@@ -40,16 +54,6 @@ use (clients)
    Swift: «» first “ != ” second „“
 
   action (clients)
-   example
-   Unicode scalar
-   {
-    if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
-     ← space
-    }
-    !
-   }
-
-  action (clients)
    differing example
    Unicode scalar
    {
@@ -57,6 +61,22 @@ use (clients)
      ← exclamation mark
     }
     !
+   }
+ }
+
+use (clients)
+ sets of (Unicode scalar)
+ {
+ }
+
+use (clients)
+ general containers of (optional (Unicode scalar))
+ {
+  action (clients)
+   example
+   optional (Unicode scalar)
+   {
+    ← wrap (example: Unicode scalar) into optional
    }
  }
 
@@ -73,21 +93,9 @@ use (clients)
    }
 
   action (clients)
-   example
-   optional (Unicode scalar)
-   {
-    ← wrap (example: Unicode scalar) into optional
-   }
-
-  action (clients)
    differing example
    optional (Unicode scalar)
    {
     ← wrap (differing example: Unicode scalar) into optional
    }
- }
-
-use (clients)
- sets of (Unicode scalar)
- {
  }

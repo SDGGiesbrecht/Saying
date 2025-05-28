@@ -13,7 +13,7 @@ flow (clients)
  Swift: “if ” condition “ {” consequence “}”
 
 extension
- optional (thing)
+ general containers of (thing)
  {
   action (clients)
    [

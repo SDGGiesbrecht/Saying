@@ -24,10 +24,10 @@ action (unit)
  create
 
 use (unit)
- lists of (Unicode segment)
+ general containers of (Unicode segment)
  {
   action (unit)
-   example element
+   example
    Unicode segment
    {
     ← Unicode segment at (zero: natural number) containing (non‐empty example: Unicode text)

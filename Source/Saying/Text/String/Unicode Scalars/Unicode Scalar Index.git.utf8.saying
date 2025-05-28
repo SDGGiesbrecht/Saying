@@ -13,6 +13,17 @@ thing (clients)
  Swift: “String.UnicodeScalarView.Index”
 
 use (clients)
+ general containers of (Unicode scalar index)
+ {
+  action (clients)
+   example
+   Unicode scalar index
+   {
+    ← beginning of (non‐empty example: Unicode scalars)
+   }
+ }
+
+use (clients)
  comparison of (Unicode scalar index) for equality
  {
   action (clients)
@@ -34,44 +45,10 @@ use (clients)
    Swift: “” first “ != ” second “”
 
   action (clients)
-   example
-   Unicode scalar index
-   {
-    ← beginning of (non‐empty example: Unicode scalars)
-   }
-
-  action (clients)
    differing example
    Unicode scalar index
    {
     ← greater example
-   }
- }
-
-use (clients)
- comparison of (optional (Unicode scalar index)) for equality
- {
-  action (clients)
-   (first: optional (Unicode scalar index)) is (second: optional (Unicode scalar index))
-   truth value
-   Kotlin: “” first “ == ” second “”
-   Swift: “” first “ == ” second “”
-   {
-    ← (first) is (second) according to optional
-   }
-
-  action (clients)
-   example
-   optional (Unicode scalar index)
-   {
-    ← wrap (example: Unicode scalar index) into optional
-   }
-
-  action (clients)
-   differing example
-   optional (Unicode scalar index)
-   {
-    ← wrap (differing example: Unicode scalar index) into optional
    }
  }
 
@@ -119,5 +96,36 @@ use (clients)
    Unicode scalar index
    {
     ← end of (non‐empty example: Unicode scalars)
+   }
+ }
+
+use (clients)
+ general containers of (optional (Unicode scalar index))
+ {
+  action (clients)
+   example
+   optional (Unicode scalar index)
+   {
+    ← wrap (example: Unicode scalar index) into optional
+   }
+ }
+
+use (clients)
+ comparison of (optional (Unicode scalar index)) for equality
+ {
+  action (clients)
+   (first: optional (Unicode scalar index)) is (second: optional (Unicode scalar index))
+   truth value
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “ == ” second “”
+   {
+    ← (first) is (second) according to optional
+   }
+
+  action (clients)
+   differing example
+   optional (Unicode scalar index)
+   {
+    ← wrap (differing example: Unicode scalar index) into optional
    }
  }

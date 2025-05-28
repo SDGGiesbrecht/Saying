@@ -44,9 +44,9 @@ extension ModuleIntermediate {
           )
         )
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeStorage(englishName: englishName, parsed: false))
+        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: englishName, parsed: false))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeStorage(englishName: englishName, parsed: true))
+        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: englishName, parsed: true))
         let file = GitStyleFile(
           source: UnicodeText(newSource.joined(separator: "\n"))
         ).parsed()

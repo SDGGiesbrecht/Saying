@@ -22,6 +22,17 @@ thing (clients)
  Swift: “UInt”
 
 use (clients)
+ general containers of (platform fixed‐width natural number)
+ {
+  action (clients)
+   example
+   platform fixed‐width natural number
+   {
+    ← zero
+   }
+ }
+
+use (clients)
  comparison of (platform fixed‐width natural number) for equality
  {
   action (clients)
@@ -41,13 +52,6 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
-
-  action (clients)
-   example
-   platform fixed‐width natural number
-   {
-    ← zero
-   }
 
   action (clients)
    differing example

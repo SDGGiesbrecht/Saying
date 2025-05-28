@@ -43,6 +43,17 @@ thing (clients)
  Swift: “Int64”
 
 use (clients)
+ general containers of (integer)
+ {
+  action (clients)
+   example
+   integer
+   {
+    ← zero
+   }
+ }
+
+use (clients)
  comparison of (integer) for equality
  {
   action (clients)
@@ -62,13 +73,6 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
-
-  action (clients)
-   example
-   integer
-   {
-    ← zero
-   }
 
   action (clients)
    differing example
