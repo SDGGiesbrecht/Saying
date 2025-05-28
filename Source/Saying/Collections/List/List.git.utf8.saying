@@ -126,7 +126,7 @@ extension
      C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ” element “)”
      C♯: “” list “.Add(” element “)”
      JavaScript: “” list “.push(” element “)”
-     Kotlin: “” list “ += ” element “”
+     Kotlin: “” list “.toMutableList().apply({ add(” element “) }).toList()”
      Swift: “” list “.append(” element “)”
    }
  }
