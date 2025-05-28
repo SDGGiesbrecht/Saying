@@ -58,7 +58,7 @@ extension
    )
    set of (element)
    C: “NULL”
-   C♯: “new HashSet()”
+   C♯: “new HashSet<” element “>()”
    Kotlin: “setOf()”
    Swift: “[]”
    create
