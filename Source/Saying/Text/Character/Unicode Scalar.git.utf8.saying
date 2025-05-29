@@ -32,6 +32,17 @@ use (clients)
    }
  }
 
+action (clients)
+ (
+  English: value of (scalar: Unicode scalar)
+ )
+ natural number
+ C: “uintmax¤(5F)t(” scalar “)”
+ C♯: “(ulong)(” scalar “.Value)”
+ JavaScript: “” scalar “”
+ Kotlin: “” scalar “.toULong()”
+ Swift: “UInt64(” scalar “.value)”
+
 use (clients)
  comparison of (Unicode scalar) for equality
  {
