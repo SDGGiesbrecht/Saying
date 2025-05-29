@@ -82,6 +82,40 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (hashing proxy of (zero: integer))}
+ ]
+ hashing proxy of (integer: integer)
+ platform fixed‐width integer
+ C: “(guint)” integer “”
+ C♯: “” integer “.GetHashCode()”
+ JavaScript: “” integer “”
+ Kotlin: “” integer “.hashCode()”
+ Swift: “Int(truncatingIfNeeded: ” integer “)”
+
+use (clients)
+ hashing (integer)
+ {
+  action (clients)
+   hash key (key: integer) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: integer)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
 use (clients)
  comparison of (integer) for order
  {
