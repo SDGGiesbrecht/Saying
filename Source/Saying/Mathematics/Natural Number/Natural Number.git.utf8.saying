@@ -88,6 +88,40 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (hashing proxy of (zero: natural number))}
+ ]
+ hashing proxy of (number: natural number)
+ platform fixed‐width integer
+ C: “(guint)” number “”
+ C♯: “” number “.GetHashCode()”
+ JavaScript: “” number “”
+ Kotlin: “” number “.hashCode()”
+ Swift: “Int(truncatingIfNeeded: ” number “)”
+
+use (clients)
+ hashing (natural number)
+ {
+  action (clients)
+   hash key (key: natural number) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: natural number)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
 use (clients)
  comparison of (natural number) for order
  {
