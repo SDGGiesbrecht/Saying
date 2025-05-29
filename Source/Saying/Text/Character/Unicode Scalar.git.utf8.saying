@@ -105,11 +105,6 @@ use (clients)
  }
 
 use (clients)
- sets of (Unicode scalar)
- {
- }
-
-use (clients)
  general containers of (optional (Unicode scalar))
  {
   action (clients)
