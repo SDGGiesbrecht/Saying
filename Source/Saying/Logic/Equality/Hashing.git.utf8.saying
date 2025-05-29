@@ -58,6 +58,25 @@ extension
    }
 
   action (unit)
+   [
+    [
+     English: Forwards to a hash computation.
+    ]
+    [
+     English: This alias exists to provide a predictable name for C’s set implementation to reference. The check’s C name cannot be specified on the requirement itself, because there it might be overridden by a native fulfillment.
+    ]
+    test {ignore (predictably named hash value of (example: key))}
+   ]
+   (
+    English: predictably named hash value of (key: key)
+    C: 1 hash (key: [key])
+   )
+   hash value
+   {
+    ← hash value of (key)
+   }
+
+  action (unit)
    (
     English: hash value of (key: key) according to default hashing
    )
