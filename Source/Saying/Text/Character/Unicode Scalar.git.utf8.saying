@@ -44,7 +44,7 @@ action (clients)
   English: value of (scalar: Unicode scalar)
  )
  natural number
- C: “uintmax¤(5F)t(” scalar “)”
+ C: “(uintmax¤(5F)t)(” scalar “)”
  C♯: “(ulong)(” scalar “.Value)”
  JavaScript: “” scalar “”
  Kotlin: “” scalar “.toULong()”
