@@ -83,6 +83,28 @@ use (clients)
  }
 
 use (clients)
+ hashing (Unicode scalar)
+ {
+  action (clients)
+   hash key (key: Unicode scalar) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (value of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: Unicode scalar)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
+use (clients)
  sets of (Unicode scalar)
  {
  }
