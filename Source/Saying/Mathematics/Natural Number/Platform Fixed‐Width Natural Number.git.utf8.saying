@@ -61,6 +61,40 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (hashing proxy of (zero: platform fixed‐width natural number))}
+ ]
+ hashing proxy of (number: platform fixed‐width natural number)
+ platform fixed‐width integer
+ C: “(guint)” number “”
+ C♯: “” number “.GetHashCode()”
+ JavaScript: “” number “”
+ Kotlin: “” number “.hashCode()”
+ Swift: “Int(bitPattern: ” number “)”
+
+use (clients)
+ hashing (platform fixed‐width natural number)
+ {
+  action (clients)
+   hash key (key: platform fixed‐width natural number) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: platform fixed‐width natural number)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
 use (clients)
  comparison of (platform fixed‐width natural number) for order
  {
