@@ -1032,7 +1032,10 @@ extension ActionIntermediate {
     }
     if let parameterIndex = disambiguatorParameter {
       let parameter = self.parameters.ordered(for: nameDeclaration)[parameterIndex - 1]
-      let type = platform.source(for: parameter.type, referenceLookup: referenceLookup)
+      var type = platform.source(for: parameter.type, referenceLookup: referenceLookup)
+      if type.last == "*" {
+        type.removeLast()
+      }
       functionName.prepend(contentsOf: "\(type)_".scalars)
     }
     if let initializerSuffix = platform.initializerSuffix,
