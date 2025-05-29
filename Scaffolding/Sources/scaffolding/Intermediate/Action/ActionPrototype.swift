@@ -113,6 +113,8 @@ extension ActionPrototype {
         documentation.documentation,
         namespace: namespace
           .appending(names)
+          .appending(contentsOf: parameters.ordered(for: names.identifier()).map({ parameter in return [StrictString(parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",".unicodeScalars))] as Set<StrictString>
+          }))
       ) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
