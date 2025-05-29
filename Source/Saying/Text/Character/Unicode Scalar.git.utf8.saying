@@ -32,6 +32,24 @@ use (clients)
    }
  }
 
+action (clients)
+ [
+  test {
+   if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
+    ignore (value of (space))
+   }
+  }
+ ]
+ (
+  English: value of (scalar: Unicode scalar)
+ )
+ natural number
+ C: “(uintmax¤(5F)t)(” scalar “)”
+ C♯: “(ulong)(” scalar “.Value)”
+ JavaScript: “” scalar “”
+ Kotlin: “” scalar “.toULong()”
+ Swift: “UInt64(” scalar “.value)”
+
 use (clients)
  comparison of (Unicode scalar) for equality
  {
