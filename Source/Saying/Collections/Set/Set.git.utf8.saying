@@ -58,12 +58,12 @@ extension
    )
    set of (element)
    C: “g¤(5F)hash¤(5F)table¤(5F)new(” element “¤(5F)hash¤(5F)reference, ” element “¤(5F)equal¤(5F)reference)” [
-    “” element “¤(5F)hash(” element “)”
-    “” element “¤(5F)equal(” element “, ” element “)”
-   ] {
-    “guint ” element “¤(5F)hash¤(5F)reference(” element “¤(2A) element)¤(A){¤(A)return ” element “¤(5F)hash(¤(2A)element);¤(A)}”
-    “bool ” element “¤(5F)equal¤(5F)reference(” element “¤(2A) first, ” element “¤(2A) second)¤(A){¤(A)return ” element “¤(5F)equal(¤(2A)first, ¤(2A)second);¤(A)}”
-   }
+     “” element “¤(5F)hash(” element “)”
+     “” element “¤(5F)equal(” element “, ” element “)”
+    ] {
+     “guint ” element “¤(5F)hash¤(5F)reference(” element “¤(2A) element)¤(A){¤(A)return ” element “¤(5F)hash(¤(2A)element);¤(A)}”
+     “bool ” element “¤(5F)equal¤(5F)reference(” element “¤(2A) first, ” element “¤(2A) second)¤(A){¤(A)return ” element “¤(5F)equal(¤(2A)first, ¤(2A)second);¤(A)}”
+    }
    C♯: “new HashSet<” element “>()”
    Kotlin: “setOf()”
    Swift: “[]”
