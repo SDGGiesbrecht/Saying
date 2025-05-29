@@ -33,6 +33,13 @@ use (clients)
  }
 
 action (clients)
+ [
+  test {
+   if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
+    ignore (value of (space))
+   }
+  }
+ ]
  (
   English: value of (scalar: Unicode scalar)
  )
