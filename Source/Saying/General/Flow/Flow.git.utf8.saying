@@ -56,6 +56,38 @@ extension
    }
  }
 
+extension
+ use of (list) as list of (element) indexed by (index)
+ {
+  flow (clients)
+   [
+    test {
+     for each (• element: element) in (non‐empty example: list), {
+      ignore (element)
+     }
+    }
+   ]
+   (
+    English: for each (entry: element) in (sequence: list), (repetition: {})
+   )
+   C: “const ” list “ list” + “ = ” sequence “;¤(A)const ” index “ end” + “ = ” list “¤(5F)end(list” + “);¤(A)for (” index “ index” + “ = ” list “¤(5F)beginning(list” + “); ” index “¤(5F)less(index” + “, end” + “); ” list “¤(5F)advance¤(5F)to¤(5F)next(¤(26)index” + “, list” + “))¤(A){¤(A)const ” element “ ” entry “ = ” list “¤(5F)entry(index” + “, list” + “);” repetition “}”
+   C♯: “...”
+   JavaScript: “...”
+   Kotlin: “...”
+   Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
+     “==(¤(5F): ” index “, ¤(5F): ” index “)”
+     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” index “)”
+     “” list “.isEmpty”
+     “” list “.index(after: ” index “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” index “: Comparable {}”
+    }
+ }
+
 flow (clients)
  [
   test {
