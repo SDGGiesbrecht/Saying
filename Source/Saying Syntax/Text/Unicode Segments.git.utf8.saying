@@ -54,17 +54,27 @@ use
      append (example: Unicode segment) to (↓ segment list)
      append (example: Unicode segment) to (↓ segment list)
      let (• two segments: Unicode segments) be (Unicode segments (segment list))
-     let (• first offset: Unicode segments index) be (index after (beginning of (two segments)) in (two segments))
-     ignore (index after (first offset) in (two segments))
+     let (• cursor: Unicode segments index) start as (beginning of (two segments))
+     advance (↓ cursor) to next in (two segments)
+     advance (↓ cursor) to next in (two segments)
     }
     test {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
      append (Unicode segment at (zero: natural number) containing (Unicode text of (“  ”))) to (↓ segment list)
      let (• long segment: Unicode segments) be (Unicode segments (segment list))
-     let (• first offset: Unicode segments index) be (index after (beginning of (long segment)) in (long segment))
-     ignore (index after (first offset) in (long segment))
+     let (• cursor: Unicode segments index) start as (beginning of (long segment))
+     advance (↓ cursor) to next in (long segment)
+     advance (↓ cursor) to next in (long segment)
     }
    ]
+   (
+    English: advance (index: ↓ Unicode segments index) to next in (list: Unicode segments)
+   )
+   {
+    change (↓ index) to (index after (index) in (list))
+   }
+
+  action (clients)
    (
     English: index after (index: Unicode segments index) in (list: Unicode segments)
    )

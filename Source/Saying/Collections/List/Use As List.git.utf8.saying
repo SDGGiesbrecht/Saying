@@ -34,6 +34,21 @@ ability (clients)
     test {
      let (• non‐empty: list) be (non‐empty example: list)
      let (• beginning: index) be (beginning of (non‐empty))
+     let (• index: index) start as (beginning)
+     advance (↓ index) to next in (non‐empty)
+     verify ((index) is not (beginning))
+    }
+   ]
+   (
+    English: advance (index: ↓ index) to next in (list: list)
+    Swift: (self: [list]).formIndex after (i: [index])
+   )
+
+  choice (clients)
+   [
+    test {
+     let (• non‐empty: list) be (non‐empty example: list)
+     let (• beginning: index) be (beginning of (non‐empty))
      verify ((index after (beginning) in (non‐empty)) is not (beginning))
     }
    ]
@@ -45,6 +60,11 @@ ability (clients)
     Swift: (self: [list]).index after (i: [index])
    )
    index
+   {
+    let (• copy: index) start as (index)
+    advance (↓ copy) to next in (list)
+    ← copy
+   }
 
   requirement (clients)
    [
@@ -242,11 +262,10 @@ use
 
   action (file)
    (
-    English: index after (index: list index) in (list: minimal list example)
+    English: advance (index: ↓ list index) to next in (list: minimal list example)
    )
-   list index
    {
-    ← index after (index) in ((wrapped list) of (list))
+    advance (↓ index) to next in ((wrapped list) of (list))
    }
 
   action (file)

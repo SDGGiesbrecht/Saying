@@ -104,6 +104,15 @@ use
 
   action (clients)
    (
+    English: advance (index: ↓ Unicode scalar index) to next in (list: Unicode scalars)
+   )
+   Swift: “” list “.formIndex(after: ¤(26)” index “)”
+   {
+    change (↓ index) to (index after (index) in (list))
+   }
+
+  action (clients)
+   (
     English: index after (index: Unicode scalar index) in (list: Unicode scalars)
    )
    Unicode scalar index

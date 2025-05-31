@@ -825,10 +825,10 @@ extension ActionIntermediate {
         specializationNamespace: specializationNamespace
       )
     })
-    var implementationTypeLookup = typeLookup
+    var nativeImplementationTypeLookup = typeLookup
     for parameter in newParameters.inAnyOrder {
       for name in parameter.names {
-        implementationTypeLookup[name] = nil
+        nativeImplementationTypeLookup[name] = nil
       }
     }
     return ActionIntermediate(
@@ -843,12 +843,12 @@ extension ActionIntermediate {
         documentation: newDocumentation,
         nativeNames: nativeNames
       ),
-      c: c?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
-      cSharp: cSharp?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
-      javaScript: javaScript?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
-      kotlin: kotlin?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
-      swift: swift?.specializing(implementationTypeLookup: implementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
-      implementation: implementation?.specializing(typeLookup: implementationTypeLookup),
+      c: c?.specializing(implementationTypeLookup: nativeImplementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
+      cSharp: cSharp?.specializing(implementationTypeLookup: nativeImplementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
+      javaScript: javaScript?.specializing(implementationTypeLookup: nativeImplementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
+      kotlin: kotlin?.specializing(implementationTypeLookup: nativeImplementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
+      swift: swift?.specializing(implementationTypeLookup: nativeImplementationTypeLookup, requiredDeclarationTypeLookup: typeLookup),
+      implementation: implementation?.specializing(typeLookup: typeLookup),
       declaration: declaration,
       isCreation: isCreation,
       isReferenceWrapper: isReferenceWrapper,
