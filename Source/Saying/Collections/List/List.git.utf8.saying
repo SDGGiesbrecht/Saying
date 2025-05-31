@@ -43,6 +43,16 @@ extension
 
     action (clients)
      (
+      English: advance (index: ↓ list index) to next in (list: list of (thing))
+     )
+     C: “++” index “”
+     C♯: “++” index “”
+     JavaScript: “++” index “”
+     Kotlin: “++” index “”
+     Swift: “” list “.formIndex(after: ¤(26)” index “)”
+
+    action (clients)
+     (
       English: index after (index: list index) in (list: list of (thing))
      )
      list index
