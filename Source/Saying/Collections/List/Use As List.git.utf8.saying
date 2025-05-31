@@ -265,7 +265,7 @@ use
     English: advance (index: ↓ list index) to next in (list: minimal list example)
    )
    {
-    ← advance (↓ index) to next in ((wrapped list) of (list))
+    advance (↓ index) to next in ((wrapped list) of (list))
    }
 
   action (file)

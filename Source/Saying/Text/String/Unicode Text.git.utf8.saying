@@ -76,7 +76,7 @@ use
     English: advance (index: ↓ Unicode scalar index) to next in (list: Unicode text)
    )
    {
-    ← advance (↓ index) to next in ((scalars) of (list))
+    advance (↓ index) to next in ((scalars) of (list))
    }
 
   action (clients)
