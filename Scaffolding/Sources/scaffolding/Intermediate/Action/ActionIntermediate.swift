@@ -667,6 +667,7 @@ extension ActionIntermediate {
           )
         } else {
           if prototype.parameters.parameter(named: parameterReference.name) == nil,
+            StrictString(parameterReference.name) != "‐",
             StrictString(parameterReference.name) != "+",
             StrictString(parameterReference.name) != "−" {
             errors.append(.noSuchParameter(parameterReference.syntaxNode))
@@ -1030,13 +1031,13 @@ extension ActionIntermediate {
     } else {
       name.removeSubrange(..<name.endIndex)
     }
+    if platform.usesSnakeCase {
+      functionName.replaceMatches(for: "‐", with: "_")
+    }
     if let parameterIndex = disambiguatorParameter {
       let parameter = self.parameters.ordered(for: nameDeclaration)[parameterIndex - 1]
-      var type = platform.source(for: parameter.type, referenceLookup: referenceLookup)
-      if type.last == "*" {
-        type.removeLast()
-      }
-      functionName.prepend(contentsOf: "\(type)_".scalars)
+      let type = platform.source(for: parameter.type, referenceLookup: referenceLookup)
+      functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_".scalars)
     }
     if let initializerSuffix = platform.initializerSuffix,
       functionName.hasSuffix(StrictString(initializerSuffix)) {

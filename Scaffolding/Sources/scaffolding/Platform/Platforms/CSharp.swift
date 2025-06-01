@@ -496,6 +496,9 @@ enum CSharp: Platform {
       .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
   }
 
+  static var usesSnakeCase: Bool {
+    return true
+  }
   static var permitsParameterLabels: Bool {
     return false
   }

@@ -140,6 +140,7 @@ protocol Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
 
   // Saying
+  static var usesSnakeCase: Bool { get }
   static var permitsParameterLabels: Bool { get }
   static var permitsOverloads: Bool { get }
   static var emptyParameterLabel: UnicodeText { get }
@@ -308,6 +309,10 @@ extension Platform {
     case .enumerationCase(enumeration: let enumeration, identifier: _):
       return source(for: enumeration, referenceLookup: referenceLookup)
     }
+  }
+
+  static func identifierPrefix(for type: String) -> String {
+    return String(String.UnicodeScalarView(type.unicodeScalars.lazy.filter({ allowedAsIdentifierContinuation($0) })))
   }
 
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
@@ -738,7 +743,12 @@ extension Platform {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
-            accumulator.append(contentsOf: typeSource)
+            if let next = nativeExpression.parameters[index...].dropFirst().first,
+              StrictString(next.name) == "‐" {
+              accumulator.append(contentsOf: identifierPrefix(for: typeSource))
+            } else {
+              accumulator.append(contentsOf: typeSource)
+            }
           } else if let enumerationCase = parameter.caseInstead {
             switch enumerationCase {
             case .simple, .compound, .action, .statements, .partReference:
@@ -814,7 +824,9 @@ extension Platform {
                 beforeCleanUp = accumulator
                 accumulator = ""
               } else {
-                fatalError()
+                if StrictString(name) != "‐" {
+                  fatalError()
+                }
               }
             }
           }

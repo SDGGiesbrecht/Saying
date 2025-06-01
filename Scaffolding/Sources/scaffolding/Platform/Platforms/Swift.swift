@@ -575,6 +575,9 @@ enum Swift: Platform {
       )
   }
 
+  static var usesSnakeCase: Bool {
+    return true
+  }
   static var permitsParameterLabels: Bool {
     return true
   }
