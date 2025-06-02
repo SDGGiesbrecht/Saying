@@ -1017,14 +1017,15 @@ extension ActionIntermediate {
       name.hasPrefix(StrictString(memberPrefix)) {
       name.removeFirst(memberPrefix.count)
     }
-    var disambiguatorParameter: Int?
-    if !platform.permitsOverloads,
-      let typePrefix = name.prefix(upTo: " "),
-      typePrefix.contents.allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
-      let parsedNumber = Int(String(StrictString(typePrefix.contents))) {
-      disambiguatorParameter = parsedNumber
-      name.removeFirst(typePrefix.contents.count)
-      name.removeFirst()
+    var disambiguatorParameters: [Int] = []
+    if !platform.permitsOverloads {
+      while let typePrefix = name.prefix(upTo: " "),
+        typePrefix.contents.allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
+        let parsedNumber = Int(String(StrictString(typePrefix.contents))) {
+          disambiguatorParameters.append(parsedNumber)
+          name.removeFirst(typePrefix.contents.count)
+          name.removeFirst()
+      }
     }
     let firstSpace = name.firstIndex(of: " ")
     var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
@@ -1036,9 +1037,16 @@ extension ActionIntermediate {
     if platform.usesSnakeCase {
       functionName.replaceMatches(for: "‐", with: "_")
     }
-    if let parameterIndex = disambiguatorParameter {
-      let parameter = self.parameters.ordered(for: nameDeclaration)[parameterIndex - 1]
-      let type = platform.source(for: parameter.type, referenceLookup: referenceLookup)
+    for parameterIndex in disambiguatorParameters {
+      let zeroBased = parameterIndex - 1
+      let parameters = self.parameters.ordered(for: nameDeclaration)
+      let parameterType: ParsedTypeReference
+      if zeroBased == parameters.endIndex {
+        parameterType = returnValue!
+      } else {
+        parameterType = parameters[zeroBased].type
+      }
+      let type = platform.source(for: parameterType, referenceLookup: referenceLookup)
       functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_".scalars)
     }
     if let initializerSuffix = platform.initializerSuffix,

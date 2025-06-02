@@ -251,7 +251,7 @@ extension
    ]
    (
     English: predictably named entry at (index: index) in (list: list)
-    C: 2 entry (index: [index]) (list: [list])
+    C: 2 3 entry (index: [index]) (list: [list])
    )
    element
    {
