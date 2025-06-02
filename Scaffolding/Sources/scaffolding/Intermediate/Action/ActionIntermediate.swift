@@ -1037,7 +1037,7 @@ extension ActionIntermediate {
     if platform.usesSnakeCase {
       functionName.replaceMatches(for: "‐", with: "_")
     }
-    for parameterIndex in disambiguatorParameters {
+    for parameterIndex in disambiguatorParameters.reversed() {
       let zeroBased = parameterIndex - 1
       let parameters = self.parameters.ordered(for: nameDeclaration)
       let parameterType: ParsedTypeReference
