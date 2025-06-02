@@ -686,7 +686,9 @@ extension ActionIntermediate {
           )
         } else {
           if parameters.parameter(named: parameterReference.name) == nil {
-            errors.append(.noSuchParameter(parameterReference.syntaxNode))
+            if StrictString(parameterReference.name) != "‐" {
+              errors.append(.noSuchParameter(parameterReference.syntaxNode))
+            }
           }
         }
       }
