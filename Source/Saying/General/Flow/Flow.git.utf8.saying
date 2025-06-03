@@ -75,7 +75,7 @@ extension
      “” list “” ‐ “¤(5F)end(” list “)”
      “” list “” ‐ “¤(5F)advance¤(5F)to¤(5F)next(” index “, ” list “)”
      “” list “” ‐ “” element “” ‐ “¤(5F)entry(” index “, ” list “)”
-   ]
+    ]
    C♯: “...”
    JavaScript: “...”
    Kotlin: “...”

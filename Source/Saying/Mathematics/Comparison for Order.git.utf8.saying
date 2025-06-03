@@ -191,3 +191,26 @@ ability (clients)
    greater example
    thing
  }
+
+extension
+ comparison of (thing) for order
+ {
+  action (unit)
+   [
+    [
+     English: Forwards to a comparison.
+    ]
+    [
+     English: This alias exists to provide a predictable name for C’s loop implementation to reference. The C name cannot be specified on the requirement itself, because there it might be overridden by a native fulfillment.
+    ]
+    test {verify (predictably named (example: thing) is less than (greater example: thing))}
+   ]
+   (
+    English: predictably named (first: thing) is less than (second: thing)
+    C: 1 less (first: [first]) (second: [second])
+   )
+   truth value
+   {
+    ← (first) is less than (second)
+   }
+ }
