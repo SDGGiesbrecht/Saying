@@ -1609,7 +1609,8 @@ extension Platform {
     mode: CompilationMode,
     moduleWideImports: [ReferenceDictionary],
     relocatedActions: Set<String>,
-    alreadyHandledNativeRequirements: inout Set<String>
+    alreadyHandledNativeRequirements: inout Set<String>,
+    alreadyHandledActionDeclarations: inout Set<String>
   ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
@@ -1625,7 +1626,6 @@ extension Platform {
         }
       }
     }
-    var handledActionDeclarations: Set<String> = []
     for action in allActions where !action.isFlow {
       if let declaration = self.declaration(
         for: action,
@@ -1636,7 +1636,7 @@ extension Platform {
           .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
-        if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
+        if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
           result.append(contentsOf: [
             "",
             declaration.full
@@ -1718,6 +1718,7 @@ extension Platform {
       result.append("")
       result.append(contentsOf: start)
     }
+    var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
       result.append(
         self.actionsSource(
@@ -1725,7 +1726,8 @@ extension Platform {
           mode: mode,
           moduleWideImports: moduleWideImportDictionary,
           relocatedActions: relocatedActions,
-          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations
         )
       )
     }
