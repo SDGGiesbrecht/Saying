@@ -80,7 +80,7 @@ extension
      “” list “.GetEnumerator()”
      “” list “.MoveNext()”
      “” list “.Current”
-   ]
+    ]
    JavaScript: “...”
    Kotlin: “...”
    Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
