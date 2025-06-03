@@ -76,7 +76,11 @@ extension
      “” list “” ‐ “¤(5F)advance¤(5F)to¤(5F)next(” index “, ” list “)”
      “” list “” ‐ “” element “” ‐ “¤(5F)entry(” index “, ” list “)”
     ]
-   C♯: “...”
+   C♯: “foreach (” element “ ” entry “ in ” sequence “) {” repetition “}” [
+     “” list “.GetEnumerator()”
+     “” list “.MoveNext()”
+     “” list “.Current”
+   ]
    JavaScript: “...”
    Kotlin: “...”
    Swift: “for ” entry “ in ” sequence “ {” repetition “}” [

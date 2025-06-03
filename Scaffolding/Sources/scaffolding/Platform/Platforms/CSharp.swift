@@ -325,17 +325,26 @@ enum CSharp: Platform {
       adjustedParameters = "object other"
     }
     let staticKeyword = isAbsorbedMember ? "" : "static "
+    let parametersSection = propertyInstead ? "" : "(\(adjustedParameters))"
     var result: [String] = [
-      "\(indent)\(access)\(override)\(staticKeyword)\(returnSection!) \(name)(\(adjustedParameters))",
+      "\(indent)\(access)\(override)\(staticKeyword)\(returnSection!) \(name)\(parametersSection)",
       "\(indent){",
     ]
+    var extraIndent = ""
+    if propertyInstead {
+      result.append(contentsOf: [
+        "\(indent)\(indent)get",
+        "\(indent)\(indent){",
+      ])
+      extraIndent = indent
+    }
     if isVirtualEquals {
       result.append(contentsOf: [
-        "\(indent)\(indent)if (!(other is \(parentType!)))",
-        "\(indent)\(indent){",
-        "\(indent)\(indent)\(indent)return false;",
-        "\(indent)\(indent)}",
-        "\(indent)\(indent)\(parentType!) obj = (\(parentType!))other;",
+        "\(indent)\(indent)\(extraIndent)if (!(other is \(parentType!)))",
+        "\(indent)\(indent)\(extraIndent){",
+        "\(indent)\(indent)\(indent)\(extraIndent)return false;",
+        "\(indent)\(indent)\(extraIndent)}",
+        "\(indent)\(indent)\(extraIndent)\(parentType!) obj = (\(parentType!))other;",
       ])
     }
     if let coverage = coverageRegistration {
@@ -343,7 +352,12 @@ enum CSharp: Platform {
     }
     for statement in implementation {
       result.append(contentsOf: [
-        "\(indent)\(statement)",
+        "\(indent)\(extraIndent)\(statement)",
+      ])
+    }
+    if propertyInstead {
+      result.append(contentsOf: [
+        "\(indent)\(indent)}",
       ])
     }
     result.append(contentsOf: [
@@ -518,7 +532,7 @@ enum CSharp: Platform {
     return "override "
   }
   static var variablePrefix: UnicodeText? {
-    return nil
+    return "get "
   }
   static var initializerSuffix: UnicodeText? {
     return nil
