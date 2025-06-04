@@ -1,4 +1,18 @@
 flow (clients)
+ (
+  English: if (condition: truth value), (consequence: {})
+  Deutsch: wenn (Bedingung: [condition]), (Folge: [consequence])
+  français : si (condition: [condition]), (conséquence: [consequence])
+  ελληνικά: αν (όρος: [condition]), (επακόλουθο: [consequence])
+  עברית: אם (תנאי: [condition]), (תוצאה: [consequence])
+ )
+ C: “if (” condition “) {” consequence “}”
+ C♯: “if (” condition “) {” consequence “}”
+ JavaScript: “if (” condition “) {” consequence “}”
+ Kotlin: “if (” condition “) {” consequence “}”
+ Swift: “if ” condition “ {” consequence “}”
+
+flow (clients)
  [
   test {
    let (• value: truth value) start as (true)
@@ -18,20 +32,6 @@ flow (clients)
  JavaScript: “while (” condition “) {” consequence “}”
  Kotlin: “while (” condition “) {” consequence “}”
  Swift: “while ” condition “ {” consequence “}”
-
-flow (clients)
- (
-  English: if (condition: truth value), (consequence: {})
-  Deutsch: wenn (Bedingung: [condition]), (Folge: [consequence])
-  français : si (condition: [condition]), (conséquence: [consequence])
-  ελληνικά: αν (όρος: [condition]), (επακόλουθο: [consequence])
-  עברית: אם (תנאי: [condition]), (תוצאה: [consequence])
- )
- C: “if (” condition “) {” consequence “}”
- C♯: “if (” condition “) {” consequence “}”
- JavaScript: “if (” condition “) {” consequence “}”
- Kotlin: “if (” condition “) {” consequence “}”
- Swift: “if ” condition “ {” consequence “}”
 
 extension
  general containers of (thing)
