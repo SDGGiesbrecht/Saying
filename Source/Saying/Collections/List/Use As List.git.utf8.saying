@@ -186,6 +186,7 @@ extension
    (
     English: predictably named beginning of (list: list)
     C: 1 beginning (list: [list])
+    C♯: get (this: [list]).Beginning
    )
    index
    {
@@ -208,6 +209,7 @@ extension
    (
     English: predictably named end of (list: list)
     C: 1 end (list: [list])
+    C♯: get (this: [list]).End
    )
    index
    {
@@ -231,6 +233,7 @@ extension
    (
     English: predictably named advance (index: ↓ index) to next in (list: list)
     C: 2 advance‐to‐next (index: [index]) (list: [list])
+    C♯: (this: [list]).AdvanceToNext (index: [index])
    )
    {
     ← advance (↓ index) to next in (list)
@@ -252,6 +255,7 @@ extension
    (
     English: predictably named entry at (index: index) in (list: list)
     C: 2 3 entry (index: [index]) (list: [list])
+    C♯: (this: [list]).EntryAt (index: [index])
    )
    element
    {

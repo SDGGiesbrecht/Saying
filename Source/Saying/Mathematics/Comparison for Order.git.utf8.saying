@@ -208,6 +208,7 @@ extension
    (
     English: predictably named (first: thing) is less than (second: thing)
     C: 1 less (first: [first]) (second: [second])
+    C♯: (this: [first]).LessThan (other: [second])
    )
    truth value
    {
