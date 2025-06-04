@@ -47,8 +47,8 @@ extension
    )
    set of (key)
    C: “g¤(5F)hash¤(5F)table¤(5F)new(” key “¤(5F)hash¤(5F)reference, ” key “¤(5F)equal¤(5F)reference)” [
-     “” key “¤(5F)hash(” key “)”
-     “” key “¤(5F)equal(” key “, ” key “)”
+     “” key “” ‐ “¤(5F)hash(” key “)”
+     “” key “” ‐ “¤(5F)equal(” key “, ” key “)”
     ] {
      “guint ” key “¤(5F)hash¤(5F)reference(” key “¤(2A) element)¤(A){¤(A)return ” key “¤(5F)hash(¤(2A)element);¤(A)}”
      “bool ” key “¤(5F)equal¤(5F)reference(” key “¤(2A) first, ” key “¤(2A) second)¤(A){¤(A)return ” key “¤(5F)equal(¤(2A)first, ¤(2A)second);¤(A)}”

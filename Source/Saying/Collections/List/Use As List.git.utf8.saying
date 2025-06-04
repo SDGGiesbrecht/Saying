@@ -169,11 +169,7 @@ extension
    general use of (list)
    {
    }
- }
 
-extension
- use of (list) as list of (element) indexed by (index)
- {
   action (clients)
    [
     test {

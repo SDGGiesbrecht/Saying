@@ -140,6 +140,7 @@ protocol Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
 
   // Saying
+  static var usesSnakeCase: Bool { get }
   static var permitsParameterLabels: Bool { get }
   static var permitsOverloads: Bool { get }
   static var emptyParameterLabel: UnicodeText { get }
@@ -308,6 +309,10 @@ extension Platform {
     case .enumerationCase(enumeration: let enumeration, identifier: _):
       return source(for: enumeration, referenceLookup: referenceLookup)
     }
+  }
+
+  static func identifierPrefix(for type: String) -> String {
+    return String(String.UnicodeScalarView(type.unicodeScalars.lazy.filter({ allowedAsIdentifierContinuation($0) })))
   }
 
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
@@ -738,7 +743,12 @@ extension Platform {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
-            accumulator.append(contentsOf: typeSource)
+            if let next = nativeExpression.parameters[index...].dropFirst().first,
+              StrictString(next.name) == "‐" {
+              accumulator.append(contentsOf: identifierPrefix(for: typeSource))
+            } else {
+              accumulator.append(contentsOf: typeSource)
+            }
           } else if let enumerationCase = parameter.caseInstead {
             switch enumerationCase {
             case .simple, .compound, .action, .statements, .partReference:
@@ -814,7 +824,9 @@ extension Platform {
                 beforeCleanUp = accumulator
                 accumulator = ""
               } else {
-                fatalError()
+                if StrictString(name) != "‐" {
+                  fatalError()
+                }
               }
             }
           }
@@ -1597,7 +1609,8 @@ extension Platform {
     mode: CompilationMode,
     moduleWideImports: [ReferenceDictionary],
     relocatedActions: Set<String>,
-    alreadyHandledNativeRequirements: inout Set<String>
+    alreadyHandledNativeRequirements: inout Set<String>,
+    alreadyHandledActionDeclarations: inout Set<String>
   ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
@@ -1613,7 +1626,6 @@ extension Platform {
         }
       }
     }
-    var handledActionDeclarations: Set<String> = []
     for action in allActions where !action.isFlow {
       if let declaration = self.declaration(
         for: action,
@@ -1624,7 +1636,7 @@ extension Platform {
           .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
-        if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
+        if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
           result.append(contentsOf: [
             "",
             declaration.full
@@ -1706,6 +1718,7 @@ extension Platform {
       result.append("")
       result.append(contentsOf: start)
     }
+    var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
       result.append(
         self.actionsSource(
@@ -1713,7 +1726,8 @@ extension Platform {
           mode: mode,
           moduleWideImports: moduleWideImportDictionary,
           relocatedActions: relocatedActions,
-          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations
         )
       )
     }

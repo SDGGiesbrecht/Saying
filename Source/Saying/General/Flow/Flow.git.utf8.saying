@@ -12,6 +12,27 @@ flow (clients)
  Kotlin: “if (” condition “) {” consequence “}”
  Swift: “if ” condition “ {” consequence “}”
 
+flow (clients)
+ [
+  test {
+   let (• value: truth value) start as (true)
+   while (value), {
+    change (value) to (false)
+   }
+  }
+ ]
+ (
+  English: while (condition: truth value), (consequence: {})
+  Deutsch: solange (Bedingung: [condition]), (Folge: [consequence])
+  français : tant que (condition: [condition]), (conséquence: [consequence])
+  ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
+ )
+ C: “while (” condition “) {” consequence “}”
+ C♯: “while (” condition “) {” consequence “}”
+ JavaScript: “while (” condition “) {” consequence “}”
+ Kotlin: “while (” condition “) {” consequence “}”
+ Swift: “while ” condition “ {” consequence “}”
+
 extension
  general containers of (thing)
  {
@@ -53,6 +74,44 @@ extension
     let (• result: thing) be (compute: thing)
     change (cache) to (result)
     ← result
+   }
+ }
+
+extension
+ use of (list) as list of (element) indexed by (index)
+ {
+  flow (clients)
+   [
+    test {
+     for each (• element: element) in (non‐empty example: list), {
+      ignore (element)
+     }
+    }
+   ]
+   (
+    English: for each (entry: element) in (sequence: list), (repetition: {})
+   )
+   Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
+     “==(¤(5F): ” index “, ¤(5F): ” index “)”
+     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” index “)”
+     “” list “.isEmpty”
+     “” list “.index(after: ” index “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” index “: Comparable {}”
+    }
+   {
+    let (• resolved list: list) be (sequence)
+    let (• index: index) start as (beginning of (resolved list))
+    let (• end: index) be (end of (resolved list))
+    while ((index) < (end)), {
+     let (• entry: element) be (entry at (index) in (resolved list))
+     repetition
+     advance (↓ index) to next in (resolved list)
+    }
    }
  }
 

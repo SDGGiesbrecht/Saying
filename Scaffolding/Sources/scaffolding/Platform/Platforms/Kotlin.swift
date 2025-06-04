@@ -481,6 +481,9 @@ enum Kotlin: Platform {
       .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.kt"))
   }
 
+  static var usesSnakeCase: Bool {
+    return true
+  }
   static var permitsParameterLabels: Bool {
     return false
   }

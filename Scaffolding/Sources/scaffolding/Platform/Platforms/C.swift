@@ -285,6 +285,7 @@ enum C: Platform {
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),
       "{",
     ]
+    let uniquenessDefinition = result
     if let coverage = coverageRegistration {
       result.append(coverage)
     }
@@ -298,7 +299,7 @@ enum C: Platform {
     ])
     return UniqueDeclaration(
       full: result.joined(separator: "\n"),
-      uniquenessDefinition: result.joined(separator: "\n")
+      uniquenessDefinition: uniquenessDefinition.joined(separator: "\n")
     )
   }
 
@@ -487,6 +488,9 @@ enum C: Platform {
       .save(to: projectDirectory.appendingPathComponent("Makefile"))
   }
 
+  static var usesSnakeCase: Bool {
+    return true
+  }
   static var permitsParameterLabels: Bool {
     return false
   }

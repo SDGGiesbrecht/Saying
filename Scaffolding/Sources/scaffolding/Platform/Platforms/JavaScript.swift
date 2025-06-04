@@ -366,6 +366,9 @@ enum JavaScript: Platform {
       .save(to: projectDirectory.appendingPathComponent("Test.html"))
   }
 
+  static var usesSnakeCase: Bool {
+    return true
+  }
   static var permitsParameterLabels: Bool {
     return false
   }
