@@ -70,22 +70,6 @@ extension
    (
     English: for each (entry: element) in (sequence: list), (repetition: {})
    )
-   C: “const ” list “ list” + “ = ” sequence “;¤(A)const ” index “ end” + “ = ” list “” ‐ “¤(5F)end(list” + “);¤(A)for (” index “ index” + “ = ” list “” ‐ “¤(5F)beginning(list” + “); ” index “¤(5F)less(index” + “, end” + “); ” list “” ‐ “¤(5F)advance¤(5F)to¤(5F)next(¤(26)index” + “, list” + “))¤(A){¤(A)const ” element “ ” entry “ = ” list “” ‐ “¤(5F)” element “” ‐ “¤(5F)entry(index” + “, list” + “);” repetition “}” [
-     “” list “” ‐ “¤(5F)beginning(” list “)”
-     “” list “” ‐ “¤(5F)end(” list “)”
-     “” list “” ‐ “¤(5F)advance¤(5F)to¤(5F)next(” index “, ” list “)”
-     “” index “” ‐ “¤(5F)less(” index “, ” index “)”
-     “” list “” ‐ “” element “” ‐ “¤(5F)entry(” index “, ” list “)”
-    ]
-   C♯: “” list “ list” + “ = ” sequence “;¤(A)” index “ end” + “ = list” + “.End;¤(A)for (” index “ index” + “ = list” + “.Beginning; index” + “.LessThan(end” + “); list” + “.AdvanceToNext(¤(26)index” + “))¤(A){¤(A)” element “ ” entry “ = list” + “.EntryAt(index” + “);” repetition “}” [
-     “” list “.Beginning”
-     “” list “.End”
-     “” list “.AdvanceToNext(” index “)”
-     “” index “.LessThan(” index “)”
-     “” list “.EntryAt(” index “)”
-    ]
-   JavaScript: “...”
-   Kotlin: “...”
    Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
      “==(¤(5F): ” index “, ¤(5F): ” index “)”
      “<(¤(5F): ” index “, ¤(5F): ” index “)”
@@ -98,6 +82,7 @@ extension
      “extension ” list “: Collection {}”
      “extension ” index “: Comparable {}”
     }
+    {}
  }
 
 flow (clients)
