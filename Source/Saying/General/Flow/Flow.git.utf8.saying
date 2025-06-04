@@ -17,7 +17,7 @@ flow (clients)
   test {
    let (• value: truth value) start as (true)
    while (value), {
-    change (↓ value) to (false)
+    change (value) to (false)
    }
   }
  ]
