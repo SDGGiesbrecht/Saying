@@ -1,4 +1,25 @@
 flow (clients)
+ [
+  test {
+   let (• value: truth value) start as (true)
+   while (value), {
+    change (↓ value) to (false)
+   }
+  }
+ ]
+ (
+  English: while (condition: truth value), (consequence: {})
+  Deutsch: solange (Bedingung: [condition]), (Folge: [consequence])
+  français : tant que (condition: [condition]), (conséquence: [consequence])
+  ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
+ )
+ C: “while (” condition “) {” consequence “}”
+ C♯: “while (” condition “) {” consequence “}”
+ JavaScript: “while (” condition “) {” consequence “}”
+ Kotlin: “while (” condition “) {” consequence “}”
+ Swift: “while ” condition “ {” consequence “}”
+
+flow (clients)
  (
   English: if (condition: truth value), (consequence: {})
   Deutsch: wenn (Bedingung: [condition]), (Folge: [consequence])
@@ -82,7 +103,16 @@ extension
      “extension ” list “: Collection {}”
      “extension ” index “: Comparable {}”
     }
-    {}
+   {
+    let (• resolved list: list) be (sequence)
+    let (• index: index) start as (beginning of (resolved list))
+    let (• end: index) be (end of (resolved list))
+    while ((index) < (end)), {
+     let (• entry: element) be (entry at (index) in (resolved list))
+     repetition
+     advance (↓ index) to next in (resolved list)
+    }
+   }
  }
 
 flow (clients)
