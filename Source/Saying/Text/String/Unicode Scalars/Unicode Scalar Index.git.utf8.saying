@@ -159,6 +159,16 @@ use (clients)
     hash key (key) with (↓ hasher) according to optional
    }
 
+  action (unit)
+   (
+    English: hash value of (key: optional (Unicode scalar index))
+   )
+   hash value
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
   action (clients)
    differing example
    optional (Unicode scalar index)
