@@ -1,7 +1,5 @@
-import SDGText
-
 func syntaxNodeGeneralUse(
-  englishName: StrictString,
+  englishName: UnicodeText,
   parsed: Bool
 ) -> [String] {
   let source: [String] = [

@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 @main struct Scaffolding {
   static func main() throws {
     let thisFile = URL(fileURLWithPath: #filePath)
@@ -50,7 +48,7 @@ import SDGText
     case "rescaffold":
       try rescaffold(from: package, packageRoot: packageRoot)
     case "format":
-      try package.format(reportProgress: { print(StrictString($0)) })
+      try package.format(reportProgress: { print($0) })
     case "prepare‐c":
       try C.prepare(package: package, mode: .testing)
     case "prepare‐c‐sharp":
@@ -87,6 +85,8 @@ import SDGText
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
         "UnicodeText.init(_: String.UnicodeScalarView)",
+        "==(_: UnicodeText, _: UnicodeText)",
+        "UnicodeText.hash(into: Hasher)",
 
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",

@@ -1,7 +1,5 @@
-import SDGText
-
 struct PartIntermediate {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
   var readAccess: AccessIntermediate
   var writeAccess: AccessIntermediate
   var testOnlyAccess: Bool
@@ -16,16 +14,16 @@ extension PartIntermediate {
 
   static func construct(
     _ declaration: ParsedPartDeclaration,
-    namespace: [Set<StrictString>],
+    namespace: [Set<UnicodeText>],
     containerType: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool
   ) -> Result<PartIntermediate, ErrorList<PartIntermediate.ConstructionError>> {
     var errors: [PartIntermediate.ConstructionError] = []
 
-    var names: Set<StrictString> = []
+    var names: Set<UnicodeText> = []
     for name in declaration.name.names.names {
-      names.insert(StrictString(name.name.identifierText()))
+      names.insert(name.name.identifierText())
     }
 
     let readAccess = AccessIntermediate(readAccessFrom: declaration.access?.keywords)
@@ -100,7 +98,7 @@ extension PartIntermediate {
 extension PartIntermediate {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
@@ -117,8 +115,8 @@ extension PartIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,

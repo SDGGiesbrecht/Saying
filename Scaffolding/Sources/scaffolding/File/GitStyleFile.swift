@@ -52,7 +52,7 @@ struct GitStyleFile {
           cursor: (offset: offset, index: index)
         )
         if index != lastIndex {
-          if (segments.last?.source).map({ StrictString($0) }) == "\u{2028}" {
+          if segments.last?.source == "\u{2028}" {
             let first = segments.removeLast()
             segments.append(UnicodeSegment(scalarOffset: first.scalarOffset, source: UnicodeText("\u{2029}")))
           } else {

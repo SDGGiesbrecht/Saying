@@ -1,11 +1,9 @@
-import SDGText
-
 func syntaxNodeCreation(
-  englishName: StrictString,
-  deutscherName: StrictString?,
-  nomFrançais: StrictString?,
-  ελληνικόΌνομα: StrictString?,
-  swiftName: StrictString,
+  englishName: UnicodeText,
+  deutscherName: UnicodeText?,
+  nomFrançais: UnicodeText?,
+  ελληνικόΌνομα: UnicodeText?,
+  swiftName: UnicodeText,
   parsed: Bool
 ) -> [String] {
   var source: [String] = [
@@ -42,7 +40,7 @@ func syntaxNodeCreation(
       source.append("  français : créer \(français)")
     }
     if let ελληνικά = ελληνικόΌνομα {
-      source.append("  ελληνικά: δημιουργία σύνταξης \(StrictString(ελληνικά.dropFirst(9)))")
+      source.append("  ελληνικά: δημιουργία σύνταξης \(UnicodeText(ελληνικά.dropFirst(9)))")
     }
     source.append(contentsOf: [
       "  Swift: \(swiftName).init",

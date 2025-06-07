@@ -1,22 +1,20 @@
-import SDGText
-
 indirect enum TypeReference: Hashable {
-  case simple(StrictString)
-  case compound(identifier: StrictString, components: [TypeReference])
+  case simple(UnicodeText)
+  case compound(identifier: UnicodeText, components: [TypeReference])
   case action(parameters: [TypeReference], returnValue: TypeReference?)
   case statements
-  case partReference(TypeReference, identifier: StrictString)
-  case enumerationCase(TypeReference, identifier: StrictString)
+  case partReference(TypeReference, identifier: UnicodeText)
+  case enumerationCase(TypeReference, identifier: UnicodeText)
 }
 
 extension TypeReference {
   func resolving(fromReferenceLookup referenceLookup: [ReferenceDictionary]) -> TypeReference {
     switch self {
     case .simple(let identifier):
-      return .simple(StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier))))
+      return .simple(referenceLookup.resolve(identifier: identifier))
     case .compound(identifier: let identifier, components: let components):
       return .compound(
-        identifier: StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier))),
+        identifier: referenceLookup.resolve(identifier: UnicodeText(identifier)),
         components: components.map({ $0.resolving(fromReferenceLookup: referenceLookup) })
       )
     case .action(parameters: let parameters, returnValue: let returnValue):
@@ -29,12 +27,12 @@ extension TypeReference {
     case .partReference(let type, let identifier):
       return .partReference(
         type.resolving(fromReferenceLookup: referenceLookup),
-        identifier: StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier)))
+        identifier: referenceLookup.resolve(identifier: UnicodeText(identifier))
       )
     case .enumerationCase(let type, let identifier):
       return .enumerationCase(
         type.resolving(fromReferenceLookup: referenceLookup),
-        identifier: StrictString(referenceLookup.resolve(identifier: UnicodeText(identifier)))
+        identifier: referenceLookup.resolve(identifier: UnicodeText(identifier))
       )
     }
   }

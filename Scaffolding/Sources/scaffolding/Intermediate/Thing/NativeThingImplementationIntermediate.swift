@@ -1,5 +1,3 @@
-import SDGText
-
 struct NativeThingImplementationIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeThingImplementationParameter]
@@ -40,7 +38,7 @@ extension NativeThingImplementationIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
         case .success(let literal):
-          textComponents.append(UnicodeText(StrictString(literal.string)))
+          textComponents.append(UnicodeText(literal.string))
         }
       }
     }
@@ -68,7 +66,7 @@ extension NativeThingImplementationIntermediate {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
       case .success(let literal):
-        requiredImports.append(UnicodeText(StrictString(literal.string)))
+        requiredImports.append(UnicodeText(literal.string))
       }
     }
     var indirectRequirments: [NativeRequirementImplementationIntermediate] = []
@@ -107,11 +105,11 @@ extension NativeThingImplementationIntermediate {
 extension NativeThingImplementationIntermediate {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> NativeThingImplementationIntermediate {
     let mappedParameters = parameters.map({ parameter in
       return NativeThingImplementationParameter(
-        name: typeLookup[StrictString(parameter.name)] ?? parameter.name,
+        name: typeLookup[parameter.name] ?? parameter.name,
         syntaxNode: parameter.syntaxNode
       )
     })
@@ -127,7 +125,7 @@ extension NativeThingImplementationIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> NativeThingImplementationIntermediate {
     let mappedParameters = parameters.map { $0.specializing(typeLookup: typeLookup) }
     return NativeThingImplementationIntermediate(

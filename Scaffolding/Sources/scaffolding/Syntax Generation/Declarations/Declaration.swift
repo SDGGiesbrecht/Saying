@@ -1,11 +1,9 @@
-import SDGText
-
 func syntaxNodeParsedDeclaration(
-  englishName: StrictString,
-  deutscherName: StrictString?,
-  nomFrançais: StrictString?,
-  ελληνικόΌνομα: StrictString?,
-  swiftName: StrictString
+  englishName: UnicodeText,
+  deutscherName: UnicodeText?,
+  nomFrançais: UnicodeText?,
+  ελληνικόΌνομα: UnicodeText?,
+  swiftName: UnicodeText
 ) -> [String] {
   var source: [String] = [
     "thing (clients)",
@@ -16,7 +14,7 @@ func syntaxNodeParsedDeclaration(
     source.append("  Deutsch: zerteilte \(deutsch)")
   }
   if let français = nomFrançais {
-    source.append("  français : syntaxe analysée \(StrictString(français.dropFirst(8)))")
+    source.append("  français : syntaxe analysée \(UnicodeText(français.dropFirst(8)))")
   }
   if let ελληνικά = ελληνικόΌνομα {
     source.append("  ελληνικά: αναλυμένη \(ελληνικά)")

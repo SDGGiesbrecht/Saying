@@ -1,11 +1,9 @@
-import SDGText
-
 struct ReferenceDictionary {
-  private var languages: Set<StrictString>
-  private var identifierMapping: [StrictString: MappedIdentifier]
-  private var things: [StrictString: [[TypeReference]: Thing]]
-  private var actions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
-  private var abilities: [StrictString: Ability]
+  private var languages: Set<UnicodeText>
+  private var identifierMapping: [UnicodeText: MappedIdentifier]
+  private var things: [UnicodeText: [[TypeReference]: Thing]]
+  private var actions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
+  private var abilities: [UnicodeText: Ability]
 }
 
 extension ReferenceDictionary {
@@ -22,17 +20,17 @@ extension ReferenceDictionary {
 
 extension ReferenceDictionary {
   mutating func add(language: UnicodeText) {
-    languages.insert(StrictString(language))
+    languages.insert(language)
   }
 
   func languageIsKnown(_ language: UnicodeText) -> Bool {
-    return self.languages.contains(StrictString(language))
+    return self.languages.contains(language)
   }
 }
 
 extension ReferenceDictionary {
   func resolveIfKnown(identifier: UnicodeText) -> UnicodeText? {
-    return identifierMapping[StrictString(identifier)]?.identifier
+    return identifierMapping[identifier]?.identifier
   }
   func resolve(identifier: UnicodeText) -> UnicodeText {
     return resolveIfKnown(identifier: identifier) ?? identifier
@@ -71,15 +69,15 @@ extension ReferenceDictionary {
     var errors: [RedeclaredIdentifierError] = []
     let identifier = thing.names.identifier()
     for name in thing.names {
-      if identifierMapping[StrictString(name)] != nil,
-        identifierMapping[StrictString(name)].map({ StrictString($0.identifier) }) != StrictString(identifier) {
+      if identifierMapping[name] != nil,
+        identifierMapping[name]?.identifier != identifier {
         errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: thing.declaration.genericDeclaration, conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: [], specifiedReturnValue: nil, parentContexts: [])!]))
       }
       identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: thing.parameters.reordering(from: UnicodeText(name), to: identifier))
     }
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
       .map({ $0.resolvedType!.key })
-    things[StrictString(identifier), default: [:]][parameters] = thing
+    things[identifier, default: [:]][parameters] = thing
     for part in thing.parts {
       errors.append(contentsOf: add(action: part.referenceAction))
       errors.append(contentsOf: add(action: part.accessor))
@@ -98,8 +96,8 @@ extension ReferenceDictionary {
   }
 
   func lookupThing(_ identifier: UnicodeText, components: [TypeReference]) -> Thing? {
-    guard let mappedIdentifier = identifierMapping[StrictString(identifier)],
-      let group = things[StrictString(mappedIdentifier.identifier)] else {
+    guard let mappedIdentifier = identifierMapping[identifier],
+      let group = things[mappedIdentifier.identifier] else {
       return nil
     }
     let mappedComponents = order(
@@ -141,13 +139,13 @@ extension ReferenceDictionary {
     if !sorted {
       return Array(unsorted)
     } else {
-      var dictionary: [StrictString: Thing] = [:]
+      var dictionary: [UnicodeText: Thing] = [:]
       for entry in unsorted {
-        dictionary[StrictString(entry.globallyUniqueIdentifier(referenceLookup: [self]))] = entry
+        dictionary[entry.globallyUniqueIdentifier(referenceLookup: [self])] = entry
       }
-      var alphabetical = dictionary.keys.sorted().map({ dictionary[$0]! })
+      var alphabetical = dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
       var sorted: [Thing] = []
-      var already: Set<StrictString> = []
+      var already: Set<UnicodeText> = []
       var foundMore: Bool = false
       repeat {
         foundMore = false
@@ -155,11 +153,11 @@ extension ReferenceDictionary {
         while index != alphabetical.endIndex {
           let thing = alphabetical[index]
           if otherThingsRequiredByDeclaration(of: thing)
-            .allSatisfy({ already.contains(StrictString($0)) }) {
+            .allSatisfy({ already.contains($0) }) {
             _ = alphabetical.remove(at: index)
             foundMore = true
             sorted.append(thing)
-            already.insert(StrictString(thing.globallyUniqueIdentifier(referenceLookup: [self])))
+            already.insert(thing.globallyUniqueIdentifier(referenceLookup: [self]))
           } else {
             index += 1
           }
@@ -194,12 +192,12 @@ extension ReferenceDictionary {
     let identifier = action.names.identifier()
     for name in action.names {
       if identifierMapping[name] != nil,
-        identifierMapping[name].map({ StrictString($0.identifier) }) != StrictString(identifier) {
+        identifierMapping[name]?.identifier != identifier {
         errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: .action(action.declaration as! ParsedActionDeclaration), conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: action.signature(orderedFor: UnicodeText(name)), specifiedReturnValue: action.returnValue, parentContexts: [])!]))
       }
       identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: action.parameters.reordering(from: UnicodeText(name), to: identifier))
     }
-    actions[StrictString(identifier), default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = action
+    actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = action
     return errors
   }
 
@@ -221,8 +219,8 @@ extension ReferenceDictionary {
     specifiedReturnValue: ParsedTypeReference??,
     parentContexts: [ReferenceDictionary]
   ) -> [ActionIntermediate] {
-    guard let mappedIdentifier = identifierMapping[StrictString(identifier)],
-      let group = actions[StrictString(mappedIdentifier.identifier)] else {
+    guard let mappedIdentifier = identifierMapping[identifier],
+      let group = actions[mappedIdentifier.identifier] else {
       return []
     }
     let mappedSignature = signature.isEmpty ? [] : order(
@@ -292,11 +290,11 @@ extension ReferenceDictionary {
     if !sorted {
       return Array(result)
     } else {
-      var dictionary: [StrictString: ActionIntermediate] = [:]
+      var dictionary: [UnicodeText: ActionIntermediate] = [:]
       for entry in result {
-        dictionary[StrictString(entry.globallyUniqueIdentifier(referenceLookup: [self]))] = entry
+        dictionary[entry.globallyUniqueIdentifier(referenceLookup: [self])] = entry
       }
-      return dictionary.keys.sorted().map({ dictionary[$0]! })
+      return dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
     }
   }
 }
@@ -386,16 +384,16 @@ extension ReferenceDictionary {
       }
       identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: ability.parameters.reordering(from: UnicodeText(name), to: identifier))
     }
-    abilities[StrictString(identifier)] = ability
+    abilities[identifier] = ability
     return errors
   }
 
   func lookupAbility(identifier: UnicodeText) -> Ability? {
-    return abilities[StrictString(resolve(identifier: identifier))]
+    return abilities[resolve(identifier: identifier)]
   }
   mutating func modifyAbility(identifier: UnicodeText, transformation: (inout Ability) -> Void) {
-    let realIdentifier = identifierMapping[StrictString(identifier)]?.identifier ?? identifier
-    transformation(&abilities[StrictString(realIdentifier)]!)
+    let realIdentifier = identifierMapping[identifier]?.identifier ?? identifier
+    transformation(&abilities[realIdentifier]!)
   }
 
   func allAbilities() -> [Ability] {
@@ -415,7 +413,7 @@ extension Array where Element == ReferenceDictionary {
 
 extension ReferenceDictionary {
   mutating func resolveTypeIdentifiers(externalLookup: [ReferenceDictionary]) {
-    var newThings: [StrictString: [[TypeReference]: Thing]] = [:]
+    var newThings: [UnicodeText: [[TypeReference]: Thing]] = [:]
     for (thingName, group) in things {
       for (signature, thing) in group {
         let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup.appending(self)) })
@@ -424,7 +422,7 @@ extension ReferenceDictionary {
     }
     things = newThings
 
-    var newActions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
+    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
         let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup.appending(self)) })
@@ -438,7 +436,7 @@ extension ReferenceDictionary {
   }
 
   mutating func resolveTypes(parentContexts: [ReferenceDictionary]) {
-    var newActions: [StrictString: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
+    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
         for (overload, action) in returnOverloads {
@@ -539,34 +537,34 @@ extension ReferenceDictionary {
 
 extension ReferenceDictionary {
   mutating func removeUnreachable(
-    fromEntryPoints entryPoints: inout Set<StrictString>,
+    fromEntryPoints entryPoints: inout Set<UnicodeText>,
     externalReferenceLookup: [ReferenceDictionary]
   ) {
     let referenceLookup = externalReferenceLookup.appending(self)
     var optimized = ReferenceDictionary()
     optimized.languages = self.languages // For temporary simplicity; not output anyway.
-    var found: Set<StrictString> = []
-    var stillRequired: Set<StrictString> = entryPoints
+    var found: Set<UnicodeText> = []
+    var stillRequired: Set<UnicodeText> = entryPoints
     var foundSomething = false
     repeat {
       foundSomething = false
       for thing in allThings() {
-        if let swift = thing.swiftName.map({ StrictString($0) }),
+        if let swift = thing.swiftName,
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true
-          found.insert(StrictString(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
+          found.insert(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup))
           _ = optimized.add(thing: thing)
           for child in thing.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
             platform: Swift.self
-          ).lazy.map({ StrictString($0) }) {
+          ) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }
           }
         }
-        let identifier = StrictString(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup))
+        let identifier = thing.globallyUniqueIdentifier(referenceLookup: referenceLookup)
         if stillRequired.contains(identifier) {
           stillRequired.remove(identifier)
           foundSomething = true
@@ -575,7 +573,7 @@ extension ReferenceDictionary {
           for child in thing.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
             platform: Swift.self
-          ).lazy.map({ StrictString($0) }) {
+          ) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }
@@ -583,22 +581,22 @@ extension ReferenceDictionary {
         }
       }
       for action in allActions() {
-        if let swift = action.swiftSignature(referenceLookup: referenceLookup).map({ StrictString($0) }),
+        if let swift = action.swiftSignature(referenceLookup: referenceLookup),
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true
-          found.insert(StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
+          found.insert(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))
           _ = optimized.add(action: action)
           for identifer in action.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
             platform: Swift.self
-          ).lazy.map({ StrictString($0) }) {
+          ) {
             if !found.contains(identifer) {
               stillRequired.insert(identifer)
             }
           }
         }
-        let identifier = StrictString(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))
+        let identifier = action.globallyUniqueIdentifier(referenceLookup: referenceLookup)
         if stillRequired.contains(identifier) {
           stillRequired.remove(identifier)
           foundSomething = true
@@ -607,7 +605,7 @@ extension ReferenceDictionary {
           for child in action.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
             platform: Swift.self
-          ).lazy.map({ StrictString($0) }) {
+          ) {
             if !found.contains(child) {
               stillRequired.insert(child)
             }

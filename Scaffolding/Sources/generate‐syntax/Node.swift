@@ -343,7 +343,7 @@ struct Node {
         "        cursor = remainder.index(after: cursor)",
         "    }",
         "    let slice = remainder[remainder.startIndex..<cursor]",
-        "    guard allowed.contains(StrictString(slice)) else {",
+        "    guard allowed.contains(UnicodeText(slice)) else {",
         "      return .failure([.notA\(name)(slice)])",
         "    }",
         "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonNotContinued: nil))",
@@ -491,7 +491,7 @@ struct Node {
         "        cursor = remainder.index(after: cursor)",
         "    }",
         "    let slice = remainder[remainder.startIndex..<cursor]",
-        "    guard allowed.contains(StrictString(slice)) else {",
+        "    guard allowed.contains(UnicodeText(slice)) else {",
         "      return nil",
         "    }",
         "    return Parsed\(name)(location: slice)",
@@ -684,7 +684,7 @@ struct Node {
     case .keyword(let allowed):
       var result: [String] = [
         "",
-        "  static let allowed: Set<StrictString> = [",
+        "  static let allowed: Set<UnicodeText> = [",
       ]
       for keyword in allowed.sorted() {
         result.append("    \u{22}\(keyword)\u{22},")

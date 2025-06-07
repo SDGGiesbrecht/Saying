@@ -1,5 +1,3 @@
-import SDGText
-
 struct UseIntermediate {
   var ability: UnicodeText
   var arguments: [ParsedTypeReference]
@@ -13,7 +11,7 @@ extension UseIntermediate {
 
   static func construct(
     _ declaration: ParsedUse,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<UseIntermediate, ErrorList<UseIntermediate.ConstructionError>> {
     var errors: [UseIntermediate.ConstructionError] = []
     let abilityName = declaration.use.name()
@@ -45,7 +43,7 @@ extension UseIntermediate {
 
 extension UseIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> UseIntermediate {
     return UseIntermediate(
       ability: ability,
@@ -58,8 +56,8 @@ extension UseIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> UseIntermediate {
     return UseIntermediate(
       ability: ability,

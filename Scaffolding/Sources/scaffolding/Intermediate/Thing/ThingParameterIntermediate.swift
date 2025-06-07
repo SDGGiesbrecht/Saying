@@ -1,7 +1,5 @@
-import SDGText
-
 struct ThingParameterIntermediate {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
   var resolvedType: ParsedTypeReference?
 }
 
@@ -9,12 +7,12 @@ extension ThingParameterIntermediate: InterpolationParameterProtocol {}
 
 extension ThingParameterIntermediate {
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> ThingParameterIntermediate {
     let identifier = names.identifier()
     return ThingParameterIntermediate(
       names: names,
-      resolvedType: typeLookup[StrictString(identifier)] ?? resolvedType?.specializing(typeLookup: typeLookup)
+      resolvedType: typeLookup[identifier] ?? resolvedType?.specializing(typeLookup: typeLookup)
     )
   }
 }

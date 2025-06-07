@@ -8,6 +8,10 @@ struct UnicodeText {
     self.scalars = scalars
   }
 
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(self.scalars)
+  }
+
   func index(after i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.scalars.index(after: i)
   }
@@ -478,6 +482,14 @@ struct ParsedRightChevronQuotationMarkSyntax {
   }
 }
 
+public func ==(_ lhs: String.UnicodeScalarView, _ rhs: String.UnicodeScalarView) -> Bool {
+  return lhs.elementsEqual(rhs)
+}
+
+func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
+  return lhs.scalars == rhs.scalars
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -486,6 +498,16 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
   cache = result
   return result
 }
+
+extension String.UnicodeScalarView {
+  public func hash(into hasher: inout Hasher) {
+    for scalar in self {
+      hasher.combine(scalar)
+    }
+  }
+}
+
+extension String.UnicodeScalarView: Hashable {}
 
 func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar

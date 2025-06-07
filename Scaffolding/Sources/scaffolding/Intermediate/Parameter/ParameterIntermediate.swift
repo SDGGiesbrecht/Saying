@@ -1,7 +1,5 @@
-import SDGText
-
 struct ParameterIntermediate {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
   var type: ParsedTypeReference
   var isThrough: Bool
   var passAction: ActionIntermediate
@@ -10,7 +8,7 @@ struct ParameterIntermediate {
   var swiftLabel: UnicodeText?
 
   init(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     type: ParsedTypeReference,
     isThrough: Bool,
     passAction: ActionIntermediate,
@@ -30,7 +28,7 @@ struct ParameterIntermediate {
 
 extension ParameterIntermediate {
   static func nativeParameterStub(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     type: ParsedTypeReference
   ) -> ParameterIntermediate {
     return ParameterIntermediate(
@@ -49,7 +47,7 @@ extension ParameterIntermediate: InterpolationParameterProtocol {}
 
 extension ParameterIntermediate {
   init(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     nestedParameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference,
     isThrough: Bool,
@@ -92,7 +90,7 @@ extension ParameterIntermediate {
 
 extension ParameterIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
@@ -117,8 +115,8 @@ extension ParameterIntermediate {
   }
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
@@ -148,7 +146,7 @@ extension ParameterIntermediate {
   }
   func prefixing(with prefix: UnicodeText) -> ParameterIntermediate {
     return ParameterIntermediate(
-      names: Set(names.map({ "\(StrictString(prefix))\($0)" })),
+      names: Set(names.map({ "\(prefix)\($0)" })),
       type: type,
       isThrough: isThrough,
       passAction: passAction,

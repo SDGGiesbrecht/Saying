@@ -6,15 +6,15 @@ extension ModuleIntermediate {
       let names = nodePrototype.declaration.name.namesDictionary
       let englishName = StrictString(names["English"]!.name())
       if englishName.hasSuffix(" syntax") {
-        let deutscherName = (names["Deutsch"]?.name()).map({ StrictString($0) })
-        let nomFrançais = (names["français"]?.name()).map({ StrictString($0) })
-        let ελληνικόΌνομα = (names["ελληνικά"]?.name()).map({ StrictString($0) })
-        let swiftName = StrictString(names["Swift"]!.name())
+        let deutscherName = (names["Deutsch"]?.name())
+        let nomFrançais = (names["français"]?.name())
+        let ελληνικόΌνομα = (names["ελληνικά"]?.name())
+        let swiftName = names["Swift"]!.name()
 
         var newSource: [String] = []
         newSource.append(
           contentsOf: syntaxNodeParsedDeclaration(
-            englishName: englishName,
+            englishName: UnicodeText(englishName),
             deutscherName: deutscherName,
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
@@ -24,7 +24,7 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(
           contentsOf: syntaxNodeCreation(
-            englishName: englishName,
+            englishName: UnicodeText(englishName),
             deutscherName: deutscherName,
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
@@ -35,7 +35,7 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(
           contentsOf: syntaxNodeCreation(
-            englishName: englishName,
+            englishName: UnicodeText(englishName),
             deutscherName: deutscherName,
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
@@ -44,9 +44,9 @@ extension ModuleIntermediate {
           )
         )
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: englishName, parsed: false))
+        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: UnicodeText(englishName), parsed: false))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: englishName, parsed: true))
+        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: UnicodeText(englishName), parsed: true))
         let file = GitStyleFile(
           source: UnicodeText(newSource.joined(separator: "\n"))
         ).parsed()
