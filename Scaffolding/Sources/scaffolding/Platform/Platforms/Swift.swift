@@ -439,6 +439,7 @@ enum Swift: Platform {
     "extension String.UnicodeScalarView: Collection {}",
     "extension String.UnicodeScalarView.Index: Comparable {}",
     "extension String.UnicodeScalarView.Index: Equatable {}",
+    "extension String.UnicodeScalarView.Index: Hashable {}",
     "extension UInt: Equatable {}",
     "extension UInt: Hashable {}",
     "extension UInt64: Equatable {}",
@@ -448,6 +449,7 @@ enum Swift: Platform {
   ]
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
     if source.hasSuffix("?: Equatable {}")
+      || source.hasSuffix("?: Hashable {}")
       || source.hasSuffix("]: Collection {}") {
       return true
     }

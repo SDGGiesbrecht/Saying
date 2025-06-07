@@ -42,6 +42,24 @@ use (clients)
    Swift: «» first “ != ” second „“
 
   action (clients)
+   hash key (key: list index) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    feed (direct hash value of (key)) into (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: list index)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
    differing example
    list index
    {
@@ -60,28 +78,6 @@ action (file)
  JavaScript: “” index “”
  Kotlin: “” index “”
  Swift: “” index “”
-
-use (clients)
- hashing (list index)
- {
-  action (clients)
-   hash key (key: list index) with (hasher: ↓ hasher)
-   Swift: “” key “.hash(into: ¤(26)” hasher “)”
-   {
-    feed (direct hash value of (key)) into (↓ hasher)
-   }
-
-  action (unit)
-   (
-    English: hash value of (key: list index)
-   )
-   hash value
-   C♯: “” key “.GetHashCode()”
-   Kotlin: “” key “.hashCode()”
-   {
-    ← hash value of (key) according to default hashing
-   }
- }
 
 use (clients)
  comparison of (list index) for order

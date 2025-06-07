@@ -86,6 +86,35 @@ ability (clients)
 
   requirement (clients)
    [
+    test {
+     let (• hasher: hasher) start as (create hasher)
+     hash key (example: thing) with (↓ hasher)
+    }
+   ]
+   (
+    English: hash key (key: thing) with (hasher: ↓ hasher)
+    Deutsch: Schlüssel (Schlüssel: [key]) mit (Verstreuer: [hasher]) zerhacken
+    français : hacher clé (clé: [key]) avec (hacheur: [hasher])
+    ελληνικά: κατατεμαχισμός κλειδί (κλειδί: [key]) με (κατακερματιστής: [hasher])
+    Swift: (self: [key]).hash into (hasher: [hasher])
+   )
+
+  choice (unit)
+   [
+    test {ignore (hash value of (example: thing))}
+   ]
+   (
+    English: hash value of (key: thing)
+    C♯: override (this: [key]).GetHashCode
+    Kotlin: override (this: [key]).hashCode
+   )
+   hash value
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  requirement (clients)
+   [
     [
      English: A separate example instance which differs from the main example.
     ]
@@ -97,6 +126,23 @@ ability (clients)
 extension
  comparison of (thing) for equality
  {
+  action (clients)
+   (
+    English: hash part (part: thing) with (hasher: ↓ hasher)
+    Deutsch: Teil (Teil: [part]) mit (Verstreuer: [hasher]) zerhacken
+    français : hacher partie (partie: [part]) avec (hacheur: [hasher])
+    ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
+   )
+   Swift: “” hasher “.combine(” part “)” [
+     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “” thing “.hash(into: Hasher)”
+    ] {
+     “extension ” thing “: Hashable {}”
+    }
+   {
+    hash key (part) with (↓ hasher)
+   }
+
   action (unit)
    [
     [
@@ -116,6 +162,25 @@ extension
     ← (first) is (second)
    }
 
+  action (unit)
+   [
+    [
+     English: Forwards to a hash computation.
+    ]
+    [
+     English: This alias exists to provide a predictable name for C’s set implementation to reference. The check’s C name cannot be specified on the requirement itself, because there it might be overridden by a native fulfillment.
+    ]
+    test {ignore (predictably named hash value of (example: thing))}
+   ]
+   (
+    English: predictably named hash value of (key: thing)
+    C: 1 hash (key: [key])
+   )
+   hash value
+   {
+    ← hash value of (key)
+   }
+
   action (clients)
    [
     test {verify ((example: thing) is not (differing example: thing) according to comparison for equality)}
@@ -128,6 +193,17 @@ extension
    Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: thing) according to comparison for equality
+   )
+   hash value
+   {
+    let (• hasher: hasher) start as (create hasher)
+    hash part (key) with (↓ hasher)
+    ← final hash value from (hasher)
    }
 
   action (clients)
@@ -170,5 +246,76 @@ extension
    Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second) according to optional)
+   }
+
+  action (clients)
+   [
+    test {
+     let (• hasher: hasher) start as (create hasher)
+     hash key (wrap (example: thing) into optional) with (↓ hasher) according to optional
+    }
+   ]
+   (
+    English: hash key (key: optional (thing)) with (hasher: ↓ hasher) according to optional
+   )
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    if (key) exists, unwrap it as (• unwrapped: thing), {
+     hash part (unwrapped) with (↓ hasher)
+    }
+   }
+ }
+
+thing (file)
+ (
+  English: minimal equality example
+ )
+ {
+  part (file)
+   (
+    English: wrapped truth value
+   )
+   truth value
+ }
+
+action (file)
+ (
+  English: minimal equality example wrapping (wrapped truth value: truth value)
+ )
+ minimal equality example
+ create
+
+use (file)
+ general containers of (minimal equality example)
+ {
+  action (file)
+   example
+   minimal equality example
+   {
+    ← minimal equality example wrapping (example: truth value)
+   }
+ }
+
+use (file)
+ comparison of (minimal equality example) for equality
+ {
+  action (file)
+   (first: minimal equality example) is (second: minimal equality example)
+   truth value
+   {
+    ← ((wrapped truth value) of (first)) is ((wrapped truth value) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal equality example) with (hasher: ↓ hasher)
+   {
+    hash part ((wrapped truth value) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal equality example
+   {
+    ← minimal equality example wrapping (differing example: truth value)
    }
  }

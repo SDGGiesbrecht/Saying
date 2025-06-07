@@ -48,6 +48,24 @@ use (clients)
    Swift: «» first “ != ” second „“
 
   action (clients)
+   hash key (key: platform fixed‐width integer) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    feed (direct hash value of (key)) into (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: platform fixed‐width integer)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
    differing example
    platform fixed‐width integer
    {
@@ -66,28 +84,6 @@ action (file)
  JavaScript: “” integer “”
  Kotlin: “” integer “”
  Swift: “” integer “”
-
-use (clients)
- hashing (platform fixed‐width integer)
- {
-  action (clients)
-   hash key (key: platform fixed‐width integer) with (hasher: ↓ hasher)
-   Swift: “” key “.hash(into: ¤(26)” hasher “)”
-   {
-    feed (direct hash value of (key)) into (↓ hasher)
-   }
-
-  action (unit)
-   (
-    English: hash value of (key: platform fixed‐width integer)
-   )
-   hash value
-   C♯: “” key “.GetHashCode()”
-   Kotlin: “” key “.hashCode()”
-   {
-    ← hash value of (key) according to default hashing
-   }
- }
 
 use (clients)
  comparison of (platform fixed‐width integer) for order

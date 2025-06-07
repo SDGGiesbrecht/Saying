@@ -114,20 +114,16 @@ use (file)
    }
 
   action (file)
+   hash key (key: minimal addition example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
    differing example
    minimal addition example
    {
     ← example sum
-   }
- }
-
-use (file)
- hashing (minimal addition example)
- {
-  action (file)
-   hash key (key: minimal addition example) with (hasher: ↓ hasher)
-   {
-    hash part ((number) of (key)) with (↓ hasher)
    }
  }
 
