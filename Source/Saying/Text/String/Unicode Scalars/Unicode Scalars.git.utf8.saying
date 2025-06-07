@@ -77,6 +77,29 @@ use (clients)
    }
  }
 
+use (clients)
+ hashing (Unicode scalars)
+ {
+  action (clients)
+   hash key (key: Unicode scalars) with (hasher: ↓ hasher)
+   {
+    for each (• scalar: Unicode scalar) in (key), {
+     hash part (scalar) with (↓ hasher)
+    }
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: Unicode scalars)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
 use
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index)
  {

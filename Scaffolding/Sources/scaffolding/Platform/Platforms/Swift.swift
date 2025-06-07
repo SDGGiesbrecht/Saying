@@ -340,6 +340,11 @@ enum Swift: Platform {
        returnSection == " -> Bool" {
       access = "public "
     }
+    if name == "hash",
+       parameters == "into hasher: inout Hasher",
+       returnSection == nil {
+      access = "public "
+    }
 
     let keyword = propertyInstead ? "var "
       : initializerInstead ? ""

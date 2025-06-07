@@ -50,6 +50,34 @@ use (clients)
    }
  }
 
+use (clients)
+ comparison of (Unicode text) for equality
+ {
+  action (clients)
+   (first: Unicode text) is (second: Unicode text)
+   truth value
+   {
+    ← ((scalars) of (first)) is ((scalars) of (second))
+   }
+
+  action (clients)
+   differing example
+   Unicode text
+   {
+    ← Unicode text of (“!”)
+   }
+ }
+
+use (clients)
+ hashing (Unicode text)
+ {
+  action (clients)
+   hash key (key: Unicode text) with (hasher: ↓ hasher)
+   {
+    hash part ((scalars) of (key)) with (↓ hasher)
+   }
+ }
+
 use
  use of (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index)
  {
