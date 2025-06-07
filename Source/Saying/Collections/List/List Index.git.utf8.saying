@@ -49,6 +49,40 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (direct hash value of (example: list index))}
+ ]
+ direct hash value of (index: list index)
+ hash value
+ C: “” index “”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “” index “”
+
+use (clients)
+ hashing (list index)
+ {
+  action (clients)
+   hash key (key: list index) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    feed (direct hash value of (key)) into (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: list index)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default hashing
+   }
+ }
+
 use (clients)
  comparison of (list index) for order
  {
