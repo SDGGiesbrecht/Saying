@@ -122,6 +122,16 @@ use (file)
  }
 
 use (file)
+ hashing (minimal addition example)
+ {
+  action (file)
+   hash key (key: minimal addition example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+ }
+
+use (file)
  addition of (minimal addition example)
  {
   action (file)
