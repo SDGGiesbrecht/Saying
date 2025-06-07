@@ -23,7 +23,7 @@ struct ActionIntermediate {
   var documentation: DocumentationIntermediate? {
     return prototype.documentation
   }
-  var names: Set<StrictString> {
+  var names: Set<UnicodeText> {
     return prototype.names
   }
   var parameters: Interpolation<ParameterIntermediate> {
@@ -116,7 +116,7 @@ extension ActionIntermediate {
   }
 
   static func parameterAction(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     parameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference?
   ) -> ActionIntermediate {
@@ -138,7 +138,7 @@ extension ActionIntermediate {
   }
 
   static func partReference(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     containerType: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool
@@ -240,7 +240,7 @@ extension ActionIntermediate {
   }
 
   static func enumerationCase(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     enumerationType: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool
@@ -345,7 +345,7 @@ extension ActionIntermediate {
   }
 
   static func enumerationWrapNothing(
-    names: Set<StrictString>,
+    names: Set<UnicodeText>,
     returnValue: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool,
@@ -556,7 +556,7 @@ extension ActionIntermediate {
 
   static func construct<Declaration>(
     _ declaration: Declaration,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<ActionIntermediate, ErrorList<ActionIntermediate.ConstructionError>>
   where Declaration: ParsedActionDeclarationPrototype {
     var errors: [ActionIntermediate.ConstructionError] = []
@@ -582,7 +582,7 @@ extension ActionIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
-          switch StrictString(implementation.language.identifierText()) {
+          switch implementation.language.identifierText() {
           case "C":
             c = constructed
           case "C♯":
@@ -667,9 +667,9 @@ extension ActionIntermediate {
           )
         } else {
           if prototype.parameters.parameter(named: parameterReference.name) == nil,
-            StrictString(parameterReference.name) != "‐",
-            StrictString(parameterReference.name) != "+",
-            StrictString(parameterReference.name) != "−" {
+            parameterReference.name != "‐",
+            parameterReference.name != "+",
+            parameterReference.name != "−" {
             errors.append(.noSuchParameter(parameterReference.syntaxNode))
           }
         }
@@ -686,7 +686,7 @@ extension ActionIntermediate {
           )
         } else {
           if parameters.parameter(named: parameterReference.name) == nil {
-            if StrictString(parameterReference.name) != "‐" {
+            if parameterReference.name != "‐" {
               errors.append(.noSuchParameter(parameterReference.syntaxNode))
             }
           }
@@ -708,7 +708,7 @@ extension ActionIntermediate {
 
 extension ActionIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in
       return parameter.resolvingExtensionContext(typeLookup: typeLookup)
@@ -749,8 +749,8 @@ extension ActionIntermediate {
   func merging(
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let mergedParameters: Interpolation<ParameterIntermediate>
@@ -811,8 +811,8 @@ extension ActionIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in
       return parameter.specializing(
@@ -904,7 +904,7 @@ extension ActionIntermediate {
   }
 
   func coverageTrackingIdentifier() -> UnicodeText {
-    return UnicodeText("☐\(StrictString(prototype.names.identifier()))")
+    return UnicodeText("☐\(prototype.names.identifier())")
   }
   func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate? {
     if let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
@@ -913,7 +913,7 @@ extension ActionIntermediate {
       return ActionIntermediate(
         prototype: ActionPrototype(
           isFlow: isFlow,
-          names: [StrictString(wrapperName)],
+          names: [wrapperName],
           namespace: [],
           parameters: prototype.parameters
             .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
@@ -983,7 +983,7 @@ extension ActionIntermediate {
       result.append(base)
       if !skippingSubregions {
         for entry in coverageSubregions() {
-          result.append(UnicodeText("\(StrictString(base)):{\(entry.inDigits())}"))
+          result.append(UnicodeText("\(base):{\(entry.inDigits())}"))
         }
       }
     }
@@ -1079,7 +1079,7 @@ extension ActionIntermediate {
         name.removeFirst()
       }
     }
-    let parameters = parameterNames.map({ "\(StrictString($0))\(StrictString(platform.parameterLabelSuffix))" }).joined()
+    let parameters = parameterNames.map({ "\($0)\(platform.parameterLabelSuffix)" }).joined()
     let parameterSection = isVariable ? "" : "(\(parameters))"
     return UnicodeText("\(functionName)\(parameterSection)")
   }

@@ -1,5 +1,3 @@
-import SDGText
-
 struct ExtensionIntermediate {
   var ability: UnicodeText
   var arguments: [SimpleTypeReference]
@@ -13,7 +11,7 @@ extension ExtensionIntermediate {
 
   static func construct(
     _ declaration: ParsedExtensionSyntax,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<ExtensionIntermediate, ErrorList<ExtensionIntermediate.ConstructionError>> {
     var errors: [ExtensionIntermediate.ConstructionError] = []
     let abilityName = declaration.ability.name()

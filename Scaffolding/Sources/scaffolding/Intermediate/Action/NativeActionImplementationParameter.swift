@@ -1,5 +1,3 @@
-import SDGText
-
 struct NativeActionImplementationParameter {
   var name: UnicodeText
   var syntaxNode: ParsedUninterruptedIdentifier
@@ -18,13 +16,13 @@ extension NativeActionImplementationParameter {
 
 extension NativeActionImplementationParameter {
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> NativeActionImplementationParameter {
     return NativeActionImplementationParameter(
       name: name,
       syntaxNode: syntaxNode,
-      typeInstead: typeLookup[StrictString(name)] ?? typeInstead?.specializing(typeLookup: typeLookup),
-      caseInstead: typeLookup[StrictString(name)] ?? caseInstead?.specializing(typeLookup: typeLookup)
+      typeInstead: typeLookup[name] ?? typeInstead?.specializing(typeLookup: typeLookup),
+      caseInstead: typeLookup[name] ?? caseInstead?.specializing(typeLookup: typeLookup)
     )
   }
 }

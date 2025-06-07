@@ -2,8 +2,8 @@ import SDGText
 
 struct ActionPrototype {
   var isFlow: Bool
-  var names: Set<StrictString>
-  var namespace: [Set<StrictString>]
+  var names: Set<UnicodeText>
+  var namespace: [Set<UnicodeText>]
   var parameters: Interpolation<ParameterIntermediate>
   var returnValue: ParsedTypeReference?
   var access: AccessIntermediate
@@ -13,8 +13,8 @@ struct ActionPrototype {
 
   init(
     isFlow: Bool,
-    names: Set<StrictString>,
-    namespace: [Set<StrictString>],
+    names: Set<UnicodeText>,
+    namespace: [Set<UnicodeText>],
     parameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference?,
     access: AccessIntermediate,
@@ -38,7 +38,7 @@ extension ActionPrototype {
 
   static func construct<S>(
     _ declaration: S,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<ActionPrototype, ErrorList<ActionPrototype.ConstructionError>>
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
@@ -60,7 +60,7 @@ extension ActionPrototype {
     case .success(let constructed):
       parameters = constructed
     }
-    var names: Set<StrictString> = []
+    var names: Set<UnicodeText> = []
     var nativeNames = NativeActionNamesIntermediate.none
     for (language, signature) in namesDictionary {
       let name = signature.name()
@@ -105,7 +105,7 @@ extension ActionPrototype {
       default:
         break
       }
-      names.insert(StrictString(name))
+      names.insert(name)
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
@@ -113,7 +113,7 @@ extension ActionPrototype {
         documentation.documentation,
         namespace: namespace
           .appending(names)
-          .appending(contentsOf: parameters.ordered(for: names.identifier()).map({ parameter in return [StrictString(parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",".unicodeScalars))] as Set<StrictString>
+          .appending(contentsOf: parameters.ordered(for: names.identifier()).map({ parameter in return [UnicodeText(parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",".unicodeScalars))] as Set<UnicodeText>
           }))
       ) {
       case .failure(let nested):
@@ -122,7 +122,7 @@ extension ActionPrototype {
         attachedDocumentation = intermediateDocumentation
         let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
         for parameter in intermediateDocumentation.parameters.joined() {
-          if !existingParameters.contains(StrictString(parameter.name.identifierText())) {
+          if !existingParameters.contains(parameter.name.identifierText()) {
             errors.append(ConstructionError.documentedParameterNotFound(parameter))
           }
         }

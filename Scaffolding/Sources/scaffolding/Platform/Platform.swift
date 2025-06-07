@@ -266,7 +266,7 @@ extension Platform {
     case .simple(let simple):
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
-        return String(native.textComponents.lazy.map({ StrictString($0) }).joined())
+        return String(UnicodeText(native.textComponents.joined()))
       } else if let native = nativeName(of: type) {
         return native
       } else {
@@ -328,9 +328,9 @@ extension Platform {
   }
   
   static func nativeIsOverride(action: ActionIntermediate) -> Bool {
-    if let name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
-      if let override = overridePrefix.map({ StrictString($0) }) {
-         return name.hasPrefix(override)
+    if let name = nativeNameDeclaration(of: action) {
+      if let override = overridePrefix {
+        return name.starts(with: override)
       }
     }
     return false
@@ -342,22 +342,23 @@ extension Platform {
          name.hasPrefix(override) {
         name.removeFirst(override.count)
       }
-      if let variable = variablePrefix.map({ StrictString($0) }) {
-        return name.hasPrefix(variable)
+      if let variable = variablePrefix {
+        return name.starts(with: variable)
       }
     }
     return false
   }
 
-  static func nativeDeclarationIsInitializer(declaration: StrictString) -> Bool {
+  static func nativeDeclarationIsInitializer(declaration: UnicodeText) -> Bool {
+    let parsableDeclaration = StrictString(declaration)
     if let initializer = initializerSuffix.map({ StrictString($0) }),
-      (declaration.prefix(upTo: " ")?.contents ?? declaration[...]).hasSuffix(initializer.literal()) {
+      (parsableDeclaration.prefix(upTo: " ")?.contents ?? parsableDeclaration[...]).hasSuffix(initializer.literal()) {
       return true
     }
     return false
   }
   static func nativeIsInitializer(action: ActionIntermediate) -> Bool {
-    if let name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
+    if let name = nativeNameDeclaration(of: action) {
       return nativeDeclarationIsInitializer(declaration: name)
     }
     return false
@@ -373,11 +374,11 @@ extension Platform {
          name.hasPrefix(variable) {
         name.removeFirst(variable.count)
       }
-      if let member = memberPrefix.map({ StrictString($0) }),
-        name.hasPrefix(member) {
+      if let member = memberPrefix,
+        name.starts(with: member) {
         return true
       }
-      if nativeDeclarationIsInitializer(declaration: name) {
+      if nativeDeclarationIsInitializer(declaration: UnicodeText(name)) {
         return true
       }
     }
@@ -578,7 +579,7 @@ extension Platform {
     coverageRegionCounter += 1
     if let coverage = contextCoverageIdentifier,
       statements.first?.isDeadEnd != true {
-      let appendedIdentifier: StrictString = "\(StrictString(coverage)):{\(coverageRegionCounter.inDigits())}"
+      let appendedIdentifier = "\(coverage):{\(coverageRegionCounter.inDigits())}"
       return "\n\(self.coverageRegistration(identifier: sanitize(stringLiteral: UnicodeText(appendedIdentifier))))"
     } else {
       return nil
@@ -597,7 +598,7 @@ extension Platform {
     extractedArguments: inout [String],
     isArgumentExtraction: Bool = false,
     cleanUpCode: inout String,
-    inliningArguments: [StrictString: String],
+    inliningArguments: [UnicodeText: String],
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
@@ -611,7 +612,7 @@ extension Platform {
       return self.literal(string: sanitize(stringLiteral: literal.string))
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
-    if let inlined = inliningArguments[StrictString(reference.actionName)] {
+    if let inlined = inliningArguments[reference.actionName] {
       return inlined
     } else if reference.passage == .out {
       return String(sanitize(identifier: reference.actionName, leading: true))
@@ -722,7 +723,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
     cleanUpCode: inout String,
-    inliningArguments: [StrictString: String],
+    inliningArguments: [UnicodeText: String],
     mode: CompilationMode
   ) -> String {
     var didUseClashAvoidance = false
@@ -744,7 +745,7 @@ extension Platform {
           if let type = parameter.typeInstead {
             let typeSource = source(for: type, referenceLookup: referenceLookup)
             if let next = nativeExpression.parameters[index...].dropFirst().first,
-              StrictString(next.name) == "‐" {
+              next.name == "‐" {
               accumulator.append(contentsOf: identifierPrefix(for: typeSource))
             } else {
               accumulator.append(contentsOf: typeSource)
@@ -764,7 +765,7 @@ extension Platform {
             }
           } else {
             let name = parameter.name
-            if let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(StrictString(name)) }) {
+            if let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(name) }) {
               let argument = reference.arguments[argumentIndex]
               switch argument {
               case .action(let actionArgument):
@@ -817,14 +818,14 @@ extension Platform {
                 local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
               }
             } else {
-              if StrictString(name) == "+" {
+              if name == "+" {
                 accumulator.append(String(clashAvoidanceCounter))
                 didUseClashAvoidance = true
-              } else if StrictString(name) == "−" {
+              } else if name == "−" {
                 beforeCleanUp = accumulator
                 accumulator = ""
               } else {
-                if StrictString(name) != "‐" {
+                if name != "‐" {
                   fatalError()
                 }
               }
@@ -853,14 +854,14 @@ extension Platform {
       }
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
-      var newInliningArguments: [StrictString: String] = [:]
+      var newInliningArguments: [UnicodeText: String] = [:]
       var locals = ReferenceDictionary()
       for index in parameters.indices {
         let parameter = parameters[index]
         let argument = reference.arguments[index]
         switch argument {
         case .action(let action):
-          newInliningArguments[StrictString(parameter.names.identifier())] = call(
+          newInliningArguments[parameter.names.identifier()] = call(
             to: action,
             context: context,
             localLookup: localLookup.appending(locals),
@@ -901,7 +902,7 @@ extension Platform {
           ) {
             source.prepend(coverage)
           }
-          newInliningArguments[StrictString(parameter.names.identifier())] = source.joined(separator: "\n")
+          newInliningArguments[parameter.names.identifier()] = source.joined(separator: "\n")
         }
       }
       var newCoverageRegionCounter = 0
@@ -1026,7 +1027,7 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
-    inliningArguments: [StrictString: String],
+    inliningArguments: [UnicodeText: String],
     mode: CompilationMode
   ) -> ReferenceCountedReturns {
     var entries = ReferenceCountedReturns()
@@ -1054,7 +1055,7 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
-    inliningArguments: [StrictString: String],
+    inliningArguments: [UnicodeText: String],
     mode: CompilationMode,
     entries: inout ReferenceCountedReturns
   ) {
@@ -1137,7 +1138,7 @@ extension Platform {
     followingStatements: Array<StatementIntermediate>.SubSequence,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
-    inliningArguments: [StrictString: String],
+    inliningArguments: [UnicodeText: String],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
     indentationLevel: Int
@@ -1336,7 +1337,7 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
-    inliningArguments: [StrictString: String],
+    inliningArguments: [UnicodeText: String],
     mode: CompilationMode,
     indentationLevel: Int
   ) -> [String] {
@@ -1523,18 +1524,18 @@ extension Platform {
     return imports
   }
 
-  static func coverageRegions(for module: ModuleIntermediate, moduleWideImports: [ReferenceDictionary]) -> Set<StrictString> {
+  static func coverageRegions(for module: ModuleIntermediate, moduleWideImports: [ReferenceDictionary]) -> Set<UnicodeText> {
     let moduleReferenceLookup = module.referenceDictionary
     let allLookup = moduleWideImports.appending(moduleReferenceLookup)
-    let actionRegions: [StrictString] = moduleReferenceLookup.allActions()
+    let actionRegions: [UnicodeText] = moduleReferenceLookup.allActions()
       .lazy.filter({ action in
         return !action.isCoverageWrapper
         && !(action.isFlow && action.returnValue != nil)
       })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
-    let choiceRegions: [StrictString] = moduleReferenceLookup.allAbilities()
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
+    let choiceRegions: [UnicodeText] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil).lazy.map({ StrictString($0) }) })
+      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
     return Set([
       actionRegions,
       choiceRegions
@@ -1550,10 +1551,10 @@ extension Platform {
       line.append(contentsOf: String(requirement.textComponents[index]))
       if index != requirement.textComponents.indices.last {
         let parameter = requirement.parameters[index]
-        if StrictString(parameter.name) != "‐" {
+        if parameter.name != "‐" {
           var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
           if let next = requirement.parameters[index...].dropFirst().first,
-             StrictString(next.name) == "‐" {
+            next.name == "‐" {
             type = identifierPrefix(for: type)
           }
           line.append(contentsOf: type)
@@ -1696,12 +1697,12 @@ extension Platform {
     }
 
     if mode == .testing {
-      var regionSet: Set<StrictString> = []
+      var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
       }
       let regions = regionSet
-        .sorted()
+        .sorted(by: { $0.lexicographicallyPrecedes($1) })
         .map({ sanitize(stringLiteral: UnicodeText($0)) })
       result.append(contentsOf: coverageRegionSet(regions: regions))
       result.append(contentsOf: registerCoverageAction)
@@ -1765,11 +1766,11 @@ extension Platform {
   static func prepare(
     package: Package,
     mode: CompilationMode,
-    entryPoints: Set<StrictString>? = nil,
+    entryPoints: Set<UnicodeText>? = nil,
     location: URL? = nil
   ) throws {
     let sourceModules = try package.modules()
-    var noEntryPoints: Set<StrictString>? = nil
+    var noEntryPoints: Set<UnicodeText>? = nil
     let sayingModule = sourceModules.first(where: { $0.isSayingModule })
     let builtSayingModule = try sayingModule?.build(
       mode: mode == .release ? .dependency : mode,

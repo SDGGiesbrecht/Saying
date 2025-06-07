@@ -1,13 +1,11 @@
-import SDGText
-
 extension ParsedActionName {
 
-  var names: [StrictString: ParsedSignature] {
+  var names: [UnicodeText: ParsedSignature] {
     switch self {
     case .multiple(let multiple):
-      var dictionary: [StrictString: ParsedSignature] = [:]
+      var dictionary: [UnicodeText: ParsedSignature] = [:]
       for entry in multiple.names.names {
-        dictionary[StrictString(entry.language.identifierText())] = entry.name
+        dictionary[entry.language.identifierText()] = entry.name
       }
       return dictionary
     case .single(let single):

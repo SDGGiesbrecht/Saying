@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGText
 import SDGPersistence
 
 struct Module {
@@ -23,7 +22,7 @@ struct Module {
 
   func build(
     mode: CompilationMode,
-    entryPoints: inout Set<StrictString>?,
+    entryPoints: inout Set<UnicodeText>?,
     moduleWideImports: [ModuleIntermediate]
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()

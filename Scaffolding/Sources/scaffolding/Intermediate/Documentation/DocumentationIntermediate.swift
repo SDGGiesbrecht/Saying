@@ -1,5 +1,3 @@
-import SDGText
-
 struct DocumentationIntermediate {
   var paragraphs: [ParsedParagraph]
   var parameters: [[ParsedParameterDocumentation]]
@@ -10,7 +8,7 @@ struct DocumentationIntermediate {
 extension DocumentationIntermediate {
   static func construct(
     _ declaration: ParsedDocumentation,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<DocumentationIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
     var errors: [LiteralIntermediate.ConstructionError] = []
     var paragraphs: [ParsedParagraph] = []
@@ -49,7 +47,7 @@ extension DocumentationIntermediate {
 
 extension DocumentationIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
       paragraphs: paragraphs,
@@ -60,8 +58,8 @@ extension DocumentationIntermediate {
     )
   }
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
       paragraphs: paragraphs,
@@ -79,8 +77,8 @@ extension Optional where Wrapped == DocumentationIntermediate {
 
   func merging(
     inherited: DocumentationIntermediate?,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> DocumentationIntermediate? {
     guard let base = inherited?.specializing(
       typeLookup: typeLookup,

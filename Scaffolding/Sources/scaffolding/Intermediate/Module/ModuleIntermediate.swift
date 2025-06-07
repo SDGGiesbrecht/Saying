@@ -13,11 +13,11 @@ extension ModuleIntermediate {
     if !sorted {
       return tests
     } else {
-      var dictionary: [StrictString: TestIntermediate] = [:]
+      var dictionary: [UnicodeText: TestIntermediate] = [:]
       for entry in tests {
-        dictionary[entry.location.map({ StrictString($0.identifier()) }).joined(separator: ":")] = entry
+        dictionary[UnicodeText(entry.location.map({ StrictString($0.identifier()) }).joined(separator: ":"))] = entry
       }
-      return dictionary.keys.sorted().map({ dictionary[$0]! })
+      return dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
     }
   }
 }
@@ -27,7 +27,7 @@ extension ModuleIntermediate {
   mutating func add(file: ParsedDeclarationList) throws {
     languageNodes.append(contentsOf: file.findAllLanguageReferences())
     var errors: [ConstructionError] = []
-    let baseNamespace: [Set<StrictString>] = []
+    let baseNamespace: [Set<UnicodeText>] = []
     for declaration in file.declarations {
       switch declaration {
       case .language(let languageNode):
@@ -70,10 +70,10 @@ extension ModuleIntermediate {
       }
       let abilityIdentifier = ability.names.identifier()
 
-      var extensionTypes: [StrictString: UnicodeText] = [:]
+      var extensionTypes: [UnicodeText: UnicodeText] = [:]
       for (index, parameter) in ability.parameters.ordered(for: extensionBlock.ability).enumerated() {
         let argument = extensionBlock.arguments[index]
-        extensionTypes[StrictString(argument.identifier)] = parameter.names.identifier()
+        extensionTypes[argument.identifier] = parameter.names.identifier()
       }
 
       for thing in extensionBlock.things {
@@ -143,19 +143,19 @@ extension ModuleIntermediate {
       return
     }
 
-    var useTypes: [StrictString: ParsedTypeReference] = [:]
+    var useTypes: [UnicodeText: ParsedTypeReference] = [:]
     for (index, parameter) in ability.parameters.ordered(for: use.ability).enumerated() {
       let argument = use.arguments[index]
       for name in parameter.names {
         useTypes[name] = argument
       }
     }
-    let specializationNamespace: [Set<StrictString>] = ability.parameters
+    let specializationNamespace: [Set<UnicodeText>] = ability.parameters
       .ordered(for: ability.names.identifier())
       .flatMap({ parameter in
-        let components: [UnicodeText] = useTypes[StrictString(parameter.names.identifier())]!
+        let components: [UnicodeText] = useTypes[parameter.names.identifier()]!
           .unresolvedGloballyUniqueIdentifierComponents()
-        return components.map({ Set([StrictString($0)]) })
+        return components.map({ Set([$0]) })
       })
 
     var prototypeActions = use.actions
@@ -175,7 +175,7 @@ extension ModuleIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors)
         }
-      } else if let provision = ability.defaults[StrictString(requirement.names.identifier())] {
+      } else if let provision = ability.defaults[requirement.names.identifier()] {
         let specialized = provision.specializing(
           for: use,
           typeLookup: useTypes,
@@ -201,7 +201,7 @@ extension ModuleIntermediate {
         specialized.names.identifier(),
         components: specialized.parameters.ordered(
           for: specialized.names.identifier()
-        ).map({ $0.resolvedType?.key ?? .simple(StrictString($0.names.identifier())) })
+        ).map({ $0.resolvedType?.key ?? .simple($0.names.identifier()) })
       ) == nil {
         _ = referenceDictionary.add(thing: specialized)
       }
@@ -322,7 +322,7 @@ extension ModuleIntermediate {
 
 extension ModuleIntermediate {
   func removingUnreachable(
-    fromEntryPoints entryPoints: inout Set<StrictString>,
+    fromEntryPoints entryPoints: inout Set<UnicodeText>,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> ModuleIntermediate {
     var result = self

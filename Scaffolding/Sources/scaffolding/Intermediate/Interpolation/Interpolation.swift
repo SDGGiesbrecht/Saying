@@ -1,9 +1,7 @@
-import SDGText
-
 struct Interpolation<InterpolationParameter>
 where InterpolationParameter: InterpolationParameterProtocol {
   private var parameters: [InterpolationParameter]
-  private var reorderings: [StrictString: [Int]]
+  private var reorderings: [UnicodeText: [Int]]
 }
 
 extension Interpolation {
@@ -21,15 +19,15 @@ extension Interpolation {
     getNestedSignature: (ParameterNode) -> ParsedSignature?,
     getNestedParameters: (ParsedSignature) -> [ParameterNode],
     constructParameter: (
-      _ names: Set<StrictString>,
+      _ names: Set<UnicodeText>,
       _ nestedParameters: Interpolation?,
       _ definition: ParameterDefinition
     ) -> InterpolationParameter
   ) -> Result<Interpolation, ErrorList<ConstructionError>>
   where Entries: Collection, Entries.Element: ParsedSyntaxNode, ParameterNode: ParsedSyntaxNode {
     var errors: [ConstructionError] = []
-    var parameterIndices: [StrictString: Int] = [:]
-    var parameterReferences: [StrictString: UnicodeText] = [:]
+    var parameterIndices: [UnicodeText: Int] = [:]
+    var parameterReferences: [UnicodeText: UnicodeText] = [:]
     var foundDefinitionEntry = false
     for entry in entries {
       var isDefinitionEntry: Bool?
@@ -38,7 +36,7 @@ extension Interpolation {
         foundDefinitionEntry = true
       }
       for (index, parameter) in parameters.enumerated() {
-        let parameterName = StrictString(getParameterName(parameter))
+        let parameterName = getParameterName(parameter)
         switch getDefinitionOrReference(parameter) {
         case .definition:
           if index == 0,
@@ -61,12 +59,12 @@ extension Interpolation {
       }
     }
     var parameterDefinitions: [ParameterDefinition] = []
-    var reorderings: [StrictString: [Int]] = [:]
+    var reorderings: [UnicodeText: [Int]] = [:]
     var nestedSignatures: [Int: [ParsedSignature]] = [:]
-    var completeParameterIndexTable: [StrictString: Int] = parameterIndices
+    var completeParameterIndexTable: [UnicodeText: Int] = parameterIndices
     for entry in entries {
       var reordering: [Int] = []
-      let entryName = StrictString(getEntryName(entry))
+      let entryName = getEntryName(entry)
       for (position, parameter) in getParameters(entry).enumerated() {
         let nestedSignature = getNestedSignature(parameter)
         switch getDefinitionOrReference(parameter) {
@@ -77,9 +75,9 @@ extension Interpolation {
             nestedSignatures[position, default: []].append(nested)
           }
         case .reference(let reference):
-          var resolving = StrictString(reference.name.name())
-          var checked: Set<StrictString> = []
-          while let next = parameterReferences[resolving].map({ StrictString($0) }) {
+          var resolving = reference.name.name()
+          var checked: Set<UnicodeText> = []
+          while let next = parameterReferences[resolving] {
             checked.insert(resolving)
             resolving = next
             if checked.contains(next) {
@@ -91,7 +89,7 @@ extension Interpolation {
           }
           if let index = parameterIndices[resolving] {
             reordering.append(index)
-            completeParameterIndexTable[StrictString(getParameterName(parameter))] = index
+            completeParameterIndexTable[getParameterName(parameter)] = index
             if let nested = nestedSignature {
               nestedSignatures[index, default: []].append(nested)
             }
@@ -148,13 +146,13 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
     accordingTo name: UnicodeText,
     apply: (inout NativeActionNamesIntermediate, UnicodeText) -> Void
   ) {
-    let indices = reorderings[StrictString(name)]!
+    let indices = reorderings[name]!
     for (index, nativeName) in zip(indices, nativeNames) {
       apply(&parameters[index].nativeNames, nativeName)
     }
   }
   mutating func apply(swiftLabels: [UnicodeText?], accordingTo name: UnicodeText) {
-    let indices = reorderings[StrictString(name)]!
+    let indices = reorderings[name]!
     for (index, label) in zip(indices, swiftLabels) {
       parameters[index].swiftLabel = label
     }
@@ -212,11 +210,11 @@ extension Interpolation {
 
 extension Interpolation {
   func parameter(named identifier: UnicodeText) -> InterpolationParameter? {
-    return parameters.first(where: { $0.names.contains(StrictString(identifier)) })
+    return parameters.first(where: { $0.names.contains(identifier) })
   }
 
   func ordered(for name: UnicodeText) -> [InterpolationParameter] {
-    guard let reordering = reorderings[StrictString(name)] else {
+    guard let reordering = reorderings[name] else {
       return []
     }
     return reordering.map({ parameters[$0] })
@@ -225,9 +223,9 @@ extension Interpolation {
     if parameters.isEmpty {
       return []
     }
-    let baseToOrigin = reorderings[StrictString(origin)]!
+    let baseToOrigin = reorderings[origin]!
     let originToBase: [Int] = baseToOrigin.indices.map({ baseToOrigin.firstIndex(of: $0)! })
-    let baseToDestination = reorderings[StrictString(destination)]!
+    let baseToDestination = reorderings[destination]!
     return baseToDestination.map({ originToBase[$0] })
   }
 }
@@ -250,7 +248,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       parameters: parameters.map({ $0.removingNativeNames() }),
       reorderings: reorderings == [:]
         ? [:]
-        : [StrictString(newName): reorderings[StrictString(originalName)]!]
+        : [newName: reorderings[originalName]!]
     )
   }
   func prefixingEach(
@@ -329,7 +327,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       ]
     )
   }
-  func names() -> Set<StrictString> {
+  func names() -> Set<UnicodeText> {
     return Set(reorderings.keys)
   }
 }

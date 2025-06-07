@@ -1,5 +1,3 @@
-import SDGText
-
 struct NativeActionExpressionIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeActionImplementationParameter]
@@ -42,7 +40,7 @@ extension NativeActionExpressionIntermediate {
 
 extension NativeActionExpressionIntermediate {
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> NativeActionExpressionIntermediate {
     return NativeActionExpressionIntermediate(
       textComponents: textComponents,

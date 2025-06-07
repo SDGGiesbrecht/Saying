@@ -1,5 +1,3 @@
-import SDGText
-
 indirect enum ParsedTypeReference {
   case simple(SimpleTypeReference)
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])
@@ -90,28 +88,28 @@ extension ParsedTypeReference {
   var key: TypeReference {
     switch self {
     case .simple(let simple):
-      return .simple(StrictString(simple.identifier))
+      return .simple(simple.identifier)
     case .compound(identifier: let identifier, components: let components):
-      return .compound(identifier: StrictString(identifier.name()), components: components.map({ $0.key }))
+      return .compound(identifier: identifier.name(), components: components.map({ $0.key }))
     case .action(parameters: let parameters, returnValue: let returnValue):
       return .action(parameters: parameters.map({ $0.key }), returnValue: returnValue.map({ $0.key }))
     case .statements:
       return .statements
     case .partReference(container: let container, identifier: let identifier):
-      return .partReference(container.key, identifier: StrictString(identifier))
+      return .partReference(container.key, identifier: identifier)
     case .enumerationCase(enumeration: let enumeration, identifier: let identifier):
-      return .enumerationCase(enumeration.key, identifier: StrictString(identifier))
+      return .enumerationCase(enumeration.key, identifier: identifier)
     }
   }
 }
 
 extension ParsedTypeReference {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> ParsedTypeReference {
     switch self {
     case .simple(let simple):
-      if let found = typeLookup[StrictString(simple.identifier)] {
+      if let found = typeLookup[simple.identifier] {
         var modified = simple
         modified.identifier = found
         return .simple(modified)
@@ -143,10 +141,10 @@ extension ParsedTypeReference {
     }
   }
 
-  func specializing(typeLookup: [StrictString: ParsedTypeReference]) -> ParsedTypeReference {
+  func specializing(typeLookup: [UnicodeText: ParsedTypeReference]) -> ParsedTypeReference {
     switch self {
     case .simple(let simple):
-      if let found = typeLookup[StrictString(simple.identifier)] {
+      if let found = typeLookup[simple.identifier] {
         return found
       } else {
         return self

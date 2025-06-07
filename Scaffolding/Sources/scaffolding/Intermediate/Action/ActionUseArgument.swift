@@ -1,5 +1,3 @@
-import SDGText
-
 enum ActionUseArgument {
   case action(ActionUse)
   case flow(StatementListIntermediate)
@@ -104,7 +102,7 @@ extension ActionUseArgument {
 
 extension ActionUseArgument {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> ActionUseArgument {
     switch self {
     case .action(let action):
@@ -115,7 +113,7 @@ extension ActionUseArgument {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> ActionUseArgument {
     switch self {
     case .action(let action):

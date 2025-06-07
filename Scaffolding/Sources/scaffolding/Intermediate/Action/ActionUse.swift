@@ -1,5 +1,3 @@
-import SDGText
-
 struct ActionUse {
   var actionName: UnicodeText
   var arguments: [ActionUseArgument]
@@ -95,7 +93,7 @@ extension ActionUse {
 extension ActionUse {
   func localActions() -> [ActionIntermediate] {
     if passage == .out {
-      return [.parameterAction(names: [StrictString(actionName)], parameters: .none, returnValue: explicitResultType)]
+      return [.parameterAction(names: [actionName], parameters: .none, returnValue: explicitResultType)]
     } else {
       return arguments.flatMap { $0.localActions() }
     }
@@ -277,7 +275,7 @@ extension ActionUse {
 
 extension ActionUse {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,
@@ -290,7 +288,7 @@ extension ActionUse {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> ActionUse {
     return ActionUse(
       actionName: actionName,
