@@ -1549,8 +1549,15 @@ extension Platform {
     for index in requirement.textComponents.indices {
       line.append(contentsOf: String(requirement.textComponents[index]))
       if index != requirement.textComponents.indices.last {
-        let type = requirement.parameters[index].resolvedType!
-        line.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
+        let parameter = requirement.parameters[index]
+        if StrictString(parameter.name) != "‐" {
+          var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+          if let next = requirement.parameters[index...].dropFirst().first,
+             StrictString(next.name) == "‐" {
+            type = identifierPrefix(for: type)
+          }
+          line.append(contentsOf: type)
+        }
       }
     }
     return line
