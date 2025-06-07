@@ -72,20 +72,6 @@ use (clients)
    Swift: «» first “ != ” second „“
 
   action (clients)
-   differing example
-   Unicode scalar
-   {
-    if (first in (“!”)) exists, unwrap it as (• exclamation mark: Unicode scalar), {
-     ← exclamation mark
-    }
-    !
-   }
- }
-
-use (clients)
- hashing (Unicode scalar)
- {
-  action (clients)
    hash key (key: Unicode scalar) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
@@ -100,7 +86,17 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to default hashing
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   Unicode scalar
+   {
+    if (first in (“!”)) exists, unwrap it as (• exclamation mark: Unicode scalar), {
+     ← exclamation mark
+    }
+    !
    }
  }
 
@@ -125,6 +121,13 @@ use (clients)
    Swift: “” first “ == ” second “”
    {
     ← (first) is (second) according to optional
+   }
+
+  action (clients)
+   hash key (key: optional (Unicode scalar)) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash key (key) with (↓ hasher) according to optional
    }
 
   action (clients)

@@ -45,12 +45,42 @@ use (clients)
    Swift: “” first “ != ” second “”
 
   action (clients)
+   hash key (key: Unicode scalar index) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: Unicode scalar index)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
    differing example
    Unicode scalar index
    {
     ← greater example
    }
  }
+
+action (file)
+ [
+  test {ignore (hashing proxy of (example: Unicode scalar index))}
+ ]
+ hashing proxy of (index: Unicode scalar index)
+ platform fixed‐width integer
+ C: “(int)” index “”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “{var hasher = Hasher(); hasher.combine(” index “); return hasher.finalize()}()”
 
 use (clients)
  comparison of (Unicode scalar index) for order
@@ -120,6 +150,13 @@ use (clients)
    Swift: “” first “ == ” second “”
    {
     ← (first) is (second) according to optional
+   }
+
+  action (clients)
+   hash key (key: optional (Unicode scalar index)) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash key (key) with (↓ hasher) according to optional
    }
 
   action (clients)
