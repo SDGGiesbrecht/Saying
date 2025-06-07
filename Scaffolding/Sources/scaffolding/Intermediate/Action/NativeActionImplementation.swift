@@ -1,5 +1,3 @@
-import SDGText
-
 struct NativeActionImplementationIntermediate {
   var expression: NativeActionExpressionIntermediate
   var requiredImports: [UnicodeText] = []
@@ -66,8 +64,8 @@ extension NativeActionImplementationIntermediate {
 
 extension NativeActionImplementationIntermediate {
   func specializing(
-    implementationTypeLookup: [StrictString: ParsedTypeReference],
-    requiredDeclarationTypeLookup: [StrictString: ParsedTypeReference]
+    implementationTypeLookup: [UnicodeText: ParsedTypeReference],
+    requiredDeclarationTypeLookup: [UnicodeText: ParsedTypeReference]
   ) -> NativeActionImplementationIntermediate {
     return NativeActionImplementationIntermediate(
       expression: expression.specializing(typeLookup: implementationTypeLookup),

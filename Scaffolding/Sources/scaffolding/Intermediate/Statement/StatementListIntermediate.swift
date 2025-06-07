@@ -1,5 +1,3 @@
-import SDGText
-
 struct StatementListIntermediate {
   var statements: [StatementIntermediate]
 }
@@ -73,7 +71,7 @@ extension StatementListIntermediate {
 
 extension StatementListIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> StatementListIntermediate {
     return StatementListIntermediate(
       statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
@@ -81,7 +79,7 @@ extension StatementListIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> StatementListIntermediate {
     return StatementListIntermediate(
       statements: statements.map({ $0.specializing(typeLookup: typeLookup) })

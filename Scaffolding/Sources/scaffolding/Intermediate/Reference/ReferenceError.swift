@@ -1,10 +1,8 @@
-import SDGText
-
 enum ReferenceError: DiagnosticError {
   case noSuchThing(UnicodeText, reference: ParsedThingReferenceProtocol)
   case noSuchAction(name: UnicodeText, reference: ParsedAction)
   case noSuchAbility(name: UnicodeText, reference: ParsedAbilityReferenceProtocol)
-  case unfulfilledRequirement(name: Set<StrictString>, ParsedUse)
+  case unfulfilledRequirement(name: Set<UnicodeText>, ParsedUse)
   case noSuchRequirement(ParsedActionDeclaration)
   case mismatchedParameters(name: UnicodeText, declaration: ParsedActionName)
   case fulfillmentAccessNarrowerThanRequirement(declaration: ParsedActionName)

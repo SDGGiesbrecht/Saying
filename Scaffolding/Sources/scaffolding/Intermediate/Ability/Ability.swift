@@ -1,11 +1,9 @@
-import SDGText
-
 struct Ability {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
   var parameters: Interpolation<AbilityParameterIntermediate>
-  var identifierMapping: [StrictString: UnicodeText]
-  var requirements: [StrictString: RequirementIntermediate]
-  var defaults: [StrictString: ActionIntermediate]
+  var identifierMapping: [UnicodeText: UnicodeText]
+  var requirements: [UnicodeText: RequirementIntermediate]
+  var defaults: [UnicodeText: ActionIntermediate]
   var provisionThings: [Thing]
   var provisionActions: [ActionIntermediate]
   var provisionUses: [UseIntermediate]
@@ -19,7 +17,7 @@ extension Ability {
 
   static func construct(
     _ declaration: ParsedAbilityDeclaration,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<Ability, ErrorList<Ability.ConstructionError>> {
     var errors: [Ability.ConstructionError] = []
     let namesDictionary = declaration.name.namesDictionary
@@ -40,14 +38,14 @@ extension Ability {
     case .success(let constructed):
       parameters = constructed
     }
-    var names: Set<StrictString> = []
+    var names: Set<UnicodeText> = []
     for (_, signature) in namesDictionary {
       let name = signature.name()
-      names.insert(StrictString(name))
+      names.insert(name)
     }
-    var identifierMapping: [StrictString: UnicodeText] = [:]
-    var requirements: [StrictString: RequirementIntermediate] = [:]
-    var defaults: [StrictString: ActionIntermediate] = [:]
+    var identifierMapping: [UnicodeText: UnicodeText] = [:]
+    var requirements: [UnicodeText: RequirementIntermediate] = [:]
+    var defaults: [UnicodeText: ActionIntermediate] = [:]
     let abilityNamespace = namespace.appending(names)
     for requirementEntry in declaration.requirements.requirements?.requirements.requirements ?? [] {
       switch requirementEntry {
@@ -63,11 +61,11 @@ extension Ability {
         let identifier = requirement.names.identifier()
         for name in requirement.names {
           if identifierMapping[name] != nil {
-            errors.append(ConstructionError.redeclaredIdentifier(UnicodeText(name), [requirementNode, identifierMapping[StrictString(identifier)].flatMap({ requirements[StrictString($0)] })!.declaration!]))
+            errors.append(ConstructionError.redeclaredIdentifier(UnicodeText(name), [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
           }
           identifierMapping[name] = identifier
         }
-        requirements[StrictString(identifier)] = requirement
+        requirements[identifier] = requirement
       case .choice(let choiceNode):
         let requirement: RequirementIntermediate
         switch RequirementIntermediate.construct(choiceNode, namespace: abilityNamespace) {
@@ -80,11 +78,11 @@ extension Ability {
         let identifier = requirement.names.identifier()
         for name in requirement.names {
           if identifierMapping[name] != nil {
-            errors.append(ConstructionError.redeclaredIdentifier(UnicodeText(name), [choiceNode, identifierMapping[StrictString(identifier)].flatMap({ requirements[StrictString($0)] })!.declaration!]))
+            errors.append(ConstructionError.redeclaredIdentifier(UnicodeText(name), [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
           }
           identifierMapping[name] = identifier
         }
-        requirements[StrictString(identifier)] = requirement
+        requirements[identifier] = requirement
         let defaultImplementation: ActionIntermediate
         switch ActionIntermediate.construct(choiceNode, namespace: abilityNamespace) {
         case .failure(let nested):
@@ -93,7 +91,7 @@ extension Ability {
         case .success(let constructed):
           defaultImplementation = constructed
         }
-        defaults[StrictString(identifier)] = defaultImplementation
+        defaults[identifier] = defaultImplementation
       }
     }
     var attachedDocumentation: DocumentationIntermediate?

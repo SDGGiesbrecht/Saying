@@ -1,7 +1,7 @@
 import SDGText
 
 struct Thing {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
   var parameters: Interpolation<ThingParameterIntermediate>
   var access: AccessIntermediate
   var testOnlyAccess: Bool
@@ -28,7 +28,7 @@ extension Thing {
 
 extension Thing {
   func reference(resolvingFromReferenceLookup referenceLookup: [ReferenceDictionary]) -> TypeReference {
-    let identifier = StrictString(names.identifier())
+    let identifier = names.identifier()
     let parameters = parameters.ordered(for: names.identifier())
     let result: TypeReference
     if parameters.isEmpty {
@@ -78,7 +78,7 @@ extension Thing {
 
   static func construct<ThingNode>(
     _ declaration: ThingNode,
-    namespace: [Set<StrictString>]
+    namespace: [Set<UnicodeText>]
   ) -> Result<Thing, ErrorList<Thing.ConstructionError>>
   where ThingNode: ParsedThingDeclarationProtocol {
     var errors: [Thing.ConstructionError] = []
@@ -100,14 +100,14 @@ extension Thing {
     case .success(let constructed):
       parameters = constructed
     }
-    var names: Set<StrictString> = []
+    var names: Set<UnicodeText> = []
     var swiftName: UnicodeText?
     for (language, signature) in namesDictionary {
       let name = signature.name()
       if language == "Swift" {
         swiftName = name
       }
-      names.insert(StrictString(name))
+      names.insert(name)
     }
 
     let thingNamespace = namespace.appending(names)
@@ -162,7 +162,7 @@ extension Thing {
       case .success(let result):
         constructed = result
       }
-      switch StrictString(implementation.language.identifierText()) {
+      switch implementation.language.identifierText() {
       case "C":
         c = constructed
       case "C♯":
@@ -241,13 +241,13 @@ extension Thing {
 extension Thing {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters({ parameter in
       let identifier = parameter.names
         .lazy.compactMap({ typeLookup[$0] })
         .first!
-      return ThingParameterIntermediate(names: [StrictString(identifier)])
+      return ThingParameterIntermediate(names: [identifier])
     })
     return Thing(
       names: names,
@@ -268,8 +268,8 @@ extension Thing {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
     let newParts = parts.map({ part in

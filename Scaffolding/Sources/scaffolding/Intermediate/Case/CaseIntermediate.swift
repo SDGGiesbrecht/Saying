@@ -1,7 +1,5 @@
-import SDGText
-
 struct CaseIntermediate {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
   var contents: ParsedTypeReference?
   var referenceAction: ActionIntermediate?
   var wrapAction: ActionIntermediate
@@ -24,16 +22,16 @@ extension CaseIntermediate {
 
   static func construct(
     _ declaration: ParsedCaseDeclaration,
-    namespace: [Set<StrictString>],
+    namespace: [Set<UnicodeText>],
     type: ParsedTypeReference,
     access: AccessIntermediate,
     testOnlyAccess: Bool
   ) -> Result<CaseIntermediate, ErrorList<CaseIntermediate.ConstructionError>> {
     var errors: [CaseIntermediate.ConstructionError] = []
 
-    var names: Set<StrictString> = []
+    var names: Set<UnicodeText> = []
     for name in declaration.name.names.names {
-      names.insert(StrictString(name.name.identifierText()))
+      names.insert(name.name.identifierText())
     }
 
     let caseNamespace = namespace.appending(names)
@@ -81,7 +79,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch StrictString(implementation.language.identifierText()) {
+            switch implementation.language.identifierText() {
             case "C":
               cStore = constructed
             case "C♯":
@@ -106,7 +104,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch StrictString(implementation.language.identifierText()) {
+            switch implementation.language.identifierText() {
             case "C":
               cStore = constructed
             case "C♯":
@@ -128,7 +126,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch StrictString(implementation.language.identifierText()) {
+            switch implementation.language.identifierText() {
             case "C":
               cRetrieve = constructed
             case "C♯":
@@ -150,7 +148,7 @@ extension CaseIntermediate {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch StrictString(implementation.language.identifierText()) {
+            switch implementation.language.identifierText() {
             case "C":
               cCheck = constructed
             case "C♯":
@@ -252,7 +250,7 @@ extension CaseIntermediate {
 extension CaseIntermediate {
 
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> CaseIntermediate {
     return CaseIntermediate(
       names: names,
@@ -268,8 +266,8 @@ extension CaseIntermediate {
 
   func specializing(
     for use: UseIntermediate,
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> CaseIntermediate {
     return CaseIntermediate(
       names: names,

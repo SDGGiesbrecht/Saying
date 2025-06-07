@@ -1,11 +1,9 @@
-import SDGText
-
 extension ParsedThingName {
 
-  var namesDictionary: [StrictString: ParsedThingSignature] {
-    var dictionary: [StrictString: ParsedThingSignature] = [:]
+  var namesDictionary: [UnicodeText: ParsedThingSignature] {
+    var dictionary: [UnicodeText: ParsedThingSignature] = [:]
     for entry in names.names {
-      dictionary[StrictString(entry.language.identifierText())] = entry.name
+      dictionary[entry.language.identifierText()] = entry.name
     }
     return dictionary
   }

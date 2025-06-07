@@ -1,5 +1,3 @@
-import SDGText
-
 protocol ParsedSyntaxNode {
   var nodeKind: ParsedSyntaxNodeKind { get }
   var children: [ParsedSyntaxNode] { get }

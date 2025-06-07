@@ -1,5 +1,3 @@
-import SDGText
-
 protocol InterpolationParameterProtocol {
-  var names: Set<StrictString> { get }
+  var names: Set<UnicodeText> { get }
 }

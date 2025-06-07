@@ -1,5 +1,3 @@
-import SDGText
-
 struct NativeRequirementImplementationIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeThingImplementationParameter]
@@ -42,11 +40,11 @@ extension NativeRequirementImplementationIntermediate {
 
 extension NativeRequirementImplementationIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> NativeRequirementImplementationIntermediate {
     let mappedParameters = parameters.map({ parameter in
       return NativeThingImplementationParameter (
-        name: typeLookup[StrictString(parameter.name)] ?? parameter.name,
+        name: typeLookup[parameter.name] ?? parameter.name,
         syntaxNode: parameter.syntaxNode
       )
     })
@@ -57,7 +55,7 @@ extension NativeRequirementImplementationIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> NativeRequirementImplementationIntermediate {
     return NativeRequirementImplementationIntermediate(
       textComponents: textComponents,

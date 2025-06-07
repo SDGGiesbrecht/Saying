@@ -9,10 +9,6 @@ import SDGPersistence
   }
 
   static func source() -> String {
-    return [
-      "import SDGText",
-      "",
-      Node.source(),
-    ].joined(separator: "\n")
+    return Node.source()
   }
 }

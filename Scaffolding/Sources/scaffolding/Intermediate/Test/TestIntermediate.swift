@@ -1,7 +1,5 @@
-import SDGText
-
 struct TestIntermediate {
-  var location: [Set<StrictString>]
+  var location: [Set<UnicodeText>]
   var statements: [StatementIntermediate]
 }
 
@@ -9,11 +7,11 @@ extension TestIntermediate {
 
   static func construct(
     _ test: ParsedTest,
-    location: [Set<StrictString>],
+    location: [Set<UnicodeText>],
     index: Int
   ) -> Result<TestIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
     var errors: [LiteralIntermediate.ConstructionError] = []
-    let nestedLocation = location.appending([index.inDigits()])
+    let nestedLocation = location.appending([UnicodeText(index.inDigits())])
     let statements: [StatementIntermediate]
     switch test.implementation {
     case .short(let short):
@@ -44,7 +42,7 @@ extension TestIntermediate {
 
 extension TestIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location,
@@ -53,8 +51,8 @@ extension TestIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference],
-    specializationNamespace: [Set<StrictString>]
+    typeLookup: [UnicodeText: ParsedTypeReference],
+    specializationNamespace: [Set<UnicodeText>]
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location.appending(contentsOf: specializationNamespace),

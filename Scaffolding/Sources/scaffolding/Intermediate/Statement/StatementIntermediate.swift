@@ -1,5 +1,3 @@
-import SDGText
-
 struct StatementIntermediate {
   var isReturn: Bool
   var action: ActionUse?
@@ -72,7 +70,7 @@ extension StatementIntermediate {
 
 extension StatementIntermediate {
   func resolvingExtensionContext(
-    typeLookup: [StrictString: UnicodeText]
+    typeLookup: [UnicodeText: UnicodeText]
   ) -> StatementIntermediate {
     return StatementIntermediate(
       isReturn: isReturn,
@@ -81,7 +79,7 @@ extension StatementIntermediate {
   }
 
   func specializing(
-    typeLookup: [StrictString: ParsedTypeReference]
+    typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> StatementIntermediate {
     return StatementIntermediate(
       isReturn: isReturn,

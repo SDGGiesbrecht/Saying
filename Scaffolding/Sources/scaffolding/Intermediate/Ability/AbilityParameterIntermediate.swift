@@ -1,7 +1,5 @@
-import SDGText
-
 struct AbilityParameterIntermediate {
-  var names: Set<StrictString>
+  var names: Set<UnicodeText>
 }
 
 extension AbilityParameterIntermediate: InterpolationParameterProtocol {}
