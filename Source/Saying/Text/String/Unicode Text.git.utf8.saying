@@ -61,20 +61,16 @@ use (clients)
    }
 
   action (clients)
+   hash key (key: Unicode text) with (hasher: ↓ hasher)
+   {
+    hash part ((scalars) of (key)) with (↓ hasher)
+   }
+
+  action (clients)
    differing example
    Unicode text
    {
     ← Unicode text of (“!”)
-   }
- }
-
-use (clients)
- hashing (Unicode text)
- {
-  action (clients)
-   hash key (key: Unicode text) with (hasher: ↓ hasher)
-   {
-    hash part ((scalars) of (key)) with (↓ hasher)
    }
  }
 

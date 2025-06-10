@@ -17,6 +17,7 @@ protocol Platform {
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>? { get set }
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>? { get set }
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
+  static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
   static func literal(string: String) -> String
 
@@ -130,8 +131,6 @@ protocol Platform {
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
-  static func testSource(identifier: String, statements: [String]) -> [String]
-  static func testCall(for identifier: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
@@ -232,6 +231,22 @@ extension Platform {
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
     }
     return result
+  }
+
+  static func capLengthOf(identifier: String, index: inout [String: [String: Int]]) -> String {
+    guard let limit = identifierLengthLimit,
+      identifier.unicodeScalars.count > limit else {
+      return identifier
+    }
+    let truncated = String(String.UnicodeScalarView(identifier.unicodeScalars.prefix(limit)))
+    let disambiguator: Int
+    if let cached = index[truncated, default: [:]][identifier] {
+      disambiguator = cached
+    } else {
+      disambiguator = index[truncated, default: [:]].count
+      index[truncated, default: [:]][identifier] = disambiguator
+    }
+    return truncated.appending(contentsOf: String(disambiguator, radix: 10))
   }
 
   static func sanitize(stringLiteral: UnicodeText) -> String {
@@ -1486,12 +1501,20 @@ extension Platform {
       .joined(separator: "_")
   }
 
-  static func source(of test: TestIntermediate, referenceLookup: [ReferenceDictionary]) -> [String] {
+  static func source(
+    of test: TestIntermediate,
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
+  ) -> String {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
-    return testSource(
-      identifier: identifier(for: test, leading: false),
-      statements: source(
+    return actionDeclaration(
+      name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex),
+      parameters: "",
+      returnSection: emptyReturnType.flatMap({ self.returnSection(with: $0, isProperty: false) }),
+      accessModifier: nil,
+      coverageRegistration: nil,
+      implementation: source(
         for: test.statements,
         context: nil,
         localLookup: [],
@@ -1501,12 +1524,18 @@ extension Platform {
         inliningArguments: [:],
         mode: .testing,
         indentationLevel: 0
-      )
-    )
+      ),
+      parentType: nil,
+      isAbsorbedMember: false,
+      isOverride: false,
+      propertyInstead: false,
+      initializerInstead: false
+    ).full
   }
 
-  static func call(test: TestIntermediate) -> String {
-    return testCall(for: identifier(for: test, leading: false))
+  static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> String {
+    let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex)
+    return statement(expression: "\(name)()")
   }
 
   static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<String> {
@@ -1618,7 +1647,8 @@ extension Platform {
     moduleWideImports: [ReferenceDictionary],
     relocatedActions: Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
-    alreadyHandledActionDeclarations: inout Set<String>
+    alreadyHandledActionDeclarations: inout Set<String>,
+    identifierIndex: inout [String: [String: Int]]
   ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
@@ -1656,7 +1686,7 @@ extension Platform {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
         result.append("")
-        result.append(contentsOf: source(of: test, referenceLookup: referenceLookup))
+        result.append(source(of: test, referenceLookup: referenceLookup, identifierIndex: &identifierIndex))
       }
     }
     return result.joined(separator: "\n")
@@ -1727,6 +1757,7 @@ extension Platform {
       result.append(contentsOf: start)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
+    var identifierIndex: [String: [String: Int]] = [:]
     for module in modules {
       result.append(
         self.actionsSource(
@@ -1735,7 +1766,8 @@ extension Platform {
           moduleWideImports: moduleWideImportDictionary,
           relocatedActions: relocatedActions,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
-          alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations
+          alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations,
+          identifierIndex: &identifierIndex
         )
       )
     }
@@ -1745,7 +1777,7 @@ extension Platform {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
       result.append("")
-      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0) })))
+      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0, identifierIndex: &identifierIndex) })))
     }
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)

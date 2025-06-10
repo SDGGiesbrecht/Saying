@@ -70,17 +70,6 @@ use (clients)
    }
 
   action (clients)
-   differing example
-   Unicode scalars
-   {
-    ← “!”
-   }
- }
-
-use (clients)
- hashing (Unicode scalars)
- {
-  action (clients)
    hash key (key: Unicode scalars) with (hasher: ↓ hasher)
    {
     for each (• scalar: Unicode scalar) in (key), {
@@ -96,7 +85,14 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to default hashing
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   Unicode scalars
+   {
+    ← “!”
    }
  }
 

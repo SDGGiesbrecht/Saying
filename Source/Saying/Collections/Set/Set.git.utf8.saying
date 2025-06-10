@@ -1,38 +1,38 @@
 extension
- hashing (key)
+ comparison of (thing) for equality
  {
   thing (clients)
    (
-    English: set of (key)
-    Deutsch: Menge von (Schlüssel: [key])
-    français : ensemble de (clé: [key])
-    ελληνικά: σύνολο (κλειδί: [key])
-    עברית: קבוצה של (מפתח: [key])
+    English: set of (thing)
+    Deutsch: Menge von (Ding: [thing])
+    français : ensemble de (chose: [thing])
+    ελληνικά: σύνολο (πράγμα: [thing])
+    עברית: קבוצה של (דבר: [thing])
    )
    C: “GHashTable¤(2A)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” set “)”/“g¤(5F)hash¤(5F)table¤(5F)unref(” set “)” (“glib¤(2D)2.0”)
-   C♯: “HashSet<” key “>” (“System.Collections.Generic”) [
-     “override ” key “.Equals(” key “)”
-     “override ” key “.GetHashCode()”
+   C♯: “HashSet<” thing “>” (“System.Collections.Generic”) [
+     “override ” thing “.Equals(” thing “)”
+     “override ” thing “.GetHashCode()”
     ]
-   Kotlin: “Set<” key “>” [
-     “override ” key “.equals(” key “)”
-     “override ” key “.hashCode()”
+   Kotlin: “Set<” thing “>” [
+     “override ” thing “.equals(” thing “)”
+     “override ” thing “.hashCode()”
     ]
-   Swift: “Set<” key “>” [
-     “==(¤(5F): ” key “, ¤(5F): ” key “)”
-     “” key “.hash(into: Hasher)”
+   Swift: “Set<” thing “>” [
+     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “” thing “.hash(into: Hasher)”
     ] {
-     “extension ” key “: Hashable {}”
+     “extension ” thing “: Hashable {}”
     }
    {
    }
 
   use (clients)
-   general containers of (set of (key))
+   general containers of (set of (thing))
    {
     action (clients)
      example
-     set of (key)
+     set of (thing)
      {
       ← empty
      }
@@ -45,15 +45,15 @@ extension
     français : vide
     ελληνικά: άδειος
    )
-   set of (key)
-   C: “g¤(5F)hash¤(5F)table¤(5F)new(” key “” ‐ “¤(5F)hash¤(5F)reference, ” key “” ‐ “¤(5F)equal¤(5F)reference)” [
-     “” key “” ‐ “¤(5F)hash(” key “)”
-     “” key “” ‐ “¤(5F)equal(” key “, ” key “)”
+   set of (thing)
+   C: “g¤(5F)hash¤(5F)table¤(5F)new(” thing “” ‐ “¤(5F)hash¤(5F)reference, ” thing “” ‐ “¤(5F)equal¤(5F)reference)” [
+     “” thing “” ‐ “¤(5F)hash(” thing “)”
+     “” thing “” ‐ “¤(5F)equal(” thing “, ” thing “)”
     ] {
-     “guint ” key “” ‐ “¤(5F)hash¤(5F)reference(” key “¤(2A) element)¤(A){¤(A)return ” key “” ‐ “¤(5F)hash(¤(2A)element);¤(A)}”
-     “bool ” key “” ‐ “¤(5F)equal¤(5F)reference(” key “¤(2A) first, ” key “¤(2A) second)¤(A){¤(A)return ” key “” ‐ “¤(5F)equal(¤(2A)first, ¤(2A)second);¤(A)}”
+     “guint ” thing “” ‐ “¤(5F)hash¤(5F)reference(” thing “¤(2A) element)¤(A){¤(A)return ” thing “” ‐ “¤(5F)hash(¤(2A)element);¤(A)}”
+     “bool ” thing “” ‐ “¤(5F)equal¤(5F)reference(” thing “¤(2A) first, ” thing “¤(2A) second)¤(A){¤(A)return ” thing “” ‐ “¤(5F)equal(¤(2A)first, ¤(2A)second);¤(A)}”
     }
-   C♯: “new HashSet<” key “>()”
+   C♯: “new HashSet<” thing “>()”
    Kotlin: “setOf()”
    Swift: “[]”
    create

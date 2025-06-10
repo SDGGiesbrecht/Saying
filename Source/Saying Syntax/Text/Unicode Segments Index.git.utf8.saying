@@ -46,6 +46,13 @@ use (clients)
    }
 
   action (clients)
+   hash key (key: Unicode segments index) with (hasher: ↓ hasher)
+   {
+    hash key ((segment) of (key)) with (↓ hasher)
+    hash key ((scalar) of (key)) with (↓ hasher)
+   }
+
+  action (clients)
    differing example
    Unicode segments index
    {

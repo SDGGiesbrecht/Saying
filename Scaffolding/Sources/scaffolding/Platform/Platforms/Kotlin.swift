@@ -41,6 +41,10 @@ enum Kotlin: Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
+  static var identifierLengthLimit: Int? {
+    return 128 // 248 caused compiler‐generated files to exceed file name size limits in the Android CI.
+  }
+
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     return character.utf16.map({ code in
       var digits = String(code, radix: 16, uppercase: true)
@@ -361,20 +365,6 @@ enum Kotlin: Platform {
   }
   static var actionDeclarationsContainerEnd: [String]? {
     return nil
-  }
-
-  static func testSource(identifier: String, statements: [String]) -> [String] {
-    var result: [String] = [
-      "fun run_\(identifier)() {"
-    ]
-    for statement in statements {
-      result.append("\(indent)\(statement)")
-    }
-    result.append("}")
-    return result
-  }
-  static func testCall(for identifier: String) -> String {
-    return "run_\(identifier)()"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
