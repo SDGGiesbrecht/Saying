@@ -89,6 +89,10 @@ enum Swift: Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
+  static var identifierLengthLimit: Int? {
+    return nil
+  }
+
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
@@ -482,20 +486,6 @@ enum Swift: Platform {
   }
   static var actionDeclarationsContainerEnd: [String]? {
     return nil
-  }
-
-  static func testSource(identifier: String, statements: [String]) -> [String] {
-    var result: [String] = [
-      "func run_\(identifier)() {",
-    ]
-    for statement in statements {
-      result.append("\(indent)\(statement)")
-    }
-    result.append("}")
-    return result
-  }
-  static func testCall(for identifier: String) -> String {
-    return "run_\(identifier)();"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {

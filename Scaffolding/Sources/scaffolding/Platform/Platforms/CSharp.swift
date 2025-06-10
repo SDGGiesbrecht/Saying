@@ -32,6 +32,10 @@ enum CSharp: Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
+  static var identifierLengthLimit: Int? {
+    return nil
+  }
+
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
     digits.scalars.fill(to: 8, with: "0", from: .start)
@@ -446,21 +450,6 @@ enum CSharp: Platform {
     return [
       "}",
     ]
-  }
-
-  static func testSource(identifier: String, statements: [String]) -> [String] {
-    var result: [String] = [
-      "\(indent)static void run_\(identifier)()",
-      "\(indent){",
-    ]
-    for statement in statements {
-      result.append("\(indent)\(indent)\(statement)")
-    }
-    result.append("\(indent)}")
-    return result
-  }
-  static func testCall(for identifier: String) -> String {
-    return "run_\(identifier)();"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
