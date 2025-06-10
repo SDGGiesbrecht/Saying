@@ -147,24 +147,3 @@ use (clients)
     ← wrap (differing example: Unicode scalar) into optional
    }
  }
-
-use (clients)
- hashing (optional (Unicode scalar))
- {
-  action (clients)
-   hash key (key: optional (Unicode scalar)) with (hasher: ↓ hasher)
-   Swift: “” key “.hash(into: ¤(26)” hasher “)”
-   {
-    hash key (key) with (↓ hasher) according to optional
-   }
-
-  action (unit)
-   (
-    English: hash value of (key: optional (Unicode scalar))
-   )
-   hash value
-   Kotlin: “” key “.hashCode()”
-   {
-    ← hash value of (key) according to default hashing
-   }
- }
