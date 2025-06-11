@@ -11,7 +11,7 @@ extension
    (
     English: let (storage: thing) be (value: thing)
    )
-   C: “const ” thing “ ” storage “ = ” value “”
+   C: “” thing “ const ” storage “ = ” value “”
    C♯: “” thing “ ” storage “ = ” value “”
    JavaScript: “const ” storage “ = ” value “”
    Kotlin: “val ” storage “: ” thing “ = ” value “”
