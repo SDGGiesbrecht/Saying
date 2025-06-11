@@ -3,6 +3,9 @@ extension UnicodeText {
   init<Scalars>(_ scalars: Scalars) where Scalars : Sequence, Scalars.Element == Unicode.Scalar {
     self.init(String.UnicodeScalarView(scalars))
   }
+  init(_ text: UnicodeText) {
+    self = text
+  }
 
   init(_ string: String) {
     self.init(string.unicodeScalars)

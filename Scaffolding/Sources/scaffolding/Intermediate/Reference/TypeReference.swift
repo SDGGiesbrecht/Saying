@@ -14,7 +14,7 @@ extension TypeReference {
       return .simple(referenceLookup.resolve(identifier: identifier))
     case .compound(identifier: let identifier, components: let components):
       return .compound(
-        identifier: referenceLookup.resolve(identifier: UnicodeText(identifier)),
+        identifier: referenceLookup.resolve(identifier: identifier),
         components: components.map({ $0.resolving(fromReferenceLookup: referenceLookup) })
       )
     case .action(parameters: let parameters, returnValue: let returnValue):
@@ -27,12 +27,12 @@ extension TypeReference {
     case .partReference(let type, let identifier):
       return .partReference(
         type.resolving(fromReferenceLookup: referenceLookup),
-        identifier: referenceLookup.resolve(identifier: UnicodeText(identifier))
+        identifier: referenceLookup.resolve(identifier: identifier)
       )
     case .enumerationCase(let type, let identifier):
       return .enumerationCase(
         type.resolving(fromReferenceLookup: referenceLookup),
-        identifier: referenceLookup.resolve(identifier: UnicodeText(identifier))
+        identifier: referenceLookup.resolve(identifier: identifier)
       )
     }
   }

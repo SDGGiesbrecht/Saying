@@ -1733,7 +1733,7 @@ extension Platform {
       }
       let regions = regionSet
         .sorted(by: { $0.lexicographicallyPrecedes($1) })
-        .map({ sanitize(stringLiteral: UnicodeText($0)) })
+        .map({ sanitize(stringLiteral: $0) })
       result.append(contentsOf: coverageRegionSet(regions: regions))
       result.append(contentsOf: registerCoverageAction)
     }
