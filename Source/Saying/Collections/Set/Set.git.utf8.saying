@@ -50,8 +50,8 @@ extension
      “” thing “” ‐ “¤(5F)hash(” thing “)”
      “” thing “” ‐ “¤(5F)equal(” thing “, ” thing “)”
     ] {
-     “guint ” thing “” ‐ “¤(5F)hash¤(5F)reference(” thing “¤(2A) element)¤(A){¤(A)return ” thing “” ‐ “¤(5F)hash(¤(2A)element);¤(A)}”
-     “bool ” thing “” ‐ “¤(5F)equal¤(5F)reference(” thing “¤(2A) first, ” thing “¤(2A) second)¤(A){¤(A)return ” thing “” ‐ “¤(5F)equal(¤(2A)first, ¤(2A)second);¤(A)}”
+     “guint ” thing “” ‐ “¤(5F)hash¤(5F)reference(gconstpointer element)¤(A){¤(A)return ” thing “” ‐ “¤(5F)hash(¤(2A)(” thing “ const ¤(2A))element);¤(A)}”
+     “gboolean ” thing “” ‐ “¤(5F)equal¤(5F)reference(gconstpointer first, gconstpointer second)¤(A){¤(A)return ” thing “” ‐ “¤(5F)equal(¤(2A)(” thing “ const ¤(2A))first, ¤(2A)(” thing “ const ¤(2A))second) ? TRUE : FALSE;¤(A)}”
     }
    C♯: “new HashSet<” thing “>()”
    Kotlin: “setOf()”
