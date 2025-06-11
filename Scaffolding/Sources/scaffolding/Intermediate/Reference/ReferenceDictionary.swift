@@ -71,9 +71,9 @@ extension ReferenceDictionary {
     for name in thing.names {
       if identifierMapping[name] != nil,
         identifierMapping[name]?.identifier != identifier {
-        errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: thing.declaration.genericDeclaration, conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: [], specifiedReturnValue: nil, parentContexts: [])!]))
+        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: thing.declaration.genericDeclaration, conflictingDeclarations: [lookupDeclaration(name, signature: [], specifiedReturnValue: nil, parentContexts: [])!]))
       }
-      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: thing.parameters.reordering(from: UnicodeText(name), to: identifier))
+      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: thing.parameters.reordering(from: name, to: identifier))
     }
     let parameters: [TypeReference] = thing.parameters.ordered(for: identifier)
       .map({ $0.resolvedType!.key })
@@ -109,9 +109,9 @@ extension ReferenceDictionary {
   func lookupThing(_ reference: TypeReference) -> Thing? {
     switch reference {
     case .simple(let simple):
-      return lookupThing(UnicodeText(simple), components: [])
+      return lookupThing(simple, components: [])
     case .compound(identifier: let identifier, components: let components):
-      return lookupThing(UnicodeText(identifier), components: components.map({ $0 }))
+      return lookupThing(identifier, components: components.map({ $0 }))
     case .action, .partReference, .enumerationCase, .statements:
       return nil
     }
@@ -193,9 +193,9 @@ extension ReferenceDictionary {
     for name in action.names {
       if identifierMapping[name] != nil,
         identifierMapping[name]?.identifier != identifier {
-        errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: .action(action.declaration as! ParsedActionDeclaration), conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: action.signature(orderedFor: UnicodeText(name)), specifiedReturnValue: action.returnValue, parentContexts: [])!]))
+        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .action(action.declaration as! ParsedActionDeclaration), conflictingDeclarations: [lookupDeclaration(name, signature: action.signature(orderedFor: name), specifiedReturnValue: action.returnValue, parentContexts: [])!]))
       }
-      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: action.parameters.reordering(from: UnicodeText(name), to: identifier))
+      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: action.parameters.reordering(from: name, to: identifier))
     }
     actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = action
     return errors
@@ -380,9 +380,9 @@ extension ReferenceDictionary {
     let identifier = ability.names.identifier()
     for name in ability.names {
       if identifierMapping[name] != nil {
-        errors.append(RedeclaredIdentifierError(identifier: UnicodeText(name), triggeringDeclaration: .ability(ability.declaration), conflictingDeclarations: [lookupDeclaration(UnicodeText(name), signature: ability.parameters.ordered(for: UnicodeText(name)).map({ _ in nil }), specifiedReturnValue: nil, parentContexts: [])!]))
+        errors.append(RedeclaredIdentifierError(identifier: name, triggeringDeclaration: .ability(ability.declaration), conflictingDeclarations: [lookupDeclaration(name, signature: ability.parameters.ordered(for: name).map({ _ in nil }), specifiedReturnValue: nil, parentContexts: [])!]))
       }
-      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: ability.parameters.reordering(from: UnicodeText(name), to: identifier))
+      identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: ability.parameters.reordering(from: name, to: identifier))
     }
     abilities[identifier] = ability
     return errors

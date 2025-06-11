@@ -183,7 +183,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       }
       if let existing = mergedReorderings[name] {
         if existing != rearranged {
-          errors.append(.mismatchedParameters(name: UnicodeText(name), declaration: provisionDeclarationName))
+          errors.append(.mismatchedParameters(name: name, declaration: provisionDeclarationName))
         }
       } else {
         mergedReorderings[name] = rearranged

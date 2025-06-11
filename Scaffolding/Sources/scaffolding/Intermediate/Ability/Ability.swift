@@ -61,7 +61,7 @@ extension Ability {
         let identifier = requirement.names.identifier()
         for name in requirement.names {
           if identifierMapping[name] != nil {
-            errors.append(ConstructionError.redeclaredIdentifier(UnicodeText(name), [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+            errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
           }
           identifierMapping[name] = identifier
         }
@@ -78,7 +78,7 @@ extension Ability {
         let identifier = requirement.names.identifier()
         for name in requirement.names {
           if identifierMapping[name] != nil {
-            errors.append(ConstructionError.redeclaredIdentifier(UnicodeText(name), [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+            errors.append(ConstructionError.redeclaredIdentifier(name, [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
           }
           identifierMapping[name] = identifier
         }
