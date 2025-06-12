@@ -16,6 +16,7 @@ struct ActionIntermediate {
   var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
   var coveredIdentifier: UnicodeText?
   var isSpecialized: Bool
+  var deservesTesting: Bool
 
   var isFlow: Bool {
     return prototype.isFlow
@@ -133,7 +134,8 @@ extension ActionIntermediate {
         nativeNames: .none
       ),
       isCreation: false,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -157,7 +159,8 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isMemberWrapper: true,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -235,7 +238,8 @@ extension ActionIntermediate {
         )
       ),
       isCreation: false,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -259,7 +263,8 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isMemberWrapper: true,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -340,7 +345,8 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isEnumerationValueWrapper: true,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -374,7 +380,8 @@ extension ActionIntermediate {
       swift: swift,
       isCreation: false,
       isMemberWrapper: true,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -470,7 +477,8 @@ extension ActionIntermediate {
         )
       ),
       isCreation: false,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -550,7 +558,8 @@ extension ActionIntermediate {
         )
       ),
       isCreation: false,
-      isSpecialized: false
+      isSpecialized: false,
+      deservesTesting: false
     )
   }
 
@@ -646,7 +655,8 @@ extension ActionIntermediate {
         implementation: implementation,
         declaration: declaration,
         isCreation: isCreation,
-        isSpecialized: false
+        isSpecialized: false,
+        deservesTesting: !isCreation
       )
     )
   }
@@ -742,7 +752,8 @@ extension ActionIntermediate {
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier,
-      isSpecialized: isSpecialized
+      isSpecialized: isSpecialized,
+      deservesTesting: deservesTesting
     )
   }
 
@@ -804,7 +815,8 @@ extension ActionIntermediate {
         isEnumerationValueWrapper: isEnumerationValueWrapper,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier,
-        isSpecialized: isSpecialized
+        isSpecialized: isSpecialized,
+        deservesTesting: deservesTesting
       )
     )
   }
@@ -859,7 +871,8 @@ extension ActionIntermediate {
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier,
-      isSpecialized: true
+      isSpecialized: true,
+      deservesTesting: deservesTesting
     )
   }
 }
@@ -892,7 +905,8 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isReferenceWrapper: true,
-      isSpecialized: isSpecialized
+      isSpecialized: isSpecialized,
+      deservesTesting: false
     )
   }
 }
@@ -951,7 +965,8 @@ extension ActionIntermediate {
         isCreation: false,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coverageIdentifier,
-        isSpecialized: isSpecialized
+        isSpecialized: isSpecialized,
+        deservesTesting: false
       )
     } else {
       return nil

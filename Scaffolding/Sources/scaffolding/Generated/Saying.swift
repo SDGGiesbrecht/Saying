@@ -470,20 +470,6 @@ enum SayingSourceCode {
   case utf8(UnicodeSegments)
 }
 
-enum SayingSourceCodeSlice {
-  case utf8(Slice<UnicodeSegments>)
-}
-
-struct SayingSourceSlice {
-  let origin: UnicodeText
-  let code: SayingSourceCodeSlice
-
-  init(origin: UnicodeText, code: SayingSourceCodeSlice) {
-    self.origin = origin
-    self.code = code
-  }
-}
-
 struct ParsedLeftChevronQuotationMarkSyntax {
   let location: Slice<UnicodeSegments>
 
