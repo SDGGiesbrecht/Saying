@@ -21,7 +21,7 @@ thing (clients)
 
 action (clients)
  (
-  English: Saying source (code: Saying source code) from (origin: Unicode text)
+  English: Saying source from (origin: Unicode text) containing (code: Saying source code)
   Swift: SayingSource.init origin (origin: [origin]) code (code: [code])
  )
  Saying source

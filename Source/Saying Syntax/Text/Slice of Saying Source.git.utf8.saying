@@ -21,7 +21,7 @@ thing (clients)
 
 action (unit)
  (
-  English: slice of Saying source (code: slice of Saying source code) from (origin: Unicode text)
+  English: slice of Saying source from (origin: Unicode text) containing (code: slice of Saying source code)
  )
  slice of Saying source
  create
