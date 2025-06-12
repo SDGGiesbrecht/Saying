@@ -1,0 +1,28 @@
+thing (clients)
+ (
+  English: Saying source
+  Swift: SayingSource
+ )
+ {
+  part (clients/nowhere)
+   (
+    English: origin
+    Swift: origin
+   )
+   Unicode text
+
+  part (clients/nowhere)
+   (
+    English: code
+    Swift: code
+   )
+   Saying source code
+ }
+
+action (clients)
+ (
+  English: Saying source (code: Saying source code) from (origin: Unicode text)
+  Swift: SayingSource.init origin (origin: [origin]) code (code: [code])
+ )
+ Saying source
+ create

@@ -1,0 +1,13 @@
+enumeration (clients)
+ (
+  English: Saying source code
+  Swift: SayingSourceCode
+ )
+ {
+  case
+   (
+    English: UTF‐8
+    Swift: utf8
+   )
+   Unicode segments
+ }
