@@ -67,6 +67,7 @@ protocol Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
@@ -469,6 +470,7 @@ extension Platform {
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
+    let access = accessModifier(for: thing.access, memberScope: false)
     var members: [String] = []
     var handledActionDeclarations: Set<String> = []
     for module in modulesToSearchForMembers {
@@ -524,7 +526,6 @@ extension Platform {
           noSetter: part.writeAccess == .nowhere
         )
       })
-      let access = accessModifier(for: thing.access, memberScope: false)
       let specifiedConstructor = externalReferenceLookup.lookupCreation(of: thing)
       let constructorParameters: [String]
       if let specified = specifiedConstructor {
@@ -579,6 +580,7 @@ extension Platform {
       return enumerationTypeDeclaration(
         name: name,
         cases: cases,
+        accessModifier: access,
         simple: thing.isSimple,
         storageCases: storageCases,
         otherMembers: members

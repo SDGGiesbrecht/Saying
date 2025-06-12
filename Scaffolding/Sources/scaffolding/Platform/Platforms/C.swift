@@ -133,6 +133,7 @@ enum C: Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
@@ -151,7 +152,14 @@ enum C: Platform {
     } else {
       var result: [String] = []
       result.append(
-        enumerationTypeDeclaration(name: "\(name)_case", cases: cases, simple: true, storageCases: [], otherMembers: [])
+        enumerationTypeDeclaration(
+          name: "\(name)_case",
+          cases: cases,
+          accessModifier: accessModifier,
+          simple: true,
+          storageCases: [],
+          otherMembers: []
+        )
       )
       result.append("typedef union \(name)_value {")
       for enumerationCase in storageCases {

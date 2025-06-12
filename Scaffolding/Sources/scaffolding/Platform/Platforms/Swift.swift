@@ -220,12 +220,14 @@ enum Swift: Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
   ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
-      "enum \(name) {"
+      "\(access)enum \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
