@@ -204,7 +204,11 @@ enum C: Platform {
     return parameter.nativeNames.c.map({ String($0) })
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
-    return nil
+    if isCreation {
+      return sanitize(identifier: parameter.names.identifier(), leading: true)
+    } else {
+      return nil
+    }
   }
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate? {
     return action.c
