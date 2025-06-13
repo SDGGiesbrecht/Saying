@@ -188,6 +188,12 @@ import Foundation
       "    return UnicodeSegment(segment: segments[index])",
       "  }",
       "}",
+      "",
+      "extension SayingSourceSlice {",
+      "  init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
+      "    self.init(origin, code)",
+      "  }",
+      "}",
     ]
     for nodeType in [
       "ParsedDownArrowSyntax",
