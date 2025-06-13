@@ -466,6 +466,10 @@ struct ParsedSymbolInsertionMarkSyntax {
   }
 }
 
+enum SayingSourceCode {
+  case utf8(UnicodeSegments)
+}
+
 struct ParsedLeftChevronQuotationMarkSyntax {
   let location: Slice<UnicodeSegments>
 
@@ -479,6 +483,16 @@ struct ParsedRightChevronQuotationMarkSyntax {
 
   fileprivate init(_ location: Slice<UnicodeSegments>) {
     self.location = location
+  }
+}
+
+struct SayingSource {
+  let origin: UnicodeText
+  let code: SayingSourceCode
+
+  init(origin: UnicodeText, code: SayingSourceCode) {
+    self.origin = origin
+    self.code = code
   }
 }
 

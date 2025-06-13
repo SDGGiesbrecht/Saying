@@ -67,6 +67,7 @@ protocol Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
@@ -469,6 +470,7 @@ extension Platform {
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
+    let access = accessModifier(for: thing.access, memberScope: false)
     var members: [String] = []
     var handledActionDeclarations: Set<String> = []
     for module in modulesToSearchForMembers {
@@ -524,12 +526,11 @@ extension Platform {
           noSetter: part.writeAccess == .nowhere
         )
       })
-      let access = accessModifier(for: thing.access, memberScope: false)
       let specifiedConstructor = externalReferenceLookup.lookupCreation(of: thing)
       let constructorParameters: [String]
-      if let specified = specifiedConstructor,
-        let native = nativeNameDeclaration(of: specified) {
-        constructorParameters = specified.parameters.ordered(for: native).map({ parameter in
+      if let specified = specifiedConstructor {
+        let orderIdentifier = nativeNameDeclaration(of: specified) ?? specified.names.identifier()
+        constructorParameters = specified.parameters.ordered(for: orderIdentifier).map({ parameter in
           return source(for: parameter, referenceLookup: externalReferenceLookup)
         })
       } else {
@@ -579,6 +580,7 @@ extension Platform {
       return enumerationTypeDeclaration(
         name: name,
         cases: cases,
+        accessModifier: access,
         simple: thing.isSimple,
         storageCases: storageCases,
         otherMembers: members
@@ -1557,10 +1559,7 @@ extension Platform {
     let moduleReferenceLookup = module.referenceDictionary
     let allLookup = moduleWideImports.appending(moduleReferenceLookup)
     let actionRegions: [UnicodeText] = moduleReferenceLookup.allActions()
-      .lazy.filter({ action in
-        return !action.isCoverageWrapper
-        && !(action.isFlow && action.returnValue != nil)
-      })
+      .lazy.filter({ $0.deservesTesting })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
     let choiceRegions: [UnicodeText] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.defaults.values })

@@ -1,25 +1,22 @@
 import Foundation
 
-struct File {
+extension SayingSource {
 
   init(from url: URL) throws {
-    self.url = url
+    let origin = UnicodeText(url.path)
     switch url.sourceFormat {
     case .utf8(let gitStyle):
       switch gitStyle {
       case false:
-        contents = .utf8(try UTF8File(from: url).source)
+        self.init(origin: origin, code: .utf8(try UTF8File(from: url).source))
       case true:
-        contents = .utf8(try UTF8File(gitStyle: GitStyleFile(from: url)).source)
+        self.init(origin: origin, code: .utf8(try UTF8File(gitStyle: GitStyleFile(from: url)).source))
       }
     }
   }
 
-  let url: URL
-  let contents: Source
-
   func parse() throws -> ParsedDeclarationList {
-    switch contents {
+    switch code {
     case .utf8(let source):
       return try ParsedDeclarationList.fastParse(source: source)
         ?? ParsedDeclarationList.diagnosticParse(source: source).get()

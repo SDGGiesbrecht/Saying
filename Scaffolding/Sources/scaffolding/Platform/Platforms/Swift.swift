@@ -220,12 +220,14 @@ enum Swift: Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
   ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
-      "enum \(name) {"
+      "\(access)enum \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")
@@ -256,7 +258,8 @@ enum Swift: Platform {
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String {
     let resolvedLabel = label ?? "_"
     let inoutKeyword = isThrough ? "inout " : ""
-    return "\(resolvedLabel) \(name): \(inoutKeyword)\(type)"
+    let labelSection = resolvedLabel == name ? "" : "\(resolvedLabel) "
+    return "\(labelSection)\(name): \(inoutKeyword)\(type)"
   }
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"

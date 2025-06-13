@@ -160,13 +160,15 @@ enum Kotlin: Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
   ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     let keyword = simple ? "enum" : "sealed"
     var result: [String] = [
-      "\(keyword) class \(name) {"
+      "\(access)\(keyword) class \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")

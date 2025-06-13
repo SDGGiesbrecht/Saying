@@ -28,7 +28,7 @@ struct Module {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
-      try module.add(file: File(from: sourceFile).parse())
+      try module.add(file: SayingSource(from: sourceFile).parse())
     }
     if isSayingSyntaxModule {
       try module.unfoldSyntax()

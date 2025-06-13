@@ -54,7 +54,7 @@ struct Package {
           reportProgress(UnicodeText("¬\(relativePath)"))
         case true:
           reportProgress(UnicodeText(" \(relativePath)"))
-          let file = try File(from: fileURL)
+          let file = try SayingSource(from: fileURL)
           let formatted = try file.formattedGitStyleSource()
           try StrictString(formatted).appending("\n").save(to: fileURL)
         }

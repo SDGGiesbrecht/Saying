@@ -192,13 +192,15 @@ enum CSharp: Platform {
   static func enumerationTypeDeclaration(
     name: String,
     cases: [String],
+    accessModifier: String?,
     simple: Bool,
     storageCases: [String],
     otherMembers: [String]
   ) -> String {
+    let access = accessModifier.map({ "\($0) " }) ?? ""
     if simple {
       var result: [String] = [
-        "enum \(name)",
+        "\(access)enum \(name)",
         "{",
       ]
       for enumerationCase in cases {
@@ -210,7 +212,7 @@ enum CSharp: Platform {
       return result.joined(separator: "\n")
     } else {
       var result: [String] = [
-        "abstract class \(name)",
+        "\(access)abstract class \(name)",
         "{",
         "\(indent)private \(name)() {}",
         "",

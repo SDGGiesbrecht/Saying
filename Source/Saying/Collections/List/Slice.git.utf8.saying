@@ -27,10 +27,10 @@ extension
 
   action (clients)
    (
-    English: entirety of (list: list)
+    English: entirety of (whole: list)
    )
    slice of (list)
-   Swift: “Slice(base: ” list “, bounds: ” list “.startIndex ..< ” list “.endIndex)”
+   Swift: “Slice(base: ” whole “, bounds: ” whole “.startIndex ..< ” whole “.endIndex)”
    create
 
   use
