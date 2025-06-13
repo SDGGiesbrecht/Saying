@@ -51,8 +51,8 @@ extension ModuleIntermediate {
           source: UnicodeText(newSource.joined(separator: "\n"))
         ).parsed()
         try self.add(
-          file: ParsedDeclarationList.fastParse(source: file)
-          ?? ParsedDeclarationList.diagnosticParse(source: file).get()
+          file: ParsedDeclarationList.fastParse(source: file, origin: compilerGeneratedOrigin())
+          ?? ParsedDeclarationList.diagnosticParse(source: file, origin: compilerGeneratedOrigin()).get()
         )
       }
     }

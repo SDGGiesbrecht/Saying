@@ -27,7 +27,7 @@ func syntaxNodeParsedDeclaration(
     "  (",
     "   English: location",
     "  )",
-    "  slice of (Unicode segments)",
+    "  slice of Saying source",
     " }",
   ])
   return source

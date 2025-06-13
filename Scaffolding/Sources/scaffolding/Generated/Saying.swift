@@ -266,222 +266,236 @@ extension UnicodeSegments {
 extension UnicodeSegments: Collection {}
 extension UnicodeSegments.Index: Comparable {}
 
-struct ParsedBulletCharacterSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedClosingBraceSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedClosingBracketSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedClosingExclamationMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedClosingParenthesisSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedClosingQuestionMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedColonCharacterSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedDownArrowSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedGreekQuestionMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedLeftArrowSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedLineBreakSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedLowQuotationMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedNinesQuotationMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedOpeningBraceSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedOpeningBracketSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedOpeningExclamationMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedOpeningParenthesisSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedOpeningQuestionMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedParagraphBreakSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedRightArrowSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedRightToLeftQuestionMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedSixesQuotationMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedSlashSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedSpaceSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
-struct ParsedSymbolInsertionMarkSyntax {
-  let location: Slice<UnicodeSegments>
-
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
-    self.location = location
-  }
-}
-
 enum SayingSourceCode {
   case utf8(UnicodeSegments)
 }
 
-struct ParsedLeftChevronQuotationMarkSyntax {
-  let location: Slice<UnicodeSegments>
+enum SayingSourceCodeSlice {
+  case utf8(Slice<UnicodeSegments>)
+}
 
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
+struct SayingSourceSlice {
+  let origin: UnicodeText
+  let code: SayingSourceCodeSlice
+
+  fileprivate init(_ origin: UnicodeText, _ code: SayingSourceCodeSlice) {
+    self.origin = origin
+    self.code = code
+  }
+}
+
+struct ParsedLeftChevronQuotationMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
 struct ParsedRightChevronQuotationMarkSyntax {
-  let location: Slice<UnicodeSegments>
+  let location: SayingSourceSlice
 
-  fileprivate init(_ location: Slice<UnicodeSegments>) {
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedBulletCharacterSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedClosingBraceSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedClosingBracketSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedClosingExclamationMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedClosingParenthesisSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedClosingQuestionMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedColonCharacterSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedDownArrowSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedGreekQuestionMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedLeftArrowSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedLineBreakSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedLowQuotationMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedNinesQuotationMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedOpeningBraceSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedOpeningBracketSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedOpeningExclamationMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedOpeningParenthesisSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedOpeningQuestionMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedParagraphBreakSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedRightArrowSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedRightToLeftQuestionMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedSixesQuotationMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedSlashSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedSpaceSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
+    self.location = location
+  }
+}
+
+struct ParsedSymbolInsertionMarkSyntax {
+  let location: SayingSourceSlice
+
+  fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
@@ -583,164 +597,170 @@ extension UnicodeSegments {
   }
 }
 
+extension SayingSourceSlice {
+  init(origin: UnicodeText, code: SayingSourceCodeSlice) {
+    self.init(origin, code)
+  }
+}
+
 extension ParsedDownArrowSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLeftArrowSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedRightArrowSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingBraceSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningBraceSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingBracketSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningBracketSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingParenthesisSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningParenthesisSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLineBreakSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedParagraphBreakSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedBulletCharacterSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningQuestionMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingQuestionMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedRightToLeftQuestionMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedGreekQuestionMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningExclamationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingExclamationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedColonCharacterSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLeftChevronQuotationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLowQuotationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedNinesQuotationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedRightChevronQuotationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSixesQuotationMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSlashSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSpaceSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSymbolInsertionMarkSyntax {
-  init(location: Slice<UnicodeSegments>) {
+  init(location: SayingSourceSlice) {
     self.init(location)
   }
 }

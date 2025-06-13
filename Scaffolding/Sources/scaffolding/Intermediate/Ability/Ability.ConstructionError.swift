@@ -7,7 +7,7 @@ extension Ability {
     case redeclaredIdentifier(UnicodeText, [ParsedRequirementDeclarationPrototype])
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .brokenDocumentation(let error):
         return error.range

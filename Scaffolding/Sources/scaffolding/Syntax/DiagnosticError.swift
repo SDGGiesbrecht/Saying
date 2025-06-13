@@ -1,5 +1,5 @@
 protocol DiagnosticError: Error {
-  var range: Slice<UnicodeSegments> { get }
+  var range: SayingSourceSlice { get }
   var message: String { get }
 }
 
@@ -15,11 +15,14 @@ extension DiagnosticError {
   }
 
   var diagnostic: String {
-    let preceding = String(String.UnicodeScalarView(range.base[..<range.startIndex]))
-    let line = preceding.lines
-      .lazy.map({ $0.newline.elementsEqual("\u{2029}".scalars) ? 2 : 1 })
-      .reduce(0, +)
-    let source = String.UnicodeScalarView(range)
-    return "\(line): \(message) “\(source)”"
+    switch range.code {
+    case .utf8(let unicode):
+      let preceding = String(String.UnicodeScalarView(unicode.base[..<unicode.startIndex]))
+      let line = preceding.lines
+        .lazy.map({ $0.newline.elementsEqual("\u{2029}".scalars) ? 2 : 1 })
+        .reduce(0, +)
+      let source = String.UnicodeScalarView(unicode)
+      return "\(range.origin)\n\(line): \(message) “\(source)”"
+    }
   }
 }

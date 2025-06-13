@@ -159,7 +159,7 @@ struct Node {
     } else {
       switch kind {
       case .fixedLeaf, .keyword, .variableLeaf:
-        return "  let location: Slice<UnicodeSegments>"
+        return "  let location: SayingSourceSlice"
       case .compound, .alternates:
         return nil
       }
@@ -182,21 +182,27 @@ struct Node {
       result.append(contentsOf: [
         "",
         "  var context: UnicodeSegments {",
-        contextImplementation(),
+      ])
+      result.append(contentsOf: contextImplementation())
+      result.append(contentsOf: [
         "  }",
         "",
         "  var startIndex: UnicodeSegments.Index {",
-        startIndexImplementation(),
+      ])
+      result.append(contentsOf: startIndexImplementation())
+      result.append(contentsOf: [
         "  }",
         "",
         "  var endIndex: UnicodeSegments.Index {",
-        endIndexImplementation(),
+      ])
+      result.append(contentsOf: endIndexImplementation())
+      result.append(contentsOf: [
         "  }",
       ])
       if let location = locationImplementation() {
         result.append(contentsOf: [
           "",
-          "  var location: Slice<UnicodeSegments> {",
+          "  var location: SayingSourceSlice {",
           location,
           "  }",
         ])
@@ -266,30 +272,51 @@ struct Node {
     }
   }
 
-  func contextImplementation() -> String {
+  func contextImplementation() -> [String] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
-      return "    return location.base"
+      return [
+        "    switch location.code {",
+        "    case .utf8(let unicode):",
+        "      return unicode.base",
+        "    }",
+      ]
     case .compound, .alternates:
-      return "    return firstChild.context"
+      return [
+        "    return firstChild.context"
+      ]
     }
   }
   
-  func startIndexImplementation() -> String {
+  func startIndexImplementation() -> [String] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
-      return "    return location.startIndex"
+      return [
+        "    switch location.code {",
+        "    case .utf8(let unicode):",
+        "      return unicode.startIndex",
+        "    }",
+      ]
     case .compound, .alternates:
-      return "    return firstChild.startIndex"
+      return [
+        "    return firstChild.startIndex"
+      ]
     }
   }
   
-  func endIndexImplementation() -> String {
+  func endIndexImplementation() -> [String] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
-      return "    return location.endIndex"
+      return [
+        "    switch location.code {",
+        "    case .utf8(let unicode):",
+        "      return unicode.endIndex",
+        "    }",
+      ]
     case .compound, .alternates:
-      return "    return lastChild.endIndex"
+      return [
+        "    return lastChild.endIndex"
+      ]
     }
   }
 
@@ -298,7 +325,7 @@ struct Node {
     case .fixedLeaf, .keyword, .variableLeaf:
       return nil
     case .compound, .alternates:
-      return "    return context[startIndex..<endIndex]"
+      return "    return SayingSourceSlice(origin: firstChild.location.origin, code: .utf8(context[startIndex..<endIndex]))"
     }
   }
   
@@ -312,12 +339,13 @@ struct Node {
     result.append(contentsOf: [
       "",
       "  static func diagnosticParseNext(",
-      "    in remainder: Slice<UnicodeSegments>",
+      "    in remainder: Slice<UnicodeSegments>,",
+      "    origin: UnicodeText",
       "  ) -> Result<DiagnosticParseResult<Parsed\(name)>, ErrorList<ParseError>> {",
       diagnosticParseImplementation(),
       "  }",
       "",
-      "  static func fastParseNext(in remainder: Slice<UnicodeSegments>) -> Parsed\(name)? {",
+      "  static func fastParseNext(in remainder: Slice<UnicodeSegments>, origin: UnicodeText) -> Parsed\(name)? {",
       fastParseImplementation(),
       "  }",
       "}",
@@ -331,9 +359,9 @@ struct Node {
       return [
         "    guard let first = remainder.first,",
         "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
-        "        return .failure([.notA\(name)(remainder.prefix(1))])",
+        "        return .failure([.notA\(name)(SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder.prefix(1)), reasonNotContinued: nil))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1)))), reasonNotContinued: nil))",
       ].joined(separator: "\n")
     case .keyword:
       return [
@@ -344,9 +372,9 @@ struct Node {
         "    }",
         "    let slice = remainder[remainder.startIndex..<cursor]",
         "    guard allowed.contains(UnicodeText(slice)) else {",
-        "      return .failure([.notA\(name)(slice)])",
+        "      return .failure([.notA\(name)(SayingSourceSlice(origin: origin, code: .utf8(slice)))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: slice), reasonNotContinued: nil))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(slice))), reasonNotContinued: nil))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
@@ -357,9 +385,9 @@ struct Node {
         "    }",
         "    let range = remainder.startIndex..<cursor",
         "    guard !range.isEmpty else {",
-        "      return .failure([.notA\(name)(remainder.prefix(1))])",
+        "      return .failure([.notA\(name)(SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))])",
         "    }",
-        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: remainder[range]), reasonNotContinued: nil))",
+        "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder[range]))), reasonNotContinued: nil))",
       ].joined(separator: "\n")
     case .compound(let children):
       var result: [String] = [
@@ -370,7 +398,7 @@ struct Node {
         switch child.kind {
         case .fixed, .required, .optional:
           result.append(contentsOf: [
-            "    let \(child.name) = Parsed\(child.type).diagnosticParseNext(in: remainder)",
+            "    let \(child.name) = Parsed\(child.type).diagnosticParseNext(in: remainder, origin: origin)",
             "    switch \(child.name) {",
           ])
           switch child.kind {
@@ -393,17 +421,17 @@ struct Node {
             "      if let reason = parsed.reasonNotContinued {",
             "        reasonsNotContinued.append(.broken\(child.uppercasedName)(reason))",
             "      }",
-            "      remainder = remainder[parsed.result.location.endIndex...]",
+            "      remainder = remainder[parsed.result.endIndex...]",
             "    }",
           ])
         case .array:
           result.append(contentsOf: [
             "    var \(child.name): [Parsed\(child.type)] = []",
-            "    while let parsed = try? Parsed\(child.type).diagnosticParseNext(in: remainder).get() {",
+            "    while let parsed = try? Parsed\(child.type).diagnosticParseNext(in: remainder, origin: origin).get() {",
             "      \(child.name).append(parsed.result)",
-            "      remainder = remainder[parsed.result.location.endIndex...]",
+            "      remainder = remainder[parsed.result.endIndex...]",
             "    }",
-            "    switch Parsed\(child.type).diagnosticParseNext(in: remainder) {",
+            "    switch Parsed\(child.type).diagnosticParseNext(in: remainder, origin: origin) {",
             "    case .failure(let errors):",
             "      reasonsNotContinued.append(contentsOf: errors.map({ .broken\(child.uppercasedName)($0) }).errors)",
             "    case .success:",
@@ -437,7 +465,7 @@ struct Node {
       result.append(contentsOf: [
         "        ),",
         "        reasonNotContinued: reasonsNotContinued",
-        "          .max(by: { $0.range.startIndex < $1.range.startIndex })",
+        "          .max(by: { $0.range.sortableStartPosition < $1.range.sortableStartPosition })",
         "      )",
         "    )",
       ])
@@ -448,7 +476,7 @@ struct Node {
       ]
       for alternate in alternates {
         result.append(contentsOf: [
-          "    let \(alternate.name) = Parsed\(alternate.type).diagnosticParseNext(in: remainder)",
+          "    let \(alternate.name) = Parsed\(alternate.type).diagnosticParseNext(in: remainder, origin: origin)",
           "    switch \(alternate.name) {",
           "    case .failure(let error):",
           "      errors.append(contentsOf: error.errors.map({ .broken\(alternate.uppercasedName)($0) }))",
@@ -465,7 +493,7 @@ struct Node {
       result.append(contentsOf: [
         "    return .failure(",
         "      errors",
-        "        .max(by: { $0.range.startIndex < $1.range.startIndex })",
+        "        .max(by: { $0.range.sortableStartPosition < $1.range.sortableStartPosition })",
         "        .map({ [$0] })!",
         "    )",
       ])
@@ -481,7 +509,7 @@ struct Node {
         "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
         "        return nil",
         "    }",
-        "    return Parsed\(name)(location: remainder.prefix(1))",
+        "    return Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))",
       ].joined(separator: "\n")
     case .keyword:
       return [
@@ -494,7 +522,7 @@ struct Node {
         "    guard allowed.contains(UnicodeText(slice)) else {",
         "      return nil",
         "    }",
-        "    return Parsed\(name)(location: slice)",
+        "    return Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(slice)))",
       ].joined(separator: "\n")
     case .variableLeaf:
       return [
@@ -507,7 +535,7 @@ struct Node {
         "    guard !range.isEmpty else {",
         "      return nil",
         "    }",
-        "    return Parsed\(name)(location: remainder[range])",
+        "    return Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder[range])))",
       ].joined(separator: "\n")
     case .compound(let children):
       var result: [String] = [
@@ -517,7 +545,7 @@ struct Node {
         switch child.kind {
         case .fixed, .required, .optional:
           result.append(contentsOf: [
-            "    let \(child.name) = Parsed\(child.type).fastParseNext(in: remainder)",
+            "    let \(child.name) = Parsed\(child.type).fastParseNext(in: remainder, origin: origin)",
             "    switch \(child.name) {",
             "    case .none:",
           ])
@@ -535,15 +563,15 @@ struct Node {
           }
           result.append(contentsOf: [
             "    case .some(let parsed):",
-            "      remainder = remainder[parsed.location.endIndex...]",
+            "      remainder = remainder[parsed.endIndex...]",
             "    }",
           ])
         case .array:
           result.append(contentsOf: [
             "    var \(child.name): [Parsed\(child.type)] = []",
-            "    while let parsed = Parsed\(child.type).fastParseNext(in: remainder) {",
+            "    while let parsed = Parsed\(child.type).fastParseNext(in: remainder, origin: origin) {",
             "      \(child.name).append(parsed)",
-            "      remainder = remainder[parsed.location.endIndex...]",
+            "      remainder = remainder[parsed.endIndex...]",
             "    }",
           ])
         }
@@ -572,7 +600,7 @@ struct Node {
       var result: [String] = []
       for alternate in alternates {
         result.append(contentsOf: [
-          "    if let \(alternate.name) = Parsed\(alternate.type).fastParseNext(in: remainder) {",
+          "    if let \(alternate.name) = Parsed\(alternate.type).fastParseNext(in: remainder, origin: origin) {",
           "      return .\(alternate.name)(\(alternate.name))",
           "    }",
         ])
@@ -597,7 +625,7 @@ struct Node {
       "      }",
       "    }",
       "",
-      "    var range: Slice<UnicodeSegments> {",
+      "    var range: SayingSourceSlice {",
       "      switch self {",
       parseDiagnosticRangeCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
       "      }",
@@ -611,7 +639,7 @@ struct Node {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
       return [
-        "case notA\(name)(Slice<UnicodeSegments>)"
+        "case notA\(name)(SayingSourceSlice)"
       ]
     case .compound(let children):
       return children.compactMap { child in
@@ -767,7 +795,7 @@ struct Node {
       "",
       "extension \(name) {",
       "  func parsed() -> Parsed\(name) {",
-      "    return Parsed\(name).fastParse(source: source())!",
+      "    return Parsed\(name).fastParse(source: source(), origin: compilerGeneratedOrigin())!",
       "  }",
       "}",
       "",
@@ -780,7 +808,7 @@ struct Node {
     case .fixedLeaf:
       break
     case .keyword, .variableLeaf:
-      arguments.append("text: UnicodeText(location)")
+      arguments.append("text: source()")
     case .compound(let children):
       for child in children {
         switch child.kind {

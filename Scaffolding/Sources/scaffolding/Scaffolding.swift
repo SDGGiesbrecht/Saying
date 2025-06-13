@@ -221,7 +221,7 @@ import Foundation
       appendix.append(contentsOf: [
         "",
         "extension \(nodeType) {",
-        "  init(location: Slice<UnicodeSegments>) {",
+        "  init(location: SayingSourceSlice) {",
         "    self.init(location)",
         "  }",
         "}",

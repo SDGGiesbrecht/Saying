@@ -2,7 +2,7 @@ extension NativeRequirementImplementationIntermediate {
   enum ConstructionError: DiagnosticError {
     case literalError(LiteralIntermediate.ConstructionError)
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .literalError(let error):
         return error.range

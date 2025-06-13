@@ -5,7 +5,7 @@ protocol ParsedSyntaxNode {
   var context: UnicodeSegments { get }
   var startIndex: UnicodeSegments.Index { get }
   var endIndex: UnicodeSegments.Index { get }
-  var location: Slice<UnicodeSegments> { get }
+  var location: SayingSourceSlice { get }
 
   func mutableNode() -> SyntaxNode
 }
@@ -13,7 +13,10 @@ protocol ParsedSyntaxNode {
 extension ParsedSyntaxNode {
 
   func source() -> UnicodeText {
-    return UnicodeText(location)
+    switch location.code {
+    case .utf8(let unicode):
+      return UnicodeText(unicode)
+    }
   }
 
   func formattedGitStyleSource() -> UnicodeText {

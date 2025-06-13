@@ -25,3 +25,17 @@ action (unit)
  )
  slice of Saying source
  create
+
+use (clients)
+ general use of (slice of Saying source)
+ {
+ }
+
+action (unit)
+ (
+  English: placeholder
+ )
+ slice of Saying source
+ {
+  ← slice of Saying source from (Unicode text of (“...”)) containing (wrap (entirety of (empty: Unicode segments)) as (UTF‐8))
+ }

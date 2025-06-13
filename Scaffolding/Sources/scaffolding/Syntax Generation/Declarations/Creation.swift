@@ -12,7 +12,7 @@ func syntaxNodeCreation(
   ]
   if parsed {
     source.append(contentsOf: [
-      "  test {ignore ((location) of (parsed \(englishName) (entirety of (empty: Unicode segments))))}",
+      "  test {ignore ((location) of (parsed \(englishName) (placeholder: slice of Saying source)))}",
     ])
   } else {
     source.append(contentsOf: [
@@ -25,7 +25,7 @@ func syntaxNodeCreation(
   ])
   if parsed {
     source.append(contentsOf: [
-      "  English: parsed \(englishName) (location: slice of (Unicode segments))",
+      "  English: parsed \(englishName) (location: slice of Saying source)",
     ])
   } else {
     source.append(contentsOf: [
