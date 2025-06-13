@@ -3,7 +3,7 @@ extension LiteralIntermediate {
     case escapeCodeNotHexadecimal(ParsedIdentifierComponent)
     case escapeCodeNotUnicodeScalar(ParsedIdentifierComponent)
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .escapeCodeNotHexadecimal(let component):
         return component.location

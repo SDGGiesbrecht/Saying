@@ -18,12 +18,16 @@ extension SayingSource {
   func parse() throws -> ParsedDeclarationList {
     switch code {
     case .utf8(let source):
-      return try ParsedDeclarationList.fastParse(source: source)
-        ?? ParsedDeclarationList.diagnosticParse(source: source).get()
+      return try ParsedDeclarationList.fastParse(source: source, origin: origin)
+        ?? ParsedDeclarationList.diagnosticParse(source: source, origin: origin).get()
     }
   }
 
   func formattedGitStyleSource() throws -> UnicodeText {
     return try parse().formattedGitStyleSource()
   }
+}
+
+func compilerGeneratedOrigin(file: StaticString = #filePath, line: UInt = #line) -> UnicodeText {
+  return "\(file) (\(line))"
 }

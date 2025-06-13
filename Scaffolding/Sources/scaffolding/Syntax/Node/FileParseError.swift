@@ -1,7 +1,7 @@
 enum FileParseError<NodeParseError>: DiagnosticError
 where NodeParseError: DiagnosticError {
   case brokenNode(NodeParseError)
-  case extraneousText(Slice<UnicodeSegments>)
+  case extraneousText(SayingSourceSlice)
 
   var message: String {
     switch self {
@@ -12,7 +12,7 @@ where NodeParseError: DiagnosticError {
     }
   }
 
-  var range: Slice<UnicodeSegments> {
+  var range: SayingSourceSlice {
     switch self {
     case .brokenNode(let error):
       return error.range

@@ -325,6 +325,15 @@ extension Thing {
         )
       )
     }
+    for enumerationCase in cases {
+      if let contents = enumerationCase.contents {
+        result.append(
+          contentsOf: contents.requiredIdentifiers(
+            moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
+          )
+        )
+      }
+    }
     if let native = platform.nativeType(of: self) {
       for indirectRequirement in native.indirectRequirements {
         result.append(

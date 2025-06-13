@@ -15,7 +15,7 @@ extension ExtensionIntermediate {
       }
     }
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .brokenThing(let error):
         return error.range

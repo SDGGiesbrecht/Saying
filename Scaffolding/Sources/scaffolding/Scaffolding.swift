@@ -188,6 +188,12 @@ import Foundation
       "    return UnicodeSegment(segment: segments[index])",
       "  }",
       "}",
+      "",
+      "extension SayingSourceSlice {",
+      "  init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
+      "    self.init(origin, code)",
+      "  }",
+      "}",
     ]
     for nodeType in [
       "ParsedDownArrowSyntax",
@@ -221,7 +227,7 @@ import Foundation
       appendix.append(contentsOf: [
         "",
         "extension \(nodeType) {",
-        "  init(location: Slice<UnicodeSegments>) {",
+        "  init(location: SayingSourceSlice) {",
         "    self.init(location)",
         "  }",
         "}",

@@ -5,7 +5,7 @@ extension ModuleIntermediate {
     case redeclaredIdentifier(ReferenceDictionary.RedeclaredIdentifierError)
     case parameterNotFound(ParsedParameterDocumentation)
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .restrictedLanguage(let declaration):
         return declaration.access?.location ?? declaration.name.location

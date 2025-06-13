@@ -4,7 +4,7 @@ extension NativeThingImplementationIntermediate {
     case nativeExpressionError(NativeActionExpressionIntermediate.ConstructionError)
     case nativeRequirementError(NativeRequirementImplementationIntermediate.ConstructionError)
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .literalError(let error):
         return error.range

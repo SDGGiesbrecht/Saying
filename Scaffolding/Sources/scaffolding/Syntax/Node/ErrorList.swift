@@ -24,6 +24,6 @@ extension ErrorList: CustomStringConvertible {
     var result = errors.map({ $0.diagnostic })
     result.prepend("[")
     result.append("]")
-    return result.joined(separator: "\n")
+    return result.joined(separator: "\n\n")
   }
 }

@@ -15,7 +15,7 @@ extension PartIntermediate {
       }
     }
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .brokenDocumentation(let error):
         return error.range

@@ -4,7 +4,7 @@ extension ActionPrototype {
     case brokenParameterInterpolation(Interpolation<ParameterIntermediate>.ConstructionError)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
-    var range: Slice<UnicodeSegments> {
+    var range: SayingSourceSlice {
       switch self {
       case .brokenDocumentation(let error):
         return error.range
