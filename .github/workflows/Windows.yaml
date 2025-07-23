@@ -42,7 +42,7 @@ jobs:
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v2
       with:
-        vs-version: '[16.11,16.12)'
+        vs-version: '[17.14,17.15)'
     - name: Build All
       shell: cmd
       run: |
