@@ -29,7 +29,7 @@ jobs:
         git diff --exit-code
   Windows_Test:
     name: Windows (Test)
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: Windows_Build
     steps:
     - name: Check out
