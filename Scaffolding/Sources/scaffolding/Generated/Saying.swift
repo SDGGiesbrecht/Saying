@@ -81,6 +81,16 @@ struct DownArrowSyntax {
   }
 }
 
+struct GitStyleSayingSource {
+  let origin: UnicodeText
+  let code: UnicodeText
+
+  init(origin: UnicodeText, code: UnicodeText) {
+    self.origin = origin
+    self.code = code
+  }
+}
+
 struct GreekQuestionMarkSyntax {
 
   init() {

@@ -1,0 +1,33 @@
+thing (clients)
+ (
+  English: Git‐style Saying source
+  Swift: GitStyleSayingSource
+ )
+ {
+  part (clients/nowhere)
+   (
+    English: origin
+    Swift: origin
+   )
+   Unicode text
+
+  part (clients/nowhere)
+   (
+    English: code
+    Swift: code
+   )
+   Unicode text
+ }
+
+action (clients)
+ (
+  English: Git‐style Saying source from (origin: Unicode text) containing (code: Unicode text)
+  Swift: GitStyleSayingSource.init origin (origin: [origin]) code (code: [code])
+ )
+ Git‐style Saying source
+ create
+
+use (clients)
+ general use of (Git‐style Saying source)
+ {
+ }

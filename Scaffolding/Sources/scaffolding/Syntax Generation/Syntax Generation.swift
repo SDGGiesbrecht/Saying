@@ -47,13 +47,16 @@ extension ModuleIntermediate {
         newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: UnicodeText(englishName), parsed: false))
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: UnicodeText(englishName), parsed: true))
-        let file = GitStyleFile(
-          source: UnicodeText(newSource.joined(separator: "\n"))
-        ).parsed()
-        try self.add(
-          file: ParsedDeclarationList.fastParse(source: file, origin: compilerGeneratedOrigin())
-          ?? ParsedDeclarationList.diagnosticParse(source: file, origin: compilerGeneratedOrigin()).get()
-        )
+        switch GitStyleSayingSource(
+          origin: compilerGeneratedOrigin(),
+          code: UnicodeText(newSource.joined(separator: "\n"))
+        ).parsed().code {
+        case .utf8(let file):
+          try self.add(
+            file: ParsedDeclarationList.fastParse(source: file, origin: compilerGeneratedOrigin())
+            ?? ParsedDeclarationList.diagnosticParse(source: file, origin: compilerGeneratedOrigin()).get()
+          )
+        }
       }
     }
   }
