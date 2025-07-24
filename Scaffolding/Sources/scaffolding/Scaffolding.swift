@@ -88,6 +88,7 @@ import Foundation
         "==(_: UnicodeText, _: UnicodeText)",
         "UnicodeText.hash(into: Hasher)",
 
+        "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
         "SayingSource.init(origin: UnicodeText, code: SayingSourceCode)",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",

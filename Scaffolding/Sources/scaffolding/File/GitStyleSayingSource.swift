@@ -3,17 +3,11 @@ import Foundation
 import SDGText
 import SDGPersistence
 
-struct GitStyleFile {
-
-  init(source: UnicodeText) {
-    self.source = source
-  }
+extension GitStyleSayingSource {
 
   init(from url: URL) throws {
-    self.init(source: UnicodeText(try String(from: url)))
+    self.init(origin: UnicodeText(url.path), code: UnicodeText(try String(from: url)))
   }
-
-  let source: UnicodeText
 
   private func registerSegment(
     in segments: inout [UnicodeSegment],
@@ -22,7 +16,7 @@ struct GitStyleFile {
   ) {
     if let segmentStart = segmentStart,
        segmentStart.offset != cursor.offset {
-      var segment = source[segmentStart.index..<cursor.index]
+      var segment = code[segmentStart.index..<cursor.index]
       var adjustedOffset = segmentStart.offset
       while segment.first == " " {
         segment.removeFirst()
@@ -38,8 +32,8 @@ struct GitStyleFile {
     segmentStart = nil
   }
 
-  func parsed() -> UnicodeSegments {
-    let source = StrictString(self.source)
+  func parsed() -> SayingSource {
+    let source = StrictString(self.code)
     var segmentStart: (offset: Int, index: String.UnicodeScalarView.Index)? = nil
     var segments: [UnicodeSegment] = []
     let lastIndex = source.indices.last
@@ -72,6 +66,6 @@ struct GitStyleFile {
         }
       }
     }
-    return UnicodeSegments(segments)
+    return SayingSource(origin: origin, code: .utf8(UnicodeSegments(segments)))
   }
 }
