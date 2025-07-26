@@ -91,6 +91,16 @@ struct GitStyleSayingSource {
   }
 }
 
+fileprivate struct Git_2010style_0020parsing_0020cursor {
+  fileprivate let index: String.UnicodeScalarView.Index
+  fileprivate let offset: UInt64
+
+  fileprivate init(_ index: String.UnicodeScalarView.Index, _ offset: UInt64) {
+    self.index = index
+    self.offset = offset
+  }
+}
+
 struct GreekQuestionMarkSyntax {
 
   init() {
@@ -567,6 +577,10 @@ func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
   return false
 }
 
+func shimAccessToGitStyleParsingCursor() {
+  _ = Git_2010style_0020parsing_0020cursor("".unicodeScalars.startIndex, 0)
+}
+
 struct UnicodeSegment {
   fileprivate var segment: Unicode_0020segment
 }
@@ -604,6 +618,22 @@ extension UnicodeSegments {
   }
   func segment(at index: Int) -> UnicodeSegment {
     return UnicodeSegment(segment: segments[index])
+  }
+}
+
+struct GitStyleParsingCursor {
+  fileprivate var value: Git_2010style_0020parsing_0020cursor
+}
+
+extension GitStyleParsingCursor {
+  init(index: String.UnicodeScalarView.Index, offset: UInt64) {
+    self.init(value: Git_2010style_0020parsing_0020cursor(index, offset))
+  }
+  var index: String.UnicodeScalarView.Index {
+    return value.index
+  }
+  var offset: UInt64 {
+    return value.offset
   }
 }
 

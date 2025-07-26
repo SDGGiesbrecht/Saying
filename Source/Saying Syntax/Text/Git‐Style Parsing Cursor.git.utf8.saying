@@ -1,0 +1,40 @@
+thing (unit)
+ (
+  English: Git‐style parsing cursor
+ )
+ {
+  part (unit/nowhere)
+   (
+    English: index
+   )
+   Unicode scalar index
+
+  part (unit/nowhere)
+   (
+    English: offset
+   )
+   natural number
+ }
+
+action (unit)
+ (
+  English: Git‐style parsing cursor at (index: Unicode scalar index) and (offset: natural number)
+ )
+ Git‐style parsing cursor
+ create
+
+use (unit)
+ general use of (Git‐style parsing cursor)
+ {
+ }
+
+use (unit)
+ general containers of (Git‐style parsing cursor)
+ {
+  action (unit)
+   example
+   Git‐style parsing cursor
+   {
+    ← Git‐style parsing cursor at (beginning of (“”)) and (0: natural number)
+   }
+ }

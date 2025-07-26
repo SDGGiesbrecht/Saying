@@ -1,0 +1,11 @@
+action (clients)
+ [
+  test {shim access to Git‐style parsing cursor}
+ ]
+ (
+  English: shim access to Git‐style parsing cursor
+  Swift: shimAccessToGitStyleParsingCursor
+ )
+ {
+  ignore (Git‐style parsing cursor at (beginning of (“”)) and (0: natural number))
+ }
