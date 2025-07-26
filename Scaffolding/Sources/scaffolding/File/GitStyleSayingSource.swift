@@ -11,8 +11,8 @@ extension GitStyleSayingSource {
 
   private func registerSegment(
     in segments: inout [UnicodeSegment],
-    segmentStart: inout (offset: Int, index: String.UnicodeScalarView.Index)?,
-    cursor: (offset: Int, index: String.UnicodeScalarView.Index)
+    segmentStart: inout GitStyleParsingCursor?,
+    cursor: GitStyleParsingCursor
   ) {
     if let segmentStart = segmentStart,
        segmentStart.offset != cursor.offset {
@@ -34,7 +34,7 @@ extension GitStyleSayingSource {
 
   func parsed() -> SayingSource {
     let source = StrictString(self.code)
-    var segmentStart: (offset: Int, index: String.UnicodeScalarView.Index)? = nil
+    var segmentStart: GitStyleParsingCursor? = nil
     var segments: [UnicodeSegment] = []
     let lastIndex = source.indices.last
     for (offset, index) in source.indices.enumerated() {
@@ -43,7 +43,7 @@ extension GitStyleSayingSource {
         registerSegment(
           in: &segments,
           segmentStart: &segmentStart,
-          cursor: (offset: offset, index: index)
+          cursor: GitStyleParsingCursor(index: index, offset: UInt64(offset))
         )
         if index != lastIndex {
           if segments.last?.source == "\u{2028}" {
@@ -55,13 +55,13 @@ extension GitStyleSayingSource {
         }
       } else {
         if segmentStart == nil {
-          segmentStart = (offset: offset, index: index)
+          segmentStart = GitStyleParsingCursor(index: index, offset: UInt64(offset))
         }
         if index == lastIndex {
           registerSegment(
             in: &segments,
             segmentStart: &segmentStart,
-            cursor: (offset: offset + 1, index: source.endIndex)
+            cursor: GitStyleParsingCursor(index: source.endIndex, offset: UInt64(offset) + 1)
           )
         }
       }
