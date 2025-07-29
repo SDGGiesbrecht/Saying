@@ -89,7 +89,7 @@ import Foundation
         "UnicodeText.hash(into: Hasher)",
 
         "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
-        "shimAccessToGitStyleParsingCursor()",
+        "shimAccessToGitStyleLineParsing()",
         "SayingSource.init(origin: UnicodeText, code: SayingSourceCode)",
         "DownArrowSyntax.init()",
         "LeftArrowSyntax.init()",
