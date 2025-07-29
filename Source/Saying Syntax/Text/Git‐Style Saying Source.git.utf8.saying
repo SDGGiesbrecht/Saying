@@ -31,3 +31,29 @@ use (clients)
  general use of (Git‐style Saying source)
  {
  }
+
+action (file)
+ (
+  English: parse line in (source: Git‐style Saying source) from (beginning: ↓ optional (Git‐style parsing cursor)) to (end: Git‐style parsing cursor) into (segments: ↓ list of (Unicode segment))
+ )
+ {
+  if (beginning) exists, unwrap it as (• start: Git‐style parsing cursor), {
+   if (((offset) of (start)) is not ((offset) of (end))), {
+    ignore (“Not implemented yet.”)
+   }
+  }
+  change (↓ beginning) to (nothing)
+ }
+
+action (unit)
+ (
+  English: shim unit access to Git‐style line parsing
+ )
+ {
+  let (• source text: Unicode text) be (Unicode text of (“.”))
+  let (• source: Git‐style Saying source) be (Git‐style Saying source from (Unicode text of (“”)) containing (source text))
+  let (• beginning: optional (Git‐style parsing cursor)) start as (wrap (Git‐style parsing cursor at (beginning of (source text)) and (0: natural number)) as (something))
+  let (• end: Git‐style parsing cursor) be (Git‐style parsing cursor at (end of (source text)) and (1: natural number))
+  let (• segments: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+  parse line in (source) from (↓ beginning) to (end) into (↓ segments)
+ }
