@@ -1,0 +1,43 @@
+extension
+ comparison of (thing) for order
+ {
+  thing (clients)
+   (
+    English: range of (thing)
+   )
+   Swift: “Range<” thing “>” [
+     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
+    ] {
+     “extension ” thing “: Comparable {}”
+    }
+   {
+    part (clients/nowhere)
+     (
+      English: lower bound
+     )
+     thing
+
+    part (clients/nowhere)
+     (
+      English: upper bound
+     )
+     thing
+   }
+
+  action (clients)
+   [
+    test {ignore (from (example: thing) to (greater example: thing))}
+   ]
+   (
+    English: from (lower bound: thing) to (upper bound: thing)
+   )
+   range of (thing)
+   Swift: “” lower bound “ ..< ” upper bound “”
+   create
+
+  use
+   general use of (range of (thing))
+   {
+   }
+ }
