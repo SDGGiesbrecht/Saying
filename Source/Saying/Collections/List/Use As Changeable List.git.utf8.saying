@@ -6,23 +6,9 @@ ability (clients)
   requirement (clients)
    [
     test {
-     verify ((empty: list) is empty)
-    }
-   ]
-   (
-    English: empty
-    Deutsch: leer
-    français : vide
-    ελληνικά: άδειος
-   )
-   list
-
-  requirement (clients)
-   [
-    test {
      let (• list: list) start as (empty: list)
      append (example: element) to (↓ list)
-     ignore (unsafe entry after (beginning of (list)) in (list))
+     verify ((first in (list)) exists)
     }
    ]
    (

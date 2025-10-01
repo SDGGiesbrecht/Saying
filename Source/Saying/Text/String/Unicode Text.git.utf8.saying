@@ -79,25 +79,12 @@ use
  {
   action (clients)
    (
-    English: unsafe index after (boundary: Unicode scalar boundary)
+    English: index after (boundary: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
    )
    Unicode scalar index
-   C: “” boundary “”
-   C♯: “” boundary “”
-   JavaScript: “” boundary “”
-   Kotlin: “” boundary “”
-   Swift: “” boundary “”
-
-  action (clients)
-   (
-    English: unsafe boundary before (index: Unicode scalar index)
-   )
-   Unicode scalar boundary
-   C: “” index “”
-   C♯: “” index “”
-   JavaScript: “” index “”
-   Kotlin: “” index “”
-   Swift: “” index “”
+   {
+    ← index after (boundary) in ((scalars) of (list)) skipping bounds check
+   }
 
   action (clients)
    (
@@ -119,28 +106,37 @@ use
 
   action (clients)
    (
-    English: unsafely advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode text)
+    English: advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode text) skipping bounds check
    )
    {
-    unsafely advance (↓ cursor) to next in ((scalars) of (list))
+    advance (↓ cursor) to next in ((scalars) of (list)) skipping bounds check
    }
 
   action (clients)
    (
-    English: unsafe boundary after (cursor: Unicode scalar boundary) in (list: Unicode text)
+    English: boundary after (cursor: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
    )
    Unicode scalar boundary
    {
-    ← unsafe boundary after (cursor) in ((scalars) of (list))
+    ← boundary after (cursor) in ((scalars) of (list)) skipping bounds check
    }
 
   action (clients)
    (
-    English: unsafe entry after (cursor: Unicode scalar boundary) in (list: Unicode text)
+    English: entry at (index: Unicode scalar index) in (list: Unicode text)
    )
    Unicode scalar
    {
-    ← unsafe entry after (cursor) in ((scalars) of (list))
+    ← entry at (index) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: entry after (cursor: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
+   )
+   Unicode scalar
+   {
+    ← entry after (cursor) in ((scalars) of (list)) skipping bounds check
    }
 
   action (clients)
@@ -168,6 +164,15 @@ use
    truth value
    {
     ← ((scalars) of (list)) is not empty
+   }
+
+  action (clients)
+   (
+    English: empty
+   )
+   Unicode text
+   {
+    ← Unicode text of (empty: Unicode scalars)
    }
 
   action (clients)

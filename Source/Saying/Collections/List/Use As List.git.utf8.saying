@@ -4,16 +4,14 @@ ability (clients)
  )
  {
   requirement (clients)
+   [
+    test {ignore (index after (beginning of (non‐empty example: list)) in (non‐empty example: list) skipping bounds check)}
+   ]
    (
-    English: unsafe index after (boundary: boundary)
+    English: index after (boundary: boundary) in (list: list) skipping bounds check
+    Swift: (self: [list]).indexSkippingBoundsCheck afterBoundary (boundary: [boundary])
    )
    index
-
-  requirement (clients)
-   (
-    English: unsafe boundary before (index: index)
-   )
-   boundary
 
   requirement (clients)
    (
@@ -47,12 +45,12 @@ ability (clients)
      let (• non‐empty: list) be (non‐empty example: list)
      let (• beginning: boundary) be (beginning of (non‐empty))
      let (• cursor: boundary) start as (beginning)
-     unsafely advance (↓ cursor) to next in (non‐empty)
+     advance (↓ cursor) to next in (non‐empty) skipping bounds check
      verify ((cursor) is not (beginning))
     }
    ]
    (
-    English: unsafely advance (cursor: ↓ boundary) to next in (list: list)
+    English: advance (cursor: ↓ boundary) to next in (list: list) skipping bounds check
     Swift: (self: [list]).formIndex after (i: [cursor])
    )
 
@@ -61,20 +59,17 @@ ability (clients)
     test {
      let (• non‐empty: list) be (non‐empty example: list)
      let (• beginning: boundary) be (beginning of (non‐empty))
-     verify ((unsafe boundary after (beginning) in (non‐empty)) is not (beginning))
+     verify ((boundary after (beginning) in (non‐empty) skipping bounds check) is not (beginning))
     }
    ]
    (
-    English: unsafe boundary after (cursor: boundary) in (list: list)
-    Deutsch : Index nach (Index: [cursor]) in (Liste: [list])
-    français : indice après (indice: [cursor]) dans (liste: [list])
-    ελληνικά: δείκτης μετά (δείκτης: [cursor]) σε (κατάλογος: [list])
+    English: boundary after (cursor: boundary) in (list: list) skipping bounds check
     Swift: (self: [list]).index after (i: [cursor])
    )
    boundary
    {
     let (• copy: boundary) start as (cursor)
-    unsafely advance (↓ copy) to next in (list)
+    advance (↓ copy) to next in (list) skipping bounds check
     ← copy
    }
 
@@ -82,14 +77,31 @@ ability (clients)
    [
     test {
      let (• non‐empty: list) be (non‐empty example: list)
-     ignore (unsafe entry after (beginning of (non‐empty)) in (non‐empty))
+     let (• index: index) be (index after (beginning of (non‐empty)) in (non‐empty) skipping bounds check)
+     ignore (entry at (index) in (non‐empty))
     }
    ]
    (
-    English: unsafe entry after (cursor: boundary) in (list: list)
+    English: entry at (index: index) in (list: list)
+    Swift: (self: [list]).subscript entryIndex (index: [index])
+   )
+   element
+
+  choice (clients)
+   [
+    test {
+     let (• non‐empty: list) be (non‐empty example: list)
+     ignore (entry after (beginning of (non‐empty)) in (non‐empty) skipping bounds check)
+    }
+   ]
+   (
+    English: entry after (cursor: boundary) in (list: list) skipping bounds check
     Swift: (self: [list]).subscript (position: [cursor])
    )
    element
+   {
+    ← entry at (index after (cursor) in (list) skipping bounds check) in (list)
+   }
 
   choice (clients)
    [
@@ -168,6 +180,20 @@ ability (clients)
    }
 
   requirement (clients)
+   [
+    test {
+     verify ((empty: list) is empty)
+    }
+   ]
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   list
+
+  requirement (clients)
    (
     English: non‐empty example
    )
@@ -184,8 +210,41 @@ extension
 
   action (clients)
    [
+    test {verify ((index after (beginning of (non‐empty example: list)) in (non‐empty example: list)) exists)}
+    test {verify ((index after (beginning of (empty: list)) in (empty: list)) does not exist)}
+   ]
+   (
+    English: index after (boundary: boundary) in (list: list)
+   )
+   optional (index)
+   {
+    if ((boundary) is less than (end of (list))), {
+     ← wrap (index after (boundary) in (list) skipping bounds check) into optional
+    }
+    ← nothing
+   }
+
+  action (clients)
+   [
+    test {verify ((boundary after (beginning of (non‐empty example: list)) in (non‐empty example: list)) exists)}
+    test {verify ((boundary after (end of (non‐empty example: list)) in (non‐empty example: list)) does not exist)}
+   ]
+   (
+    English: boundary after (cursor: boundary) in (list: list)
+   )
+   optional (boundary)
+   {
+    if ((cursor) is less than (end of (list))), {
+     ← wrap (boundary after (cursor) in (list) skipping bounds check) into optional
+    }
+    ← nothing
+   }
+
+  action (clients)
+   [
     test {
      verify ((first in (non‐empty example: list) according to default use as list) exists)
+     verify ((first in (empty: list) according to default use as list) does not exist)
     }
    ]
    (
@@ -193,10 +252,10 @@ extension
    )
    optional (element)
    {
-    if ((list) is empty), {
-     ← nothing
+    if (index after (beginning of (list)) in (list)) exists, unwrap it as (• first: index), {
+     ← wrap (entry at (first) in (list)) into optional
     }
-    ← wrap (unsafe entry after (beginning of (list)) in (list)) into optional
+    ← nothing
    }
 
   action (clients)
@@ -250,27 +309,14 @@ action (file)
 use
  use of (minimal list example) as list of (truth value) indexed by (list index) separated by (list boundary)
  {
-  action (clients)
+  action (file)
    (
-    English: unsafe index after (boundary: list boundary)
+    English: index after (boundary: list boundary) in (list: minimal list example) skipping bounds check
    )
    list index
-   C: “” boundary “”
-   C♯: “” boundary “”
-   JavaScript: “” boundary “”
-   Kotlin: “” boundary “”
-   Swift: “” boundary “”
-
-  action (clients)
-   (
-    English: unsafe boundary before (index: list index)
-   )
-   list boundary
-   C: “” index “”
-   C♯: “” index “”
-   JavaScript: “” index “”
-   Kotlin: “” index “”
-   Swift: “” index “”
+   {
+    ← index after (boundary) in ((wrapped list) of (list)) skipping bounds check
+   }
 
   action (file)
    (
@@ -292,19 +338,28 @@ use
 
   action (file)
    (
-    English: unsafely advance (cursor: ↓ list boundary) to next in (list: minimal list example)
+    English: advance (cursor: ↓ list boundary) to next in (list: minimal list example) skipping bounds check
    )
    {
-    unsafely advance (↓ cursor) to next in ((wrapped list) of (list))
+    advance (↓ cursor) to next in ((wrapped list) of (list)) skipping bounds check
    }
 
   action (file)
    (
-    English: unsafe entry after (cursor: list boundary) in (list: minimal list example)
+    English: entry at (index: list index) in (list: minimal list example)
    )
    truth value
    {
-    ← unsafe entry after (cursor) in ((wrapped list) of (list))
+    ← entry at (index) in ((wrapped list) of (list))
+   }
+
+  action (file)
+   (
+    English: empty
+   )
+   minimal list example
+   {
+    ← minimal list example wrapping (empty: list of (truth value))
    }
 
   action (file)
@@ -315,18 +370,4 @@ use
    {
     ← minimal list example wrapping (non‐empty example: list of (truth value))
    }
- }
-
-action (file)
- [
-  test {
-   verify ((first in (empty minimal list example) according to default use as list) does not exist)
-  }
- ]
- (
-  English: empty minimal list example
- )
- minimal list example
- {
-  ← minimal list example wrapping (empty: list of (truth value))
  }

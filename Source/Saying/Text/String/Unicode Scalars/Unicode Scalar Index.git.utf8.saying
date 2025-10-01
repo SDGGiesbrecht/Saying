@@ -19,7 +19,7 @@ use (clients)
    example
    Unicode scalar index
    {
-    ← unsafe index after (beginning of (non‐empty example: Unicode scalars))
+    ← index after (beginning of (non‐empty example: Unicode scalars)) in (non‐empty example: Unicode scalars) skipping bounds check
    }
  }
 
@@ -125,7 +125,9 @@ use (clients)
    greater example
    Unicode scalar index
    {
-    ← unsafe index after (end of (non‐empty example: Unicode scalars))
+    let (• two scalars: Unicode scalars) be (“  ”)
+    let (• second boundary: Unicode scalar boundary) be (boundary after (beginning of (two scalars)) in (two scalars) skipping bounds check)
+    ← index after (second boundary) in (two scalars) skipping bounds check
    }
  }
 

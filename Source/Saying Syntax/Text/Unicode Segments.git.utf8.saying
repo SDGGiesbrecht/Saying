@@ -23,20 +23,16 @@ use
  {
   action (clients)
    (
-    English: unsafe index after (boundary: Unicode segments boundary)
+    English: index after (boundary: Unicode segments boundary) in (list: Unicode segments) skipping bounds check
    )
    Unicode segments index
    {
-    ← unsafe Unicode segments index after (boundary)
-   }
-
-  action (clients)
-   (
-    English: unsafe boundary before (index: Unicode segments index)
-   )
-   Unicode segments boundary
-   {
-    ← (preceding boundary) of (index)
+    if ((scalar) of (boundary)) exists, unwrap it as (• scalar boundary: Unicode scalar boundary), {
+     let (• segment list: list of (Unicode segment)) be ((segments) of (list))
+     let (• segment index: list index) be (index after ((segment) of (boundary)) in (segment list) skipping bounds check)
+     ← Unicode segments index at segment (segment index), scalar (index after (scalar boundary) in ((source) of (entry at (segment index) in (segment list))) skipping bounds check)
+    }
+    !
    }
 
   action (clients)
@@ -73,42 +69,42 @@ use
      append (example: Unicode segment) to (↓ segment list)
      let (• two segments: Unicode segments) be (Unicode segments (segment list))
      let (• cursor: Unicode segments boundary) start as (beginning of (two segments))
-     unsafely advance (↓ cursor) to next in (two segments)
-     unsafely advance (↓ cursor) to next in (two segments)
+     advance (↓ cursor) to next in (two segments) skipping bounds check
+     advance (↓ cursor) to next in (two segments) skipping bounds check
     }
     test {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
      append (Unicode segment at (zero: natural number) containing (Unicode text of (“  ”))) to (↓ segment list)
      let (• long segment: Unicode segments) be (Unicode segments (segment list))
      let (• cursor: Unicode segments boundary) start as (beginning of (long segment))
-     unsafely advance (↓ cursor) to next in (long segment)
-     unsafely advance (↓ cursor) to next in (long segment)
+     advance (↓ cursor) to next in (long segment) skipping bounds check
+     advance (↓ cursor) to next in (long segment) skipping bounds check
     }
    ]
    (
-    English: unsafely advance (cursor: ↓ Unicode segments boundary) to next in (list: Unicode segments)
+    English: advance (cursor: ↓ Unicode segments boundary) to next in (list: Unicode segments) skipping bounds check
    )
    {
-    change (↓ cursor) to (unsafe boundary after (cursor) in (list))
+    change (↓ cursor) to (boundary after (cursor) in (list) skipping bounds check)
    }
 
   action (clients)
    (
-    English: unsafe boundary after (cursor: Unicode segments boundary) in (list: Unicode segments)
+    English: boundary after (cursor: Unicode segments boundary) in (list: Unicode segments) skipping bounds check
    )
    Unicode segments boundary
    {
     let (• segment list: list of (Unicode segment)) be ((segments) of (list))
     let (• segment cursor: list boundary) be ((segment) of (cursor))
-    let (• segment: Unicode text) be ((source) of (unsafe entry after (segment cursor) in (segment list)))
+    let (• segment: Unicode text) be ((source) of (entry at (index after (segment cursor) in (segment list) skipping bounds check) in (segment list)))
     if ((scalar) of (cursor)) exists, unwrap it as (• scalar cursor: Unicode scalar boundary), {
-     let (• next scalar: Unicode scalar boundary) be (unsafe boundary after (scalar cursor) in (segment))
+     let (• next scalar: Unicode scalar boundary) be (boundary after (scalar cursor) in (segment) skipping bounds check)
      if ((next scalar) is (end of (segment))), {
-      let (• next segment cursor: list boundary) be (unsafe boundary after (segment cursor) in (segment list))
+      let (• next segment cursor: list boundary) be (boundary after (segment cursor) in (segment list) skipping bounds check)
       if ((next segment cursor) is (end of (segment list))), {
        ← Unicode segments boundary at segment (next segment cursor), scalar (nothing: optional (Unicode scalar boundary))
       }
-      ← Unicode segments boundary at segment (next segment cursor), scalar (wrap (beginning of ((source) of (unsafe entry after (next segment cursor) in (segment list)))) into optional)
+      ← Unicode segments boundary at segment (next segment cursor), scalar (wrap (beginning of ((source) of (entry at (index after (next segment cursor) in (segment list) skipping bounds check) in (segment list)))) into optional)
      }
      ← Unicode segments boundary at segment (segment cursor), scalar (wrap (next scalar) into optional)
     }
@@ -117,14 +113,23 @@ use
 
   action (clients)
    (
-    English: unsafe entry after (cursor: Unicode segments boundary) in (list: Unicode segments)
+    English: entry at (index: Unicode segments index) in (list: Unicode segments)
    )
    Unicode scalar
    {
-    if ((scalar) of (cursor)) exists, unwrap it as (• scalar cursor: Unicode scalar boundary), {
-     ← unsafe entry after (scalar cursor) in ((source) of (unsafe entry after ((segment) of (cursor)) in ((segments) of (list))))
-    }
-    !
+    ← entry at ((scalar) of (index)) in ((source) of (entry at ((segment) of (index)) in ((segments) of (list))))
+   }
+
+  action (clients)
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   Unicode segments
+   {
+    ← Unicode segments (empty: list of (Unicode segment))
    }
 
   action (clients)
@@ -135,16 +140,4 @@ use
    {
     ← Unicode segments (non‐empty example: list of (Unicode segment))
    }
- }
-
-action (clients)
- (
-  English: empty
-  Deutsch: leer
-  français : vide
-  ελληνικά: άδειος
- )
- Unicode segments
- {
-  ← Unicode segments (empty: list of (Unicode segment))
  }

@@ -1,7 +1,7 @@
 thing (clients)
  (
   English: Unicode segments boundary
-  Swift: UnicodeSegments.Index
+  Swift: UnicodeSegments.Boundary
  )
  {
   part (unit/nowhere)

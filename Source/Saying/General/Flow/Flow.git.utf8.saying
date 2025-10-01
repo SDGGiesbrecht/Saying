@@ -108,9 +108,9 @@ extension
     let (• cursor: boundary) start as (beginning of (resolved list))
     let (• end: boundary) be (end of (resolved list))
     while ((cursor) < (end)), {
-     let (• entry: element) be (unsafe entry after (cursor) in (resolved list))
+     let (• entry: element) be (entry at (index after (cursor) in (resolved list) skipping bounds check) in (resolved list))
      repetition
-     unsafely advance (↓ cursor) to next in (resolved list)
+     advance (↓ cursor) to next in (resolved list) skipping bounds check
     }
    }
  }
