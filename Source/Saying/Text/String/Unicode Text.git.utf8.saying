@@ -75,13 +75,35 @@ use (clients)
  }
 
 use
- use of (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index)
+ use of (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+  action (clients)
+   (
+    English: unsafe index after (boundary: Unicode scalar boundary)
+   )
+   Unicode scalar index
+   C: “” boundary “”
+   C♯: “” boundary “”
+   JavaScript: “” boundary “”
+   Kotlin: “” boundary “”
+   Swift: “” boundary “”
+
+  action (clients)
+   (
+    English: unsafe boundary before (index: Unicode scalar index)
+   )
+   Unicode scalar boundary
+   C: “” index “”
+   C♯: “” index “”
+   JavaScript: “” index “”
+   Kotlin: “” index “”
+   Swift: “” index “”
+
   action (clients)
    (
     English: beginning of (list: Unicode text)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    {
     ← beginning of ((scalars) of (list))
    }
@@ -90,35 +112,35 @@ use
    (
     English: end of (list: Unicode text)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    {
     ← end of ((scalars) of (list))
    }
 
   action (clients)
    (
-    English: advance (index: ↓ Unicode scalar index) to next in (list: Unicode text)
+    English: unsafely advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode text)
    )
    {
-    advance (↓ index) to next in ((scalars) of (list))
+    unsafely advance (↓ cursor) to next in ((scalars) of (list))
    }
 
   action (clients)
    (
-    English: index after (index: Unicode scalar index) in (list: Unicode text)
+    English: unsafe boundary after (cursor: Unicode scalar boundary) in (list: Unicode text)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    {
-    ← index after (index) in ((scalars) of (list))
+    ← unsafe boundary after (cursor) in ((scalars) of (list))
    }
 
   action (clients)
    (
-    English: entry at (index: Unicode scalar index) in (list: Unicode text)
+    English: unsafe entry after (cursor: Unicode scalar boundary) in (list: Unicode text)
    )
    Unicode scalar
    {
-    ← entry at (index) in ((scalars) of (list))
+    ← unsafe entry after (cursor) in ((scalars) of (list))
    }
 
   action (clients)

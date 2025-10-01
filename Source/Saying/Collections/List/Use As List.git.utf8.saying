@@ -1,8 +1,20 @@
 ability (clients)
  (
-  English: use of (list) as list of (element) indexed by (index)
+  English: use of (list) as list of (element) indexed by (index) separated by (boundary)
  )
  {
+  requirement (clients)
+   (
+    English: unsafe index after (boundary: boundary)
+   )
+   index
+
+  requirement (clients)
+   (
+    English: unsafe boundary before (index: index)
+   )
+   boundary
+
   requirement (clients)
    (
     English: beginning of (list: list)
@@ -11,7 +23,7 @@ ability (clients)
     ελληνικά: αρχή (κατάλογος: [list])
     Swift: var (self: [list]).startIndex
    )
-   index
+   boundary
 
   requirement (clients)
    [
@@ -27,42 +39,42 @@ ability (clients)
     ελληνικά: τέλος (κατάλογος: [list])
     Swift: var (self: [list]).endIndex
    )
-   index
+   boundary
 
   requirement (clients)
    [
     test {
      let (• non‐empty: list) be (non‐empty example: list)
-     let (• beginning: index) be (beginning of (non‐empty))
-     let (• index: index) start as (beginning)
-     advance (↓ index) to next in (non‐empty)
-     verify ((index) is not (beginning))
+     let (• beginning: boundary) be (beginning of (non‐empty))
+     let (• cursor: boundary) start as (beginning)
+     unsafely advance (↓ cursor) to next in (non‐empty)
+     verify ((cursor) is not (beginning))
     }
    ]
    (
-    English: advance (index: ↓ index) to next in (list: list)
-    Swift: (self: [list]).formIndex after (i: [index])
+    English: unsafely advance (cursor: ↓ boundary) to next in (list: list)
+    Swift: (self: [list]).formIndex after (i: [cursor])
    )
 
   choice (clients)
    [
     test {
      let (• non‐empty: list) be (non‐empty example: list)
-     let (• beginning: index) be (beginning of (non‐empty))
-     verify ((index after (beginning) in (non‐empty)) is not (beginning))
+     let (• beginning: boundary) be (beginning of (non‐empty))
+     verify ((unsafe boundary after (beginning) in (non‐empty)) is not (beginning))
     }
    ]
    (
-    English: index after (index: index) in (list: list)
-    Deutsch : Index nach (Index: [index]) in (Liste: [list])
-    français : indice après (indice: [index]) dans (liste: [list])
-    ελληνικά: δείκτης μετά (δείκτης: [index]) σε (κατάλογος: [list])
-    Swift: (self: [list]).index after (i: [index])
+    English: unsafe boundary after (cursor: boundary) in (list: list)
+    Deutsch : Index nach (Index: [cursor]) in (Liste: [list])
+    français : indice après (indice: [cursor]) dans (liste: [list])
+    ελληνικά: δείκτης μετά (δείκτης: [cursor]) σε (κατάλογος: [list])
+    Swift: (self: [list]).index after (i: [cursor])
    )
-   index
+   boundary
    {
-    let (• copy: index) start as (index)
-    advance (↓ copy) to next in (list)
+    let (• copy: boundary) start as (cursor)
+    unsafely advance (↓ copy) to next in (list)
     ← copy
    }
 
@@ -70,12 +82,12 @@ ability (clients)
    [
     test {
      let (• non‐empty: list) be (non‐empty example: list)
-     ignore (entry at (beginning of (non‐empty)) in (non‐empty))
+     ignore (unsafe entry after (beginning of (non‐empty)) in (non‐empty))
     }
    ]
    (
-    English: entry at (index: index) in (list: list)
-    Swift: (self: [list]).subscript (position: [index])
+    English: unsafe entry after (cursor: boundary) in (list: list)
+    Swift: (self: [list]).subscript (position: [cursor])
    )
    element
 
@@ -94,16 +106,16 @@ ability (clients)
    )
    optional (element)
    Swift: “” list “.first” [
-     “==(¤(5F): ” index “, ¤(5F): ” index “)”
-     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
      “” list “.startIndex”
      “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” index “)”
+     “” list “.subscript(¤(5F): ” boundary “)”
      “” list “.isEmpty”
-     “” list “.index(after: ” index “)”
+     “” list “.index(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
-     “extension ” index “: Comparable {}”
+     “extension ” boundary “: Comparable {}”
     }
    {
     ← first in (list) according to default use as list
@@ -124,15 +136,15 @@ ability (clients)
    )
    truth value
    Swift: “” list “.isEmpty” [
-     “==(¤(5F): ” index “, ¤(5F): ” index “)”
-     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
      “” list “.startIndex”
      “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” index “)”
-     “” list “.index(after: ” index “)”
+     “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.index(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
-     “extension ” index “: Comparable {}”
+     “extension ” boundary “: Comparable {}”
     }
    {
     ← (list) is empty according to default use as list
@@ -163,7 +175,7 @@ ability (clients)
  }
 
 extension
- use of (list) as list of (element) indexed by (index)
+ use of (list) as list of (element) indexed by (index) separated by (boundary)
  {
   use (clients)
    general use of (list)
@@ -184,7 +196,7 @@ extension
     if ((list) is empty), {
      ← nothing
     }
-    ← wrap (entry at (beginning of (list)) in (list)) into optional
+    ← wrap (unsafe entry after (beginning of (list)) in (list)) into optional
    }
 
   action (clients)
@@ -236,13 +248,35 @@ action (file)
  create
 
 use
- use of (minimal list example) as list of (truth value) indexed by (list index)
+ use of (minimal list example) as list of (truth value) indexed by (list index) separated by (list boundary)
  {
+  action (clients)
+   (
+    English: unsafe index after (boundary: list boundary)
+   )
+   list index
+   C: “” boundary “”
+   C♯: “” boundary “”
+   JavaScript: “” boundary “”
+   Kotlin: “” boundary “”
+   Swift: “” boundary “”
+
+  action (clients)
+   (
+    English: unsafe boundary before (index: list index)
+   )
+   list boundary
+   C: “” index “”
+   C♯: “” index “”
+   JavaScript: “” index “”
+   Kotlin: “” index “”
+   Swift: “” index “”
+
   action (file)
    (
     English: beginning of (list: minimal list example)
    )
-   list index
+   list boundary
    {
     ← beginning of ((wrapped list) of (list))
    }
@@ -251,26 +285,26 @@ use
    (
     English: end of (list: minimal list example)
    )
-   list index
+   list boundary
    {
     ← end of ((wrapped list) of (list))
    }
 
   action (file)
    (
-    English: advance (index: ↓ list index) to next in (list: minimal list example)
+    English: unsafely advance (cursor: ↓ list boundary) to next in (list: minimal list example)
    )
    {
-    advance (↓ index) to next in ((wrapped list) of (list))
+    unsafely advance (↓ cursor) to next in ((wrapped list) of (list))
    }
 
   action (file)
    (
-    English: entry at (index: list index) in (list: minimal list example)
+    English: unsafe entry after (cursor: list boundary) in (list: minimal list example)
    )
    truth value
    {
-    ← entry at (index) in ((wrapped list) of (list))
+    ← unsafe entry after (cursor) in ((wrapped list) of (list))
    }
 
   action (file)

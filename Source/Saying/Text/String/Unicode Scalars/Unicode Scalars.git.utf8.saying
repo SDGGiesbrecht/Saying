@@ -97,13 +97,35 @@ use (clients)
  }
 
 use
- use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index)
+ use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+  action (clients)
+   (
+    English: unsafe index after (boundary: Unicode scalar boundary)
+   )
+   Unicode scalar index
+   C: “” boundary “”
+   C♯: “” boundary “”
+   JavaScript: “” boundary “”
+   Kotlin: “” boundary “”
+   Swift: “” boundary “”
+
+  action (clients)
+   (
+    English: unsafe boundary before (index: Unicode scalar index)
+   )
+   Unicode scalar boundary
+   C: “” index “”
+   C♯: “” index “”
+   JavaScript: “” index “”
+   Kotlin: “” index “”
+   Swift: “” index “”
+
   action (clients)
    (
     English: beginning of (list: Unicode scalars)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    C: “0”
    C♯: “0”
    JavaScript: “0”
@@ -114,7 +136,7 @@ use
    (
     English: end of (list: Unicode scalars)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    C: “” list “¤(2D)>target¤(2D)>len”
    C♯: “” list “.Length”
    JavaScript: “” list “.length”
@@ -123,34 +145,34 @@ use
 
   action (clients)
    (
-    English: advance (index: ↓ Unicode scalar index) to next in (list: Unicode scalars)
+    English: unsafely advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode scalars)
    )
-   Swift: “” list “.formIndex(after: ¤(26)” index “)”
+   Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
    {
-    change (↓ index) to (index after (index) in (list))
+    change (↓ cursor) to (unsafe boundary after (cursor) in (list))
    }
 
   action (clients)
    (
-    English: index after (index: Unicode scalar index) in (list: Unicode scalars)
+    English: unsafe boundary after (cursor: Unicode scalar boundary) in (list: Unicode scalars)
    )
-   Unicode scalar index
-   C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)”
-   C♯: “0xD800 <= ” list “[” index “] ¤(26)¤(26) ” list “[” index “] < 0xDC00 ? ” index “ + 2 : ” index “ + 1”
-   JavaScript: “0xD800 <= ” list “.charCodeAt(” index “) ¤(26)¤(26) ” list “.charCodeAt(” index “) < 0xDC00 ? ” index “ + 2 : ” index “ + 1”
-   Kotlin: “” list “.offsetByCodePoints(” index “, 1)”
-   Swift: “” list “.index(after: ” index “)”
+   Unicode scalar boundary
+   C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)”
+   C♯: “0xD800 <= ” list “[” cursor “] ¤(26)¤(26) ” list “[” cursor “] < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
+   JavaScript: “0xD800 <= ” list “.charCodeAt(” cursor “) ¤(26)¤(26) ” list “.charCodeAt(” cursor “) < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
+   Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
+   Swift: “” list “.index(after: ” cursor “)”
 
   action (clients)
    (
-    English: entry at (index: Unicode scalar index) in (list: Unicode scalars)
+    English: unsafe entry after (cursor: Unicode scalar boundary) in (list: Unicode scalars)
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” index “)”
-   C♯: “Rune.GetRuneAt(” list “, ” index “)”
-   JavaScript: “” list “.codePointAt(” index “)”
-   Kotlin: “” list “.codePointAt(” index “)”
-   Swift: “” list “[” index “]”
+   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)”
+   C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
+   JavaScript: “” list “.codePointAt(” cursor “)”
+   Kotlin: “” list “.codePointAt(” cursor “)”
+   Swift: “” list “[” cursor “]”
 
   action (clients)
    (
@@ -207,7 +229,7 @@ action (file)
  [
   test {
    let (• ASCII: Unicode scalars) be (example with one ASCII scalar)
-   verify ((index after (beginning of (ASCII)) in (ASCII)) is (end of (ASCII)))
+   verify ((unsafe boundary after (beginning of (ASCII)) in (ASCII)) is (end of (ASCII)))
   }
  ]
  (
@@ -222,7 +244,7 @@ action (file)
  [
   test {
    let (• supplementary: Unicode scalars) be (example with one supplementary plane scalar)
-   verify ((index after (beginning of (supplementary)) in (supplementary)) is (end of (supplementary)))
+   verify ((unsafe boundary after (beginning of (supplementary)) in (supplementary)) is (end of (supplementary)))
   }
  ]
  (

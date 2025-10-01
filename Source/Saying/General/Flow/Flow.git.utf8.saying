@@ -78,7 +78,7 @@ extension
  }
 
 extension
- use of (list) as list of (element) indexed by (index)
+ use of (list) as list of (element) indexed by (index) separated by (boundary)
  {
   flow (clients)
    [
@@ -92,25 +92,25 @@ extension
     English: for each (entry: element) in (sequence: list), (repetition: {})
    )
    Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
-     “==(¤(5F): ” index “, ¤(5F): ” index “)”
-     “<(¤(5F): ” index “, ¤(5F): ” index “)”
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
      “” list “.startIndex”
      “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” index “)”
+     “” list “.subscript(¤(5F): ” boundary “)”
      “” list “.isEmpty”
-     “” list “.index(after: ” index “)”
+     “” list “.index(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
-     “extension ” index “: Comparable {}”
+     “extension ” boundary “: Comparable {}”
     }
    {
     let (• resolved list: list) be (sequence)
-    let (• index: index) start as (beginning of (resolved list))
-    let (• end: index) be (end of (resolved list))
-    while ((index) < (end)), {
-     let (• entry: element) be (entry at (index) in (resolved list))
+    let (• cursor: boundary) start as (beginning of (resolved list))
+    let (• end: boundary) be (end of (resolved list))
+    while ((cursor) < (end)), {
+     let (• entry: element) be (unsafe entry after (cursor) in (resolved list))
      repetition
-     advance (↓ index) to next in (resolved list)
+     unsafely advance (↓ cursor) to next in (resolved list)
     }
    }
  }

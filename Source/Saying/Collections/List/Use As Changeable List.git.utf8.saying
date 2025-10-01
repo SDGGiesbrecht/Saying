@@ -1,6 +1,6 @@
 ability (clients)
  (
-  English: use of (list) as changeable list of (element) indexed by (index)
+  English: use of (list) as changeable list of (element) indexed by (index) separated by (boundary)
  )
  {
   requirement (clients)
@@ -22,7 +22,7 @@ ability (clients)
     test {
      let (• list: list) start as (empty: list)
      append (example: element) to (↓ list)
-     ignore (entry at (beginning of (list)) in (list))
+     ignore (unsafe entry after (beginning of (list)) in (list))
     }
    ]
    (
@@ -31,7 +31,7 @@ ability (clients)
  }
 
 extension
- use of (list) as changeable list of (element) indexed by (index)
+ use of (list) as changeable list of (element) indexed by (index) separated by (boundary)
  {
   action (clients)
    (

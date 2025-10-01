@@ -1,25 +1,18 @@
 thing (clients)
  (
   English: Unicode segments index
-  Swift: UnicodeSegments.Index
  )
  {
   part (unit/nowhere)
    (
-    English: segment
+    English: preceding boundary
    )
-   list index
-
-  part (unit/nowhere)
-   (
-    English: scalar
-   )
-   optional (Unicode scalar index)
+   Unicode segments boundary
  }
 
 action (unit)
  (
-  English: Unicode segments index at segment (segment: list index), scalar (scalar: optional (Unicode scalar index))
+  English: unsafe Unicode segments index after (preceding boundary: Unicode segments boundary)
  )
  Unicode segments index
  create
@@ -31,7 +24,7 @@ use (clients)
    example
    Unicode segments index
    {
-    ← Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))
+    ← unsafe Unicode segments index after (example: Unicode segments boundary)
    }
  }
 
@@ -42,21 +35,20 @@ use (clients)
    (first: Unicode segments index) is (second: Unicode segments index)
    truth value
    {
-    ← (((segment) of (first)) is ((segment) of (second))) and (((scalar) of (first)) is ((scalar) of (second)))
+    ← ((preceding boundary) of (first)) is ((preceding boundary) of (second))
    }
 
   action (clients)
    hash key (key: Unicode segments index) with (hasher: ↓ hasher)
    {
-    hash key ((segment) of (key)) with (↓ hasher)
-    hash key ((scalar) of (key)) with (↓ hasher)
+    hash key ((preceding boundary) of (key)) with (↓ hasher)
    }
 
   action (clients)
    differing example
    Unicode segments index
    {
-    ← Unicode segments index at segment (example: list index), scalar (differing example: optional (Unicode scalar index))
+    ← unsafe Unicode segments index after (differing example: Unicode segments boundary)
    }
  }
 
@@ -67,39 +59,13 @@ use (clients)
    (first: Unicode segments index) is less than (second: Unicode segments index)
    truth value
    {
-    if (((segment) of (first)) is less than ((segment) of (second))), {
-     ← true
-    }
-    if (((segment) of (first)) is greater than ((segment) of (second))), {
-     ← false
-    }
-    if ((scalar) of (first)) exists, unwrap it as (• first scalar: Unicode scalar index), {
-     if ((scalar) of (second)) exists, unwrap it as (• second scalar: Unicode scalar index), {
-      ← (first scalar: Unicode scalar index) is less than (second scalar: Unicode scalar index)
-     }
-     ← true
-    }
-    ← false
+    ← ((preceding boundary) of (first)) is less than ((preceding boundary) of (second))
    }
 
   action (clients)
    greater example
    Unicode segments index
    {
-    ← Unicode segments index at segment (example: list index), scalar (nothing: optional (Unicode scalar index))
+    ← unsafe Unicode segments index after (greater example: Unicode segments boundary)
    }
- }
-
-action (file)
- [
-  test {verify (hidden Unicode segments index tests)}
-  test {verify ((Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))) is less than (Unicode segments index at segment (greater example: list index), scalar (example: optional (Unicode scalar index))))}
-  test {verify (not ((Unicode segments index at segment (greater example: list index), scalar (example: optional (Unicode scalar index))) is less than (Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index)))))}
- ]
- (
-  English: hidden Unicode segments index tests
- )
- truth value
- {
-  ← true
  }
