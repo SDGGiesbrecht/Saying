@@ -424,6 +424,13 @@ enum Kotlin: Platform {
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("settings.gradle.kts"))
     try ([
+      "<?xml version=\u{22}1.0\u{22} encoding=\u{22}UTF-8\u{22}?>",
+      "<lint>",
+      "\(indent)<issue id=\u{22}GradleDependency\u{22} severity=\u{22}ignore\u{22} />",
+      "</lint>",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent("lint.xml"))
+    try ([
       "plugins {",
       "\(indent)id(\u{22}com.android.application\u{22}) version \u{22}8.6.0\u{22} apply false",
       "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22}) version \u{22}2.0.20\u{22} apply false",
