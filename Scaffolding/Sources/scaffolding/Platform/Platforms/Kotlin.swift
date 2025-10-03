@@ -427,6 +427,7 @@ enum Kotlin: Platform {
       "<?xml version=\u{22}1.0\u{22} encoding=\u{22}UTF-8\u{22}?>",
       "<lint>",
       "\(indent)<issue id=\u{22}GradleDependency\u{22} severity=\u{22}ignore\u{22} />",
+      "\(indent)<issue id=\u{22}LintError\u{22} severity=\u{22}ignore\u{22} />",
       "</lint>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("lint.xml"))
