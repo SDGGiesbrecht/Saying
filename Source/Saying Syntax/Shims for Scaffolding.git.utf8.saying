@@ -1,6 +1,6 @@
 action (clients)
  [
-  test {shim access to Git‐style line parsing}
+  test (hidden) {shim access to Git‐style line parsing}
  ]
  (
   English: shim access to Git‐style line parsing

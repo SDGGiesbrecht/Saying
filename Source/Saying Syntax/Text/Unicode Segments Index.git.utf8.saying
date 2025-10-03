@@ -64,6 +64,10 @@ use (clients)
  comparison of (Unicode segments index) for order
  {
   action (clients)
+   [
+    test (hidden) {verify ((Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index)) is less than (Unicode segments index at segment (greater example: list index), scalar (example: Unicode scalar index)))}
+    test (hidden) {verify (not ((Unicode segments index at segment (greater example: list index), scalar (example: Unicode scalar index)) is less than (Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index))))}
+   ]
    (first: Unicode segments index) is less than (second: Unicode segments index)
    truth value
    {
@@ -82,18 +86,4 @@ use (clients)
    {
     ← Unicode segments index at segment (example: list index), scalar (greater example: Unicode scalar index)
    }
- }
-
-action (file)
- [
-  test {verify (hidden Unicode segments index tests)}
-  test {verify ((Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index)) is less than (Unicode segments index at segment (greater example: list index), scalar (example: Unicode scalar index)))}
-  test {verify (not ((Unicode segments index at segment (greater example: list index), scalar (example: Unicode scalar index)) is less than (Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index))))}
- ]
- (
-  English: hidden Unicode segments index tests
- )
- truth value
- {
-  ← true
  }

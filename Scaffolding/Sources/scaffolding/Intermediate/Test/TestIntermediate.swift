@@ -1,5 +1,6 @@
 struct TestIntermediate {
   var location: [Set<UnicodeText>]
+  var isHidden: Bool
   var statements: [StatementIntermediate]
 }
 
@@ -12,6 +13,7 @@ extension TestIntermediate {
   ) -> Result<TestIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
     var errors: [LiteralIntermediate.ConstructionError] = []
     let nestedLocation = location.appending([UnicodeText(index.inDigits())])
+    let isHidden = test.visibility != nil
     let statements: [StatementIntermediate]
     switch test.implementation {
     case .short(let short):
@@ -36,7 +38,7 @@ extension TestIntermediate {
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    return .success(TestIntermediate(location: nestedLocation, statements: statements))
+    return .success(TestIntermediate(location: nestedLocation, isHidden: isHidden, statements: statements))
   }
 }
 
@@ -46,6 +48,7 @@ extension TestIntermediate {
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location,
+      isHidden: isHidden,
       statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
     )
   }
@@ -56,6 +59,7 @@ extension TestIntermediate {
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location.appending(contentsOf: specializationNamespace),
+      isHidden: isHidden,
       statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
     )
   }

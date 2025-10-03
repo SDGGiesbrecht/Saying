@@ -105,9 +105,7 @@ ability (clients)
 
   choice (clients)
    [
-    test {
-     verify ((first in (non‐empty example: list)) exists)
-    }
+    test {verify ((first in (non‐empty example: list)) exists)}
    ]
    (
     English: first in (list: list)
@@ -135,9 +133,7 @@ ability (clients)
 
   choice (clients)
    [
-    test {
-     verify (not ((non‐empty example: list) is empty))
-    }
+    test {verify ((empty: list) is empty)}
    ]
    (
     English: (list: list) is empty
@@ -164,9 +160,7 @@ ability (clients)
 
   choice (clients)
    [
-    test {
-     verify ((non‐empty example: list) is not empty)
-    }
+    test {verify ((non‐empty example: list) is not empty)}
    ]
    (
     English: (list: list) is not empty
@@ -181,9 +175,7 @@ ability (clients)
 
   requirement (clients)
    [
-    test {
-     verify ((empty: list) is empty)
-    }
+    test {verify ((empty: list) is empty)}
    ]
    (
     English: empty
@@ -260,9 +252,7 @@ extension
 
   action (clients)
    [
-    test {
-     verify (not ((non‐empty example: list) is empty according to default use as list))
-    }
+    test {verify ((empty: list) is empty according to default use as list)}
    ]
    (
     English: (list: list) is empty according to default use as list
@@ -274,9 +264,7 @@ extension
 
   action (clients)
    [
-    test {
-     verify ((non‐empty example: list) is not empty according to default use as list)
-    }
+    test {verify ((non‐empty example: list) is not empty according to default use as list)}
    ]
    (
     English: (list: list) is not empty according to default use as list

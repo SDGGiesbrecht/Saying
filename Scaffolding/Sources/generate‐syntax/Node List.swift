@@ -50,6 +50,7 @@ extension Node {
           Node(name: "NowhereKeyword", kind: .keyword(["nowhere", "nirgendwo", "nulle" /* part */, "πουθενά", "אין" /* גישה */])),
           Node(name: "TestsKeyword", kind: .keyword(["tests", "Prüfungen", "essais", "δοκιμές", "בדיקות"])),
           Node(name: "TestKeyword", kind: .keyword(["test", "Prüfung", "essai", "δοκιμή", "בדיקה"])),
+          Node(name: "HiddenKeyword", kind: .keyword(["hidden", "versteckt", "caché", "κρυφή", "נסתרת"])),
           Node(name: "ParameterKeyword", kind: .keyword(["parameter", "Übergabewert", "paramètre", "παράμετρος", "פרמטר"])),
           Node(
             name: "IdentifierComponent",
@@ -578,6 +579,15 @@ extension Node {
             ])
           ),
           Node(
+            name: "TestVisibility",
+            kind: .compound(children: [
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "keyword", type: "HiddenKeyword", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
             name: "ShortTestImplementation",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
@@ -596,6 +606,7 @@ extension Node {
             name: "Test",
             kind: .compound(children: [
               Child(name: "keyword", type: "TestKeyword", kind: .required),
+              Child(name: "visibility", type: "TestVisibility", kind: .optional),
               Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "implementation", type: "TestImplemenation", kind: .required),
             ])

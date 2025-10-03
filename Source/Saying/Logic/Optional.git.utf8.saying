@@ -108,19 +108,3 @@ extension
     change (storage) to (wrap (value) into optional)
    }
  }
-
-action
- [
-  test {verify (not (use optional (nothing: optional (truth value))))}
-  test {verify (use optional (wrap (true) into optional))}
- ]
- (
-  English: use optional (optional: optional (truth value))
- )
- truth value
- {
-  if (optional) is (something), unwrap it as (• unwrapped: truth value), {
-   ← unwrapped
-  }
-  ← false
- }

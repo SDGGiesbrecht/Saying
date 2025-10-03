@@ -36,9 +36,6 @@ use
    }
 
   action (clients)
-   [
-    test {ignore (beginning of (empty: Unicode segments))}
-   ]
    (
     English: beginning of (list: Unicode segments)
    )
@@ -63,7 +60,7 @@ use
 
   action (clients)
    [
-    test {
+    test (hidden) {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
      append (example: Unicode segment) to (↓ segment list)
      append (example: Unicode segment) to (↓ segment list)
@@ -72,7 +69,7 @@ use
      advance (↓ cursor) to next in (two segments) skipping bounds check
      advance (↓ cursor) to next in (two segments) skipping bounds check
     }
-    test {
+    test (hidden) {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
      append (Unicode segment at (zero: natural number) containing (Unicode text of (“  ”))) to (↓ segment list)
      let (• long segment: Unicode segments) be (Unicode segments (segment list))
