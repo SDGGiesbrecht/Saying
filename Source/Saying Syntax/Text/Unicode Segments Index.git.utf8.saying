@@ -1,7 +1,7 @@
 thing (clients)
  (
   English: Unicode segments index
-  Swift: UnicodeSegments.Index
+  Swift: UnicodeSegments.EntryIndex
  )
  {
   part (unit/nowhere)
@@ -14,12 +14,12 @@ thing (clients)
    (
     English: scalar
    )
-   optional (Unicode scalar index)
+   Unicode scalar index
  }
 
 action (unit)
  (
-  English: Unicode segments index at segment (segment: list index), scalar (scalar: optional (Unicode scalar index))
+  English: Unicode segments index at segment (segment: list index), scalar (scalar: Unicode scalar index)
  )
  Unicode segments index
  create
@@ -31,7 +31,7 @@ use (clients)
    example
    Unicode segments index
    {
-    ← Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))
+    ← Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index)
    }
  }
 
@@ -56,7 +56,7 @@ use (clients)
    differing example
    Unicode segments index
    {
-    ← Unicode segments index at segment (example: list index), scalar (differing example: optional (Unicode scalar index))
+    ← Unicode segments index at segment (example: list index), scalar (differing example: Unicode scalar index)
    }
  }
 
@@ -73,28 +73,22 @@ use (clients)
     if (((segment) of (first)) is greater than ((segment) of (second))), {
      ← false
     }
-    if ((scalar) of (first)) exists, unwrap it as (• first scalar: Unicode scalar index), {
-     if ((scalar) of (second)) exists, unwrap it as (• second scalar: Unicode scalar index), {
-      ← (first scalar: Unicode scalar index) is less than (second scalar: Unicode scalar index)
-     }
-     ← true
-    }
-    ← false
+    ← ((scalar) of (first)) is less than ((scalar) of (second))
    }
 
   action (clients)
    greater example
    Unicode segments index
    {
-    ← Unicode segments index at segment (example: list index), scalar (nothing: optional (Unicode scalar index))
+    ← Unicode segments index at segment (example: list index), scalar (greater example: Unicode scalar index)
    }
  }
 
 action (file)
  [
   test {verify (hidden Unicode segments index tests)}
-  test {verify ((Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index))) is less than (Unicode segments index at segment (greater example: list index), scalar (example: optional (Unicode scalar index))))}
-  test {verify (not ((Unicode segments index at segment (greater example: list index), scalar (example: optional (Unicode scalar index))) is less than (Unicode segments index at segment (example: list index), scalar (example: optional (Unicode scalar index)))))}
+  test {verify ((Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index)) is less than (Unicode segments index at segment (greater example: list index), scalar (example: Unicode scalar index)))}
+  test {verify (not ((Unicode segments index at segment (greater example: list index), scalar (example: Unicode scalar index)) is less than (Unicode segments index at segment (example: list index), scalar (example: Unicode scalar index))))}
  ]
  (
   English: hidden Unicode segments index tests

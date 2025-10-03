@@ -75,13 +75,22 @@ use (clients)
  }
 
 use
- use of (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index)
+ use of (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+  action (clients)
+   (
+    English: index after (boundary: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
+   )
+   Unicode scalar index
+   {
+    ← index after (boundary) in ((scalars) of (list)) skipping bounds check
+   }
+
   action (clients)
    (
     English: beginning of (list: Unicode text)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    {
     ← beginning of ((scalars) of (list))
    }
@@ -90,26 +99,26 @@ use
    (
     English: end of (list: Unicode text)
    )
-   Unicode scalar index
+   Unicode scalar boundary
    {
     ← end of ((scalars) of (list))
    }
 
   action (clients)
    (
-    English: advance (index: ↓ Unicode scalar index) to next in (list: Unicode text)
+    English: advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode text) skipping bounds check
    )
    {
-    advance (↓ index) to next in ((scalars) of (list))
+    advance (↓ cursor) to next in ((scalars) of (list)) skipping bounds check
    }
 
   action (clients)
    (
-    English: index after (index: Unicode scalar index) in (list: Unicode text)
+    English: boundary after (cursor: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
    )
-   Unicode scalar index
+   Unicode scalar boundary
    {
-    ← index after (index) in ((scalars) of (list))
+    ← boundary after (cursor) in ((scalars) of (list)) skipping bounds check
    }
 
   action (clients)
@@ -119,6 +128,15 @@ use
    Unicode scalar
    {
     ← entry at (index) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: entry after (cursor: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
+   )
+   Unicode scalar
+   {
+    ← entry after (cursor) in ((scalars) of (list)) skipping bounds check
    }
 
   action (clients)
@@ -146,6 +164,15 @@ use
    truth value
    {
     ← ((scalars) of (list)) is not empty
+   }
+
+  action (clients)
+   (
+    English: empty
+   )
+   Unicode text
+   {
+    ← Unicode text of (empty: Unicode scalars)
    }
 
   action (clients)

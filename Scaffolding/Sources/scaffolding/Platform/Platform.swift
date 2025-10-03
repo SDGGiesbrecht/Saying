@@ -1437,7 +1437,9 @@ extension Platform {
     let isProperty = nativeIsProperty(action: action)
     let isInitializer = nativeIsInitializer(action: action)
 
-    var parameterEntries = action.parameters.ordered(for: action.names.identifier())
+    var parameterEntries = action.parameters.ordered(
+      for: nativeNameDeclaration(of: action) ?? action.names.identifier()
+    )
     var parentType: String?
     if nativeIsMember(action: action),
       !isInitializer {

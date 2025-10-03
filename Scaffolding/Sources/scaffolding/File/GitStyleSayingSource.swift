@@ -16,7 +16,7 @@ extension GitStyleSayingSource {
   ) {
     if let segmentStart = segmentStart,
        segmentStart.offset != cursor.offset {
-      var segment = code[segmentStart.index..<cursor.index]
+      var segment = code[segmentStart.cursor..<cursor.cursor]
       var adjustedOffset = segmentStart.offset
       while segment.first == " " {
         segment.removeFirst()

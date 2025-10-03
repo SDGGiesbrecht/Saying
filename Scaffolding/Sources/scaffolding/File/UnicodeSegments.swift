@@ -10,7 +10,7 @@ extension UnicodeSegments {
     self.init(segments: [UnicodeSegment(scalarOffset: 0, source: segment)])
   }
 
-  func underlyingScalarOffset(of index: Index) -> Int {
+  func underlyingScalarOffset(of index: Boundary) -> Int {
     let segmentIndex = index.segmentIndex
     if let scalar = index.scalarIndex {
       let segment = segment(at: segmentIndex)
@@ -25,7 +25,7 @@ extension UnicodeSegments {
 
 extension UnicodeSegments: BidirectionalCollection {
 
-  func index(before i: Index) -> Index {
+  func index(before i: Boundary) -> Boundary {
     guard let scalar = i.scalarIndex else {
       return lastOfSegment(before: i.segmentIndex)
     }
@@ -36,7 +36,7 @@ extension UnicodeSegments: BidirectionalCollection {
     return Index(segment: i.segmentIndex, scalar: segment.index(before: scalar))
   }
 
-  private func lastOfSegment(before segmentIndex: Int) -> Index {
+  private func lastOfSegment(before segmentIndex: Int) -> Boundary {
     let previousSegmentIndex = segmentIndices[..<segmentIndex].last!
     let previousSegment = StrictString(segment(at: previousSegmentIndex).source)
     return Index(

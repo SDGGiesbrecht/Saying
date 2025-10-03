@@ -1,0 +1,105 @@
+thing (clients)
+ (
+  English: Unicode segments boundary
+  Swift: UnicodeSegments.Boundary
+ )
+ {
+  part (unit/nowhere)
+   (
+    English: segment
+   )
+   list boundary
+
+  part (unit/nowhere)
+   (
+    English: scalar
+   )
+   optional (Unicode scalar boundary)
+ }
+
+action (unit)
+ (
+  English: Unicode segments boundary at segment (segment: list boundary), scalar (scalar: optional (Unicode scalar boundary))
+ )
+ Unicode segments boundary
+ create
+
+use (clients)
+ general containers of (Unicode segments boundary)
+ {
+  action (clients)
+   example
+   Unicode segments boundary
+   {
+    ← Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary))
+   }
+ }
+
+use (clients)
+ comparison of (Unicode segments boundary) for equality
+ {
+  action (clients)
+   (first: Unicode segments boundary) is (second: Unicode segments boundary)
+   truth value
+   {
+    ← (((segment) of (first)) is ((segment) of (second))) and (((scalar) of (first)) is ((scalar) of (second)))
+   }
+
+  action (clients)
+   hash key (key: Unicode segments boundary) with (hasher: ↓ hasher)
+   {
+    hash key ((segment) of (key)) with (↓ hasher)
+    hash key ((scalar) of (key)) with (↓ hasher)
+   }
+
+  action (clients)
+   differing example
+   Unicode segments boundary
+   {
+    ← Unicode segments boundary at segment (example: list boundary), scalar (differing example: optional (Unicode scalar boundary))
+   }
+ }
+
+use (clients)
+ comparison of (Unicode segments boundary) for order
+ {
+  action (clients)
+   (first: Unicode segments boundary) is less than (second: Unicode segments boundary)
+   truth value
+   {
+    if (((segment) of (first)) is less than ((segment) of (second))), {
+     ← true
+    }
+    if (((segment) of (first)) is greater than ((segment) of (second))), {
+     ← false
+    }
+    if ((scalar) of (first)) exists, unwrap it as (• first scalar: Unicode scalar boundary), {
+     if ((scalar) of (second)) exists, unwrap it as (• second scalar: Unicode scalar boundary), {
+      ← (first scalar: Unicode scalar boundary) is less than (second scalar: Unicode scalar boundary)
+     }
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   greater example
+   Unicode segments boundary
+   {
+    ← Unicode segments boundary at segment (example: list boundary), scalar (nothing: optional (Unicode scalar boundary))
+   }
+ }
+
+action (file)
+ [
+  test {verify (hidden Unicode segments boundary tests)}
+  test {verify ((Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary))) is less than (Unicode segments boundary at segment (greater example: list boundary), scalar (example: optional (Unicode scalar boundary))))}
+  test {verify (not ((Unicode segments boundary at segment (greater example: list boundary), scalar (example: optional (Unicode scalar boundary))) is less than (Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary)))))}
+ ]
+ (
+  English: hidden Unicode segments boundary tests
+ )
+ truth value
+ {
+  ← true
+ }

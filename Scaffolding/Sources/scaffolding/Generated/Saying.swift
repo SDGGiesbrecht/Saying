@@ -28,6 +28,14 @@ struct UnicodeText {
     return self.scalars.endIndex
   }
 
+  subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+    return self.scalars[index]
+  }
+
+  func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+    return boundary
+  }
+
   var startIndex: String.UnicodeScalarView.Index {
     return self.scalars.startIndex
   }
@@ -92,11 +100,11 @@ struct GitStyleSayingSource {
 }
 
 fileprivate struct Git_2010style_0020parsing_0020cursor {
-  fileprivate let index: String.UnicodeScalarView.Index
+  fileprivate let cursor: String.UnicodeScalarView.Index
   fileprivate let offset: UInt64
 
-  fileprivate init(_ index: String.UnicodeScalarView.Index, _ offset: UInt64) {
-    self.index = index
+  fileprivate init(_ cursor: String.UnicodeScalarView.Index, _ offset: UInt64) {
+    self.cursor = cursor
     self.offset = offset
   }
 }
@@ -225,6 +233,18 @@ fileprivate struct Unicode_0020segment {
   }
 }
 
+extension UnicodeSegments {
+  struct EntryIndex {
+    fileprivate let segment: Int
+    fileprivate let scalar: String.UnicodeScalarView.Index
+
+    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index) {
+      self.segment = segment
+      self.scalar = scalar
+    }
+  }
+}
+
 struct UnicodeSegments {
   fileprivate let segments: [Unicode_0020segment]
 
@@ -232,47 +252,57 @@ struct UnicodeSegments {
     self.segments = segments
   }
 
-  func index(after i: UnicodeSegments.Index) -> UnicodeSegments.Index {
+  func index(after i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
     let segment_0020list: [Unicode_0020segment] = self.segments
-    let segment_0020index: Int = i.segment
-    let segment: UnicodeText = segment_0020list[segment_0020index].source
-    if let scalar_0020index = i.scalar {
-      let next_0020scalar: String.UnicodeScalarView.Index = segment.index(after: scalar_0020index)
+    let segment_0020cursor: Int = i.segment
+    let segment: UnicodeText = segment_0020list[segment_0020cursor].source
+    if let scalar_0020cursor = i.scalar {
+      let next_0020scalar: String.UnicodeScalarView.Index = segment.index(after: scalar_0020cursor)
       if next_0020scalar == segment.endIndex {
-        let next_0020segment_0020index: Int = segment_0020list.index(after: segment_0020index)
-        if next_0020segment_0020index == segment_0020list.endIndex {
-          return UnicodeSegments.Index(next_0020segment_0020index, nil)
+        let next_0020segment_0020cursor: Int = segment_0020list.index(after: segment_0020cursor)
+        if next_0020segment_0020cursor == segment_0020list.endIndex {
+          return UnicodeSegments.Boundary(next_0020segment_0020cursor, nil)
         }
-        return UnicodeSegments.Index(next_0020segment_0020index, segment_0020list[next_0020segment_0020index].source.startIndex)
+        return UnicodeSegments.Boundary(next_0020segment_0020cursor, segment_0020list[next_0020segment_0020cursor].source.startIndex)
       }
-      return UnicodeSegments.Index(segment_0020index, next_0020scalar)
+      return UnicodeSegments.Boundary(segment_0020cursor, next_0020scalar)
     }
     fatalError()
   }
 
-  subscript(_ position: UnicodeSegments.Index) -> Unicode.Scalar {
-    if let scalar_0020index = position.scalar {
-      return self.segments[position.segment].source[scalar_0020index]
+  subscript(_ position: UnicodeSegments.Boundary) -> Unicode.Scalar {
+    return self[entryIndex: self.indexSkippingBoundsCheck(afterBoundary: position)]
+  }
+
+  var endIndex: UnicodeSegments.Boundary {
+    return UnicodeSegments.Boundary(self.segments.endIndex, nil)
+  }
+
+  subscript(entryIndex index: UnicodeSegments.EntryIndex) -> Unicode.Scalar {
+    return self.segments[index.segment].source[entryIndex: index.scalar]
+  }
+
+  func indexSkippingBoundsCheck(afterBoundary boundary: UnicodeSegments.Boundary) -> UnicodeSegments.EntryIndex {
+    if let scalar_0020boundary = boundary.scalar {
+      let segment_0020list: [Unicode_0020segment] = self.segments
+      let segment_0020index: Int = boundary.segment
+      return UnicodeSegments.EntryIndex(segment_0020index, segment_0020list[segment_0020index].source.indexSkippingBoundsCheck(afterBoundary: scalar_0020boundary))
     }
     fatalError()
   }
 
-  var endIndex: UnicodeSegments.Index {
-    return UnicodeSegments.Index(self.segments.endIndex, nil)
-  }
-
-  var startIndex: UnicodeSegments.Index {
+  var startIndex: UnicodeSegments.Boundary {
     let segment_0020list: [Unicode_0020segment] = self.segments
-    let segment_0020index: Int = segment_0020list.startIndex
+    let segment_0020cursor: Int = segment_0020list.startIndex
     if let first_0020segment = segment_0020list.first {
-      return UnicodeSegments.Index(segment_0020index, first_0020segment.source.startIndex)
+      return UnicodeSegments.Boundary(segment_0020cursor, first_0020segment.source.startIndex)
     }
-    return UnicodeSegments.Index(segment_0020index, nil)
+    return UnicodeSegments.Boundary(segment_0020cursor, nil)
   }
 }
 
 extension UnicodeSegments {
-  struct Index {
+  struct Boundary {
     fileprivate let segment: Int
     fileprivate let scalar: String.UnicodeScalarView.Index?
 
@@ -284,7 +314,7 @@ extension UnicodeSegments {
 }
 
 extension UnicodeSegments: Collection {}
-extension UnicodeSegments.Index: Comparable {}
+extension UnicodeSegments.Boundary: Comparable {}
 
 enum SayingSourceCode {
   case utf8(UnicodeSegments)
@@ -557,11 +587,11 @@ extension String.UnicodeScalarView {
 
 extension String.UnicodeScalarView: Hashable {}
 
-func ==(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
+func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
 
-func <(_ lhs: UnicodeSegments.Index, _ rhs: UnicodeSegments.Index) -> Bool {
+func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   if lhs.segment < rhs.segment {
     return true
   }
@@ -615,7 +645,7 @@ extension UnicodeSegment {
   }
 }
 
-extension UnicodeSegments.Index {
+extension UnicodeSegments.Boundary {
   init(segment: Int, scalar: String.UnicodeScalarView.Index?) {
     self.init(segment, scalar)
   }
@@ -647,8 +677,8 @@ extension GitStyleParsingCursor {
   init(index: String.UnicodeScalarView.Index, offset: UInt64) {
     self.init(value: Git_2010style_0020parsing_0020cursor(index, offset))
   }
-  var index: String.UnicodeScalarView.Index {
-    return value.index
+  var cursor: String.UnicodeScalarView.Index {
+    return value.cursor
   }
   var offset: UInt64 {
     return value.offset

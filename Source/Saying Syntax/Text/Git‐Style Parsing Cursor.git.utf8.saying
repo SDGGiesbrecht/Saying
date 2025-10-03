@@ -5,9 +5,9 @@ thing (unit)
  {
   part (unit/nowhere)
    (
-    English: index
+    English: cursor
    )
-   Unicode scalar index
+   Unicode scalar boundary
 
   part (unit/nowhere)
    (
@@ -18,7 +18,7 @@ thing (unit)
 
 action (unit)
  (
-  English: Git‐style parsing cursor at (index: Unicode scalar index) and (offset: natural number)
+  English: Git‐style parsing cursor at (cursor: Unicode scalar boundary) and (offset: natural number)
  )
  Git‐style parsing cursor
  create

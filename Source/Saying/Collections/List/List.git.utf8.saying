@@ -17,13 +17,24 @@ extension
    }
 
   use (clients)
-   use of (list of (thing)) as list of (thing) indexed by (list index)
+   use of (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {
+    action (clients)
+     (
+      English: index after (boundary: list boundary) in (list: list of (thing)) skipping bounds check
+     )
+     list index
+     C: “” boundary “”
+     C♯: “” boundary “”
+     JavaScript: “” boundary “”
+     Kotlin: “” boundary “”
+     Swift: “” boundary “”
+
     action (clients)
      (
       English: beginning of (list: list of (thing))
      )
-     list index
+     list boundary
      C: “0”
      C♯: “0”
      JavaScript: “0”
@@ -34,7 +45,7 @@ extension
      (
       English: end of (list: list of (thing))
      )
-     list index
+     list boundary
      C: “” list “¤(2D)>len”
      C♯: “” list “.Count”
      JavaScript: “” list “.length”
@@ -43,35 +54,46 @@ extension
 
     action (clients)
      (
-      English: advance (index: ↓ list index) to next in (list: list of (thing))
+      English: advance (cursor: ↓ list boundary) to next in (list: list of (thing)) skipping bounds check
      )
-     C: “++” index “”
-     C♯: “++” index “”
-     JavaScript: “++” index “”
-     Kotlin: “++” index “”
-     Swift: “” list “.formIndex(after: ¤(26)” index “)”
+     C: “++” cursor “”
+     C♯: “++” cursor “”
+     JavaScript: “++” cursor “”
+     Kotlin: “++” cursor “”
+     Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
 
     action (clients)
      (
-      English: index after (index: list index) in (list: list of (thing))
+      English: boundary after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
      )
-     list index
-     C: “” index “ + 1”
-     C♯: “” index “ + 1”
-     JavaScript: “” index “ + 1”
-     Kotlin: “” index “ + 1”
-     Swift: “” list “.index(after: ” index “)”
+     list boundary
+     C: “” cursor “ + 1”
+     C♯: “” cursor “ + 1”
+     JavaScript: “” cursor “ + 1”
+     Kotlin: “” cursor “ + 1”
+     Swift: “” list “.index(after: ” cursor “)”
 
     action (clients)
      (
-      English: entry at (index: list index) in (list: list of (thing))
+      English: entry at (cursor: list index) in (list: list of (thing))
      )
      thing
-     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “)”
-     C♯: “” list “[” index “]”
-     JavaScript: “” list “[” index “]”
-     Kotlin: “” list “[” index “]”
-     Swift: “” list “[” index “]”
+     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
+     C♯: “” list “[” cursor “]”
+     JavaScript: “” list “[” cursor “]”
+     Kotlin: “” list “[” cursor “]”
+     Swift: “” list “[” cursor “]”
+
+    action (clients)
+     (
+      English: entry after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
+     )
+     thing
+     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
+     C♯: “” list “[” cursor “]”
+     JavaScript: “” list “[” cursor “]”
+     Kotlin: “” list “[” cursor “]”
+     Swift: “” list “[” cursor “]”
 
     action (clients)
      (
@@ -107,19 +129,6 @@ extension
 
     action (clients)
      (
-      English: non‐empty example
-     )
-     list of (thing)
-     {
-      ← non‐empty example according to use as changeable list
-     }
-   }
-
-  use (clients)
-   use of (list of (thing)) as changeable list of (thing) indexed by (list index)
-   {
-    action (clients)
-     (
       English: empty
      )
      list of (thing)
@@ -129,6 +138,19 @@ extension
      Kotlin: “listOf()”
      Swift: “[]”
 
+    action (clients)
+     (
+      English: non‐empty example
+     )
+     list of (thing)
+     {
+      ← non‐empty example according to use as changeable list
+     }
+   }
+
+  use (clients)
+   use of (list of (thing)) as changeable list of (thing) indexed by (list index) separated by (list boundary)
+   {
     action (clients)
      (
       English: append (element: thing) to (list: ↓ list of (thing))

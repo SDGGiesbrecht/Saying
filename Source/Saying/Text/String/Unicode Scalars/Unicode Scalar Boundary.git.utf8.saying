@@ -1,11 +1,11 @@
 thing (clients)
  [
   [
-   English: A position of a Unicode scalar.
+   English: A boundary between Unicode scalars.
   ]
  ]
  (
-  English: Unicode scalar index
+  English: Unicode scalar boundary
  )
  C: “gsize” (“glib¤(2D)2.0”)
  C♯: “int”
@@ -13,21 +13,21 @@ thing (clients)
  Swift: “String.UnicodeScalarView.Index”
 
 use (clients)
- general containers of (Unicode scalar index)
+ general containers of (Unicode scalar boundary)
  {
   action (clients)
    example
-   Unicode scalar index
+   Unicode scalar boundary
    {
-    ← index after (beginning of (non‐empty example: Unicode scalars)) in (non‐empty example: Unicode scalars) skipping bounds check
+    ← beginning of (non‐empty example: Unicode scalars)
    }
  }
 
 use (clients)
- comparison of (Unicode scalar index) for equality
+ comparison of (Unicode scalar boundary) for equality
  {
   action (clients)
-   (first: Unicode scalar index) is (second: Unicode scalar index)
+   (first: Unicode scalar boundary) is (second: Unicode scalar boundary)
    truth value
    C: “” first “ == ” second “”
    C♯: “” first “ == ” second “”
@@ -36,7 +36,7 @@ use (clients)
    Swift: “” first “ == ” second “”
 
   action (clients)
-   (first: Unicode scalar index) is not (second: Unicode scalar index)
+   (first: Unicode scalar boundary) is not (second: Unicode scalar boundary)
    truth value
    C: “” first “ != ” second “”
    C♯: “” first “ != ” second “”
@@ -45,7 +45,7 @@ use (clients)
    Swift: “” first “ != ” second “”
 
   action (clients)
-   hash key (key: Unicode scalar index) with (hasher: ↓ hasher)
+   hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
     hash part (hashing proxy of (key)) with (↓ hasher)
@@ -53,7 +53,7 @@ use (clients)
 
   action (unit)
    (
-    English: hash value of (key: Unicode scalar index)
+    English: hash value of (key: Unicode scalar boundary)
    )
    hash value
    C♯: “” key “.GetHashCode()”
@@ -64,7 +64,7 @@ use (clients)
 
   action (clients)
    differing example
-   Unicode scalar index
+   Unicode scalar boundary
    {
     ← greater example
    }
@@ -72,21 +72,21 @@ use (clients)
 
 action (file)
  [
-  test {ignore (hashing proxy of (example: Unicode scalar index))}
+  test {ignore (hashing proxy of (example: Unicode scalar boundary))}
  ]
- hashing proxy of (index: Unicode scalar index)
+ hashing proxy of (boundary: Unicode scalar boundary)
  platform fixed‐width integer
- C: “(int)” index “”
- C♯: “” index “”
- JavaScript: “” index “”
- Kotlin: “” index “”
- Swift: “{var hasher = Hasher(); hasher.combine(” index “); return hasher.finalize()}()”
+ C: “(int)” boundary “”
+ C♯: “” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “”
+ Swift: “{var hasher = Hasher(); hasher.combine(” boundary “); return hasher.finalize()}()”
 
 use (clients)
- comparison of (Unicode scalar index) for order
+ comparison of (Unicode scalar boundary) for order
  {
   action (clients)
-   (first: Unicode scalar index) is less than (second: Unicode scalar index)
+   (first: Unicode scalar boundary) is less than (second: Unicode scalar boundary)
    truth value
    C: “” first “ < ” second “”
    C♯: “” first “ < ” second “”
@@ -95,7 +95,7 @@ use (clients)
    Swift: “” first “ < ” second “”
 
   action (clients)
-   (first: Unicode scalar index) is greater than (second: Unicode scalar index)
+   (first: Unicode scalar boundary) is greater than (second: Unicode scalar boundary)
    truth value
    C: “” first “ > ” second “”
    C♯: “” first “ > ” second “”
@@ -104,7 +104,7 @@ use (clients)
    Swift: “” first “ > ” second “”
 
   action (clients)
-   (first: Unicode scalar index) is less than or equal to (second: Unicode scalar index)
+   (first: Unicode scalar boundary) is less than or equal to (second: Unicode scalar boundary)
    truth value
    C: “” first “ <= ” second “”
    C♯: “” first “ <= ” second “”
@@ -113,7 +113,7 @@ use (clients)
    Swift: “” first “ <= ” second “”
 
   action (clients)
-   (first: Unicode scalar index) is greater than or equal to (second: Unicode scalar index)
+   (first: Unicode scalar boundary) is greater than or equal to (second: Unicode scalar boundary)
    truth value
    C: “” first “ >= ” second “”
    C♯: “” first “ >= ” second “”
@@ -123,30 +123,28 @@ use (clients)
 
   action (clients)
    greater example
-   Unicode scalar index
+   Unicode scalar boundary
    {
-    let (• two scalars: Unicode scalars) be (“  ”)
-    let (• second boundary: Unicode scalar boundary) be (boundary after (beginning of (two scalars)) in (two scalars) skipping bounds check)
-    ← index after (second boundary) in (two scalars) skipping bounds check
+    ← end of (non‐empty example: Unicode scalars)
    }
  }
 
 use (clients)
- general containers of (optional (Unicode scalar index))
+ general containers of (optional (Unicode scalar boundary))
  {
   action (clients)
    example
-   optional (Unicode scalar index)
+   optional (Unicode scalar boundary)
    {
-    ← wrap (example: Unicode scalar index) into optional
+    ← wrap (example: Unicode scalar boundary) into optional
    }
  }
 
 use (clients)
- comparison of (optional (Unicode scalar index)) for equality
+ comparison of (optional (Unicode scalar boundary)) for equality
  {
   action (clients)
-   (first: optional (Unicode scalar index)) is (second: optional (Unicode scalar index))
+   (first: optional (Unicode scalar boundary)) is (second: optional (Unicode scalar boundary))
    truth value
    Kotlin: “” first “ == ” second “”
    Swift: “” first “ == ” second “”
@@ -155,7 +153,7 @@ use (clients)
    }
 
   action (clients)
-   hash key (key: optional (Unicode scalar index)) with (hasher: ↓ hasher)
+   hash key (key: optional (Unicode scalar boundary)) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
     hash key (key) with (↓ hasher) according to optional
@@ -163,7 +161,7 @@ use (clients)
 
   action (unit)
    (
-    English: hash value of (key: optional (Unicode scalar index))
+    English: hash value of (key: optional (Unicode scalar boundary))
    )
    hash value
    Kotlin: “” key “.hashCode()”
@@ -173,8 +171,8 @@ use (clients)
 
   action (clients)
    differing example
-   optional (Unicode scalar index)
+   optional (Unicode scalar boundary)
    {
-    ← wrap (differing example: Unicode scalar index) into optional
+    ← wrap (differing example: Unicode scalar boundary) into optional
    }
  }
