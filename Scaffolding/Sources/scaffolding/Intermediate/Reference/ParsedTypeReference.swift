@@ -245,20 +245,20 @@ extension ParsedTypeReference {
 extension ParsedTypeReference {
   func validateReferences(
     requiredAccess: AccessIntermediate,
-    allowTestOnlyAccess: Bool,
+    testContext: TestContext?,
     referenceLookup: [ReferenceDictionary],
     errors: inout [ReferenceError]
   ) {
     switch self {
     case .simple(let simple):
       if let thing = referenceLookup.lookupThing(simple.identifier, components: []) {
-        if requiredAccess > thing.access {
-          errors.append(.thingAccessNarrowerThanSignature(reference: simple.syntaxNode))
-        }
-        if !allowTestOnlyAccess,
-          thing.testOnlyAccess {
-          errors.append(.thingUnavailableOutsideTests(reference: simple.syntaxNode))
-        }
+        validateAccess(
+          to: thing,
+          requiredAccess: requiredAccess,
+          testContext: testContext,
+          reference: simple.syntaxNode,
+          errors: &errors
+        )
       } else {
         errors.append(.noSuchThing(simple.identifier, reference: simple.syntaxNode))
       }
@@ -267,20 +267,20 @@ extension ParsedTypeReference {
         identifier.name(),
         components: components.map({ $0.key })
       ) {
-        if requiredAccess > thing.access {
-          errors.append(.thingAccessNarrowerThanSignature(reference: identifier))
-        }
-        if !allowTestOnlyAccess,
-          thing.testOnlyAccess {
-          errors.append(.thingUnavailableOutsideTests(reference: identifier))
-        }
+        validateAccess(
+          to: thing,
+          requiredAccess: requiredAccess,
+          testContext: testContext,
+          reference: identifier,
+          errors: &errors
+        )
       } else {
         errors.append(.noSuchThing(identifier.name(), reference: identifier))
       }
       for component in components {
         component.validateReferences(
           requiredAccess: requiredAccess,
-          allowTestOnlyAccess: allowTestOnlyAccess,
+          testContext: testContext,
           referenceLookup: referenceLookup,
           errors: &errors
         )
@@ -289,14 +289,14 @@ extension ParsedTypeReference {
       for parameter in parameters {
         parameter.validateReferences(
           requiredAccess: requiredAccess,
-          allowTestOnlyAccess: allowTestOnlyAccess,
+          testContext: testContext,
           referenceLookup: referenceLookup,
           errors: &errors
         )
       }
       returnValue?.validateReferences(
         requiredAccess: requiredAccess,
-        allowTestOnlyAccess: allowTestOnlyAccess,
+        testContext: testContext,
         referenceLookup: referenceLookup,
         errors: &errors
       )
@@ -306,11 +306,30 @@ extension ParsedTypeReference {
       .enumerationCase(enumeration: let type, identifier: _):
       type.validateReferences(
         requiredAccess: requiredAccess,
-        allowTestOnlyAccess: allowTestOnlyAccess,
+        testContext: testContext,
         referenceLookup: referenceLookup,
         errors: &errors
       )
     }
+  }
+
+  func validateAccess(
+    to thing: Thing,
+    requiredAccess: AccessIntermediate,
+    testContext: TestContext?,
+    reference: ParsedThingReferenceProtocol,
+    errors: inout [ReferenceError]
+  ) {
+    if requiredAccess > thing.access {
+      errors.append(.thingAccessNarrowerThanSignature(reference: reference))
+    }
+    testContext.validateAccess(
+      to: thing.access,
+      testOnly: thing.testOnlyAccess,
+      errors: &errors,
+      unavailableOutsideTestsError: { .thingUnavailableOutsideTests(reference: reference) },
+      unavailableInVisibleTestsError: { .thingAccessNarrowerThanDocumentationVisibility(reference: reference) }
+    )
   }
 }
 

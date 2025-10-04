@@ -88,12 +88,16 @@ extension ActionUseArgument {
 
   func validateReferences(
     context: [ReferenceDictionary],
-    testContext: Bool,
+    testContext: TestContext?,
     errors: inout [ReferenceError]
   ) {
     switch self {
     case .action(let action):
-      action.validateReferences(context: context, testContext: testContext, errors: &errors)
+      action.validateReferences(
+        context: context,
+        testContext: testContext,
+        errors: &errors
+      )
     case .flow(let statements):
       statements.validateReferences(context: context, testContext: testContext, errors: &errors)
     }

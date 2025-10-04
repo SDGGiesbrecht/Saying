@@ -40,7 +40,8 @@ extension CaseIntermediate {
     if let documentation = declaration.documentation {
       switch DocumentationIntermediate.construct(
         documentation.documentation,
-        namespace: caseNamespace
+        namespace: caseNamespace,
+        inheritedVisibility: access
       ) {
         case .failure(let nested):
           errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
@@ -267,7 +268,8 @@ extension CaseIntermediate {
   func specializing(
     for use: UseIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    specializationVisibility: AccessIntermediate
   ) -> CaseIntermediate {
     return CaseIntermediate(
       names: names,
@@ -294,7 +296,8 @@ extension CaseIntermediate {
       ),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        specializationVisibility: specializationVisibility
       ),
       declaration: declaration
     )

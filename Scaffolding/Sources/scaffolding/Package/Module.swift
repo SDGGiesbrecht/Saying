@@ -36,8 +36,9 @@ struct Module {
     try module.resolveExtensions()
     try module.resolveUses(externalLookup: moduleWideImports.map({ $0.referenceDictionary }))
     module.resolveTypeIdentifiers(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
-    module.resolveTypes(moduleWideImports: moduleWideImports)
     module.resolveSpecializedAccess(moduleWideImports: moduleWideImports)
+    module.collectTests()
+    module.resolveTypes(moduleWideImports: moduleWideImports)
     try module.validateReferences(moduleWideImports: moduleWideImports)
     switch mode {
     case .testing:

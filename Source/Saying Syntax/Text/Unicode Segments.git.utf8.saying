@@ -18,7 +18,7 @@ action (unit)
  Unicode segments
  create
 
-use
+use (clients)
  use of (Unicode segments) as list of (Unicode scalar) indexed by (Unicode segments index) separated by (Unicode segments boundary)
  {
   action (clients)

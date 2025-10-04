@@ -435,24 +435,6 @@ extension ReferenceDictionary {
     actions = newActions
   }
 
-  mutating func resolveTypes(parentContexts: [ReferenceDictionary]) {
-    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
-    for (actionName, group) in actions {
-      for (signature, returnOverloads) in group {
-        for (overload, action) in returnOverloads {
-          var modified = action
-          modified.implementation?.resolveTypes(
-            context: action,
-            referenceLookup: parentContexts.appending(self),
-            finalReturnValue: action.returnValue
-          )
-          newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
-        }
-      }
-    }
-    actions = newActions
-  }
-
   mutating func resolveSpecializedAccess(externalLookup: [ReferenceDictionary]) {
     while performOnePassResolvingSpecializedAccess(externalLookup: externalLookup) {}
   }
@@ -471,7 +453,7 @@ extension ReferenceDictionary {
           }
           let access = min(thing.access, parameterAccess.lazy.map({ $0.access }).min() ?? .clients)
           if access != thing.access {
-            things[thingName]![signature]!.access = access
+            things[thingName]![signature]!.resolveSpecializedAccess(to: access)
             changedSomething = true
           }
           let testOnly = thing.testOnlyAccess || parameterAccess.contains(where: { $0.testOnly })
@@ -489,7 +471,7 @@ extension ReferenceDictionary {
             let proxy = ParsedTypeReference.action(parameters: action.parameters.inAnyOrder.map({ $0.type }), returnValue: action.returnValue)
             let access = proxy.derivedAccessLimit(referenceLookup: allLookup)
             if access != action.access {
-              actions[actionName]![signature]![overload]!.access = access
+              actions[actionName]![signature]![overload]!.resolveSpecializedAccess(to: access)
               changedSomething = true
             }
             let testOnly = proxy.derivedTestAccess(referenceLookup: allLookup)
@@ -504,6 +486,24 @@ extension ReferenceDictionary {
     return changedSomething
   }
 
+  mutating func resolveTypes(parentContexts: [ReferenceDictionary]) {
+    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
+    for (actionName, group) in actions {
+      for (signature, returnOverloads) in group {
+        for (overload, action) in returnOverloads {
+          var modified = action
+          modified.implementation?.resolveTypes(
+            context: action,
+            referenceLookup: parentContexts.appending(self),
+            finalReturnValue: action.returnValue
+          )
+          newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
+        }
+      }
+    }
+    actions = newActions
+  }
+
   func validateReferencesAsModule(
     moduleWideImports: [ModuleIntermediate],
     errors: inout [ReferenceError]
@@ -516,7 +516,11 @@ extension ReferenceDictionary {
       action.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
     for ability in allAbilities() {
-      ability.documentation?.validateReferences(referenceLookup: referenceLookup, errors: &errors)
+      ability.documentation?.validateReferences(
+        inheritedVisibility: ability.access,
+        referenceLookup: referenceLookup,
+        errors: &errors
+      )
     }
   }
 }

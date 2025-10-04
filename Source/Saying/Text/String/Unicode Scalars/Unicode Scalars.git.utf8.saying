@@ -96,7 +96,7 @@ use (clients)
    }
  }
 
-use
+use (clients)
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)

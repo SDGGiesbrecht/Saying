@@ -8,6 +8,8 @@ enum ReferenceError: DiagnosticError {
   case fulfillmentAccessNarrowerThanRequirement(declaration: ParsedActionName)
   case mismatchedTestAccess(testAccess: ParsedTestAccess)
   case thingAccessNarrowerThanSignature(reference: ParsedThingReferenceProtocol)
+  case thingAccessNarrowerThanDocumentationVisibility(reference: ParsedThingReferenceProtocol)
+  case actionAccessNarrowerThanDocumentationVisibility(reference: ParsedAction)
   case thingUnavailableOutsideTests(reference: ParsedThingReferenceProtocol)
   case actionUnavailableOutsideTests(reference: ParsedAction)
   case redeclaredLocalIdentifier(error: ReferenceDictionary.RedeclaredIdentifierError)
@@ -34,6 +36,10 @@ enum ReferenceError: DiagnosticError {
     case .mismatchedTestAccess:
       return defaultMessage
     case .thingAccessNarrowerThanSignature:
+      return defaultMessage
+    case .thingAccessNarrowerThanDocumentationVisibility:
+      return defaultMessage
+    case .actionAccessNarrowerThanDocumentationVisibility:
       return defaultMessage
     case .thingUnavailableOutsideTests:
       return defaultMessage
@@ -69,6 +75,10 @@ enum ReferenceError: DiagnosticError {
     case .mismatchedTestAccess(testAccess: let testAccess):
       return testAccess.location
     case .thingAccessNarrowerThanSignature(reference: let reference):
+      return reference.location
+    case .thingAccessNarrowerThanDocumentationVisibility(reference: let reference):
+      return reference.location
+    case .actionAccessNarrowerThanDocumentationVisibility(reference: let reference):
       return reference.location
     case .thingUnavailableOutsideTests(reference: let reference):
       return reference.location
