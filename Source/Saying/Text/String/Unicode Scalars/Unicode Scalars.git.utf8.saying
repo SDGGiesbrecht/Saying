@@ -142,6 +142,16 @@ use
    }
 
   action (clients)
+   [
+    test (hidden) {
+     let (• ASCII: Unicode scalars) be (“ ”)
+     verify ((boundary after (beginning of (ASCII)) in (ASCII) skipping bounds check) is (end of (ASCII)))
+    }
+    test (hidden) {
+     let (• supplementary: Unicode scalars) be (“¤(10000)”)
+     verify ((boundary after (beginning of (supplementary)) in (supplementary) skipping bounds check) is (end of (supplementary)))
+    }
+   ]
    (
     English: boundary after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
@@ -234,33 +244,3 @@ action (clients)
  JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
  Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
  Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
-
-action (file)
- [
-  test {
-   let (• ASCII: Unicode scalars) be (example with one ASCII scalar)
-   verify ((boundary after (beginning of (ASCII)) in (ASCII) skipping bounds check) is (end of (ASCII)))
-  }
- ]
- (
-  English: example with one ASCII scalar
- )
- Unicode scalars
- {
-  ← “ ”
- }
-
-action (file)
- [
-  test {
-   let (• supplementary: Unicode scalars) be (example with one supplementary plane scalar)
-   verify ((boundary after (beginning of (supplementary)) in (supplementary) skipping bounds check) is (end of (supplementary)))
-  }
- ]
- (
-  English: example with one supplementary plane scalar
- )
- Unicode scalars
- {
-  ← “¤(10000)”
- }

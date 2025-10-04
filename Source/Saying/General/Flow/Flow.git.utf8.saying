@@ -136,21 +136,3 @@ flow (clients)
  JavaScript: “try {” − “} finally {” clean‐up “}”
  Kotlin: “try {” − “} finally {” clean‐up “}”
  Swift: “defer {” clean‐up “}”
-
-action (file)
- [
-  test {verify (avoid dead end)}
- ]
- (
-  English: avoid dead end
- )
- truth value
- {
-  if (false), {
-   !
-  }
-  if (true), {
-   ← true
-  }
-  ¡!
- }

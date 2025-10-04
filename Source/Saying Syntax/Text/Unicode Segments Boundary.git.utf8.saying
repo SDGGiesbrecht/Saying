@@ -64,6 +64,10 @@ use (clients)
  comparison of (Unicode segments boundary) for order
  {
   action (clients)
+   [
+    test (hidden) {verify ((Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary))) is less than (Unicode segments boundary at segment (greater example: list boundary), scalar (example: optional (Unicode scalar boundary))))}
+    test (hidden) {verify (not ((Unicode segments boundary at segment (greater example: list boundary), scalar (example: optional (Unicode scalar boundary))) is less than (Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary)))))}
+   ]
    (first: Unicode segments boundary) is less than (second: Unicode segments boundary)
    truth value
    {
@@ -88,18 +92,4 @@ use (clients)
    {
     ← Unicode segments boundary at segment (example: list boundary), scalar (nothing: optional (Unicode scalar boundary))
    }
- }
-
-action (file)
- [
-  test {verify (hidden Unicode segments boundary tests)}
-  test {verify ((Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary))) is less than (Unicode segments boundary at segment (greater example: list boundary), scalar (example: optional (Unicode scalar boundary))))}
-  test {verify (not ((Unicode segments boundary at segment (greater example: list boundary), scalar (example: optional (Unicode scalar boundary))) is less than (Unicode segments boundary at segment (example: list boundary), scalar (example: optional (Unicode scalar boundary)))))}
- ]
- (
-  English: hidden Unicode segments boundary tests
- )
- truth value
- {
-  ← true
  }
