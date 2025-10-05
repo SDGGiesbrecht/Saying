@@ -294,7 +294,7 @@ action (file)
  minimal list example
  create
 
-use
+use (file)
  use of (minimal list example) as list of (truth value) indexed by (list index) separated by (list boundary)
  {
   action (file)

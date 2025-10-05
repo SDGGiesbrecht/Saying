@@ -107,6 +107,7 @@ extension ActionPrototype {
       }
       names.insert(name)
     }
+    let access = AccessIntermediate(declaration.access)
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
       switch DocumentationIntermediate.construct(
@@ -114,7 +115,8 @@ extension ActionPrototype {
         namespace: namespace
           .appending(names)
           .appending(contentsOf: parameters.ordered(for: names.identifier()).map({ parameter in return [UnicodeText(parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",".unicodeScalars))] as Set<UnicodeText>
-          }))
+          })),
+        inheritedVisibility: access
       ) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
@@ -138,7 +140,7 @@ extension ActionPrototype {
         namespace: namespace,
         parameters: parameters,
         returnValue: declaration.returnValueType.map({ ParsedTypeReference($0) }),
-        access: AccessIntermediate(declaration.access),
+        access: access,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
         nativeNames: nativeNames
@@ -147,17 +149,18 @@ extension ActionPrototype {
   }
 
   func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
+    let testContext = TestContext.inherited(visibility: access, isTestOnly: testOnlyAccess)
     for parameter in parameters.inAnyOrder {
       parameter.type.validateReferences(
         requiredAccess: access,
-        allowTestOnlyAccess: testOnlyAccess,
+        testContext: testContext,
         referenceLookup: referenceLookup,
         errors: &errors
       )
     }
     returnValue?.validateReferences(
       requiredAccess: access,
-      allowTestOnlyAccess: testOnlyAccess,
+      testContext: testContext,
       referenceLookup: referenceLookup,
       errors: &errors
     )

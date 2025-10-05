@@ -118,15 +118,6 @@ extension ModuleIntermediate {
     for use in uses {
       resolve(use, externalLookup: externalLookup, errors: &errors)
     }
-
-    for documentation in [
-      referenceDictionary.allThings().lazy.compactMap({ $0.documentation }),
-      referenceDictionary.allThings().lazy.flatMap({ $0.cases.compactMap({ $0.documentation }) }),
-      referenceDictionary.allActions().lazy.compactMap({ $0.documentation })
-    ].joined() {
-      tests.append(contentsOf: documentation.tests)
-    }
-
     if !errors.isEmpty {
       throw ErrorList(errors)
     }
@@ -233,6 +224,20 @@ extension ModuleIntermediate {
     referenceDictionary.resolveTypeIdentifiers(externalLookup: externalReferenceLookup)
   }
 
+  mutating func resolveSpecializedAccess(moduleWideImports: [ModuleIntermediate]) {
+    referenceDictionary.resolveSpecializedAccess(externalLookup: moduleWideImports.map({ $0.referenceDictionary }))
+  }
+
+  mutating func collectTests() {
+    for documentation in [
+      referenceDictionary.allThings().lazy.compactMap({ $0.documentation }),
+      referenceDictionary.allThings().lazy.flatMap({ $0.cases.compactMap({ $0.documentation }) }),
+      referenceDictionary.allActions().lazy.compactMap({ $0.documentation })
+    ].joined() {
+      tests.append(contentsOf: documentation.tests)
+    }
+  }
+
   mutating func resolveTypes(
     moduleWideImports: [ModuleIntermediate]
   ) {
@@ -259,10 +264,6 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func resolveSpecializedAccess(moduleWideImports: [ModuleIntermediate]) {
-    referenceDictionary.resolveSpecializedAccess(externalLookup: moduleWideImports.map({ $0.referenceDictionary }))
-  }
-
   func validateReferences(
     moduleWideImports: [ModuleIntermediate]
   ) throws {
@@ -274,11 +275,12 @@ extension ModuleIntermediate {
     let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
     let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
     for test in tests {
+      let testContext = TestContext(isHidden: test.isHidden, inheritedVisibility: test.inheritedVisibility)
       var locals = ReferenceDictionary()
       for statement in test.statements {
         statement.validateReferences(
           context: externalAndModuleLookup.appending(locals),
-          testContext: true,
+          testContext: testContext,
           errors: &errors
         )
         let newActions = statement.action?.localActions() ?? []

@@ -1,6 +1,7 @@
 struct TestIntermediate {
   var location: [Set<UnicodeText>]
   var isHidden: Bool
+  var inheritedVisibility: AccessIntermediate
   var statements: [StatementIntermediate]
 }
 
@@ -9,7 +10,8 @@ extension TestIntermediate {
   static func construct(
     _ test: ParsedTest,
     location: [Set<UnicodeText>],
-    index: Int
+    index: Int,
+    inheritedVisibility: AccessIntermediate
   ) -> Result<TestIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
     var errors: [LiteralIntermediate.ConstructionError] = []
     let nestedLocation = location.appending([UnicodeText(index.inDigits())])
@@ -38,7 +40,14 @@ extension TestIntermediate {
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    return .success(TestIntermediate(location: nestedLocation, isHidden: isHidden, statements: statements))
+    return .success(
+      TestIntermediate(
+        location: nestedLocation,
+        isHidden: isHidden,
+        inheritedVisibility: inheritedVisibility,
+        statements: statements
+      )
+    )
   }
 }
 
@@ -49,17 +58,20 @@ extension TestIntermediate {
     return TestIntermediate(
       location: location,
       isHidden: isHidden,
+      inheritedVisibility: inheritedVisibility,
       statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
     )
   }
 
   func specializing(
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    specializationVisibility: AccessIntermediate
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location.appending(contentsOf: specializationNamespace),
       isHidden: isHidden,
+      inheritedVisibility: min(self.inheritedVisibility, specializationVisibility),
       statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
     )
   }

@@ -177,7 +177,11 @@ extension Thing {
     }
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(documentation.documentation, namespace: thingNamespace) {
+      switch DocumentationIntermediate.construct(
+        documentation.documentation,
+        namespace: thingNamespace,
+        inheritedVisibility: access
+      ) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
       case .success(let intermediateDocumentation):
@@ -212,6 +216,7 @@ extension Thing {
 
 extension Thing {
   func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
+    let testContext = TestContext.inherited(visibility: access, isTestOnly: testOnlyAccess)
     for native in allNativeImplementations() {
       for parameterReference in [native.parameters]
         .appending(contentsOf: native.indirectRequirements.compactMap({ $0.parameters }))
@@ -220,7 +225,7 @@ extension Thing {
         if let typeInstead = parameterReference.resolvedType {
           typeInstead.validateReferences(
             requiredAccess: access,
-            allowTestOnlyAccess: testOnlyAccess,
+            testContext: testContext,
             referenceLookup: referenceLookup,
             errors: &errors
           )
@@ -232,6 +237,7 @@ extension Thing {
       }
     }
     documentation?.validateReferences(
+      inheritedVisibility: access,
       referenceLookup: referenceLookup,
       errors: &errors
     )
@@ -272,6 +278,7 @@ extension Thing {
     specializationNamespace: [Set<UnicodeText>]
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
+    let newAccess = min(access, use.access)
     let newParts = parts.map({ part in
       return part.specializing(
         for: use,
@@ -283,20 +290,22 @@ extension Thing {
       return enumerationCase.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        specializationVisibility: newAccess
       )
     })
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        specializationVisibility: newAccess
       )
     })
     return Thing(
       names: names,
       parameters: mappedParameters,
-      access: access,
-      testOnlyAccess: testOnlyAccess,
+      access: newAccess,
+      testOnlyAccess: self.testOnlyAccess || use.testOnlyAccess,
       parts: newParts,
       cases: newCases,
       c: c?.specializing(typeLookup: typeLookup),
@@ -307,6 +316,15 @@ extension Thing {
       declaration: declaration,
       swiftName: swiftName
     )
+  }
+
+  mutating func resolveSpecializedAccess(to new: AccessIntermediate) {
+    self.access = new
+    if let tests = documentation?.tests {
+      for index in tests.indices {
+        documentation?.tests[index].inheritedVisibility = new
+      }
+    }
   }
 }
 

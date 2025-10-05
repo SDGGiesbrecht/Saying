@@ -8,7 +8,8 @@ struct DocumentationIntermediate {
 extension DocumentationIntermediate {
   static func construct(
     _ declaration: ParsedDocumentation,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    inheritedVisibility: AccessIntermediate
   ) -> Result<DocumentationIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
     var errors: [LiteralIntermediate.ConstructionError] = []
     var paragraphs: [ParsedParagraph] = []
@@ -20,7 +21,7 @@ extension DocumentationIntermediate {
       case .parameter(let parameter):
         parameters.append(parameter)
       case .test(let test):
-        switch TestIntermediate.construct(test, location: namespace, index: testIndex) {
+        switch TestIntermediate.construct(test, location: namespace, index: testIndex, inheritedVisibility: inheritedVisibility) {
         case .failure(let error):
           errors.append(contentsOf: error.errors)
         case .success(let constructed):
@@ -59,7 +60,8 @@ extension DocumentationIntermediate {
   }
   func specializing(
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    specializationVisibility: AccessIntermediate
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
       paragraphs: paragraphs,
@@ -67,7 +69,8 @@ extension DocumentationIntermediate {
       tests: tests.map({ test in
         return test.specializing(
           typeLookup: typeLookup,
-          specializationNamespace: specializationNamespace
+          specializationNamespace: specializationNamespace,
+          specializationVisibility: specializationVisibility
         )
       })
     )
@@ -78,11 +81,13 @@ extension Optional where Wrapped == DocumentationIntermediate {
   func merging(
     inherited: DocumentationIntermediate?,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    specializationVisibility: AccessIntermediate
   ) -> DocumentationIntermediate? {
     guard let base = inherited?.specializing(
       typeLookup: typeLookup,
-      specializationNamespace: specializationNamespace
+      specializationNamespace: specializationNamespace,
+      specializationVisibility: specializationVisibility
     ) else {
       return self
     }
@@ -99,7 +104,7 @@ extension Optional where Wrapped == DocumentationIntermediate {
 }
 
 extension DocumentationIntermediate {
-  func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
+  func validateReferences(inheritedVisibility: AccessIntermediate, referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
     var paragraphs: [ParsedParagraph] = []
     for paragraph in self.paragraphs {
       paragraphs.append(paragraph)
@@ -107,6 +112,7 @@ extension DocumentationIntermediate {
     for parameter in parameters.lazy.flatMap({ $0 }) {
       paragraphs.append(parameter.details.paragraph)
     }
+    let testContext: TestContext? = TestContext(isHidden: false, inheritedVisibility: inheritedVisibility)
     for paragraph in paragraphs {
       for languageEntry in paragraph.paragraphs.text {
         for span in languageEntry.text.spans {
@@ -116,20 +122,38 @@ extension DocumentationIntermediate {
               break
             case .reference(let reference):
               let identifier = reference.identifier
-              if referenceLookup.lookupAction(
-                identifier.identifierText(),
+              let identifierText = identifier.identifierText()
+
+              var foundTarget: Bool = false
+              var bestVisibility: AccessIntermediate = .nowhere
+              var accessError: () -> ReferenceError = { fatalError() }
+              for action in referenceLookup.lookupActions(
+                identifierText,
                 signature: [],
                 specifiedReturnValue: .none
-              ) == nil
-                  && referenceLookup.lookupActions(
-                    identifier.identifierText(),
-                    signature: [],
-                    specifiedReturnValue: .none
-                  ).isEmpty
-                  && referenceLookup.lookupThing(
-                    identifier.identifierText(),
-                    components: []
-                  ) == nil {
+              ) {
+                if action.access > bestVisibility {
+                  foundTarget = true
+                  bestVisibility = action.access
+                  accessError = { .actionAccessNarrowerThanDocumentationVisibility(reference: .simple(identifier)) }
+                }
+              }
+              if let thing = referenceLookup.lookupThing(identifierText, components: []) {
+                foundTarget = true
+                if thing.access > bestVisibility {
+                  bestVisibility = thing.access
+                  accessError = { .thingAccessNarrowerThanDocumentationVisibility(reference: identifier) }
+                }
+              }
+              if foundTarget {
+                testContext.validateAccess(
+                  to: bestVisibility,
+                  testOnly: false,
+                  errors: &errors,
+                  unavailableOutsideTestsError: { fatalError() },
+                  unavailableInVisibleTestsError: { accessError() }
+                )
+              } else {
                 errors.append(.noSuchIdentifier(identifier))
               }
             }

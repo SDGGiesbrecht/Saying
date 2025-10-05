@@ -236,7 +236,7 @@ extension ActionUse {
 
   func validateReferences(
     context: [ReferenceDictionary],
-    testContext: Bool,
+    testContext: TestContext?,
     errors: inout [ReferenceError]
   ) {
     var local = ReferenceDictionary()
@@ -260,10 +260,13 @@ extension ActionUse {
           actionName,
           signature: signature,
           specifiedReturnValue: resolvedResultType) {
-        if !testContext,
-           action.testOnlyAccess {
-          errors.append(.actionUnavailableOutsideTests(reference: source!))
-        }
+        testContext.validateAccess(
+          to: action.access,
+          testOnly: action.testOnlyAccess,
+          errors: &errors,
+          unavailableOutsideTestsError: { .actionUnavailableOutsideTests(reference: source!) },
+          unavailableInVisibleTestsError: { .actionAccessNarrowerThanDocumentationVisibility(reference: source!) }
+        )
       } else {
         if literal == nil {
           errors.append(.noSuchAction(name: actionName, reference: source!))

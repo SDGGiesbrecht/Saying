@@ -94,9 +94,14 @@ extension Ability {
         defaults[identifier] = defaultImplementation
       }
     }
+    let access = AccessIntermediate(declaration.access)
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(documentation.documentation, namespace: namespace.appending(names)) {
+      switch DocumentationIntermediate.construct(
+        documentation.documentation,
+        namespace: namespace.appending(names),
+        inheritedVisibility: access
+      ) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
       case .success(let intermediateDocumentation):
@@ -119,7 +124,7 @@ extension Ability {
         provisionThings: [],
         provisionActions: [],
         provisionUses: [],
-        access: AccessIntermediate(declaration.access),
+        access: access,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
         declaration: declaration

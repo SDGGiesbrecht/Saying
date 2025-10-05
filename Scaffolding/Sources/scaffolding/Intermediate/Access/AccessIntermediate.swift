@@ -4,6 +4,7 @@ enum AccessIntermediate: Comparable {
   case file
   case unit
   case clients
+  static var anywhereCapableOfDiscovery: AccessIntermediate { .clients }
 }
 
 extension AccessIntermediate {

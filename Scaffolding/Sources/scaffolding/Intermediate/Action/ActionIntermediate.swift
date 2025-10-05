@@ -22,7 +22,12 @@ struct ActionIntermediate {
     return prototype.isFlow
   }
   var documentation: DocumentationIntermediate? {
-    return prototype.documentation
+    get {
+      return prototype.documentation
+    }
+    set {
+      prototype.documentation = newValue
+    }
   }
   var names: Set<UnicodeText> {
     return prototype.names
@@ -128,7 +133,7 @@ extension ActionIntermediate {
         namespace: [],
         parameters: parameters,
         returnValue: returnValue,
-        access: .inferred,
+        access: .anywhereCapableOfDiscovery,
         testOnlyAccess: false,
         documentation: nil,
         nativeNames: .none
@@ -666,12 +671,13 @@ extension ActionIntermediate {
       referenceLookup: referenceLookup,
       errors: &errors
     )
+    let testContext = TestContext.inherited(visibility: access, isTestOnly: testOnlyAccess)
     for native in allNativeImplementations() {
       for parameterReference in native.expression.parameters {
         if let typeInstead = parameterReference.typeInstead {
           typeInstead.validateReferences(
             requiredAccess: access,
-            allowTestOnlyAccess: testOnlyAccess,
+            testContext: testContext,
             referenceLookup: referenceLookup,
             errors: &errors
           )
@@ -690,7 +696,7 @@ extension ActionIntermediate {
         if let typeInstead = parameterReference.resolvedType {
           typeInstead.validateReferences(
             requiredAccess: access,
-            allowTestOnlyAccess: testOnlyAccess,
+            testContext: testContext,
             referenceLookup: referenceLookup,
             errors: &errors
           )
@@ -706,10 +712,11 @@ extension ActionIntermediate {
     let externalAndParameters = referenceLookup.appending(self.parameterReferenceDictionary(externalLookup: referenceLookup))
     implementation?.validateReferences(
       context: externalAndParameters,
-      testContext: false,
+      testContext: nil,
       errors: &errors
     )
     documentation?.validateReferences(
+      inheritedVisibility: access,
       referenceLookup: externalAndParameters,
       errors: &errors
     )
@@ -787,7 +794,8 @@ extension ActionIntermediate {
     let mergedDocumentation = documentation.merging(
       inherited: requirement.documentation,
       typeLookup: typeLookup,
-      specializationNamespace: specializationNamespace
+      specializationNamespace: specializationNamespace,
+      specializationVisibility: access
     )
     return .success(
       ActionIntermediate(
@@ -834,10 +842,12 @@ extension ActionIntermediate {
       )
     })
     let newReturnValue = returnValue.flatMap { $0.specializing(typeLookup: typeLookup) }
+    let newAccess = min(self.access, use.access)
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        specializationVisibility: newAccess
       )
     })
     var nativeImplementationTypeLookup = typeLookup
@@ -853,7 +863,7 @@ extension ActionIntermediate {
         namespace: prototype.namespace,
         parameters: newParameters,
         returnValue: newReturnValue,
-        access: min(self.access, use.access),
+        access: newAccess,
         testOnlyAccess: self.testOnlyAccess || use.testOnlyAccess,
         documentation: newDocumentation,
         nativeNames: nativeNames
@@ -874,6 +884,15 @@ extension ActionIntermediate {
       isSpecialized: true,
       deservesTesting: deservesTesting
     )
+  }
+
+  mutating func resolveSpecializedAccess(to new: AccessIntermediate) {
+    self.access = new
+    if let tests = documentation?.tests {
+      for index in tests.indices {
+        documentation?.tests[index].inheritedVisibility = new
+      }
+    }
   }
 }
 

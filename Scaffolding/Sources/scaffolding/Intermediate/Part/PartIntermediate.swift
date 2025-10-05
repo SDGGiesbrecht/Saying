@@ -36,7 +36,8 @@ extension PartIntermediate {
     if let documentation = declaration.documentation {
       switch DocumentationIntermediate.construct(
         documentation.documentation,
-        namespace: partNamespace
+        namespace: partNamespace,
+        inheritedVisibility: max(readAccess, writeAccess)
       ) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
@@ -120,9 +121,9 @@ extension PartIntermediate {
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
-      readAccess: readAccess,
-      writeAccess: writeAccess,
-      testOnlyAccess: testOnlyAccess,
+      readAccess: min(readAccess, use.access),
+      writeAccess: min(writeAccess, use.access),
+      testOnlyAccess: testOnlyAccess || use.testOnlyAccess,
       contents: contents.specializing(typeLookup: typeLookup),
       referenceAction: referenceAction.specializing(
         for: use,
@@ -136,7 +137,8 @@ extension PartIntermediate {
       ),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        specializationVisibility: use.access
       ),
       declaration: declaration
     )

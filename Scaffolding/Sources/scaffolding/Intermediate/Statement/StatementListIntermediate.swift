@@ -48,7 +48,7 @@ extension StatementListIntermediate {
 
   func validateReferences(
     context: [ReferenceDictionary],
-    testContext: Bool,
+    testContext: TestContext?,
     errors: inout [ReferenceError]
   ) {
     var local = ReferenceDictionary()
