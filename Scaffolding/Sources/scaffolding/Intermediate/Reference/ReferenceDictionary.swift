@@ -46,7 +46,13 @@ extension ReferenceDictionary {
       let thing = lookupThing(identifier, components: [])?.declaration.genericDeclaration {
       return thing
     } else if let fullSignature = signature.mapAll({ $0 }),
-      let action = lookupAction(identifier, signature: fullSignature, specifiedReturnValue: specifiedReturnValue, parentContexts: parentContexts)?.declaration as? ParsedActionDeclaration {
+      let action = lookupAction(
+        identifier,
+        signature: fullSignature,
+        specifiedReturnValue: specifiedReturnValue,
+        parentContexts: parentContexts,
+        reportAllForErrorAnalysis: false
+      )?.declaration as? ParsedActionDeclaration {
       return .action(action)
     } else {
       return nil
@@ -217,7 +223,8 @@ extension ReferenceDictionary {
     _ identifier: UnicodeText,
     signature: [ParsedTypeReference],
     specifiedReturnValue: ParsedTypeReference??,
-    parentContexts: [ReferenceDictionary]
+    parentContexts: [ReferenceDictionary],
+    reportAllForErrorAnalysis: Bool
   ) -> [ActionIntermediate] {
     guard let mappedIdentifier = identifierMapping[identifier],
       let group = actions[mappedIdentifier.identifier] else {
@@ -251,7 +258,11 @@ extension ReferenceDictionary {
         if set.count == 1 {
           return Array(set.values)
         } else {
-          return set.values.filter({ $0.isMemberWrapper })
+          if reportAllForErrorAnalysis {
+            return Array(set.values)
+          } else {
+            return set.values.filter({ $0.isMemberWrapper })
+          }
         }
       }
     }
@@ -261,13 +272,15 @@ extension ReferenceDictionary {
     _ identifier: UnicodeText,
     signature: [ParsedTypeReference],
     specifiedReturnValue: ParsedTypeReference??,
-    parentContexts: [ReferenceDictionary]
+    parentContexts: [ReferenceDictionary],
+    reportAllForErrorAnalysis: Bool
   ) -> ActionIntermediate? {
     let all = lookupActions(
       identifier,
       signature: signature,
       specifiedReturnValue: specifiedReturnValue,
-      parentContexts: parentContexts
+      parentContexts: parentContexts,
+      reportAllForErrorAnalysis: reportAllForErrorAnalysis
     )
     if all.count == 1 {
       return all[0]
@@ -303,7 +316,8 @@ extension Array where Element == ReferenceDictionary {
     _ identifier: UnicodeText,
     signature: [ParsedTypeReference],
     specifiedReturnValue: ParsedTypeReference??,
-    externalLookup: [ReferenceDictionary] = []
+    externalLookup: [ReferenceDictionary] = [],
+    reportAllForErrorAnalysis: Bool
   ) -> [ActionIntermediate] {
     for index in indices.reversed() {
       let scope = self[index]
@@ -311,7 +325,8 @@ extension Array where Element == ReferenceDictionary {
         identifier,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue,
-        parentContexts: externalLookup.appending(contentsOf: self[..<index])
+        parentContexts: externalLookup.appending(contentsOf: self[..<index]),
+        reportAllForErrorAnalysis: reportAllForErrorAnalysis
       )
       if !found.isEmpty {
         return found
@@ -331,7 +346,8 @@ extension Array where Element == ReferenceDictionary {
         identifier,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue,
-        parentContexts: externalLookup.appending(contentsOf: self[..<index])
+        parentContexts: externalLookup.appending(contentsOf: self[..<index]),
+        reportAllForErrorAnalysis: false
       ) {
         return found
       }

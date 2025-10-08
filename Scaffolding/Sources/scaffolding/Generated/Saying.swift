@@ -585,6 +585,16 @@ extension String.UnicodeScalarView {
   }
 }
 
+func compare(_ first: Int, to second: Int) -> Bool? {
+  if first < second {
+    return true
+  }
+  if first > second {
+    return false
+  }
+  return nil
+}
+
 extension String.UnicodeScalarView: Hashable {}
 
 func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
@@ -592,11 +602,8 @@ func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Boo
 }
 
 func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
-  if lhs.segment < rhs.segment {
-    return true
-  }
-  if lhs.segment > rhs.segment {
-    return false
+  if let result = compare(lhs.segment, to: rhs.segment) {
+    return result
   }
   if let first_0020scalar = lhs.scalar {
     if let second_0020scalar = rhs.scalar {

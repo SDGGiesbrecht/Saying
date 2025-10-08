@@ -71,11 +71,8 @@ use (clients)
    (first: Unicode segments index) is less than (second: Unicode segments index)
    truth value
    {
-    if (((segment) of (first)) is less than ((segment) of (second))), {
-     ← true
-    }
-    if (((segment) of (first)) is greater than ((segment) of (second))), {
-     ← false
+    if (compare ((segment) of (first)) to ((segment) of (second))) exists, unwrap it as (• result: truth value), {
+     ← result
     }
     ← ((scalar) of (first)) is less than ((scalar) of (second))
    }

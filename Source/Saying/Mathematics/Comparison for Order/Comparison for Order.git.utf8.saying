@@ -191,3 +191,34 @@ ability (clients)
    greater example
    thing
  }
+
+extension
+ comparison of (thing) for order
+ {
+  action (clients)
+   [
+    [
+     English: Handles one step in a lexicographical comparison.
+    ]
+    [
+     English: This action is intended to simplify implementations of {() < ()} and its result has the same meaning.
+    ]
+    [
+     English: If {first} and {second} are inequal, their comparison directly determines the result. If they are equal, then {nothing} is returned to signal that another step is needed.
+    ]
+   ]
+   (
+    English: compare (first: thing) to (second: thing)
+    Swift: compare (first: [first]) to (second: [second])
+   )
+   optional (truth value)
+   {
+    if ((first) < (second)), {
+     ← wrap (true) into optional
+    }
+    if ((first) > (second)), {
+     ← wrap (false) into optional
+    }
+    ← nothing
+   }
+ }

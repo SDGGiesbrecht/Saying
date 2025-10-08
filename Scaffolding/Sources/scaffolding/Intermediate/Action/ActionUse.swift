@@ -141,7 +141,8 @@ extension ActionUse {
       return referenceLookup.lookupActions(
         actionName,
         signature: guess,
-        specifiedReturnValue: specifiedReturnValue
+        specifiedReturnValue: specifiedReturnValue,
+        reportAllForErrorAnalysis: false
       ).map { action in
         return (guess, action)
       }

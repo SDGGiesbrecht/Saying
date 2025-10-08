@@ -9,13 +9,13 @@ enum ReferenceError: DiagnosticError {
   case mismatchedTestAccess(testAccess: ParsedTestAccess)
   case thingAccessNarrowerThanSignature(reference: ParsedThingReferenceProtocol)
   case thingAccessNarrowerThanDocumentationVisibility(reference: ParsedThingReferenceProtocol)
-  case actionAccessNarrowerThanDocumentationVisibility(reference: ParsedAction)
+  case actionAccessNarrowerThanDocumentationVisibility(reference: ParsedActionReferenceProtocol)
   case thingUnavailableOutsideTests(reference: ParsedThingReferenceProtocol)
   case actionUnavailableOutsideTests(reference: ParsedAction)
   case redeclaredLocalIdentifier(error: ReferenceDictionary.RedeclaredIdentifierError)
   case noSuchParameter(ParsedUninterruptedIdentifier)
   case noSuchLanguage(ParsedUninterruptedIdentifier)
-  case noSuchIdentifier(ParsedUninterruptedIdentifier)
+  case noSuchIdentifier(ParsedDocumentationReferenceIdentifier)
 
   var message: String {
     switch self {
