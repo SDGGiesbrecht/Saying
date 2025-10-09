@@ -16,8 +16,8 @@ extension
       ελληνικά: κάτι
      )
      thing
-     JavaScript: “” value “”/“let resolvedOptional = ” enumeration “; if (resolvedOptional !== null) { const ” value “ = resolvedOptional; {” consequence “}}”/“” enumeration “ !== null”
-     Kotlin: “” value “”/“val resolvedOptional = ” enumeration “; if (resolvedOptional != null) { val ” value “ = resolvedOptional;” consequence “}”/“” enumeration “ != null”
+     JavaScript: “” value “”/“let resolvedOptional” + “ = ” enumeration “; if (resolvedOptional” + “ !== null) { const ” value “ = resolvedOptional” + “; {” consequence “}}”/“” enumeration “ !== null”
+     Kotlin: “” value “”/“val resolvedOptional” + “ = ” enumeration “; if (resolvedOptional” + “ != null) { val ” value “ = resolvedOptional” + “;” consequence “}”/“” enumeration “ != null”
      Swift: “” value “ as ” thing “?”/“if let ” value “ = ” enumeration “ {” consequence “}”/“” enumeration “ != nil”
 
     case
@@ -79,8 +79,8 @@ extension
    (
     English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
    )
-   JavaScript: “let resolvedOptional = ” optional “; if (resolvedOptional !== null) { const ” unwrapped “ = resolvedOptional; {” consequence “}}”
-   Kotlin: “val resolvedOptional = ” optional “; if (resolvedOptional != null) { val ” unwrapped “ = resolvedOptional” consequence “}”
+   JavaScript: “let resolvedOptional” + “ = ” optional “; if (resolvedOptional” + “ !== null) { const ” unwrapped “ = resolvedOptional” + “; {” consequence “}}”
+   Kotlin: “val resolvedOptional” + “ = ” optional “; if (resolvedOptional” + “ != null) { val ” unwrapped “ = resolvedOptional” + “” consequence “}”
    Swift: “if let ” unwrapped “ = ” optional “ {” consequence “}”
    {
     if (optional) is (something), unwrap it as (unwrapped), {

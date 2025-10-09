@@ -268,10 +268,17 @@ extension Node {
           ),
 
           Node(
+            name: "DocumentationReferenceIdentifier",
+            kind: .alternates([
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+              Alternate(name: "action", type: "ActionReference"),
+            ])
+          ),
+          Node(
             name: "DocumentationReference",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
-              Child(name: "identifier", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "identifier", type: "DocumentationReferenceIdentifier", kind: .required),
               Child(name: "closingBrace", type: "ClosingBraceSyntax", kind: .fixed),
             ])
           ),

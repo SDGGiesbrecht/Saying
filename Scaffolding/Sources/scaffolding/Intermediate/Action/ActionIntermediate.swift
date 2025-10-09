@@ -421,13 +421,16 @@ extension ActionIntermediate {
       ),
       c: c ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
-          textComponents: ["", " enumeration = ", "; if (enumeration.enumeration_case == ", ") { ", " ", " = enumeration.value.", ";", "}"].map({ UnicodeText($0) }),
+          textComponents: ["", " enumeration", " = ", "; if (enumeration", ".enumeration_case == ", ") { ", " ", " = enumeration", ".value.", ";", "}"].map({ UnicodeText($0) }),
           parameters: [
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!, typeInstead: enumerationType),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!, typeInstead: valueType),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
@@ -449,11 +452,14 @@ extension ActionIntermediate {
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
-          textComponents: ["let enumeration = ", "; if (enumeration.enumerationCase == ", ") { let ", " = enumeration.value;", "}"].map({ UnicodeText($0) }),
+          textComponents: ["let enumeration", " = ", "; if (enumeration", ".enumerationCase == ", ") { let ", " = enumeration", ".value;", "}"].map({ UnicodeText($0) }),
           parameters: [
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!),
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("+"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
         )

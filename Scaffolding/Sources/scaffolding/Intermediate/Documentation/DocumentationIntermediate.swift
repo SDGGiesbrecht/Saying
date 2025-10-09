@@ -130,19 +130,22 @@ extension DocumentationIntermediate {
               for action in referenceLookup.lookupActions(
                 identifierText,
                 signature: [],
-                specifiedReturnValue: .none
+                specifiedReturnValue: .none,
+                reportAllForErrorAnalysis: true
               ) {
                 if action.access > bestVisibility {
                   foundTarget = true
                   bestVisibility = action.access
-                  accessError = { .actionAccessNarrowerThanDocumentationVisibility(reference: .simple(identifier)) }
+                  accessError = { .actionAccessNarrowerThanDocumentationVisibility(reference: identifier) }
                 }
               }
-              if let thing = referenceLookup.lookupThing(identifierText, components: []) {
-                foundTarget = true
-                if thing.access > bestVisibility {
-                  bestVisibility = thing.access
-                  accessError = { .thingAccessNarrowerThanDocumentationVisibility(reference: identifier) }
+              if case .simple(let simpleIdentifier) = identifier {
+                if let thing = referenceLookup.lookupThing(identifierText, components: []) {
+                  foundTarget = true
+                  if thing.access > bestVisibility {
+                    bestVisibility = thing.access
+                    accessError = { .thingAccessNarrowerThanDocumentationVisibility(reference: simpleIdentifier) }
+                  }
                 }
               }
               if foundTarget {

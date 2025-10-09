@@ -71,11 +71,8 @@ use (clients)
    (first: Unicode segments boundary) is less than (second: Unicode segments boundary)
    truth value
    {
-    if (((segment) of (first)) is less than ((segment) of (second))), {
-     ← true
-    }
-    if (((segment) of (first)) is greater than ((segment) of (second))), {
-     ← false
+    if (compare ((segment) of (first)) to ((segment) of (second))) exists, unwrap it as (• result: truth value), {
+     ← result
     }
     if ((scalar) of (first)) exists, unwrap it as (• first scalar: Unicode scalar boundary), {
      if ((scalar) of (second)) exists, unwrap it as (• second scalar: Unicode scalar boundary), {
