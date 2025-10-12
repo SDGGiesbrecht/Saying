@@ -87,7 +87,6 @@ import Foundation
         "UnicodeText.init(_: String.UnicodeScalarView)",
         "==(_: UnicodeText, _: UnicodeText)",
         "UnicodeText.hash(into: Hasher)",
-        "UnicodeText.subscript(_: String.UnicodeScalarView.Index)",
 
         "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
         "shimAccessToGitStyleLineParsing()",

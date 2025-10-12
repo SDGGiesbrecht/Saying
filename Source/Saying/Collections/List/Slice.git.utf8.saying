@@ -23,15 +23,30 @@ extension
       English: whole
      )
      list
+
+    part (clients/nowhere)
+     (
+      English: bounds
+     )
+     range of (boundary)
    }
 
   action (clients)
    (
-    English: entirety of (whole: list)
+    English: (bounds: range of (boundary)) in (whole: list)
    )
    slice of (list)
-   Swift: “Slice(base: ” whole “, bounds: ” whole “.startIndex ..< ” whole “.endIndex)”
+   Swift: “Slice(base: ” whole “, bounds: ” bounds “)”
    create
+
+  action (clients)
+   (
+    English: entirety of (list: list)
+   )
+   slice of (list)
+   {
+    ← (from (beginning of (list)) to (end of (list))) in (list)
+   }
 
   use (clients)
    general use of (slice of (list))
