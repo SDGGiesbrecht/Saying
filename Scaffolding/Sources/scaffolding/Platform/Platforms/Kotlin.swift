@@ -131,6 +131,9 @@ enum Kotlin: Platform {
     }
   }
 
+  static var infersConstructors: Bool {
+    return true
+  }
   static func thingDeclaration(
     name: String,
     components: [String],

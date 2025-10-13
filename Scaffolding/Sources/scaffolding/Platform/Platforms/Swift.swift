@@ -172,6 +172,9 @@ enum Swift: Platform {
     return nil
   }
 
+  static var infersConstructors: Bool {
+    return false
+  }
   static func thingDeclaration(
     name: String,
     components: [String],

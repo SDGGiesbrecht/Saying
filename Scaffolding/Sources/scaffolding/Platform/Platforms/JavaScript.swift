@@ -108,6 +108,9 @@ enum JavaScript: Platform {
     return nil
   }
 
+  static var infersConstructors: Bool {
+    true
+  }
   static func thingDeclaration(
     name: String,
     components: [String],
