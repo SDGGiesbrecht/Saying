@@ -52,4 +52,114 @@ extension
    general use of (slice of (list))
    {
    }
+
+  use (clients)
+   use of (slice of (list)) as list of (element) indexed by (index) separated by (boundary)
+   {
+    action (clients)
+     (
+      English: index after (boundary: boundary) in (list: slice of (list)) skipping bounds check
+     )
+     index
+     {
+      ← index after (boundary) in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: beginning of (list: slice of (list))
+     )
+     boundary
+     Swift: “” list “.startIndex”
+     {
+      ← (lower bound) of ((bounds) of (list))
+     }
+
+    action (clients)
+     (
+      English: end of (list: slice of (list))
+     )
+     boundary
+     Swift: “” list “.endIndex”
+     {
+      ← (upper bound) of ((bounds) of (list))
+     }
+
+    action (clients)
+     (
+      English: advance (cursor: ↓ boundary) to next in (list: slice of (list)) skipping bounds check
+     )
+     Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
+     {
+      ← advance (↓ cursor) to next in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: boundary after (cursor: boundary) in (list: slice of (list)) skipping bounds check
+     )
+     boundary
+     Swift: “” list “.index(after: ” cursor “)”
+     {
+      ← boundary after (cursor) in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: entry at (cursor: index) in (list: slice of (list))
+     )
+     element
+     Swift: “” list “[” cursor “]”
+     {
+      ← entry at (cursor) in ((whole) of (list))
+     }
+
+    action (clients)
+     (
+      English: entry after (cursor: boundary) in (list: slice of (list)) skipping bounds check
+     )
+     element
+     Swift: “” list “[” cursor “]”
+     {
+      ← entry after (cursor) in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: first in (list: slice of (list))
+     )
+     optional (element)
+     Swift: “” list “.first”
+     {
+      ← first in (list) according to default use as list
+     }
+
+    action (clients)
+     (
+      English: (list: slice of (list)) is empty
+     )
+     truth value
+     Swift: “” list “.isEmpty”
+     {
+      ← (list) is empty according to default use as list
+     }
+
+    action (clients)
+     (
+      English: empty
+     )
+     slice of (list)
+     {
+      ← entirety of (empty: list)
+     }
+
+    action (clients)
+     (
+      English: non‐empty example
+     )
+     slice of (list)
+     {
+      ← entirety of (non‐empty example: list)
+     }
+   }
  }
