@@ -38,7 +38,11 @@ action (file)
  )
  {
   if (beginning) exists, unwrap it as (• start: Git‐style parsing cursor), {
-   if (((offset) of (start)) is not ((offset) of (end))), {
+   let (• adjusted offset: natural number) be ((offset) of (start))
+   if ((adjusted offset) is not ((offset) of (end))), {
+    let (• segment: slice of (Unicode text)) be ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
+    ignore (segment)
+    ignore (adjusted offset)
     ignore (“Not implemented yet.”)
    }
   }

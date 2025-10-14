@@ -55,6 +55,7 @@ protocol Platform {
   static func repair(compoundNativeType: String) -> String
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
+  static var infersConstructors: Bool { get }
   static func thingDeclaration(
     name: String,
     components: [String],
@@ -1000,6 +1001,12 @@ extension Platform {
         }
         if action.isCreation {
           let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+          if infersConstructors {
+            argumentsArray = referenceLookup.lookupThing(action.returnValue!.key)!.parts.map { part in
+              let index = parameters.firstIndex(where: { $0.names.overlaps(part.names) })!
+              return argumentsArray[index]
+            }
+          }
           let arguments = argumentsArray.joined(separator: ", ")
           return createInstance(of: type, parts: arguments)
         } else {
