@@ -138,3 +138,8 @@ use (clients)
     ← Unicode segments (non‐empty example: list of (Unicode segment))
    }
  }
+
+use (clients)
+ slicing (Unicode segments) as list of (Unicode scalar) indexed by (Unicode segments index) separated by (Unicode segments boundary)
+ {
+ }

@@ -149,6 +149,11 @@ extension
    }
 
   use (clients)
+   slicing (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
+   {
+   }
+
+  use (clients)
    use of (list of (thing)) as changeable list of (thing) indexed by (list index) separated by (list boundary)
    {
     action (clients)

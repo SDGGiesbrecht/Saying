@@ -184,3 +184,8 @@ use (clients)
     ← Unicode text of (“ ”)
    }
  }
+
+use (clients)
+ slicing (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+ }

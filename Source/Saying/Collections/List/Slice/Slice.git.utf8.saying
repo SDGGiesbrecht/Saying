@@ -1,5 +1,5 @@
 extension
- use of (list) as list of (element) indexed by (index) separated by (boundary)
+ slicing (list) as list of (element) indexed by (index) separated by (boundary)
  {
   thing (clients)
    (
