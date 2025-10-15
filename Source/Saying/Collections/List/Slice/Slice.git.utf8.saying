@@ -111,7 +111,6 @@ extension
       English: entry at (cursor: index) in (list: slice of (list))
      )
      element
-     Swift: “” list “[” cursor “]”
      {
       ← entry at (cursor) in ((whole) of (list))
      }
