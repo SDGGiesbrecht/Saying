@@ -615,6 +615,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
     isArgumentExtraction: Bool = false,
+    isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
     mode: CompilationMode
@@ -691,7 +692,8 @@ extension Platform {
           ),
           specifiedReturnValue: reference.resolvedResultType
         )!
-      if !isArgumentExtraction,
+      if !isDirectReturn,
+        !isArgumentExtraction,
         !extractedArguments.isEmpty,
         let result = action.returnValue,
         let type = referenceLookup.lookupThing(result.key),
@@ -798,6 +800,7 @@ extension Platform {
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     extractedArguments: &extractedArguments,
+                    isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
@@ -889,6 +892,7 @@ extension Platform {
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &extractedArguments,
+            isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
@@ -970,6 +974,7 @@ extension Platform {
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     extractedArguments: &extractedArguments,
+                    isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
                     mode: mode
@@ -989,6 +994,7 @@ extension Platform {
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
                   extractedArguments: &extractedArguments,
+                  isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
                   mode: mode
@@ -1132,6 +1138,7 @@ extension Platform {
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &entries.unused,
             isArgumentExtraction: true,
+            isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
@@ -1187,6 +1194,7 @@ extension Platform {
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               extractedArguments: &extracted,
+              isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inliningArguments: inliningArguments,
               mode: mode
@@ -1245,6 +1253,7 @@ extension Platform {
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &remainingExtractedArguments,
+            isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             mode: mode
