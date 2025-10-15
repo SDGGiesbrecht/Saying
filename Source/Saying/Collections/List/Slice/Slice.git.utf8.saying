@@ -23,12 +23,14 @@ extension
       English: whole
      )
      list
+     Swift: “” . “.base”
 
     part (clients/nowhere)
      (
       English: bounds
      )
      range of (boundary)
+     Swift: “{let slice = ” . “; return slice.startIndex ..< slice.endIndex}()”
    }
 
   action (clients)
