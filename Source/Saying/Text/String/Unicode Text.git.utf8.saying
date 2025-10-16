@@ -70,7 +70,7 @@ use (clients)
    differing example
    Unicode text
    {
-    ← Unicode text of (“!”)
+    ← “!”
    }
  }
 
@@ -172,7 +172,7 @@ use (clients)
    )
    Unicode text
    {
-    ← Unicode text of (empty: Unicode scalars)
+    ← “”
    }
 
   action (clients)
@@ -181,7 +181,7 @@ use (clients)
    )
    Unicode text
    {
-    ← Unicode text of (“ ”)
+    ← “ ”
    }
  }
 

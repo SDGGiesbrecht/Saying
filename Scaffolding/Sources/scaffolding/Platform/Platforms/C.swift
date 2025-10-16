@@ -46,8 +46,8 @@ enum C: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func literal(string: String) -> String {
-    return "reference_string(g_string_new(\u{22}\(string)\u{22}))"
+  static func literal(scalars: String) -> String {
+    return "reference_string(g_string_new(\u{22}\(scalars)\u{22}))"
   }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {

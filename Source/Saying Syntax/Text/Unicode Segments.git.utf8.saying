@@ -71,7 +71,7 @@ use (clients)
     }
     test (hidden) {
      let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-     append (Unicode segment at (zero: natural number) containing (Unicode text of (“  ”))) to (↓ segment list)
+     append (Unicode segment at (zero: natural number) containing (“  ”)) to (↓ segment list)
      let (• long segment: Unicode segments) be (Unicode segments (segment list))
      let (• cursor: Unicode segments boundary) start as (beginning of (long segment))
      advance (↓ cursor) to next in (long segment) skipping bounds check

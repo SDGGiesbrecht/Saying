@@ -19,7 +19,7 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
-  static func literal(string: String) -> String
+  static func literal(scalars: String) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -604,6 +604,48 @@ extension Platform {
     }
   }
 
+  static func call(scalarLiteral: LiteralIntermediate) -> String {
+    return self.literal(scalars: sanitize(stringLiteral: scalarLiteral.string))
+  }
+
+  static func call(
+    literal: LiteralIntermediate,
+    type: Thing,
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    isNativeArgument: Bool,
+    contextCoverageIdentifier: UnicodeText?,
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    extractedArguments: inout [String],
+    isArgumentExtraction: Bool,
+    isDirectReturn: Bool,
+    cleanUpCode: inout String,
+    inliningArguments: [UnicodeText: String],
+    mode: CompilationMode
+  ) -> String {
+    if let loading = literal.loadingAction(type: type) {
+      return call(
+        to: loading,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        isNativeArgument: isNativeArgument,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArguments: &extractedArguments,
+        isDirectReturn: isDirectReturn,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        mode: mode
+      )
+    } else {
+      return call(scalarLiteral: literal)
+    }
+  }
+
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
@@ -621,14 +663,30 @@ extension Platform {
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
+      let type = referenceLookup.lookupThing(reference.resolvedResultType!!.key)!
       if !isArgumentExtraction,
         !extractedArguments.isEmpty,
-        let type = referenceLookup.lookupThing(.simple("Unicode scalars")),
         let native = nativeType(of: type),
         native.release != nil {
         return extractedArguments.removeFirst()
       }
-      return self.literal(string: sanitize(stringLiteral: literal.string))
+      return call(
+        literal: literal,
+        type: type,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        isNativeArgument: isNativeArgument,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArguments: &extractedArguments,
+        isArgumentExtraction: isArgumentExtraction,
+        isDirectReturn: isDirectReturn,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        mode: mode
+      )
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {

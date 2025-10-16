@@ -158,7 +158,7 @@ extension ActionUse {
     }
     if literal != nil {
       return .resolved(
-        .some(.some(.simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: UnicodeText("Unicode scalars"), origin: compilerGeneratedOrigin())!))))
+        .some(.some(.compilerGeneratedReference(to: LiteralIntermediate.unicodeTextName)))
       )
     }
     return .failed
@@ -269,7 +269,16 @@ extension ActionUse {
           unavailableInVisibleTestsError: { .actionAccessNarrowerThanDocumentationVisibility(reference: source!) }
         )
       } else {
-        if literal == nil {
+        if let literal = literal,
+           let resolved = resolvedResultType,
+           let reference = resolved,
+           let type = context.lookupThing(reference.key) {
+          literal.validate(
+            as: type,
+            reference: reference,
+            errors: &errors
+          )
+        } else {
           errors.append(.noSuchAction(name: actionName, reference: source!))
         }
       }
