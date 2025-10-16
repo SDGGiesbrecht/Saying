@@ -12,6 +12,15 @@ struct PartIntermediate {
 
 extension PartIntermediate {
 
+  static func disallowImports(
+    in implementation: ParsedNativeAction,
+    errors: inout [ConstructionError]
+  ) {
+    if implementation.importNode != nil {
+      errors.append(ConstructionError.invalidImport(implementation))
+    }
+  }
+
   static func construct(
     _ declaration: ParsedPartDeclaration,
     namespace: [Set<UnicodeText>],
@@ -49,11 +58,37 @@ extension PartIntermediate {
       }
     }
 
-    let c: NativeActionImplementationIntermediate? = nil
-    let cSharp: NativeActionImplementationIntermediate? = nil
-    let javaScript: NativeActionImplementationIntermediate? = nil
-    let kotlin: NativeActionImplementationIntermediate? = nil
-    let swift: NativeActionImplementationIntermediate? = nil
+    var c: NativeActionImplementationIntermediate? = nil
+    var cSharp: NativeActionImplementationIntermediate? = nil
+    var javaScript: NativeActionImplementationIntermediate? = nil
+    var kotlin: NativeActionImplementationIntermediate? = nil
+    var swift: NativeActionImplementationIntermediate? = nil
+    if let implementations = declaration.implementations {
+      for implementation in implementations.implementations.implementations {
+        switch NativeActionImplementationIntermediate.construct(
+          implementation: implementation.expression
+        ) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
+        case .success(let constructed):
+          switch implementation.language.identifierText() {
+          case "C":
+            c = constructed
+          case "C♯":
+            cSharp = constructed
+          case "JavaScript":
+            javaScript = constructed
+            disallowImports(in: implementation.expression, errors: &errors)
+          case "Kotlin":
+            kotlin = constructed
+          case "Swift":
+            swift = constructed
+          default:
+            errors.append(ConstructionError.unknownLanguage(implementation.language))
+          }
+        }
+      }
+    }
 
     let contents = ParsedTypeReference(declaration.type)
 

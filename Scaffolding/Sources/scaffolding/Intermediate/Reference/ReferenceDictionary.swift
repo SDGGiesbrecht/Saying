@@ -319,20 +319,16 @@ extension Array where Element == ReferenceDictionary {
     externalLookup: [ReferenceDictionary] = [],
     reportAllForErrorAnalysis: Bool
   ) -> [ActionIntermediate] {
-    for index in indices.reversed() {
+    return indices.reversed().flatMap { index in
       let scope = self[index]
-      let found = scope.lookupActions(
+      return scope.lookupActions(
         identifier,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue,
         parentContexts: externalLookup.appending(contentsOf: self[..<index]),
         reportAllForErrorAnalysis: reportAllForErrorAnalysis
       )
-      if !found.isEmpty {
-        return found
-      }
     }
-    return []
   }
   func lookupAction(
     _ identifier: UnicodeText,

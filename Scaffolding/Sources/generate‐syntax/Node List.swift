@@ -1361,6 +1361,7 @@ extension Node {
               Child(name: "name", type: "PartName", kind: .required),
               Child(name: "typeLineBreak", type: "LineBreakSyntax", kind: .fixed),
               Child(name: "type", type: "ThingReference", kind: .required),
+              Child(name: "implementations", type: "EmptyCaseImplementations", kind: .optional),
             ])
           ),
           Node(

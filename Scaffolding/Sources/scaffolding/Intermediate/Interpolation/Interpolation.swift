@@ -269,7 +269,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
     return Interpolation(
       parameters: [
         .nativeParameterStub(names: ["part"], type: .partReference(container: containerType, identifier: partIdentifier)),
-        .nativeParameterStub(names: ["container"], type: containerType),
+        .nativeParameterStub(names: [".", "container"], type: containerType),
       ],
       reorderings: [
         "() of ()": [0, 1],

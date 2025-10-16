@@ -41,7 +41,7 @@ action (file)
    let (• adjusted offset: natural number) be ((offset) of (start))
    if ((adjusted offset) is not ((offset) of (end))), {
     let (• segment: slice of (Unicode text)) be ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
-    ignore (segment)
+    ignore (first in (segment))
     ignore (adjusted offset)
     ignore (“Not implemented yet.”)
    }
