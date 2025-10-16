@@ -93,7 +93,7 @@ extension
      )
      Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
      {
-      ← advance (↓ cursor) to next in ((whole) of (list)) skipping bounds check
+      advance (↓ cursor) to next in ((whole) of (list)) skipping bounds check
      }
 
     action (clients)
