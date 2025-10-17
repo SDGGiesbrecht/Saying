@@ -37,5 +37,5 @@ action (unit)
  )
  slice of Saying source
  {
-  ← slice of Saying source from (Unicode text of (“...”)) containing (wrap (entirety of (empty: Unicode segments)) as (UTF‐8))
+  ← slice of Saying source from (“...”) containing (wrap (entirety of (empty: Unicode segments)) as (UTF‐8))
  }

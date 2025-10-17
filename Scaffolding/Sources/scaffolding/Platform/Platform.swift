@@ -19,7 +19,7 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
-  static func literal(string: String) -> String
+  static func literal(scalars: String) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -604,6 +604,54 @@ extension Platform {
     }
   }
 
+  static func call(scalarLiteral: LiteralIntermediate, normalize: Bool) -> String {
+    var contents = scalarLiteral.string
+    if normalize {
+      contents = contents.decomposedStringWithCompatibilityMapping
+    }
+    return self.literal(scalars: sanitize(stringLiteral: contents))
+  }
+
+  static func call(
+    literal: LiteralIntermediate,
+    type: Thing,
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    isNativeArgument: Bool,
+    contextCoverageIdentifier: UnicodeText?,
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    extractedArguments: inout [String],
+    isArgumentExtraction: Bool,
+    isDirectReturn: Bool,
+    cleanUpCode: inout String,
+    inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
+    mode: CompilationMode
+  ) -> String {
+    if let loading = literal.loadingAction(type: type) {
+      return call(
+        to: loading,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        isNativeArgument: isNativeArgument,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArguments: &extractedArguments,
+        isDirectReturn: isDirectReturn,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
+        mode: mode
+      )
+    } else {
+      return call(scalarLiteral: literal, normalize: normalizeNextNestedLiteral)
+    }
+  }
+
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
@@ -618,17 +666,35 @@ extension Platform {
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
+      let type = referenceLookup.lookupThing(reference.resolvedResultType!!.key)!
       if !isArgumentExtraction,
         !extractedArguments.isEmpty,
-        let type = referenceLookup.lookupThing(.simple("Unicode scalars")),
         let native = nativeType(of: type),
         native.release != nil {
         return extractedArguments.removeFirst()
       }
-      return self.literal(string: sanitize(stringLiteral: literal.string))
+      return call(
+        literal: literal,
+        type: type,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        isNativeArgument: isNativeArgument,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArguments: &extractedArguments,
+        isArgumentExtraction: isArgumentExtraction,
+        isDirectReturn: isDirectReturn,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+        mode: mode
+      )
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
@@ -669,6 +735,7 @@ extension Platform {
           extractedArguments: &extractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
+          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode
         )
       }
@@ -716,6 +783,7 @@ extension Platform {
           extractedArguments: &extractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
+          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode
         )
       ]
@@ -744,6 +812,7 @@ extension Platform {
     extractedArguments: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
     var didUseClashAvoidance = false
@@ -803,6 +872,7 @@ extension Platform {
                     isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
+                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   )
                 )
@@ -895,6 +965,7 @@ extension Platform {
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode
           )
           let newActions = action.localActions()
@@ -977,6 +1048,7 @@ extension Platform {
                     isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
+                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   ),
                   forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true
@@ -997,6 +1069,7 @@ extension Platform {
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
+                  normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                   mode: mode
                 )
               )
@@ -1058,6 +1131,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> ReferenceCountedReturns {
     var entries = ReferenceCountedReturns()
@@ -1071,6 +1145,7 @@ extension Platform {
       clashAvoidanceCounter: &clashAvoidanceCounter,
       cleanUpCode: &cleanUpCode,
       inliningArguments: inliningArguments,
+      normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
       entries: &entries
     )
@@ -1086,6 +1161,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     entries: inout ReferenceCountedReturns
   ) {
@@ -1114,6 +1190,7 @@ extension Platform {
             clashAvoidanceCounter: &clashAvoidanceCounter,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
             entries: &entries
           )
@@ -1141,6 +1218,7 @@ extension Platform {
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode
           )
           let releaseExpression = release.textComponents.lazy.map({ String($0) })
@@ -1197,6 +1275,7 @@ extension Platform {
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inliningArguments: inliningArguments,
+              normalizeNextNestedLiteral: false,
               mode: mode
             )
           })
@@ -1219,6 +1298,7 @@ extension Platform {
         clashAvoidanceCounter: &clashAvoidanceCounter,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: false,
         mode: mode
       )
       if !extractedArguments.all.isEmpty {
@@ -1256,6 +1336,7 @@ extension Platform {
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: false,
             mode: mode
           )
         )

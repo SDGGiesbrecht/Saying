@@ -85,6 +85,19 @@ extension ParsedTypeReference {
 }
 
 extension ParsedTypeReference {
+  static func compilerGeneratedReference(to name: UnicodeText) -> ParsedTypeReference {
+    return .simple(
+      SimpleTypeReference(
+        ParsedUninterruptedIdentifier(
+          source: name,
+          origin: compilerGeneratedOrigin()
+        )!
+      )
+    )
+  }
+}
+
+extension ParsedTypeReference {
   var key: TypeReference {
     switch self {
     case .simple(let simple):

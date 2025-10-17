@@ -6,7 +6,7 @@ thing (clients)
   [
    English: {Unicode scalar} behaves the same as {Unicode scalars} with regards to equivalence and normalization.
   ]
-  test {verify ((first in (“¤(340)”)) is not (first in (“¤(300)”)))}
+  test {verify ((first in (“¤(340)”: Unicode scalars)) is not (first in (“¤(300)”: Unicode scalars)))}
  ]
  (
   English: Unicode scalar

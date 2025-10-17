@@ -1,5 +1,6 @@
 struct LiteralIntermediate {
   var string: String
+  var source: ParsedLiteral
 }
 
 extension LiteralIntermediate {
@@ -43,6 +44,80 @@ extension LiteralIntermediate {
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    return .success(LiteralIntermediate(string: string))
+    return .success(LiteralIntermediate(string: string, source: literal))
+  }
+}
+
+extension LiteralIntermediate {
+
+  static var unicodeTextName: UnicodeText {
+    return "Unicode text"
+  }
+  static var unicodeScalarsName: UnicodeText {
+    return "Unicode scalars"
+  }
+
+  func validate(
+    as type: Thing,
+    reference: ParsedTypeReference,
+    errors: inout [ReferenceError]
+  ) {
+    if type.names.contains(LiteralIntermediate.unicodeTextName)
+        || type.names.contains(LiteralIntermediate.unicodeScalarsName) {
+      return
+    } else {
+      errors.append(.thingCannotBeExpressedAsLiteral(source, thing: reference))
+    }
+  }
+}
+
+extension LiteralIntermediate {
+
+  private func loadingAction(
+    name: UnicodeText,
+    result: UnicodeText
+  ) -> ActionUse {
+    return ActionUse(
+      actionName: name,
+      arguments: [
+        .action(
+          ActionUse(
+            actionName: "",
+            arguments: [],
+            literal: self,
+            passage: .into,
+            resolvedResultType: .compilerGeneratedReference(to: LiteralIntermediate.unicodeScalarsName)
+          )
+        )
+      ],
+      passage: .into,
+      resolvedResultType: .compilerGeneratedReference(to: result)
+    )
+  }
+  func loadingAction(type: Thing) -> ActionUse? {
+    if type.names.contains(LiteralIntermediate.unicodeTextName) {
+      if string.unicodeScalars.allSatisfy({ $0.properties.age != nil }) {
+        return loadingAction(
+          name: "Unicode text skipping normalization of ()",
+          result: LiteralIntermediate.unicodeTextName
+        )
+      } else {
+        return loadingAction(
+          name: "Unicode text of ()",
+          result: LiteralIntermediate.unicodeTextName
+        )
+      }
+    }
+    return nil
+  }
+}
+
+extension LiteralIntermediate {
+
+  func requiredIdentifiers(
+    type: Thing,
+    context: [ReferenceDictionary]
+  ) -> [UnicodeText] {
+    return loadingAction(type: type)?.requiredIdentifiers(context: context) ?? []
   }
 }

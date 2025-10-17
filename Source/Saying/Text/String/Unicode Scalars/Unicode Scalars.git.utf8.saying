@@ -6,7 +6,7 @@ thing (clients)
   [
    English: {Unicode scalars} always preserves the exact scalar representation; it does not consider canonical or compatibility equivalence and does not apply normalization.
   ]
-  test {verify ((“¤(C0)”) is not (“A¤(300)”))}
+  test {verify ((“¤(C0)”: Unicode scalars) is not (“A¤(300)”: Unicode scalars))}
   [
    English: However, literals originate in source files, which are text. As such, any tool handling the source files may change their representation. To prevent inconsistency, the compiler reads source files according to compatibility decomposition (NFKD). This means that literals can safely include NFKD scalars directly, but must use escape codes to preserve non‐NFKD scalars.
   ]
@@ -34,7 +34,7 @@ use (clients)
 
 action (file)
  [
-  test {verify (implementation of (“”) is (“”))}
+  test {verify (implementation of (“”: Unicode scalars) is (“”: Unicode scalars))}
  ]
  implementation of (first: Unicode scalars) is (second: Unicode scalars)
  truth value
@@ -144,11 +144,11 @@ use (clients)
   action (clients)
    [
     test (hidden) {
-     let (• ASCII: Unicode scalars) be (“ ”)
+     let (• ASCII: Unicode scalars) be (“ ”: Unicode scalars)
      verify ((boundary after (beginning of (ASCII)) in (ASCII) skipping bounds check) is (end of (ASCII)))
     }
     test (hidden) {
-     let (• supplementary: Unicode scalars) be (“¤(10000)”)
+     let (• supplementary: Unicode scalars) be (“¤(10000)”: Unicode scalars)
      verify ((boundary after (beginning of (supplementary)) in (supplementary) skipping bounds check) is (end of (supplementary)))
     }
    ]
@@ -235,7 +235,7 @@ action (clients)
   [
    English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
   ]
-  test {verify ((compatibility decomposition of (“¤(A0)”)) is (“¤(20)”))}
+  test {verify ((compatibility decomposition of (“¤(A0)”: Unicode scalars)) is (“¤(20)”: Unicode scalars))}
  ]
  (
   English: compatibility decomposition of (scalars: Unicode scalars)

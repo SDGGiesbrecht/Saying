@@ -125,7 +125,7 @@ use (clients)
    greater example
    Unicode scalar index
    {
-    let (• two scalars: Unicode scalars) be (“  ”)
+    let (• two scalars: Unicode scalars) be (“  ”: Unicode scalars)
     let (• second boundary: Unicode scalar boundary) be (boundary after (beginning of (two scalars)) in (two scalars) skipping bounds check)
     ← index after (second boundary) in (two scalars) skipping bounds check
    }

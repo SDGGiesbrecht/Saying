@@ -53,8 +53,8 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func literal(string: String) -> String {
-    return "\u{22}\(string)\u{22}"
+  static func literal(scalars: String) -> String {
+    return "\u{22}\(scalars)\u{22}"
   }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
