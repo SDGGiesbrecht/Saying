@@ -355,6 +355,12 @@ extension ActionUse {
         result.append(action.globallyUniqueIdentifier(referenceLookup: context))
       }
     }
+    if let literal = self.literal,
+       let returnType = resolvedResultType,
+       let reference = returnType,
+       let thing = context.lookupThing(reference.key) {
+      result.append(contentsOf: literal.requiredIdentifiers(type: thing, context: context))
+    }
     return result
   }
 }

@@ -604,8 +604,12 @@ extension Platform {
     }
   }
 
-  static func call(scalarLiteral: LiteralIntermediate) -> String {
-    return self.literal(scalars: sanitize(stringLiteral: scalarLiteral.string))
+  static func call(scalarLiteral: LiteralIntermediate, normalize: Bool) -> String {
+    var contents = scalarLiteral.string
+    if normalize {
+      contents = contents.decomposedStringWithCompatibilityMapping
+    }
+    return self.literal(scalars: sanitize(stringLiteral: contents))
   }
 
   static func call(
@@ -623,6 +627,7 @@ extension Platform {
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
     if let loading = literal.loadingAction(type: type) {
@@ -639,10 +644,11 @@ extension Platform {
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
         mode: mode
       )
     } else {
-      return call(scalarLiteral: literal)
+      return call(scalarLiteral: literal, normalize: normalizeNextNestedLiteral)
     }
   }
 
@@ -660,6 +666,7 @@ extension Platform {
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
@@ -685,6 +692,7 @@ extension Platform {
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: normalizeNextNestedLiteral,
         mode: mode
       )
     }
@@ -727,6 +735,7 @@ extension Platform {
           extractedArguments: &extractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
+          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode
         )
       }
@@ -774,6 +783,7 @@ extension Platform {
           extractedArguments: &extractedArguments,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
+          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode
         )
       ]
@@ -802,6 +812,7 @@ extension Platform {
     extractedArguments: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
     var didUseClashAvoidance = false
@@ -861,6 +872,7 @@ extension Platform {
                     isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
+                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   )
                 )
@@ -953,6 +965,7 @@ extension Platform {
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode
           )
           let newActions = action.localActions()
@@ -1035,6 +1048,7 @@ extension Platform {
                     isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
+                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   ),
                   forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true
@@ -1055,6 +1069,7 @@ extension Platform {
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
+                  normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                   mode: mode
                 )
               )
@@ -1116,6 +1131,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> ReferenceCountedReturns {
     var entries = ReferenceCountedReturns()
@@ -1129,6 +1145,7 @@ extension Platform {
       clashAvoidanceCounter: &clashAvoidanceCounter,
       cleanUpCode: &cleanUpCode,
       inliningArguments: inliningArguments,
+      normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
       entries: &entries
     )
@@ -1144,6 +1161,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
+    normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     entries: inout ReferenceCountedReturns
   ) {
@@ -1172,6 +1190,7 @@ extension Platform {
             clashAvoidanceCounter: &clashAvoidanceCounter,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
             entries: &entries
           )
@@ -1199,6 +1218,7 @@ extension Platform {
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode
           )
           let releaseExpression = release.textComponents.lazy.map({ String($0) })
@@ -1255,6 +1275,7 @@ extension Platform {
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inliningArguments: inliningArguments,
+              normalizeNextNestedLiteral: false,
               mode: mode
             )
           })
@@ -1277,6 +1298,7 @@ extension Platform {
         clashAvoidanceCounter: &clashAvoidanceCounter,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: false,
         mode: mode
       )
       if !extractedArguments.all.isEmpty {
@@ -1314,6 +1336,7 @@ extension Platform {
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: false,
             mode: mode
           )
         )

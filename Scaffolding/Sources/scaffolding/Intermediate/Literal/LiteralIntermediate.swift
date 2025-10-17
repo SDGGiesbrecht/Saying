@@ -96,11 +96,28 @@ extension LiteralIntermediate {
   }
   func loadingAction(type: Thing) -> ActionUse? {
     if type.names.contains(LiteralIntermediate.unicodeTextName) {
-      return loadingAction(
-        name: "Unicode text of ()",
-        result: LiteralIntermediate.unicodeTextName
-      )
+      if string.unicodeScalars.allSatisfy({ $0.properties.age != nil }) {
+        return loadingAction(
+          name: "Unicode text skipping normalization of ()",
+          result: LiteralIntermediate.unicodeTextName
+        )
+      } else {
+        return loadingAction(
+          name: "Unicode text of ()",
+          result: LiteralIntermediate.unicodeTextName
+        )
+      }
     }
     return nil
+  }
+}
+
+extension LiteralIntermediate {
+
+  func requiredIdentifiers(
+    type: Thing,
+    context: [ReferenceDictionary]
+  ) -> [UnicodeText] {
+    return loadingAction(type: type)?.requiredIdentifiers(context: context) ?? []
   }
 }
