@@ -47,7 +47,10 @@ enum JavaScript: Platform {
   static func literal(scalars: String) -> String {
     return "\u{22}\(scalars)\u{22}"
   }
-  
+  static func literal(scalar: Unicode.Scalar) -> String {
+    return "0x\(String(scalar.value, radix: 16, uppercase: true))"
+  }
+
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
   }

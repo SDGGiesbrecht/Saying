@@ -6,7 +6,7 @@ thing (clients)
   [
    English: {Unicode scalar} behaves the same as {Unicode scalars} with regards to equivalence and normalization.
   ]
-  test {verify ((first in (“¤(340)”: Unicode scalars)) is not (first in (“¤(300)”: Unicode scalars)))}
+  test {verify ((“¤(340)”: Unicode scalar) is not (“¤(300)”: Unicode scalar))}
  ]
  (
   English: Unicode scalar
@@ -25,20 +25,13 @@ use (clients)
    example
    Unicode scalar
    {
-    if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
-     ← space
-    }
-    !
+    ← “ ”
    }
  }
 
 action (clients)
  [
-  test {
-   if (first in (“ ”)) exists, unwrap it as (• space: Unicode scalar), {
-    ignore (value of (space))
-   }
-  }
+  test {ignore (value of (“ ”: Unicode scalar))}
  ]
  (
   English: value of (scalar: Unicode scalar)
@@ -93,10 +86,7 @@ use (clients)
    differing example
    Unicode scalar
    {
-    if (first in (“!”)) exists, unwrap it as (• exclamation mark: Unicode scalar), {
-     ← exclamation mark
-    }
-    !
+    ← “!”
    }
  }
 

@@ -17,6 +17,7 @@ enum ReferenceError: DiagnosticError {
   case noSuchLanguage(ParsedUninterruptedIdentifier)
   case noSuchIdentifier(ParsedDocumentationReferenceIdentifier)
   case thingCannotBeExpressedAsLiteral(ParsedLiteral, thing: ParsedTypeReference)
+  case multipleScalars(ParsedLiteral)
 
   var message: String {
     switch self {
@@ -55,6 +56,8 @@ enum ReferenceError: DiagnosticError {
     case .noSuchIdentifier:
       return defaultMessage
     case .thingCannotBeExpressedAsLiteral:
+      return defaultMessage
+    case .multipleScalars:
       return defaultMessage
     }
   }
@@ -96,6 +99,8 @@ enum ReferenceError: DiagnosticError {
     case .noSuchIdentifier(let identifier):
       return identifier.location
     case .thingCannotBeExpressedAsLiteral(let literal, thing: _):
+      return literal.location
+    case .multipleScalars(let literal):
       return literal.location
     }
   }
