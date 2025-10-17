@@ -628,15 +628,15 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
       let segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
       _ = segment.first
       _ = adjusted_0020offset
-      _ = "Not implemented yet.".unicodeScalars
+      _ = UnicodeText(skippingNormalizationOf: "Not implemented yet.".unicodeScalars)
     }
   }
   beginning = nil
 }
 
 fileprivate func shim_0020unit_0020access_0020to_0020Git_2010style_0020line_0020parsing_003A() {
-  let source_0020text: UnicodeText = UnicodeText(".".unicodeScalars)
-  let source: GitStyleSayingSource = GitStyleSayingSource(origin: UnicodeText("".unicodeScalars), code: source_0020text)
+  let source_0020text: UnicodeText = UnicodeText(skippingNormalizationOf: ".".unicodeScalars)
+  let source: GitStyleSayingSource = GitStyleSayingSource(origin: UnicodeText(skippingNormalizationOf: "".unicodeScalars), code: source_0020text)
   var beginning: Git_2010style_0020parsing_0020cursor? = Git_2010style_0020parsing_0020cursor(source_0020text.startIndex, 0) as Git_2010style_0020parsing_0020cursor?
   let end: Git_2010style_0020parsing_0020cursor = Git_2010style_0020parsing_0020cursor(source_0020text.endIndex, 1)
   var segments: [Unicode_0020segment] = []
