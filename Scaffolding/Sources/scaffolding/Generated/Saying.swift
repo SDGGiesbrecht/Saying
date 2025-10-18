@@ -626,7 +626,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
     let adjusted_0020offset: UInt64 = start.offset
     if adjusted_0020offset != end.offset {
       let segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
-      _ = segment.first
+      _ = segment.first == " "
       _ = adjusted_0020offset
       _ = UnicodeText(skippingNormalizationOf: "Not implemented yet.".unicodeScalars)
     }
