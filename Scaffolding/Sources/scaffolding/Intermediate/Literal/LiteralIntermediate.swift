@@ -56,6 +56,9 @@ extension LiteralIntermediate {
   static var unicodeScalarsName: UnicodeText {
     return "Unicode scalars"
   }
+  static var unicodeScalarName: UnicodeText {
+    return "Unicode scalar"
+  }
 
   func validate(
     as type: Thing,
@@ -65,6 +68,10 @@ extension LiteralIntermediate {
     if type.names.contains(LiteralIntermediate.unicodeTextName)
         || type.names.contains(LiteralIntermediate.unicodeScalarsName) {
       return
+    } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
+      if !string.unicodeScalars.dropFirst().isEmpty {
+        errors.append(.multipleScalars(source))
+      }
     } else {
       errors.append(.thingCannotBeExpressedAsLiteral(source, thing: reference))
     }

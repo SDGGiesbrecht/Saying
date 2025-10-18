@@ -232,6 +232,59 @@ extension
 
   action (clients)
    [
+    test {verify ((wrap (example: thing) into optional) is (example: thing))}
+    test {verify (not ((wrap (example: thing) into optional) is (differing example: thing)))}
+    test {verify (not ((nothing: optional (thing)) is (example: thing)))}
+   ]
+   (
+    English: (first: optional (thing)) is (second: thing)
+    English +: (first: [first]) = (second: [second])
+    Deutsch: (erste: [first]) ist (zweite: [second])
+    Deutsch +: (erste: [first]) = (zweite: [second])
+    français : (première: [first]) est (deuxième: [second])
+    français +: (première: [first]) = (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
+    עברית: (ראשון: [first]) (שני: [second])
+    עברית +: (ראשון: [first]) = (שני: [second])
+   )
+   truth value
+   Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
+   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   {
+    if (first) exists, unwrap it as (• first value: thing), {
+     ← (first value: thing) is (second: thing)
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    test {verify ((example: thing) is (wrap (example: thing) into optional))}
+    test {verify (not ((example: thing) is (wrap (differing example: thing) into optional)))}
+    test {verify (not ((example: thing) is (nothing: optional (thing))))}
+   ]
+   (
+    English: (first: thing) is (second: optional (thing))
+    English +: (first: [first]) = (second: [second])
+    Deutsch: (erste: [first]) ist (zweite: [second])
+    Deutsch +: (erste: [first]) = (zweite: [second])
+    français : (première: [first]) est (deuxième: [second])
+    français +: (première: [first]) = (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
+    עברית: (ראשון: [first]) (שני: [second])
+    עברית +: (ראשון: [first]) = (שני: [second])
+   )
+   truth value
+   Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
+   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   {
+    ← (second) is (first)
+   }
+
+  action (clients)
+   [
     test {verify (not ((wrap (example: thing) into optional) is not (wrap (example: thing) into optional) according to optional))}
     test {verify ((wrap (example: thing) into optional) is not (wrap (differing example: thing) into optional) according to optional)}
     test {verify ((wrap (example: thing) into optional) is not (nothing: optional (thing)) according to optional)}
@@ -246,6 +299,56 @@ extension
    Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second) according to optional)
+   }
+
+  action (clients)
+   [
+    test {verify (not ((wrap (example: thing) into optional) is not (example: thing)))}
+    test {verify ((wrap (example: thing) into optional) is not (differing example: thing))}
+    test {verify ((nothing: optional (thing)) is not (example: thing))}
+   ]
+   (
+    English: (first: optional (thing)) is not (second: thing)
+    English +: (first: [first]) ≠ (second: [second])
+    Deutsch: (erste: [first]) ist nicht (zweite: [second])
+    Deutsch +: (erste: [first]) ≠ (zweite: [second])
+    français : (première: [first]) n’est pas (deuxième: [second])
+    français +: (première: [first]) ≠ (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) δεν είναι (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) ≠ (δεύτερα: [second])
+    עברית: (ראשון: [first]) לא (שני: [second])
+    עברית +: (ראשון: [first]) ≠ (שני: [second])
+   )
+   truth value
+   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
+   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   {
+    ← not ((first) is (second))
+   }
+
+  action (clients)
+   [
+    test {verify (not ((example: thing) is not (wrap (example: thing) into optional)))}
+    test {verify ((example: thing) is not (wrap (differing example: thing) into optional))}
+    test {verify ((example: thing) is not (nothing: optional (thing)))}
+   ]
+   (
+    English: (first: thing) is not (second: optional (thing))
+    English +: (first: [first]) ≠ (second: [second])
+    Deutsch: (erste: [first]) ist nicht (zweite: [second])
+    Deutsch +: (erste: [first]) ≠ (zweite: [second])
+    français : (première: [first]) n’est pas (deuxième: [second])
+    français +: (première: [first]) ≠ (deuxième: [second])
+    ελληνικά: (πρώτη: [first]) δεν είναι (δεύτερα: [second])
+    ελληνικά +: (πρώτη: [first]) ≠ (δεύτερα: [second])
+    עברית: (ראשון: [first]) לא (שני: [second])
+    עברית +: (ראשון: [first]) ≠ (שני: [second])
+   )
+   truth value
+   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
+   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   {
+    ← (second) is not (first)
    }
 
   action (clients)

@@ -100,6 +100,10 @@ enum Swift: Platform {
   static func literal(scalars: String) -> String {
     return "\u{22}\(scalars)\u{22}.unicodeScalars"
   }
+  static func literal(scalar: Unicode.Scalar) -> String {
+    let contents = sanitize(stringLiteral: "\(scalar)")
+    return "\u{22}\(contents)\u{22}"
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

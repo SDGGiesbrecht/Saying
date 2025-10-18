@@ -20,6 +20,7 @@ protocol Platform {
   static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
   static func literal(scalars: String) -> String
+  static func literal(scalar: Unicode.Scalar) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -647,6 +648,8 @@ extension Platform {
         normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
         mode: mode
       )
+    } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
+      return self.literal(scalar: literal.string.unicodeScalars.first!)
     } else {
       return call(scalarLiteral: literal, normalize: normalizeNextNestedLiteral)
     }
