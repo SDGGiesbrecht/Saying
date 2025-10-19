@@ -163,4 +163,47 @@ extension
       ← entirety of (non‐empty example: list)
      }
    }
+
+  action (file)
+   (
+    English: remove first from (slice: ↓ slice of (list)) skipping bounds check
+   )
+   Swift: “” slice “.removeFirst()”
+   {
+    let (• new start: boundary) be (boundary after (beginning of (slice)) in (slice) skipping bounds check)
+    change (↓ slice) to ((from (new start) to (end of (slice))) in ((whole) of (slice)))
+   }
+
+  action (clients)
+   [
+    [
+     English: Removes the first element from the slice by shrinking its window.
+    ]
+    [
+     English: The underlying list remains unaffected.
+    ]
+    test {
+     let (• one scalar: Unicode text) be (“1”)
+     let (• slice: slice of (list)) start as (entirety of (one scalar))
+     remove first from (↓ slice)
+     verify ((slice) is empty)
+     verify ((one scalar) is (“1”))
+    }
+    [
+     English: This action does nothing if the slice is already empty.
+    ]
+    test {
+     let (• slice: slice of (list)) start as (empty: slice of (list))
+     remove first from (↓ slice)
+     verify ((slice) is empty)
+    }
+   ]
+   (
+    English: remove first from (slice: ↓ slice of (list))
+   )
+   {
+    if ((slice) is not empty), {
+      remove first from (↓ slice) skipping bounds check
+    }
+   }
  }
