@@ -241,6 +241,7 @@ enum JavaScript: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,

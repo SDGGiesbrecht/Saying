@@ -111,6 +111,7 @@ protocol Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
@@ -1541,9 +1542,11 @@ extension Platform {
       for: nativeNameDeclaration(of: action) ?? action.names.identifier()
     )
     var parentType: String?
+    var isMutating = false
     if nativeIsMember(action: action),
       !isInitializer {
       let first = parameterEntries.removeFirst()
+      isMutating = first.isThrough
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
     }
     let parameters: String = parameterEntries
@@ -1592,6 +1595,7 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation,
       parentType: parentType,
+      isMutating: isMutating,
       isAbsorbedMember: isAbsorbedMember,
       isOverride: isOverride,
       propertyInstead: isProperty,
@@ -1630,6 +1634,7 @@ extension Platform {
         indentationLevel: 0
       ),
       parentType: nil,
+      isMutating: false,
       isAbsorbedMember: false,
       isOverride: false,
       propertyInstead: false,
