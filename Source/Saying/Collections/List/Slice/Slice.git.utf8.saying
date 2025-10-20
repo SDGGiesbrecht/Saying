@@ -199,7 +199,7 @@ extension
    ]
    (
     English: remove first from (slice: ↓ slice of (list))
-    Swift: (self: [slice]).removeFirstIfNotEmpty
+    Swift: (self: [slice]).removeFirstUnlessEmpty
    )
    {
     if ((slice) is not empty), {

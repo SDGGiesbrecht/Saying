@@ -611,7 +611,7 @@ func compare(_ first: Int, to second: Int) -> Bool? {
 extension String.UnicodeScalarView: Hashable {}
 
 extension Slice<UnicodeText> {
-  func removeFirstIfNotEmpty() {
+  mutating func removeFirstUnlessEmpty() {
     if self.isNotEmpty {
       self.removeFirst()
     }
@@ -647,7 +647,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
     if adjusted_0020offset != end.offset {
       var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
       while segment.first == " " {
-        &segment.removeFirstIfNotEmpty()
+        segment.removeFirstUnlessEmpty()
         adjusted_0020offset += 1
       }
       _ = UnicodeText(skippingNormalizationOf: "Not implemented yet.".unicodeScalars)
