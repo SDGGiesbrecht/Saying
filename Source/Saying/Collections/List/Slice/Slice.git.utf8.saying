@@ -203,7 +203,7 @@ extension
    )
    {
     if ((slice) is not empty), {
-      remove first from (↓ slice) skipping bounds check
+     remove first from (↓ slice) skipping bounds check
     }
    }
  }
