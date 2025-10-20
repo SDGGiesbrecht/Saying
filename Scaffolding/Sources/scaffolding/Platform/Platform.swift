@@ -86,7 +86,7 @@ protocol Platform {
   static func constructorSetter(name: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
-  static func passReference(to argument: String, forwarding: Bool) -> String
+  static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String
   static func unpackReference(to argument: String) -> String?
   static func dereference(throughParameter: String, forwarding: Bool) -> String
   static var emptyReturnType: String? { get }
@@ -1055,7 +1055,8 @@ extension Platform {
                     normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   ),
-                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true
+                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true,
+                  isAddressee: nativeIsMember(action: action) && argumentsArray.isEmpty
                 )
               )
             } else {

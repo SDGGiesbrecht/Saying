@@ -223,7 +223,7 @@ enum Kotlin: Platform {
     let name = sanitize(identifier: UnicodeText(argument), leading: true)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
   }
-  static func passReference(to argument: String, forwarding: Bool) -> String {
+  static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {
       return argument
     } else {

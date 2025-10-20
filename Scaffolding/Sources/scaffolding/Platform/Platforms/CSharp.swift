@@ -269,7 +269,7 @@ enum CSharp: Platform {
   static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
-  static func passReference(to argument: String, forwarding: Bool) -> String {
+  static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     return "ref \(argument)"
   }
   static func unpackReference(to argument: String) -> String? {
