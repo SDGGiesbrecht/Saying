@@ -167,6 +167,7 @@ ability (clients)
     Deutsch: (Liste: [list]) ist nicht leer
     français : (liste: [list]) n’est pas vide
     ελληνικά: (κατάλογος: [list]) δεν είναι άδειος
+    Swift: var (self: [list]).isNotEmpty
    )
    truth value
    {
@@ -207,6 +208,7 @@ extension
    ]
    (
     English: index after (boundary: boundary) in (list: list)
+    Swift: (self: [list]).index afterBoundary (boundary: [boundary])
    )
    optional (index)
    {
@@ -223,6 +225,7 @@ extension
    ]
    (
     English: boundary after (cursor: boundary) in (list: list)
+    Swift: (self: [list]).boundary after (cursor: [cursor])
    )
    optional (boundary)
    {
@@ -241,6 +244,7 @@ extension
    ]
    (
     English: first in (list: list) according to default use as list
+    Swift: var (self: [list]).firstAccordingToDefaultUseAsList
    )
    optional (element)
    {
@@ -256,6 +260,7 @@ extension
    ]
    (
     English: (list: list) is empty according to default use as list
+    Swift: var (self: [list]).isEmptyAccordingToDefaultUseAsList
    )
    truth value
    {
@@ -268,6 +273,7 @@ extension
    ]
    (
     English: (list: list) is not empty according to default use as list
+    Swift: var (self: [list]).isNotEmptyAccordingToDefaultUseAsList
    )
    truth value
    {

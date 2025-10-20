@@ -180,11 +180,11 @@ extension
      English: Removes the first element from the slice by shrinking its window.
     ]
     [
-     English: The underlying list remains unaffected.
+     English: The list behind the slice remains unaffected.
     ]
     test {
      let (• one scalar: Unicode text) be (“1”)
-     let (• slice: slice of (list)) start as (entirety of (one scalar))
+     let (• slice: slice of (Unicode text)) start as (entirety of (one scalar))
      remove first from (↓ slice)
      verify ((slice) is empty)
      verify ((one scalar) is (“1”))
@@ -195,11 +195,11 @@ extension
     test {
      let (• slice: slice of (list)) start as (empty: slice of (list))
      remove first from (↓ slice)
-     verify ((slice) is empty)
     }
    ]
    (
     English: remove first from (slice: ↓ slice of (list))
+    Swift: (self: [slice]).removeFirstIfNotEmpty
    )
    {
     if ((slice) is not empty), {

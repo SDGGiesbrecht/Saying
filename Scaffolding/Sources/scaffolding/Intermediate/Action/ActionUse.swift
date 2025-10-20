@@ -293,6 +293,7 @@ extension ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      literal: literal,
       source: source,
       passage: passage,
       explicitResultType: explicitResultType
@@ -306,6 +307,7 @@ extension ActionUse {
     return ActionUse(
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
+      literal: literal,
       source: source,
       passage: passage,
       explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) })
@@ -360,6 +362,9 @@ extension ActionUse {
        let reference = returnType,
        let thing = context.lookupThing(reference.key) {
       result.append(contentsOf: literal.requiredIdentifiers(type: thing, context: context))
+      if let loading = literal.loadingAction(type: thing) {
+        result.append(contentsOf: loading.requiredIdentifiers(context: context))
+      }
     }
     return result
   }

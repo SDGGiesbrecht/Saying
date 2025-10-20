@@ -575,6 +575,12 @@ func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
   return lhs.scalars == rhs.scalars
 }
 
+extension Slice<UnicodeText> {
+  var isNotEmpty: Bool {
+    return self.isNotEmptyAccordingToDefaultUseAsList
+  }
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -604,6 +610,20 @@ func compare(_ first: Int, to second: Int) -> Bool? {
 
 extension String.UnicodeScalarView: Hashable {}
 
+extension Slice<UnicodeText> {
+  func removeFirstIfNotEmpty() {
+    if self.isNotEmpty {
+      self.removeFirst()
+    }
+  }
+}
+
+extension Slice<UnicodeText> {
+  var isNotEmptyAccordingToDefaultUseAsList: Bool {
+    return !self.isEmpty
+  }
+}
+
 func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
@@ -623,11 +643,13 @@ func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool
 
 fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: Git_2010style_0020parsing_0020cursor, _ segments: inout [Unicode_0020segment]) {
   if let start = beginning {
-    let adjusted_0020offset: UInt64 = start.offset
+    var adjusted_0020offset: UInt64 = start.offset
     if adjusted_0020offset != end.offset {
-      let segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
-      _ = segment.first == " "
-      _ = adjusted_0020offset
+      var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
+      while segment.first == " " {
+        &segment.removeFirstIfNotEmpty()
+        adjusted_0020offset += 1
+      }
       _ = UnicodeText(skippingNormalizationOf: "Not implemented yet.".unicodeScalars)
     }
   }
@@ -635,7 +657,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
 }
 
 fileprivate func shim_0020unit_0020access_0020to_0020Git_2010style_0020line_0020parsing_003A() {
-  let source_0020text: UnicodeText = UnicodeText(skippingNormalizationOf: ".".unicodeScalars)
+  let source_0020text: UnicodeText = UnicodeText(skippingNormalizationOf: " ...".unicodeScalars)
   let source: GitStyleSayingSource = GitStyleSayingSource(origin: UnicodeText(skippingNormalizationOf: "".unicodeScalars), code: source_0020text)
   var beginning: Git_2010style_0020parsing_0020cursor? = Git_2010style_0020parsing_0020cursor(source_0020text.startIndex, 0) as Git_2010style_0020parsing_0020cursor?
   let end: Git_2010style_0020parsing_0020cursor = Git_2010style_0020parsing_0020cursor(source_0020text.endIndex, 1)
