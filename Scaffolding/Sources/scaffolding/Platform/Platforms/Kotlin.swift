@@ -408,6 +408,7 @@ enum Kotlin: Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "android.useAndroidX=true",
+      "kotlin.daemon.jvmargs=-Xmx1g",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
     try ([
