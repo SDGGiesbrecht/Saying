@@ -86,7 +86,7 @@ protocol Platform {
   static func constructorSetter(name: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
-  static func passReference(to argument: String, forwarding: Bool) -> String
+  static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String
   static func unpackReference(to argument: String) -> String?
   static func dereference(throughParameter: String, forwarding: Bool) -> String
   static var emptyReturnType: String? { get }
@@ -111,6 +111,7 @@ protocol Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
@@ -1054,7 +1055,8 @@ extension Platform {
                     normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   ),
-                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true
+                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true,
+                  isAddressee: nativeIsMember(action: action) && argumentsArray.isEmpty
                 )
               )
             } else {
@@ -1541,9 +1543,11 @@ extension Platform {
       for: nativeNameDeclaration(of: action) ?? action.names.identifier()
     )
     var parentType: String?
+    var isMutating = false
     if nativeIsMember(action: action),
       !isInitializer {
       let first = parameterEntries.removeFirst()
+      isMutating = first.isThrough
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
     }
     let parameters: String = parameterEntries
@@ -1592,6 +1596,7 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation,
       parentType: parentType,
+      isMutating: isMutating,
       isAbsorbedMember: isAbsorbedMember,
       isOverride: isOverride,
       propertyInstead: isProperty,
@@ -1630,6 +1635,7 @@ extension Platform {
         indentationLevel: 0
       ),
       parentType: nil,
+      isMutating: false,
       isAbsorbedMember: false,
       isOverride: false,
       propertyInstead: false,

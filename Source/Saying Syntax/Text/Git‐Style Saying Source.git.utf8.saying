@@ -38,11 +38,13 @@ action (file)
  )
  {
   if (beginning) exists, unwrap it as (• start: Git‐style parsing cursor), {
-   let (• adjusted offset: natural number) be ((offset) of (start))
+   let (• adjusted offset: natural number) start as ((offset) of (start))
    if ((adjusted offset) is not ((offset) of (end))), {
-    let (• segment: slice of (Unicode text)) be ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
-    ignore ((first in (segment)) is (“ ”: Unicode scalar))
-    ignore (adjusted offset)
+    let (• segment: slice of (Unicode text)) start as ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
+    while ((first in (segment)) is (“ ”: Unicode scalar)), {
+     remove first from (↓ segment)
+     add (one: natural number) to (↓ adjusted offset)
+    }
     ignore (“Not implemented yet.”)
    }
   }
@@ -54,7 +56,7 @@ action (unit)
   English: shim unit access to Git‐style line parsing
  )
  {
-  let (• source text: Unicode text) be (“.”)
+  let (• source text: Unicode text) be (“ ...”)
   let (• source: Git‐style Saying source) be (Git‐style Saying source from (“”) containing (source text))
   let (• beginning: optional (Git‐style parsing cursor)) start as (wrap (Git‐style parsing cursor at (beginning of (source text)) and (0: natural number)) as (something))
   let (• end: Git‐style parsing cursor) be (Git‐style parsing cursor at (end of (source text)) and (1: natural number))

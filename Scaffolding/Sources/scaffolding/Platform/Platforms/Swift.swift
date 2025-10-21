@@ -283,8 +283,9 @@ enum Swift: Platform {
   static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
-  static func passReference(to argument: String, forwarding: Bool) -> String {
-    return "&\(argument)"
+  static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
+    let reference = isAddressee ? "" : "&"
+    return "\(reference)\(argument)"
   }
   static func unpackReference(to argument: String) -> String? {
     return nil
@@ -341,6 +342,7 @@ enum Swift: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
@@ -360,6 +362,7 @@ enum Swift: Platform {
       access = "public "
     }
 
+    let mutating = isMutating ? "mutating " : ""
     let keyword = propertyInstead ? "var "
       : initializerInstead ? ""
       : name == "subscript" ? ""
@@ -379,7 +382,7 @@ enum Swift: Platform {
       ])
     }
     result.append(contentsOf: [
-      "\(extraIndent)\(access)\(keyword)\(name)\(signature) {",
+      "\(extraIndent)\(access)\(mutating)\(keyword)\(name)\(signature) {",
     ])
     let uniquenessDefinition = result
     let returnPrefix = "\(indent)return "
