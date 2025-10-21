@@ -270,8 +270,8 @@ extension Node {
           Node(
             name: "DocumentationReferenceIdentifier",
             kind: .alternates([
-              Alternate(name: "simple", type: "UninterruptedIdentifier"),
               Alternate(name: "action", type: "ActionReference"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
             ])
           ),
           Node(

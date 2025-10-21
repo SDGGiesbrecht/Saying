@@ -4,7 +4,7 @@ import Foundation
 struct UnicodeText {
   fileprivate var scalars: String.UnicodeScalarView
 
-  fileprivate init(skippingNormalizationOf scalars: String.UnicodeScalarView) {
+  init(skippingNormalizationOf scalars: String.UnicodeScalarView) {
     self.scalars = scalars
   }
 
@@ -575,12 +575,6 @@ func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
   return lhs.scalars == rhs.scalars
 }
 
-extension Slice<UnicodeText> {
-  var isNotEmpty: Bool {
-    return self.isNotEmptyAccordingToDefaultUseAsList
-  }
-}
-
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -610,20 +604,6 @@ func compare(_ first: Int, to second: Int) -> Bool? {
 
 extension String.UnicodeScalarView: Hashable {}
 
-extension Slice<UnicodeText> {
-  mutating func removeFirstUnlessEmpty() {
-    if self.isNotEmpty {
-      self.removeFirst()
-    }
-  }
-}
-
-extension Slice<UnicodeText> {
-  var isNotEmptyAccordingToDefaultUseAsList: Bool {
-    return !self.isEmpty
-  }
-}
-
 func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
@@ -647,7 +627,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
     if adjusted_0020offset != end.offset {
       var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
       while segment.first == " " {
-        segment.removeFirstUnlessEmpty()
+        segment.removeFirst()
         adjusted_0020offset += 1
       }
       _ = UnicodeText(skippingNormalizationOf: "Not implemented yet.".unicodeScalars)

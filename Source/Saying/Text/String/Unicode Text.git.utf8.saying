@@ -21,7 +21,19 @@ thing (clients)
    Unicode scalars
  }
 
-action (file)
+action (clients)
+ [
+  [
+   English: Creates Unicode text directly from scalars that are already in normalized form, without performing redundant normalization.
+  ]
+  [
+   English: It is generally advised to use the safer variant {Unicode text of ()} instead.
+  ]
+  [
+   English: Skipping normalization can be more efficient when the scalars are already known from context to be in normalized form. However, the caller takes responsibility for the logical soundness of the call. Creating text from scalars that are not in the correct normalized form may cause a fatal error or escape into invalid program state.
+  ]
+  test {ignore (Unicode text skipping normalization of (“ASCII”: Unicode scalars))}
+ ]
  (
   English: Unicode text skipping normalization of (scalars: Unicode scalars)
   Swift: UnicodeText.init skippingNormalizationOf (scalars: [scalars])
@@ -31,6 +43,9 @@ action (file)
 
 action (clients)
  [
+  [
+   English: Creates Unicode text by normalizing a sequence of Unicode scalars.
+  ]
   test {verify ((Unicode text of (“¤(A0)”: Unicode scalars)) is (“¤(20)”))}
  ]
  (

@@ -164,7 +164,26 @@ extension
      }
    }
 
-  action (file)
+  action (clients)
+   [
+    [
+     English: Removes the first element from the slice by shrinking its window, without checking whether anything exists to remove.
+    ]
+    [
+     English: It is generally advised to use the safer variant {remove first from ()} instead. For valid parameters, its effects are exactly the same.
+    ]
+    [
+     English: Skipping the bounds check can be more efficient when a first element is already known from context to exist. However, the caller takes responsibility for assuring that the slice is not empty. Removing from an empty slice may cause a fatal error or overflow into invalid program state.
+    ]
+    test {
+     let (• text: Unicode text) be (“...”)
+     let (• slice: slice of (Unicode text)) start as (entirety of (text))
+     while ((first in (slice)) is (“.”: Unicode scalar)), {
+      remove first from (↓ slice) skipping bounds check
+     }
+     verify ((slice) is empty)
+    }
+   ]
    (
     English: remove first from (slice: ↓ slice of (list)) skipping bounds check
    )
@@ -183,14 +202,18 @@ extension
      English: The list behind the slice remains unaffected.
     ]
     test {
-     let (• one scalar: Unicode text) be (“1”)
-     let (• slice: slice of (Unicode text)) start as (entirety of (one scalar))
+     let (• numbers: Unicode text) be (“123”)
+     let (• slice: slice of (Unicode text)) start as (entirety of (numbers))
+     remove first from (↓ slice)
+     verify ((first in (slice)) is (“2”: Unicode scalar))
+     remove first from (↓ slice)
+     verify ((first in (slice)) is (“3”: Unicode scalar))
      remove first from (↓ slice)
      verify ((slice) is empty)
-     verify ((one scalar) is (“1”))
+     verify ((numbers) is (“123”))
     }
     [
-     English: This action does nothing if the slice is already empty.
+     English: This action safely does nothing if the slice is already empty.
     ]
     test {
      let (• slice: slice of (list)) start as (empty: slice of (list))

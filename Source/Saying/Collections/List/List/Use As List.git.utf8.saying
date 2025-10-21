@@ -5,6 +5,15 @@ ability (clients)
  {
   requirement (clients)
    [
+    [
+     English: Returns the index of the entry beginning at the specified boundary, without checking whether an entry actually exists at that position.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {index after () in ()} instead.
+    ]
+    [
+     English: Skipping the bounds check can also be more efficient when the expected index is already known from context to be valid. However, the caller takes responsibility for the logical soundness of the call. There is no index after the end boundary; asking for it may cause a fatal error or overflow into invalid program state.
+    ]
     test {ignore (index after (beginning of (non‐empty example: list)) in (non‐empty example: list) skipping bounds check)}
    ]
    (
@@ -56,6 +65,15 @@ ability (clients)
 
   choice (clients)
    [
+    [
+     English: Returns the next boundary, without checking whether it actually exists.
+    ]
+    [
+     English: It is generally advised to use the safer variant {index after () in ()} instead.
+    ]
+    [
+     English: Skipping the bounds check can be more efficient when the expected boundary is already known from context to exist. However, the caller takes responsibility for the logical soundness of the call. There is nothing after the end boundary; reaching there may cause a fatal error or overflow into invalid program state.
+    ]
     test {
      let (• non‐empty: list) be (non‐empty example: list)
      let (• beginning: boundary) be (beginning of (non‐empty))
@@ -203,6 +221,9 @@ extension
 
   action (clients)
    [
+    [
+     English: Returns the index of the entry beginning at the specified boundary, but only if an entry actually exists at that position.
+    ]
     test {verify ((index after (beginning of (non‐empty example: list)) in (non‐empty example: list)) exists)}
     test {verify ((index after (beginning of (empty: list)) in (empty: list)) does not exist)}
    ]
@@ -220,6 +241,9 @@ extension
 
   action (clients)
    [
+    [
+     English: Returns the next boundary, but only if there actually is one.
+    ]
     test {verify ((boundary after (beginning of (non‐empty example: list)) in (non‐empty example: list)) exists)}
     test {verify ((boundary after (end of (non‐empty example: list)) in (non‐empty example: list)) does not exist)}
    ]
