@@ -1,0 +1,22 @@
+ability (clients)
+ (
+  English: insertion from (insertion) into (list) separated by (list boundary)
+ )
+ {
+  requirement (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: insertion)
+    }
+   ]
+   (
+    English: replace (range: range of (list boundary)) in (list: ↓ list) with (insertion: insertion)
+   )
+
+  requirement (clients)
+   (
+    English: insertion example
+   )
+   insertion
+ }
