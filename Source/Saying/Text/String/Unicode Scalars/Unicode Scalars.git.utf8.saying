@@ -241,6 +241,7 @@ action (file)
   English: copy of (scalars: Unicode scalars) appending (scalar: Unicode scalar)
  )
  Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)append¤(5F)unichar(” scalars “¤(2D)>target, ” scalar “))”
  C♯: “new StringBuilder(” scalars “).Append(” scalar “.ToString()).ToString()” (“System.Text”)
  Kotlin: “StringBuilder(” scalars “).appendCodePoint(” scalar “).toString()”
  {
