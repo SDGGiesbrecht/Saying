@@ -274,7 +274,7 @@ action (file)
   English: copy of (list: Unicode scalars) replacing from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) with (insertion: Unicode scalars)
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)insert(g¤(5F)string¤(5F)erase(” list “¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “), ” beginning “, ” insertion “))”
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)insert(g¤(5F)string¤(5F)erase(” list “¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “), ” beginning “, ” insertion “¤(2D)>target))”
  C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “)” (“System”)
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
@@ -316,7 +316,7 @@ action (file)
   English: isolated copy of slice from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars)
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
  {
