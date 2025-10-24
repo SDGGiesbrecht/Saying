@@ -257,7 +257,7 @@ use (clients)
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append¤(5F)unichar(¤(26)” list “¤(2D)>target, ” element “)”
+   C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
    Swift: “” list “.append(” element “)”
    {
     change (↓ list) to (copy of (list) appending (element))
