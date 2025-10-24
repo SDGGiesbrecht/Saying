@@ -241,6 +241,7 @@ action (file)
   English: copy of (scalars: Unicode scalars) appending (scalar: Unicode scalar)
  )
  Unicode scalars
+ C♯: “new StringBuilder(” scalars “).Append(” scalar “.ToString()).ToString()” (“System.Text”)
  Kotlin: “StringBuilder(” scalars “).appendCodePoint(” scalar “).toString()”
  {
   let (• copy: Unicode scalars) start as (scalars)
@@ -272,6 +273,7 @@ action (file)
   English: copy of (list: Unicode scalars) replacing from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) with (insertion: Unicode scalars)
  )
  Unicode scalars
+ C♯: “new StringBuilder(” list “).Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “).ToString()” (“System.Text”)
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
   let (• copy: Unicode scalars) start as (list)
@@ -312,6 +314,7 @@ action (file)
   English: isolated copy of slice from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars)
  )
  Unicode scalars
+ C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
  {
   ← isolated copy of ((from (beginning) to (end)) in (scalars))
