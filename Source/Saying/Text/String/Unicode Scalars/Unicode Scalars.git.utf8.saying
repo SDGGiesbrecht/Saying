@@ -274,7 +274,7 @@ action (file)
   English: copy of (list: Unicode scalars) replacing from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) with (insertion: Unicode scalars)
  )
  Unicode scalars
- C♯: “new StringBuilder(” list “).Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “).ToString()” (“System.Text”)
+ C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “)” (“System”)
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
   let (• copy: Unicode scalars) start as (list)
