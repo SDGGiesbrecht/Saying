@@ -241,7 +241,6 @@ action (file)
   English: copy of (scalars: Unicode scalars) appending (scalar: Unicode scalar)
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)append¤(5F)unichar(” scalars “¤(2D)>target, ” scalar “))”
  C♯: “new StringBuilder(” scalars “).Append(” scalar “.ToString()).ToString()” (“System.Text”)
  JavaScript: “” scalars “ + String.fromCodePoint(” scalar “)”
  Kotlin: “StringBuilder(” scalars “).appendCodePoint(” scalar “).toString()”
@@ -258,6 +257,7 @@ use (clients)
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
+   C: “g¤(5F)string¤(5F)append¤(5F)unichar(” list “¤(2D)>target, ” element “)”
    Swift: “” list “.append(” element “)”
    {
     change (↓ list) to (copy of (list) appending (element))
