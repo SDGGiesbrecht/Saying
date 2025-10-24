@@ -243,6 +243,7 @@ action (file)
  Unicode scalars
  C: “reference¤(5F)string(g¤(5F)string¤(5F)append¤(5F)unichar(” scalars “¤(2D)>target, ” scalar “))”
  C♯: “new StringBuilder(” scalars “).Append(” scalar “.ToString()).ToString()” (“System.Text”)
+ JavaScript: “” scalars “ + String.fromCodePoint(” scalar “)”
  Kotlin: “StringBuilder(” scalars “).appendCodePoint(” scalar “).toString()”
  {
   let (• copy: Unicode scalars) start as (scalars)
@@ -276,6 +277,7 @@ action (file)
  Unicode scalars
  C: “reference¤(5F)string(g¤(5F)string¤(5F)insert(g¤(5F)string¤(5F)erase(” list “¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “), ” beginning “, ” insertion “¤(2D)>target))”
  C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “)” (“System”)
+ JavaScript: “” list “.substring(0, ” beginning “) + ” insertion “ + ” list “.substring(” end “)”
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
   let (• copy: Unicode scalars) start as (list)
@@ -318,6 +320,7 @@ action (file)
  Unicode scalars
  C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
+ JavaScript: “” scalars “.substring(” beginning “, ” end “)”
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
  {
   ← isolated copy of ((from (beginning) to (end)) in (scalars))
