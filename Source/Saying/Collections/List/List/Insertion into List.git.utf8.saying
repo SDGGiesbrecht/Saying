@@ -54,8 +54,20 @@ ability (clients)
    )
    list
    {
-    let (• copy: list) start as (list)
-    append (appendix) to (↓ copy)
+    ← (list) with (appendix) appended according to list insertion
+   }
+
+  choice (clients)
+   [
+    test {ignore (convert (insertion example: insertion) into list: list)}
+   ]
+   (
+    English: convert (other: insertion) into list
+   )
+   list
+   {
+    let (• copy: list) start as (empty: list)
+    append (other) to (↓ copy)
     ← copy
    }
 
@@ -64,6 +76,24 @@ ability (clients)
     English: insertion example
    )
    insertion
+ }
+
+extension
+ insertion from (insertion) into (list) separated by (list boundary)
+ {
+  action (clients)
+   [
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) appended according to list insertion)}
+   ]
+   (
+    English: (list: list) with (appendix: insertion) appended according to list insertion
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    append (appendix) to (↓ copy)
+    ← copy
+   }
  }
 
 use (unit)
