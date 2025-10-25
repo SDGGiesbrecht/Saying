@@ -305,29 +305,29 @@ extension
    }
  }
 
-thing (file)
+thing (unit)
  (
   English: minimal list example
  )
  {
-  part (file)
+  part (unit)
    (
     English: wrapped list
    )
    list of (truth value)
  }
 
-action (file)
+action (unit)
  (
   English: minimal list example wrapping (wrapped list: list of (truth value))
  )
  minimal list example
  create
 
-use (file)
+use (unit)
  use of (minimal list example) as list of (truth value) indexed by (list index) separated by (list boundary)
  {
-  action (file)
+  action (unit)
    (
     English: index after (boundary: list boundary) in (list: minimal list example) skipping bounds check
    )
@@ -336,7 +336,7 @@ use (file)
     ← index after (boundary) in ((wrapped list) of (list)) skipping bounds check
    }
 
-  action (file)
+  action (unit)
    (
     English: beginning of (list: minimal list example)
    )
@@ -345,7 +345,7 @@ use (file)
     ← beginning of ((wrapped list) of (list))
    }
 
-  action (file)
+  action (unit)
    (
     English: end of (list: minimal list example)
    )
@@ -354,7 +354,7 @@ use (file)
     ← end of ((wrapped list) of (list))
    }
 
-  action (file)
+  action (unit)
    (
     English: advance (cursor: ↓ list boundary) to next in (list: minimal list example) skipping bounds check
    )
@@ -362,7 +362,7 @@ use (file)
     advance (↓ cursor) to next in ((wrapped list) of (list)) skipping bounds check
    }
 
-  action (file)
+  action (unit)
    (
     English: entry at (index: list index) in (list: minimal list example)
    )
@@ -371,7 +371,7 @@ use (file)
     ← entry at (index) in ((wrapped list) of (list))
    }
 
-  action (file)
+  action (unit)
    (
     English: empty
    )
@@ -380,7 +380,7 @@ use (file)
     ← minimal list example wrapping (empty: list of (truth value))
    }
 
-  action (file)
+  action (unit)
    (
     English: non‐empty example
    )
