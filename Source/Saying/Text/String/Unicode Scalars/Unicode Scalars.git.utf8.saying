@@ -230,6 +230,154 @@ use (clients)
  {
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   verify ((copy of (scalars) appending (“!”: Unicode scalar)) is (“ !”: Unicode scalars))
+  }
+ ]
+ (
+  English: copy of (scalars: Unicode scalars) appending (scalar: Unicode scalar)
+ )
+ Unicode scalars
+ C♯: “new StringBuilder(” scalars “).Append(” scalar “.ToString()).ToString()” (“System.Text”)
+ JavaScript: “” scalars “ + String.fromCodePoint(” scalar “)”
+ Kotlin: “StringBuilder(” scalars “).appendCodePoint(” scalar “).toString()”
+ {
+  let (• copy: Unicode scalars) start as (scalars)
+  append (scalar) to (↓ copy)
+  ← copy
+ }
+
+use (clients)
+ use of (Unicode scalars) as changeable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
+   )
+   C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
+   Swift: “” list “.append(” element “)”
+   {
+    change (↓ list) to (copy of (list) appending (element))
+   }
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   verify ((copy of (scalars) replacing from (beginning of (scalars)) to (end of (scalars)) with (scalars)) is (scalars))
+  }
+ ]
+ (
+  English: copy of (list: Unicode scalars) replacing from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) with (insertion: Unicode scalars)
+ )
+ Unicode scalars
+ C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “)” (“System”)
+ JavaScript: “” list “.substring(0, ” beginning “) + ” insertion “ + ” list “.substring(” end “)”
+ Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
+ {
+  let (• copy: Unicode scalars) start as (list)
+  replace (from (beginning) to (end)) in (↓ copy) with (insertion)
+  ← copy
+ }
+
+action (file)
+ [
+  test {
+   let (• list: Unicode scalars) start as (non‐empty example: Unicode scalars)
+   replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: Unicode scalars)
+  }
+ ]
+ (
+  English: replace from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars)
+ )
+ C: “g¤(5F)string¤(5F)insert(g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “), ” beginning “, ” insertion “¤(2D)>target¤(2D)>str)”
+ {
+  change (↓ list) to (copy of (list) replacing from (beginning) to (end) with (insertion))
+ }
+
+use (clients)
+ insertion from (Unicode scalars) into (Unicode scalars) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars)
+   )
+   Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
+   {
+    replace from ((lower bound) of (range)) to ((upper bound) of (range)) in (↓ list) with (insertion)
+   }
+
+  action (clients)
+   (
+    English: insertion example
+   )
+   Unicode scalars
+   {
+    ← example
+   }
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   verify ((isolated copy of slice from (beginning of (scalars)) to (end of (scalars)) in (scalars)) is (scalars))
+  }
+ ]
+ (
+  English: isolated copy of slice from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars)
+ )
+ Unicode scalars
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
+ C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
+ JavaScript: “” scalars “.substring(” beginning “, ” end “)”
+ Kotlin: “” scalars “.slice(” beginning “..<” end “)”
+ {
+  ← isolated copy of ((from (beginning) to (end)) in (scalars))
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   verify ((isolated copy of (entirety of (scalars))) is (scalars))
+  }
+ ]
+ (
+  English: isolated copy of (slice: slice of (Unicode scalars))
+ )
+ Unicode scalars
+ Swift: “String.UnicodeScalarView(” slice “)”
+ {
+  ← isolated copy of slice from (beginning of (slice)) to (end of (slice)) in ((whole) of (slice))
+ }
+
+use (clients)
+ insertion from (slice of (Unicode scalars)) into (Unicode scalars) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode scalars) with (insertion: slice of (Unicode scalars))
+   )
+   Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
+   {
+    change (↓ list) to (copy of (list) replacing from ((lower bound) of (range)) to ((upper bound) of (range)) with (isolated copy of (insertion)))
+   }
+
+  action (clients)
+   (
+    English: insertion example
+   )
+   slice of (Unicode scalars)
+   {
+    ← entirety of (example: Unicode scalars)
+   }
+ }
+
 action (clients)
  [
   [
@@ -241,7 +389,7 @@ action (clients)
   English: compatibility decomposition of (scalars: Unicode scalars)
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Normalize(NormalizationForm.FormKD)” (
   “System”
   “System.Text”
