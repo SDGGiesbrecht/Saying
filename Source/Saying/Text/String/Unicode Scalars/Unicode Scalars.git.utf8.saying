@@ -284,9 +284,9 @@ action (file)
  Unicode scalars
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
-  let (• copy: Unicode scalars) start as (isolated copy of slice from (beginning of (list)) to (beginning) in (list))
+  let (• copy: Unicode scalars) start as (convert from (beginning of (list)) to (beginning) in (list) into scalars)
   append (insertion) to (↓ copy)
-  append (isolated copy of slice from (end) to (end of (list)) in (list)) to (↓ copy)
+  append (convert from (end) to (end of (list)) in (list) into scalars) to (↓ copy)
   ← copy
  }
 
@@ -337,10 +337,19 @@ use (clients)
    Kotlin: “” list “ + ” appendix “”
    Swift: “” list “ + ” appendix “”
    {
-    let (• copy: Unicode scalars) start as (list)
-    append (appendix) to (↓ copy)
-    ← copy
+    ← (list) with (appendix) appended according to list insertion
    }
+
+  action (clients)
+   (
+    English: convert (other: Unicode scalars) into list
+   )
+   Unicode scalars
+   C: “” other “”
+   C♯: “” other “”
+   JavaScript: “” other “”
+   Kotlin: “” other “”
+   Swift: “” other “”
 
   action (clients)
    (
@@ -356,11 +365,11 @@ action (file)
  [
   test {
    let (• scalars: Unicode scalars) be (example: Unicode scalars)
-   verify ((isolated copy of slice from (beginning of (scalars)) to (end of (scalars)) in (scalars)) is (scalars))
+   verify ((convert from (beginning of (scalars)) to (end of (scalars)) in (scalars) into scalars) is (scalars))
   }
  ]
  (
-  English: isolated copy of slice from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars)
+  English: convert from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars) into scalars
  )
  Unicode scalars
  C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
@@ -368,23 +377,7 @@ action (file)
  JavaScript: “” scalars “.substring(” beginning “, ” end “)”
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
  {
-  ← isolated copy of ((from (beginning) to (end)) in (scalars))
- }
-
-action (file)
- [
-  test {
-   let (• scalars: Unicode scalars) be (example: Unicode scalars)
-   verify ((isolated copy of (entirety of (scalars))) is (scalars))
-  }
- ]
- (
-  English: isolated copy of (slice: slice of (Unicode scalars))
- )
- Unicode scalars
- Swift: “String.UnicodeScalarView(” slice “)”
- {
-  ← isolated copy of slice from (beginning of (slice)) to (end of (slice)) in ((whole) of (slice))
+  ← convert ((from (beginning) to (end)) in (scalars)) into list
  }
 
 use (clients)
@@ -396,7 +389,7 @@ use (clients)
    )
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
-    replace (range) in (↓ list) with (isolated copy of (insertion))
+    replace (range) in (↓ list) with (convert (insertion) into list: Unicode scalars)
    }
 
   action (clients)
@@ -405,7 +398,17 @@ use (clients)
    )
    Swift: “” list “.append(contentsOf: ” appendix “)”
    {
-    append (isolated copy of (appendix)) to (↓ list)
+    append (convert (appendix) into list: Unicode scalars) to (↓ list)
+   }
+
+  action (clients)
+   (
+    English: convert (other: slice of (Unicode scalars)) into list
+   )
+   Unicode scalars
+   Swift: “String.UnicodeScalarView(” other “)”
+   {
+    ← convert from (beginning of (other)) to (end of (other)) in ((whole) of (other)) into scalars
    }
 
   action (clients)
