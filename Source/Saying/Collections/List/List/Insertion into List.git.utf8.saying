@@ -14,9 +14,75 @@ ability (clients)
     English: replace (range: range of (list boundary)) in (list: ↓ list) with (insertion: insertion)
    )
 
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: insertion))
+    }
+   ]
+   (
+    English: (list: list) with (range: range of (list boundary)) replaced with (insertion: insertion)
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    replace (range) in (↓ copy) with (insertion)
+    ← copy
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     append (insertion example: insertion) to (↓ list)
+    }
+   ]
+   (
+    English: append (appendix: insertion) to (list: ↓ list)
+   )
+   {
+    replace (from (end of (list)) to (end of (list))) in (↓ list) with (appendix)
+   }
+
+  choice (clients)
+   [
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) appended)}
+   ]
+   (
+    English: (list: list) with (appendix: insertion) appended
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    append (appendix) to (↓ copy)
+    ← copy
+   }
+
   requirement (clients)
    (
     English: insertion example
    )
    insertion
+ }
+
+use (unit)
+ insertion from (minimal list example) into (minimal list example) separated by (list boundary)
+ {
+  action (unit)
+   (
+    English: replace (range: range of (list boundary)) in (list: ↓ minimal list example) with (insertion: minimal list example)
+   )
+   {
+    ignore (false)
+   }
+
+  action (unit)
+   (
+    English: insertion example
+   )
+   minimal list example
+   {
+    ← non‐empty example
+   }
  }

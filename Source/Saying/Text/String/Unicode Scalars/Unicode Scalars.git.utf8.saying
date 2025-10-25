@@ -268,11 +268,11 @@ action (file)
  [
   test {
    let (• scalars: Unicode scalars) be (example: Unicode scalars)
-   verify ((copy of (scalars) replacing from (beginning of (scalars)) to (end of (scalars)) with (scalars)) is (scalars))
+   verify (((scalars) with (beginning of (scalars)) to (end of (scalars)) replaced with (scalars)) is (scalars))
   }
  ]
  (
-  English: copy of (list: Unicode scalars) replacing from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) with (insertion: Unicode scalars)
+  English: (list: Unicode scalars) with (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) replaced with (insertion: Unicode scalars)
  )
  Unicode scalars
  C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “)” (“System”)
@@ -296,7 +296,7 @@ action (file)
  )
  C: “g¤(5F)string¤(5F)insert(g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “), ” beginning “, ” insertion “¤(2D)>target¤(2D)>str)”
  {
-  change (↓ list) to (copy of (list) replacing from (beginning) to (end) with (insertion))
+  change (↓ list) to ((list) with (beginning) to (end) replaced with (insertion))
  }
 
 use (clients)
@@ -309,6 +309,31 @@ use (clients)
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
     replace from ((lower bound) of (range)) to ((upper bound) of (range)) in (↓ list) with (insertion)
+   }
+
+  action (clients)
+   (
+    English: append (appendix: Unicode scalars) to (list: ↓ Unicode scalars)
+   )
+   C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)”
+   Swift: “” list “.append(contentsOf: ” appendix “)”
+   {
+    change (↓ list) to ((list) with (appendix) appended)
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (appendix: Unicode scalars) appended
+   )
+   Unicode scalars
+   C♯: “” list “ + ” appendix “”
+   JavaScript: “” list “ + ” appendix “”
+   Kotlin: “” list “ + ” appendix “”
+   Swift: “” list “ + ” appendix “”
+   {
+    let (• copy: Unicode scalars) start as (list)
+    append (appendix) to (↓ copy)
+    ← copy
    }
 
   action (clients)
@@ -365,7 +390,16 @@ use (clients)
    )
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
-    change (↓ list) to (copy of (list) replacing from ((lower bound) of (range)) to ((upper bound) of (range)) with (isolated copy of (insertion)))
+    replace (range) in (↓ list) with (isolated copy of (insertion))
+   }
+
+  action (clients)
+   (
+    English: append (appendix: slice of (Unicode scalars)) to (list: ↓ Unicode scalars)
+   )
+   Swift: “” list “.append(contentsOf: ” appendix “)”
+   {
+    append (isolated copy of (appendix)) to (↓ list)
    }
 
   action (clients)
