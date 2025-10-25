@@ -8,12 +8,26 @@ ability (clients)
     test {
      let (• list: list) start as (empty: list)
      append (example: element) to (↓ list)
-     verify ((first in (list)) exists)
+     verify ((list) is not empty)
     }
    ]
    (
     English: append (element: element) to (list: ↓ list)
    )
+
+  choice (clients)
+   [
+    test {verify (((empty: list) with (example: element) appended) is not empty)}
+   ]
+   (
+    English: (list: list) with (element: element) appended
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    append (element) to (↓ copy)
+    ← copy
+   }
  }
 
 extension

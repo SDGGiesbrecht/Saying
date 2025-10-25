@@ -230,24 +230,21 @@ use (clients)
  {
  }
 
-action (file)
+action (clients)
  [
-  test {
-   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
-   verify ((copy of (scalars) appending (“!”: Unicode scalar)) is (“ !”: Unicode scalars))
-  }
+  test {verify (((“ ”: Unicode scalar) as scalars) is (“ ”: Unicode scalars))}
  ]
  (
-  English: copy of (scalars: Unicode scalars) appending (scalar: Unicode scalar)
+  English: (scalar: Unicode scalar) as scalars
  )
  Unicode scalars
- C♯: “new StringBuilder(” scalars “).Append(” scalar “.ToString()).ToString()” (“System.Text”)
- JavaScript: “” scalars “ + String.fromCodePoint(” scalar “)”
- Kotlin: “StringBuilder(” scalars “).appendCodePoint(” scalar “).toString()”
+ C♯: “” scalar “.ToString()”
+ JavaScript: “String.fromCodePoint(” scalar “)”
+ Swift: “String(” scalar “).unicodeScalars”
  {
-  let (• copy: Unicode scalars) start as (scalars)
-  append (scalar) to (↓ copy)
-  ← copy
+  let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+  append (scalar) to (↓ scalars)
+  ← scalars
  }
 
 use (clients)
@@ -260,7 +257,17 @@ use (clients)
    C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
    Swift: “” list “.append(” element “)”
    {
-    change (↓ list) to (copy of (list) appending (element))
+    change (↓ list) to ((list) with (element) appended)
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (element: Unicode scalar) appended
+   )
+   Unicode scalars
+   Kotlin: “StringBuilder(” list “).appendCodePoint(” element “).toString()”
+   {
+    ← (list) with ((element) as scalars) appended
    }
  }
 
@@ -275,12 +282,11 @@ action (file)
   English: (list: Unicode scalars) with (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) replaced with (insertion: Unicode scalars)
  )
  Unicode scalars
- C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “).Insert(” beginning “, ” insertion “)” (“System”)
- JavaScript: “” list “.substring(0, ” beginning “) + ” insertion “ + ” list “.substring(” end “)”
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
-  let (• copy: Unicode scalars) start as (list)
-  replace (from (beginning) to (end)) in (↓ copy) with (insertion)
+  let (• copy: Unicode scalars) start as (isolated copy of slice from (beginning of (list)) to (beginning) in (list))
+  append (insertion) to (↓ copy)
+  append (isolated copy of slice from (end) to (end of (list)) in (list)) to (↓ copy)
   ← copy
  }
 
