@@ -42,7 +42,7 @@ ability (clients)
     English: insert (insertion: insertion) at (boundary: list boundary) in (list: ↓ list)
    )
    {
-    ← replace (from (boundary) to (boundary)) in (↓ list) with (insertion)
+    insert (insertion) at (boundary) in (↓ list) according to list insertion
    }
 
   choice (clients)
@@ -57,9 +57,7 @@ ability (clients)
    )
    list
    {
-    let (• copy: list) start as (list)
-    insert (insertion) at (boundary) in (↓ copy)
-    ← copy
+    ← (list) with (insertion) inserted at (boundary) according to list insertion
    }
 
   choice (clients)
@@ -149,6 +147,37 @@ extension
    {
     let (• copy: list) start as (list)
     append (appendix) to (↓ copy)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     insert (insertion example: insertion) at (beginning of (list)) in (↓ list) according to list insertion
+    }
+   ]
+   (
+    English: insert (insertion: insertion) at (boundary: list boundary) in (list: ↓ list) according to list insertion
+   )
+   {
+    replace (from (boundary) to (boundary)) in (↓ list) with (insertion)
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (insertion example: insertion) inserted at (beginning of (list)) according to list insertion)
+    }
+   ]
+   (
+    English: (list: list) with (insertion: insertion) inserted at (boundary: list boundary) according to list insertion
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    insert (insertion) at (boundary) in (↓ copy)
     ← copy
    }
 
