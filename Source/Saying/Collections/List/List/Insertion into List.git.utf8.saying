@@ -35,6 +35,37 @@ ability (clients)
    [
     test {
      let (• list: list) start as (non‐empty example: list)
+     insert (insertion example: insertion) at (beginning of (list)) in (↓ list)
+    }
+   ]
+   (
+    English: insert (insertion: insertion) at (boundary: list boundary) in (list: ↓ list)
+   )
+   {
+    ← replace (from (boundary) to (boundary)) in (↓ list) with (insertion)
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (insertion example: insertion) inserted at (beginning of (list)))
+    }
+   ]
+   (
+    English: (list: list) with (insertion: insertion) inserted at (boundary: list boundary)
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    insert (insertion) at (boundary) in (↓ copy)
+    ← copy
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
      append (insertion example: insertion) to (↓ list)
     }
    ]
@@ -55,6 +86,34 @@ ability (clients)
    list
    {
     ← (list) with (appendix) appended according to list insertion
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     prepend (insertion example: insertion) to (↓ list)
+    }
+   ]
+   (
+    English: prepend (prefix: insertion) to (list: ↓ list)
+   )
+   {
+    replace (from (beginning of (list)) to (beginning of (list))) in (↓ list) with (prefix)
+   }
+
+  choice (clients)
+   [
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) prepended)}
+   ]
+   (
+    English: (list: list) with (prefix: insertion) prepended
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    prepend (prefix) to (↓ copy)
+    ← copy
    }
 
   choice (clients)
