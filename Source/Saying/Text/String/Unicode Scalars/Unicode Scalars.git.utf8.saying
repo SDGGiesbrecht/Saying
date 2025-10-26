@@ -324,7 +324,7 @@ use (clients)
    C: “g¤(5F)string¤(5F)insert((” list “)¤(2D)>target, ” boundary “, ” insertion “¤(2D)>target¤(2D)>str)”
    Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
    {
-    insert (insertion) at (boundary) in (list) according to list insertion
+    insert (insertion) at (boundary) in (↓ list) according to list insertion
    }
 
   action (clients)
