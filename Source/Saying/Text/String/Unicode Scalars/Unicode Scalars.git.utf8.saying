@@ -342,6 +342,28 @@ use (clients)
 
   action (clients)
    (
+    English: prepend (prefix: Unicode scalars) to (list: ↓ Unicode scalars)
+   )
+   C: “g¤(5F)string¤(5F)prepend((” list “)¤(2D)>target, ” prefix “¤(2D)>target¤(2D)>str)”
+   {
+    prepend (prefix) to (↓ list) according to list insertion
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (prefix: Unicode scalars) prepended
+   )
+   Unicode scalars
+   C♯: “” prefix “ + ” list “”
+   JavaScript: “” prefix “ + ” list “”
+   Kotlin: “” prefix “ + ” list “”
+   Swift: “” prefix “ + ” list “”
+   {
+    ← (list) with (prefix) prepended according to list insertion
+   }
+
+  action (clients)
+   (
     English: convert (other: Unicode scalars) into list
    )
    Unicode scalars

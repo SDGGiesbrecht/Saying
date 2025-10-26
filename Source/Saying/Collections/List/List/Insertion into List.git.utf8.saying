@@ -99,7 +99,7 @@ ability (clients)
     English: prepend (prefix: insertion) to (list: ↓ list)
    )
    {
-    replace (from (beginning of (list)) to (beginning of (list))) in (↓ list) with (prefix)
+    prepend (prefix) to (↓ list) according to list insertion
    }
 
   choice (clients)
@@ -111,9 +111,7 @@ ability (clients)
    )
    list
    {
-    let (• copy: list) start as (list)
-    prepend (prefix) to (↓ copy)
-    ← copy
+    ← (list) with (prefix) prepended according to list insertion
    }
 
   choice (clients)
@@ -151,6 +149,34 @@ extension
    {
     let (• copy: list) start as (list)
     append (appendix) to (↓ copy)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     prepend (insertion example: insertion) to (↓ list) according to list insertion
+    }
+   ]
+   (
+    English: prepend (prefix: insertion) to (list: ↓ list) according to list insertion
+   )
+   {
+    replace (from (beginning of (list)) to (beginning of (list))) in (↓ list) with (prefix)
+   }
+
+  action (clients)
+   [
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) prepended according to list insertion)}
+   ]
+   (
+    English: (list: list) with (prefix: insertion) prepended according to list insertion
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    prepend (prefix) to (↓ copy)
     ← copy
    }
  }
