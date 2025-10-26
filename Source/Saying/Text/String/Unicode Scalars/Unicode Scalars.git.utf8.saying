@@ -319,6 +319,27 @@ use (clients)
 
   action (clients)
    (
+    English: insert (insertion: Unicode scalars) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
+   )
+   C: “g¤(5F)string¤(5F)insert((” list “)¤(2D)>target, ” boundary “, ” insertion “¤(2D)>target¤(2D)>str)”
+   Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
+   {
+    insert (insertion) at (boundary) in (↓ list) according to list insertion
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (insertion: Unicode scalars) inserted at (boundary: Unicode scalar boundary)
+   )
+   Unicode scalars
+   C♯: “” list “.Insert(” boundary “, ” insertion “)” (“System”)
+   Kotlin: “StringBuilder(” list “).insert(” boundary “, ” insertion “).toString()”
+   {
+    ← (list) with (insertion) inserted at (boundary) according to list insertion
+   }
+
+  action (clients)
+   (
     English: append (appendix: Unicode scalars) to (list: ↓ Unicode scalars)
    )
    C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)”
@@ -338,6 +359,28 @@ use (clients)
    Swift: “” list “ + ” appendix “”
    {
     ← (list) with (appendix) appended according to list insertion
+   }
+
+  action (clients)
+   (
+    English: prepend (prefix: Unicode scalars) to (list: ↓ Unicode scalars)
+   )
+   C: “g¤(5F)string¤(5F)prepend((” list “)¤(2D)>target, ” prefix “¤(2D)>target¤(2D)>str)”
+   {
+    prepend (prefix) to (↓ list) according to list insertion
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (prefix: Unicode scalars) prepended
+   )
+   Unicode scalars
+   C♯: “” prefix “ + ” list “”
+   JavaScript: “” prefix “ + ” list “”
+   Kotlin: “” prefix “ + ” list “”
+   Swift: “” prefix “ + ” list “”
+   {
+    ← (list) with (prefix) prepended according to list insertion
    }
 
   action (clients)
@@ -390,6 +433,15 @@ use (clients)
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
     replace (range) in (↓ list) with (convert (insertion) into list: Unicode scalars)
+   }
+
+  action (clients)
+   (
+    English: insert (insertion: slice of (Unicode scalars)) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
+   )
+   Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
+   {
+    insert (convert (insertion) into list: Unicode scalars) at (boundary) in (↓ list)
    }
 
   action (clients)
