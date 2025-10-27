@@ -218,7 +218,7 @@ use (unit)
     English: replace (range: range of (list boundary)) in (list: ↓ minimal list example) with (insertion: minimal list example)
    )
    {
-    ignore (false)
+    replace (range) in (↓ (wrapped list) of (list)) with ((wrapped list) of (insertion))
    }
 
   action (unit)
@@ -227,6 +227,6 @@ use (unit)
    )
    minimal list example
    {
-    ← non‐empty example
+    ← minimal list example wrapping (insertion example: list of (truth value))
    }
  }
