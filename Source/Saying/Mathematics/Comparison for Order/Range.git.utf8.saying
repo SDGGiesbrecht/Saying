@@ -17,12 +17,14 @@ extension
       English: lower bound
      )
      thing
+     Swift: “” . “.lowerBound”
 
     part (clients/nowhere)
      (
       English: upper bound
      )
      thing
+     Swift: “” . “.upperBound”
    }
 
   action (clients)

@@ -290,21 +290,6 @@ action (file)
   ← copy
  }
 
-action (file)
- [
-  test {
-   let (• list: Unicode scalars) start as (non‐empty example: Unicode scalars)
-   replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: Unicode scalars)
-  }
- ]
- (
-  English: replace from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars)
- )
- C: “g¤(5F)string¤(5F)insert(g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “), ” beginning “, ” insertion “¤(2D)>target¤(2D)>str)”
- {
-  change (↓ list) to ((list) with (beginning) to (end) replaced with (insertion))
- }
-
 use (clients)
  insertion from (Unicode scalars) into (Unicode scalars) separated by (Unicode scalar boundary)
  {
@@ -314,7 +299,7 @@ use (clients)
    )
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
-    replace from ((lower bound) of (range)) to ((upper bound) of (range)) in (↓ list) with (insertion)
+    change (↓ list) to ((list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (insertion))
    }
 
   action (clients)
@@ -343,10 +328,10 @@ use (clients)
     English: append (appendix: Unicode scalars) to (list: ↓ Unicode scalars)
    )
    C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)”
-   Swift: “” list “.append(contentsOf: ” appendix “)”
-   {
-    change (↓ list) to ((list) with (appendix) appended)
-   }
+   C♯: “” list “ += ” appendix “”
+   JavaScript: “” list “ += ” appendix “”
+   Kotlin: “” list “ += ” appendix “”
+   Swift: “” list “ += ” appendix “”
 
   action (clients)
    (
