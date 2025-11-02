@@ -187,7 +187,7 @@ extension
     English: (list: list of (thing)) with (beginning: list boundary) to (end: list boundary) replaced with (insertion: list of (thing))
    )
    list of (thing)
-   JavaScript: “” list “.toSplice(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
+   JavaScript: “” list “.toSpliced(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
    {
     let (• copy: list of (thing)) start as (convert from (beginning of (list)) to (beginning) in (list) into list)
     append (insertion) to (↓ copy)
@@ -233,7 +233,7 @@ extension
       English: (list: list of (thing)) with (insertion: list of (thing)) inserted at (boundary: list boundary)
      )
      list of (thing)
-     JavaScript: “” list “.toSplice(” boundary “, 0, ...” insertion “)”
+     JavaScript: “” list “.toSpliced(” boundary “, 0, ...” insertion “)”
      Kotlin: “” list “.toMutableList().apply { addAll(” boundary “, ” insertion “) }.toList()”
      {
       ← (list) with (insertion) inserted at (boundary) according to list insertion
