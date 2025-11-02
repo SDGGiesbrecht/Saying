@@ -234,7 +234,7 @@ extension
      )
      list of (thing)
      JavaScript: “” list “.toSplice(” boundary “, 0, ...” insertion “)”
-     Kotlin: “” list “.toMutableList().addAll(” boundary “, ” insertion “).toList()”
+     Kotlin: “” list “.toMutableList().apply { addAll(” boundary “, ” insertion “) }.toList()”
      {
       ← (list) with (insertion) inserted at (boundary) according to list insertion
      }
