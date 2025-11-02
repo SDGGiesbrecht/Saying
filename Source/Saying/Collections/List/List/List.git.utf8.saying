@@ -315,15 +315,15 @@ extension
     }
    ]
    (
-    English: convert from (beginning: list boundary) to (end: list boundary) in (list: list of (thing)) into list
+    English: convert from (lower bound: list boundary) to (upper bound: list boundary) in (list: list of (thing)) into list
    )
    list of (thing)
-   C♯: “” list “.Slice(” beginning “, ” end “ ¤(2D) ” beginning “)”
-   JavaScript: “” list “.slice(” beginning “, ” end “)”
-   Kotlin: “” list “.slice(” beginning “..<” end “)”
+   C♯: “” list “.Slice(” lower bound “, ” upper bound “ ¤(2D) ” lower bound “)”
+   JavaScript: “” list “.slice(” lower bound “, ” upper bound “)”
+   Kotlin: “” list “.slice(” lower bound “..<” upper bound “)”
    {
     let (• copy: list of (thing)) start as (empty: list of (thing))
-    for each (• element: thing) in ((from (beginning) to (end)) in (list)), {
+    for each (• element: thing) in ((from (lower bound) to (upper bound)) in (list)), {
      append (element) to (↓ copy)
     }
     ← copy
