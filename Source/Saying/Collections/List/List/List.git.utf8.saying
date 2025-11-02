@@ -256,7 +256,7 @@ extension
       English: (list: list of (thing)) with (appendix: list of (thing)) appended
      )
      list of (thing)
-     C♯: “” list “.Concat(” appendix “)”
+     C♯: “” list “.Concat(” appendix “).ToList()”
      JavaScript: “” list “.concat(” appendix “)”
      Kotlin: “” list “ + ” appendix “”
      Swift: “” list “ + ” appendix “”
