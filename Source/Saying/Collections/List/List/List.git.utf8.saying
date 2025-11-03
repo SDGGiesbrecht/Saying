@@ -318,7 +318,7 @@ extension
     English: convert from (lower bound: list boundary) to (upper bound: list boundary) in (list: list of (thing)) into list
    )
    list of (thing)
-   C♯: “” list “.Slice(” lower bound “, ” upper bound “ ¤(2D) ” lower bound “)”
+   C♯: “” list “.GetRange(” lower bound “, ” upper bound “ ¤(2D) ” lower bound “)”
    JavaScript: “” list “.slice(” lower bound “, ” upper bound “)”
    Kotlin: “” list “.slice(” lower bound “..<” upper bound “)”
    {
