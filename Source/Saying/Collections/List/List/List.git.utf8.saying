@@ -166,4 +166,216 @@ extension
      Kotlin: “” list “ += listOf(” element “)”
      Swift: “” list “.append(” element “)”
    }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: list of (thing))
+    }
+   ]
+   (
+    English: replace from (beginning: list boundary) to (end: list boundary) in (list: ↓ list of (thing)) with (insertion: list of (thing))
+   )
+   JavaScript: “” list “.splice(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
+   {
+    change (↓ list) to ((list) with (beginning) to (end) replaced with (insertion))
+   }
+
+  action (file)
+   (
+    English: (list: list of (thing)) with (beginning: list boundary) to (end: list boundary) replaced with (insertion: list of (thing))
+   )
+   list of (thing)
+   JavaScript: “” list “.toSpliced(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
+   {
+    let (• copy: list of (thing)) start as (convert from (beginning of (list)) to (beginning) in (list) into list)
+    append (insertion) to (↓ copy)
+    append (convert from (end) to (end of (list)) in (list) into list) to (↓ copy)
+    ← copy
+   }
+
+  use (clients)
+   insertion from (list of (thing)) into (list of (thing)) separated by (list boundary)
+   {
+    action (clients)
+     (
+      English: replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing))
+     )
+     Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
+     {
+      replace from ((lower bound) of (range)) to ((upper bound) of (range)) in (↓ list) with (insertion)
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing))
+     )
+     list of (thing)
+     {
+      ← (list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (insertion)
+     }
+
+    action (clients)
+     (
+      English: insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing))
+     )
+     C: “g¤(5F)array¤(5F)insert¤(5F)vals(” list “, ” boundary “, ” insertion “¤(2D)>data, ” insertion “¤(2D)>len)”
+     C♯: “” list “.InsertRange(” boundary “, ” insertion “)”
+     JavaScript: “” list “.splice(” boundary “, 0, ...” insertion “)”
+     Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
+     {
+      insert (insertion) at (boundary) in (↓ list) according to list insertion
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (insertion: list of (thing)) inserted at (boundary: list boundary)
+     )
+     list of (thing)
+     JavaScript: “” list “.toSpliced(” boundary “, 0, ...” insertion “)”
+     Kotlin: “” list “.toMutableList().apply { addAll(” boundary “, ” insertion “) }.toList()”
+     {
+      ← (list) with (insertion) inserted at (boundary) according to list insertion
+     }
+
+    action (clients)
+     (
+      English: append (appendix: list of (thing)) to (list: ↓ list of (thing))
+     )
+     C: “g¤(5F)array¤(5F)append¤(5F)vals(” list “, ” appendix “¤(2D)>data, ” appendix “¤(2D)>len)”
+     C♯: “” list “.AddRange(” appendix “)”
+     Kotlin: “” list “ += ” appendix “”
+     Swift: “” list “ += ” appendix “”
+     {
+      change (↓ list) to ((list) with (appendix) appended)
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (appendix: list of (thing)) appended
+     )
+     list of (thing)
+     C♯: “” list “.Concat(” appendix “).ToList()”
+     JavaScript: “” list “.concat(” appendix “)”
+     Kotlin: “” list “ + ” appendix “”
+     Swift: “” list “ + ” appendix “”
+     {
+      ← (list) with (appendix) appended according to list insertion
+     }
+
+    action (clients)
+     (
+      English: prepend (prefix: list of (thing)) to (list: ↓ list of (thing))
+     )
+     C: “g¤(5F)array¤(5F)prepend¤(5F)vals(” list “, ” prefix “¤(2D)>data, ” prefix “¤(2D)>len)”
+     {
+      prepend (prefix) to (↓ list) according to list insertion
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (prefix: list of (thing)) prepended
+     )
+     list of (thing)
+     C♯: “” prefix “.Concat(” list “).ToList()”
+     JavaScript: “” prefix “.concat(” list “)”
+     Kotlin: “” prefix “ + ” list “”
+     Swift: “” prefix “ + ” list “”
+     {
+      ← (list) with (prefix) prepended according to list insertion
+     }
+
+    action (clients)
+     (
+      English: convert (other: list of (thing)) into list
+     )
+     list of (thing)
+     C: “” other “”
+     C♯: “” other “”
+     JavaScript: “” other “”
+     Kotlin: “” other “”
+     Swift: “” other “”
+
+    action (clients)
+     (
+      English: insertion example
+     )
+     list of (thing)
+     {
+      ← non‐empty example
+     }
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     verify ((convert from (beginning of (list)) to (end of (list)) in (list) into list) is not empty)
+    }
+   ]
+   (
+    English: convert from (lower bound: list boundary) to (upper bound: list boundary) in (list: list of (thing)) into list
+   )
+   list of (thing)
+   C♯: “” list “.GetRange(” lower bound “, ” upper bound “ ¤(2D) ” lower bound “)”
+   JavaScript: “” list “.slice(” lower bound “, ” upper bound “)”
+   Kotlin: “” list “.slice(” lower bound “..<” upper bound “)”
+   {
+    let (• copy: list of (thing)) start as (empty: list of (thing))
+    for each (• element: thing) in ((from (lower bound) to (upper bound)) in (list)), {
+     append (element) to (↓ copy)
+    }
+    ← copy
+   }
+
+  use (clients)
+   insertion from (slice of (list of (thing))) into (list of (thing)) separated by (list boundary)
+   {
+    action (clients)
+     (
+      English: replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: slice of (list of (thing)))
+     )
+     Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
+     {
+      replace (range) in (↓ list) with (convert (insertion) into list: list of (thing))
+     }
+
+    action (clients)
+     (
+      English: insert (insertion: slice of (list of (thing))) at (boundary: list boundary) in (list: ↓ list of (thing))
+     )
+     Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
+     {
+      insert (convert (insertion) into list: list of (thing)) at (boundary) in (↓ list)
+     }
+
+    action (clients)
+     (
+      English: append (appendix: slice of (list of (thing))) to (list: ↓ list of (thing))
+     )
+     Swift: “” list “.append(contentsOf: ” appendix “)”
+     {
+      append (convert (appendix) into list: list of (thing)) to (↓ list)
+     }
+
+    action (clients)
+     (
+      English: convert (other: slice of (list of (thing))) into list
+     )
+     list of (thing)
+     Swift: “Array(” other “)”
+     {
+      ← convert from (beginning of (other)) to (end of (other)) in ((whole) of (other)) into list
+     }
+
+    action (clients)
+     (
+      English: insertion example
+     )
+     slice of (list of (thing))
+     {
+      ← entirety of (insertion example: list of (thing))
+     }
+   }
  }
