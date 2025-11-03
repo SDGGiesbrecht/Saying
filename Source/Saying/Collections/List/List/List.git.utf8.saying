@@ -278,7 +278,7 @@ extension
       English: (list: list of (thing)) with (prefix: list of (thing)) prepended
      )
      list of (thing)
-     C♯: “” prefix “.Concat(” list “)”
+     C♯: “” prefix “.Concat(” list “).ToList()”
      JavaScript: “” prefix “.concat(” list “)”
      Kotlin: “” prefix “ + ” list “”
      Swift: “” prefix “ + ” list “”
