@@ -6,6 +6,61 @@ ability (clients)
   requirement (clients)
    [
     test {
+     let (• list: list) start as (non‐empty example: list)
+     replace (beginning of (list)) in (↓ list) with (example: element)
+    }
+   ]
+   (
+    English: replace (index: index) in (list: ↓ list) with (element: element)
+   )
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (beginning of (list)) replaced with (example: element))
+    }
+   ]
+   (
+    English: (list: list) with (index: index) replaced with (element: element)
+   )
+   list
+   {
+    ← (list) with (index) replaced with (element) according to use as changeable list
+   }
+
+  requirement (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     insert (example: element) at (begining of (list)) in (↓ list)
+     verify ((list) is not empty)
+    }
+   ]
+   (
+    English: insert (element: element) at (boundary: boundary) in (list: ↓ list)
+   )
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     verify (((list) with (example: element) inserted at (end of (list))) is not empty)
+    }
+   ]
+   (
+    English: (list: list) with (element: element) inserted at (boundary: boundary)
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    insert (element) at (boundary) in (↓ copy)
+    ← copy
+   }
+
+  choice (clients)
+   [
+    test {
      let (• list: list) start as (empty: list)
      append (example: element) to (↓ list)
      verify ((list) is not empty)
@@ -14,6 +69,9 @@ ability (clients)
    (
     English: append (element: element) to (list: ↓ list)
    )
+   {
+    ← insert (element) at (end of (list)) in (↓ list)
+   }
 
   choice (clients)
    [
@@ -24,9 +82,86 @@ ability (clients)
    )
    list
    {
+    ← (list) with (element) appended according to use as changeable list
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     prepend (example: element) to (↓ list)
+     verify ((list) is not empty)
+    }
+   ]
+   (
+    English: prepend (element: element) to (list: ↓ list)
+   )
+   {
+    ← prepend (element) to (↓ list) according to use as changeable list
+   }
+
+  choice (clients)
+   [
+    test {verify (((empty: list) with (example: element) prepended) is not empty)}
+   ]
+   (
+    English: (list: list) with (element: element) prepended
+   )
+   list
+   {
     let (• copy: list) start as (list: list)
-    append (element) to (↓ copy)
+    prepend (element) to (↓ copy)
     ← copy
+   }
+
+  requirement (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     remove (beginning of (list)) from (↓ list)
+    }
+   ]
+   (
+    English: remove (index: index) from (list: ↓ list)
+   )
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (beginning of (list)) removed)
+    }
+   ]
+   (
+    English: (list: list) with (index: index) removed
+   )
+   {
+    ← (list) with (index) removed according to use as changeable list
+   }
+
+  requirement (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     remove (from (beginning of (list)) to (end of (list))) from (↓ list)
+    }
+   ]
+   (
+    English: remove (range: range of (boundary)) from (list: ↓ list)
+   )
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (from (beginning of (list)) to (end of (list))) removed)
+    }
+   ]
+   (
+    English: (list: list) with (range: range of (boundary)) removed
+   )
+   {
+    ← (list) with (range) removed according to use as changeable list
    }
  }
 
@@ -42,5 +177,100 @@ extension
     let (• list: list) start as (empty: list)
     append (example: element) to (↓ list)
     ← list
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (beginning of (list)) replaced with (example: element) according to use as changeable list)
+    }
+   ]
+   (
+    English: (list: list) with (index: index) replaced with (element: element) according to use as changeable list
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    replace (index) in (↓ copy) with (element)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     verify (((list) with (example: element) inserted at (end of (list)) according to use as changeable list) is not empty)
+    }
+   ]
+   (
+    English: (list: list) with (element: element) inserted at (boundary: boundary) according to use as changeable list
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    insert (element) at (boundary) in (↓ copy)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {verify (((empty: list) with (example: element) appended according to use as changeable list) is not empty)}
+   ]
+   (
+    English: (list: list) with (element: element) appended according to use as changeable list
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    append (element) to (↓ copy)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (empty: list)
+     prepend (example: element) to (↓ list) according to use as changeable list
+     verify ((list) is not empty)
+    }
+   ]
+   (
+    English: prepend (element: element) to (list: ↓ list) according to use as changeable list
+   )
+   {
+    ← insert (element) at (beginning of (list)) in (↓ list)
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (beginning of (list)) removed according to use as changeable list)
+    }
+   ]
+   (
+    English: (list: list) with (index: index) removed according to use as changeable list
+   )
+   {
+    let (• copy: list) start as (list: list)
+    remove (index) from (↓ copy)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (from (beginning of (list)) to (end of (list))) removed according to use as changeable list)
+    }
+   ]
+   (
+    English: (list: list) with (range: range of (boundary)) removed according to use as changeable list
+   )
+   {
+    let (• copy: list) start as (list: list)
+    remove (range) from (↓ copy)
+    ← copy
    }
  }

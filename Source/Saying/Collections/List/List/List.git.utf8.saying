@@ -153,9 +153,86 @@ extension
    {
    }
 
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     remove from (beginning of (list)) to (end of (list)) in (↓ list)
+    }
+   ]
+   (
+    English: remove from (beginning: list boundary) to (end: list boundary) in (list: ↓ list of (thing))
+   )
+   C: “g¤(5F)array¤(5F)remove¤(5F)range(” list “, ” beginning “, ” end “ ¤(2D) ” beginning “)”
+   C♯: “” list “.RemoveRange(” beginning “, ” end “ ¤(2D) ” beginning “)”
+   JavaScript: “” list “.splice(” beginning “, ” end “ ¤(2D) ” beginning “)”
+   {
+    change (↓ list) to ((list) with (from (beginning) to (end)) removed)
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     ignore ((list) with from (beginning of (list)) to (end of (list)) removed)
+    }
+   ]
+   (
+    English: (list: list) with from (beginning: boundary) to (end: boundary) removed
+   )
+   list of (thing)
+   Kotlin: “” list “.toMutableList().apply { removeRange(” beginning “, ” end “) }.toList()”
+   {
+    ← (list) with (from (beginning) to (end)) removed according to use as changeable list
+   }
+
   use (clients)
    use of (list of (thing)) as changeable list of (thing) indexed by (list index) separated by (list boundary)
    {
+    action (clients)
+     (
+      English: replace (index: list index) in (list: ↓ list of (thing)) with (element: thing)
+     )
+     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “) = ” element “”
+     C♯: “” list “[” index “] = ” element “”
+     JavaScript: “” list “[” index “] = ” element “”
+     Swift: “” list “[” index “] = ” element “”
+     {
+      change (↓ list) to ((list) with (index) replaced with (element))
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (index: list index) replaced with (element: thing)
+     )
+     list
+     Kotlin: “” list “.toMutableList().apply { this[” index “] = ” element “ }.toList()”
+     {
+      ← (list) with (index) replaced with (element) according to use as changeable list
+     }
+
+    action (clients)
+     (
+      English: insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing))
+     )
+     C: “g¤(5F)array¤(5F)insert¤(5F)val(” list “, ” boundary “, ” element “)”
+     C♯: “” list “.Insert(” boundary “, ” element “)”
+     JavaScript: “” list “.splice(” boundary “, 0, ” element “)”
+     Swift: “” list “.insert(” element “, at: ” boundary “)”
+     {
+      change (↓ list) to ((list) with (element) inserted at (boundary))
+     }
+
+    action (clients)
+     (
+      English: (list: list) with (element: element) inserted at (boundary: list boundary)
+     )
+     list
+     Kotlin: “” list “.toMutableList().apply { add(” boundary “, ” element “) }.toList()”
+     {
+      ← (list) with (element) inserted at (boundary) according to use as changeable list
+     }
+
     action (clients)
      (
       English: append (element: thing) to (list: ↓ list of (thing))
@@ -163,8 +240,69 @@ extension
      C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ” element “)”
      C♯: “” list “.Add(” element “)”
      JavaScript: “” list “.push(” element “)”
-     Kotlin: “” list “ += listOf(” element “)”
      Swift: “” list “.append(” element “)”
+     {
+      change (↓ list) to ((list) with (element) appended)
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (element: thing) appended
+     )
+     list
+     Kotlin: “” list “.toMutableList().apply { add(” element “) }.toList()”
+     {
+      ← (list) with (element) appended according to use as changeable list
+     }
+
+    action (clients)
+     (
+      English: prepend (element: thing) to (list: ↓ list of (thing))
+     )
+     C: “g¤(5F)array¤(5F)prepend¤(5F)val(” list “, ” element “)”
+     C♯: “” list “.Prepend(” element “)”
+     JavaScript: “” list “.unshift(” element “)”
+     {
+      ← prepend (element) to (↓ list) according to use as changeable list
+     }
+
+    action (clients)
+     (
+      English: remove (index: list index) from (list: ↓ list of (thing))
+     )
+     C: “g¤(5F)array¤(5F)remove¤(5F)index(” list “, ” index “)”
+     C♯: “” list “.RemoveAt(” index “)”
+     JavaScript: “” list “.splice(” index “, 0)”
+     Swift: “” list “.remove(at: ” index “)”
+     {
+      change (↓ list) to ((list) with (index) removed)
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (index: list index) removed
+     )
+     Kotlin: “” list “.toMutableList().apply { removeAt(” index “) }.toList()”
+     {
+      ← (list) with (index) removed according to use as changeable list
+     }
+
+    action (clients)
+     (
+      English: remove (range: range of (list boundary)) from (list: ↓ list of (thing))
+     )
+     Swift: “” list “.removeSubrange(” range “)”
+     {
+      remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (range: range of (list boundary)) removed
+     )
+     {
+      ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
+     }
    }
 
   action (file)
@@ -222,7 +360,6 @@ extension
      )
      C: “g¤(5F)array¤(5F)insert¤(5F)vals(” list “, ” boundary “, ” insertion “¤(2D)>data, ” insertion “¤(2D)>len)”
      C♯: “” list “.InsertRange(” boundary “, ” insertion “)”
-     JavaScript: “” list “.splice(” boundary “, 0, ...” insertion “)”
      Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
      {
       insert (insertion) at (boundary) in (↓ list) according to list insertion
@@ -233,7 +370,6 @@ extension
       English: (list: list of (thing)) with (insertion: list of (thing)) inserted at (boundary: list boundary)
      )
      list of (thing)
-     JavaScript: “” list “.toSpliced(” boundary “, 0, ...” insertion “)”
      Kotlin: “” list “.toMutableList().apply { addAll(” boundary “, ” insertion “) }.toList()”
      {
       ← (list) with (insertion) inserted at (boundary) according to list insertion
@@ -269,6 +405,7 @@ extension
       English: prepend (prefix: list of (thing)) to (list: ↓ list of (thing))
      )
      C: “g¤(5F)array¤(5F)prepend¤(5F)vals(” list “, ” prefix “¤(2D)>data, ” prefix “¤(2D)>len)”
+     JavaScript: “” list “.unshift(...” element “)”
      {
       prepend (prefix) to (↓ list) according to list insertion
      }

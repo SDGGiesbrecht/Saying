@@ -230,6 +230,17 @@ use (clients)
  {
  }
 
+action (file)
+ (
+  English: boundary before (index: Unicode scalar index) in (scalars: Unicode scalars)
+ )
+ Unicode scalar boundary
+ C: “” index “”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “” index “”
+
 action (clients)
  [
   test {verify (((“ ”: Unicode scalar) as scalars) is (“ ”: Unicode scalars))}
@@ -247,9 +258,63 @@ action (clients)
   ← scalars
  }
 
+action (file)
+ [
+  test {
+   let (• list: Unicode scalars) start as (“ ”: Unicode scalars)
+   remove from (beginning of (list)) to (end of (list)) in (↓ list)
+   verify ((list) is (“”: Unicode scalars))
+  }
+ ]
+ (
+  English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (list: ↓ Unicode scalars)
+ )
+ C: “g¤(5F)array¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)”
+ C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “)”
+ Kotlin: “StringBuilder(” list “).deleteRange(” beginning “, ” end “).toString()”
+ {
+  replace from (beginning) to (end) in (↓ list) with (empty: Unicode scalars)
+ }
+
+action (clients)
+ [
+  test {
+   let (• list: Unicode scalars) be (non‐empty example: Unicode scalars)
+   ignore ((list) with from (beginning of (list)) to (end of (list)) removed)
+  }
+ ]
+ (
+  English: (list: Unicode scalars) with from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) removed
+ )
+ Unicode scalars
+ Kotlin: “” list “.removeRange(” beginning “, ” end “)”
+ {
+  ← (list) with (from (beginning) to (end)) removed according to use as changeable list
+ }
+
 use (clients)
  use of (Unicode scalars) as changeable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+  action (clients)
+   (
+    English: replace (index: Unicode scalar index) in (list: ↓ Unicode scalars) with (element: Unicode scalar)
+   )
+   Swift: “” list “[” index “] = ” element “”
+   {
+    let (• lower bound) be (boundary before (index))
+    replace (from (lower bound) to (boundary after (lower bound) in (list) skipping bounds check)) in (↓ list) with ((element) as scalars)
+   }
+
+  action (clients)
+   (
+    English: insert (element: element) at (boundary: boundary) in (list: ↓ list)
+   )
+   C: “g¤(5F)string¤(5F)insert¤(5F)unichar((” list “)¤(2D)>target, ” boundary “, ” element “)”
+   Swift: “” list “.insert(” element “, at: ” boundary “)”
+   {
+    insert ((element) as scalars) at (boundary before (index) in (list))
+   }
+
   action (clients)
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
@@ -268,6 +333,42 @@ use (clients)
    Kotlin: “StringBuilder(” list “).appendCodePoint(” element “).toString()”
    {
     ← (list) with ((element) as scalars) appended
+   }
+
+  action (clients)
+   (
+    English: prepend (element: Unicode scalar) to (list: ↓ Unicode scalars)
+   )
+   C: “g¤(5F)string¤(5F)prepend¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
+   {
+    ← prepend (element) to (↓ list) according to use as changeable list
+   }
+
+  action (clients)
+   (
+    English: remove (index: index) from (list: ↓ list)
+   )
+   Swift: “” list “.remove(at: ” index “)”
+   {
+    let (• lower bound) be (boundary before (index))
+    remove (from (lower bound) to (boundary after (lower bound))) from (↓ list)
+   }
+
+  action (clients)
+   (
+    English: remove (range: range of (boundary)) from (list: ↓ list)
+   )
+   Swift: “” list “.removeSubrange(” range “)”
+   {
+    ← remove from ((lower bound) of (range)) to ((lower bound) of (range)) from (↓ list)
+   }
+
+  action (clients)
+   (
+    English: (list: list) with (range: range of (boundary)) removed
+   )
+   {
+    ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
    }
  }
 

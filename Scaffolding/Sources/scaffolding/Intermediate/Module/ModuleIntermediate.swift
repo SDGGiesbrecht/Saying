@@ -150,7 +150,7 @@ extension ModuleIntermediate {
       })
 
     var prototypeActions = use.actions
-    for (_, requirement) in ability.requirements {
+    for requirement in ability.requirements.values.lazy.flatMap({ $0.values }).flatMap({ $0.values }) {
       if let provisionIndex = prototypeActions.firstIndex(where: { action in
         return action.names.overlaps(requirement.names)
       }) {
