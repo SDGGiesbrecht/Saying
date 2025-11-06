@@ -7,7 +7,7 @@ ability (clients)
    [
     test {
      let (• list: list) start as (non‐empty example: list)
-     replace (beginning of (list)) in (↓ list) with (example: element)
+     replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: element)
     }
    ]
    (
@@ -18,7 +18,7 @@ ability (clients)
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     ignore ((list) with (beginning of (list)) replaced with (example: element))
+     ignore ((list) with (index after (beginning of (list)) in (list) skipping bounds check) replaced with (example: element))
     }
    ]
    (
@@ -33,7 +33,7 @@ ability (clients)
    [
     test {
      let (• list: list) start as (empty: list)
-     insert (example: element) at (begining of (list)) in (↓ list)
+     insert (example: element) at (beginning of (list)) in (↓ list)
      verify ((list) is not empty)
     }
    ]
@@ -44,7 +44,7 @@ ability (clients)
   choice (clients)
    [
     test {
-     let (• list: list) start as (empty: list)
+     let (• list: list) be (empty: list)
      verify (((list) with (example: element) inserted at (end of (list))) is not empty)
     }
    ]
@@ -118,7 +118,7 @@ ability (clients)
    [
     test {
      let (• list: list) start as (non‐empty example: list)
-     remove (beginning of (list)) from (↓ list)
+     remove (index after (beginning of (list)) in (list) skipping bounds check) from (↓ list)
     }
    ]
    (
@@ -129,12 +129,13 @@ ability (clients)
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     ignore ((list) with (beginning of (list)) removed)
+     ignore ((list) with (index after (beginning of (list)) in (list) skipping bounds check) removed)
     }
    ]
    (
     English: (list: list) with (index: index) removed
    )
+   list
    {
     ← (list) with (index) removed according to use as changeable list
    }
@@ -160,6 +161,7 @@ ability (clients)
    (
     English: (list: list) with (range: range of (boundary)) removed
    )
+   list
    {
     ← (list) with (range) removed according to use as changeable list
    }
@@ -183,7 +185,7 @@ extension
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     ignore ((list) with (beginning of (list)) replaced with (example: element) according to use as changeable list)
+     ignore ((list) with (index after (beginning of (list)) in (list) skipping bounds check) replaced with (example: element) according to use as changeable list)
     }
    ]
    (
@@ -199,7 +201,7 @@ extension
   action (clients)
    [
     test {
-     let (• list: list) start as (empty: list)
+     let (• list: list) be (empty: list)
      verify (((list) with (example: element) inserted at (end of (list)) according to use as changeable list) is not empty)
     }
    ]
@@ -246,12 +248,13 @@ extension
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     ignore ((list) with (beginning of (list)) removed according to use as changeable list)
+     ignore ((list) with (index after (beginning of (list)) in (list) skipping bounds check) removed according to use as changeable list)
     }
    ]
    (
     English: (list: list) with (index: index) removed according to use as changeable list
    )
+   list
    {
     let (• copy: list) start as (list: list)
     remove (index) from (↓ copy)
@@ -268,9 +271,46 @@ extension
    (
     English: (list: list) with (range: range of (boundary)) removed according to use as changeable list
    )
+   list
    {
     let (• copy: list) start as (list: list)
     remove (range) from (↓ copy)
     ← copy
+   }
+ }
+
+use (unit)
+ use of (minimal list example) as changeable list of (truth value) indexed by (list index) separated by (list boundary)
+ {
+  action (unit)
+   (
+    English: replace (index: list index) in (list: ↓ minimal list example) with (element: truth value)
+   )
+   {
+    replace (index) in (↓ (wrapped list) of (list)) with (element)
+   }
+
+  action (unit)
+   (
+    English: insert (element: truth value) at (boundary: list boundary) in (list: ↓ minimal list example)
+   )
+   {
+    insert (element) at (boundary) in (↓ (wrapped list) of (list))
+   }
+
+  action (unit)
+   (
+    English: remove (index: list index) from (list: ↓ minimal list example)
+   )
+   {
+    remove (index) from (↓ (wrapped list) of (list))
+   }
+
+  action (unit)
+   (
+    English: remove (range: range of (list boundary)) from (list: ↓ minimal list example)
+   )
+   {
+    remove (range) from (↓ (wrapped list) of (list))
    }
  }

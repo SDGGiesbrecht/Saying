@@ -262,21 +262,21 @@ action (file)
  [
   test {
    let (• list: Unicode scalars) start as (“ ”: Unicode scalars)
-   remove from (beginning of (list)) to (end of (list)) in (↓ list)
+   remove from (beginning of (list)) to (end of (list)) from (↓ list)
    verify ((list) is (“”: Unicode scalars))
   }
  ]
  (
-  English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (list: ↓ Unicode scalars)
+  English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) from (list: ↓ Unicode scalars)
  )
  C: “g¤(5F)array¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)”
  C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “)”
  Kotlin: “StringBuilder(” list “).deleteRange(” beginning “, ” end “).toString()”
  {
-  replace from (beginning) to (end) in (↓ list) with (empty: Unicode scalars)
+  replace (from (beginning) to (end)) in (↓ list) with (empty: Unicode scalars)
  }
 
-action (clients)
+action (file)
  [
   test {
    let (• list: Unicode scalars) be (non‐empty example: Unicode scalars)
@@ -299,20 +299,19 @@ use (clients)
    (
     English: replace (index: Unicode scalar index) in (list: ↓ Unicode scalars) with (element: Unicode scalar)
    )
-   Swift: “” list “[” index “] = ” element “”
    {
-    let (• lower bound) be (boundary before (index))
+    let (• lower bound: Unicode scalar boundary) be (boundary before (index) in (list))
     replace (from (lower bound) to (boundary after (lower bound) in (list) skipping bounds check)) in (↓ list) with ((element) as scalars)
    }
 
   action (clients)
    (
-    English: insert (element: element) at (boundary: boundary) in (list: ↓ list)
+    English: insert (element: Unicode scalar) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
    C: “g¤(5F)string¤(5F)insert¤(5F)unichar((” list “)¤(2D)>target, ” boundary “, ” element “)”
    Swift: “” list “.insert(” element “, at: ” boundary “)”
    {
-    insert ((element) as scalars) at (boundary before (index) in (list))
+    insert ((element) as scalars) at (boundary) in (↓ list)
    }
 
   action (clients)
@@ -341,32 +340,33 @@ use (clients)
    )
    C: “g¤(5F)string¤(5F)prepend¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
    {
-    ← prepend (element) to (↓ list) according to use as changeable list
+    prepend (element) to (↓ list) according to use as changeable list
    }
 
   action (clients)
    (
-    English: remove (index: index) from (list: ↓ list)
+    English: remove (index: Unicode scalar index) from (list: ↓ Unicode scalars)
    )
    Swift: “” list “.remove(at: ” index “)”
    {
-    let (• lower bound) be (boundary before (index))
-    remove (from (lower bound) to (boundary after (lower bound))) from (↓ list)
+    let (• lower bound: Unicode scalar boundary) be (boundary before (index) in (list))
+    remove (from (lower bound) to (boundary after (lower bound) in (list) skipping bounds check)) from (↓ list)
    }
 
   action (clients)
    (
-    English: remove (range: range of (boundary)) from (list: ↓ list)
+    English: remove (range: range of (Unicode scalar boundary)) from (list: ↓ Unicode scalars)
    )
    Swift: “” list “.removeSubrange(” range “)”
    {
-    ← remove from ((lower bound) of (range)) to ((lower bound) of (range)) from (↓ list)
+    remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
    }
 
   action (clients)
    (
-    English: (list: list) with (range: range of (boundary)) removed
+    English: (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) removed
    )
+   Unicode scalars
    {
     ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
    }

@@ -157,11 +157,11 @@ extension
    [
     test {
      let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     remove from (beginning of (list)) to (end of (list)) in (↓ list)
+     remove from (beginning of (list)) to (end of (list)) from (↓ list)
     }
    ]
    (
-    English: remove from (beginning: list boundary) to (end: list boundary) in (list: ↓ list of (thing))
+    English: remove from (beginning: list boundary) to (end: list boundary) from (list: ↓ list of (thing))
    )
    C: “g¤(5F)array¤(5F)remove¤(5F)range(” list “, ” beginning “, ” end “ ¤(2D) ” beginning “)”
    C♯: “” list “.RemoveRange(” beginning “, ” end “ ¤(2D) ” beginning “)”
@@ -178,7 +178,7 @@ extension
     }
    ]
    (
-    English: (list: list) with from (beginning: boundary) to (end: boundary) removed
+    English: (list: list of (thing)) with from (beginning: list boundary) to (end: list boundary) removed
    )
    list of (thing)
    Kotlin: “” list “.toMutableList().apply { removeRange(” beginning “, ” end “) }.toList()”
@@ -205,7 +205,7 @@ extension
      (
       English: (list: list of (thing)) with (index: list index) replaced with (element: thing)
      )
-     list
+     list of (thing)
      Kotlin: “” list “.toMutableList().apply { this[” index “] = ” element “ }.toList()”
      {
       ← (list) with (index) replaced with (element) according to use as changeable list
@@ -225,9 +225,9 @@ extension
 
     action (clients)
      (
-      English: (list: list) with (element: element) inserted at (boundary: list boundary)
+      English: (list: list of (thing)) with (element: thing) inserted at (boundary: list boundary)
      )
-     list
+     list of (thing)
      Kotlin: “” list “.toMutableList().apply { add(” boundary “, ” element “) }.toList()”
      {
       ← (list) with (element) inserted at (boundary) according to use as changeable list
@@ -249,7 +249,7 @@ extension
      (
       English: (list: list of (thing)) with (element: thing) appended
      )
-     list
+     list of (thing)
      Kotlin: “” list “.toMutableList().apply { add(” element “) }.toList()”
      {
       ← (list) with (element) appended according to use as changeable list
@@ -263,7 +263,7 @@ extension
      C♯: “” list “.Prepend(” element “)”
      JavaScript: “” list “.unshift(” element “)”
      {
-      ← prepend (element) to (↓ list) according to use as changeable list
+      prepend (element) to (↓ list) according to use as changeable list
      }
 
     action (clients)
@@ -282,6 +282,7 @@ extension
      (
       English: (list: list of (thing)) with (index: list index) removed
      )
+     list of (thing)
      Kotlin: “” list “.toMutableList().apply { removeAt(” index “) }.toList()”
      {
       ← (list) with (index) removed according to use as changeable list
@@ -300,6 +301,7 @@ extension
      (
       English: (list: list of (thing)) with (range: range of (list boundary)) removed
      )
+     list of (thing)
      {
       ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
      }
@@ -405,7 +407,7 @@ extension
       English: prepend (prefix: list of (thing)) to (list: ↓ list of (thing))
      )
      C: “g¤(5F)array¤(5F)prepend¤(5F)vals(” list “, ” prefix “¤(2D)>data, ” prefix “¤(2D)>len)”
-     JavaScript: “” list “.unshift(...” element “)”
+     JavaScript: “” list “.unshift(...” prefix “)”
      {
       prepend (prefix) to (↓ list) according to list insertion
      }
