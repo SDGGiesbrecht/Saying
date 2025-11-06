@@ -129,7 +129,7 @@ ability (clients)
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     ignore ((list) with (index after (beginning of (list)) in (list) skipping bounds check) removed according to use as changeable list)
+     ignore ((list) with (index after (beginning of (list)) in (list) skipping bounds check) removed)
     }
    ]
    (
