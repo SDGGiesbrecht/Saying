@@ -170,22 +170,6 @@ extension
     change (↓ list) to ((list) with (from (beginning) to (end)) removed)
    }
 
-  action (clients)
-   [
-    test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     ignore ((list) with from (beginning of (list)) to (end of (list)) removed)
-    }
-   ]
-   (
-    English: (list: list of (thing)) with from (beginning: list boundary) to (end: list boundary) removed
-   )
-   list of (thing)
-   Kotlin: “” list “.toMutableList().apply { removeRange(” beginning “, ” end “) }.toList()”
-   {
-    ← (list) with (from (beginning) to (end)) removed according to use as changeable list
-   }
-
   use (clients)
    use of (list of (thing)) as changeable list of (thing) indexed by (list index) separated by (list boundary)
    {
@@ -295,15 +279,6 @@ extension
      Swift: “” list “.removeSubrange(” range “)”
      {
       remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
-     }
-
-    action (clients)
-     (
-      English: (list: list of (thing)) with (range: range of (list boundary)) removed
-     )
-     list of (thing)
-     {
-      ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
      }
    }
 
