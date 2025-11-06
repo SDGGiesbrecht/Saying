@@ -70,7 +70,7 @@ ability (clients)
     English: append (element: element) to (list: ↓ list)
    )
    {
-    ← insert (element) at (end of (list)) in (↓ list)
+    insert (element) at (end of (list)) in (↓ list)
    }
 
   choice (clients)
@@ -97,7 +97,7 @@ ability (clients)
     English: prepend (element: element) to (list: ↓ list)
    )
    {
-    ← prepend (element) to (↓ list) according to use as changeable list
+    prepend (element) to (↓ list) according to use as changeable list
    }
 
   choice (clients)
@@ -241,7 +241,7 @@ extension
     English: prepend (element: element) to (list: ↓ list) according to use as changeable list
    )
    {
-    ← insert (element) at (beginning of (list)) in (↓ list)
+    insert (element) at (beginning of (list)) in (↓ list)
    }
 
   action (clients)
