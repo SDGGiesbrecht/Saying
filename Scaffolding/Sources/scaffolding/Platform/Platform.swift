@@ -1670,7 +1670,7 @@ extension Platform {
       .lazy.filter({ $0.deservesTesting })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
     let choiceRegions: [UnicodeText] = moduleReferenceLookup.allAbilities()
-      .lazy.flatMap({ $0.defaults.values })
+      .lazy.flatMap({ $0.allDefaults() })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
     return Set([
       actionRegions,

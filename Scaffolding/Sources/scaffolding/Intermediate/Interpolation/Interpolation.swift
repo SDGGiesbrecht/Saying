@@ -160,12 +160,28 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
 }
 
 extension Interpolation where InterpolationParameter == ParameterIntermediate {
+  private func correlatableName(with other: Interpolation) -> UnicodeText? {
+    return reorderings.keys.first(where: { other.reorderings[$0] != nil })
+  }
+
+  func match(requirement: Interpolation, typeLookup: [UnicodeText: ParsedTypeReference]) -> Bool {
+    guard let correlation = correlatableName(with: requirement) else {
+      return false
+    }
+    for (provided, expected) in zip(ordered(for: correlation), requirement.ordered(for: correlation)) {
+      if provided.type.key != expected.type.specializing(typeLookup: typeLookup).key {
+        return false
+      }
+    }
+    return true
+  }
+
   func merging(
     requirement: Interpolation,
     provisionDeclarationName: ParsedActionName
   ) -> Result<Interpolation, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
-    let correlatedName = self.reorderings.keys.first(where: { requirement.reorderings[$0] != nil })!
+    let correlatedName = self.correlatableName(with: requirement)!
     let nameToRequirement = requirement.reorderings[correlatedName]!
     let nameToSelf = self.reorderings[correlatedName]!
     let mergedParameters = self.parameters.indices.map { index in

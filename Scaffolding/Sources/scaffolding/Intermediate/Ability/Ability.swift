@@ -3,7 +3,7 @@ struct Ability {
   var parameters: Interpolation<AbilityParameterIntermediate>
   var identifierMapping: [UnicodeText: MappedIdentifier]
   var requirements: [UnicodeText: [[TypeReference]: [TypeReference?: RequirementIntermediate]]]
-  var defaults: [UnicodeText: ActionIntermediate]
+  var defaults: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
   var provisionThings: [Thing]
   var provisionActions: [ActionIntermediate]
   var provisionUses: [UseIntermediate]
@@ -11,6 +11,15 @@ struct Ability {
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
+}
+
+extension Ability {
+  func allDefaults() -> [ActionIntermediate] {
+    return defaults
+      .lazy.flatMap({ $0.value })
+      .lazy.flatMap({ $0.value })
+      .map({ $0.value })
+  }
 }
 
 extension Ability {
@@ -45,7 +54,7 @@ extension Ability {
     }
     var identifierMapping: [UnicodeText: MappedIdentifier] = [:]
     var requirements: [UnicodeText: [[TypeReference]: [TypeReference?: RequirementIntermediate]]] = [:]
-    var defaults: [UnicodeText: ActionIntermediate] = [:]
+    var defaults: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     let abilityNamespace = namespace.appending(names)
     for requirementEntry in declaration.requirements.requirements?.requirements.requirements ?? [] {
       switch requirementEntry {
@@ -93,7 +102,7 @@ extension Ability {
         case .success(let constructed):
           defaultImplementation = constructed
         }
-        defaults[identifier] = defaultImplementation
+        defaults[identifier, default: [:]][defaultImplementation.signature(orderedFor: identifier).map({ $0.key }), default: [:]][defaultImplementation.returnValue?.key] = defaultImplementation
       }
     }
     let access = AccessIntermediate(declaration.access)
