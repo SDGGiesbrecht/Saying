@@ -135,6 +135,7 @@ protocol Platform {
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
+  static func log(test: String) -> String // Temporary, due to lack of info from “verify”.
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
@@ -1604,6 +1605,11 @@ extension Platform {
     )
   }
 
+  static func sayingIdentifier(for test: TestIntermediate) -> String {
+    return test.location.lazy
+      .map({ String($0.identifier()) })
+      .joined(separator: ":")
+  }
   static func identifier(for test: TestIntermediate, leading: Bool) -> String {
     return test.location.lazy.enumerated()
       .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0) })
@@ -1643,9 +1649,13 @@ extension Platform {
     ).full
   }
 
-  static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> String {
+  static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> [String] {
     let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex)
-    return statement(expression: "\(name)()")
+    return [
+      log(test: sayingIdentifier(for: test)),
+      log(test: name),
+      statement(expression: "\(name)()")
+    ]
   }
 
   static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<String> {
@@ -1884,7 +1894,7 @@ extension Platform {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
       result.append("")
-      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0, identifierIndex: &identifierIndex) })))
+      result.append(contentsOf: testSummary(testCalls: allTests.flatMap({ call(test: $0, identifierIndex: &identifierIndex) })))
     }
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)

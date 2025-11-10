@@ -461,6 +461,10 @@ enum CSharp: Platform {
     ]
   }
 
+  static func log(test: String) -> String {
+    return "Console.WriteLine(\u{22}\(sanitize(stringLiteral: test))\u{22});"
+  }
+
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
       "\(indent)internal static void Test()",

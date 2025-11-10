@@ -376,6 +376,10 @@ enum Kotlin: Platform {
     return nil
   }
 
+  static func log(test: String) -> String {
+    return "println(\u{22}\(sanitize(stringLiteral: test))\u{22})"
+  }
+
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
       "",

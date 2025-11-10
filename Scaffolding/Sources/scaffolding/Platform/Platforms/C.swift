@@ -428,6 +428,10 @@ enum C: Platform {
     return nil
   }
 
+  static func log(test: String) -> String {
+    return "printf(\u{22}\(sanitize(stringLiteral: test))\u{22}); fflush(stdout);"
+  }
+
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
       "void test() {",
