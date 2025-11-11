@@ -369,7 +369,7 @@ extension
       English: (list: list of (thing)) with (appendix: list of (thing)) appended
      )
      list of (thing)
-     C♯: “” list “.Concat(” appendix “).ToList()”
+     C♯: “” list “.Concat(” appendix “).ToList()” (“System.Linq”)
      JavaScript: “” list “.concat(” appendix “)”
      Kotlin: “” list “ + ” appendix “”
      Swift: “” list “ + ” appendix “”
@@ -392,7 +392,7 @@ extension
       English: (list: list of (thing)) with (prefix: list of (thing)) prepended
      )
      list of (thing)
-     C♯: “” prefix “.Concat(” list “).ToList()”
+     C♯: “” prefix “.Concat(” list “).ToList()” (“System.Linq”)
      JavaScript: “” prefix “.concat(” list “)”
      Kotlin: “” prefix “ + ” list “”
      Swift: “” prefix “ + ” list “”
