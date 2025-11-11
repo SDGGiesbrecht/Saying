@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   iOS:
     name: iOS
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
     - name: Check out
       uses: actions/checkout@v2
