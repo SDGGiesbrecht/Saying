@@ -381,13 +381,38 @@ enum Kotlin: Platform {
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
-    var result = [
+    let maximumGroupSize = 2 ^ 13
+    var groupedTestCalls: [[String]] = []
+    var remainder = testCalls
+    while remainder.isEmpty {
+      let move = Array(remainder.prefix(maximumGroupSize))
+      groupedTestCalls.append(move)
+      remainder.removeFirst(move.count)
+    }
+
+    var result: [String] = []
+    for (index, group) in groupedTestCalls.enumerated() {
+      result.append(contentsOf: [
+          "",
+          "fun test\(index)() {",
+      ])
+      for test in group {
+        result.append(contentsOf: [
+          "\(indent)\(test)",
+        ])
+      }
+      result.append(contentsOf: [
+          "}",
+      ])
+    }
+
+    result.append(contentsOf: [
       "",
       "fun test() {",
-    ]
-    for test in testCalls {
+    ])
+    for index in groupedTestCalls.indices {
       result.append(contentsOf: [
-        "\(indent)\(test)",
+        "\(indent)test\(index)()",
       ])
     }
     result.append(contentsOf: [
