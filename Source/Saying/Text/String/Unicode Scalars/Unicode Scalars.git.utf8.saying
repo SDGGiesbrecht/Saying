@@ -270,7 +270,6 @@ action (file)
   English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) from (list: ↓ Unicode scalars)
  )
  C: “g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)”
- C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “)”
  Kotlin: “StringBuilder(” list “).deleteRange(” beginning “, ” end “).toString()”
  {
   replace (from (beginning) to (end)) in (↓ list) with (empty: Unicode scalars)
@@ -287,6 +286,7 @@ action (file)
   English: (list: Unicode scalars) with from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) removed
  )
  Unicode scalars
+ C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “)”
  Kotlin: “” list “.removeRange(” beginning “, ” end “)”
  {
   ← (list) with (from (beginning) to (end)) removed according to use as changeable list
