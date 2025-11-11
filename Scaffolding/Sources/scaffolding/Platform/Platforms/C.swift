@@ -429,7 +429,7 @@ enum C: Platform {
   }
 
   static func log(test: String) -> String {
-    return "printf(\u{22}\(sanitize(stringLiteral: test))\u{22}); fflush(stdout);"
+    return "printf(\u{22}\(sanitize(stringLiteral: test))\u{2F}n\u{22}); fflush(stdout);"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
