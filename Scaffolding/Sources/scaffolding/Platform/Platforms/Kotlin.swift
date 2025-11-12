@@ -384,7 +384,7 @@ enum Kotlin: Platform {
     let maximumGroupSize = 2 ^ 13
     var groupedTestCalls: [[String]] = []
     var remainder = testCalls
-    while remainder.isEmpty {
+    while !remainder.isEmpty {
       let move = Array(remainder.prefix(maximumGroupSize))
       groupedTestCalls.append(move)
       remainder.removeFirst(move.count)
