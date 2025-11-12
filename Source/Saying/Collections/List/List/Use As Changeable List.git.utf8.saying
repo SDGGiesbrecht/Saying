@@ -109,9 +109,7 @@ ability (clients)
    )
    list
    {
-    let (• copy: list) start as (list: list)
-    prepend (element) to (↓ copy)
-    ← copy
+    ← (list) with (element) prepended according to use as changeable list
    }
 
   requirement (clients)
@@ -242,6 +240,20 @@ extension
    )
    {
     insert (element) at (beginning of (list)) in (↓ list)
+   }
+
+  action (clients)
+   [
+    test {verify (((empty: list) with (example: element) prepended according to use as changeable list) is not empty)}
+   ]
+   (
+    English: (list: list) with (element: element) prepended according to use as changeable list
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    prepend (element) to (↓ copy)
+    ← copy
    }
 
   action (clients)

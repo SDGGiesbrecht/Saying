@@ -244,10 +244,19 @@ extension
       English: prepend (element: thing) to (list: ↓ list of (thing))
      )
      C: “g¤(5F)array¤(5F)prepend¤(5F)val(” list “, ” element “)”
-     C♯: “” list “.Prepend(” element “)”
      JavaScript: “” list “.unshift(” element “)”
      {
       prepend (element) to (↓ list) according to use as changeable list
+     }
+
+    action (clients)
+     (
+      English: (list: list of (thing)) with (element: thing) prepended
+     )
+     list of (thing)
+     C♯: “” list “.Prepend(” element “).ToList()” (“System.Linq”)
+     {
+      ← (list) with (element) prepended according to use as changeable list
      }
 
     action (clients)
