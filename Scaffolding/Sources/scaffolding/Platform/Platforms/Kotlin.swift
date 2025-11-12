@@ -381,7 +381,7 @@ enum Kotlin: Platform {
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
-    let maximumGroupSize = 2 ^ 13
+    let maximumGroupSize = Int(pow(2, 13) as Double)
     var groupedTestCalls: [[String]] = []
     var remainder = testCalls
     while !remainder.isEmpty {
