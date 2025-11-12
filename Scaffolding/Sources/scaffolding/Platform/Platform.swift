@@ -141,6 +141,7 @@ protocol Platform {
   // Package
   static func testEntryPoint() -> [String]?
   static var sourceFileName: String { get }
+  static func splitFileIfNecessary(_ file: String) -> [String]?
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
 
   // Saying
@@ -1903,6 +1904,10 @@ extension Platform {
     return result.joined(separator: "\n").appending("\n")
   }
 
+  static func splitFileIfNecessary(_ file: String) -> [String]? {
+    return nil
+  }
+
   static func preparedDirectory(for package: Package) -> URL {
     return package.constructionDirectory
       .appendingPathComponent(self.directoryName)
@@ -1962,8 +1967,21 @@ extension Platform {
         source.append(contentsOf: entryPoint)
       }
       let constructionDirectory = location ?? preparedDirectory(for: package)
-      try source.joined(separator: "\n").appending("\n")
-        .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
+      let completedSource = source.joined(separator: "\n").appending("\n")
+      let sourceFileURL = constructionDirectory.appendingPathComponent(sourceFileName)
+      if let split = splitFileIfNecessary(completedSource) {
+        let fileExtension = sourceFileURL.pathExtension
+        let withoutExtension = sourceFileURL.deletingPathExtension()
+        let name = withoutExtension.lastPathComponent
+        let directory = withoutExtension.deletingLastPathComponent()
+        for (index, part) in split.enumerated() {
+          try part.save(
+            to: directory.appendingPathComponent("\(name)\(index)").appendingPathExtension(fileExtension)
+          )
+        }
+      } else {
+        try completedSource.save(to: sourceFileURL)
+      }
       try createOtherProjectContainerFiles(projectDirectory: constructionDirectory, dependencies: dependencies.sorted())
     case .release:
       let productsDirectory = location ?? productsDirectory(for: package)

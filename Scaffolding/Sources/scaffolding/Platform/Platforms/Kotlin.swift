@@ -430,6 +430,11 @@ enum Kotlin: Platform {
     ]
   }
 
+  static func splitFileIfNecessary(_ file: String) -> [String]? {
+    #warning("Not implemented yet.")
+    return nil
+  }
+
   static var sourceFileName: String {
     return "app/src/main/kotlin/Test.kt"
   }
