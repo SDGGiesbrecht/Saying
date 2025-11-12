@@ -1173,7 +1173,7 @@ extension Platform {
     for argument in action.arguments {
       switch argument {
       case .action(let action):
-        if action.passage == .out {
+        if action.passage == .out || action.passage == .through {
           continue
         } else if localLookup.lookupAction(
           action.actionName,
