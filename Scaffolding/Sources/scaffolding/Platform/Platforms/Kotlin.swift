@@ -431,8 +431,37 @@ enum Kotlin: Platform {
   }
 
   static func splitFileIfNecessary(_ file: String) -> [String]? {
-    #warning("Not implemented yet.")
-    return nil
+    let fileSizeLimit = Int(pow(2, 23) as Double)
+    var lines = (file.components(separatedBy: "\n") as [String])[...]
+    let imports = Array(lines.prefix(while: { $0.hasPrefix("import") }))
+    lines.removeFirst(imports.count)
+    var files: [String] = []
+    while !lines.isEmpty {
+      let file: [String]
+      if let nextBreak = lines.indices.dropFirst().first(where: { index in
+        if lines[index] == "",
+           let next = lines[index...].dropFirst().first,
+           let startingCharacter = next.first,
+           startingCharacter != " " {
+          return true
+        } else {
+          return false
+        }
+      }) {
+        file = Array(lines[..<nextBreak])
+      } else {
+        file = Array(lines)
+      }
+      lines.removeFirst(file.count)
+      let joinedFile = file.joined(separator: "\n")
+      if let existing = files.last,
+        existing.utf8.count + joinedFile.utf8.count <= fileSizeLimit {
+        files[files.indices.last!] = existing.appending(contentsOf: joinedFile)
+      } else {
+        files.append(imports.appending(contentsOf: file).joined(separator: "\n"))
+      }
+    }
+    return files
   }
 
   static var sourceFileName: String {
