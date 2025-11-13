@@ -393,11 +393,13 @@ enum C: Platform {
   static var currentTestVariable: String {
     return [
       "char* current_test;",
-      "void assert_noting_test()",
+      "void assert_noting_test(bool condition)",
       "{",
-      "\(indent)printf(current_test);",
-      "\(indent)fflush(stdout);",
-      "\(indent)assert(false);",
+      "\(indent)if (!condition) {",
+      "\(indent)\(indent)printf(\u{22}%s\u{5C}n\u{22}, current_test);",
+      "\(indent)\(indent)fflush(stdout);",
+      "\(indent)\(indent)assert(false);",
+      "\(indent)}",
       "}",
     ].joined(separator: "\n")
   }
