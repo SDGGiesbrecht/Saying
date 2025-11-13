@@ -7,8 +7,8 @@ action (clients) (tests)
  (
   English: verify (condition: truth value)
  )
- C: “assert(” condition “)” (“assert”)
- C♯: “Assert(” condition “, ¤(22)¤(22))”
- JavaScript: “console.assert(” condition “)”
- Kotlin: “assert(” condition “)”
- Swift: “assert(” condition “)”
+ C: “assert¤(5F)noting¤(5F)test(” condition “)”
+ C♯: “Assert(” condition “, CurrentTest.Test)”
+ JavaScript: “console.assert(” condition “, currentTest)”
+ Kotlin: “assert(” condition “) { currentTest }”
+ Swift: “assert(” condition “, currentTest)”

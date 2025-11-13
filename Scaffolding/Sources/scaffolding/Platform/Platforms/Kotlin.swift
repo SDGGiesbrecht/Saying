@@ -348,6 +348,10 @@ enum Kotlin: Platform {
     return nil
   }
 
+  static var currentTestVariable: String {
+    return "var currentTest: String = \u{22}\u{22}"
+  }
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
       "val coverageRegions: MutableSet<String> = mutableSetOf(",
@@ -376,8 +380,8 @@ enum Kotlin: Platform {
     return nil
   }
 
-  static func log(test: String) -> String {
-    return "println(\u{22}\(sanitize(stringLiteral: test))\u{22})"
+  static func register(test: String) -> String {
+    return "currentTest = \u{22}\(sanitize(stringLiteral: test))\u{22}"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {

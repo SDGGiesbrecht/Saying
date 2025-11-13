@@ -293,6 +293,10 @@ enum JavaScript: Platform {
     return nil
   }
 
+  static var currentTestVariable: String {
+    return "let currentTest;"
+  }
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
       "let coverageRegions = new Set([",
@@ -321,8 +325,8 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func log(test: String) -> String {
-    return "console.log(\u{22}\(sanitize(stringLiteral: test))\u{22});"
+  static func register(test: String) -> String {
+    return "currentTest = \u{22}\(sanitize(stringLiteral: test))\u{22};"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {

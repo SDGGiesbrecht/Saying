@@ -131,11 +131,12 @@ protocol Platform {
   static var importsNeededByDeadEnd: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
   static var memoryManagement: String? { get }
+  static var currentTestVariable: String { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
-  static func log(test: String) -> String // Temporary, due to lack of info from “verify”.
+  static func register(test: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
@@ -1653,8 +1654,7 @@ extension Platform {
   static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> [String] {
     let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex)
     return [
-      log(test: sayingIdentifier(for: test)),
-      log(test: name),
+      register(test: "\(sayingIdentifier(for: test)) (\(name))"),
       statement(expression: "\(name)()")
     ]
   }
@@ -1845,6 +1845,8 @@ extension Platform {
     }
 
     if mode == .testing {
+      result.append(currentTestVariable)
+      result.append("")
       var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
