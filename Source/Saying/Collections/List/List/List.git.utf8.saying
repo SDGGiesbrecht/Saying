@@ -167,7 +167,7 @@ extension
    C♯: “” list “.RemoveRange(” beginning “, ” end “ ¤(2D) ” beginning “)”
    JavaScript: “” list “.splice(” beginning “, ” end “ ¤(2D) ” beginning “)”
    {
-    change (↓ list) to ((list) with (from (beginning) to (end)) removed)
+    replace from (beginning) to (end) in (↓ list) with (empty: list of (thing))
    }
 
   use (clients)
