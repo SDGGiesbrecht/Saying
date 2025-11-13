@@ -348,6 +348,10 @@ enum Kotlin: Platform {
     return nil
   }
 
+  static var currentTestVariable: String {
+    return "var currentTest: String = \u{22}\u{22}"
+  }
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
       "val coverageRegions: MutableSet<String> = mutableSetOf(",
@@ -376,14 +380,43 @@ enum Kotlin: Platform {
     return nil
   }
 
+  static func register(test: String) -> String {
+    return "currentTest = \u{22}\(sanitize(stringLiteral: test))\u{22}"
+  }
+
   static func testSummary(testCalls: [String]) -> [String] {
-    var result = [
+    let maximumGroupSize = Int(pow(2, 13) as Double)
+    var groupedTestCalls: [[String]] = []
+    var remainder = testCalls
+    while !remainder.isEmpty {
+      let move = Array(remainder.prefix(maximumGroupSize))
+      groupedTestCalls.append(move)
+      remainder.removeFirst(move.count)
+    }
+
+    var result: [String] = []
+    for (index, group) in groupedTestCalls.enumerated() {
+      result.append(contentsOf: [
+          "",
+          "fun test\(index)() {",
+      ])
+      for test in group {
+        result.append(contentsOf: [
+          "\(indent)\(test)",
+        ])
+      }
+      result.append(contentsOf: [
+          "}",
+      ])
+    }
+
+    result.append(contentsOf: [
       "",
       "fun test() {",
-    ]
-    for test in testCalls {
+    ])
+    for index in groupedTestCalls.indices {
       result.append(contentsOf: [
-        "\(indent)\(test)",
+        "\(indent)test\(index)()",
       ])
     }
     result.append(contentsOf: [
@@ -401,6 +434,40 @@ enum Kotlin: Platform {
     ]
   }
 
+  static func splitFileIfNecessary(_ file: String) -> [String]? {
+    let fileSizeLimit = Int(pow(2, 23) as Double)
+    var lines = (file.components(separatedBy: "\n") as [String])[...]
+    let imports = Array(lines.prefix(while: { $0.hasPrefix("import") }))
+    lines.removeFirst(imports.count)
+    var files: [String] = []
+    while !lines.isEmpty {
+      let file: [String]
+      if let nextBreak = lines.indices.dropFirst().first(where: { index in
+        if lines[index] == "",
+           let next = lines[index...].dropFirst().first,
+           let startingCharacter = next.first,
+           startingCharacter != " " {
+          return true
+        } else {
+          return false
+        }
+      }) {
+        file = Array(lines[..<nextBreak])
+      } else {
+        file = Array(lines)
+      }
+      lines.removeFirst(file.count)
+      let joinedFile = file.joined(separator: "\n")
+      if let existing = files.last,
+        existing.utf8.count + joinedFile.utf8.count <= fileSizeLimit {
+        files[files.indices.last!] = existing.appending(contentsOf: joinedFile)
+      } else {
+        files.append(imports.appending(contentsOf: file).joined(separator: "\n"))
+      }
+    }
+    return files
+  }
+
   static var sourceFileName: String {
     return "app/src/main/kotlin/Test.kt"
   }
@@ -408,7 +475,7 @@ enum Kotlin: Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "android.useAndroidX=true",
-      "kotlin.daemon.jvmargs=-Xmx1g",
+      "kotlin.daemon.jvmargs=-Xmx2g",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
     try ([

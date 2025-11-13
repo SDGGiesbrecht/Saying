@@ -414,6 +414,15 @@ enum CSharp: Platform {
     return nil
   }
 
+  static var currentTestVariable: String {
+    return [
+      "static class CurrentTest",
+      "{",
+      "\(indent)internal static string Test;",
+      "}",
+    ].joined(separator: "\n")
+  }
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
       "static class Coverage",
@@ -459,6 +468,10 @@ enum CSharp: Platform {
     return [
       "}",
     ]
+  }
+
+  static func register(test: String) -> String {
+    return "CurrentTest.Test = \u{22}\(sanitize(stringLiteral: test))\u{22};"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {

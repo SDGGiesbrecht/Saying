@@ -150,9 +150,10 @@ extension ModuleIntermediate {
       })
 
     var prototypeActions = use.actions
-    for (_, requirement) in ability.requirements {
+    for requirement in ability.requirements.values.lazy.flatMap({ $0.values }).flatMap({ $0.values }) {
       if let provisionIndex = prototypeActions.firstIndex(where: { action in
-        return action.names.overlaps(requirement.names)
+        return action.parameters.match(requirement: requirement.parameters, typeLookup: useTypes)
+          && action.returnValue?.key == requirement.returnValue?.specializing(typeLookup: useTypes).key
       }) {
         let provision = prototypeActions.remove(at: provisionIndex)
         switch provision.merging(
@@ -166,7 +167,7 @@ extension ModuleIntermediate {
         case .failure(let error):
           errors.append(contentsOf: error.errors)
         }
-      } else if let provision = ability.defaults[requirement.names.identifier()] {
+      } else if let provision = ability.defaults[requirement.names.identifier()]?[requirement.signature(orderedFor: requirement.names.identifier()).map({ $0.key })]?[requirement.returnValue?.key] {
         let specialized = provision.specializing(
           for: use,
           typeLookup: useTypes,

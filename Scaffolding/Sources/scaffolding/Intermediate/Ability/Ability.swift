@@ -1,9 +1,9 @@
 struct Ability {
   var names: Set<UnicodeText>
   var parameters: Interpolation<AbilityParameterIntermediate>
-  var identifierMapping: [UnicodeText: UnicodeText]
-  var requirements: [UnicodeText: RequirementIntermediate]
-  var defaults: [UnicodeText: ActionIntermediate]
+  var identifierMapping: [UnicodeText: MappedIdentifier]
+  var requirements: [UnicodeText: [[TypeReference]: [TypeReference?: RequirementIntermediate]]]
+  var defaults: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
   var provisionThings: [Thing]
   var provisionActions: [ActionIntermediate]
   var provisionUses: [UseIntermediate]
@@ -11,6 +11,15 @@ struct Ability {
   var testOnlyAccess: Bool
   var documentation: DocumentationIntermediate?
   var declaration: ParsedAbilityDeclaration
+}
+
+extension Ability {
+  func allDefaults() -> [ActionIntermediate] {
+    return defaults
+      .lazy.flatMap({ $0.value })
+      .lazy.flatMap({ $0.value })
+      .map({ $0.value })
+  }
 }
 
 extension Ability {
@@ -43,9 +52,9 @@ extension Ability {
       let name = signature.name()
       names.insert(name)
     }
-    var identifierMapping: [UnicodeText: UnicodeText] = [:]
-    var requirements: [UnicodeText: RequirementIntermediate] = [:]
-    var defaults: [UnicodeText: ActionIntermediate] = [:]
+    var identifierMapping: [UnicodeText: MappedIdentifier] = [:]
+    var requirements: [UnicodeText: [[TypeReference]: [TypeReference?: RequirementIntermediate]]] = [:]
+    var defaults: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     let abilityNamespace = namespace.appending(names)
     for requirementEntry in declaration.requirements.requirements?.requirements.requirements ?? [] {
       switch requirementEntry {
@@ -60,12 +69,13 @@ extension Ability {
         }
         let identifier = requirement.names.identifier()
         for name in requirement.names {
-          if identifierMapping[name] != nil {
-            errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+          if identifierMapping[name] != nil,
+            identifierMapping[name]?.identifier != identifier {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [requirementNode, identifierMapping[identifier].flatMap({ requirements[$0.identifier]?[requirement.signature(orderedFor: identifier).map({ $0.key })]![requirement.returnValue?.key] })!.declaration!]))
           }
-          identifierMapping[name] = identifier
+          identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: requirement.parameters.reordering(from: name, to: identifier))
         }
-        requirements[identifier] = requirement
+        requirements[identifier, default: [:]][requirement.signature(orderedFor: identifier).map({ $0.key }), default: [:]][requirement.returnValue?.key] = requirement
       case .choice(let choiceNode):
         let requirement: RequirementIntermediate
         switch RequirementIntermediate.construct(choiceNode, namespace: abilityNamespace) {
@@ -77,12 +87,13 @@ extension Ability {
         }
         let identifier = requirement.names.identifier()
         for name in requirement.names {
-          if identifierMapping[name] != nil {
-            errors.append(ConstructionError.redeclaredIdentifier(name, [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0] })!.declaration!]))
+          if identifierMapping[name] != nil,
+            identifierMapping[name]?.identifier != identifier {
+            errors.append(ConstructionError.redeclaredIdentifier(name, [choiceNode, identifierMapping[identifier].flatMap({ requirements[$0.identifier]?[requirement.signature(orderedFor: identifier).map({ $0.key })]![requirement.returnValue?.key] })!.declaration!]))
           }
-          identifierMapping[name] = identifier
+          identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: requirement.parameters.reordering(from: name, to: identifier))
         }
-        requirements[identifier] = requirement
+        requirements[identifier, default: [:]][requirement.signature(orderedFor: identifier).map({ $0.key }), default: [:]][requirement.returnValue?.key] = requirement
         let defaultImplementation: ActionIntermediate
         switch ActionIntermediate.construct(choiceNode, namespace: abilityNamespace) {
         case .failure(let nested):
@@ -91,7 +102,7 @@ extension Ability {
         case .success(let constructed):
           defaultImplementation = constructed
         }
-        defaults[identifier] = defaultImplementation
+        defaults[identifier, default: [:]][defaultImplementation.signature(orderedFor: identifier).map({ $0.key }), default: [:]][defaultImplementation.returnValue?.key] = defaultImplementation
       }
     }
     let access = AccessIntermediate(declaration.access)

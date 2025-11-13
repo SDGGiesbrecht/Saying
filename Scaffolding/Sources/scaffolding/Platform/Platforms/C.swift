@@ -390,6 +390,20 @@ enum C: Platform {
     ].joined(separator: "\n")
   }
 
+  static var currentTestVariable: String {
+    return [
+      "char* current_test;",
+      "void assert_noting_test(bool condition)",
+      "{",
+      "\(indent)if (!condition) {",
+      "\(indent)\(indent)printf(\u{22}%s\u{5C}n\u{22}, current_test);",
+      "\(indent)\(indent)fflush(stdout);",
+      "\(indent)\(indent)assert(false);",
+      "\(indent)}",
+      "}",
+    ].joined(separator: "\n")
+  }
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = []
     result.append(contentsOf: [
@@ -428,6 +442,10 @@ enum C: Platform {
     return nil
   }
 
+  static func register(test: String) -> String {
+    return "current_test = \u{22}\(sanitize(stringLiteral: test))\u{22};"
+  }
+
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
       "void test() {",
@@ -444,6 +462,7 @@ enum C: Platform {
       "\(indent)\(indent)if (coverage_regions[index][0] != 0)",
       "\(indent)\(indent){",
       "\(indent)\(indent)\(indent)printf(\u{22}%s\u{5C}n\u{22}, coverage_regions[index]);",
+      "\(indent)\(indent)\(indent)fflush(stdout);",
       "\(indent)\(indent)\(indent)any_remaining = true;",
       "\(indent)\(indent)}",
       "\(indent)}",

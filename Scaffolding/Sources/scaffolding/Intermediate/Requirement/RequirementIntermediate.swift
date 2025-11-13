@@ -62,4 +62,8 @@ extension RequirementIntermediate {
   func lookupParameter(_ identifier: UnicodeText) -> ParameterIntermediate? {
     return prototype.lookupParameter(identifier)
   }
+
+  func signature(orderedFor name: UnicodeText) -> [ParsedTypeReference] {
+    return prototype.signature(orderedFor: name)
+  }
 }

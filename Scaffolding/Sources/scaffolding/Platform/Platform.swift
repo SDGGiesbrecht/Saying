@@ -131,15 +131,18 @@ protocol Platform {
   static var importsNeededByDeadEnd: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
   static var memoryManagement: String? { get }
+  static var currentTestVariable: String { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
+  static func register(test: String) -> String
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
   static func testEntryPoint() -> [String]?
   static var sourceFileName: String { get }
+  static func splitFileIfNecessary(_ file: String) -> [String]?
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
 
   // Saying
@@ -1604,6 +1607,11 @@ extension Platform {
     )
   }
 
+  static func sayingIdentifier(for test: TestIntermediate) -> String {
+    return test.location.lazy
+      .map({ String($0.identifier()) })
+      .joined(separator: ":")
+  }
   static func identifier(for test: TestIntermediate, leading: Bool) -> String {
     return test.location.lazy.enumerated()
       .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0) })
@@ -1643,9 +1651,12 @@ extension Platform {
     ).full
   }
 
-  static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> String {
+  static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> [String] {
     let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex)
-    return statement(expression: "\(name)()")
+    return [
+      register(test: "\(sayingIdentifier(for: test)) (\(name))"),
+      statement(expression: "\(name)()")
+    ]
   }
 
   static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<String> {
@@ -1670,7 +1681,7 @@ extension Platform {
       .lazy.filter({ $0.deservesTesting })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
     let choiceRegions: [UnicodeText] = moduleReferenceLookup.allAbilities()
-      .lazy.flatMap({ $0.defaults.values })
+      .lazy.flatMap({ $0.allDefaults() })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
     return Set([
       actionRegions,
@@ -1834,6 +1845,8 @@ extension Platform {
     }
 
     if mode == .testing {
+      result.append(currentTestVariable)
+      result.append("")
       var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
@@ -1884,13 +1897,17 @@ extension Platform {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
       result.append("")
-      result.append(contentsOf: testSummary(testCalls: allTests.map({ call(test: $0, identifierIndex: &identifierIndex) })))
+      result.append(contentsOf: testSummary(testCalls: allTests.flatMap({ call(test: $0, identifierIndex: &identifierIndex) })))
     }
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
     }
 
     return result.joined(separator: "\n").appending("\n")
+  }
+
+  static func splitFileIfNecessary(_ file: String) -> [String]? {
+    return nil
   }
 
   static func preparedDirectory(for package: Package) -> URL {
@@ -1952,8 +1969,21 @@ extension Platform {
         source.append(contentsOf: entryPoint)
       }
       let constructionDirectory = location ?? preparedDirectory(for: package)
-      try source.joined(separator: "\n").appending("\n")
-        .save(to: constructionDirectory.appendingPathComponent(sourceFileName))
+      let completedSource = source.joined(separator: "\n").appending("\n")
+      let sourceFileURL = constructionDirectory.appendingPathComponent(sourceFileName)
+      if let split = splitFileIfNecessary(completedSource) {
+        let fileExtension = sourceFileURL.pathExtension
+        let withoutExtension = sourceFileURL.deletingPathExtension()
+        let name = withoutExtension.lastPathComponent
+        let directory = withoutExtension.deletingLastPathComponent()
+        for (index, part) in split.enumerated() {
+          try part.save(
+            to: directory.appendingPathComponent("\(name)\(index)").appendingPathExtension(fileExtension)
+          )
+        }
+      } else {
+        try completedSource.save(to: sourceFileURL)
+      }
       try createOtherProjectContainerFiles(projectDirectory: constructionDirectory, dependencies: dependencies.sorted())
     case .release:
       let productsDirectory = location ?? productsDirectory(for: package)

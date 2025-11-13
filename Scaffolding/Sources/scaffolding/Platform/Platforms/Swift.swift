@@ -476,6 +476,10 @@ enum Swift: Platform {
     return false
   }
 
+  static var currentTestVariable: String {
+    return "var currentTest: String = \u{22}\u{22}"
+  }
+
   static func coverageRegionSet(regions: [String]) -> [String] {
     var result: [String] = [
       "var coverageRegions: Set<String> = [",
@@ -502,6 +506,10 @@ enum Swift: Platform {
   }
   static var actionDeclarationsContainerEnd: [String]? {
     return nil
+  }
+
+  static func register(test: String) -> String {
+    return "currentTest = \u{22}\(sanitize(stringLiteral: test))\u{22}"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
