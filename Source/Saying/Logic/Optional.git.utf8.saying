@@ -9,6 +9,14 @@ extension
    Swift: “” thing “?”
    {
     case
+     [
+      test {verify ((wrap (true) into optional) is case (something))}
+      test {
+       if (wrap (true) into optional) is (something), unwrap it as (• unwrapped: truth value), {
+        ignore (unwrapped)
+       }
+      }
+     ]
      (
       English: something
       Deutsch: etwas

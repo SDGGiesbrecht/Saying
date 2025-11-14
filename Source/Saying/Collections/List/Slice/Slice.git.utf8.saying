@@ -26,6 +26,9 @@ extension
      Swift: “” . “.base”
 
     part (clients/nowhere)
+     [
+      test {ignore ((bounds) of (non‐empty example: slice of (list of (truth value))))}
+     ]
      (
       English: bounds
      )

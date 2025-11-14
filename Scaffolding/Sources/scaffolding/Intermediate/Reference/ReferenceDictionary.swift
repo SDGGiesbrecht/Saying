@@ -542,9 +542,8 @@ extension ReferenceDictionary {
   func applyingTestCoverageTracking(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
     var new = self
     for action in allActions() {
-      if let wrapped = action.wrappedToTrackCoverage(referenceLookup: externalLookup.appending(self)) {
-        _ = new.add(action: wrapped)
-      }
+      let wrapped = action.wrappedToTrackCoverage(referenceLookup: externalLookup.appending(self))
+      _ = new.add(action: wrapped)
     }
     new.resolveTypeIdentifiers(externalLookup: externalLookup)
     return new

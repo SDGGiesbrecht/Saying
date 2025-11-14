@@ -158,6 +158,16 @@ protocol Platform {
   static var initializerName: UnicodeText { get }
 }
 
+func existsForAnyPlatform<T>(
+  c: T?,
+  cSharp: T?,
+  javaScript: T?,
+  kotlin: T?,
+  swift: T?
+) -> Bool {
+  return c ?? cSharp ?? javaScript ?? kotlin ?? swift != nil
+}
+
 extension Platform {
 
   static func filterUnsafe(characters: [UInt32]) -> Set<Unicode.Scalar> {
@@ -625,6 +635,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     isNativeArgument: Bool,
     contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
@@ -643,6 +654,7 @@ extension Platform {
         referenceLookup: referenceLookup,
         isNativeArgument: isNativeArgument,
         contextCoverageIdentifier: contextCoverageIdentifier,
+        extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         extractedArguments: &extractedArguments,
@@ -666,6 +678,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     isNativeArgument: Bool,
     contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
@@ -692,6 +705,7 @@ extension Platform {
         referenceLookup: referenceLookup,
         isNativeArgument: isNativeArgument,
         contextCoverageIdentifier: contextCoverageIdentifier,
+        extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         extractedArguments: &extractedArguments,
@@ -737,6 +751,7 @@ extension Platform {
           referenceLookup: referenceLookup,
           parameterName: parameterName,
           contextCoverageIdentifier: contextCoverageIdentifier,
+          extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           extractedArguments: &extractedArguments,
@@ -775,7 +790,7 @@ extension Platform {
         native.release != nil {
         return extractedArguments.removeFirst()
       }
-      var result: [String] = [
+      let result: [String] = [
         call(
           to: bareAction.isFlow ? bareAction : action,
           bareAction: bareAction,
@@ -785,6 +800,7 @@ extension Platform {
           referenceLookup: referenceLookup,
           parameterName: nil,
           contextCoverageIdentifier: contextCoverageIdentifier,
+          extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           extractedArguments: &extractedArguments,
@@ -796,9 +812,9 @@ extension Platform {
       ]
       if mode == .testing,
         bareAction.isFlow,
-        bareAction.returnValue == nil,
+        bareAction.deservesTesting,
         let coveredIdentifier = action.coveredIdentifier {
-        result.prepend(
+        extractedCoverageRegistrations.append(
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
         )
       }
@@ -814,6 +830,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     parameterName: String?,
     contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
@@ -873,6 +890,7 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     isNativeArgument: true,
                     contextCoverageIdentifier: contextCoverageIdentifier,
+                    extractedCoverageRegistrations: &extractedCoverageRegistrations,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     extractedArguments: &extractedArguments,
@@ -966,6 +984,7 @@ extension Platform {
             referenceLookup: referenceLookup,
             isNativeArgument: false,
             contextCoverageIdentifier: contextCoverageIdentifier,
+            extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &extractedArguments,
@@ -1049,6 +1068,7 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     isNativeArgument: false,
                     contextCoverageIdentifier: contextCoverageIdentifier,
+                    extractedCoverageRegistrations: &extractedCoverageRegistrations,
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     extractedArguments: &extractedArguments,
@@ -1071,6 +1091,7 @@ extension Platform {
                   referenceLookup: referenceLookup,
                   isNativeArgument: false,
                   contextCoverageIdentifier: contextCoverageIdentifier,
+                  extractedCoverageRegistrations: &extractedCoverageRegistrations,
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
                   extractedArguments: &extractedArguments,
@@ -1135,6 +1156,7 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
@@ -1149,6 +1171,7 @@ extension Platform {
       localLookup: localLookup,
       referenceLookup: referenceLookup,
       contextCoverageIdentifier: contextCoverageIdentifier,
+      extractedCoverageRegistrations: &extractedCoverageRegistrations,
       coverageRegionCounter: &coverageRegionCounter,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       cleanUpCode: &cleanUpCode,
@@ -1165,6 +1188,7 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
@@ -1194,6 +1218,7 @@ extension Platform {
             localLookup: localLookup,
             referenceLookup: referenceLookup,
             contextCoverageIdentifier: contextCoverageIdentifier,
+            extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             cleanUpCode: &cleanUpCode,
@@ -1219,6 +1244,7 @@ extension Platform {
             referenceLookup: referenceLookup,
             isNativeArgument: false,
             contextCoverageIdentifier: contextCoverageIdentifier,
+            extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &entries.unused,
@@ -1263,6 +1289,7 @@ extension Platform {
     var entry = ""
     if let action = statement.action {
       var referenceList: [String] = []
+      var extractedCoverageRegistrations: [String] = []
       if needsReferencePreparation {
         referenceList = statement.passedReferences()
           .filter({ reference in
@@ -1277,6 +1304,7 @@ extension Platform {
               referenceLookup: referenceLookup,
               isNativeArgument: false,
               contextCoverageIdentifier: contextCoverageIdentifier,
+              extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               extractedArguments: &extracted,
@@ -1302,6 +1330,7 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         contextCoverageIdentifier: contextCoverageIdentifier,
+        extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         cleanUpCode: &cleanUpCode,
@@ -1338,6 +1367,7 @@ extension Platform {
             referenceLookup: referenceLookup,
             isNativeArgument: false,
             contextCoverageIdentifier: contextCoverageIdentifier,
+            extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &remainingExtractedArguments,
@@ -1349,6 +1379,9 @@ extension Platform {
           )
         )
       )
+      if !extractedCoverageRegistrations.isEmpty {
+        entry = extractedCoverageRegistrations.joined(separator: "\n").appending("\n") + entry
+      }
       if mode == .testing,
          coverageRegionCounter != before,
          let coverage = flowCoverageRegistration(
