@@ -244,7 +244,13 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isSpecialized: false,
-      deservesTesting: false
+      deservesTesting: existsForAnyPlatform(
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
+      )
     )
   }
 
@@ -351,7 +357,13 @@ extension ActionIntermediate {
       isCreation: false,
       isEnumerationValueWrapper: true,
       isSpecialized: false,
-      deservesTesting: false
+      deservesTesting: existsForAnyPlatform(
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
+      )
     )
   }
 
@@ -386,7 +398,13 @@ extension ActionIntermediate {
       isCreation: false,
       isMemberWrapper: true,
       isSpecialized: false,
-      deservesTesting: false
+      deservesTesting: existsForAnyPlatform(
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
+      )
     )
   }
 
@@ -489,7 +507,13 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isSpecialized: false,
-      deservesTesting: false
+      deservesTesting: existsForAnyPlatform(
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
+      )
     )
   }
 
@@ -570,7 +594,13 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isSpecialized: false,
-      deservesTesting: false
+      deservesTesting: existsForAnyPlatform(
+        c: c,
+        cSharp: cSharp,
+        javaScript: javaScript,
+        kotlin: kotlin,
+        swift: swift
+      )
     )
   }
 
@@ -667,7 +697,13 @@ extension ActionIntermediate {
         declaration: declaration,
         isCreation: isCreation,
         isSpecialized: false,
-        deservesTesting: !isCreation
+        deservesTesting: !isCreation || existsForAnyPlatform(
+          c: c,
+          cSharp: cSharp,
+          javaScript: javaScript,
+          kotlin: kotlin,
+          swift: swift
+        )
       )
     )
   }
@@ -945,33 +981,33 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> UnicodeText {
     return UnicodeText("☐\(prototype.names.identifier())")
   }
-  func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate? {
-    if let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup) {
-      let baseName = names.identifier()
-      let wrapperName = coverageTrackingIdentifier()
-      return ActionIntermediate(
-        prototype: ActionPrototype(
-          isFlow: isFlow,
-          names: [wrapperName],
-          namespace: [],
-          parameters: prototype.parameters
-            .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
-            .prefixingEach(with: UnicodeText("→")),
-          returnValue: prototype.returnValue,
-          access: prototype.access,
-          testOnlyAccess: prototype.testOnlyAccess,
-          documentation: nil,
-          nativeNames: .none
-        ),
-        implementation: StatementListIntermediate(
-          statements: [
-            StatementIntermediate(
-              isReturn: returnValue != nil,
-              action: ActionUse(
-                actionName: baseName,
-                arguments: prototype.parameters
-                  .prefixingEach(with: UnicodeText("→"))
-                  .ordered(for: baseName).map({ parameter in
+  func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate {
+    let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup)
+    let baseName = names.identifier()
+    let wrapperName = coverageTrackingIdentifier()
+    return ActionIntermediate(
+      prototype: ActionPrototype(
+        isFlow: isFlow,
+        names: [wrapperName],
+        namespace: [],
+        parameters: prototype.parameters
+          .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
+          .prefixingEach(with: UnicodeText("→")),
+        returnValue: prototype.returnValue,
+        access: prototype.access,
+        testOnlyAccess: prototype.testOnlyAccess,
+        documentation: nil,
+        nativeNames: .none
+      ),
+      implementation: StatementListIntermediate(
+        statements: [
+          StatementIntermediate(
+            isReturn: returnValue != nil,
+            action: ActionUse(
+              actionName: baseName,
+              arguments: prototype.parameters
+                .prefixingEach(with: UnicodeText("→"))
+                .ordered(for: baseName).map({ parameter in
                   return .action(
                     ActionUse(
                       actionName: parameter.names.identifier(),
@@ -981,24 +1017,21 @@ extension ActionIntermediate {
                     )
                   )
                 }),
-                passage: .into,
-                resolvedResultType: returnValue
-              )
+              passage: .into,
+              resolvedResultType: returnValue
             )
-          ]
-        ),
-        isCreation: false,
-        originalUnresolvedCoverageRegionIdentifierComponents: nil,
-        coveredIdentifier: coverageIdentifier,
-        isSpecialized: isSpecialized,
-        deservesTesting: false
-      )
-    } else {
-      return nil
-    }
+          )
+        ]
+      ),
+      isCreation: false,
+      originalUnresolvedCoverageRegionIdentifierComponents: nil,
+      coveredIdentifier: coverageIdentifier,
+      isSpecialized: isSpecialized,
+      deservesTesting: false
+    )
   }
 
-  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
+  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
     let namespace = prototype.namespace
       .lazy.map({ StrictString($0.identifier()) })
       .joined(separator: ":")
@@ -1019,12 +1052,11 @@ extension ActionIntermediate {
     skippingSubregions: Bool
   ) -> [UnicodeText] {
     var result: [UnicodeText] = []
-    if let base = coverageRegionIdentifier(referenceLookup: referenceLookup) {
-      result.append(base)
-      if !skippingSubregions {
-        for entry in coverageSubregions() {
-          result.append(UnicodeText("\(base):{\(entry.inDigits())}"))
-        }
+    let base = coverageRegionIdentifier(referenceLookup: referenceLookup)
+    result.append(base)
+    if !skippingSubregions {
+      for entry in coverageSubregions() {
+        result.append(UnicodeText("\(base):{\(entry.inDigits())}"))
       }
     }
     return result

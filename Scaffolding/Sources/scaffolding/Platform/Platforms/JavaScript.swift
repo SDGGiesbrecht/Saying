@@ -213,7 +213,7 @@ enum JavaScript: Platform {
   }
 
   static func coverageRegistration(identifier: String) -> String {
-    return "coverageRegions.delete(\u{22}\(identifier)\u{22});"
+    return "registerCoverage(\u{22}\(identifier)\u{22});"
   }
 
   static func statement(expression: String) -> String {
