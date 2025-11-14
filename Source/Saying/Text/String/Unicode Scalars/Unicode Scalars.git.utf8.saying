@@ -230,7 +230,7 @@ use (clients)
  {
  }
 
-action (file)
+action (unit)
  (
   English: boundary before (index: Unicode scalar index) in (scalars: Unicode scalars)
  )
@@ -561,12 +561,39 @@ use (clients)
 action (clients)
  [
   [
-   English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
+   English: Normalizes the scalars normalized according to compatibility decomposition (NFKD).
   ]
-  test {verify ((compatibility decomposition of (“¤(A0)”: Unicode scalars)) is (“¤(20)”: Unicode scalars))}
+  test {
+   let (• scalars: Unicode scalars) start as (“¤(A0)”: Unicode scalars)
+   decompose (↓ scalars) according to compatibility decomposition
+   verify ((scalars) is (“¤(20)”: Unicode scalars))
+  }
  ]
  (
-  English: compatibility decomposition of (scalars: Unicode scalars)
+  English: decompose (scalars: ↓ Unicode scalars) according to compatibility decomposition
+ )
+ {
+  change (↓ scalars) to (compatibility decomposition of (scalars))
+ }
+
+action (file)
+ [
+  [
+   English: Ensures Unicode resources have been loaded.
+  ]
+  [
+   English: This action provides a workaround for a bug in Swift’s Foundation module on some platforms. Some of its methods silently fail to do anything if they are called before some internal initialization has been triggered. (As an example, the bug can be demonstrated by attempting decomposedStringWithCompatibilityMapping at the very beginning of an executable created with the Swift Package Manager and running on macOS 12.) This action triggers the initialization required for the relevant methods to work properly.
+  ]
+ ]
+ (
+  English: ensure Unicode resources have loaded
+ )
+ Swift: “ensureUnicodeResourcesHaveLoaded” (“Foundation”) {“private let ensureUnicodeResourcesHaveLoaded: Void = { ¤(5F) = Locale.current }()”}
+ {}
+
+action (file)
+ (
+  English: compute compatibility decomposition of (scalars: Unicode scalars)
  )
  Unicode scalars
  C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
@@ -577,3 +604,20 @@ action (clients)
  JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
  Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
  Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
+
+action (clients)
+ [
+  [
+   English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
+  ]
+  test {verify ((compatibility decomposition of (“¤(A0)”: Unicode scalars)) is (“¤(20)”: Unicode scalars))}
+ ]
+ (
+  English: compatibility decomposition of (scalars: Unicode scalars)
+  Swift: (self: [scalars]).compatibilityDecomposition
+ )
+ Unicode scalars
+ {
+  ensure Unicode resources have loaded
+  ← compute compatibility decomposition of (scalars)
+ }

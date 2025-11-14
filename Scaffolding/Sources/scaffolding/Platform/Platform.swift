@@ -1783,10 +1783,8 @@ extension Platform {
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
-        result.append(contentsOf: [
-          "",
-          declaration
-        ])
+        result.appendSeparatorLine()
+        result.append(declaration)
       }
     }
     return result.joined(separator: "\n")
@@ -1808,10 +1806,8 @@ extension Platform {
     if needsForwardDeclarations {
       for action in allActions where !action.isFlow {
         if let declaration = forwardDeclaration(for: action, referenceLookup: referenceLookup) {
-          result.append(contentsOf: [
-            "",
-            declaration
-          ])
+          result.appendSeparatorLine()
+          result.append(declaration)
         }
       }
     }
@@ -1826,17 +1822,15 @@ extension Platform {
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
       ) {
         if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
-          result.append(contentsOf: [
-            "",
-            declaration.full
-          ])
+          result.appendSeparatorLine()
+          result.append(declaration.full)
         }
       }
     }
     if mode == .testing {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
-        result.append("")
+        result.appendSeparatorLine()
         result.append(source(of: test, referenceLookup: referenceLookup, identifierIndex: &identifierIndex))
       }
     }
@@ -1854,8 +1848,8 @@ extension Platform {
     var result: [String] = []
 
     if let settings = fileSettings {
+      result.appendSeparatorLine()
       result.append(settings)
-      result.append("")
     }
 
     var imports: Set<String> = []
@@ -1866,20 +1860,21 @@ extension Platform {
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
+      result.appendSeparatorLine()
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
       }
-      result.append("")
     }
 
     if let memoryManagement = memoryManagement {
+      result.appendSeparatorLine()
       result.append(memoryManagement)
-      result.append("")
     }
 
     if mode == .testing {
+      result.appendSeparatorLine()
       result.append(currentTestVariable)
-      result.append("")
+      result.appendSeparatorLine()
       var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
@@ -1893,6 +1888,7 @@ extension Platform {
 
     var relocatedActions: Set<String> = []
     for module in modules {
+      result.appendSeparatorLine()
       result.append(
         typesSource(
           for: module,
@@ -1906,12 +1902,13 @@ extension Platform {
     }
 
     if let start = actionDeclarationsContainerStart {
-      result.append("")
+      result.appendSeparatorLine()
       result.append(contentsOf: start)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
     var identifierIndex: [String: [String: Int]] = [:]
     for module in modules {
+      result.appendSeparatorLine()
       result.append(
         self.actionsSource(
           for: module,
@@ -1929,7 +1926,7 @@ extension Platform {
       for module in modules {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
-      result.append("")
+      result.appendSeparatorLine()
       result.append(contentsOf: testSummary(testCalls: allTests.flatMap({ call(test: $0, identifierIndex: &identifierIndex) })))
     }
     if let end = actionDeclarationsContainerEnd {
@@ -1998,7 +1995,7 @@ extension Platform {
     switch mode {
     case .testing, .debugging, .dependency:
       if let entryPoint = testEntryPoint() {
-        source.append("")
+        source.appendSeparatorLine()
         source.append(contentsOf: entryPoint)
       }
       let constructionDirectory = location ?? preparedDirectory(for: package)

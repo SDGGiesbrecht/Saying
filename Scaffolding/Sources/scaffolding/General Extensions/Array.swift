@@ -12,3 +12,12 @@ extension Array {
     return result
   }
 }
+
+extension Array where Element == String {
+  mutating func appendSeparatorLine() {
+    if !isEmpty,
+      last != "" {
+      append("")
+    }
+  }
+}
