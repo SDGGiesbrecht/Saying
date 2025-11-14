@@ -561,7 +561,7 @@ use (clients)
 action (clients)
  [
   [
-   English: Normalizes the scalars normalized according to compatibility decomposition (NFKD).
+   English: Normalizes the scalars according to compatibility decomposition (NFKD).
   ]
   test {
    let (• scalars: Unicode scalars) start as (“¤(A0)”: Unicode scalars)
