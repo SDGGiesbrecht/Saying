@@ -57,6 +57,22 @@ action (clients)
   ← Unicode text skipping normalization of (compatibility decomposition of (scalars))
  }
 
+action (clients)
+ [
+  [
+   English: Creates Unicode text by normalizing a Unicode scalar.
+  ]
+  test {verify ((Unicode text of (“¤(A0)”: Unicode scalar)) is (“¤(20)”))}
+  test {verify ((Unicode text of (“¤(A8)”: Unicode scalar)) is (“¤(20)¤(308)”))}
+ ]
+ (
+  English: Unicode text of (scalar: Unicode scalar)
+ )
+ Unicode text
+ {
+  ← Unicode text of ((scalar) as scalars)
+ }
+
 use (clients)
  general containers of (Unicode text)
  {
@@ -208,4 +224,118 @@ use (clients)
 use (clients)
  slicing (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+ }
+
+use (clients)
+ use of (Unicode text) as changeable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: replace (index: Unicode scalar index) in (list: ↓ Unicode text) with (element: Unicode scalar)
+   )
+   {
+    let (• boundary before: Unicode scalar boundary) be (boundary before (index) in ((scalars) of (list)))
+    replace (from (boundary before) to (boundary after (boundary before) in (list) skipping bounds check)) in (↓ list) with (Unicode text of (element))
+   }
+
+  action (clients)
+   (
+    English: insert (element: Unicode scalar) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode text)
+   )
+   {
+    insert (Unicode text of (element)) at (boundary) in (↓ list)
+   }
+
+  action (clients)
+   (
+    English: remove (index: Unicode scalar index) from (list: ↓ Unicode text)
+   )
+   {
+    let (• boundary before: Unicode scalar boundary) be (boundary before (index) in ((scalars) of (list)))
+    remove (from (boundary before) to (boundary after (boundary before) in (list) skipping bounds check)) from (↓ list)
+   }
+
+  action (clients)
+   (
+    English: remove (range: range of (Unicode scalar boundary)) from (list: ↓ Unicode text)
+   )
+   {
+    remove (range) from (↓ list) according to list insertion
+   }
+ }
+
+use (clients)
+ insertion from (Unicode text) into (Unicode text) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode text) with (insertion: Unicode text)
+   )
+   {
+    let (• end: Unicode scalar boundary) be (end of (list))
+    let (• after: Unicode text) be (convert ((from ((upper bound) of (range)) to (end)) in (list)) into list: Unicode text)
+    remove (from ((lower bound) of (range)) to (end)) from (↓ (scalars) of (list))
+    append (insertion) to (↓ list)
+    append (after) to (↓ list)
+   }
+
+  action (clients)
+   [
+    test {verify (((“¤(315)”) with (“¤(300)”) appended) is (“¤(300)¤(315)”))}
+   ]
+   (
+    English: append (appendix: Unicode text) to (list: ↓ Unicode text)
+   )
+   {
+    append ((scalars) of (appendix)) to (↓ (scalars) of (list))
+    decompose (↓ (scalars) of (list)) according to compatibility decomposition
+   }
+
+  action (clients)
+   (
+    English: convert (other: Unicode text) into list
+   )
+   Unicode text
+   {
+    ← other
+   }
+
+  action (clients)
+   (
+    English: insertion example
+   )
+   Unicode text
+   {
+    ← example
+   }
+ }
+
+use (clients)
+ insertion from (slice of (Unicode text)) into (Unicode text) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode text) with (insertion: slice of (Unicode text))
+   )
+   {
+    replace (range) in (↓ list) with (convert (insertion) into list)
+   }
+
+  action (clients)
+   (
+    English: convert (other: slice of (Unicode text)) into list
+   )
+   Unicode text
+   {
+    ← Unicode text skipping normalization of (convert (((bounds) of (other)) in ((scalars) of ((whole) of (other)))) into list: Unicode scalars)
+   }
+
+  action (clients)
+   (
+    English: insertion example
+   )
+   slice of (Unicode text)
+   {
+    ← non‐empty example
+   }
  }
