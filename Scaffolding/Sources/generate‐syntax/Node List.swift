@@ -1122,6 +1122,8 @@ extension Node {
               Child(name: "hold", type: "NativeActionExpression", kind: .required),
               Child(name: "secondSlash", type: "SlashSyntax", kind: .fixed),
               Child(name: "release", type: "NativeActionExpression", kind: .required),
+              Child(name: "thirdSlash", type: "SlashSyntax", kind: .fixed),
+              Child(name: "copy", type: "NativeActionExpression", kind: .required),
             ])
           ),
           Node(

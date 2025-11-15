@@ -9,7 +9,7 @@ extension
     ελληνικά: κατάλογος (πράγμα: [thing])
     עברית: רשימה של (דבר: [thing])
    )
-   C: “GArray¤(2A)”/“g¤(5F)array¤(5F)ref(” array “)”/“g¤(5F)array¤(5F)unref(” array “)” (“glib¤(2D)2.0”)
+   C: “GArray¤(2A)”/“g¤(5F)array¤(5F)ref(” array “)”/“g¤(5F)array¤(5F)unref(” array “)”/“g¤(5F)array¤(5F)copy(” array “)” (“glib¤(2D)2.0”)
    C♯: “List<” thing “>” (“System.Collections.Generic”)
    Kotlin: “List<” thing “>”
    Swift: “[” thing “]”
