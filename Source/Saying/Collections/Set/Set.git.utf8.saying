@@ -9,7 +9,7 @@ extension
     ελληνικά: σύνολο (πράγμα: [thing])
     עברית: קבוצה של (דבר: [thing])
    )
-   C: “GHashTable¤(2A)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” set “)”/“g¤(5F)hash¤(5F)table¤(5F)unref(” set “)” (“glib¤(2D)2.0”)
+   C: “GHashTable¤(2A)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” set “)”/“g¤(5F)hash¤(5F)table¤(5F)unref(” set “)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” set “)” (“glib¤(2D)2.0”)
    C♯: “HashSet<” thing “>” (“System.Collections.Generic”) [
      “override ” thing “.Equals(” thing “)”
      “override ” thing “.GetHashCode()”
