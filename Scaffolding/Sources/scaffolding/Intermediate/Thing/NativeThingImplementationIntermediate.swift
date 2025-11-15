@@ -3,9 +3,29 @@ struct NativeThingImplementationIntermediate {
   var parameters: [NativeThingImplementationParameter]
   var hold: NativeActionExpressionIntermediate?
   var release: NativeActionExpressionIntermediate?
+  var copy: NativeActionExpressionIntermediate?
   var requiredImports: [UnicodeText]
   var indirectRequirements: [NativeRequirementImplementationIntermediate]
   var requiredDeclarations: [NativeRequirementImplementationIntermediate]
+
+  init(
+    textComponents: [UnicodeText],
+    parameters: [NativeThingImplementationParameter],
+    hold: NativeActionExpressionIntermediate?,
+    release: NativeActionExpressionIntermediate?,
+    copy: NativeActionExpressionIntermediate?,
+    requiredImports: [UnicodeText],
+    indirectRequirements: [NativeRequirementImplementationIntermediate],
+    requiredDeclarations: [NativeRequirementImplementationIntermediate]) {
+    self.textComponents = textComponents
+    self.parameters = parameters
+    self.hold = hold
+    self.release = release
+    self.copy = copy
+    self.requiredImports = requiredImports
+    self.indirectRequirements = indirectRequirements
+    self.requiredDeclarations = requiredDeclarations
+  }
 }
 
 extension NativeThingImplementationIntermediate {
@@ -17,11 +37,13 @@ extension NativeThingImplementationIntermediate {
     let type: ParsedNativeThingReference
     var holdAction: ParsedNativeActionExpression?
     var releaseAction: ParsedNativeActionExpression?
+    var copyAction: ParsedNativeActionExpression?
     switch implementation.type {
     case .referenceCounted(let referenceCounted):
       type = referenceCounted.type
       holdAction = referenceCounted.hold
       releaseAction = referenceCounted.release
+      copyAction = referenceCounted.copy
     case .simple(let simple):
       type = simple
     }
@@ -32,7 +54,12 @@ extension NativeThingImplementationIntermediate {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        parameters.append(NativeThingImplementationParameter(parameter))
+        switch NativeThingImplementationParameter.construct(parameter) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.parameterError($0) }))
+        case .success(let constructed):
+          parameters.append(constructed)
+        }
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
         case .failure(let error):
@@ -58,6 +85,15 @@ extension NativeThingImplementationIntermediate {
         errors.append(contentsOf: error.errors.map({ ConstructionError.nativeExpressionError($0) }))
       case .success(let success):
         nativeRelease = success
+      }
+    }
+    var nativeCopy: NativeActionExpressionIntermediate?
+    if let copy = copyAction {
+      switch NativeActionExpressionIntermediate.construct(expression: copy) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.nativeExpressionError($0) }))
+      case .success(let success):
+        nativeCopy = success
       }
     }
     var requiredImports: [UnicodeText] = []
@@ -95,6 +131,7 @@ extension NativeThingImplementationIntermediate {
       parameters: parameters,
       hold: nativeHold,
       release: nativeRelease,
+      copy: nativeCopy,
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirments,
       requiredDeclarations: requiredDeclarations
@@ -118,6 +155,7 @@ extension NativeThingImplementationIntermediate {
       parameters: mappedParameters,
       hold: hold,
       release: release,
+      copy: copy,
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
@@ -133,6 +171,7 @@ extension NativeThingImplementationIntermediate {
       parameters: mappedParameters,
       hold: hold,
       release: release,
+      copy: copy,
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: typeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })

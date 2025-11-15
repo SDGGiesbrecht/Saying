@@ -996,9 +996,26 @@ extension Node {
           ),
 
           Node(
+            name: "ModifiedImplementationParameter",
+            kind: .compound(children: [
+              Child(name: "initialModifierSegment", type: "InitialIdentifierSegment", kind: .optional),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "parameter", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
+              Child(name: "finalModifierSegment", type: "FinalIdentifierSegment", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "ImplementationParameter",
+            kind: .alternates([
+              Alternate(name: "modified", type: "ModifiedImplementationParameter"),
+              Alternate(name: "simple", type: "UninterruptedIdentifier"),
+            ])
+          ),
+          Node(
             name: "ImplementationComponent",
             kind: .alternates([
-              Alternate(name: "parameter", type: "UninterruptedIdentifier"),
+              Alternate(name: "parameter", type: "ImplementationParameter"),
               Alternate(name: "literal", type: "Literal"),
             ])
           ),
@@ -1105,6 +1122,8 @@ extension Node {
               Child(name: "hold", type: "NativeActionExpression", kind: .required),
               Child(name: "secondSlash", type: "SlashSyntax", kind: .fixed),
               Child(name: "release", type: "NativeActionExpression", kind: .required),
+              Child(name: "thirdSlash", type: "SlashSyntax", kind: .fixed),
+              Child(name: "copy", type: "NativeActionExpression", kind: .required),
             ])
           ),
           Node(

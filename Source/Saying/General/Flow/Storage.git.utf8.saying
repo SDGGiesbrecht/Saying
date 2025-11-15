@@ -29,7 +29,7 @@ extension
    (
     English: let (storage: thing) start as (value: thing)
    )
-   C: “” thing “ ” storage “ = ” value “”
+   C: “” thing “ ” held (storage) “ = ” copy of (value) “”
    C♯: “” thing “ ” storage “ = ” value “”
    JavaScript: “let ” storage “ = ” value “”
    Kotlin: “var ” storage “: ” thing “ = ” value “”

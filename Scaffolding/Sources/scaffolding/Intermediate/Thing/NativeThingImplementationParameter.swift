@@ -5,9 +5,38 @@ struct NativeThingImplementationParameter {
 }
 
 extension NativeThingImplementationParameter {
-  init(_ parameter: ParsedUninterruptedIdentifier) {
-    name = parameter.identifierText()
-    syntaxNode = parameter
+  static func construct(
+    _ parameter: ParsedImplementationParameter
+  ) -> Result<
+    NativeThingImplementationParameter,
+    ErrorList<NativeThingImplementationParameter.ConstructionError>
+  > {
+    var errors: [NativeThingImplementationParameter.ConstructionError] = []
+
+    let name: UnicodeText
+    let syntaxNode: ParsedUninterruptedIdentifier
+    switch parameter {
+    case .simple(let simple):
+      name = simple.identifierText()
+      syntaxNode = simple
+    case .modified(let modified):
+      name = modified.parameter.identifierText()
+      syntaxNode = modified.parameter
+      switch modified.identifierText() {
+      default:
+        errors.append(.unknownModifier(modified))
+      }
+    }
+
+    if !errors.isEmpty {
+      return .failure(ErrorList(errors))
+    }
+    return .success(
+      NativeThingImplementationParameter(
+        name: name,
+        syntaxNode: syntaxNode
+      )
+    )
   }
 }
 

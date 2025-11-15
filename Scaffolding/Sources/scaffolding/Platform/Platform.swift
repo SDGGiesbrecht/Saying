@@ -882,24 +882,33 @@ extension Platform {
               let argument = reference.arguments[argumentIndex]
               switch argument {
               case .action(let actionArgument):
+                var result = call(
+                  to: actionArgument,
+                  context: context,
+                  localLookup: localLookup.appending(local),
+                  referenceLookup: referenceLookup,
+                  isNativeArgument: true,
+                  contextCoverageIdentifier: contextCoverageIdentifier,
+                  extractedCoverageRegistrations: &extractedCoverageRegistrations,
+                  coverageRegionCounter: &coverageRegionCounter,
+                  clashAvoidanceCounter: &clashAvoidanceCounter,
+                  extractedArguments: &extractedArguments,
+                  isDirectReturn: false,
+                  cleanUpCode: &cleanUpCode,
+                  inliningArguments: inliningArguments,
+                  normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+                  mode: mode
+                )
+                if parameter.copy,
+                  let parameterType = actionArgument.resolvedResultType??.key,
+                  let type = referenceLookup.lookupThing(parameterType),
+                  let native = nativeType(of: type),
+                  let copy = native.copy {
+                    result = copy.textComponents.lazy.map({ String($0) })
+                      .joined(separator: result)
+                }
                 accumulator.append(
-                  contentsOf: call(
-                    to: actionArgument,
-                    context: context,
-                    localLookup: localLookup.appending(local),
-                    referenceLookup: referenceLookup,
-                    isNativeArgument: true,
-                    contextCoverageIdentifier: contextCoverageIdentifier,
-                    extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                    coverageRegionCounter: &coverageRegionCounter,
-                    clashAvoidanceCounter: &clashAvoidanceCounter,
-                    extractedArguments: &extractedArguments,
-                    isDirectReturn: false,
-                    cleanUpCode: &cleanUpCode,
-                    inliningArguments: inliningArguments,
-                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                    mode: mode
-                  )
+                  contentsOf: result
                 )
               case .flow(let statements):
                 if mode == .testing,
