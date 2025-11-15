@@ -32,7 +32,12 @@ extension NativeThingImplementationIntermediate {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        parameters.append(NativeThingImplementationParameter(parameter))
+        switch NativeThingImplementationParameter.construct(parameter) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.parameterError($0) }))
+        case .success(let constructed):
+          parameters.append(constructed)
+        }
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
         case .failure(let error):

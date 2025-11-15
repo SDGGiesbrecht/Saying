@@ -16,7 +16,12 @@ extension NativeActionExpressionIntermediate {
       let element = components[index]
       switch element {
       case .parameter(let parameter):
-        parameters.append(NativeActionImplementationParameter(parameter))
+        switch NativeActionImplementationParameter.construct(parameter) {
+        case .failure(let error):
+          errors.append(contentsOf: error.errors.map({ ConstructionError.parameterError($0) }))
+        case .success(let constructed):
+          parameters.append(constructed)
+        }
       case .literal(let literal):
         switch LiteralIntermediate.construct(literal: literal) {
         case .failure(let error):
