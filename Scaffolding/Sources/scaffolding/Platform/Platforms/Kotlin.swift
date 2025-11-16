@@ -435,7 +435,7 @@ enum Kotlin: Platform {
   }
 
   static func splitFileIfNecessary(_ file: String) -> [String]? {
-    let fileSizeLimit = Int(pow(2, 23) as Double)
+    let fileSizeLimitInBytes = 2500 * 1000 // idea.max.intellisense.filesize
     var lines = (file.components(separatedBy: "\n") as [String])[...]
     let imports = Array(lines.prefix(while: { $0.hasPrefix("import") }))
     lines.removeFirst(imports.count)
@@ -459,7 +459,7 @@ enum Kotlin: Platform {
       lines.removeFirst(file.count)
       let joinedFile = file.joined(separator: "\n")
       if let existing = files.last,
-        existing.utf8.count + joinedFile.utf8.count <= fileSizeLimit {
+        existing.utf8.count + joinedFile.utf8.count <= fileSizeLimitInBytes {
         files[files.indices.last!] = existing.appending(contentsOf: joinedFile)
       } else {
         files.append(imports.appending(contentsOf: file).joined(separator: "\n"))
@@ -502,7 +502,6 @@ enum Kotlin: Platform {
       "<?xml version=\u{22}1.0\u{22} encoding=\u{22}UTF-8\u{22}?>",
       "<lint>",
       "\(indent)<issue id=\u{22}GradleDependency\u{22} severity=\u{22}ignore\u{22} />",
-      "\(indent)<issue id=\u{22}LintError\u{22} severity=\u{22}ignore\u{22} />",
       "</lint>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("lint.xml"))
