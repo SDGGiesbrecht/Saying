@@ -6,6 +6,7 @@ protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
   static var indent: String { get }
+  static var fileSizeLimit: Int? { get }
 
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
@@ -142,7 +143,7 @@ protocol Platform {
   // Package
   static func testEntryPoint() -> [String]?
   static var sourceFileName: String { get }
-  static func splitFileIfNecessary(_ file: String) -> [String]?
+  static func splitLongFile(_ file: String) -> [String]
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
 
   // Saying
@@ -1945,8 +1946,8 @@ extension Platform {
     return result.joined(separator: "\n").appending("\n")
   }
 
-  static func splitFileIfNecessary(_ file: String) -> [String]? {
-    return nil
+  static func splitLongFile(_ file: String) -> [String] {
+    return [file]
   }
 
   static func preparedDirectory(for package: Package) -> URL {
@@ -2010,7 +2011,9 @@ extension Platform {
       let constructionDirectory = location ?? preparedDirectory(for: package)
       let completedSource = source.joined(separator: "\n").appending("\n")
       let sourceFileURL = constructionDirectory.appendingPathComponent(sourceFileName)
-      if let split = splitFileIfNecessary(completedSource) {
+      if let limit = fileSizeLimit,
+        completedSource.utf8.count > limit {
+        let split = splitLongFile(completedSource)
         let fileExtension = sourceFileURL.pathExtension
         let withoutExtension = sourceFileURL.deletingPathExtension()
         let name = withoutExtension.lastPathComponent
