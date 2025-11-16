@@ -1,12 +1,14 @@
 import Foundation
 
 enum Kotlin: Platform {
-
   static var directoryName: String {
     "Kotlin"
   }
   static var indent: String {
     return "    "
+  }
+  static var fileSizeLimit: Int? {
+    return 2500 * 1000 // idea.max.intellisense.filesize; exceeding it broke the build in the Android CI
   }
 
   static var allowsAllUnicodeIdentifiers: Bool {
@@ -385,17 +387,28 @@ enum Kotlin: Platform {
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
-    let maximumGroupSize = Int(pow(2, 13) as Double)
-    var groupedTestCalls: [[String]] = []
-    var remainder = testCalls
+    let maximumGroupLength = fileSizeLimit! / 2
+    let indentLength = indent.utf8.count
+
+    var groups: [[String]] = []
+    var remainder = testCalls[...]
+    var accumulatedBytes = 0
     while !remainder.isEmpty {
-      let move = Array(remainder.prefix(maximumGroupSize))
-      groupedTestCalls.append(move)
-      remainder.removeFirst(move.count)
+      let next = remainder.removeFirst()
+      let nextLength = next.utf8.count
+      let additionLength = 1 + indentLength + nextLength
+      if !groups.isEmpty,
+        accumulatedBytes + additionLength + 1 < maximumGroupLength {
+        groups[groups.indices.last!].append(next)
+        accumulatedBytes += additionLength
+      } else {
+        groups.append([next])
+        accumulatedBytes = additionLength
+      }
     }
 
     var result: [String] = []
-    for (index, group) in groupedTestCalls.enumerated() {
+    for (index, group) in groups.enumerated() {
       result.append(contentsOf: [
           "",
           "fun test\(index)() {",
@@ -414,7 +427,7 @@ enum Kotlin: Platform {
       "",
       "fun test() {",
     ])
-    for index in groupedTestCalls.indices {
+    for index in groups.indices {
       result.append(contentsOf: [
         "\(indent)test\(index)()",
       ])
@@ -434,14 +447,17 @@ enum Kotlin: Platform {
     ]
   }
 
-  static func splitFileIfNecessary(_ file: String) -> [String]? {
-    let fileSizeLimitInBytes = 2500 * 1000 // idea.max.intellisense.filesize
+  static func splitLongFile(_ file: String) -> [String] {
     var lines = (file.components(separatedBy: "\n") as [String])[...]
-    let imports = Array(lines.prefix(while: { $0.hasPrefix("import") }))
-    lines.removeFirst(imports.count)
+    let importLines = Array(lines.prefix(while: { $0.hasPrefix("import") }))
+    lines.removeFirst(importLines.count)
+    let imports = importLines.joined(separator: "\n")
+    let importsLength = imports.utf8.count
+
     var files: [String] = []
+    var accumulatedBytes = importsLength
     while !lines.isEmpty {
-      let file: [String]
+      let sectionLines: [String]
       if let nextBreak = lines.indices.dropFirst().first(where: { index in
         if lines[index] == "",
            let next = lines[index...].dropFirst().first,
@@ -452,18 +468,21 @@ enum Kotlin: Platform {
           return false
         }
       }) {
-        file = Array(lines[..<nextBreak])
+        sectionLines = Array(lines[..<nextBreak])
       } else {
-        file = Array(lines)
+        sectionLines = Array(lines)
       }
-      lines.removeFirst(file.count)
-      let joinedFile = file.joined(separator: "\n")
-      if let existing = files.last,
-        existing.utf8.count + joinedFile.utf8.count <= fileSizeLimitInBytes {
-        files[files.indices.last!] = existing.appending(contentsOf: joinedFile)
+      lines.removeFirst(sectionLines.count)
+      let section = "\n" + sectionLines.joined(separator: "\n")
+      let sectionLength = section.utf8.count
+      if !files.isEmpty,
+        accumulatedBytes + sectionLength < fileSizeLimit! {
+        accumulatedBytes += sectionLength
       } else {
-        files.append(imports.appending(contentsOf: file).joined(separator: "\n"))
+        files.append(imports)
+        accumulatedBytes = importsLength + sectionLength
       }
+      files[files.indices.last!].append(contentsOf: section)
     }
     return files
   }
@@ -475,7 +494,7 @@ enum Kotlin: Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "android.useAndroidX=true",
-      "kotlin.daemon.jvmargs=-Xmx2g",
+      "kotlin.daemon.jvmargs=-Xmx2g", // 1G ran out in the Android CI.
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
     try ([

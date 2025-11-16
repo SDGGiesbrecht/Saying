@@ -8,6 +8,9 @@ enum CSharp: Platform {
   static var indent: String {
     return "    "
   }
+  static var fileSizeLimit: Int? {
+    return nil
+  }
   
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
