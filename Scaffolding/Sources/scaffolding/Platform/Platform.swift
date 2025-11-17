@@ -1442,6 +1442,7 @@ extension Platform {
       }
       if !referenceList.isEmpty || !cleanUpCode.isEmpty {
         if statement.isReturn {
+          entry.append(contentsOf: cleanUpCode)
           entry.append(contentsOf: delayedReturn)
         }
         for reference in referenceList {
