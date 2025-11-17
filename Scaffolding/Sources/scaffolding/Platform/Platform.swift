@@ -672,6 +672,24 @@ extension Platform {
     }
   }
 
+  static func modify(
+    nativeParameter parameter: inout String,
+    accordingTo details: NativeActionImplementationParameter,
+    condition: (NativeActionImplementationParameter) -> Bool,
+    argument: ActionUse,
+    referenceLookup: [ReferenceDictionary],
+    getImplementation: (NativeThingImplementationIntermediate) -> NativeActionExpressionIntermediate?
+  ) {
+    if condition(details),
+      let parameterType = argument.resolvedResultType??.key,
+      let type = referenceLookup.lookupThing(parameterType),
+      let native = nativeType(of: type),
+      let implementation = getImplementation(native) {
+      parameter = implementation.textComponents.lazy.map({ String($0) })
+          .joined(separator: parameter)
+    }
+  }
+
   static func call(
     to reference: ActionUse,
     context: ActionIntermediate?,
@@ -900,22 +918,30 @@ extension Platform {
                   normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                   mode: mode
                 )
-                if parameter.hold,
-                  let parameterType = actionArgument.resolvedResultType??.key,
-                  let type = referenceLookup.lookupThing(parameterType),
-                  let native = nativeType(of: type),
-                  let hold = native.hold {
-                    result = hold.textComponents.lazy.map({ String($0) })
-                      .joined(separator: result)
-                }
-                if parameter.copy,
-                  let parameterType = actionArgument.resolvedResultType??.key,
-                  let type = referenceLookup.lookupThing(parameterType),
-                  let native = nativeType(of: type),
-                  let copy = native.copy {
-                    result = copy.textComponents.lazy.map({ String($0) })
-                      .joined(separator: result)
-                }
+                modify(
+                  nativeParameter: &result,
+                  accordingTo: parameter,
+                  condition: { $0.hold },
+                  argument: actionArgument,
+                  referenceLookup: referenceLookup,
+                  getImplementation: { $0.hold }
+                )
+                modify(
+                  nativeParameter: &result,
+                  accordingTo: parameter,
+                  condition: { $0.release },
+                  argument: actionArgument,
+                  referenceLookup: referenceLookup,
+                  getImplementation: { $0.release }
+                )
+                modify(
+                  nativeParameter: &result,
+                  accordingTo: parameter,
+                  condition: { $0.copy },
+                  argument: actionArgument,
+                  referenceLookup: referenceLookup,
+                  getImplementation: { $0.copy }
+                )
                 accumulator.append(
                   contentsOf: result
                 )
