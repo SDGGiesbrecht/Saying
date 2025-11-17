@@ -1,6 +1,6 @@
 ability (clients)
  (
-  English: insertion from (insertion) into (list) separated by (list boundary)
+  English: insertion from (insertion) into (list) separated by (boundary)
  )
  {
   requirement (clients)
@@ -11,7 +11,7 @@ ability (clients)
     }
    ]
    (
-    English: replace (range: range of (list boundary)) in (list: ↓ list) with (insertion: insertion)
+    English: replace (range: range of (boundary)) in (list: ↓ list) with (insertion: insertion)
    )
 
   choice (clients)
@@ -22,7 +22,7 @@ ability (clients)
     }
    ]
    (
-    English: (list: list) with (range: range of (list boundary)) replaced with (insertion: insertion)
+    English: (list: list) with (range: range of (boundary)) replaced with (insertion: insertion)
    )
    list
    {
@@ -39,7 +39,7 @@ ability (clients)
     }
    ]
    (
-    English: insert (insertion: insertion) at (boundary: list boundary) in (list: ↓ list)
+    English: insert (insertion: insertion) at (boundary: boundary) in (list: ↓ list)
    )
    {
     insert (insertion) at (boundary) in (↓ list) according to list insertion
@@ -53,7 +53,7 @@ ability (clients)
     }
    ]
    (
-    English: (list: list) with (insertion: insertion) inserted at (boundary: list boundary)
+    English: (list: list) with (insertion: insertion) inserted at (boundary: boundary)
    )
    list
    {
@@ -134,7 +134,7 @@ ability (clients)
  }
 
 extension
- insertion from (insertion) into (list) separated by (list boundary)
+ insertion from (insertion) into (list) separated by (boundary)
  {
   action (clients)
    [
@@ -158,7 +158,7 @@ extension
     }
    ]
    (
-    English: insert (insertion: insertion) at (boundary: list boundary) in (list: ↓ list) according to list insertion
+    English: insert (insertion: insertion) at (boundary: boundary) in (list: ↓ list) according to list insertion
    )
    {
     replace (from (boundary) to (boundary)) in (↓ list) with (insertion)
@@ -172,7 +172,7 @@ extension
     }
    ]
    (
-    English: (list: list) with (insertion: insertion) inserted at (boundary: list boundary) according to list insertion
+    English: (list: list) with (insertion: insertion) inserted at (boundary: boundary) according to list insertion
    )
    list
    {
@@ -207,6 +207,14 @@ extension
     let (• copy: list) start as (list)
     prepend (prefix) to (↓ copy)
     ← copy
+   }
+
+  action (clients)
+   (
+    English: remove (range: range of (boundary)) from (list: ↓ list) according to list insertion
+   )
+   {
+    replace (range) in (↓ list) with (empty: list)
    }
  }
 

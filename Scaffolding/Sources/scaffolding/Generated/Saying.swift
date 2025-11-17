@@ -1,6 +1,5 @@
 import Foundation
 
-
 struct UnicodeText {
   fileprivate var scalars: String.UnicodeScalarView
 
@@ -25,7 +24,7 @@ struct UnicodeText {
   }
 
   init(_ scalars: String.UnicodeScalarView) {
-    self = UnicodeText(skippingNormalizationOf: String(scalars).decomposedStringWithCompatibilityMapping.unicodeScalars)
+    self = UnicodeText(skippingNormalizationOf: scalars.compatibilityDecomposition())
   }
 
   var endIndex: String.UnicodeScalarView.Index {
@@ -585,6 +584,13 @@ func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Un
 }
 
 extension String.UnicodeScalarView {
+  func compatibilityDecomposition() -> String.UnicodeScalarView {
+    ensureUnicodeResourcesHaveLoaded
+    return String(self).decomposedStringWithCompatibilityMapping.unicodeScalars
+  }
+}
+
+extension String.UnicodeScalarView {
   public func hash(into hasher: inout Hasher) {
     for scalar in self {
       hasher.combine(scalar)
@@ -601,6 +607,8 @@ func compare(_ first: Int, to second: Int) -> Bool? {
   }
   return nil
 }
+
+private let ensureUnicodeResourcesHaveLoaded: Void = { _ = Locale.current }()
 
 extension String.UnicodeScalarView: Hashable {}
 
