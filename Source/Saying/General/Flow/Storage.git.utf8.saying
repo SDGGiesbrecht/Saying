@@ -39,7 +39,7 @@ extension
    (
     English: change (storage: thing) to (value: thing)
    )
-   C: “” storage “ = ” value “”
+   C: “” storage “ = ” hold on (value) “”
    C♯: “” storage “ = ” value “”
    JavaScript: “” storage “ = ” value “”
    Kotlin: “” storage “ = ” value “”

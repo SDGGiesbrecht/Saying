@@ -1,5 +1,36 @@
 import Foundation
 
+// Memory Management
+
+// Memory is managed by reference counting.
+
+// • The return value of any function is owned by the caller.
+//   • This means anything received from a function must be released.
+//       reference variable = callFunction();
+//       release(variable);
+//     • Note that passing directly from a return value to an argument would cause a leak.
+//         callOuterFunction(callInnerFunction());
+//       Instead:
+//         reference variable = callInnerFunction();
+//         callOuterFunction(variable);
+//         release(variable);
+//   • This means anything sent out of a function by return must be under a hold.
+//       return hold(constant);
+//     • Note that most often ownership is already there from a function call.
+//         return callFunction();
+//   • Note that this rule describes even the hold() and copy() functions.
+// • Any storage must own its contents.
+//     uninitialized_storage = hold(constant);
+//   • This means swapping contents must release the old value and hold the new.
+//     release(existing_storage);
+//     existing_storage = hold(new);
+//   • This means when the storage is destroyed, it must release its contents.
+//       release(structure->member);
+//       structure = NULL;
+//     • Note that most often this is centralized into a simple release of the parent.
+//         release(structure);
+//   • Note that this rule describes even passed references.
+
 enum C: Platform {
 
   static var directoryName: String {
