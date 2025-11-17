@@ -678,15 +678,22 @@ extension Platform {
     condition: (NativeActionImplementationParameter) -> Bool,
     argument: ActionUse,
     referenceLookup: [ReferenceDictionary],
-    getImplementation: (NativeThingImplementationIntermediate) -> NativeActionExpressionIntermediate?
+    getImplementation: (NativeThingImplementationIntermediate) -> NativeActionExpressionIntermediate?,
+    delayUntilCleanUp: Bool = false,
+    cleanUpCode: inout String
   ) {
     if condition(details),
       let parameterType = argument.resolvedResultType??.key,
       let type = referenceLookup.lookupThing(parameterType),
       let native = nativeType(of: type),
       let implementation = getImplementation(native) {
-      parameter = implementation.textComponents.lazy.map({ String($0) })
-          .joined(separator: parameter)
+      let wrapped = implementation.textComponents.lazy.map({ String($0) })
+        .joined(separator: parameter)
+      if delayUntilCleanUp {
+        cleanUpCode.prepend(contentsOf: wrapped.appending(contentsOf: "\n"))
+      } else {
+        parameter = wrapped
+      }
     }
   }
 
@@ -924,7 +931,8 @@ extension Platform {
                   condition: { $0.hold },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.hold }
+                  getImplementation: { $0.hold },
+                  cleanUpCode: &cleanUpCode
                 )
                 modify(
                   nativeParameter: &result,
@@ -932,7 +940,8 @@ extension Platform {
                   condition: { $0.release },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.release }
+                  getImplementation: { $0.release },
+                  cleanUpCode: &cleanUpCode
                 )
                 modify(
                   nativeParameter: &result,
@@ -940,7 +949,18 @@ extension Platform {
                   condition: { $0.copy },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.copy }
+                  getImplementation: { $0.copy },
+                  cleanUpCode: &cleanUpCode
+                )
+                modify(
+                  nativeParameter: &result,
+                  accordingTo: parameter,
+                  condition: { $0.held },
+                  argument: actionArgument,
+                  referenceLookup: referenceLookup,
+                  getImplementation: { $0.release },
+                  delayUntilCleanUp: true,
+                  cleanUpCode: &cleanUpCode
                 )
                 accumulator.append(
                   contentsOf: result
@@ -994,7 +1014,7 @@ extension Platform {
         }
       }
       if let before = beforeCleanUp {
-        cleanUpCode = accumulator
+        cleanUpCode.prepend(contentsOf: accumulator)
         return before
       } else {
         return accumulator
