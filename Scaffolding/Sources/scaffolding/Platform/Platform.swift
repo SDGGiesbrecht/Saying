@@ -1570,11 +1570,13 @@ extension Platform {
       }
       return result
     })
-    if inOrder.isEmpty {
-      inOrder.append(cleanUpCode)
-    } else {
-      if !cleanUpCode.isEmpty {
-        inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+    if !(statements.last?.isReturn ?? false) {
+      if inOrder.isEmpty {
+        inOrder.append(cleanUpCode)
+      } else {
+        if !cleanUpCode.isEmpty {
+          inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+        }
       }
     }
     return inOrder
