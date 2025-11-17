@@ -1389,7 +1389,7 @@ extension Platform {
         }
       }
       if statement.isReturn {
-        if referenceList.isEmpty {
+        if referenceList.isEmpty, cleanUpCode.isEmpty {
           entry.append(contentsOf: "return ")
         } else {
           entry.append(
@@ -1440,7 +1440,7 @@ extension Platform {
           entry.append(unpack)
         }
       }
-      if !referenceList.isEmpty {
+      if !referenceList.isEmpty || !cleanUpCode.isEmpty {
         if statement.isReturn {
           entry.append(contentsOf: delayedReturn)
         }
