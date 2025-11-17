@@ -900,6 +900,14 @@ extension Platform {
                   normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                   mode: mode
                 )
+                if parameter.hold,
+                  let parameterType = actionArgument.resolvedResultType??.key,
+                  let type = referenceLookup.lookupThing(parameterType),
+                  let native = nativeType(of: type),
+                  let hold = native.hold {
+                    result = hold.textComponents.lazy.map({ String($0) })
+                      .joined(separator: result)
+                }
                 if parameter.copy,
                   let parameterType = actionArgument.resolvedResultType??.key,
                   let type = referenceLookup.lookupThing(parameterType),
