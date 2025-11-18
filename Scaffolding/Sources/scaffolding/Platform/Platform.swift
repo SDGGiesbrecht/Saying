@@ -809,26 +809,24 @@ extension Platform {
         native.release != nil {
         return extractedArguments.removeFirst()
       }
-      let result: [String] = [
-        call(
-          to: bareAction.isFlow ? bareAction : action,
-          bareAction: bareAction,
-          reference: reference,
-          context: context,
-          localLookup: localLookup,
-          referenceLookup: referenceLookup,
-          parameterName: nil,
-          contextCoverageIdentifier: contextCoverageIdentifier,
-          extractedCoverageRegistrations: &extractedCoverageRegistrations,
-          coverageRegionCounter: &coverageRegionCounter,
-          clashAvoidanceCounter: &clashAvoidanceCounter,
-          extractedArguments: &extractedArguments,
-          cleanUpCode: &cleanUpCode,
-          inliningArguments: inliningArguments,
-          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-          mode: mode
-        )
-      ]
+      let basicCall: String = call(
+        to: bareAction.isFlow ? bareAction : action,
+        bareAction: bareAction,
+        reference: reference,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        parameterName: nil,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        extractedCoverageRegistrations: &extractedCoverageRegistrations,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArguments: &extractedArguments,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+        mode: mode
+      )
       if mode == .testing,
         bareAction.isFlow,
         bareAction.deservesTesting,
@@ -837,7 +835,16 @@ extension Platform {
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
         )
       }
-      return result.joined(separator: "\n\(indent)")
+      if bareAction.isAccessor,
+        let returnType = bareAction.returnValue?.key,
+        let type = referenceLookup.lookupThing(returnType),
+        let native = nativeType(of: type),
+        let hold = native.hold {
+        return hold.textComponents.lazy.map({ String($0) })
+          .joined(separator: basicCall)
+      } else {
+        return basicCall
+      }
     }
   }
   static func call(
