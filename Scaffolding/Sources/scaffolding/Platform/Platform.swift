@@ -659,6 +659,7 @@ extension Platform {
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         extractedArguments: &extractedArguments,
+        isThrough: false,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
@@ -702,6 +703,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
     isArgumentExtraction: Bool = false,
+    isThrough: Bool,
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: String],
@@ -809,26 +811,24 @@ extension Platform {
         native.release != nil {
         return extractedArguments.removeFirst()
       }
-      let result: [String] = [
-        call(
-          to: bareAction.isFlow ? bareAction : action,
-          bareAction: bareAction,
-          reference: reference,
-          context: context,
-          localLookup: localLookup,
-          referenceLookup: referenceLookup,
-          parameterName: nil,
-          contextCoverageIdentifier: contextCoverageIdentifier,
-          extractedCoverageRegistrations: &extractedCoverageRegistrations,
-          coverageRegionCounter: &coverageRegionCounter,
-          clashAvoidanceCounter: &clashAvoidanceCounter,
-          extractedArguments: &extractedArguments,
-          cleanUpCode: &cleanUpCode,
-          inliningArguments: inliningArguments,
-          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-          mode: mode
-        )
-      ]
+      let basicCall: String = call(
+        to: bareAction.isFlow ? bareAction : action,
+        bareAction: bareAction,
+        reference: reference,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        parameterName: nil,
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        extractedCoverageRegistrations: &extractedCoverageRegistrations,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArguments: &extractedArguments,
+        cleanUpCode: &cleanUpCode,
+        inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+        mode: mode
+      )
       if mode == .testing,
         bareAction.isFlow,
         bareAction.deservesTesting,
@@ -837,7 +837,17 @@ extension Platform {
           coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
         )
       }
-      return result.joined(separator: "\n\(indent)")
+      if !isThrough,
+        bareAction.isAccessor,
+        let returnType = bareAction.returnValue?.key,
+        let type = referenceLookup.lookupThing(returnType),
+        let native = nativeType(of: type),
+        let hold = native.hold {
+        return hold.textComponents.lazy.map({ String($0) })
+          .joined(separator: basicCall)
+      } else {
+        return basicCall
+      }
     }
   }
   static func call(
@@ -912,6 +922,7 @@ extension Platform {
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
                   extractedArguments: &extractedArguments,
+                  isThrough: actionArgument.passage == .through,
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
@@ -1032,6 +1043,7 @@ extension Platform {
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &extractedArguments,
+            isThrough: action.passage == .through,
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
@@ -1116,6 +1128,7 @@ extension Platform {
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     extractedArguments: &extractedArguments,
+                    isThrough: actionArgument.passage == .through,
                     isDirectReturn: false,
                     cleanUpCode: &cleanUpCode,
                     inliningArguments: inliningArguments,
@@ -1139,6 +1152,7 @@ extension Platform {
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
                   extractedArguments: &extractedArguments,
+                  isThrough: actionArgument.passage == .through,
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
                   inliningArguments: inliningArguments,
@@ -1293,6 +1307,7 @@ extension Platform {
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &entries.unused,
             isArgumentExtraction: true,
+            isThrough: action.passage == .through,
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
@@ -1352,6 +1367,7 @@ extension Platform {
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               extractedArguments: &extracted,
+              isThrough: false,
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inliningArguments: inliningArguments,
@@ -1424,6 +1440,7 @@ extension Platform {
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             extractedArguments: &remainingExtractedArguments,
+            isThrough: false,
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
