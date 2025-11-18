@@ -1388,16 +1388,25 @@ extension Platform {
           cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
         }
       }
+      var closingParenthesis = ""
       if statement.isReturn {
         if referenceList.isEmpty, cleanUpCode.isEmpty {
           entry.append(contentsOf: "return ")
         } else {
+          let storageType = action.resolvedResultType!
           entry.append(
             contentsOf: returnDelayStorage(
-              type: action.resolvedResultType!
+              type: storageType
                 .map({ source(for: $0, referenceLookup: referenceLookup) })
             )
           )
+          if let expectedType = storageType,
+            let type = referenceLookup.lookupThing(expectedType.key),
+            let native = nativeType(of: type),
+            let hold = native.hold {
+            entry.append(contentsOf: String(hold.textComponents.first!))
+            closingParenthesis = String(hold.textComponents.last!)
+          }
         }
       }
       let before = coverageRegionCounter
@@ -1420,7 +1429,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: false,
             mode: mode
-          )
+          ).appending(contentsOf: closingParenthesis)
         )
       )
       if !extractedCoverageRegistrations.isEmpty {
