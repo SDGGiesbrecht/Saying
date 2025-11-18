@@ -21,7 +21,7 @@ import Foundation
 //   • Note that this rule describes even the hold() and copy() functions.
 // • Any storage must own its contents.
 //     uninitialized_storage = hold(constant);
-//   • This means swapping contents must release the old value and hold the new.
+//   • This means swapping contents must release the old contents and hold the new.
 //     release(existing_storage);
 //     existing_storage = hold(new);
 //   • This means when the storage is destroyed, it must release its contents.
@@ -30,6 +30,7 @@ import Foundation
 //     • Note that most often this is centralized into a simple release of the parent.
 //         release(structure);
 //   • Note that this rule describes even passed references.
+// • Holds and releases may be omitted in pairs, either by a code author or by compiler optimization, provided the pair is known from context to be unnecessary.
 
 enum C: Platform {
 
