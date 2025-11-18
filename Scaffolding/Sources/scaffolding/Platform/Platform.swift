@@ -691,7 +691,7 @@ extension Platform {
       let wrapped = implementation.textComponents.lazy.map({ String($0) })
         .joined(separator: parameter)
       if delayUntilCleanUp {
-        cleanUpCode.prepend(contentsOf: wrapped.appending(contentsOf: "\n"))
+        cleanUpCode.prepend(contentsOf: statement(expression: wrapped).appending(contentsOf: "\n"))
       } else {
         parameter = wrapped
       }
