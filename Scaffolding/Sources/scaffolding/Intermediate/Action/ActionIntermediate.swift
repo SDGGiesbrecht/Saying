@@ -13,6 +13,7 @@ struct ActionIntermediate {
   var isReferenceWrapper: Bool = false
   var isMemberWrapper: Bool = false
   var isEnumerationValueWrapper: Bool = false
+  var isAccessor: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
   var coveredIdentifier: UnicodeText?
   var isSpecialized: Bool
@@ -243,6 +244,7 @@ extension ActionIntermediate {
         )
       ),
       isCreation: false,
+      isAccessor: true,
       isSpecialized: false,
       deservesTesting: existsForAnyPlatform(
         c: c,
@@ -799,6 +801,7 @@ extension ActionIntermediate {
       isReferenceWrapper: isReferenceWrapper,
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
+      isAccessor: isAccessor,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier,
       isSpecialized: isSpecialized,
@@ -863,6 +866,7 @@ extension ActionIntermediate {
         isReferenceWrapper: isReferenceWrapper,
         isMemberWrapper: isMemberWrapper,
         isEnumerationValueWrapper: isEnumerationValueWrapper,
+        isAccessor: isAccessor,
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier,
         isSpecialized: isSpecialized,
@@ -921,6 +925,7 @@ extension ActionIntermediate {
       isReferenceWrapper: isReferenceWrapper,
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
+      isAccessor: isAccessor,
       originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier,
       isSpecialized: true,
