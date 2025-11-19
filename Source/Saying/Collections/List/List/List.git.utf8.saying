@@ -414,7 +414,7 @@ extension
       English: convert (other: list of (thing)) into list
      )
      list of (thing)
-     C: “g¤(5F)array¤(5F)ref(” other “)”
+     C: “” hold on (other) “”
      C♯: “” other “”
      JavaScript: “” other “”
      Kotlin: “” other “”
