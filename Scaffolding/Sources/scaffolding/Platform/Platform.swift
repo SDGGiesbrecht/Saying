@@ -1160,25 +1160,37 @@ extension Platform {
                 )
               )
             } else {
+              let basicCall = call(
+                to: actionArgument,
+                context: context,
+                localLookup: localLookup,
+                referenceLookup: referenceLookup,
+                isNativeArgument: false,
+                contextCoverageIdentifier: contextCoverageIdentifier,
+                extractedCoverageRegistrations: &extractedCoverageRegistrations,
+                coverageRegionCounter: &coverageRegionCounter,
+                clashAvoidanceCounter: &clashAvoidanceCounter,
+                extractedArguments: &extractedArguments,
+                isThrough: actionArgument.passage == .through,
+                isDirectReturn: false,
+                cleanUpCode: &cleanUpCode,
+                inliningArguments: inliningArguments,
+                normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+                mode: mode
+              )
+              let wrappedCall: String
+              if action.isCreation,
+                let memberType = actionArgument.resolvedResultType??.key,
+                let type = referenceLookup.lookupThing(memberType),
+                let native = nativeType(of: type),
+                let hold = native.hold {
+                wrappedCall = hold.textComponents.lazy.map({ String($0) })
+                  .joined(separator: basicCall)
+              } else {
+                wrappedCall = basicCall
+              }
               argumentsArray.append(
-                parameterLabel + call(
-                  to: actionArgument,
-                  context: context,
-                  localLookup: localLookup,
-                  referenceLookup: referenceLookup,
-                  isNativeArgument: false,
-                  contextCoverageIdentifier: contextCoverageIdentifier,
-                  extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                  coverageRegionCounter: &coverageRegionCounter,
-                  clashAvoidanceCounter: &clashAvoidanceCounter,
-                  extractedArguments: &extractedArguments,
-                  isThrough: actionArgument.passage == .through,
-                  isDirectReturn: false,
-                  cleanUpCode: &cleanUpCode,
-                  inliningArguments: inliningArguments,
-                  normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                  mode: mode
-                )
+                parameterLabel + wrappedCall
               )
             }
           case .flow:
