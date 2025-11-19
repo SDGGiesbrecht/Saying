@@ -226,6 +226,7 @@ extension Thing {
           typeInstead.validateReferences(
             requiredAccess: access,
             testContext: testContext,
+            allowTestOnly: testOnlyAccess,
             referenceLookup: referenceLookup,
             errors: &errors
           )

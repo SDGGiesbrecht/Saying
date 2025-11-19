@@ -259,6 +259,7 @@ extension ParsedTypeReference {
   func validateReferences(
     requiredAccess: AccessIntermediate,
     testContext: TestContext?,
+    allowTestOnly: Bool,
     referenceLookup: [ReferenceDictionary],
     errors: inout [ReferenceError]
   ) {
@@ -269,6 +270,7 @@ extension ParsedTypeReference {
           to: thing,
           requiredAccess: requiredAccess,
           testContext: testContext,
+          allowTestOnly: allowTestOnly,
           reference: simple.syntaxNode,
           errors: &errors
         )
@@ -284,6 +286,7 @@ extension ParsedTypeReference {
           to: thing,
           requiredAccess: requiredAccess,
           testContext: testContext,
+          allowTestOnly: allowTestOnly,
           reference: identifier,
           errors: &errors
         )
@@ -294,6 +297,7 @@ extension ParsedTypeReference {
         component.validateReferences(
           requiredAccess: requiredAccess,
           testContext: testContext,
+          allowTestOnly: allowTestOnly,
           referenceLookup: referenceLookup,
           errors: &errors
         )
@@ -303,6 +307,7 @@ extension ParsedTypeReference {
         parameter.validateReferences(
           requiredAccess: requiredAccess,
           testContext: testContext,
+          allowTestOnly: allowTestOnly,
           referenceLookup: referenceLookup,
           errors: &errors
         )
@@ -310,6 +315,7 @@ extension ParsedTypeReference {
       returnValue?.validateReferences(
         requiredAccess: requiredAccess,
         testContext: testContext,
+        allowTestOnly: allowTestOnly,
         referenceLookup: referenceLookup,
         errors: &errors
       )
@@ -320,6 +326,7 @@ extension ParsedTypeReference {
       type.validateReferences(
         requiredAccess: requiredAccess,
         testContext: testContext,
+        allowTestOnly: allowTestOnly,
         referenceLookup: referenceLookup,
         errors: &errors
       )
@@ -330,6 +337,7 @@ extension ParsedTypeReference {
     to thing: Thing,
     requiredAccess: AccessIntermediate,
     testContext: TestContext?,
+    allowTestOnly: Bool,
     reference: ParsedThingReferenceProtocol,
     errors: inout [ReferenceError]
   ) {
@@ -339,6 +347,7 @@ extension ParsedTypeReference {
     testContext.validateAccess(
       to: thing.access,
       testOnly: thing.testOnlyAccess,
+      allowTestOnly: allowTestOnly,
       errors: &errors,
       unavailableOutsideTestsError: { .thingUnavailableOutsideTests(reference: reference) },
       unavailableInVisibleTestsError: { .thingAccessNarrowerThanDocumentationVisibility(reference: reference) }

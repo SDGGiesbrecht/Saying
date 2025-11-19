@@ -58,11 +58,13 @@ extension StatementIntermediate {
   func validateReferences(
     context: [ReferenceDictionary],
     testContext: TestContext?,
+    allowTestOnly: Bool,
     errors: inout [ReferenceError]
   ) {
     action?.validateReferences(
       context: context,
       testContext: testContext,
+      allowTestOnly: allowTestOnly,
       errors: &errors
     )
   }
