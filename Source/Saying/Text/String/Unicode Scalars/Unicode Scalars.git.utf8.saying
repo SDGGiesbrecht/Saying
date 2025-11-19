@@ -473,7 +473,7 @@ use (clients)
     English: convert (other: Unicode scalars) into list
    )
    Unicode scalars
-   C: “” other “”
+   C: “reference¤(5F)string(” other “)”
    C♯: “” other “”
    JavaScript: “” other “”
    Kotlin: “” other “”
