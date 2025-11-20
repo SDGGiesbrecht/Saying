@@ -45,7 +45,7 @@ action (file)
  C: “create¤(5F)reference¤(5F)tracker()” {“reference¤(5F)tracker create¤(5F)reference¤(5F)tracker()¤(A){¤(A)int¤(2A) new = malloc(sizeof(int));¤(A)if (!new)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)new = 0;¤(A)return (reference¤(5F)tracker) {new, false};¤(A)}”}
  create
 
-action (file)
+flow (file)
  (
   English: clean (tracker: reference tracker) up
  )
