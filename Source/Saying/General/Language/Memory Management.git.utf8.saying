@@ -20,13 +20,14 @@ thing (file)
   English: reference tracker
  )
  C: “reference¤(5F)tracker”/“hold¤(5F)reference¤(5F)tracker(” tracker “)”/“release¤(5F)reference¤(5F)tracker(” tracker “)”/“copy¤(5F)reference¤(5F)tracker(” tracker “)” (
+  “err”
   “stdbool”
   “stdlib”
   ) {
    “typedef struct reference¤(5F)tracker {¤(A)int¤(2A) count;¤(A)bool gone;¤(A)} reference¤(5F)tracker;”
    “reference¤(5F)tracker hold¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)if (!tracker.gone)¤(A){¤(A)¤(2A)tracker.count += 1;¤(A)}¤(A)}”
    “void release¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)if (!tracker.gone)¤(A){¤(A)¤(2A)tracker.count ¤(2D)= 1;¤(A)}¤(A)}”
-   “reference¤(5F)tracker copy¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)int¤(2A) copy = malloc(sizeof(int));¤(A)¤(2A)copy = 1;¤(A)return (reference¤(5F)tracker) {copy, false};¤(A)}”
+   “reference¤(5F)tracker copy¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)int¤(2A) copy = malloc(sizeof(int));¤(A)if (!copy)¤(A){¤(A)err(EXIT_FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)copy = 1;¤(A)return (reference¤(5F)tracker) {copy, false};¤(A)}”
   }
  {
  }
@@ -41,7 +42,7 @@ action (file)
   English: create reference tracker
  )
  reference tracker
- C: “create¤(5F)reference¤(5F)tracker()” {“reference¤(5F)tracker create¤(5F)reference¤(5F)tracker()¤(A){¤(A)int¤(2A) new = malloc(sizeof(int));¤(A)¤(2A)new = 0;¤(A)return (reference¤(5F)tracker) {new, false};¤(A)}”}
+ C: “create¤(5F)reference¤(5F)tracker()” {“reference¤(5F)tracker create¤(5F)reference¤(5F)tracker()¤(A){¤(A)int¤(2A) new = malloc(sizeof(int));¤(A)if (!copy)¤(A){¤(A)err(EXIT_FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)new = 0;¤(A)return (reference¤(5F)tracker) {new, false};¤(A)}”}
  create
 
 action (file)
