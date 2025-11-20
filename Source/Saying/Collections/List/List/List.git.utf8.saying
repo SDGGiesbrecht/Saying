@@ -414,7 +414,7 @@ extension
       English: convert (other: list of (thing)) into list
      )
      list of (thing)
-     C: “” other “”
+     C: “” hold on (other) “”
      C♯: “” other “”
      JavaScript: “” other “”
      Kotlin: “” other “”
