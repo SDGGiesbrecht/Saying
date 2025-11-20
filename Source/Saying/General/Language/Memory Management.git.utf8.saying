@@ -3,31 +3,29 @@ thing (file)
   [
    English: A tracker that can be used to trace and test reference counting done by the Saying compiler.
   ]
-  [
-   English: A tracker will remain even after its reference count drops to zero. That way it can still be inspected even once it represents an instance that no longer exists. As such, {clean () up} must be called manually on every tracker, including copies.
-  ]
   test {
-   let (• tracker: reference tracker) be (create reference tracker)
-   verify (reference count of (tracker) is (zero: platform fixed‐width integer))
-   ignore (hold (tracker))
+   let (• secret hold: reference tracker) be (create reference tracker)
+   verify (reference count of (secret hold) is (one: platform fixed‐width integer))
+   let (• tracker: reference tracker) be (restart (secret hold))
    verify (reference count of (tracker) is (one: platform fixed‐width integer))
    release (tracker)
    verify (reference count of (tracker) is (zero: platform fixed‐width integer))
-   clean (tracker) up
+   ignore (hold (tracker))
+   verify (reference count of (tracker) is (one: platform fixed‐width integer))
   }
  ]
  (
   English: reference tracker
  )
- C: “reference¤(5F)tracker”/“hold¤(5F)reference¤(5F)tracker(” tracker “)”/“release¤(5F)reference¤(5F)tracker(” tracker “)”/“copy¤(5F)reference¤(5F)tracker(” tracker “)” (
+ C: “reference¤(5F)tracker¤(2A)”/“hold¤(5F)reference¤(5F)tracker(” tracker “)”/“release¤(5F)reference¤(5F)tracker(” tracker “)”/“copy¤(5F)reference¤(5F)tracker(” tracker “)” (
   “err”
   “stdbool”
   “stdlib”
   ) {
-   “typedef struct reference¤(5F)tracker {¤(A)int¤(2A) count;¤(A)bool gone;¤(A)} reference¤(5F)tracker;”
-   “reference¤(5F)tracker hold¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)if (!tracker.gone)¤(A){¤(A)¤(2A)tracker.count += 1;¤(A)}¤(A)}”
-   “void release¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)if (!tracker.gone)¤(A){¤(A)¤(2A)tracker.count ¤(2D)= 1;¤(A)}¤(A)}”
-   “reference¤(5F)tracker copy¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)int¤(2A) copy = malloc(sizeof(int));¤(A)if (!copy)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)copy = 1;¤(A)return (reference¤(5F)tracker) {copy, false};¤(A)}”
+   “typedef struct reference¤(5F)tracker {¤(A)int tracked¤(5F)references;¤(A)int all¤(5F)references;¤(A)} reference¤(5F)tracker;”
+   “reference¤(5F)tracker¤(2A) hold¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references += 1;¤(A)tracker¤(2D)>all¤(5F)references += 1;¤(A)}”
+   “void release¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references ¤(2D)= 1;¤(A)tracker¤(2D)>all¤(5F)references ¤(2D)= 1;¤(A)if (tracker¤(2D)>all¤(5F)references == 0)¤(A){¤(A)free(tracker);¤(A)}¤(A)}”
+   “reference¤(5F)tracker¤(2A) copy¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)reference¤(5F)tracker¤(2A) copy = malloc(sizeof(reference¤(5F)tracker));¤(A)if (!copy)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)copy = (reference¤(5F)tracker) {1, 1};¤(A)return copy;¤(A)}”
   }
  {
  }
@@ -42,15 +40,8 @@ action (file)
   English: create reference tracker
  )
  reference tracker
- C: “create¤(5F)reference¤(5F)tracker()” {“reference¤(5F)tracker create¤(5F)reference¤(5F)tracker()¤(A){¤(A)int¤(2A) new = malloc(sizeof(int));¤(A)if (!new)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)new = 0;¤(A)return (reference¤(5F)tracker) {new, false};¤(A)}”}
+ C: “create¤(5F)reference¤(5F)tracker()” {“reference¤(5F)tracker¤(2A) create¤(5F)reference¤(5F)tracker()¤(A){¤(A)reference¤(5F)tracker¤(2A) tracker = malloc(sizeof(reference¤(5F)tracker));¤(A)if (!tracker)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)tracker = (reference¤(5F)tracker) {1, 1};¤(A)return tracker;¤(A)}”}
  create
-
-action (file)
- (
-  English: clean (tracker: reference tracker) up
- )
- C: “free(” tracker “.count); ” tracker “.gone = true”
- {}
 
 use (file)
  general use of (reference tracker)
@@ -60,14 +51,14 @@ use (file)
 action (file)
  [
   [
-   English: Starts the reference counter and returns it at a count of one as though it were freshly created.
+   English: Restarts the reference tracker and returns it at a count of one as though it were freshly created.
   ]
  ]
  (
-  English: start (tracker: reference tracker)
+  English: restart (tracker: reference tracker)
  )
  reference tracker
- C: “start¤(5F)reference¤(5F)tracker(” tracker “)” {“reference¤(5F)tracker start¤(5F)reference¤(5F)tracker(reference¤(5F)tracker tracker)¤(A){¤(A)¤(2A)tracker.count = 1;¤(A)return tracker;¤(A)}”}
+ C: “restart¤(5F)reference¤(5F)tracker(” tracker “)” {“reference¤(5F)tracker¤(2A) restart¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references = 0;¤(A)return hold¤(5F)reference¤(5F)tracker(tracker);¤(A)}”}
  {
   ← tracker
  }
@@ -102,7 +93,7 @@ action (file)
   English: reference count of (tracker: reference tracker) is (expected count: platform fixed‐width integer)
  )
  truth value
- C: “¤(2A)” tracker “.count == ” expected count “”
+ C: “” tracker “¤(2D)>tracked¤(5F)references == ” expected count “”
  {
   ← true
  }
@@ -113,14 +104,13 @@ action (file) (tests)
    let (• tracker: reference tracker) be (create reference tracker)
    use local reference with (tracker)
    verify (reference count of (tracker) is (zero: platform fixed‐width integer))
-   clean (tracker) up
   }
  ]
  (
   English: use local reference with (tracker: reference tracker)
  )
  {
-  let (• reference: reference tracker) be (start (tracker))
+  let (• reference: reference tracker) be (restart (tracker))
   verify (reference count of (reference) is (one: platform fixed‐width integer))
   ignore (reference)
  }
