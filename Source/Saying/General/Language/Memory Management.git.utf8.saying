@@ -67,11 +67,8 @@ action (file)
  (
   English: hold (tracker: reference tracker)
  )
- reference tracker
  C: “hold¤(5F)reference¤(5F)tracker(” tracker “)”
- {
-  ← tracker
- }
+ {}
 
 action (file)
  (
