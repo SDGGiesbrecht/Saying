@@ -10,7 +10,7 @@ thing (file)
    verify (reference count of (tracker) is (one: platform fixed‐width integer))
    release (tracker)
    verify (reference count of (tracker) is (zero: platform fixed‐width integer))
-   ignore (hold (tracker))
+   hold (tracker)
    verify (reference count of (tracker) is (one: platform fixed‐width integer))
   }
  ]
