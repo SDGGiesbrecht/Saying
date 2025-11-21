@@ -128,3 +128,26 @@ action (file) (tests)
  {
   ← restart (tracker)
  }
+
+action (file) (tests)
+ (
+  English: accept reference (tracker: reference tracker) as parameter at reference count of (expected count: platform fixed‐width integer)
+ )
+ {
+  verify (reference count of (tracker) is (expected count))
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   directly pass action return without any local storage using (tracker)
+   verify (reference count of (tracker) is (zero: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: directly pass action return without any local storage using (tracker: reference tracker)
+ )
+ {
+  accept reference (restart (tracker)) as parameter at reference count of (one: platform fixed‐width integer)
+ }
