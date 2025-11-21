@@ -13,6 +13,18 @@ thing (file)
    hold (tracker)
    verify (reference count of (tracker) is (one: platform fixed‐width integer))
   }
+  test {
+   let (• original: reference tracker) be (create reference tracker)
+   hold (original)
+   hold (original)
+   hold (original)
+   let (• copy: reference tracker) start as (original)
+   verify (reference count of (copy) is (one: platform fixed‐width integer))
+   change nothing about (↓ copy)
+   release (original)
+   release (original)
+   release (original)
+  }
  ]
  (
   English: reference tracker
@@ -95,6 +107,12 @@ action (file)
   ← true
  }
 
+action (file)
+ (
+  English: change nothing about (tracker: ↓ reference tracker)
+ )
+ {}
+
 action (file) (tests)
  [
   test {
@@ -110,6 +128,23 @@ action (file) (tests)
   let (• reference: reference tracker) be (restart (tracker))
   verify (reference count of (reference) is (one: platform fixed‐width integer))
   ignore (reference)
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   let (• returned: reference tracker) be (directly return action return without any local storage using (tracker))
+   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+   ignore (returned)
+  }
+ ]
+ (
+  English: directly return action return without any local storage using (tracker: reference tracker)
+ )
+ reference tracker
+ {
+  ← restart (tracker)
  }
 
 action (file) (tests)
