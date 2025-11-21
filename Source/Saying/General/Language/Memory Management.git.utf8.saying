@@ -107,11 +107,31 @@ action (file)
   ← true
  }
 
+flow (file)
+ (
+  English: let (storage: reference tracker) start as (value: reference tracker) without copying
+ )
+ C: “reference¤(5F)tracker¤(2A) ” storage “ = ” value “”
+ {
+  let (• storage: reference tracker) start as (value)
+ }
+
 action (file)
  (
   English: change nothing about (tracker: ↓ reference tracker)
  )
  {}
+
+flow (file)
+ (
+  English: accessor of (tracker: reference tracker)
+ )
+ reference tracker
+ C: “” tracker “”
+ C♯: “” tracker “”
+ JavaScript: “” tracker “”
+ Kotlin: “” tracker “”
+ Swift: “” tracker “”
 
 action (file) (tests)
  [
@@ -168,4 +188,31 @@ action (file) (tests)
  )
  {
   accept reference (restart (tracker)) as parameter at reference count of (one: platform fixed‐width integer)
+ }
+
+action (file) (tests)
+ (
+  English: accept reference (tracker: ↓ reference tracker) as through parameter at reference count of (expected count: platform fixed‐width integer)
+ )
+ {
+  verify (reference count of (tracker) is (expected count))
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   directly pass accessor to through parameter without any local storage using (tracker)
+   verify (reference count of (tracker) is (zero: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: directly pass accessor to through parameter without any local storage using (tracker: reference tracker)
+ )
+ {
+  let (• changeable: reference tracker) start as (restart (tracker)) without copying
+  verify (reference count of (changeable) is (one: platform fixed‐width integer))
+  accept reference (↓ accessor of (changeable)) as through parameter at reference count of (one: platform fixed‐width integer)
+  verify (reference count of (changeable) is (one: platform fixed‐width integer))
+  ignore (changeable)
  }
