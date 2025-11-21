@@ -283,6 +283,7 @@ extension ModuleIntermediate {
         statement.validateReferences(
           context: externalAndModuleLookup.appending(locals),
           testContext: testContext,
+          allowTestOnly: true,
           errors: &errors
         )
         let newActions = statement.action?.localActions() ?? []
