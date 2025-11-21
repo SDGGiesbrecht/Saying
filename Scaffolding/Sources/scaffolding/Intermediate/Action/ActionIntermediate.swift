@@ -722,6 +722,7 @@ extension ActionIntermediate {
           typeInstead.validateReferences(
             requiredAccess: access,
             testContext: testContext,
+            allowTestOnly: testOnlyAccess,
             referenceLookup: referenceLookup,
             errors: &errors
           )
@@ -741,6 +742,7 @@ extension ActionIntermediate {
           typeInstead.validateReferences(
             requiredAccess: access,
             testContext: testContext,
+            allowTestOnly: testOnlyAccess,
             referenceLookup: referenceLookup,
             errors: &errors
           )
@@ -757,6 +759,7 @@ extension ActionIntermediate {
     implementation?.validateReferences(
       context: externalAndParameters,
       testContext: nil,
+      allowTestOnly: testOnlyAccess,
       errors: &errors
     )
     documentation?.validateReferences(

@@ -154,6 +154,7 @@ extension ActionPrototype {
       parameter.type.validateReferences(
         requiredAccess: access,
         testContext: testContext,
+        allowTestOnly: testOnlyAccess,
         referenceLookup: referenceLookup,
         errors: &errors
       )
@@ -161,6 +162,7 @@ extension ActionPrototype {
     returnValue?.validateReferences(
       requiredAccess: access,
       testContext: testContext,
+      allowTestOnly: testOnlyAccess,
       referenceLookup: referenceLookup,
       errors: &errors
     )

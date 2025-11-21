@@ -152,6 +152,7 @@ extension DocumentationIntermediate {
                 testContext.validateAccess(
                   to: bestVisibility,
                   testOnly: false,
+                  allowTestOnly: true,
                   errors: &errors,
                   unavailableOutsideTestsError: { fatalError() },
                   unavailableInVisibleTestsError: { accessError() }

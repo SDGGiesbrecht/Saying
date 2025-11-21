@@ -13,6 +13,7 @@ extension Optional where Wrapped == TestContext {
   func validateAccess(
     to access: AccessIntermediate,
     testOnly: Bool,
+    allowTestOnly: Bool,
     errors: inout [ReferenceError],
     unavailableOutsideTestsError: () -> ReferenceError,
     unavailableInVisibleTestsError: () -> ReferenceError
@@ -23,7 +24,7 @@ extension Optional where Wrapped == TestContext {
         errors.append(unavailableInVisibleTestsError())
       }
     } else {
-      if testOnly {
+      if testOnly && !allowTestOnly {
         errors.append(unavailableOutsideTestsError())
       }
     }
