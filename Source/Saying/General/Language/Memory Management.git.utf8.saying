@@ -214,7 +214,7 @@ action (file) (tests)
  {
   let (• changeable: reference tracker) start as (restart (tracker)) without copying
   verify (reference count of (changeable) is (two))
-  accept reference (↓ accessor of (changeable)) as through parameter at reference count of (one: platform fixed‐width integer)
+  accept reference (↓ accessor of (changeable)) as through parameter at reference count of (two: platform fixed‐width integer)
   verify (reference count of (changeable) is (two))
   ignore (changeable)
  }
