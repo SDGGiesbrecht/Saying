@@ -269,6 +269,66 @@ action (file) (tests)
   verify (reference count of (reference) is (two))
  }
 
+thing (file)
+ (
+  English: thing with reference part
+ )
+ {
+  part
+   (
+    English: reference
+   )
+   reference tracker
+ }
+
+action (file)
+ (
+  English: create thing with reference part containing (reference: reference tracker)
+ )
+ thing with reference part
+ create
+
+use (file)
+ general use of (thing with reference part)
+ {
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   create and use thing with reference part containing (restart (tracker))
+  }
+ ]
+ (
+  English: create and use thing with reference part containing (tracker: reference tracker)
+ )
+ {
+  let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
+  verify (reference count of (tracker) is (two))
+  ignore (thing)
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+   let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
+   verify (reference count of (tracker) is (two))
+   withdraw reference from (thing) at reference count of (three)
+   verify (reference count of (tracker) is (two))
+  }
+ ]
+ (
+  English: withdraw reference from (thing: thing with reference part) at reference count of (expected count: platform fixed‐width integer)
+ )
+ {
+  let (• withdrawn: reference tracker) be ((reference) of (thing))
+  verify (reference count of (withdrawn) is (expected count))
+  ignore (withdrawn)
+ }
+
 action (file)
  (
   English: two
