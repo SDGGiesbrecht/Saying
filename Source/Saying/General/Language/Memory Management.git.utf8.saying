@@ -242,9 +242,31 @@ action (file) (tests)
   verify (reference count of (changeable) is (four))
   change (↓ changeable) to (restart (replacement))
   verify (reference count of (original) is (three))
-  verify (reference count of (changeable) is (two: platform fixed‐width integer))
+  verify (reference count of (changeable) is (two))
   release (original)
   release (original)
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• original: reference tracker) be (create reference tracker)
+   verify (reference count of (original) is (one: platform fixed‐width integer))
+   let (• reference: reference tracker) start as (original) without copying
+   verify (reference count of (original) is (two))
+   verify (reference count of (reference) is (two))
+   change passed reference (↓ reference)
+   verify (reference count of (original) is (one: platform fixed‐width integer))
+   verify (reference count of (reference) is (one: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: change passed reference (reference: ↓ reference tracker)
+ )
+ {
+  verify (reference count of (reference) is (two))
+  change (↓ reference) to (create reference tracker)
+  verify (reference count of (reference) is (two))
  }
 
 action (file)
