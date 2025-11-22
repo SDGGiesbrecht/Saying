@@ -18,7 +18,9 @@ thing (file)
    hold (original)
    hold (original)
    hold (original)
+   verify (reference count of (original) is (four: platform fixed‐width integer))
    let (• copy: reference tracker) start as (original)
+   verify (reference count of (original) is (four: platform fixed‐width integer))
    verify (reference count of (copy) is (one: platform fixed‐width integer))
    change nothing about (↓ copy)
    release (original)
@@ -107,11 +109,31 @@ action (file)
   ← true
  }
 
+flow (file)
+ (
+  English: let (storage: reference tracker) start as (value: reference tracker) without copying
+ )
+ C: “reference¤(5F)tracker¤(2A) ” held (storage) “ = ” hold on (value) “”
+ {
+  let (• storage: reference tracker) start as (value)
+ }
+
 action (file)
  (
   English: change nothing about (tracker: ↓ reference tracker)
  )
  {}
+
+flow (file)
+ (
+  English: accessor of (tracker: reference tracker)
+ )
+ reference tracker
+ C: “” tracker “”
+ C♯: “” tracker “”
+ JavaScript: “” tracker “”
+ Kotlin: “” tracker “”
+ Swift: “” tracker “”
 
 action (file) (tests)
  [
@@ -169,3 +191,173 @@ action (file) (tests)
  {
   accept reference (restart (tracker)) as parameter at reference count of (one: platform fixed‐width integer)
  }
+
+action (file) (tests)
+ (
+  English: accept reference (tracker: ↓ reference tracker) as through parameter at reference count of (expected count: platform fixed‐width integer)
+ )
+ {
+  verify (reference count of (tracker) is (expected count))
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   directly pass accessor to through parameter without any local storage using (tracker)
+   verify (reference count of (tracker) is (zero: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: directly pass accessor to through parameter without any local storage using (tracker: reference tracker)
+ )
+ {
+  let (• changeable: reference tracker) start as (restart (tracker)) without copying
+  verify (reference count of (changeable) is (two))
+  accept reference (↓ accessor of (changeable)) as through parameter at reference count of (two: platform fixed‐width integer)
+  verify (reference count of (changeable) is (two))
+  ignore (changeable)
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• original: reference tracker) be (create reference tracker)
+   let (• replacement: reference tracker) be (create reference tracker)
+   change reference tracked storage from (original) to (replacement)
+   verify (reference count of (original) is (zero: platform fixed‐width integer))
+   verify (reference count of (replacement) is (zero: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: change reference tracked storage from (original: reference tracker) to (replacement: reference tracker)
+ )
+ {
+  let (• changeable: reference tracker) start as (restart (original)) without copying
+  verify (reference count of (original) is (two))
+  verify (reference count of (changeable) is (two))
+  hold (original)
+  hold (original)
+  verify (reference count of (original) is (four))
+  verify (reference count of (changeable) is (four))
+  change (↓ changeable) to (restart (replacement))
+  verify (reference count of (original) is (three))
+  verify (reference count of (changeable) is (two))
+  release (original)
+  release (original)
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• original: reference tracker) be (create reference tracker)
+   verify (reference count of (original) is (one: platform fixed‐width integer))
+   let (• reference: reference tracker) start as (original) without copying
+   verify (reference count of (original) is (two))
+   verify (reference count of (reference) is (two))
+   change passed reference (↓ reference)
+   verify (reference count of (original) is (one: platform fixed‐width integer))
+   verify (reference count of (reference) is (one: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: change passed reference (reference: ↓ reference tracker)
+ )
+ {
+  verify (reference count of (reference) is (two))
+  change (↓ reference) to (create reference tracker)
+  verify (reference count of (reference) is (two))
+ }
+
+thing (file)
+ (
+  English: thing with reference part
+ )
+ {
+  part
+   (
+    English: reference
+   )
+   reference tracker
+ }
+
+action (file)
+ (
+  English: create thing with reference part containing (reference: reference tracker)
+ )
+ thing with reference part
+ create
+
+use (file)
+ general use of (thing with reference part)
+ {
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   create and use thing with reference part containing (restart (tracker))
+  }
+ ]
+ (
+  English: create and use thing with reference part containing (tracker: reference tracker)
+ )
+ {
+  let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
+  verify (reference count of (tracker) is (two))
+  ignore (thing)
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+   let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
+   verify (reference count of (tracker) is (two))
+   withdraw reference from (thing) at reference count of (three)
+   verify (reference count of (tracker) is (two))
+  }
+ ]
+ (
+  English: withdraw reference from (thing: thing with reference part) at reference count of (expected count: platform fixed‐width integer)
+ )
+ {
+  let (• withdrawn: reference tracker) be ((reference) of (thing))
+  verify (reference count of (withdrawn) is (expected count))
+  ignore (withdrawn)
+ }
+
+action (file)
+ (
+  English: two
+ )
+ platform fixed‐width integer
+ C: “2”
+ C♯: “2”
+ JavaScript: “2”
+ Kotlin: “2”
+ Swift: “2”
+
+action (file)
+ (
+  English: three
+ )
+ platform fixed‐width integer
+ C: “3”
+ C♯: “3”
+ JavaScript: “3”
+ Kotlin: “3”
+ Swift: “3”
+
+action (file)
+ (
+  English: four
+ )
+ platform fixed‐width integer
+ C: “4”
+ C♯: “4”
+ JavaScript: “4”
+ Kotlin: “4”
+ Swift: “4”
