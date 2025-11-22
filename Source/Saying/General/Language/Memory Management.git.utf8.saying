@@ -213,9 +213,9 @@ action (file) (tests)
  )
  {
   let (• changeable: reference tracker) start as (restart (tracker)) without copying
-  verify (reference count of (changeable) is (one: platform fixed‐width integer))
+  verify (reference count of (changeable) is (two))
   accept reference (↓ accessor of (changeable)) as through parameter at reference count of (one: platform fixed‐width integer)
-  verify (reference count of (changeable) is (one: platform fixed‐width integer))
+  verify (reference count of (changeable) is (two))
   ignore (changeable)
  }
 
@@ -234,9 +234,8 @@ action (file) (tests)
  )
  {
   let (• changeable: reference tracker) start as (restart (original)) without copying
-  verify (reference count of (original) is (one: platform fixed‐width integer))
-  verify (reference count of (changeable) is (one: platform fixed‐width integer))
-  hold (original)
+  verify (reference count of (original) is (two))
+  verify (reference count of (changeable) is (two))
   hold (original)
   hold (original)
   verify (reference count of (original) is (four))
@@ -244,7 +243,6 @@ action (file) (tests)
   change (↓ changeable) to (restart (replacement))
   verify (reference count of (original) is (three))
   verify (reference count of (changeable) is (two: platform fixed‐width integer))
-  release (original)
   release (original)
   release (original)
  }
