@@ -298,6 +298,7 @@ action (file) (tests)
   test {
    let (• tracker: reference tracker) be (create reference tracker)
    create and use thing with reference part containing (restart (tracker))
+   verify (reference count of (tracker) is (one: platform fixed‐width integer))
   }
  ]
  (
