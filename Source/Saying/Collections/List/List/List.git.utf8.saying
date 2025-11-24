@@ -199,7 +199,7 @@ extension
      (
       English: insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)insert¤(5F)val(” list “, ” boundary “, ((struct { ” thing “ value; }) { ” element “ }).value)”
+     C: “g¤(5F)array¤(5F)insert¤(5F)val(” list “, ” boundary “, ((struct { ” thing “ value; }) { ” hold on (element) “ }).value)”
      C♯: “” list “.Insert(” boundary “, ” element “)”
      JavaScript: “” list “.splice(” boundary “, 0, ” element “)”
      Swift: “” list “.insert(” element “, at: ” boundary “)”
@@ -221,7 +221,7 @@ extension
      (
       English: append (element: thing) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ((struct { ” thing “ value; }) { ” element “ }).value)”
+     C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ((struct { ” thing “ value; }) { ” hold on (element) “ }).value)”
      C♯: “” list “.Add(” element “)”
      JavaScript: “” list “.push(” element “)”
      Swift: “” list “.append(” element “)”
@@ -243,7 +243,7 @@ extension
      (
       English: prepend (element: thing) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)prepend¤(5F)val(” list “, ((struct { ” thing “ value; }) { ” element “ }).value)”
+     C: “g¤(5F)array¤(5F)prepend¤(5F)val(” list “, ((struct { ” thing “ value; }) { ” hold on (element) “ }).value)”
      JavaScript: “” list “.unshift(” element “)”
      {
       prepend (element) to (↓ list) according to use as changeable list
