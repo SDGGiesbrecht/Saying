@@ -221,7 +221,7 @@ extension
      (
       English: append (element: thing) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, (” thing “){” hold on (element) “})”
+     C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ” element “)”
      C♯: “” list “.Add(” element “)”
      JavaScript: “” list “.push(” element “)”
      Swift: “” list “.append(” element “)”
