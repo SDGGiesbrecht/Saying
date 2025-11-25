@@ -1436,16 +1436,25 @@ extension Platform {
           cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
         }
       }
+      var closingParenthesis = ""
       if statement.isReturn {
-        if referenceList.isEmpty {
+        if referenceList.isEmpty, cleanUpCode.isEmpty {
           entry.append(contentsOf: "return ")
         } else {
+          let storageType = action.resolvedResultType!
           entry.append(
             contentsOf: returnDelayStorage(
-              type: action.resolvedResultType!
+              type: storageType
                 .map({ source(for: $0, referenceLookup: referenceLookup) })
             )
           )
+          if let expectedType = storageType,
+            let type = referenceLookup.lookupThing(expectedType.key),
+            let native = nativeType(of: type),
+            let hold = native.hold {
+            entry.append(contentsOf: String(hold.textComponents.first!))
+            closingParenthesis = String(hold.textComponents.last!)
+          }
         }
       }
       let before = coverageRegionCounter
@@ -1469,7 +1478,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: false,
             mode: mode
-          )
+          ).appending(contentsOf: closingParenthesis)
         )
       )
       if !extractedCoverageRegistrations.isEmpty {
@@ -1489,8 +1498,9 @@ extension Platform {
           entry.append(unpack)
         }
       }
-      if !referenceList.isEmpty {
+      if !referenceList.isEmpty || !cleanUpCode.isEmpty {
         if statement.isReturn {
+          entry.append(contentsOf: "\n" + cleanUpCode)
           entry.append(contentsOf: delayedReturn)
         }
         for reference in referenceList {
@@ -1618,11 +1628,13 @@ extension Platform {
       }
       return result
     })
-    if inOrder.isEmpty {
-      inOrder.append(cleanUpCode)
-    } else {
-      if !cleanUpCode.isEmpty {
-        inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+    if !(statements.last?.isReturn ?? false) {
+      if inOrder.isEmpty {
+        inOrder.append(cleanUpCode)
+      } else {
+        if !cleanUpCode.isEmpty {
+          inOrder[inOrder.indices.last!].append(contentsOf: "\n" + cleanUpCode)
+        }
       }
     }
     return inOrder
