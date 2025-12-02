@@ -612,7 +612,9 @@ extension Platform {
     on thing: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary]
   ) -> NativeActionExpressionIntermediate? {
-    let type = referenceLookup.lookupThing(thing.key)!
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
     if let native = nativeType(of: type) {
       return native.hold
     } else if type.requiresCleanUp == true {
@@ -626,7 +628,9 @@ extension Platform {
     of thing: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary]
   ) -> NativeActionExpressionIntermediate? {
-    let type = referenceLookup.lookupThing(thing.key)!
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
     if let native = nativeType(of: type) {
       return native.release
     } else if type.requiresCleanUp == true {
@@ -640,7 +644,9 @@ extension Platform {
     of thing: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary]
   ) -> NativeActionExpressionIntermediate? {
-    let type = referenceLookup.lookupThing(thing.key)!
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
     if let native = nativeType(of: type) {
       return native.copy
     } else if type.requiresCleanUp == true {
