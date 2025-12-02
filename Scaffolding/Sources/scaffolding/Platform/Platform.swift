@@ -66,7 +66,10 @@ protocol Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -581,8 +584,12 @@ extension Platform {
         constructorAccessModifier: constructorAccess,
         constructorSetters: constructorSetters,
         otherMembers: members,
-        synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil
+        synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
+        componentHolds: [],
+        componentReleases: [],
+        componentCopies: []
       )
+      #warning("↑ Hold, releases and copies not implemented yet.")
     } else {
       var cases: [String] = []
       var storageCases: [String] = []

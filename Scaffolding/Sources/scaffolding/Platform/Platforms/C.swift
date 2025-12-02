@@ -179,7 +179,10 @@ enum C: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
@@ -199,10 +202,8 @@ enum C: Platform {
           returnSection: name,
           accessModifier: nil,
           coverageRegistration: nil,
-          implementation: [
-            "\(indent)/* ... */",
-            "\(indent)return target;",
-          ],
+          implementation: componentHolds.map({"\(indent)\($0)"})
+            .appending("\(indent)return target;"),
           parentType: nil,
           isMutating: false,
           isAbsorbedMember: false,
@@ -217,9 +218,7 @@ enum C: Platform {
           returnSection: "void",
           accessModifier: nil,
           coverageRegistration: nil,
-          implementation: [
-            "\(indent)/* ... */",
-          ],
+          implementation: componentReleases.map({"\(indent)\($0)"}),
           parentType: nil,
           isMutating: false,
           isAbsorbedMember: false,
@@ -234,10 +233,9 @@ enum C: Platform {
           returnSection: name,
           accessModifier: nil,
           coverageRegistration: nil,
-          implementation: [
-            "\(indent)/* ... */",
-            "\(indent)return target;",
-          ],
+          implementation: ["\(indent)\(name) copy;"]
+            .appending(contentsOf: componentCopies.map({"\(indent)\($0)"}))
+            .appending("\(indent)return copy;"),
           parentType: nil,
           isMutating: false,
           isAbsorbedMember: false,
@@ -317,7 +315,10 @@ enum C: Platform {
           constructorAccessModifier: nil,
           constructorSetters: [],
           otherMembers: [],
-          synthesizeReferenceCounting: synthesizeReferenceCounting
+          synthesizeReferenceCounting: synthesizeReferenceCounting,
+          componentHolds: ["Enumeration holds not implemented yet."],
+          componentReleases: ["Enumeration releases not implemented yet."],
+          componentCopies: ["Enumeration copies not implemented yet."]
         )!
       )
       return result.joined(separator: "\n")

@@ -134,7 +134,10 @@ enum JavaScript: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     return nil
   }

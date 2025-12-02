@@ -199,7 +199,10 @@ enum Swift: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     var typeName = name
     var extraIndent = ""
