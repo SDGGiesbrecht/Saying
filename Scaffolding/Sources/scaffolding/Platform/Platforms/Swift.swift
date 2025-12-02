@@ -163,6 +163,15 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
   }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func repair(compoundNativeType: String) -> String {
     if compoundNativeType.contains("].") {
       return compoundNativeType

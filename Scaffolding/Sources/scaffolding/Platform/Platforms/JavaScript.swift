@@ -107,6 +107,15 @@ enum JavaScript: Platform {
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType
   }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return ""
   }

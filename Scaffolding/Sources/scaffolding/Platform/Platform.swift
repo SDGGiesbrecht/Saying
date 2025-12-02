@@ -75,6 +75,9 @@ protocol Platform {
     storageCases: [String],
     otherMembers: [String]
   ) -> String
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate?
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate?
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate?
 
   // Actions
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText?
@@ -605,6 +608,48 @@ extension Platform {
     }
   }
 
+  static func nativeHold(
+    on thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    let type = referenceLookup.lookupThing(thing.key)!
+    if let native = nativeType(of: type) {
+      return native.hold
+    } else if type.requiresCleanUp == true {
+      return synthesizedHold(on: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
+    }
+  }
+
+  static func nativeRelease(
+    of thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    let type = referenceLookup.lookupThing(thing.key)!
+    if let native = nativeType(of: type) {
+      return native.release
+    } else if type.requiresCleanUp == true {
+      return synthesizedRelease(of: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
+    }
+  }
+
+  static func nativeCopy(
+    of thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    let type = referenceLookup.lookupThing(thing.key)!
+    if let native = nativeType(of: type) {
+      return native.copy
+    } else if type.requiresCleanUp == true {
+      return synthesizedCopy(of: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
+    }
+  }
+
   static func flowCoverageRegistration(
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
@@ -679,15 +724,14 @@ extension Platform {
     condition: (NativeActionImplementationParameter) -> Bool,
     argument: ActionUse,
     referenceLookup: [ReferenceDictionary],
-    getImplementation: (NativeThingImplementationIntermediate) -> NativeActionExpressionIntermediate?,
+    getImplementation: (ParsedTypeReference, [ReferenceDictionary]) -> NativeActionExpressionIntermediate?,
     delayUntilCleanUp: Bool = false,
     cleanUpCode: inout String
   ) {
     if condition(details),
-      let parameterType = argument.resolvedResultType??.key,
-      let type = referenceLookup.lookupThing(parameterType),
-      let native = nativeType(of: type),
-      let implementation = getImplementation(native) {
+      let partiallyUnwrapped = argument.resolvedResultType,
+      let parameterType = partiallyUnwrapped,
+      let implementation = getImplementation(parameterType, referenceLookup) {
       let wrapped = implementation.textComponents.lazy.map({ String($0) })
         .joined(separator: parameter)
       if delayUntilCleanUp {
@@ -718,13 +762,13 @@ extension Platform {
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
-      let type = referenceLookup.lookupThing(reference.resolvedResultType!!.key)!
+      let resolvedReference = reference.resolvedResultType!!
       if !isArgumentExtraction,
         !extractedArguments.isEmpty,
-        let native = nativeType(of: type),
-        native.release != nil {
+        nativeRelease(of: resolvedReference, referenceLookup: referenceLookup) != nil {
         return extractedArguments.removeFirst()
       }
+      let type = referenceLookup.lookupThing(resolvedReference.key)!
       return call(
         literal: literal,
         type: type,
@@ -813,9 +857,7 @@ extension Platform {
         !isArgumentExtraction,
         !extractedArguments.isEmpty,
         let result = action.returnValue,
-        let type = referenceLookup.lookupThing(result.key),
-        let native = nativeType(of: type),
-        native.release != nil {
+        nativeRelease(of: result, referenceLookup: referenceLookup) != nil {
         return extractedArguments.removeFirst()
       }
       let basicCall: String = call(
@@ -846,10 +888,8 @@ extension Platform {
       }
       if !isThrough,
         bareAction.isAccessor,
-        let returnType = bareAction.returnValue?.key,
-        let type = referenceLookup.lookupThing(returnType),
-        let native = nativeType(of: type),
-        let hold = native.hold {
+        let returnType = bareAction.returnValue,
+        let hold = nativeHold(on: returnType, referenceLookup: referenceLookup) {
         return hold.textComponents.lazy.map({ String($0) })
           .joined(separator: basicCall)
       } else {
@@ -942,7 +982,7 @@ extension Platform {
                   condition: { $0.hold },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.hold },
+                  getImplementation: nativeHold,
                   cleanUpCode: &cleanUpCode
                 )
                 modify(
@@ -951,7 +991,7 @@ extension Platform {
                   condition: { $0.release },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.release },
+                  getImplementation: nativeRelease,
                   cleanUpCode: &cleanUpCode
                 )
                 modify(
@@ -960,7 +1000,7 @@ extension Platform {
                   condition: { $0.copy },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.copy },
+                  getImplementation: nativeCopy,
                   cleanUpCode: &cleanUpCode
                 )
                 modify(
@@ -969,7 +1009,7 @@ extension Platform {
                   condition: { $0.held },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.release },
+                  getImplementation: nativeRelease,
                   delayUntilCleanUp: true,
                   cleanUpCode: &cleanUpCode
                 )
@@ -1180,10 +1220,9 @@ extension Platform {
               )
               let wrappedCall: String
               if action.isCreation,
-                let memberType = actionArgument.resolvedResultType??.key,
-                let type = referenceLookup.lookupThing(memberType),
-                let native = nativeType(of: type),
-                let hold = native.hold {
+                let partiallyUnwrapped = actionArgument.resolvedResultType,
+                let memberType: ParsedTypeReference = partiallyUnwrapped,
+                let hold = nativeHold(on: memberType, referenceLookup: referenceLookup) {
                 wrappedCall = hold.textComponents.lazy.map({ String($0) })
                   .joined(separator: basicCall)
               } else {
@@ -1321,9 +1360,7 @@ extension Platform {
 
         if let result = argument.resolvedResultType,
           let actualResult = result,
-          let type = referenceLookup.lookupThing(actualResult.key),
-          let native = nativeType(of: type),
-           let release = native.release {
+          let release = nativeRelease(of: actualResult, referenceLookup: referenceLookup) {
           clashAvoidanceCounter += 1
           let localName = "local\(clashAvoidanceCounter)"
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
@@ -1449,9 +1486,7 @@ extension Platform {
             )
           )
           if let expectedType = storageType,
-            let type = referenceLookup.lookupThing(expectedType.key),
-            let native = nativeType(of: type),
-            let hold = native.hold {
+            let hold = nativeHold(on: expectedType, referenceLookup: referenceLookup) {
             entry.append(contentsOf: String(hold.textComponents.first!))
             closingParenthesis = String(hold.textComponents.last!)
           }

@@ -136,14 +136,30 @@ enum C: Platform {
     return nil
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
-    var result = thing.c
-    if thing.requiresCleanUp == true && result?.release == nil {
-      #warning("Needs to synthesize here.")
-    }
-    return result
+    return thing.c
   }
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType
+  }
+  private static func synthesized(_ name: String, for thing: String) -> NativeActionExpressionIntermediate? {
+    let prefix = identifierPrefix(for: thing)
+    return NativeActionExpressionIntermediate(
+      textComponents: ["\(prefix)_\(name)(", ")"],
+      parameters: [
+        NativeActionImplementationParameter(
+          ParsedUninterruptedIdentifier(source: UnicodeText("thing"), origin: compilerGeneratedOrigin())!
+        )
+      ]
+    )
+  }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("hold", for: thing)
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("release", for: thing)
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("copy", for: thing)
   }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "\(returnValue) (*)(\(parameters))"
