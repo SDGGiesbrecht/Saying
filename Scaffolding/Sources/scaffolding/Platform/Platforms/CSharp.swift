@@ -175,7 +175,8 @@ enum CSharp: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
@@ -213,7 +214,8 @@ enum CSharp: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     if simple {

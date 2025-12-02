@@ -65,7 +65,8 @@ protocol Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -73,7 +74,8 @@ protocol Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String
   static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate?
   static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate?
@@ -578,7 +580,8 @@ extension Platform {
         constructorParameters: constructorParameters,
         constructorAccessModifier: constructorAccess,
         constructorSetters: constructorSetters,
-        otherMembers: members
+        otherMembers: members,
+        synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil
       )
     } else {
       var cases: [String] = []
@@ -603,7 +606,8 @@ extension Platform {
         accessModifier: access,
         simple: thing.isSimple,
         storageCases: storageCases,
-        otherMembers: members
+        otherMembers: members,
+        synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil
       )
     }
   }

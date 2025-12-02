@@ -133,7 +133,8 @@ enum JavaScript: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String? {
     return nil
   }
@@ -143,7 +144,8 @@ enum JavaScript: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"

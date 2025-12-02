@@ -198,7 +198,8 @@ enum Swift: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String? {
     var typeName = name
     var extraIndent = ""
@@ -242,7 +243,8 @@ enum Swift: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [

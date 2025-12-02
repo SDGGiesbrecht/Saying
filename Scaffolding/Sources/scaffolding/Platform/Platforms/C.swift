@@ -178,7 +178,8 @@ enum C: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
@@ -189,6 +190,69 @@ enum C: Platform {
     result.append(contentsOf: [
       "} \(name);"
     ])
+    if synthesizeReferenceCounting {
+      result.append(contentsOf: [
+        "",
+        actionDeclaration(
+          name: String(String.UnicodeScalarView(synthesizedHold(on: name)!.textComponents.first!.dropLast())),
+          parameters: "\(name) target",
+          returnSection: name,
+          accessModifier: nil,
+          coverageRegistration: nil,
+          implementation: [
+            "\(indent)/* ... */",
+            "\(indent)return target;",
+          ],
+          parentType: nil,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false
+        ).full,
+        "",
+        actionDeclaration(
+          name: String(String.UnicodeScalarView(synthesizedRelease(of: name)!.textComponents.first!.dropLast())),
+          parameters: "\(name) target",
+          returnSection: "void",
+          accessModifier: nil,
+          coverageRegistration: nil,
+          implementation: [
+            "\(indent)/* ... */",
+          ],
+          parentType: nil,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false
+        ).full,
+        "",
+        actionDeclaration(
+          name: String(String.UnicodeScalarView(synthesizedCopy(of: name)!.textComponents.first!.dropLast())),
+          parameters: "\(name) target",
+          returnSection: name,
+          accessModifier: nil,
+          coverageRegistration: nil,
+          implementation: [
+            "\(indent)/* ... */",
+            "\(indent)return target;",
+          ],
+          parentType: nil,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false
+        ).full,
+      ])
+    }
+    if synthesizeReferenceCounting {
+      #warning("Debugging...")
+      print("")
+      print(result.joined(separator: "\n"))
+      print("")
+    }
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(
@@ -197,7 +261,8 @@ enum C: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     if simple {
       var result: [String] = [
@@ -219,7 +284,8 @@ enum C: Platform {
           accessModifier: accessModifier,
           simple: true,
           storageCases: [],
-          otherMembers: []
+          otherMembers: [],
+          synthesizeReferenceCounting: false
         )
       )
       result.append("typedef union \(name)_value {")
@@ -250,10 +316,10 @@ enum C: Platform {
           constructorParameters: [],
           constructorAccessModifier: nil,
           constructorSetters: [],
-          otherMembers: []
+          otherMembers: [],
+          synthesizeReferenceCounting: synthesizeReferenceCounting
         )!
       )
-      
       return result.joined(separator: "\n")
     }
   }
