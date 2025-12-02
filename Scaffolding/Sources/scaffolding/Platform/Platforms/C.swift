@@ -136,7 +136,11 @@ enum C: Platform {
     return nil
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
-    return thing.c
+    var result = thing.c
+    if thing.requiresCleanUp == true && result?.release == nil {
+      #warning("Needs to synthesize here.")
+    }
+    return result
   }
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType

@@ -538,6 +538,48 @@ extension ReferenceDictionary {
 }
 
 extension ReferenceDictionary {
+  mutating func resolveNestedReferenceCounting(externalLookup: [ReferenceDictionary]) {
+    while performOnePassResolvingNestedReferenceCounting(externalLookup: externalLookup) {}
+  }
+  private mutating func performOnePassResolvingNestedReferenceCounting(
+    externalLookup: [ReferenceDictionary]
+  ) -> Bool {
+    let allLookup = externalLookup.appending(self)
+    var changedSomething = false
+    for (thingName, group) in things {
+      thingIteration: for (signature, thing) in group {
+        if thing.requiresCleanUp != nil {
+          continue thingIteration
+        } else {
+          var required = false
+          if thing.c?.release != nil {
+            required = true
+          } else {
+            partIteration: for part in thing.parts {
+              if let type = allLookup.lookupThing(part.contents.key) {
+                if let known = type.requiresCleanUp {
+                  if known {
+                    required = true
+                    break partIteration
+                  } else {
+                    continue partIteration
+                  }
+                } else {
+                  continue thingIteration
+                }
+              }
+            }
+          }
+          things[thingName]![signature]?.requiresCleanUp = required
+          changedSomething = true
+        }
+      }
+    }
+    return changedSomething
+  }
+}
+
+extension ReferenceDictionary {
 
   func applyingTestCoverageTracking(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
     var new = self

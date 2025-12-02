@@ -14,6 +14,7 @@ struct Thing {
   var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclarationProtocol
   var swiftName: UnicodeText?
+  var requiresCleanUp: Bool?
 
   func allNativeImplementations() -> [NativeThingImplementationIntermediate] {
     return [c, cSharp, kotlin, swift].compactMap({ $0 })
