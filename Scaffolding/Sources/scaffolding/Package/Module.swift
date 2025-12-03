@@ -40,6 +40,7 @@ struct Module {
     module.collectTests()
     module.resolveTypes(moduleWideImports: moduleWideImports)
     try module.validateReferences(moduleWideImports: moduleWideImports)
+    module.resolveNestedReferenceCounting(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
     switch mode {
     case .testing:
       return module.applyingTestCoverageTracking(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))

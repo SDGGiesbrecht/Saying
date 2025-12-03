@@ -125,6 +125,15 @@ enum Kotlin: Platform {
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType
   }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }
@@ -146,7 +155,11 @@ enum Kotlin: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let constructorAccess = constructorAccessModifier == accessModifier
@@ -171,7 +184,8 @@ enum Kotlin: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let keyword = simple ? "enum" : "sealed"

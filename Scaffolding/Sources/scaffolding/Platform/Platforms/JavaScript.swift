@@ -107,6 +107,15 @@ enum JavaScript: Platform {
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType
   }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return ""
   }
@@ -124,7 +133,11 @@ enum JavaScript: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     return nil
   }
@@ -134,7 +147,8 @@ enum JavaScript: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"

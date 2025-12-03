@@ -315,6 +315,12 @@ extension ModuleIntermediate {
 }
 
 extension ModuleIntermediate {
+  mutating func resolveNestedReferenceCounting(externalReferenceLookup: [ReferenceDictionary]) {
+    referenceDictionary.resolveNestedReferenceCounting(externalLookup: externalReferenceLookup)
+  }
+}
+
+extension ModuleIntermediate {
 
   func applyingTestCoverageTracking(externalReferenceLookup: [ReferenceDictionary]) -> ModuleIntermediate {
     return ModuleIntermediate(

@@ -141,6 +141,15 @@ enum CSharp: Platform {
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType
   }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     if returnValue == emptyReturnTypeForActionType {
       return "Action<\(parameters)>"
@@ -166,7 +175,11 @@ enum CSharp: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
@@ -204,7 +217,8 @@ enum CSharp: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     if simple {

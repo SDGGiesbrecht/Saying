@@ -65,7 +65,11 @@ protocol Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -73,8 +77,12 @@ protocol Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate?
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate?
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate?
 
   // Actions
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText?
@@ -568,6 +576,37 @@ extension Platform {
         )
         return constructorSetter(name: name)
       })
+      let componentHolds: [String] = thing.parts.compactMap { part in
+        guard let hold = nativeHold(on: part.contents, referenceLookup: externalReferenceLookup) else {
+          return nil
+        }
+        let partName = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        return hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
+      }
+      let componentReleases: [String] = thing.parts.compactMap { part in
+        guard let release = nativeRelease(of: part.contents, referenceLookup: externalReferenceLookup) else {
+          return nil
+        }
+        let partName = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        return release.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
+      }
+      let componentCopies: [String] = thing.parts.map { part in
+        let partName = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        var replacement: String = "target.\(partName)"
+        if let copy = nativeCopy(of: part.contents, referenceLookup: externalReferenceLookup) {
+          replacement = copy.textComponents.lazy.map({ String($0) }).joined(separator: replacement)
+        }
+        return "copy.\(partName) = \(replacement)"
+      }
       return thingDeclaration(
         name: name,
         components: components,
@@ -575,7 +614,11 @@ extension Platform {
         constructorParameters: constructorParameters,
         constructorAccessModifier: constructorAccess,
         constructorSetters: constructorSetters,
-        otherMembers: members
+        otherMembers: members,
+        synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
+        componentHolds: componentHolds,
+        componentReleases: componentReleases,
+        componentCopies: componentCopies
       )
     } else {
       var cases: [String] = []
@@ -600,8 +643,57 @@ extension Platform {
         accessModifier: access,
         simple: thing.isSimple,
         storageCases: storageCases,
-        otherMembers: members
+        otherMembers: members,
+        synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil
       )
+    }
+  }
+
+  static func nativeHold(
+    on thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
+    if let native = nativeType(of: type) {
+      return native.hold
+    } else if type.requiresCleanUp == true {
+      return synthesizedHold(on: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
+    }
+  }
+
+  static func nativeRelease(
+    of thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
+    if let native = nativeType(of: type) {
+      return native.release
+    } else if type.requiresCleanUp == true {
+      return synthesizedRelease(of: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
+    }
+  }
+
+  static func nativeCopy(
+    of thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
+    if let native = nativeType(of: type) {
+      return native.copy
+    } else if type.requiresCleanUp == true {
+      return synthesizedCopy(of: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
     }
   }
 
@@ -679,15 +771,14 @@ extension Platform {
     condition: (NativeActionImplementationParameter) -> Bool,
     argument: ActionUse,
     referenceLookup: [ReferenceDictionary],
-    getImplementation: (NativeThingImplementationIntermediate) -> NativeActionExpressionIntermediate?,
+    getImplementation: (ParsedTypeReference, [ReferenceDictionary]) -> NativeActionExpressionIntermediate?,
     delayUntilCleanUp: Bool = false,
     cleanUpCode: inout String
   ) {
     if condition(details),
-      let parameterType = argument.resolvedResultType??.key,
-      let type = referenceLookup.lookupThing(parameterType),
-      let native = nativeType(of: type),
-      let implementation = getImplementation(native) {
+      let partiallyUnwrapped = argument.resolvedResultType,
+      let parameterType = partiallyUnwrapped,
+      let implementation = getImplementation(parameterType, referenceLookup) {
       let wrapped = implementation.textComponents.lazy.map({ String($0) })
         .joined(separator: parameter)
       if delayUntilCleanUp {
@@ -718,13 +809,13 @@ extension Platform {
     mode: CompilationMode
   ) -> String {
     if let literal = reference.literal {
-      let type = referenceLookup.lookupThing(reference.resolvedResultType!!.key)!
+      let resolvedReference = reference.resolvedResultType!!
       if !isArgumentExtraction,
         !extractedArguments.isEmpty,
-        let native = nativeType(of: type),
-        native.release != nil {
+        nativeRelease(of: resolvedReference, referenceLookup: referenceLookup) != nil {
         return extractedArguments.removeFirst()
       }
+      let type = referenceLookup.lookupThing(resolvedReference.key)!
       return call(
         literal: literal,
         type: type,
@@ -813,9 +904,7 @@ extension Platform {
         !isArgumentExtraction,
         !extractedArguments.isEmpty,
         let result = action.returnValue,
-        let type = referenceLookup.lookupThing(result.key),
-        let native = nativeType(of: type),
-        native.release != nil {
+        nativeRelease(of: result, referenceLookup: referenceLookup) != nil {
         return extractedArguments.removeFirst()
       }
       let basicCall: String = call(
@@ -846,10 +935,8 @@ extension Platform {
       }
       if !isThrough,
         bareAction.isAccessor,
-        let returnType = bareAction.returnValue?.key,
-        let type = referenceLookup.lookupThing(returnType),
-        let native = nativeType(of: type),
-        let hold = native.hold {
+        let returnType = bareAction.returnValue,
+        let hold = nativeHold(on: returnType, referenceLookup: referenceLookup) {
         return hold.textComponents.lazy.map({ String($0) })
           .joined(separator: basicCall)
       } else {
@@ -894,9 +981,7 @@ extension Platform {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
             if parameter.hold {
-              if let found = referenceLookup.lookupThing(type.key) {
-                nativeWrap = nativeType(of: found)?.hold
-              }
+              nativeWrap = nativeHold(on: type, referenceLookup: referenceLookup)
             } else {
               let typeSource = source(for: type, referenceLookup: referenceLookup)
               if let next = nativeExpression.parameters[index...].dropFirst().first,
@@ -949,7 +1034,7 @@ extension Platform {
                   condition: { $0.hold },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.hold },
+                  getImplementation: nativeHold,
                   cleanUpCode: &cleanUpCode
                 )
                 modify(
@@ -958,7 +1043,7 @@ extension Platform {
                   condition: { $0.release },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.release },
+                  getImplementation: nativeRelease,
                   cleanUpCode: &cleanUpCode
                 )
                 modify(
@@ -967,7 +1052,7 @@ extension Platform {
                   condition: { $0.copy },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.copy },
+                  getImplementation: nativeCopy,
                   cleanUpCode: &cleanUpCode
                 )
                 modify(
@@ -976,7 +1061,7 @@ extension Platform {
                   condition: { $0.held },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
-                  getImplementation: { $0.release },
+                  getImplementation: nativeRelease,
                   delayUntilCleanUp: true,
                   cleanUpCode: &cleanUpCode
                 )
@@ -1190,10 +1275,9 @@ extension Platform {
               )
               let wrappedCall: String
               if action.isCreation,
-                let memberType = actionArgument.resolvedResultType??.key,
-                let type = referenceLookup.lookupThing(memberType),
-                let native = nativeType(of: type),
-                let hold = native.hold {
+                let partiallyUnwrapped = actionArgument.resolvedResultType,
+                let memberType: ParsedTypeReference = partiallyUnwrapped,
+                let hold = nativeHold(on: memberType, referenceLookup: referenceLookup) {
                 wrappedCall = hold.textComponents.lazy.map({ String($0) })
                   .joined(separator: basicCall)
               } else {
@@ -1331,9 +1415,7 @@ extension Platform {
 
         if let result = argument.resolvedResultType,
           let actualResult = result,
-          let type = referenceLookup.lookupThing(actualResult.key),
-          let native = nativeType(of: type),
-           let release = native.release {
+          let release = nativeRelease(of: actualResult, referenceLookup: referenceLookup) {
           clashAvoidanceCounter += 1
           let localName = "local\(clashAvoidanceCounter)"
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
@@ -1459,9 +1541,7 @@ extension Platform {
             )
           )
           if let expectedType = storageType,
-            let type = referenceLookup.lookupThing(expectedType.key),
-            let native = nativeType(of: type),
-            let hold = native.hold {
+            let hold = nativeHold(on: expectedType, referenceLookup: referenceLookup) {
             entry.append(contentsOf: String(hold.textComponents.first!))
             closingParenthesis = String(hold.textComponents.last!)
           }

@@ -141,6 +141,26 @@ enum C: Platform {
   static func repair(compoundNativeType: String) -> String {
     return compoundNativeType
   }
+  private static func synthesized(_ name: String, for thing: String) -> NativeActionExpressionIntermediate? {
+    let prefix = identifierPrefix(for: thing)
+    return NativeActionExpressionIntermediate(
+      textComponents: ["\(prefix)_\(name)(", ")"],
+      parameters: [
+        NativeActionImplementationParameter(
+          ParsedUninterruptedIdentifier(source: UnicodeText("thing"), origin: compilerGeneratedOrigin())!
+        )
+      ]
+    )
+  }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("hold", for: thing)
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("release", for: thing)
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("copy", for: thing)
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "\(returnValue) (*)(\(parameters))"
   }
@@ -158,7 +178,11 @@ enum C: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
@@ -169,6 +193,58 @@ enum C: Platform {
     result.append(contentsOf: [
       "} \(name);"
     ])
+    if synthesizeReferenceCounting {
+      result.append(contentsOf: [
+        "",
+        actionDeclaration(
+          name: String(String.UnicodeScalarView(synthesizedHold(on: name)!.textComponents.first!.dropLast())),
+          parameters: "\(name) target",
+          returnSection: name,
+          accessModifier: nil,
+          coverageRegistration: nil,
+          implementation: componentHolds.map({"\(indent)\($0);"})
+            .appending("\(indent)return target;"),
+          parentType: nil,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false
+        ).full,
+        "",
+        actionDeclaration(
+          name: String(String.UnicodeScalarView(synthesizedRelease(of: name)!.textComponents.first!.dropLast())),
+          parameters: "\(name) target",
+          returnSection: "void",
+          accessModifier: nil,
+          coverageRegistration: nil,
+          implementation: componentReleases.map({"\(indent)\($0);"}),
+          parentType: nil,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false
+        ).full,
+        "",
+        actionDeclaration(
+          name: String(String.UnicodeScalarView(synthesizedCopy(of: name)!.textComponents.first!.dropLast())),
+          parameters: "\(name) target",
+          returnSection: name,
+          accessModifier: nil,
+          coverageRegistration: nil,
+          implementation: ["\(indent)\(name) copy;"]
+            .appending(contentsOf: componentCopies.map({"\(indent)\($0);"}))
+            .appending("\(indent)return copy;"),
+          parentType: nil,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false
+        ).full,
+      ])
+    }
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(
@@ -177,7 +253,8 @@ enum C: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     if simple {
       var result: [String] = [
@@ -199,7 +276,8 @@ enum C: Platform {
           accessModifier: accessModifier,
           simple: true,
           storageCases: [],
-          otherMembers: []
+          otherMembers: [],
+          synthesizeReferenceCounting: false
         )
       )
       result.append("typedef union \(name)_value {")
@@ -230,10 +308,13 @@ enum C: Platform {
           constructorParameters: [],
           constructorAccessModifier: nil,
           constructorSetters: [],
-          otherMembers: []
+          otherMembers: [],
+          synthesizeReferenceCounting: synthesizeReferenceCounting,
+          componentHolds: ["Enumeration holds not implemented yet."],
+          componentReleases: ["Enumeration releases not implemented yet."],
+          componentCopies: ["Enumeration copies not implemented yet."]
         )!
       )
-      
       return result.joined(separator: "\n")
     }
   }

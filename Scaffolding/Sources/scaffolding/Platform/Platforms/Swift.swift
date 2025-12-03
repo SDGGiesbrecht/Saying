@@ -163,6 +163,15 @@ enum Swift: Platform {
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift
   }
+  static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
+  static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func repair(compoundNativeType: String) -> String {
     if compoundNativeType.contains("].") {
       return compoundNativeType
@@ -189,7 +198,11 @@ enum Swift: Platform {
     constructorParameters: [String],
     constructorAccessModifier: String?,
     constructorSetters: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [String],
+    componentReleases: [String],
+    componentCopies: [String]
   ) -> String? {
     var typeName = name
     var extraIndent = ""
@@ -233,7 +246,8 @@ enum Swift: Platform {
     accessModifier: String?,
     simple: Bool,
     storageCases: [String],
-    otherMembers: [String]
+    otherMembers: [String],
+    synthesizeReferenceCounting: Bool
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
