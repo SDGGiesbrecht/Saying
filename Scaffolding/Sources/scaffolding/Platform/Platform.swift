@@ -586,6 +586,27 @@ extension Platform {
         )
         return hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
       }
+      let componentReleases: [String] = thing.parts.compactMap { part in
+        guard let release = nativeRelease(of: part.contents, referenceLookup: externalReferenceLookup) else {
+          return nil
+        }
+        let partName = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        return release.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
+      }
+      let componentCopies: [String] = thing.parts.map { part in
+        let partName = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        var replacement: String = "target.\(partName)"
+        if let copy = nativeCopy(of: part.contents, referenceLookup: externalReferenceLookup) {
+          replacement = copy.textComponents.lazy.map({ String($0) }).joined(separator: replacement)
+        }
+        return "copy.\(partName) = \(replacement)"
+      }
       return thingDeclaration(
         name: name,
         components: components,
@@ -596,10 +617,9 @@ extension Platform {
         otherMembers: members,
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
-        componentReleases: [],
-        componentCopies: []
+        componentReleases: componentReleases,
+        componentCopies: componentCopies
       )
-      #warning("↑ Releases and copies not implemented yet.")
     } else {
       var cases: [String] = []
       var storageCases: [String] = []

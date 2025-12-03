@@ -245,12 +245,6 @@ enum C: Platform {
         ).full,
       ])
     }
-    if synthesizeReferenceCounting {
-      #warning("Debugging...")
-      print("")
-      print(result.joined(separator: "\n"))
-      print("")
-    }
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(
