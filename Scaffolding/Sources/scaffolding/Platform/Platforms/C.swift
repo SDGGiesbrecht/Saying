@@ -254,7 +254,10 @@ enum C: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [(String, String)],
+    componentReleases: [(String, String)],
+    componentCopies: [(String, String)]
   ) -> String {
     if simple {
       var result: [String] = [
@@ -277,7 +280,10 @@ enum C: Platform {
           simple: true,
           storageCases: [],
           otherMembers: [],
-          synthesizeReferenceCounting: false
+          synthesizeReferenceCounting: false,
+          componentHolds: [],
+          componentReleases: [],
+          componentCopies: []
         )
       )
       result.append("typedef union \(name)_value {")
@@ -310,13 +316,31 @@ enum C: Platform {
           constructorSetters: [],
           otherMembers: [],
           synthesizeReferenceCounting: synthesizeReferenceCounting,
-          componentHolds: ["Enumeration holds not implemented yet."],
-          componentReleases: ["Enumeration releases not implemented yet."],
-          componentCopies: ["Enumeration copies not implemented yet."]
+          componentHolds: switchCases(componentHolds, parentType: name),
+          componentReleases: switchCases(componentReleases, parentType: name),
+          componentCopies: switchCases(componentCopies, parentType: name)
+            .prepending("copy.enumeration_case = target.enumeration_case;")
         )!
       )
       return result.joined(separator: "\n")
     }
+  }
+  private static func switchCases(_ enumerationCases: [(String, String)], parentType: String) -> [String] {
+    var result: [String] = [
+      "switch (target.enumeration_case)",
+      "{"
+    ]
+    for entry in enumerationCases {
+      result.append(contentsOf: [
+        "case \(parentType)_case_\(entry.0):",
+        "\(indent)\(entry.1);",
+        "\(indent)break;",
+      ])
+    }
+    result.append(contentsOf: [
+      "}",
+    ])
+    return [result.joined(separator: "\n\(indent)")]
   }
 
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText? {

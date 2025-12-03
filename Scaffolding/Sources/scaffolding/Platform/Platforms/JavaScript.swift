@@ -148,7 +148,10 @@ enum JavaScript: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [(String, String)],
+    componentReleases: [(String, String)],
+    componentCopies: [(String, String)]
   ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"

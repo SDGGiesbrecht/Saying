@@ -555,8 +555,11 @@ extension ReferenceDictionary {
           if thing.c?.release != nil {
             required = true
           } else {
-            partIteration: for part in thing.parts {
-              if let type = allLookup.lookupThing(part.contents.key) {
+            partIteration: for component in [
+              thing.parts.map({ $0.contents }),
+              thing.cases.compactMap({ $0.contents })
+            ].joined() {
+              if let type = allLookup.lookupThing(component.key) {
                 if let known = type.requiresCleanUp {
                   if known {
                     required = true

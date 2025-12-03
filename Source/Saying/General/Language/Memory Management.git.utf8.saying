@@ -349,6 +349,40 @@ action (file) (tests)
   ignore (withdrawn)
  }
 
+enumeration (file)
+ (
+  English: enumeration with reference case
+ )
+ {
+  case
+   (
+    English: reference
+   )
+   reference tracker
+ }
+
+use (file)
+ general use of (enumeration with reference case)
+ {
+ }
+
+action (file) (tests)
+ [
+  test {
+   let (• tracker: reference tracker) be (create reference tracker)
+   create and use enumeration with reference case containing (restart (tracker))
+   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+  }
+ ]
+ (
+  English: create and use enumeration with reference case containing (tracker: reference tracker)
+ )
+ {
+  let (• enumeration: enumeration with reference case) be (wrap (tracker) as (reference))
+  verify (reference count of (tracker) is (two))
+  ignore (enumeration)
+ }
+
 action (file)
  (
   English: two
