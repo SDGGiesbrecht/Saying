@@ -576,6 +576,16 @@ extension Platform {
         )
         return constructorSetter(name: name)
       })
+      let componentHolds: [String] = thing.parts.compactMap { part in
+        guard let hold = nativeHold(on: part.contents, referenceLookup: externalReferenceLookup) else {
+          return nil
+        }
+        let partName = sanitize(
+          identifier: part.names.identifier(),
+          leading: true
+        )
+        return hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
+      }
       return thingDeclaration(
         name: name,
         components: components,
@@ -585,11 +595,11 @@ extension Platform {
         constructorSetters: constructorSetters,
         otherMembers: members,
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
-        componentHolds: [],
+        componentHolds: componentHolds,
         componentReleases: [],
         componentCopies: []
       )
-      #warning("↑ Hold, releases and copies not implemented yet.")
+      #warning("↑ Releases and copies not implemented yet.")
     } else {
       var cases: [String] = []
       var storageCases: [String] = []

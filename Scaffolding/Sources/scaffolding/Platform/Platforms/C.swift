@@ -202,7 +202,7 @@ enum C: Platform {
           returnSection: name,
           accessModifier: nil,
           coverageRegistration: nil,
-          implementation: componentHolds.map({"\(indent)\($0)"})
+          implementation: componentHolds.map({"\(indent)\($0);"})
             .appending("\(indent)return target;"),
           parentType: nil,
           isMutating: false,
@@ -218,7 +218,7 @@ enum C: Platform {
           returnSection: "void",
           accessModifier: nil,
           coverageRegistration: nil,
-          implementation: componentReleases.map({"\(indent)\($0)"}),
+          implementation: componentReleases.map({"\(indent)\($0);"}),
           parentType: nil,
           isMutating: false,
           isAbsorbedMember: false,
@@ -234,7 +234,7 @@ enum C: Platform {
           accessModifier: nil,
           coverageRegistration: nil,
           implementation: ["\(indent)\(name) copy;"]
-            .appending(contentsOf: componentCopies.map({"\(indent)\($0)"}))
+            .appending(contentsOf: componentCopies.map({"\(indent)\($0);"}))
             .appending("\(indent)return copy;"),
           parentType: nil,
           isMutating: false,
