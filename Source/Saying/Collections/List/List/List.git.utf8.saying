@@ -177,7 +177,7 @@ extension
      (
       English: replace (index: list index) in (list: ↓ list of (thing)) with (element: thing)
      )
-     C: “” hold on (thing) “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “) = ” hold on (element) “”
+     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “) = ” hold on (element) “”
      C♯: “” list “[” index “] = ” element “”
      JavaScript: “” list “[” index “] = ” element “”
      Swift: “” list “[” index “] = ” element “”
