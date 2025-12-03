@@ -78,7 +78,7 @@ extension
       English: entry at (cursor: list index) in (list: list of (thing))
      )
      thing
-     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
+     C: “” hold on (thing) “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
      C♯: “” list “[” cursor “]”
      JavaScript: “” list “[” cursor “]”
      Kotlin: “” list “[” cursor “]”
@@ -89,7 +89,7 @@ extension
       English: entry after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
      )
      thing
-     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
+     C: “” hold on (thing) “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
      C♯: “” list “[” cursor “]”
      JavaScript: “” list “[” cursor “]”
      Kotlin: “” list “[” cursor “]”
@@ -177,7 +177,7 @@ extension
      (
       English: replace (index: list index) in (list: ↓ list of (thing)) with (element: thing)
      )
-     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “) = ” hold on (element) “”
+     C: “” hold on (thing) “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “) = ” hold on (element) “”
      C♯: “” list “[” index “] = ” element “”
      JavaScript: “” list “[” index “] = ” element “”
      Swift: “” list “[” index “] = ” element “”
