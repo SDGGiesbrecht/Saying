@@ -884,6 +884,7 @@ extension Platform {
     if let native = nativeImplementation(of: action) {
       let usedParameters = action.parameters.ordered(for: reference.actionName)
       var accumulator = ""
+      var nativeWrap: NativeActionExpressionIntermediate?
       var beforeCleanUp: String? = nil
       var local = ReferenceDictionary()
       let nativeExpression = native.expression
@@ -892,12 +893,18 @@ extension Platform {
         if index != nativeExpression.textComponents.indices.last {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
-            let typeSource = source(for: type, referenceLookup: referenceLookup)
-            if let next = nativeExpression.parameters[index...].dropFirst().first,
-              next.name == "‐" {
-              accumulator.append(contentsOf: identifierPrefix(for: typeSource))
+            if parameter.hold {
+              if let found = referenceLookup.lookupThing(type.key) {
+                nativeWrap = nativeType(of: found)?.hold
+              }
             } else {
-              accumulator.append(contentsOf: typeSource)
+              let typeSource = source(for: type, referenceLookup: referenceLookup)
+              if let next = nativeExpression.parameters[index...].dropFirst().first,
+                 next.name == "‐" {
+                accumulator.append(contentsOf: identifierPrefix(for: typeSource))
+              } else {
+                accumulator.append(contentsOf: typeSource)
+              }
             }
           } else if let enumerationCase = parameter.caseInstead {
             switch enumerationCase {
@@ -1023,6 +1030,9 @@ extension Platform {
             }
           }
         }
+      }
+      if let wrap = nativeWrap {
+        accumulator = wrap.textComponents.lazy.map({ String($0) }).joined(separator: accumulator)
       }
       if let before = beforeCleanUp {
         cleanUpCode.prepend(contentsOf: accumulator)
