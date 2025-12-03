@@ -981,9 +981,7 @@ extension Platform {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
             if parameter.hold {
-              if let found = referenceLookup.lookupThing(type.key) {
-                nativeWrap = nativeType(of: found)?.hold
-              }
+              nativeWrap = nativeHold(on: type, referenceLookup: referenceLookup)
             } else {
               let typeSource = source(for: type, referenceLookup: referenceLookup)
               if let next = nativeExpression.parameters[index...].dropFirst().first,
