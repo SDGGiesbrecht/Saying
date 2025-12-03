@@ -1382,6 +1382,10 @@ extension Platform {
     entries: inout ReferenceCountedReturns
   ) {
     for argument in action.arguments {
+      var entriesInThisBranch = ReferenceCountedReturns()
+      defer {
+        entries.append(contentsOf: entriesInThisBranch)
+      }
       switch argument {
       case .action(let action):
         if action.passage == .out || action.passage == .through {
@@ -1409,7 +1413,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
-            entries: &entries
+            entries: &entriesInThisBranch
           )
         }
 
@@ -1429,7 +1433,7 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
-            extractedArguments: &entries.unused,
+            extractedArguments: &entriesInThisBranch.unused,
             isArgumentExtraction: true,
             isThrough: action.passage == .through,
             isDirectReturn: false,
@@ -1440,7 +1444,7 @@ extension Platform {
           )
           let releaseExpression = release.textComponents.lazy.map({ String($0) })
             .joined(separator: localName)
-          entries.append(
+          entriesInThisBranch.append(
             ReferenceCountedReturn(
               localStorageDeclaration: "\(typeName) \(localName) = \(call);",
               localName: localName,

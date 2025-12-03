@@ -8,4 +8,9 @@ extension ReferenceCountedReturns {
     all.append(entry)
     unused.append(entry.localName)
   }
+
+  mutating func append(contentsOf entries: ReferenceCountedReturns) {
+    all.append(contentsOf: entries.all)
+    unused.append(contentsOf: entries.unused)
+  }
 }
