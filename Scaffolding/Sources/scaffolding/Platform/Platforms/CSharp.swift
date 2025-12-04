@@ -178,8 +178,7 @@ enum CSharp: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String],
-    componentCopies: [String]
+    componentReleases: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
@@ -220,8 +219,7 @@ enum CSharp: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)],
-    componentCopies: [(String, String)]
+    componentReleases: [(String, String)]
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     if simple {

@@ -181,8 +181,7 @@ enum C: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String],
-    componentCopies: [String]
+    componentReleases: [String]
   ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
@@ -233,9 +232,9 @@ enum C: Platform {
           returnSection: name,
           accessModifier: nil,
           coverageRegistration: nil,
-          implementation: ["\(indent)\(name) copy;"]
-            .appending(contentsOf: componentCopies.map({"\(indent)\($0);"}))
-            .appending("\(indent)return copy;"),
+          implementation: [
+            "\(indent)return \(synthesizedHold(on: name)!.textComponents.lazy.map({ String($0) }).joined(separator: "target"));"
+          ],
           parentType: nil,
           isMutating: false,
           isAbsorbedMember: false,
@@ -256,8 +255,7 @@ enum C: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)],
-    componentCopies: [(String, String)]
+    componentReleases: [(String, String)]
   ) -> String {
     if simple {
       var result: [String] = [
@@ -282,8 +280,7 @@ enum C: Platform {
           otherMembers: [],
           synthesizeReferenceCounting: false,
           componentHolds: [],
-          componentReleases: [],
-          componentCopies: []
+          componentReleases: []
         )
       )
       result.append("typedef union \(name)_value {")
@@ -317,9 +314,7 @@ enum C: Platform {
           otherMembers: [],
           synthesizeReferenceCounting: synthesizeReferenceCounting,
           componentHolds: switchCases(componentHolds, parentType: name),
-          componentReleases: switchCases(componentReleases, parentType: name),
-          componentCopies: switchCases(componentCopies, parentType: name)
-            .prepending("copy.enumeration_case = target.enumeration_case;")
+          componentReleases: switchCases(componentReleases, parentType: name)
         )!
       )
       return result.joined(separator: "\n")
