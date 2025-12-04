@@ -136,8 +136,7 @@ enum JavaScript: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String],
-    componentCopies: [String]
+    componentReleases: [String]
   ) -> String? {
     return nil
   }
@@ -150,8 +149,7 @@ enum JavaScript: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)],
-    componentCopies: [(String, String)]
+    componentReleases: [(String, String)]
   ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"

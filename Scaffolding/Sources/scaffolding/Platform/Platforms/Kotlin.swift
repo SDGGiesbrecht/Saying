@@ -158,8 +158,7 @@ enum Kotlin: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String],
-    componentCopies: [String]
+    componentReleases: [String]
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let constructorAccess = constructorAccessModifier == accessModifier
@@ -187,8 +186,7 @@ enum Kotlin: Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)],
-    componentCopies: [(String, String)]
+    componentReleases: [(String, String)]
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let keyword = simple ? "enum" : "sealed"

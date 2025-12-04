@@ -68,8 +68,7 @@ protocol Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String],
-    componentCopies: [String]
+    componentReleases: [String]
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -80,8 +79,7 @@ protocol Platform {
     otherMembers: [String],
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)],
-    componentCopies: [(String, String)]
+    componentReleases: [(String, String)]
   ) -> String
   static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate?
   static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate?
@@ -599,17 +597,6 @@ extension Platform {
         )
         return release.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
       }
-      let componentCopies: [String] = thing.parts.map { part in
-        let partName = sanitize(
-          identifier: part.names.identifier(),
-          leading: true
-        )
-        var replacement: String = "target.\(partName)"
-        if let copy = nativeCopy(of: part.contents, referenceLookup: externalReferenceLookup) {
-          replacement = copy.textComponents.lazy.map({ String($0) }).joined(separator: replacement)
-        }
-        return "copy.\(partName) = \(replacement)"
-      }
       return thingDeclaration(
         name: name,
         components: components,
@@ -620,8 +607,7 @@ extension Platform {
         otherMembers: members,
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
-        componentReleases: componentReleases,
-        componentCopies: componentCopies
+        componentReleases: componentReleases
       )
     } else {
       var cases: [String] = []
@@ -664,21 +650,6 @@ extension Platform {
         let call = release.textComponents.lazy.map({ String($0) }).joined(separator: "target.value.\(name)_case_\(caseName)")
         return (caseName, call)
       }
-      let componentCopies: [(String, String)] = thing.cases.map { enumerationCase in
-        let caseName = sanitize(
-          identifier: enumerationCase.names.identifier(),
-          leading: true
-        )
-        var replacement: String = "target.value"
-        var storage: String = "copy.value"
-        if let contents = enumerationCase.contents,
-          let copy = nativeCopy(of: contents, referenceLookup: externalReferenceLookup) {
-          storage = "\(storage).\(name)_case_\(caseName)"
-          replacement = "\(replacement).\(name)_case_\(caseName)"
-          replacement = copy.textComponents.lazy.map({ String($0) }).joined(separator: replacement)
-        }
-        return (caseName, "\(storage) = \(replacement)")
-      }
       return enumerationTypeDeclaration(
         name: name,
         cases: cases,
@@ -688,8 +659,7 @@ extension Platform {
         otherMembers: members,
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
-        componentReleases: componentReleases,
-        componentCopies: componentCopies
+        componentReleases: componentReleases
       )
     }
   }
