@@ -1,5 +1,3 @@
-import SDGText
-
 struct Thing {
   var names: Set<UnicodeText>
   var parameters: Interpolation<ThingParameterIntermediate>
@@ -62,8 +60,8 @@ extension Thing {
   ) -> UnicodeText {
     return UnicodeText(
       globallyUniqueIdentifierComponents
-        .lazy.map({ StrictString(referenceLookup.resolve(identifier: $0)) })
-        .joined(separator: ":")
+        .lazy.map({ referenceLookup.resolve(identifier: $0) })
+        .joined(separator: ":".unicodeScalars)
       )
   }
 

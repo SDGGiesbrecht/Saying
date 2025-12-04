@@ -85,8 +85,10 @@ import Foundation
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
         "UnicodeText.init(_: String.UnicodeScalarView)",
+        "UnicodeText.init(_: UnicodeText)",
         "==(_: UnicodeText, _: UnicodeText)",
         "UnicodeText.hash(into: Hasher)",
+        "UnicodeText.replaceSubrange(_: Range<String.UnicodeScalarView.Index>, with: UnicodeText)",
 
         "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
         "shimAccessToGitStyleLineParsing()",

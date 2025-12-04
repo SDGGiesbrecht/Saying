@@ -14,6 +14,7 @@ extension Array {
 }
 
 extension Array where Element == String {
+
   mutating func appendSeparatorLine() {
     if !isEmpty,
       last != "" {

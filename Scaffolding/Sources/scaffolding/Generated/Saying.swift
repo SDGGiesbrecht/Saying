@@ -23,8 +23,21 @@ struct UnicodeText {
     return self.scalars[position]
   }
 
+  init(_ other: Slice<UnicodeText>) {
+    self = UnicodeText(skippingNormalizationOf: String.UnicodeScalarView(Slice(base: other.base.scalars, bounds: { let slice = other; return slice.startIndex ..< slice.endIndex }())))
+  }
+
+  init(_ other: UnicodeText) {
+    self = other
+  }
+
   init(_ scalars: String.UnicodeScalarView) {
     self = UnicodeText(skippingNormalizationOf: scalars.compatibilityDecomposition())
+  }
+
+  mutating func append(contentsOf newElements: UnicodeText) {
+    self.scalars += newElements.scalars
+    self.scalars.decomposeAccordingToCompatibilityDecomposition()
   }
 
   var endIndex: String.UnicodeScalarView.Index {
@@ -37,6 +50,14 @@ struct UnicodeText {
 
   func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return boundary
+  }
+
+  mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: UnicodeText) {
+    let end: String.UnicodeScalarView.Index = self.endIndex
+    let after: UnicodeText = UnicodeText(Slice(base: self, bounds: subrange.upperBound ..< end))
+    self.scalars.removeSubrange(subrange.lowerBound ..< end)
+    self.append(contentsOf: newElements)
+    self.append(contentsOf: after)
   }
 
   var startIndex: String.UnicodeScalarView.Index {
@@ -587,6 +608,12 @@ extension String.UnicodeScalarView {
   func compatibilityDecomposition() -> String.UnicodeScalarView {
     ensureUnicodeResourcesHaveLoaded
     return String(self).decomposedStringWithCompatibilityMapping.unicodeScalars
+  }
+}
+
+extension String.UnicodeScalarView {
+  mutating func decomposeAccordingToCompatibilityDecomposition() {
+    self = self.compatibilityDecomposition()
   }
 }
 
