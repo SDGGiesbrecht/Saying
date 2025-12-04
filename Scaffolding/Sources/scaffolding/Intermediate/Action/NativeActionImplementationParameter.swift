@@ -14,13 +14,14 @@ extension NativeActionImplementationParameter {
   init(
     _ parameter: ParsedUninterruptedIdentifier,
     typeInstead: ParsedTypeReference? = nil,
-    caseInstead: ParsedTypeReference? = nil
+    caseInstead: ParsedTypeReference? = nil,
+    hold: Bool = false
   ) {
     name = parameter.identifierText()
     syntaxNode = parameter
     self.typeInstead = typeInstead
     self.caseInstead = caseInstead
-    self.hold = false
+    self.hold = hold
     self.release = false
     self.copy = false
     self.held = false
