@@ -185,7 +185,10 @@ enum Kotlin: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
-    synthesizeReferenceCounting: Bool
+    synthesizeReferenceCounting: Bool,
+    componentHolds: [(String, String)],
+    componentReleases: [(String, String)],
+    componentCopies: [(String, String)]
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let keyword = simple ? "enum" : "sealed"

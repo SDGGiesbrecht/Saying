@@ -316,7 +316,7 @@ extension ActionIntermediate {
           parameters: [
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, typeInstead: enumerationType),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
-            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!)
+            NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!, hold: true)
           ]
         )
       ),
