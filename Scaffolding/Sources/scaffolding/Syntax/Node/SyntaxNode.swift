@@ -33,7 +33,7 @@ extension SyntaxNode {
             .lazy.map({ String($0.formattedGitStyleSource(indent: indent + 1)) })
             .joined()
         )
-      case .spacedNativeRequirementList:
+      case .spacedImportList, .spacedNativeRequirementList:
         accumulator.append(
           contentsOf: node.children.dropLast(1)
             .map({ String($0.formattedGitStyleSource(indent: indent + 1)) })
