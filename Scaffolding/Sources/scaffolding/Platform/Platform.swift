@@ -649,7 +649,7 @@ extension Platform {
           identifier: enumerationCase.names.identifier(),
           leading: true
         )
-        let call = hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.value")
+        let call = hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.value.\(name)_case_\(caseName)")
         return (caseName, call)
       }
       let componentReleases: [(String, String)] = thing.cases.compactMap { enumerationCase in
@@ -661,7 +661,7 @@ extension Platform {
           identifier: enumerationCase.names.identifier(),
           leading: true
         )
-        let call = release.textComponents.lazy.map({ String($0) }).joined(separator: "target.value")
+        let call = release.textComponents.lazy.map({ String($0) }).joined(separator: "target.value.\(name)_case_\(caseName)")
         return (caseName, call)
       }
       let componentCopies: [(String, String)] = thing.cases.map { enumerationCase in
@@ -670,11 +670,14 @@ extension Platform {
           leading: true
         )
         var replacement: String = "target.value"
+        var storage: String = "copy.value"
         if let contents = enumerationCase.contents,
           let copy = nativeCopy(of: contents, referenceLookup: externalReferenceLookup) {
+          storage = "\(storage).\(name)_case_\(caseName)"
+          replacement = "\(replacement).\(name)_case_\(caseName)"
           replacement = copy.textComponents.lazy.map({ String($0) }).joined(separator: replacement)
         }
-        return (caseName, "copy.value = \(replacement)")
+        return (caseName, "\(storage) = \(replacement)")
       }
       return enumerationTypeDeclaration(
         name: name,
