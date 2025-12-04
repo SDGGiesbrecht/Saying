@@ -32,9 +32,9 @@ thing (file)
   English: reference tracker
  )
  C: “reference¤(5F)tracker¤(2A)”/“hold¤(5F)reference¤(5F)tracker(” tracker “)”/“release¤(5F)reference¤(5F)tracker(” tracker “)”/“copy¤(5F)reference¤(5F)tracker(” tracker “)” (
-  “err”
-  “stdbool”
-  “stdlib”
+   “err”
+   “stdbool”
+   “stdlib”
   ) {
    “typedef struct reference¤(5F)tracker {¤(A)int tracked¤(5F)references;¤(A)int all¤(5F)references;¤(A)} reference¤(5F)tracker;”
    “reference¤(5F)tracker¤(2A) hold¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references += 1;¤(A)tracker¤(2D)>all¤(5F)references += 1;¤(A)}”
