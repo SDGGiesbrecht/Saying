@@ -45,7 +45,7 @@ action (file)
      remove first from (↓ segment) skipping bounds check
      add (one: natural number) to (↓ adjusted offset)
     }
-    ignore (“Not implemented yet.”)
+    append (Unicode segment at (adjusted offset) containing (convert (segment) into list)) to (↓ segments)
    }
   }
   change (↓ beginning) to (nothing)

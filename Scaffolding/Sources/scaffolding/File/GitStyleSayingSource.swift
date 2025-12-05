@@ -9,29 +9,6 @@ extension GitStyleSayingSource {
     self.init(origin: UnicodeText(url.path), code: UnicodeText(try String(from: url)))
   }
 
-  private func registerSegment(
-    in segments: inout [UnicodeSegment],
-    segmentStart: inout GitStyleParsingCursor?,
-    cursor: GitStyleParsingCursor
-  ) {
-    if let segmentStart = segmentStart,
-       segmentStart.offset != cursor.offset {
-      var segment = code[segmentStart.cursor..<cursor.cursor]
-      var adjustedOffset = segmentStart.offset
-      while segment.first == " " {
-        segment.removeFirst()
-        adjustedOffset += 1
-      }
-      segments.append(
-        UnicodeSegment(
-          scalarOffset: UInt64(adjustedOffset),
-          source: UnicodeText(segment)
-        )
-      )
-    }
-    segmentStart = nil
-  }
-
   func parsed() -> SayingSource {
     let source = StrictString(self.code)
     var segmentStart: GitStyleParsingCursor? = nil
@@ -40,10 +17,11 @@ extension GitStyleSayingSource {
     for (offset, index) in source.indices.enumerated() {
       let scalar = source[index]
       if scalar == "\n" {
-        registerSegment(
-          in: &segments,
-          segmentStart: &segmentStart,
-          cursor: GitStyleParsingCursor(index: index, offset: UInt64(offset))
+        parseLine(
+          in: self,
+          from: &segmentStart,
+          to: GitStyleParsingCursor(index: index, offset: UInt64(offset)),
+          into: &segments
         )
         if index != lastIndex {
           if segments.last?.source == "\u{2028}" {
@@ -58,10 +36,11 @@ extension GitStyleSayingSource {
           segmentStart = GitStyleParsingCursor(index: index, offset: UInt64(offset))
         }
         if index == lastIndex {
-          registerSegment(
-            in: &segments,
-            segmentStart: &segmentStart,
-            cursor: GitStyleParsingCursor(index: source.endIndex, offset: UInt64(offset) + 1)
+          parseLine(
+            in: self,
+            from: &segmentStart,
+            to: GitStyleParsingCursor(index: source.endIndex, offset: UInt64(offset) + 1),
+            into: &segments
           )
         }
       }
