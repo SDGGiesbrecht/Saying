@@ -7,6 +7,7 @@ struct NativeActionImplementationParameter {
   var release: Bool
   var copy: Bool
   var held: Bool
+  var sanitizedForIdentifier: Bool
 }
 
 extension NativeActionImplementationParameter {
@@ -25,6 +26,7 @@ extension NativeActionImplementationParameter {
     self.release = false
     self.copy = false
     self.held = false
+    self.sanitizedForIdentifier = false
   }
 
   static func construct(
@@ -40,6 +42,7 @@ extension NativeActionImplementationParameter {
     var release = false
     var copy = false
     var held = false
+    var sanitizedForIdentifier = false
     switch parameter {
     case .simple(let simple):
       name = simple.identifierText()
@@ -56,6 +59,8 @@ extension NativeActionImplementationParameter {
         copy = true
       case "held ()":
         held = true
+      case "() sanitized for identifier":
+        sanitizedForIdentifier = true
       default:
         errors.append(.unknownModifier(modified))
       }
@@ -73,7 +78,8 @@ extension NativeActionImplementationParameter {
         hold: hold,
         release: release,
         copy: copy,
-        held: held
+        held: held,
+        sanitizedForIdentifier: sanitizedForIdentifier
       )
     )
   }
@@ -91,7 +97,8 @@ extension NativeActionImplementationParameter {
       hold: hold,
       release: release,
       copy: copy,
-      held: held
+      held: held,
+      sanitizedForIdentifier: sanitizedForIdentifier
     )
   }
 }

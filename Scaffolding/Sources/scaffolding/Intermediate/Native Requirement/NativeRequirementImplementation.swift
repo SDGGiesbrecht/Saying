@@ -50,7 +50,8 @@ extension NativeRequirementImplementationIntermediate {
     let mappedParameters = parameters.map({ parameter in
       return NativeThingImplementationParameter (
         name: typeLookup[parameter.name] ?? parameter.name,
-        syntaxNode: parameter.syntaxNode
+        syntaxNode: parameter.syntaxNode,
+        sanitizedForIdentifier: parameter.sanitizedForIdentifier
       )
     })
     return NativeRequirementImplementationIntermediate(
