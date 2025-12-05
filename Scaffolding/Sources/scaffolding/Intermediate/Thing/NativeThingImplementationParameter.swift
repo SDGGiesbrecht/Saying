@@ -2,6 +2,7 @@ struct NativeThingImplementationParameter {
   var name: UnicodeText
   var syntaxNode: ParsedUninterruptedIdentifier
   var resolvedType: ParsedTypeReference?
+  var sanitizedForIdentifier: Bool
 }
 
 extension NativeThingImplementationParameter {
@@ -15,6 +16,7 @@ extension NativeThingImplementationParameter {
 
     let name: UnicodeText
     let syntaxNode: ParsedUninterruptedIdentifier
+    var sanitizedForIdentifier = false
     switch parameter {
     case .simple(let simple):
       name = simple.identifierText()
@@ -23,6 +25,8 @@ extension NativeThingImplementationParameter {
       name = modified.parameter.identifierText()
       syntaxNode = modified.parameter
       switch modified.identifierText() {
+      case "() sanitized for identifier":
+        sanitizedForIdentifier = true
       default:
         errors.append(.unknownModifier(modified))
       }
@@ -34,7 +38,8 @@ extension NativeThingImplementationParameter {
     return .success(
       NativeThingImplementationParameter(
         name: name,
-        syntaxNode: syntaxNode
+        syntaxNode: syntaxNode,
+        sanitizedForIdentifier: sanitizedForIdentifier
       )
     )
   }
@@ -47,7 +52,8 @@ extension NativeThingImplementationParameter {
     return NativeThingImplementationParameter(
       name: name,
       syntaxNode: syntaxNode,
-      resolvedType: typeLookup[name] ?? resolvedType?.specializing(typeLookup: typeLookup)
+      resolvedType: typeLookup[name] ?? resolvedType?.specializing(typeLookup: typeLookup),
+      sanitizedForIdentifier: sanitizedForIdentifier
     )
   }
 }
