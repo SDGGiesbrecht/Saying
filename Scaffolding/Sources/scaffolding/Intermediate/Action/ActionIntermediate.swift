@@ -729,7 +729,7 @@ extension ActionIntermediate {
         } else {
           if prototype.parameters.parameter(named: parameterReference.name) == nil,
             !parameterReference.unique,
-            parameterReference.name != "−" {
+            !parameterReference.remainderOfScope {
             errors.append(.noSuchParameter(parameterReference.syntaxNode))
           }
         }

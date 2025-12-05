@@ -1024,6 +1024,9 @@ extension Platform {
               accumulator.append(sanitize(identifier: name, leading: true))
               accumulator.append(String(clashAvoidanceCounter))
               didUseClashAvoidance = true
+            } else if parameter.remainderOfScope {
+              beforeCleanUp = accumulator
+              accumulator = ""
             } else if let argumentIndex = usedParameters.firstIndex(where: { $0.names.contains(name) }) {
               let argument = reference.arguments[argumentIndex]
               switch argument {
@@ -1119,12 +1122,7 @@ extension Platform {
                 local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
               }
             } else {
-              if name == "−" {
-                beforeCleanUp = accumulator
-                accumulator = ""
-              } else {
-                fatalError()
-              }
+              fatalError()
             }
           }
         }

@@ -131,8 +131,8 @@ flow (clients)
   français : lors du rangement, (rangement: [clean‐up])
   ελληνικά: στη συγύρισμα (συγύρισμα: [clean‐up])
  )
- C: “” − “” clean‐up “”
- C♯: “try {” − “} finally {” clean‐up “}”
- JavaScript: “try {” − “} finally {” clean‐up “}”
- Kotlin: “try {” − “} finally {” clean‐up “}”
+ C: “” remainder of (scope) “” clean‐up “”
+ C♯: “try {” remainder of (scope) “} finally {” clean‐up “}”
+ JavaScript: “try {” remainder of (scope) “} finally {” clean‐up “}”
+ Kotlin: “try {” remainder of (scope) “} finally {” clean‐up “}”
  Swift: “defer {” clean‐up “}”
