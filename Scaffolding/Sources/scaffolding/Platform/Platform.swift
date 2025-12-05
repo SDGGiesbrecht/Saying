@@ -1118,7 +1118,7 @@ extension Platform {
               if name == "+" {
                 accumulator.append(String(clashAvoidanceCounter))
                 didUseClashAvoidance = true
-              } else if name == "−" {
+              } else if parameter.remainderOfScope {
                 beforeCleanUp = accumulator
                 accumulator = ""
               } else {
