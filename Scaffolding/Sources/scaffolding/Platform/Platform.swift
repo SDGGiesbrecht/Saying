@@ -999,8 +999,7 @@ extension Platform {
               nativeWrap = nativeHold(on: type, referenceLookup: referenceLookup)
             } else {
               let typeSource = source(for: type, referenceLookup: referenceLookup)
-              if let next = nativeExpression.parameters[index...].dropFirst().first,
-                 next.name == "‐" {
+              if parameter.sanitizedForIdentifier {
                 accumulator.append(contentsOf: identifierPrefix(for: typeSource))
               } else {
                 accumulator.append(contentsOf: typeSource)
@@ -1123,9 +1122,7 @@ extension Platform {
                 beforeCleanUp = accumulator
                 accumulator = ""
               } else {
-                if name != "‐" {
-                  fatalError()
-                }
+                fatalError()
               }
             }
           }
@@ -1945,14 +1942,11 @@ extension Platform {
       line.append(contentsOf: String(requirement.textComponents[index]))
       if index != requirement.textComponents.indices.last {
         let parameter = requirement.parameters[index]
-        if parameter.name != "‐" {
-          var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
-          if let next = requirement.parameters[index...].dropFirst().first,
-            next.name == "‐" {
-            type = identifierPrefix(for: type)
-          }
-          line.append(contentsOf: type)
+        var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+        if parameter.sanitizedForIdentifier {
+          type = identifierPrefix(for: type)
         }
+        line.append(contentsOf: type)
       }
     }
     return line

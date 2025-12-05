@@ -728,7 +728,6 @@ extension ActionIntermediate {
           )
         } else {
           if prototype.parameters.parameter(named: parameterReference.name) == nil,
-            parameterReference.name != "‐",
             parameterReference.name != "+",
             parameterReference.name != "−" {
             errors.append(.noSuchParameter(parameterReference.syntaxNode))
@@ -748,9 +747,7 @@ extension ActionIntermediate {
           )
         } else {
           if parameters.parameter(named: parameterReference.name) == nil {
-            if parameterReference.name != "‐" {
-              errors.append(.noSuchParameter(parameterReference.syntaxNode))
-            }
+            errors.append(.noSuchParameter(parameterReference.syntaxNode))
           }
         }
       }
