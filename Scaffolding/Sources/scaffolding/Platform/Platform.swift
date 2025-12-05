@@ -1116,7 +1116,8 @@ extension Platform {
                 local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
               }
             } else {
-              if name == "+" {
+              if parameter.unique {
+                accumulator.append(sanitize(identifier: name, leading: true))
                 accumulator.append(String(clashAvoidanceCounter))
                 didUseClashAvoidance = true
               } else if name == "−" {

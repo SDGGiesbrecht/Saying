@@ -3,6 +3,7 @@ struct NativeActionImplementationParameter {
   var syntaxNode: ParsedUninterruptedIdentifier
   var typeInstead: ParsedTypeReference?
   var caseInstead: ParsedTypeReference?
+  var unique: Bool
   var hold: Bool
   var release: Bool
   var copy: Bool
@@ -15,12 +16,14 @@ extension NativeActionImplementationParameter {
     _ parameter: ParsedUninterruptedIdentifier,
     typeInstead: ParsedTypeReference? = nil,
     caseInstead: ParsedTypeReference? = nil,
+    unique: Bool = false,
     hold: Bool = false
   ) {
     name = parameter.identifierText()
     syntaxNode = parameter
     self.typeInstead = typeInstead
     self.caseInstead = caseInstead
+    self.unique = unique
     self.hold = hold
     self.release = false
     self.copy = false
@@ -36,6 +39,7 @@ extension NativeActionImplementationParameter {
 
     let name: UnicodeText
     let syntaxNode: ParsedUninterruptedIdentifier
+    var unique = false
     var hold = false
     var release = false
     var copy = false
@@ -48,6 +52,8 @@ extension NativeActionImplementationParameter {
       name = modified.parameter.identifierText()
       syntaxNode = modified.parameter
       switch modified.identifierText() {
+      case "unique ()":
+        unique = true
       case "hold on ()":
         hold = true
       case "release of ()":
@@ -70,6 +76,7 @@ extension NativeActionImplementationParameter {
         syntaxNode: syntaxNode,
         typeInstead: typeInstead,
         caseInstead: caseInstead,
+        unique: unique,
         hold: hold,
         release: release,
         copy: copy,
@@ -88,6 +95,7 @@ extension NativeActionImplementationParameter {
       syntaxNode: syntaxNode,
       typeInstead: typeLookup[name] ?? typeInstead?.specializing(typeLookup: typeLookup),
       caseInstead: typeLookup[name] ?? caseInstead?.specializing(typeLookup: typeLookup),
+      unique: unique,
       hold: hold,
       release: release,
       copy: copy,
