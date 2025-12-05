@@ -379,9 +379,9 @@ extension Platform {
   }
 
   static func nativeIsProperty(action: ActionIntermediate) -> Bool {
-    if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
-      if let override = overridePrefix.map({ StrictString($0) }),
-         name.hasPrefix(override) {
+    if var name = nativeNameDeclaration(of: action) {
+      if let override = overridePrefix,
+         name.starts(with: override) {
         name.removeFirst(override.count)
       }
       if let variable = variablePrefix {
@@ -407,13 +407,13 @@ extension Platform {
   }
 
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
-    if var name = nativeNameDeclaration(of: action).map({ StrictString($0) }) {
-      if let override = overridePrefix.map({ StrictString($0) }),
-         name.hasPrefix(override) {
+    if var name = nativeNameDeclaration(of: action) {
+      if let override = overridePrefix,
+         name.starts(with: override) {
         name.removeFirst(override.count)
       }
-      if let variable = variablePrefix.map({ StrictString($0) }),
-         name.hasPrefix(variable) {
+      if let variable = variablePrefix,
+         name.starts(with: variable) {
         name.removeFirst(variable.count)
       }
       if let member = memberPrefix,

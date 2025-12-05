@@ -1,5 +1,3 @@
-import SDGText
-
 extension ParsedActionReference {
 
   func identifierSegments() -> [ParsedIdentifierSegment?] {
@@ -14,7 +12,7 @@ extension ParsedActionReference {
 
   func identifierText() -> UnicodeText {
     return UnicodeText(
-      identifierSegments().lazy.map({ ($0?.identifierText()).map({ StrictString($0) }) ?? "" }).joined(separator: "()")
+      identifierSegments().lazy.map({ $0?.identifierText() ?? "" }).joined(separator: "()".unicodeScalars)
     )
   }
 }

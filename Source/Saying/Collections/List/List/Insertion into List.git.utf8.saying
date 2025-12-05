@@ -11,7 +11,8 @@ ability (clients)
     }
    ]
    (
-    English: replace (range: range of (boundary)) in (list: ↓ list) with (insertion: insertion)
+    English: replace (range: range of (boundary)) in (list: ↓ list) with (replacement: insertion)
+    Swift: (self: [list]).replaceSubrange (subrange: [range]) with (newElements: [replacement])
    )
 
   choice (clients)
@@ -22,12 +23,13 @@ ability (clients)
     }
    ]
    (
-    English: (list: list) with (range: range of (boundary)) replaced with (insertion: insertion)
+    English: (list: list) with (range: range of (boundary)) replaced with (replacement: insertion)
+    Swift: (self: [list]).replacingSubrange (subrange: [range]) with (newElements: [replacement])
    )
    list
    {
     let (• copy: list) start as (list)
-    replace (range) in (↓ copy) with (insertion)
+    replace (range) in (↓ copy) with (replacement)
     ← copy
    }
 
@@ -40,6 +42,7 @@ ability (clients)
    ]
    (
     English: insert (insertion: insertion) at (boundary: boundary) in (list: ↓ list)
+    Swift: (self: [list]).insert contentsOf (newElements: [insertion]) at (i: [boundary])
    )
    {
     insert (insertion) at (boundary) in (↓ list) according to list insertion
@@ -54,6 +57,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (insertion: insertion) inserted at (boundary: boundary)
+    Swift: (self: [list]).inserting contentsOf (newElements: [insertion]) at (boundary: [boundary])
    )
    list
    {
@@ -69,6 +73,7 @@ ability (clients)
    ]
    (
     English: append (appendix: insertion) to (list: ↓ list)
+    Swift: (self: [list]).append contentsOf (newElements: [appendix])
    )
    {
     replace (from (end of (list)) to (end of (list))) in (↓ list) with (appendix)
@@ -80,6 +85,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (appendix: insertion) appended
+    Swift: (self: [list]).appending contentsOf (newElements: [appendix])
    )
    list
    {
@@ -95,6 +101,7 @@ ability (clients)
    ]
    (
     English: prepend (prefix: insertion) to (list: ↓ list)
+    Swift: (self: [list]).prepend contentsOf (newElements: [prefix])
    )
    {
     prepend (prefix) to (↓ list) according to list insertion
@@ -106,6 +113,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (prefix: insertion) prepended
+    Swift: (self: [list]).prepending contentsOf (newElements: [prefix])
    )
    list
    {
@@ -118,6 +126,7 @@ ability (clients)
    ]
    (
     English: convert (other: insertion) into list
+    Swift: Self.init (other: [other])
    )
    list
    {

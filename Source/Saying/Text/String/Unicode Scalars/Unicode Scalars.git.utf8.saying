@@ -571,6 +571,7 @@ action (clients)
  ]
  (
   English: decompose (scalars: ↓ Unicode scalars) according to compatibility decomposition
+  Swift: (self: [scalars]).decomposeAccordingToCompatibilityDecomposition
  )
  {
   change (↓ scalars) to (compatibility decomposition of (scalars))

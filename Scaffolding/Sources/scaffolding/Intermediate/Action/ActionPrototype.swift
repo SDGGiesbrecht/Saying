@@ -78,11 +78,11 @@ extension ActionPrototype {
       case "Swift":
         nativeNames.swift = name
         var remainder = StrictString(name)
-        if remainder.hasPrefix("var ") {
+        if remainder.starts(with: "var ".unicodeScalars) {
           remainder.removeFirst(4)
         }
         var labels: [StrictString] = []
-        if remainder.hasPrefix("().") {
+        if remainder.starts(with: "().".unicodeScalars) {
           remainder.removeFirst(3)
           labels.append("")
         }

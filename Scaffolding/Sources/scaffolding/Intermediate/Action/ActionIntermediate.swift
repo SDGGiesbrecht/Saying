@@ -98,8 +98,8 @@ extension ActionIntermediate {
   ) -> UnicodeText {
     return UnicodeText(
       globallyUniqueIdentifierComponents
-        .lazy.map({ StrictString(referenceLookup.resolve(identifier: $0)) })
-        .joined(separator: ":")
+        .lazy.map({ referenceLookup.resolve(identifier: $0) })
+        .joined(separator: ":".unicodeScalars)
     )
   }
 
@@ -1040,9 +1040,11 @@ extension ActionIntermediate {
   }
 
   func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
-    let namespace = prototype.namespace
-      .lazy.map({ StrictString($0.identifier()) })
-      .joined(separator: ":")
+    let namespace = UnicodeText(
+      prototype.namespace
+        .lazy.map({ $0.identifier() })
+        .joined(separator: ":".unicodeScalars)
+      )
     let identifier: UnicodeText
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
       identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceLookup: referenceLookup)
@@ -1050,8 +1052,8 @@ extension ActionIntermediate {
       identifier = globallyUniqueIdentifier(referenceLookup: referenceLookup)
     }
     return UnicodeText(
-      [namespace, StrictString(identifier)]
-        .joined(separator: ":")
+      [namespace, identifier]
+        .joined(separator: ":".unicodeScalars)
     )
   }
 
@@ -1084,24 +1086,24 @@ extension ActionIntermediate {
     }
     var name = StrictString(nameDeclaration)
     if let overridePrefix = platform.overridePrefix,
-      name.hasPrefix(StrictString(overridePrefix)) {
+      name.starts(with: overridePrefix) {
       name.removeFirst(overridePrefix.count)
     }
     var isVariable = false
     if let variablePrefix = platform.variablePrefix,
-      name.hasPrefix(StrictString(variablePrefix)) {
+      name.starts(with: variablePrefix) {
         name.removeFirst(variablePrefix.count)
         isVariable = true
     }
     if let memberPrefix = platform.memberPrefix,
-      name.hasPrefix(StrictString(memberPrefix)) {
+      name.starts(with: memberPrefix) {
       name.removeFirst(memberPrefix.count)
     }
     var disambiguatorParameters: [Int] = []
     if !platform.permitsOverloads {
       while let typePrefix = name.prefix(upTo: " "),
         typePrefix.contents.allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
-        let parsedNumber = Int(String(StrictString(typePrefix.contents))) {
+        let parsedNumber = Int(String(UnicodeText(typePrefix.contents))) {
           disambiguatorParameters.append(parsedNumber)
           name.removeFirst(typePrefix.contents.count)
           name.removeFirst()
@@ -1170,7 +1172,7 @@ extension ActionIntermediate {
     }
     let components = identifier.components(separatedBy: ":")
     var parameters = self.parameters.ordered(for: name)
-    var result: StrictString = ""
+    var result: UnicodeText = ""
     if components.count == parameters.count {
       let selfType = parameters.removeFirst()
       result.prepend(contentsOf: Swift.source(for: selfType.type, referenceLookup: referenceLookup).scalars)
@@ -1185,7 +1187,7 @@ extension ActionIntermediate {
       result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
     }
     result.append(contentsOf: components.last!.contents)
-    if result.hasPrefix("init(") {
+    if result.starts(with: "init(".unicodeScalars) {
       result.prepend(contentsOf: ".".scalars)
       result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).scalars)
     }

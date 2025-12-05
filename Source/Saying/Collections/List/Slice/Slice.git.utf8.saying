@@ -33,7 +33,7 @@ extension
       English: bounds
      )
      range of (boundary)
-     Swift: “{let slice = ” . “; return slice.startIndex ..< slice.endIndex}()”
+     Swift: “{ let slice = ” . “; return slice.startIndex ..< slice.endIndex }()”
    }
 
   action (clients)

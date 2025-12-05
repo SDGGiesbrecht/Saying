@@ -1,5 +1,3 @@
-import SDGText
-
 extension ParsedModifiedImplementationParameter {
   
   func identifierSegments() -> [ParsedIdentifierSegment?] {
@@ -12,8 +10,8 @@ extension ParsedModifiedImplementationParameter {
   func identifierText() -> UnicodeText {
     return UnicodeText(
       identifierSegments()
-        .lazy.map({ ($0?.identifierText()).map({ StrictString($0) }) ?? "" })
-        .joined(separator: "()")
+        .lazy.map({ $0?.identifierText() ?? "" })
+        .joined(separator: "()".unicodeScalars)
     )
   }
 }
