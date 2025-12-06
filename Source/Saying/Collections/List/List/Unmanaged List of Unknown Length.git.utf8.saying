@@ -1,0 +1,95 @@
+extension
+ general containers of (thing)
+ {
+  thing (unit)
+   [
+    test {
+     let (• list: unmanaged list of (thing) of unknown length) be (allocate memory up to (end of list containing (one: natural number) entries): unmanaged list of (thing) of unknown length)
+     deallocate memory of (list)
+    }
+   ]
+   (
+    English: unmanaged list of (thing) of unknown length
+   )
+   C: “” thing “¤(2A)”
+   {
+    part (file)
+     (
+      English: list
+     )
+     list of (thing)
+   }
+
+  action (file)
+   (
+    English: unmanaged (list: list of (thing))
+   )
+   unmanaged list of (thing) of unknown length
+   create
+
+  use (unit)
+   general use of (unmanaged list of (thing) of unknown length)
+   {
+   }
+
+  action (file)
+   (
+    English: unallocated
+   )
+   unmanaged list of (thing) of unknown length
+   C: “NULL” (“stddef”)
+   {
+    ← unmanaged (empty: list of (thing))
+   }
+
+  action (file)
+   (
+    English: (first: unmanaged list of (thing) of unknown length) and (second: unmanaged list of (thing) of unknown length) share address
+   )
+   truth value
+   C: “” first “ == ” second “”
+   {
+    ← false
+   }
+
+  action (file)
+   (
+    English: allocate memory up to (end: list boundary) skipping success check
+   )
+   unmanaged list of (thing) of unknown length
+   C: “malloc(” end “ ¤(2A) sizeof(” thing “))” (“stdlib”)
+   {
+    ← unmanaged (empty: list of (thing))
+   }
+
+  action (unit)
+   (
+    English: allocate memory up to (end: list boundary)
+   )
+   unmanaged list of (thing) of unknown length
+   {
+    let (• memory: unmanaged list of (thing) of unknown length) be (allocate memory up to (end) skipping success check: unmanaged list of (thing) of unknown length)
+    if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), {
+     !
+    }
+    ← memory
+   }
+
+  action (unit)
+   (
+    English: deallocate memory of (list: unmanaged list of (thing) of unknown length)
+   )
+   C: “free(” list “)”
+   {}
+ }
+
+action (unit)
+ (
+  English: end of list containing (end: natural number) entries
+ )
+ list boundary
+ C: “(size¤(5F)t)” end “”
+ C♯: “(int)” end “”
+ JavaScript: “” end “”
+ Kotlin: “” end “.toInt()”
+ Swift: “Int(” end “)”
