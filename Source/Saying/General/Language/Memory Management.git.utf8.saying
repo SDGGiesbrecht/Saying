@@ -1,4 +1,4 @@
-thing (file)
+thing (unit)
  [
   [
    English: A tracker that can be used to trace and test reference counting done by the Saying compiler.
@@ -13,7 +13,7 @@ thing (file)
    hold (tracker)
    verify (reference count of (tracker) is (one: platform fixed‐width integer))
   }
-  test {
+  test (hidden) {
    let (• original: reference tracker) be (create reference tracker)
    hold (original)
    hold (original)
@@ -44,7 +44,7 @@ thing (file)
  {
  }
 
-action (file)
+action (unit)
  [
   [
    English: Creates a reference tracker with its reference count still at zero.
@@ -57,12 +57,23 @@ action (file)
  C: “create¤(5F)reference¤(5F)tracker()” {“reference¤(5F)tracker¤(2A) create¤(5F)reference¤(5F)tracker()¤(A){¤(A)reference¤(5F)tracker¤(2A) tracker = malloc(sizeof(reference¤(5F)tracker));¤(A)if (!tracker)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)tracker = (reference¤(5F)tracker) {1, 1};¤(A)return tracker;¤(A)}”}
  create
 
-use (file)
+use (unit)
  general use of (reference tracker)
  {
  }
 
-action (file)
+use (unit)
+ general containers of (reference tracker)
+ {
+  action (unit)
+   example
+   reference tracker
+   {
+    ← create reference tracker
+   }
+ }
+
+action (unit)
  [
   [
    English: Restarts the reference tracker and returns it at a count of one as though it were freshly created.
@@ -77,21 +88,21 @@ action (file)
   ← tracker
  }
 
-action (file)
+action (unit)
  (
   English: hold (tracker: reference tracker)
  )
  C: “hold¤(5F)reference¤(5F)tracker(” tracker “)”
  {}
 
-action (file)
+action (unit)
  (
   English: release (tracker: reference tracker)
  )
  C: “release¤(5F)reference¤(5F)tracker(” tracker “)”
  {}
 
-action (file)
+action (unit)
  [
   [
    English: Compares the reference count, but only on platforms where the Saying compiler is responsible for reference counting.
@@ -383,7 +394,7 @@ action (file) (tests)
   ignore (enumeration)
  }
 
-action (file)
+action (unit)
  (
   English: two
  )
@@ -394,7 +405,7 @@ action (file)
  Kotlin: “2”
  Swift: “2”
 
-action (file)
+action (unit)
  (
   English: three
  )

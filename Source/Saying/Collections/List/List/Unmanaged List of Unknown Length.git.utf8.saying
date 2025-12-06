@@ -3,9 +3,30 @@ extension
  {
   thing (unit)
    [
+    [
+     English: A rudimentary list whose memory and length must be managed manually.
+    ]
+    [
+     English: Never attempt to access any index outside of the allocated range.
+    ]
+    [
+     English: While the lifetime of the list itself is the reponsibility of the developer, ownership of individual entries is managed automatically by the compiler. However, for it to work properly, two rules must be followed. (1) Indices must be initialized before being accessed in any other way. (2) At clean‐up, the specified endpoint must encompass all initialized indices and none that are uninitialized.
+    ]
     test {
-     let (• list: unmanaged list of (thing) of unknown length) be (allocate memory up to (end of list containing (one: natural number) entries): unmanaged list of (thing) of unknown length)
-     deallocate memory of (list)
+     let (• end: list boundary) be (end of list containing (one: natural number) entries)
+     let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (end): unmanaged list of (reference tracker) of unknown length)
+     let (• first index: list index) be (index after (beginning of (list)) in (list) skipping bounds check)
+     let (• original tracker: reference tracker) be (create reference tracker)
+     initialize entry at (first index) in (↓ list) to (restart (original tracker))
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     ignore (entry at (first index) in (list))
+     verify (reference count of (original tracker) is (three: platform fixed‐width integer))
+     let (• replacement tracker: reference tracker) be (create reference tracker)
+     replace (first index) in (↓ list) with (restart (replacement tracker))
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
+     clean (list) up up to (end)
+     verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
     }
    ]
    (
@@ -15,14 +36,14 @@ extension
    {
     part (file)
      (
-      English: list
+      English: managed
      )
      list of (thing)
    }
 
   action (file)
    (
-    English: unmanaged (list: list of (thing))
+    English: unmanaged (managed: list of (thing))
    )
    unmanaged list of (thing) of unknown length
    create
@@ -59,7 +80,11 @@ extension
    unmanaged list of (thing) of unknown length
    C: “malloc(” end “ ¤(2A) sizeof(” thing “))” (“stdlib”)
    {
-    ← unmanaged (empty: list of (thing))
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    while ((end of (list)) is less than (end)), {
+     append (example: thing) to (↓ list)
+    }
+    ← unmanaged (list)
    }
 
   action (unit)
@@ -77,10 +102,94 @@ extension
 
   action (unit)
    (
+    English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
+   )
+   C: “” list “[” index “] = ” hold on (element) “”
+   {
+    replace (index) in (↓ (managed) of (list)) with (element)
+   }
+
+  action (file)
+   (
+    English: release entry (entry: thing)
+   )
+   C: “” release of (entry) “”
+   {}
+
+  action (file)
+   (
     English: deallocate memory of (list: unmanaged list of (thing) of unknown length)
    )
    C: “free(” list “)”
    {}
+
+  action (unit)
+   (
+    English: clean (list: unmanaged list of (thing) of unknown length) up up to (end: list boundary)
+   )
+   {
+    let (• cursor: list boundary) start as (beginning of (list))
+    while ((cursor) is less than (end)), {
+     release entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
+     advance (↓ cursor) to next in (list) skipping bounds check
+    }
+    deallocate memory of (list)
+   }
+
+  action (unit)
+   (
+    English: index after (boundary: list boundary) in (list: unmanaged list of (thing) of unknown length) skipping bounds check
+    Swift: (self: [list]).indexSkippingBoundsCheck afterBoundary (boundary: [boundary])
+   )
+   list index
+   C: “” boundary “”
+   {
+    ← index after (boundary) in ((managed) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: beginning of (list: unmanaged list of (thing) of unknown length)
+    Deutsch: Anfang von (Liste: [list])
+    français : début de (liste: [list])
+    ελληνικά: αρχή (κατάλογος: [list])
+    Swift: var (self: [list]).startIndex
+   )
+   list boundary
+   C: “0”
+   {
+    ← beginning of ((managed) of (list))
+   }
+
+  action (unit)
+   (
+    English: advance (cursor: ↓ list boundary) to next in (list: unmanaged list of (thing) of unknown length) skipping bounds check
+    Swift: (self: [list]).formIndex after (i: [cursor])
+   )
+   C: “++” cursor “”
+   {
+    advance (↓ cursor) to next in ((managed) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: entry at (index: list index) in (list: unmanaged list of (thing) of unknown length)
+    Swift: (self: [list]).subscript entryIndex (index: [index])
+   )
+   thing
+   C: “” hold on (thing) “” list “[” index “]”
+   {
+    ← entry at (index) in ((managed) of (list))
+   }
+
+  action (unit)
+   (
+    English: replace (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) with (element: thing)
+   )
+   {
+    release entry (entry at (index) in (list))
+    initialize entry at (index) in (↓ list) to (element)
+   }
  }
 
 action (unit)
