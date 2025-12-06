@@ -2,7 +2,7 @@ thing (clients)
  (
   English: list index
  )
- C: “guint” (“glib¤(2D)2.0”)
+ C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
@@ -73,7 +73,7 @@ action (file)
  ]
  direct hash value of (index: list index)
  hash value
- C: “” index “”
+ C: “(guint)” index “”
  C♯: “” index “”
  JavaScript: “” index “”
  Kotlin: “” index “”
