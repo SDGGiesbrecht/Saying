@@ -243,9 +243,9 @@ action (file) (tests)
  )
  {
   let (• changeable: reference tracker) start as (restart (tracker)) without copying
-  verify (reference count of (changeable) is (two))
+  verify (reference count of (changeable) is (two: platform fixed‐width integer))
   accept reference (↓ accessor of (changeable)) as through parameter at reference count of (two: platform fixed‐width integer)
-  verify (reference count of (changeable) is (two))
+  verify (reference count of (changeable) is (two: platform fixed‐width integer))
   ignore (changeable)
  }
 
@@ -264,15 +264,15 @@ action (file) (tests)
  )
  {
   let (• changeable: reference tracker) start as (restart (original)) without copying
-  verify (reference count of (original) is (two))
-  verify (reference count of (changeable) is (two))
+  verify (reference count of (original) is (two: platform fixed‐width integer))
+  verify (reference count of (changeable) is (two: platform fixed‐width integer))
   hold (original)
   hold (original)
   verify (reference count of (original) is (four))
   verify (reference count of (changeable) is (four))
   change (↓ changeable) to (restart (replacement))
   verify (reference count of (original) is (three))
-  verify (reference count of (changeable) is (two))
+  verify (reference count of (changeable) is (two: platform fixed‐width integer))
   release (original)
   release (original)
  }
@@ -283,8 +283,8 @@ action (file) (tests)
    let (• original: reference tracker) be (create reference tracker)
    verify (reference count of (original) is (one: platform fixed‐width integer))
    let (• reference: reference tracker) start as (original) without copying
-   verify (reference count of (original) is (two))
-   verify (reference count of (reference) is (two))
+   verify (reference count of (original) is (two: platform fixed‐width integer))
+   verify (reference count of (reference) is (two: platform fixed‐width integer))
    change passed reference (↓ reference)
    verify (reference count of (original) is (one: platform fixed‐width integer))
    verify (reference count of (reference) is (one: platform fixed‐width integer))
@@ -294,9 +294,9 @@ action (file) (tests)
   English: change passed reference (reference: ↓ reference tracker)
  )
  {
-  verify (reference count of (reference) is (two))
+  verify (reference count of (reference) is (two: platform fixed‐width integer))
   change (↓ reference) to (create reference tracker)
-  verify (reference count of (reference) is (two))
+  verify (reference count of (reference) is (two: platform fixed‐width integer))
  }
 
 thing (file)
@@ -336,7 +336,7 @@ action (file) (tests)
  )
  {
   let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
-  verify (reference count of (tracker) is (two))
+  verify (reference count of (tracker) is (two: platform fixed‐width integer))
   ignore (thing)
  }
 
@@ -346,9 +346,9 @@ action (file) (tests)
    let (• tracker: reference tracker) be (create reference tracker)
    verify (reference count of (tracker) is (one: platform fixed‐width integer))
    let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
-   verify (reference count of (tracker) is (two))
+   verify (reference count of (tracker) is (two: platform fixed‐width integer))
    withdraw reference from (thing) at reference count of (three)
-   verify (reference count of (tracker) is (two))
+   verify (reference count of (tracker) is (two: platform fixed‐width integer))
   }
  ]
  (
@@ -390,39 +390,6 @@ action (file) (tests)
  )
  {
   let (• enumeration: enumeration with reference case) be (wrap (tracker) as (reference))
-  verify (reference count of (tracker) is (two))
+  verify (reference count of (tracker) is (two: platform fixed‐width integer))
   ignore (enumeration)
  }
-
-action (unit)
- (
-  English: two
- )
- platform fixed‐width integer
- C: “2”
- C♯: “2”
- JavaScript: “2”
- Kotlin: “2”
- Swift: “2”
-
-action (unit)
- (
-  English: three
- )
- platform fixed‐width integer
- C: “3”
- C♯: “3”
- JavaScript: “3”
- Kotlin: “3”
- Swift: “3”
-
-action (file)
- (
-  English: four
- )
- platform fixed‐width integer
- C: “4”
- C♯: “4”
- JavaScript: “4”
- Kotlin: “4”
- Swift: “4”

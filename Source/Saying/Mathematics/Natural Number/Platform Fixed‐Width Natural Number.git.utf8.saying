@@ -163,3 +163,36 @@ use (clients)
    Kotlin: “1u”
    Swift: “1”
  }
+
+action (unit)
+ (
+  English: two
+ )
+ platform fixed‐width integer
+ C: “2”
+ C♯: “2”
+ JavaScript: “2”
+ Kotlin: “2u”
+ Swift: “2”
+
+action (unit)
+ (
+  English: three
+ )
+ platform fixed‐width integer
+ C: “3”
+ C♯: “3”
+ JavaScript: “3”
+ Kotlin: “3u”
+ Swift: “3”
+
+action (unit)
+ (
+  English: four
+ )
+ platform fixed‐width integer
+ C: “4”
+ C♯: “4”
+ JavaScript: “4”
+ Kotlin: “4u”
+ Swift: “4”
