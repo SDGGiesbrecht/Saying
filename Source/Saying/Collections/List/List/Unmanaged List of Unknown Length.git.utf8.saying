@@ -226,9 +226,9 @@ flow (file)
   English: if (condition: truth value), abort due to memory allocation failure
  )
  C: “if (” condition “)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc([...]) == NULL¤(22));¤(A)}” (
-  “err”
-  “stdlib”
- )
+   “err”
+   “stdlib”
+  )
  {
   if (condition), {
    !
