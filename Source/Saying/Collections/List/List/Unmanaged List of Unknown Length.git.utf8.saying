@@ -94,9 +94,7 @@ extension
    unmanaged list of (thing) of unknown length
    {
     let (• memory: unmanaged list of (thing) of unknown length) be (allocate memory up to (end) skipping success check: unmanaged list of (thing) of unknown length)
-    if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), {
-     !
-    }
+    if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), abort due to memory allocation failure
     ← memory
    }
 
@@ -134,6 +132,37 @@ extension
      advance (↓ cursor) to next in (list) skipping bounds check
     }
     deallocate memory of (list)
+   }
+
+  action (file)
+   (
+    English: reallocate memory of (list: unmanaged list of (thing) of unknown length) up to (end: list boundary) skipping success check
+   )
+   unmanaged list of (thing) of unknown length
+   C: “realloc(” list “, ” end “ ¤(2A) sizeof(” thing “))” (“stdlib”)
+   {
+    let (• copy: unmanaged list of (thing) of unknown length) start as (list)
+    while ((end of ((managed) of (copy))) is less than (end)), {
+     append (example: thing) to (↓ (managed) of (copy))
+    }
+    ← copy
+   }
+
+  action (unit)
+   [
+    test {
+     let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (end of list containing (one: natural number) entries): unmanaged list of (reference tracker) of unknown length)
+     reallocate memory of (↓ list) up to (end of list containing (two: natural number) entries)
+     clean (list) up up to (end of list containing (zero: natural number) entries)
+    }
+   ]
+   (
+    English: reallocate memory of (list: ↓ unmanaged list of (thing) of unknown length) up to (end: list boundary)
+   )
+   {
+    let (• memory: unmanaged list of (thing) of unknown length) be (reallocate memory of (list) up to (end) skipping success check: unmanaged list of (thing) of unknown length)
+    if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), abort due to memory allocation failure
+    change (↓ list) to (memory)
    }
 
   action (unit)
@@ -190,6 +219,20 @@ extension
     release entry (entry at (index) in (list))
     initialize entry at (index) in (↓ list) to (element)
    }
+ }
+
+flow (file)
+ (
+  English: if (condition: truth value), abort due to memory allocation failure
+ )
+ C: “if (” condition “)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc([...]) == NULL¤(22));¤(A)}” (
+   “err”
+   “stdlib”
+  )
+ {
+  if (condition), {
+   !
+  }
  }
 
 action (unit)
