@@ -2,7 +2,7 @@ struct StatementIntermediate {
   var isReturn: Bool
   var action: ActionUse?
   var isDeadEnd: Bool {
-    return action == nil
+    return !isReturn && action == nil
   }
 }
 
@@ -21,6 +21,9 @@ extension StatementIntermediate {
       case .success(let constructed):
         action = constructed
       }
+    case .emptyReturn:
+      isReturn = true
+      action = nil
     case .deadEnd:
       isReturn = false
       action = nil
