@@ -236,3 +236,47 @@ use (clients)
    Kotlin: “1L”
    Swift: “1”
  }
+
+use (clients)
+ incrementation of (integer)
+ {
+  action (clients)
+   (
+    English: increment (value: ↓ integer)
+   )
+   C: “++” value “”
+   C♯: “++” value “”
+   JavaScript: “++” value “”
+   Kotlin: “++” value “”
+   {
+    add (one: integer) to (↓ value)
+   }
+
+  action (clients)
+   (
+    English: decrement (value: ↓ integer) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” value “”
+   C♯: “¤(2D)¤(2D)” value “”
+   JavaScript: “¤(2D)¤(2D)” value “”
+   Kotlin: “¤(2D)¤(2D)” value “”
+   Swift: “” value “ ¤(2D)= 1”
+
+  action (clients)
+   (
+    English: can decrement (value: integer)
+   )
+   truth value
+   {
+    ← true
+   }
+
+  action (clients)
+   (
+    English: successor example
+   )
+   integer
+   {
+    ← one
+   }
+ }

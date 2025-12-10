@@ -158,6 +158,48 @@ use (clients)
    Swift: “1”
  }
 
+use (clients)
+ incrementation of (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: increment (value: ↓ platform fixed‐width integer)
+   )
+   C: “++” value “”
+   C♯: “++” value “”
+   JavaScript: “++” value “”
+   Kotlin: “++” value “”
+   Swift: “” value “ += 1”
+
+  action (clients)
+   (
+    English: decrement (value: ↓ platform fixed‐width integer) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” value “”
+   C♯: “¤(2D)¤(2D)” value “”
+   JavaScript: “¤(2D)¤(2D)” value “”
+   Kotlin: “¤(2D)¤(2D)” value “”
+   Swift: “” value “ ¤(2D)= 1”
+
+  action (clients)
+   (
+    English: can decrement (value: platform fixed‐width integer)
+   )
+   truth value
+   {
+    ← true
+   }
+
+  action (clients)
+   (
+    English: successor example
+   )
+   platform fixed‐width integer
+   {
+    ← one
+   }
+ }
+
 action (unit)
  (
   English: two

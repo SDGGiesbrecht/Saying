@@ -243,6 +243,50 @@ use (clients)
    Swift: “1”
  }
 
+use (clients)
+ incrementation of (natural number)
+ {
+  action (clients)
+   (
+    English: increment (value: ↓ natural number)
+   )
+   C: “++” value “”
+   C♯: “++” value “”
+   JavaScript: “++” value “”
+   Kotlin: “++” value “”
+   {
+    add (one: natural number) to (↓ value)
+   }
+
+  action (clients)
+   (
+    English: decrement (value: ↓ natural number) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” value “”
+   C♯: “¤(2D)¤(2D)” value “”
+   JavaScript: “¤(2D)¤(2D)” value “”
+   Kotlin: “¤(2D)¤(2D)” value “”
+   Swift: “” value “ ¤(2D)= 1”
+
+  action (clients)
+   (
+    English: can decrement (value: natural number)
+   )
+   truth value
+   {
+    ← (value) is greater than (zero: natural number)
+   }
+
+  action (clients)
+   (
+    English: successor example
+   )
+   natural number
+   {
+    ← one
+   }
+ }
+
 action (unit)
  (
   English: two
