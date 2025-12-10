@@ -271,6 +271,20 @@ extension UnicodeSegments {
   }
 }
 
+extension UnicodeSegments {
+  struct Boundary {
+    fileprivate let segment: Int
+    fileprivate let scalar: String.UnicodeScalarView.Index?
+
+    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
+      self.segment = segment
+      self.scalar = scalar
+    }
+  }
+}
+
+extension UnicodeSegments.Boundary: Comparable {}
+
 struct UnicodeSegments {
   fileprivate let segments: [Unicode_0020segment]
 
@@ -326,20 +340,6 @@ struct UnicodeSegments {
     return UnicodeSegments.Boundary(segment_0020cursor, nil)
   }
 }
-
-extension UnicodeSegments {
-  struct Boundary {
-    fileprivate let segment: Int
-    fileprivate let scalar: String.UnicodeScalarView.Index?
-
-    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
-      self.segment = segment
-      self.scalar = scalar
-    }
-  }
-}
-
-extension UnicodeSegments.Boundary: Comparable {}
 
 extension UnicodeSegments: Collection {}
 

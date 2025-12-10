@@ -125,6 +125,9 @@ extension ReferenceDictionary {
 
   func otherThingsRequiredByDeclaration(of thing: Thing) -> [UnicodeText] {
     var requirements: [ParsedTypeReference] = []
+    for parameter in thing.parameters.inAnyOrder {
+      requirements.append(parameter.resolvedType!)
+    }
     for enumerationCase in thing.cases {
       if let contents = enumerationCase.contents {
         requirements.append(contents)
