@@ -176,7 +176,7 @@ extension
    )
    {
     reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
-    change (↓ (limit) of (list)) to (new limit)
+    change ((limit) of (list)) to (new limit)
    }
 
   action (unit)
