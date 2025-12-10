@@ -1195,7 +1195,7 @@ extension Node {
             ])
           ),
           Node(
-            name: "ValidStatement",
+            name: "ActionStatement",
             kind: .compound(children: [
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "action", type: "Action", kind: .required),
@@ -1204,7 +1204,8 @@ extension Node {
           Node(
             name: "Statement",
             kind: .alternates([
-              Alternate(name: "valid", type: "ValidStatement"),
+              Alternate(name: "valid", type: "ActionStatement"),
+              Alternate(name: "emptyReturn", type: "YieldArrowCharacter"),
               Alternate(name: "deadEnd", type: "EmptyExclamation"),
             ])
           ),

@@ -1612,6 +1612,11 @@ extension Platform {
           existingReferences.insert(reference)
         }
       }
+    } else if statement.isReturn {
+      if !cleanUpCode.isEmpty {
+        entry.append(contentsOf: "\n" + cleanUpCode)
+      }
+      entry.append(contentsOf: self.statement(expression: "return"))
     } else {
       entry.append(contentsOf: deadEnd())
     }
