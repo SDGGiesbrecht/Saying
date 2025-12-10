@@ -1,0 +1,102 @@
+extension
+ general containers of (thing)
+ {
+  thing (unit)
+   [
+    [
+     English: A rudimentary list whose memory must be managed manually.
+    ]
+    [
+     English: While the lifetime of the list itself is the reponsibility of the developer, ownership of individual entries is managed automatically by the compiler.
+    ]
+    test {
+     let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
+     hold (↓ list)
+     release (↓ list)
+     release (↓ list)
+    }
+   ]
+   (
+    English: unmanaged list of (thing)
+   )
+   {
+    part (file)
+     (
+      English: uncounted
+     )
+     unmanaged list of (thing) of unknown length
+
+    part (file)
+     (
+      English: end
+     )
+     list boundary
+
+    part (file)
+     (
+      English: limit
+     )
+     list boundary
+
+    part (file)
+     (
+      English: references
+     )
+     platform fixed‐width natural number
+   }
+
+  action (file)
+   (
+    English: create unmanaged list with uncounted (uncounted: unmanaged list of (thing) of unknown length), end (end: list boundary), limit (limit: list boundary) and references (references: platform fixed‐width natural number)
+   )
+   unmanaged list of (thing)
+   create
+
+  use (unit)
+   general use of (unmanaged list of (thing))
+   {
+   }
+
+  action (file)
+   (
+    English: create unmanaged list with uncounted (uncounted: unmanaged list of (thing) of unknown length), end (end: list boundary) and limit (limit: list boundary)
+   )
+   unmanaged list of (thing)
+   {
+    ← create unmanaged list with uncounted (uncounted), end (end), limit (limit) and references (one: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: hold (list: ↓ unmanaged list of (thing))
+   )
+   {
+    increment (↓ (references) of (list))
+   }
+
+  action (file)
+   (
+    English: release (list: ↓ unmanaged list of (thing))
+   )
+   {
+    if (((references) of (list)) is less than (one: platform fixed‐width natural number)), {
+     !
+    }
+    decrement (↓ (references) of (list)) skipping underflow check
+    if (((references) of (list)) is (zero: platform fixed‐width natural number)), {
+     clean ((uncounted) of (list)) up up to ((end) of (list))
+    }
+   }
+
+  action (unit)
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   unmanaged list of (thing)
+   {
+    ← create unmanaged list with uncounted (unallocated: unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list)
+   }
+ }
