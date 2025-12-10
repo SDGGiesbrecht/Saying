@@ -188,7 +188,7 @@ extension
     ← unmanaged (empty: list of (thing))
    }
 
-  flow (file)
+  action (file)
    (
     English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match move of (range: range of (list boundary)) to (destination: list boundary)
    )
