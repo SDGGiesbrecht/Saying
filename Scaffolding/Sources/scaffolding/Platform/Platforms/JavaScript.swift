@@ -358,7 +358,7 @@ enum JavaScript: Platform {
       ])
     }
     result.append(contentsOf: [
-      "\(indent)console.assert(coverageRegions.size == 0, coverageRegions);",
+      "\(indent)console.assert(coverageRegions.size == 0, Array.from(coverageRegions));",
       "}"
     ])
     return result
