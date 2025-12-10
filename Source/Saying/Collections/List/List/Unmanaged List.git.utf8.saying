@@ -11,9 +11,22 @@ extension
     ]
     test {
      let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
+     let (• original tracker: reference tracker) be (create reference tracker)
+     insert (restart (original tracker)) at (beginning of (list)) in (↓ list)
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (one: natural number) entries))
      hold (↓ list)
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      release (↓ list)
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     let (• insertion tracker: reference tracker) be (create reference tracker)
+     insert (restart (insertion tracker)) at (beginning of (list)) in (↓ list)
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
      release (↓ list)
+     verify (reference count of (original tracker) is (one: platform fixed‐width integer))
+     verify (reference count of (insertion tracker) is (one: platform fixed‐width integer))
     }
    ]
    (
@@ -90,6 +103,63 @@ extension
 
   action (unit)
    (
+    English: index after (boundary: list boundary) in (list: unmanaged list of (thing)) skipping bounds check
+    Swift: (self: [list]).indexSkippingBoundsCheck afterBoundary (boundary: [boundary])
+   )
+   list index
+   {
+    ← index after (boundary) in ((uncounted) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: beginning of (list: unmanaged list of (thing))
+    Deutsch: Anfang von (Liste: [list])
+    français : début de (liste: [list])
+    ελληνικά: αρχή (κατάλογος: [list])
+    Swift: var (self: [list]).startIndex
+   )
+   list boundary
+   {
+    ← beginning of ((uncounted) of (list))
+   }
+
+  action (unit)
+   (
+    English: end of (list: unmanaged list of (thing))
+    Deutsch: Ende von (Liste: [list])
+    français : fin de (liste: [list])
+    ελληνικά: τέλος (κατάλογος: [list])
+    Swift: var (self: [list]).endIndex
+   )
+   list boundary
+   {
+    ← (end) of (list)
+   }
+
+  action (unit)
+   (
+    English: advance (cursor: ↓ list boundary) to next in (list: unmanaged list of (thing)) skipping bounds check
+    Swift: (self: [list]).formIndex after (i: [cursor])
+   )
+   {
+    advance (↓ cursor) to next in ((uncounted) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: boundary after (cursor: list boundary) in (list: unmanaged list of (thing)) skipping bounds check
+    Swift: (self: [list]).index after (i: [cursor])
+   )
+   list boundary
+   {
+    let (• copy: list boundary) start as (cursor)
+    advance (↓ copy) to next in (list) skipping bounds check
+    ← copy
+   }
+
+  action (unit)
+   (
     English: empty
     Deutsch: leer
     français : vide
@@ -99,4 +169,47 @@ extension
    {
     ← create unmanaged list with uncounted (unallocated: unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list)
    }
+
+  action (file)
+   (
+    English: resize storage of (list: ↓ unmanaged list of (thing)) to end at (new limit: list boundary)
+   )
+   {
+    reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
+    change (↓ (limit) of (list)) to (new limit)
+   }
+
+  action (unit)
+   (
+    English: insert (element: thing) at (boundary: list boundary) in (list: ↓ unmanaged list of (thing))
+   )
+   {
+    let (• original end: list boundary) be (end of (list))
+    if ((boundary) is greater than (original end)), {
+     !
+    }
+    if ((original end) is ((limit) of (list))), {
+     if ((original end) is (end of empty list)), {
+      resize storage of (↓ list) to end at (end of list containing one entry)
+     }, otherwise {
+      resize storage of (↓ list) to end at (double (original end))
+     }
+    }
+    if ((boundary) is not (original end)), {
+     move (from (boundary) to (original end)) to (boundary after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list))
+    }
+    initialize entry at (index after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list)) to (element)
+    advance (↓ (end) of (list)) to next in (list) skipping bounds check
+   }
  }
+
+action (file)
+ (
+  English: double (end: list boundary)
+ )
+ list boundary
+ C: “” end “ ¤(2A) 2”
+ C♯: “” end “ ¤(2A) 2”
+ JavaScript: “” end “ ¤(2A) 2”
+ Kotlin: “” end “ ¤(2A) 2”
+ Swift: “” end “ ¤(2A) 2”

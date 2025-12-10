@@ -171,6 +171,43 @@ extension
     change (↓ list) to (memory)
    }
 
+  action (file)
+   (
+    English: move memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
+   )
+   C: “memmove(” destination “, ” origin “, ” amount “ ¤(2A) sizeof(” thing “))” (“string”)
+   {}
+
+  action (file)
+   (
+    English: pointer to (boundary: list boundary) in (list: unmanaged list of (thing) of unknown length)
+   )
+   unmanaged list of (thing) of unknown length
+   C: “” list “ + ” boundary “”
+   {
+    ← unmanaged (empty: list of (thing))
+   }
+
+  flow (file)
+   (
+    English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match move of (range: range of (list boundary)) to (destination: list boundary)
+   )
+   C: “”
+   {
+    let (• extraction: slice of (list of (thing))) be ((range) in ((managed) of (list)))
+    let (• overwrite: range of (list boundary)) be (from (destination) to (distance (length of (range)) after (destination)))
+    replace (overwrite) in (↓ (managed) of (list)) with (extraction)
+   }
+
+  action (unit)
+   (
+    English: move (range: range of (list boundary)) to (destination: list boundary) in (list: ↓ unmanaged list of (thing) of unknown length)
+   )
+   {
+    move memory of (length of (range)) entries from (pointer to ((lower bound) of (range)) in (list)) to (pointer to (destination) in (list))
+    synchronize mock behind (↓ list) to match move of (range) to (destination)
+   }
+
   action (unit)
    (
     English: index after (boundary: list boundary) in (list: unmanaged list of (thing) of unknown length) skipping bounds check
@@ -260,4 +297,45 @@ action (unit)
  C: “0”
  {
   ← end of list containing (zero: natural number) entries
+ }
+
+action (unit)
+ (
+  English: end of list containing one entry
+ )
+ list boundary
+ C: “1”
+ {
+  ← end of list containing (one: natural number) entries
+ }
+
+action (file)
+ (
+  English: distance from (lower bound: list boundary) to (upper bound: list boundary)
+ )
+ list boundary
+ C: “” upper bound “ ¤(2D) ” lower bound “”
+ C♯: “” upper bound “ ¤(2D) ” lower bound “”
+ JavaScript: “” upper bound “ ¤(2D) ” lower bound “”
+ Kotlin: “” upper bound “ ¤(2D) ” lower bound “”
+ Swift: “” upper bound “ ¤(2D) ” lower bound “”
+
+action (file)
+ (
+  English: distance (distance: list boundary) after (boundary: list boundary)
+ )
+ list boundary
+ C: “” boundary “ + ” distance “”
+ C♯: “” boundary “ + ” distance “”
+ JavaScript: “” boundary “ + ” distance “”
+ Kotlin: “” boundary “ + ” distance “”
+ Swift: “” boundary “ + ” distance “”
+
+action (file)
+ (
+  English: length of (range: range of (list boundary))
+ )
+ list boundary
+ {
+  ← distance from ((lower bound) of (range)) to ((upper bound) of (range))
  }
