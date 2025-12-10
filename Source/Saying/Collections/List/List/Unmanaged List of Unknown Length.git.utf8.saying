@@ -321,6 +321,9 @@ action (file)
  Swift: “” upper bound “ ¤(2D) ” lower bound “”
 
 action (file)
+ [
+  test {verify ((distance (end of list containing (one: natural number) entries) after (end of list containing (one: natural number) entries)) is (end of list containing (two: natural number) entries))}
+ ]
  (
   English: distance (distance: list boundary) after (boundary: list boundary)
  )
