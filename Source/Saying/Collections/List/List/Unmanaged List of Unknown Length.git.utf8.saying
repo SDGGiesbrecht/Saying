@@ -42,6 +42,11 @@ extension
    }
 
   action (file)
+   [
+    test {
+     ignore (unmanaged (empty: list of (thing)))
+    }
+   ]
    (
     English: unmanaged (managed: list of (thing))
    )
