@@ -148,6 +148,17 @@ extension
      }
    }
 
+  action (clients)
+   (
+    English: boundary before (index: list index) in (list: list of (thing))
+   )
+   list boundary
+   C: “” index “”
+   C♯: “” index “”
+   JavaScript: “” index “”
+   Kotlin: “” index “”
+   Swift: “” index “”
+
   use (clients)
    slicing (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {

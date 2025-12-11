@@ -12,7 +12,8 @@ extension
     test {
      let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
      let (• original tracker: reference tracker) be (create reference tracker)
-     insert (restart (original tracker)) at (beginning of (list)) in (↓ list)
+     let (• beginning: list boundary)
+     insert (restart (original tracker)) at (beginning) in (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (one: natural number) entries))
      hold (↓ list)
@@ -20,13 +21,25 @@ extension
      release (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      let (• insertion tracker: reference tracker) be (create reference tracker)
-     insert (restart (insertion tracker)) at (beginning of (list)) in (↓ list)
+     insert (restart (insertion tracker)) at (beginning) in (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     let (• first: list index) be (index after (beginning) in (list) skipping bounds check)
+     ignore (entry at (first) in (list))
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (insertion tracker) is (three: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     let (• replacement tracker: reference tracker) be (create reference tracker)
+     replace (first) in (↓ list) with (restart (replacement tracker))
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (two: natural number) entries))
      release (↓ list)
      verify (reference count of (original tracker) is (one: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (one: platform fixed‐width integer))
+     verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
     }
    ]
    (
@@ -113,6 +126,15 @@ extension
 
   action (unit)
    (
+    English: boundary before (index: list index) in (list: unmanaged list of (thing))
+   )
+   list boundary
+   {
+    ← boundary before (index) in ((uncounted) of (list))
+   }
+
+  action (unit)
+   (
     English: beginning of (list: unmanaged list of (thing))
     Deutsch: Anfang von (Liste: [list])
     français : début de (liste: [list])
@@ -160,6 +182,19 @@ extension
 
   action (unit)
    (
+    English: entry at (index: list index) in (list: unmanaged list of (thing))
+    Swift: (self: [list]).subscript entryIndex (index: [index])
+   )
+   thing
+   {
+    if ((index) is within ((uncounted) of (list)) ending at ((end) of (list))), {
+     ← entry at (index) in ((uncounted) of (list))
+    }
+    !
+  }
+
+  action (unit)
+   (
     English: empty
     Deutsch: leer
     français : vide
@@ -168,6 +203,18 @@ extension
    unmanaged list of (thing)
    {
     ← create unmanaged list with uncounted (unallocated: unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list)
+   }
+
+  action (unit)
+   (
+    English: replace (index: list index) in (list: ↓ unmanaged list of (thing)) with (element: thing)
+   )
+   {
+    if ((index) is within ((uncounted) of (list)) ending at ((end) of (list))), {
+     replace (index) in (↓ (unmanaged) of (list)) with (element)
+    }, otherwise {
+     !
+    }
    }
 
   action (file)
