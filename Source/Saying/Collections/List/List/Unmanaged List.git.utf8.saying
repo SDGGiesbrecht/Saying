@@ -38,7 +38,7 @@ extension
      verify (((end) of (list)) is (end of list containing (two: natural number) entries))
      release (↓ list)
      verify (reference count of (original tracker) is (one: platform fixed‐width integer))
-     verify (reference count of (insertion tracker) is (one: platform fixed‐width integer))
+     verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
      verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
     }
    ]
