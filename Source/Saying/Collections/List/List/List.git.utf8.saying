@@ -148,6 +148,24 @@ extension
      }
    }
 
+  action (clients)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     let (• beginning: list boundary) be (beginning of (list))
+     verify ((boundary before (index after (beginning) in (list) skipping bounds check) in (list)) is (beginning))
+    }
+   ]
+   (
+    English: boundary before (index: list index) in (list: list of (thing))
+   )
+   list boundary
+   C: “” index “”
+   C♯: “” index “”
+   JavaScript: “” index “”
+   Kotlin: “” index “”
+   Swift: “” index “”
+
   use (clients)
    slicing (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {

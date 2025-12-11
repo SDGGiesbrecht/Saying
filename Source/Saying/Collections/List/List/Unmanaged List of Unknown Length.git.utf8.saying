@@ -221,6 +221,16 @@ extension
 
   action (unit)
    (
+    English: boundary before (index: list index) in (list: unmanaged list of (thing) of unknown length)
+   )
+   list boundary
+   C: “” index “”
+   {
+    ← boundary before (index) in ((managed) of (list))
+   }
+
+  action (unit)
+   (
     English: beginning of (list: unmanaged list of (thing) of unknown length)
     Deutsch: Anfang von (Liste: [list])
     français : début de (liste: [list])
@@ -241,6 +251,15 @@ extension
    C: “++” cursor “”
    {
     advance (↓ cursor) to next in ((managed) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: (index: list index) is within (list: unmanaged list of (thing) of unknown length) ending at (end: list boundary)
+   )
+   truth value
+   {
+    ← (boundary before (index) in (list)) is less than (end)
    }
 
   action (unit)
