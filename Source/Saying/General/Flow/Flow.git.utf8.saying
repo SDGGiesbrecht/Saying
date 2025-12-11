@@ -13,6 +13,16 @@ flow (clients)
  Swift: “if ” condition “ {” consequence “}”
 
 flow (clients)
+ (
+  English: if (condition: truth value), (consequence: {}), otherwise (alternative: {})
+ )
+ C: “if (” condition “) {” consequence “} else {” alternative “}”
+ C♯: “if (” condition “) {” consequence “} else {” alternative “}”
+ JavaScript: “if (” condition “) {” consequence “} else {” alternative “}”
+ Kotlin: “if (” condition “) {” consequence “} else {” alternative “}”
+ Swift: “if ” condition “ {” consequence “} else {” alternative “}”
+
+flow (clients)
  [
   test {
    let (• value: truth value) start as (true)
