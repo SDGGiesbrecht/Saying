@@ -153,7 +153,7 @@ extension
     test {
      let (• list: list of (thing)) be (non‐empty example: list of (thing))
      let (• beginning: list boundary) be (beginning of (list))
-     verify ((boundary before (index after (beginning) in (list) skipping bounds check)) is (beginning))
+     verify ((boundary before (index after (beginning) in (list) skipping bounds check) in (list)) is (beginning))
     }
    ]
    (
