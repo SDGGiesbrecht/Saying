@@ -12,7 +12,7 @@ extension
     test {
      let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
      let (• original tracker: reference tracker) be (create reference tracker)
-     let (• beginning: list boundary)
+     let (• beginning: list boundary) be (beginning of (list))
      insert (restart (original tracker)) at (beginning) in (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (one: natural number) entries))
@@ -211,7 +211,7 @@ extension
    )
    {
     if ((index) is within ((uncounted) of (list)) ending at ((end) of (list))), {
-     replace (index) in (↓ (unmanaged) of (list)) with (element)
+     replace (index) in (↓ (uncounted) of (list)) with (element)
     }, otherwise {
      !
     }
