@@ -213,7 +213,11 @@ extension
     English: resize storage of (list: ↓ unmanaged list of (thing)) to end at (new limit: list boundary)
    )
    {
-    reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
+    if (((limit) of (list)) is (end of empty list), {
+     change (↓ (uncounted) of (list)) to (allocate memory up to (new limit))
+    }, otherwise {
+     reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
+    }
     change ((limit) of (list)) to (new limit)
    }
 
