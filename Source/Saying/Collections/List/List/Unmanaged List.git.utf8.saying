@@ -126,15 +126,6 @@ extension
 
   action (unit)
    (
-    English: boundary before (index: list index) in (list: unmanaged list of (thing))
-   )
-   list boundary
-   {
-    ← boundary before (index) in ((uncounted) of (list))
-   }
-
-  action (unit)
-   (
     English: beginning of (list: unmanaged list of (thing))
     Deutsch: Anfang von (Liste: [list])
     français : début de (liste: [list])
