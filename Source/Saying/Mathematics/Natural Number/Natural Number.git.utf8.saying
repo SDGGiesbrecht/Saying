@@ -308,3 +308,14 @@ action (unit)
  JavaScript: “3”
  Kotlin: “3uL”
  Swift: “3”
+
+action (unit)
+ (
+  English: six
+ )
+ natural number
+ C: “6”
+ C♯: “6”
+ JavaScript: “6”
+ Kotlin: “6uL”
+ Swift: “6”
