@@ -110,7 +110,9 @@ extension
     }
     decrement (↓ (references) of (list)) skipping underflow check
     if (((references) of (list)) is (zero: platform fixed‐width natural number)), {
-     clean ((uncounted) of (list)) up up to ((end) of (list))
+     if (((limit) of (list)) is greater than (end of empty list)), {
+      clean ((uncounted) of (list)) up up to ((end) of (list))
+     }
     }
    }
 
