@@ -228,7 +228,7 @@ extension
    )
    {
     if (((limit) of (list)) is (end of empty list)), {
-     change (↓ (uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
+     change ((uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
     }, otherwise {
      reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
     }
