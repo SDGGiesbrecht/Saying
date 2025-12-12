@@ -92,7 +92,7 @@ extension
     ← create unmanaged list with uncounted (uncounted), end (end), limit (limit) and references (one: platform fixed‐width natural number)
    }
 
-  action (file)
+  action (unit)
    (
     English: hold (list: ↓ unmanaged list of (thing))
    )
@@ -100,7 +100,7 @@ extension
     increment (↓ (references) of (list))
    }
 
-  action (file)
+  action (unit)
    (
     English: release (list: ↓ unmanaged list of (thing))
    )
@@ -114,6 +114,36 @@ extension
       clean ((uncounted) of (list)) up up to ((end) of (list))
      }
     }
+   }
+
+  action (unit)
+   [
+    test {
+     let (• tracker: reference tracker) be (create reference tracker)
+     let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
+     insert (restart (tracker)) at (beginning of (list)) in (↓ list)
+     verify (reference count of (tracker) is (two: platform fixed‐width integer))
+     let (• copy: unmanaged list of (reference tracker)) start as (copy of (list))
+     verify (reference count of (tracker) is (three: platform fixed‐width integer))
+     release (↓ list)
+     verify (reference count of (tracker) is (two: platform fixed‐width integer))
+     release (↓ copy)
+     verify (reference count of (tracker) is (one: platform fixed‐width integer))
+    }
+    test {
+     let (• list: unmanaged list of (thing)) start as (copy of (empty: unmanaged list of (thing)))
+     release (↓ list)
+    }
+   ]
+   (
+    English: copy of (list: unmanaged list of (thing))
+   )
+   unmanaged list of (thing)
+   {
+    let (• copy: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
+    resize storage of (↓ copy) to end at ((end) of (list))
+    replace (from (end of empty list) to (end of empty list)) in (↓ copy) with (list)
+    ← copy
    }
 
   action (unit)
@@ -216,7 +246,9 @@ extension
    )
    {
     if (((limit) of (list)) is (end of empty list)), {
-     change ((uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
+     if ((new limit) is not (end of empty list)), {
+      change ((uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
+     }
     }, otherwise {
      reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
     }
