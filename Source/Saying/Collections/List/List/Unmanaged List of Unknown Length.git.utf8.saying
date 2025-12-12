@@ -113,6 +113,13 @@ extension
     replace (index) in (↓ (managed) of (list)) with (element)
    }
 
+  action (unit)
+   (
+    English: hold entry (entry: thing)
+   )
+   C: “” hold on (entry) “”
+   {}
+
   action (file)
    (
     English: release entry (entry: thing)
@@ -177,7 +184,7 @@ extension
 
   action (file)
    (
-    English: move memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
+    English: copy memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
    )
    C: “memmove(” destination “, ” origin “, ” amount “ ¤(2A) sizeof(” thing “))” (“string”)
    {}
@@ -194,13 +201,28 @@ extension
 
   action (file)
    (
-    English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match move of (range: range of (list boundary)) to (destination: list boundary)
+    English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match copy of (range: range of (list boundary)) from (origin: unmanaged list of (thing) of unknown length) to (destination: list boundary)
    )
    C: “”
    {
-    let (• extraction: slice of (list of (thing))) be ((range) in ((managed) of (list)))
+    let (• extraction: slice of (list of (thing))) be ((range) in ((managed) of (origin)))
     let (• overwrite: range of (list boundary)) be (from (destination) to (distance (length of (range)) after (destination)))
     replace (overwrite) in (↓ (managed) of (list)) with (extraction)
+   }
+
+  action (unit)
+   (
+    English: copy (range: range of (list boundary)) from (origin: unmanaged list of (thing) of unknown length) to (destination: list boundary) in (list: ↓ unmanaged list of (thing) of unknown length)
+   )
+   {
+    copy memory of (length of (range)) entries from (pointer to ((lower bound) of (range)) in (origin)) to (pointer to (destination) in (list))
+    synchronize mock behind (↓ list) to match copy of (range) from (origin) to (destination)
+    let (• cursor: list boundary) start as (destination)
+    let (• end: list boundary) be (distance (length of (range)) after (destination))
+    while ((cursor) is less than (end)), {
+     hold entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
+     advance (↓ cursor) to next in (list) skipping bounds check
+    }
    }
 
   action (unit)
@@ -208,8 +230,7 @@ extension
     English: move (range: range of (list boundary)) to (destination: list boundary) in (list: ↓ unmanaged list of (thing) of unknown length)
    )
    {
-    move memory of (length of (range)) entries from (pointer to ((lower bound) of (range)) in (list)) to (pointer to (destination) in (list))
-    synchronize mock behind (↓ list) to match move of (range) to (destination)
+    copy (range) from (list) to (destination) in (↓ list)
    }
 
   action (unit)
