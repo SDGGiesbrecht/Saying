@@ -262,7 +262,13 @@ extension
      verify (((end) of (list)) is (end of list containing (two: natural number) entries))
      replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
      verify (((end) of (list)) is (end of list containing (three: natural number) entries))
-     replace (from (beginning) to (end of (list))) in (↓ list) with (empty: unmanaged list of (thing))
+     let (• first: range of (list boundary)) be (from (beginning) to (boundary after (beginning) in (list) skipping bounds check))
+     replace (first) in (↓ list) with (empty: unmanaged list of (thing))
+     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     replace (first) in (↓ list) with (empty: unmanaged list of (thing))
+     verify (((end) of (list)) is (end of list containing one entry))
+     replace (first) in (↓ list) with (empty: unmanaged list of (thing))
+     verify (((end) of (list)) is (end of empty list))
      release (↓ list)
      release (↓ replacement)
     }
@@ -294,9 +300,8 @@ extension
     }
     change ((end) of (list)) to (new end)
     if ((new end) is less than (original end)), {
-     let (• smaller limit: list boundary) be (((limit) of (list)) shrunk by (growth factor))
-     if (((end) of (list)) is less than or equal to ((smaller limit) shrunk by (growth factor))), {
-      resize storage of (↓ list) to end at (smaller limit)
+     if ((new end) is less than or equal to ((((limit) of (list)) shrunk by (growth factor)) shrunk by (growth factor))), {
+      resize storage of (↓ list) to end at ((new end) grown by (growth factor))
      }
     }
     if ((length of replacement) is greater than (end of empty list)), {
