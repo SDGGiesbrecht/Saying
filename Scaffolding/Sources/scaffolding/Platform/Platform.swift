@@ -52,7 +52,7 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
-  static func nativeName(of thing: Thing) -> String?
+  static func nativeNameDeclaration(of thing: Thing) -> UnicodeText?
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func repair(compoundNativeType: String) -> String
   static func actionType(parameters: String, returnValue: String) -> String
@@ -285,6 +285,14 @@ extension Platform {
       .joined()
   }
 
+  static func nativeName(of thing: Thing, referenceLookup: [ReferenceDictionary]) -> String? {
+    if let identifier = thing.identifier(for: self, referenceLookup: referenceLookup) {
+      return String(identifier)
+    } else {
+      return nil
+    }
+  }
+
   static func isSimpleEnumeration(
     _ type: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary]
@@ -309,7 +317,7 @@ extension Platform {
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
         return String(UnicodeText(native.textComponents.joined()))
-      } else if let native = nativeName(of: type) {
+      } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
         return native
       } else {
         return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
@@ -492,7 +500,7 @@ extension Platform {
       return nil
     }
 
-    let name = nativeName(of: thing) ?? sanitize(
+    let name = nativeName(of: thing, referenceLookup: externalReferenceLookup) ?? sanitize(
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )

@@ -157,8 +157,8 @@ enum Swift: Platform {
     return nil
   }
 
-  static func nativeName(of thing: Thing) -> String? {
-    return thing.swiftName.map { String($0) }
+  static func nativeNameDeclaration(of thing: Thing) -> UnicodeText? {
+    return thing.swiftName
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.swift

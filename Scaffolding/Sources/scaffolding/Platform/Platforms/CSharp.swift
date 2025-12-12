@@ -132,7 +132,7 @@ enum CSharp: Platform {
     return true
   }
 
-  static func nativeName(of thing: Thing) -> String? {
+  static func nativeNameDeclaration(of thing: Thing) -> UnicodeText? {
     return nil
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
