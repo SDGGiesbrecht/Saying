@@ -232,3 +232,14 @@ action (unit)
  JavaScript: “4”
  Kotlin: “4”
  Swift: “4”
+
+action (unit)
+ (
+  English: five
+ )
+ platform fixed‐width integer
+ C: “5”
+ C♯: “5”
+ JavaScript: “5”
+ Kotlin: “5”
+ Swift: “5”

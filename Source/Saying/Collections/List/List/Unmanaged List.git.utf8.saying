@@ -36,11 +36,6 @@ extension
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
      verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (two: natural number) entries))
-     remove (first) from (↓ list)
-     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
-     verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
-     verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (one: natural number) entries))
      release (↓ list)
      verify (reference count of (original tracker) is (one: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
@@ -115,7 +110,9 @@ extension
     }
     decrement (↓ (references) of (list)) skipping underflow check
     if (((references) of (list)) is (zero: platform fixed‐width natural number)), {
-     clean ((uncounted) of (list)) up up to ((end) of (list))
+     if (((limit) of (list)) is greater than (end of empty list)), {
+      clean ((uncounted) of (list)) up up to ((end) of (list))
+     }
     }
    }
 
@@ -127,15 +124,6 @@ extension
    list index
    {
     ← index after (boundary) in ((uncounted) of (list)) skipping bounds check
-   }
-
-  action (unit)
-   (
-    English: boundary before (index: list index) in (list: unmanaged list of (thing))
-   )
-   list boundary
-   {
-    ← boundary before (index) in ((uncounted) of (list))
    }
 
   action (unit)
@@ -235,6 +223,16 @@ extension
     change ((limit) of (list)) to (new limit)
    }
 
+  action (file)
+   (
+    English: ensure enough storage for (new end: list boundary) in (list: ↓ unmanaged list of (thing))
+   )
+   {
+    if ((new end) is greater than ((limit) of (list))), {
+     resize storage of (↓ list) to end at ((new end) grown by (growth factor))
+    }
+   }
+
   action (unit)
    (
     English: insert (element: thing) at (boundary: list boundary) in (list: ↓ unmanaged list of (thing))
@@ -244,13 +242,8 @@ extension
     if ((boundary) is greater than (original end)), {
      !
     }
-    if ((original end) is ((limit) of (list))), {
-     if ((original end) is (end of empty list)), {
-      resize storage of (↓ list) to end at (end of list containing one entry)
-     }, otherwise {
-      resize storage of (↓ list) to end at ((original end) grown by (growth factor))
-     }
-    }
+    let (• new end: list boundary) be (distance (end of list containing one entry) after (original end))
+    ensure enough storage for (new end) in (↓ list)
     if ((boundary) is not (original end)), {
      move (from (boundary) to (original end)) to (boundary after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list))
     }
@@ -259,54 +252,78 @@ extension
    }
 
   action (unit)
-   (
-    English: remove (index: list index) from (list: ↓ unmanaged list of (thing))
-   )
-   {
-    let (• boundary before: list boundary) be (boundary before (index) in (list))
-    remove (from (boundary before) to (boundary after (boundary before) in (list) skipping bounds check)) from (↓ list)
-   }
-
-  action (unit)
    [
     test {
-     let (• list: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
-     let (• out of bounds: list boundary) be (end of list containing (two: natural number) entries)
-     remove (from (out of bounds) to (out of bounds)) from (↓ list)
+     let (• replacement: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
+     let (• tracker: reference tracker) be (create reference tracker)
+     insert (restart (tracker)) at (beginning of (replacement)) in (↓ replacement)
+     verify (reference count of (tracker) is (two: platform fixed‐width integer))
+     let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
      verify (((end) of (list)) is (end of empty list))
+     verify (((limit) of (list)) is (end of empty list))
      let (• beginning: list boundary) be (beginning of (list))
-     insert (example: thing) at (beginning) in (↓ list)
-     remove (from (end of empty list) to (out of bounds)) from (↓ list)
-     verify (((end) of (list)) is (end of empty list))
-     insert (example: thing) at (beginning) in (↓ list)
-     remove (from (end of list containing one entry) to (out of bounds)) from (↓ list)
+     replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
+     verify (reference count of (tracker) is (three: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing one entry))
+     verify (((limit) of (list)) is (end of list containing (two: natural number) entries))
+     replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
+     verify (reference count of (tracker) is (four: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((limit) of (list)) is (end of list containing (two: natural number) entries))
+     replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
+     verify (reference count of (tracker) is (five: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (three: natural number) entries))
+     verify (((limit) of (list)) is (end of list containing (six: natural number) entries))
+     let (• first: range of (list boundary)) be (from (beginning) to (boundary after (beginning) in (list) skipping bounds check))
+     replace (first) in (↓ list) with (empty: unmanaged list of (reference tracker))
+     verify (reference count of (tracker) is (four: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((limit) of (list)) is (end of list containing (six: natural number) entries))
+     replace (first) in (↓ list) with (empty: unmanaged list of (reference tracker))
+     verify (reference count of (tracker) is (three: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing one entry))
+     verify (((limit) of (list)) is (end of list containing (two: natural number) entries))
+     replace (first) in (↓ list) with (empty: unmanaged list of (reference tracker))
+     verify (reference count of (tracker) is (two: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of empty list))
+     verify (((limit) of (list)) is (end of empty list))
      release (↓ list)
+     release (↓ replacement)
     }
    ]
    (
-    English: remove (range: range of (list boundary)) from (list: ↓ unmanaged list of (thing))
+    English: replace (range: range of (list boundary)) in (list: ↓ unmanaged list of (thing)) with (replacement: unmanaged list of (thing))
+    Swift: (self: [list]).replaceSubrange (subrange: [range]) with (newElements: [replacement])
    )
    {
     let (• original end: list boundary) be ((end) of (list))
-    let (• beginning of range: list boundary) be ((lower bound) of (range))
-    if ((beginning of range) is greater than or equal to (original end)), {
-     ←
+    let (• beginning of removal: list boundary) be ((lower bound) of (range))
+    if ((beginning of removal) is greater than (original end)), {
+     !
     }
-    let (• end of range: list boundary) start as ((upper bound) of (range))
-    if ((end of range) is greater than (original end)), {
-     change (end of range) to (original end)
+    let (• end of removal: list boundary) be ((upper bound) of (range))
+    if ((end of removal) is greater than (original end)), {
+     !
     }
-    let (• removal range: range of (list boundary)) be (from (beginning of range) to (end of range))
-    remove (removal range) from (↓ (uncounted) of (list))
-    let (• trailing range: range of (list boundary)) be (from (end of range) to (original end))
-    if ((end of range) is not (original end)), {
-     move (trailing range) to (beginning of range) in (↓ (uncounted) of (list))
+    remove (range) from (↓ (uncounted) of (list))
+    let (• trailing range: range of (list boundary)) be (from (end of removal) to (original end))
+    let (• length of replacement: list boundary) be (end of (replacement))
+    let (• end of insertion: list boundary) be (distance (length of replacement) after (beginning of removal))
+    let (• new end: list boundary) be (distance (length of (trailing range)) after (end of insertion))
+    ensure enough storage for (new end) in (↓ list)
+    if ((end of removal) is not (original end)), {
+     if ((new end) is not (original end)), {
+      move (trailing range) to (end of insertion) in (↓ (uncounted) of (list))
+     }
     }
-    change ((end) of (list)) to (distance (length of (trailing range)) after (beginning of range))
-    let (• smaller limit: list boundary) be (((limit) of (list)) shrunk by (growth factor))
-    if (((end) of (list)) is less than or equal to ((smaller limit) shrunk by (growth factor))), {
-     resize storage of (↓ list) to end at (smaller limit)
+    change ((end) of (list)) to (new end)
+    if ((new end) is less than (original end)), {
+     if ((new end) is less than or equal to ((((limit) of (list)) shrunk by (growth factor)) shrunk by (growth factor))), {
+      resize storage of (↓ list) to end at ((new end) grown by (growth factor))
+     }
+    }
+    if ((length of replacement) is greater than (end of empty list)), {
+     copy (from (beginning of (replacement)) to (end of (replacement))) from ((uncounted) of (replacement)) to (beginning of removal) in (↓ (uncounted) of (list))
     }
    }
  }
