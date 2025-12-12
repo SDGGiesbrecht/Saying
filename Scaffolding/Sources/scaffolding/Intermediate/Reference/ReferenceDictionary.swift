@@ -555,8 +555,8 @@ extension ReferenceDictionary {
           continue thingIteration
         } else {
           var required = false
-          if thing.c?.release != nil {
-            required = true
+          if let native = thing.c {
+            required = native.release != nil
           } else {
             partIteration: for component in [
               thing.parts.map({ $0.contents }),
