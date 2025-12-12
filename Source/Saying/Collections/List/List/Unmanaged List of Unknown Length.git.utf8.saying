@@ -166,9 +166,13 @@ extension
     English: reallocate memory of (list: ↓ unmanaged list of (thing) of unknown length) up to (end: list boundary)
    )
    {
-    let (• memory: unmanaged list of (thing) of unknown length) be (reallocate memory of (list) up to (end) skipping success check: unmanaged list of (thing) of unknown length)
-    if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), abort due to memory allocation failure
-    change (↓ list) to (memory)
+    if ((end) is (end of empty list)), {
+     clean (list) up up to (end of empty list)
+    }, otherwise {
+     let (• memory: unmanaged list of (thing) of unknown length) be (reallocate memory of (list) up to (end) skipping success check: unmanaged list of (thing) of unknown length)
+     if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), abort due to memory allocation failure
+     change (↓ list) to (memory)
+    }
    }
 
   action (file)
@@ -280,6 +284,19 @@ extension
    {
     release entry (entry at (index) in (list))
     initialize entry at (index) in (↓ list) to (element)
+   }
+
+  action (unit)
+   (
+    English: remove (range: range of (list boundary)) from (list: ↓ unmanaged list of (thing) of unknown length)
+   )
+   {
+    let (• cursor: list boundary) start as ((lower bound) of (range))
+    let (• end: list boundary) be ((upper bound) of (range))
+    while ((cursor) is less than (end)), {
+     release entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
+     advance (↓ cursor) to next in (list) skipping bounds check
+    }
    }
  }
 

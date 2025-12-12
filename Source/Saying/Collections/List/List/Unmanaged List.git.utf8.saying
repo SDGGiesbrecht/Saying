@@ -36,6 +36,11 @@ extension
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
      verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     remove (first) from (↓ list)
+     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
+     verify (((end) of (list)) is (end of list containing (one: natural number) entries))
      release (↓ list)
      verify (reference count of (original tracker) is (one: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
@@ -122,6 +127,15 @@ extension
    list index
    {
     ← index after (boundary) in ((uncounted) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: boundary before (index: list index) in (list: unmanaged list of (thing))
+   )
+   list boundary
+   {
+    ← boundary before (index) in ((uncounted) of (list))
    }
 
   action (unit)
@@ -213,7 +227,11 @@ extension
     English: resize storage of (list: ↓ unmanaged list of (thing)) to end at (new limit: list boundary)
    )
    {
-    reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
+    if (((limit) of (list)) is (end of empty list)), {
+     change ((uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
+    }, otherwise {
+     reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
+    }
     change ((limit) of (list)) to (new limit)
    }
 
@@ -230,7 +248,7 @@ extension
      if ((original end) is (end of empty list)), {
       resize storage of (↓ list) to end at (end of list containing one entry)
      }, otherwise {
-      resize storage of (↓ list) to end at (double (original end))
+      resize storage of (↓ list) to end at ((original end) grown by (growth factor))
      }
     }
     if ((boundary) is not (original end)), {
@@ -239,15 +257,89 @@ extension
     initialize entry at (index after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list)) to (element)
     advance (↓ (end) of (list)) to next in (list) skipping bounds check
    }
+
+  action (unit)
+   (
+    English: remove (index: list index) from (list: ↓ unmanaged list of (thing))
+   )
+   {
+    let (• boundary before: list boundary) be (boundary before (index) in (list))
+    remove (from (boundary before) to (boundary after (boundary before) in (list) skipping bounds check)) from (↓ list)
+   }
+
+  action (unit)
+   [
+    test {
+     let (• list: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
+     let (• out of bounds: list boundary) be (end of list containing (two: natural number) entries)
+     remove (from (out of bounds) to (out of bounds)) from (↓ list)
+     verify (((end) of (list)) is (end of empty list))
+     let (• beginning: list boundary) be (beginning of (list))
+     insert (example: thing) at (beginning) in (↓ list)
+     remove (from (end of empty list) to (out of bounds)) from (↓ list)
+     verify (((end) of (list)) is (end of empty list))
+     insert (example: thing) at (beginning) in (↓ list)
+     remove (from (end of list containing one entry) to (out of bounds)) from (↓ list)
+     verify (((end) of (list)) is (end of list containing one entry))
+     release (↓ list)
+    }
+   ]
+   (
+    English: remove (range: range of (list boundary)) from (list: ↓ unmanaged list of (thing))
+   )
+   {
+    let (• original end: list boundary) be ((end) of (list))
+    let (• beginning of range: list boundary) be ((lower bound) of (range))
+    if ((beginning of range) is greater than or equal to (original end)), {
+     ←
+    }
+    let (• end of range: list boundary) start as ((upper bound) of (range))
+    if ((end of range) is greater than (original end)), {
+     change (end of range) to (original end)
+    }
+    let (• removal range: range of (list boundary)) be (from (beginning of range) to (end of range))
+    remove (removal range) from (↓ (uncounted) of (list))
+    let (• trailing range: range of (list boundary)) be (from (end of range) to (original end))
+    if ((end of range) is not (original end)), {
+     move (trailing range) to (beginning of range) in (↓ (uncounted) of (list))
+    }
+    change ((end) of (list)) to (distance (length of (trailing range)) after (beginning of range))
+    let (• smaller limit: list boundary) be (((limit) of (list)) shrunk by (growth factor))
+    if (((end) of (list)) is less than or equal to ((smaller limit) shrunk by (growth factor))), {
+     resize storage of (↓ list) to end at (smaller limit)
+    }
+   }
  }
 
 action (file)
  (
-  English: double (end: list boundary)
+  English: growth factor
  )
  list boundary
- C: “” end “ ¤(2A) 2”
- C♯: “” end “ ¤(2A) 2”
- JavaScript: “” end “ ¤(2A) 2”
- Kotlin: “” end “ ¤(2A) 2”
- Swift: “” end “ ¤(2A) 2”
+ C: “2”
+ C♯: “2”
+ JavaScript: “2”
+ Kotlin: “2”
+ Swift: “2”
+
+action (file)
+ (
+  English: (end: list boundary) grown by (factor: list boundary)
+ )
+ list boundary
+ C: “” end “ ¤(2A) ” factor “”
+ C♯: “” end “ ¤(2A) ” factor “”
+ JavaScript: “” end “ ¤(2A) ” factor “”
+ Kotlin: “” end “ ¤(2A) ” factor “”
+ Swift: “” end “ ¤(2A) ” factor “”
+
+action (file)
+ (
+  English: (end: list boundary) shrunk by (factor: list boundary)
+ )
+ list boundary
+ C: “” end “ / ” factor “”
+ C♯: “” end “ / ” factor “”
+ JavaScript: “Math.floor(” end “ / ” factor “)”
+ Kotlin: “” end “ / ” factor “”
+ Swift: “” end “ / ” factor “”
