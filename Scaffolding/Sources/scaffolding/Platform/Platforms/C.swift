@@ -132,8 +132,8 @@ enum C: Platform {
     return true
   }
 
-  static func nativeName(of thing: Thing) -> String? {
-    return nil
+  static func nativeNameDeclaration(of thing: Thing) -> UnicodeText? {
+    return thing.cName
   }
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate? {
     return thing.c

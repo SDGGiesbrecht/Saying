@@ -52,7 +52,7 @@ protocol Platform {
 
   // Things
   static var isTyped: Bool { get }
-  static func nativeName(of thing: Thing) -> String?
+  static func nativeNameDeclaration(of thing: Thing) -> UnicodeText?
   static func nativeType(of thing: Thing) -> NativeThingImplementationIntermediate?
   static func repair(compoundNativeType: String) -> String
   static func actionType(parameters: String, returnValue: String) -> String
@@ -285,6 +285,14 @@ extension Platform {
       .joined()
   }
 
+  static func nativeName(of thing: Thing, referenceLookup: [ReferenceDictionary]) -> String? {
+    if let identifier = thing.identifier(for: self, referenceLookup: referenceLookup) {
+      return String(identifier)
+    } else {
+      return nil
+    }
+  }
+
   static func isSimpleEnumeration(
     _ type: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary]
@@ -309,7 +317,7 @@ extension Platform {
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
         return String(UnicodeText(native.textComponents.joined()))
-      } else if let native = nativeName(of: type) {
+      } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
         return native
       } else {
         return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
@@ -329,6 +337,8 @@ extension Platform {
           }
         }
         return repair(compoundNativeType: result)
+      } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
+        return native
       } else {
         return sanitize(
           identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
@@ -492,7 +502,7 @@ extension Platform {
       return nil
     }
 
-    let name = nativeName(of: thing) ?? sanitize(
+    let name = nativeName(of: thing, referenceLookup: externalReferenceLookup) ?? sanitize(
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
       leading: true
     )
@@ -1980,6 +1990,7 @@ extension Platform {
     moduleWideImports: [ReferenceDictionary],
     mode: CompilationMode,
     relocatedActions: inout Set<String>,
+    alreadyHandledDeclarations: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String {
@@ -1995,8 +2006,10 @@ extension Platform {
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
-        result.appendSeparatorLine()
-        result.append(declaration)
+        if alreadyHandledDeclarations.insert(declaration).inserted {
+          result.appendSeparatorLine()
+          result.append(declaration)
+        }
       }
     }
     return result.joined(separator: "\n")
@@ -2055,6 +2068,7 @@ extension Platform {
     moduleWideImports: [ModuleIntermediate]
   ) -> String {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
+    var alreadyHandledDeclarations: Set<String> = []
     var alreadyHandledNativeRequirements: Set<String> = preexistingNativeRequirements
 
     var result: [String] = []
@@ -2107,6 +2121,7 @@ extension Platform {
           moduleWideImports: moduleWideImportDictionary,
           mode: mode,
           relocatedActions: &relocatedActions,
+          alreadyHandledDeclarations: &alreadyHandledDeclarations,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
           modulesToSearchForMembers: modules
         )

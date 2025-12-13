@@ -44,6 +44,7 @@ extension
    ]
    (
     English: unmanaged list of (thing)
+    C: list‐(thing: [thing])
    )
    {
     part (file)

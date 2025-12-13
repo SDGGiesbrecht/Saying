@@ -1,3 +1,5 @@
+import SDGText
+
 struct Thing {
   var names: Set<UnicodeText>
   var parameters: Interpolation<ThingParameterIntermediate>
@@ -11,6 +13,7 @@ struct Thing {
   var swift: NativeThingImplementationIntermediate?
   var documentation: DocumentationIntermediate?
   var declaration: ParsedThingDeclarationProtocol
+  var cName: UnicodeText?
   var swiftName: UnicodeText?
   var requiresCleanUp: Bool?
 
@@ -100,11 +103,17 @@ extension Thing {
       parameters = constructed
     }
     var names: Set<UnicodeText> = []
+    var cName: UnicodeText?
     var swiftName: UnicodeText?
     for (language, signature) in namesDictionary {
       let name = signature.name()
-      if language == "Swift" {
+      switch language {
+      case "C":
+        cName = name
+      case "Swift":
         swiftName = name
+      default:
+        break
       }
       names.insert(name)
     }
@@ -207,6 +216,7 @@ extension Thing {
         swift: swift,
         documentation: attachedDocumentation,
         declaration: declaration,
+        cName: cName,
         swiftName: swiftName
       )
     )
@@ -268,6 +278,7 @@ extension Thing {
       swift: swift?.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation,
       declaration: declaration,
+      cName: cName,
       swiftName: swiftName
     )
   }
@@ -314,6 +325,7 @@ extension Thing {
       swift: swift?.specializing(typeLookup: typeLookup),
       documentation: newDocumentation,
       declaration: declaration,
+      cName: cName,
       swiftName: swiftName
     )
   }
@@ -325,6 +337,43 @@ extension Thing {
         documentation?.tests[index].inheritedVisibility = new
       }
     }
+  }
+}
+
+extension Thing {
+  func identifier<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
+  where P: Platform {
+    guard let nameDeclaration = platform.nativeNameDeclaration(of: self) else {
+      return nil
+    }
+    var declaration = StrictString(nameDeclaration)
+    if platform.usesSnakeCase {
+      declaration.replaceMatches(for: "‐", with: "_")
+    }
+    var parameters = self.parameters.ordered(for: nameDeclaration)
+    var name: UnicodeText = ""
+    while !declaration.isEmpty {
+      guard let next = declaration.firstIndex(of: "(") else {
+        name.append(contentsOf: declaration)
+        declaration.removeAll()
+        continue
+      }
+      let precedingSegment = UnicodeText(declaration[..<next])
+      declaration.removeSubrange(..<next)
+      name.append(contentsOf: precedingSegment)
+      if declaration.hasPrefix("()") {
+        declaration.removeFirst(2)
+      }
+      let parameter = parameters.removeFirst()
+      name.append(
+        contentsOf: UnicodeText(
+          platform.identifierPrefix(
+            for: platform.source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+          )
+        )
+      )
+    }
+    return name
   }
 }
 
