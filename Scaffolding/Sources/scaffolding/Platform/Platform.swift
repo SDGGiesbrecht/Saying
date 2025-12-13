@@ -337,6 +337,8 @@ extension Platform {
           }
         }
         return repair(compoundNativeType: result)
+      } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
+        return native
       } else {
         return sanitize(
           identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
