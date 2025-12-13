@@ -1988,6 +1988,7 @@ extension Platform {
     moduleWideImports: [ReferenceDictionary],
     mode: CompilationMode,
     relocatedActions: inout Set<String>,
+    alreadyHandledDeclarations: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String {
@@ -2003,7 +2004,7 @@ extension Platform {
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
-        if alreadyHandledNativeRequirements.insert(declaration).inserted {
+        if alreadyHandledDeclarations.insert(declaration).inserted {
           result.appendSeparatorLine()
           result.append(declaration)
         }
@@ -2065,6 +2066,7 @@ extension Platform {
     moduleWideImports: [ModuleIntermediate]
   ) -> String {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
+    var alreadyHandledDeclarations: Set<String> = []
     var alreadyHandledNativeRequirements: Set<String> = preexistingNativeRequirements
 
     var result: [String] = []
@@ -2117,6 +2119,7 @@ extension Platform {
           moduleWideImports: moduleWideImportDictionary,
           mode: mode,
           relocatedActions: &relocatedActions,
+          alreadyHandledDeclarations: &alreadyHandledDeclarations,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
           modulesToSearchForMembers: modules
         )
