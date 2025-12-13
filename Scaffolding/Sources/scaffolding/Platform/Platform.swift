@@ -2003,8 +2003,10 @@ extension Platform {
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
-        result.appendSeparatorLine()
-        result.append(declaration)
+        if alreadyHandledNativeRequirements.insert(declaration).inserted {
+          result.appendSeparatorLine()
+          result.append(declaration)
+        }
       }
     }
     return result.joined(separator: "\n")
