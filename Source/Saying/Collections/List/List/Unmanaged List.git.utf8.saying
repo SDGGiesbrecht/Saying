@@ -96,6 +96,7 @@ extension
   action (unit)
    (
     English: hold (list: ↓ unmanaged list of (thing))
+    C: 1 hold (list: [list])
    )
    {
     increment (↓ (references) of (list))
@@ -104,6 +105,7 @@ extension
   action (unit)
    (
     English: release (list: ↓ unmanaged list of (thing))
+    C: 1 release (list: [list])
    )
    {
     if (((references) of (list)) is less than (one: platform fixed‐width natural number)), {
