@@ -124,7 +124,7 @@ extension
      let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
      insert (restart (tracker)) at (beginning of (list)) in (↓ list)
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
-     let (• copy: unmanaged list of (reference tracker)) start as (copy of (list))
+     let (• copy: unmanaged list of (reference tracker)) start as (copy of unmanaged (list))
      verify (reference count of (tracker) is (three: platform fixed‐width integer))
      release unmanaged (↓ list)
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
@@ -132,12 +132,12 @@ extension
      verify (reference count of (tracker) is (one: platform fixed‐width integer))
     }
     test {
-     let (• list: unmanaged list of (thing)) start as (copy of (empty: unmanaged list of (thing)))
+     let (• list: unmanaged list of (thing)) start as (copy of unmanaged (empty: unmanaged list of (thing)))
      release unmanaged (↓ list)
     }
    ]
    (
-    English: copy of (list: unmanaged list of (thing))
+    English: copy of unmanaged (list: unmanaged list of (thing))
    )
    unmanaged list of (thing)
    {

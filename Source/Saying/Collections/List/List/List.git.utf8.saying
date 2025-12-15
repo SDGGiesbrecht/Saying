@@ -27,6 +27,16 @@ extension
    }
 
   action (file)
+   (
+    English: create list with unmanaged list (list: unmanaged list of (thing))
+   )
+   list of (thing)
+   C: “g¤(5F)array¤(5F)new(FALSE, FALSE, sizeof(” thing “))”
+   {
+    ← (managed) of ((uncounted) of (list))
+   }
+
+  action (file)
    [
     test {
      let (• list: list of (thing)) be (empty: list of (thing))
@@ -61,6 +71,21 @@ extension
    {
     let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
     release unmanaged (↓ unmanaged)
+   }
+
+  action (file)
+   [
+    test {
+     ignore (copy of (empty: list of (thing)))
+    }
+   ]
+   (
+    English: copy of (list: list of (thing))
+    C: 1 copy (list: [list])
+   )
+   list of (thing)
+   {
+    ← create list with unmanaged list (copy of unmanaged (unmanaged (list)))
    }
 
   use (clients)
