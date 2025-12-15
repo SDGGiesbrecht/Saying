@@ -31,6 +31,7 @@ extension
     English: create list with unmanaged list (list: unmanaged list of (thing))
    )
    list of (thing)
+   C: “g¤(5F)array¤(5F)new(FALSE, FALSE, sizeof(” thing “))”
    {
     ← (managed) of ((uncounted) of (list))
    }
