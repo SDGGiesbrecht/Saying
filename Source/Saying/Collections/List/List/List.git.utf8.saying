@@ -41,7 +41,7 @@ extension
    list of (thing)
    {
     let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-    hold (↓ unmanaged)
+    hold unmanaged (↓ unmanaged)
     ← list
    }
 
@@ -50,7 +50,7 @@ extension
     test (hidden) {
      let (• list: list of (thing)) be (empty: list of (thing))
      let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-     hold (↓ unmanaged)
+     hold unmanaged (↓ unmanaged)
      release (list)
     }
    ]
@@ -60,7 +60,7 @@ extension
    )
    {
     let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-    release (↓ unmanaged)
+    release unmanaged (↓ unmanaged)
    }
 
   use (clients)
