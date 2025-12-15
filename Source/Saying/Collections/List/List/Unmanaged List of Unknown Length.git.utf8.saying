@@ -41,14 +41,14 @@ extension
      list of (thing)
    }
 
-  action (file)
+  action (unit)
    [
     test {
-     ignore (unmanaged (empty: list of (thing)))
+     ignore (uncounted (empty: list of (thing)))
     }
    ]
    (
-    English: unmanaged (managed: list of (thing))
+    English: uncounted (managed: list of (thing))
    )
    unmanaged list of (thing) of unknown length
    C: “(” thing “¤(2A))” managed “¤(2D)>data”
@@ -66,7 +66,7 @@ extension
    unmanaged list of (thing) of unknown length
    C: “NULL” (“stddef”)
    {
-    ← unmanaged (empty: list of (thing))
+    ← uncounted (empty: list of (thing))
    }
 
   action (file)
@@ -90,7 +90,7 @@ extension
     while ((end of (list)) is less than (end)), {
      append (example: thing) to (↓ list)
     }
-    ← unmanaged (list)
+    ← uncounted (list)
    }
 
   action (unit)
@@ -196,7 +196,7 @@ extension
    unmanaged list of (thing) of unknown length
    C: “” list “ + ” boundary “”
    {
-    ← unmanaged (empty: list of (thing))
+    ← uncounted (empty: list of (thing))
    }
 
   action (file)

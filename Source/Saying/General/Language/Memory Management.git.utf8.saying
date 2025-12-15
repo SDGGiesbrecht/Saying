@@ -91,6 +91,7 @@ action (unit)
 action (unit)
  (
   English: hold (tracker: reference tracker)
+  C: 1 hold (tracker: [tracker])
  )
  C: “hold¤(5F)reference¤(5F)tracker(” tracker “)”
  {}
@@ -98,6 +99,7 @@ action (unit)
 action (unit)
  (
   English: release (tracker: reference tracker)
+  C: 1 release (tracker: [tracker])
  )
  C: “release¤(5F)reference¤(5F)tracker(” tracker “)”
  {}

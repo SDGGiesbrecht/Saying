@@ -16,6 +16,53 @@ extension
    {
    }
 
+  action (file)
+   (
+    English: unmanaged (list: list of (thing))
+   )
+   unmanaged list of (thing)
+   {
+    let (• end: list boundary) be (end of (list))
+    ← create unmanaged list with uncounted (uncounted (list)), end (end) and limit (end)
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (empty: list of (thing))
+     ignore (hold (list))
+     release (list)
+    }
+   ]
+   (
+    English: hold (list: list of (thing))
+    C: 1 hold (list: [list])
+   )
+   list of (thing)
+   {
+    let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
+    hold unmanaged (↓ unmanaged)
+    ← list
+   }
+
+  action (file)
+   [
+    test (hidden) {
+     let (• list: list of (thing)) be (empty: list of (thing))
+     let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
+     hold unmanaged (↓ unmanaged)
+     release (list)
+    }
+   ]
+   (
+    English: release (list: list of (thing))
+    C: 1 release (list: [list])
+   )
+   {
+    let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
+    release unmanaged (↓ unmanaged)
+   }
+
   use (clients)
    use of (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {

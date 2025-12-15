@@ -16,9 +16,9 @@ extension
      insert (restart (original tracker)) at (beginning) in (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (one: natural number) entries))
-     hold (↓ list)
+     hold unmanaged (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
-     release (↓ list)
+     release unmanaged (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      let (• insertion tracker: reference tracker) be (create reference tracker)
      insert (restart (insertion tracker)) at (beginning) in (↓ list)
@@ -36,7 +36,7 @@ extension
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
      verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of list containing (two: natural number) entries))
-     release (↓ list)
+     release unmanaged (↓ list)
      verify (reference count of (original tracker) is (one: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
      verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
@@ -95,7 +95,7 @@ extension
 
   action (unit)
    (
-    English: hold (list: ↓ unmanaged list of (thing))
+    English: hold unmanaged (list: ↓ unmanaged list of (thing))
    )
    {
     increment (↓ (references) of (list))
@@ -103,7 +103,7 @@ extension
 
   action (unit)
    (
-    English: release (list: ↓ unmanaged list of (thing))
+    English: release unmanaged (list: ↓ unmanaged list of (thing))
    )
    {
     if (((references) of (list)) is less than (one: platform fixed‐width natural number)), {
@@ -126,14 +126,14 @@ extension
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
      let (• copy: unmanaged list of (reference tracker)) start as (copy of (list))
      verify (reference count of (tracker) is (three: platform fixed‐width integer))
-     release (↓ list)
+     release unmanaged (↓ list)
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
-     release (↓ copy)
+     release unmanaged (↓ copy)
      verify (reference count of (tracker) is (one: platform fixed‐width integer))
     }
     test {
      let (• list: unmanaged list of (thing)) start as (copy of (empty: unmanaged list of (thing)))
-     release (↓ list)
+     release unmanaged (↓ list)
     }
    ]
    (
@@ -320,8 +320,8 @@ extension
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
      verify (((end) of (list)) is (end of empty list))
      verify (((limit) of (list)) is (end of empty list))
-     release (↓ list)
-     release (↓ replacement)
+     release unmanaged (↓ list)
+     release unmanaged (↓ replacement)
     }
    ]
    (
