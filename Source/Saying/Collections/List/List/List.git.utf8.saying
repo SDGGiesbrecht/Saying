@@ -247,7 +247,7 @@ extension
    [
     test {
      let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, replace (index after (beginning of (list)) skipping bounds check) in (↓ list) with (example: thing) by replacement
+     if most efficient, replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: thing) by replacement
     }
    ]
    (
@@ -334,15 +334,19 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     remove from (beginning of (list)) to (end of (list)) from (↓ list)
+    }
+   ]
    (
     English: remove from (beginning: list boundary) to (end: list boundary) from (list: ↓ list of (thing))
    )
    C: “g¤(5F)array¤(5F)remove¤(5F)range(” list “, ” beginning “, ” end “ ¤(2D) ” beginning “)”
    C♯: “” list “.RemoveRange(” beginning “, ” end “ ¤(2D) ” beginning “)”
    JavaScript: “” list “.splice(” beginning “, ” end “ ¤(2D) ” beginning “)”
-   {
-    replace from (beginning) to (end) in (↓ list) with (empty: list of (thing))
-   }
+   {}
 
   action (file)
    [
@@ -808,6 +812,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     ignore (convert from (beginning of (list)) to (end of (list)) in (list) into list)
+    }
+   ]
    (
     English: convert from (lower bound: list boundary) to (upper bound: list boundary) in (list: list of (thing)) into list
    )
