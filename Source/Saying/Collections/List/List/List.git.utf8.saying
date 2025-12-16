@@ -256,6 +256,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, insert (example: thing) at (beginning of (list)) in (↓ list) by replacement
+    }
+   ]
    (
     English: if most efficient, insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing)) by replacement
    )
@@ -268,6 +274,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, append (example: thing) to (↓ list) by replacement
+    }
+   ]
    (
     English: if most efficient, append (element: thing) to (list: ↓ list of (thing)) by replacement
    )
@@ -280,6 +292,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, remove (index after (beginning of (list)) in (list) skipping bounds check) from (↓ list) by replacement
+    }
+   ]
    (
     English: if most efficient, remove (index: list index) from (list: ↓ list of (thing)) by replacement
    )
@@ -292,6 +310,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, remove (from (beginning of (list)) to (end of (list))) from (↓ list) by empty replacement
+    }
+   ]
    (
     English: if most efficient, remove (range: range of (list boundary)) from (list: ↓ list of (thing)) by empty replacement
    )
@@ -304,12 +328,6 @@ extension
    }
 
   action (file)
-   [
-    test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     remove from (beginning of (list)) to (end of (list)) from (↓ list)
-    }
-   ]
    (
     English: remove from (beginning: list boundary) to (end: list boundary) from (list: ↓ list of (thing))
    )
@@ -321,6 +339,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, remove (from (beginning of (list)) to (end of (list))) from (↓ list) by bounds
+    }
+   ]
    (
     English: if most efficient, remove (range: range of (list boundary)) from (list: ↓ list of (thing)) by bounds
    )
@@ -453,12 +477,6 @@ extension
    }
 
   action (file)
-   [
-    test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: list of (thing))
-    }
-   ]
    (
     English: replace from (beginning: list boundary) to (end: list boundary) in (list: ↓ list of (thing)) with (insertion: list of (thing))
    )
@@ -466,6 +484,12 @@ extension
    {}
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (thing)) by bounds
+    }
+   ]
    (
     English: if most efficient, replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing)) by bounds
    )
@@ -478,6 +502,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (thing)) by replacement
+    }
+   ]
    (
     English: if most efficient, replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing)) by replacement
    )
@@ -488,6 +518,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (thing)) by appending)
+    }
+   ]
    (
     English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by appending
    )
@@ -497,7 +533,7 @@ extension
    {
     let (• copy: list of (thing)) start as (convert ((from (beginning of (list)) to ((lower bound) of (range))) in (list)) into list)
     append (insertion) to (↓ copy)
-    append (convert (from ((upper bound) of (range)) to (end of (list)) in (list)) into list) to (↓ copy)
+    append (convert ((from ((upper bound) of (range)) to (end of (list))) in (list)) into list) to (↓ copy)
     ← copy
    }
 
@@ -512,6 +548,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (thing)) by bounds)
+    }
+   ]
    (
     English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by bounds
    )
@@ -525,6 +567,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (thing)) by list insertion)
+    }
+   ]
    (
     English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by list insertion
    )
@@ -538,6 +586,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, insert (insertion example: list of (thing)) at (beginning of (list)) in (↓ list) by replacement
+    }
+   ]
    (
     English: if most efficient, insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing)) by replacement
    )
@@ -550,6 +604,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, insert (insertion example: list of (thing)) at (beginning of (list)) in (↓ list) by list insertion
+    }
+   ]
    (
     English: if most efficient, insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing)) by list insertion
    )
@@ -562,6 +622,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, append (insertion example: list of (thing)) to (↓ list) by replacement
+    }
+   ]
    (
     English: if most efficient, append (appendix: list of (thing)) to (list: ↓ list of (thing)) by replacement
    )
@@ -574,6 +640,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, prepend (insertion example: list of (thing)) to (↓ list) by replacement
+    }
+   ]
    (
     English: if most efficient, prepend (prefix: list of (thing)) to (list: ↓ list of (thing)) by replacement
    )
@@ -697,6 +769,13 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     let (• result: list of (thing)) start as (empty: list of (thing))
+     if most efficient, convert ((from (beginning of (list)) to (end of (list))) in (list)) into list by iteration and store in (↓ result)
+    }
+   ]
    (
     English: if most efficient, convert (other: slice of (list of (thing))) into list by iteration and store in (result: ↓ list of (thing))
    )
@@ -706,18 +785,11 @@ extension
    Swift: “”
    {
     for each (• element: thing) in (other), {
-     append (element) to (↓ copy)
+     append (element) to (↓ result)
     }
-    ← copy
    }
 
   action (file)
-   [
-    test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     verify ((convert from (beginning of (list)) to (end of (list)) in (list) into list) is not empty)
-    }
-   ]
    (
     English: convert from (lower bound: list boundary) to (upper bound: list boundary) in (list: list of (thing)) into list
    )
@@ -730,6 +802,13 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     let (• result: list of (thing)) start as (empty: list of (thing))
+     if most efficient, convert ((from (beginning of (list)) to (end of (list))) in (list)) into list by bounds and store in (↓ result)
+    }
+   ]
    (
     English: if most efficient, convert (other: slice of (list of (thing))) into list by bounds and store in (result: ↓ list of (thing))
    )
