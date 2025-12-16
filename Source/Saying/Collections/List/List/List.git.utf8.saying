@@ -244,6 +244,66 @@ extension
    }
 
   action (file)
+   (
+    English: if most efficient, replace (index: list index) in (list: ↓ list of (thing)) with (element: thing) by replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (index) replaced with (element))
+   }
+
+  action (file)
+   (
+    English: if most efficient, insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (element) inserted at (boundary))
+   }
+
+  action (file)
+   (
+    English: if most efficient, append (element: thing) to (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (element) appended)
+   }
+
+  action (file)
+   (
+    English: if most efficient, remove (index: list index) from (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (index) removed)
+   }
+
+  action (file)
+   (
+    English: if most efficient, remove (range: range of (list boundary)) from (list: ↓ list of (thing)) by empty replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    replace (range) in (↓ list) with (empty: list of (thing))
+   }
+
+  action (file)
    [
     test {
      let (• list: list of (thing)) start as (non‐empty example: list of (thing))
@@ -260,6 +320,16 @@ extension
     replace from (beginning) to (end) in (↓ list) with (empty: list of (thing))
    }
 
+  action (file)
+   (
+    English: if most efficient, remove (range: range of (list boundary)) from (list: ↓ list of (thing)) by bounds
+   )
+   Kotlin: “”
+   Swift: “”
+   {
+    remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
+   }
+
   use (clients)
    use of (list of (thing)) as changeable list of (thing) indexed by (list index) separated by (list boundary)
    {
@@ -272,7 +342,7 @@ extension
      JavaScript: “” list “[” index “] = ” element “”
      Swift: “” list “[” index “] = ” element “”
      {
-      change (↓ list) to ((list) with (index) replaced with (element))
+      if most efficient, replace (index) in (↓ list) with (element) by replacement
      }
 
     action (clients)
@@ -294,7 +364,7 @@ extension
      JavaScript: “” list “.splice(” boundary “, 0, ” element “)”
      Swift: “” list “.insert(” element “, at: ” boundary “)”
      {
-      change (↓ list) to ((list) with (element) inserted at (boundary))
+      if most efficient, insert (element) at (boundary) in (↓ list) by replacement
      }
 
     action (clients)
@@ -316,7 +386,7 @@ extension
      JavaScript: “” list “.push(” element “)”
      Swift: “” list “.append(” element “)”
      {
-      change (↓ list) to ((list) with (element) appended)
+      if most efficient, append (element) to (↓ list) by replacement
      }
 
     action (clients)
@@ -358,7 +428,7 @@ extension
      JavaScript: “” list “.splice(” index “, 0)”
      Swift: “” list “.remove(at: ” index “)”
      {
-      change (↓ list) to ((list) with (index) removed)
+      if most efficient, remove (index) from (↓ list) by replacement
      }
 
     action (clients)
@@ -377,7 +447,8 @@ extension
      )
      Swift: “” list “.removeSubrange(” range “)”
      {
-      remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
+      if most efficient, remove (range) from (↓ list) by bounds
+      if most efficient, remove (range) from (↓ list) by empty replacement
      }
    }
 
@@ -392,8 +463,42 @@ extension
     English: replace from (beginning: list boundary) to (end: list boundary) in (list: ↓ list of (thing)) with (insertion: list of (thing))
    )
    JavaScript: “” list “.splice(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
+   {}
+
+  action (file)
+   (
+    English: if most efficient, replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing)) by bounds
+   )
+   C: “”
+   C♯: “”
+   Kotlin: “”
+   Swift: “”
    {
-    change (↓ list) to ((list) with (beginning) to (end) replaced with (insertion))
+    replace from ((lower bound) of (range)) to ((upper bound) of (range)) in (↓ list) with (insertion)
+   }
+
+  action (file)
+   (
+    English: if most efficient, replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing)) by replacement
+   )
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (range) replaced with (insertion))
+   }
+
+  action (file)
+   (
+    English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by appending
+   )
+   list of (thing)
+   JavaScript: “” list “”
+   Swift: “” list “”
+   {
+    let (• copy: list of (thing)) start as (convert ((from (beginning of (list)) to ((lower bound) of (range))) in (list)) into list)
+    append (insertion) to (↓ copy)
+    append (convert (from ((upper bound) of (range)) to (end of (list)) in (list)) into list) to (↓ copy)
+    ← copy
    }
 
   action (file)
@@ -403,10 +508,79 @@ extension
    list of (thing)
    JavaScript: “” list “.toSpliced(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
    {
-    let (• copy: list of (thing)) start as (convert from (beginning of (list)) to (beginning) in (list) into list)
-    append (insertion) to (↓ copy)
-    append (convert from (end) to (end of (list)) in (list) into list) to (↓ copy)
-    ← copy
+    ← list
+   }
+
+  action (file)
+   (
+    English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by bounds
+   )
+   list of (thing)
+   C: “” list “”
+   C♯: “” list “”
+   Kotlin: “” list “”
+   Swift: “” list “”
+   {
+    ← (list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (insertion)
+   }
+
+  action (file)
+   (
+    English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by list insertion
+   )
+   list of (thing)
+   C: “” list “”
+   C♯: “” list “”
+   JavaScript: “” list “”
+   Kotlin: “” list “”
+   {
+    ← (list) with (range) replaced with (insertion) according to list insertion
+   }
+
+  action (file)
+   (
+    English: if most efficient, insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (insertion) inserted at (boundary))
+   }
+
+  action (file)
+   (
+    English: if most efficient, insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing)) by list insertion
+   )
+   C: “”
+   C♯: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    insert (insertion) at (boundary) in (↓ list) according to list insertion
+   }
+
+  action (file)
+   (
+    English: if most efficient, append (appendix: list of (thing)) to (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   C♯: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (appendix) appended)
+   }
+
+  action (file)
+   (
+    English: if most efficient, prepend (prefix: list of (thing)) to (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   JavaScript: “”
+   {
+    change (↓ list) to ((list) with (prefix) prepended)
    }
 
   use (clients)
@@ -418,7 +592,8 @@ extension
      )
      Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
      {
-      replace from ((lower bound) of (range)) to ((upper bound) of (range)) in (↓ list) with (insertion)
+      if most efficient, replace (range) in (↓ list) with (insertion) by replacement
+      if most efficient, replace (range) in (↓ list) with (insertion) by bounds
      }
 
     action (clients)
@@ -427,7 +602,7 @@ extension
      )
      list of (thing)
      {
-      ← (list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (insertion)
+      ← if most efficient, (if most efficient, (if most efficient, (list) with (range) replaced with (insertion) by bounds) with (range) replaced with (insertion) by list insertion) with (range) replaced with (insertion) by appending
      }
 
     action (clients)
@@ -438,7 +613,8 @@ extension
      C♯: “” list “.InsertRange(” boundary “, ” insertion “)”
      Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
      {
-      insert (insertion) at (boundary) in (↓ list) according to list insertion
+      if most efficient, insert (insertion) at (boundary) in (↓ list) by replacement
+      if most efficient, insert (insertion) at (boundary) in (↓ list) by list insertion
      }
 
     action (clients)
@@ -460,7 +636,7 @@ extension
      Kotlin: “” list “ += ” appendix “”
      Swift: “” list “ += ” appendix “”
      {
-      change (↓ list) to ((list) with (appendix) appended)
+      if most efficient, append (appendix) to (↓ list) by replacement
      }
 
     action (clients)
@@ -483,7 +659,7 @@ extension
      C: “g¤(5F)array¤(5F)prepend¤(5F)vals(” list “, ” prefix “¤(2D)>data, ” prefix “¤(2D)>len)”
      JavaScript: “” list “.unshift(...” prefix “)”
      {
-      prepend (prefix) to (↓ list) according to list insertion
+      if most efficient, prepend (prefix) to (↓ list) by replacement
      }
 
     action (clients)
@@ -521,6 +697,21 @@ extension
    }
 
   action (file)
+   (
+    English: if most efficient, convert (other: slice of (list of (thing))) into list by iteration and store in (result: ↓ list of (thing))
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    for each (• element: thing) in (other), {
+     append (element) to (↓ copy)
+    }
+    ← copy
+   }
+
+  action (file)
    [
     test {
      let (• list: list of (thing)) be (non‐empty example: list of (thing))
@@ -535,11 +726,17 @@ extension
    JavaScript: “” list “.slice(” lower bound “, ” upper bound “)”
    Kotlin: “” list “.slice(” lower bound “..<” upper bound “)”
    {
-    let (• copy: list of (thing)) start as (empty: list of (thing))
-    for each (• element: thing) in ((from (lower bound) to (upper bound)) in (list)), {
-     append (element) to (↓ copy)
-    }
-    ← copy
+    ← empty
+   }
+
+  action (file)
+   (
+    English: if most efficient, convert (other: slice of (list of (thing))) into list by bounds and store in (result: ↓ list of (thing))
+   )
+   C: “”
+   Swift: “”
+   {
+    change (↓ result) to (convert from (beginning of (other)) to (end of (other)) in ((whole) of (other)) into list)
    }
 
   use (clients)
@@ -579,7 +776,10 @@ extension
      list of (thing)
      Swift: “Array(” other “)”
      {
-      ← convert from (beginning of (other)) to (end of (other)) in ((whole) of (other)) into list
+      let (• copy: list of (thing)) start as (empty: list of (thing))
+      if most efficient, convert (other) into list by bounds and store in (↓ copy)
+      if most efficient, convert (other) into list by iteration and store in (↓ copy)
+      ← copy
      }
 
     action (clients)
