@@ -244,6 +244,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, replace (index after (beginning of (list)) skipping bounds check) in (↓ list) with (example: thing) by replacement
+    }
+   ]
    (
     English: if most efficient, replace (index: list index) in (list: ↓ list of (thing)) with (element: thing) by replacement
    )
@@ -477,6 +483,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: list of (thing))
+    }
+   ]
    (
     English: replace from (beginning: list boundary) to (end: list boundary) in (list: ↓ list of (thing)) with (insertion: list of (thing))
    )
@@ -538,6 +550,12 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     ignore ((list) with (beginning of (list)) to (end of (list)) replaced with (insertion example: list of (thing)))
+    }
+   ]
    (
     English: (list: list of (thing)) with (beginning: list boundary) to (end: list boundary) replaced with (insertion: list of (thing))
    )
