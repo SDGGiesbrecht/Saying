@@ -1,0 +1,111 @@
+thing (unit)
+ (
+  English: memory address
+ )
+ C: “void¤(2A)”
+ {
+ }
+
+action (unit)
+ (
+  English: unallocated
+ )
+ memory address
+ C: “NULL” (“stddef”)
+ create
+
+use (unit)
+ general use of (memory address)
+ {
+ }
+
+action (file)
+ (
+  English: (first: memory address) is (second: memory address)
+  English +: (first: [first]) = (second: [second])
+  Deutsch: (erste: [first]) ist (zweite: [second])
+  Deutsch +: (erste: [first]) = (zweite: [second])
+  français : (première: [first]) est (deuxième: [second])
+  français +: (première: [first]) = (deuxième: [second])
+  ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
+  עברית: (ראשון: [first]) (שני: [second])
+  עברית +: (ראשון: [first]) = (שני: [second])
+  C♯: override (this: [first]).Equals (obj: [second])
+  Kotlin: override (this: [first]).equals (other: [second])
+  Swift: == (lhs: [first]) (rhs: [second])
+ )
+ truth value
+ C: “” first “ == ” second “”
+ {
+  ← false
+ }
+
+action (file)
+ (
+  English: allocate (amount: list boundary) bytes of memory, skipping success check
+ )
+ memory address
+ C: “malloc(” amount “)” (“stdlib”)
+ {
+  ← unallocated
+ }
+
+flow (file)
+ (
+  English: if (condition: truth value), abort due to memory allocation failure
+ )
+ C: “if (” condition “)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc([...]) == NULL¤(22));¤(A)}” (
+   “err”
+   “stdlib”
+  )
+ {
+  if (condition), {
+   !
+  }
+ }
+
+action (unit)
+ (
+  English: allocate (amount: list boundary) bytes of memory
+ )
+ memory address
+ {
+  let (• memory: memory address) be (allocate (amount) bytes of memory, skipping success check)
+  if ((memory) is (unallocated)), abort due to memory allocation failure
+  ← memory
+ }
+
+action (unit)
+ (
+  English: deallocate memory (address: memory address)
+ )
+ C: “free(” address “)”
+ {}
+
+action (file)
+ (
+  English: reallocate memory of (address: memory address) to (size: list boundary) bytes, skipping success check
+ )
+ memory address
+ C: “realloc(” address “, ” size “)” (“stdlib”)
+ {
+  ← address
+ }
+
+action (unit)
+ (
+  English: reallocate memory of (address: ↓ memory address) to (size: list boundary) bytes
+ )
+ {
+  let (• memory: memory address) be (reallocate memory of (address) to (size) bytes, skipping success check)
+  if ((memory) is (unallocated)), abort due to memory allocation failure
+  change (↓ address) to (memory)
+ }
+
+action (unit)
+ (
+  English: copy memory of (amount: list boundary) bytes from (origin: memory address) to (destination: memory address)
+ )
+ C: “memmove(” destination “, ” origin “, ” amount “)” (“string”)
+ {}

@@ -59,38 +59,45 @@ extension
    {
    }
 
-  action (unit)
+  action (file)
    (
-    English: unallocated
+    English: unmanaged list of unknown length at (address: memory address)
    )
    unmanaged list of (thing) of unknown length
-   C: “NULL” (“stddef”)
+   C: “(” thing “¤(2A))” address “”
    {
     ← uncounted (empty: list of (thing))
    }
 
   action (file)
    (
-    English: (first: unmanaged list of (thing) of unknown length) and (second: unmanaged list of (thing) of unknown length) share address
+    English: memory address of (list: unmanaged list of (thing) of unknown length)
    )
-   truth value
-   C: “” first “ == ” second “”
+   memory address
+   C: “(void¤(2A))” list “”
    {
-    ← false
+    ← unallocated
    }
 
   action (file)
    (
-    English: allocate memory up to (end: list boundary) skipping success check
+    English: size of entry
    )
-   unmanaged list of (thing) of unknown length
-   C: “malloc(” end “ ¤(2A) sizeof(” thing “))” (“stdlib”)
+   list boundary
+   C: “sizeof(” thing “)”
    {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    while ((end of (list)) is less than (end)), {
-     append (example: thing) to (↓ list)
+    ← end of empty list
+   }
+
+  action (file)
+   (
+    English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match allocation up to (end: list boundary)
+   )
+   C: “”
+   {
+    while ((end of ((managed) of (list))) is less than (end)), {
+     append (example: thing) to (↓ (managed) of (list))
     }
-    ← uncounted (list)
    }
 
   action (unit)
@@ -99,9 +106,9 @@ extension
    )
    unmanaged list of (thing) of unknown length
    {
-    let (• memory: unmanaged list of (thing) of unknown length) be (allocate memory up to (end) skipping success check: unmanaged list of (thing) of unknown length)
-    if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), abort due to memory allocation failure
-    ← memory
+    let (• list: unmanaged list of (thing) of unknown length) start as (unmanaged list of unknown length at (allocate ((end) times (size of entry)) bytes of memory): unmanaged list of (thing) of unknown length)
+    synchronize mock behind (↓ list) to match allocation up to (end)
+    ← list
    }
 
   action (unit)
@@ -131,8 +138,9 @@ extension
    (
     English: deallocate memory of (list: unmanaged list of (thing) of unknown length)
    )
-   C: “free(” list “)”
-   {}
+   {
+    deallocate memory (memory address of (list))
+   }
 
   action (unit)
    (
@@ -145,20 +153,6 @@ extension
      advance (↓ cursor) to next in (list) skipping bounds check
     }
     deallocate memory of (list)
-   }
-
-  action (file)
-   (
-    English: reallocate memory of (list: unmanaged list of (thing) of unknown length) up to (end: list boundary) skipping success check
-   )
-   unmanaged list of (thing) of unknown length
-   C: “realloc(” list “, ” end “ ¤(2A) sizeof(” thing “))” (“stdlib”)
-   {
-    let (• copy: unmanaged list of (thing) of unknown length) start as (list)
-    while ((end of ((managed) of (copy))) is less than (end)), {
-     append (example: thing) to (↓ (managed) of (copy))
-    }
-    ← copy
    }
 
   action (unit)
@@ -176,9 +170,10 @@ extension
     if ((end) is (end of empty list)), {
      clean (list) up up to (end of empty list)
     }, otherwise {
-     let (• memory: unmanaged list of (thing) of unknown length) be (reallocate memory of (list) up to (end) skipping success check: unmanaged list of (thing) of unknown length)
-     if ((memory) and (unallocated: unmanaged list of (thing) of unknown length) share address), abort due to memory allocation failure
-     change (↓ list) to (memory)
+     let (• address: memory address) start as (memory address of (list))
+     reallocate memory of (↓ address) to ((end) times (size of entry)) bytes
+     change (↓ list) to (unmanaged list of unknown length at (address): unmanaged list of (thing) of unknown length)
+     synchronize mock behind (↓ list) to match allocation up to (end)
     }
    }
 
@@ -186,8 +181,9 @@ extension
    (
     English: copy memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
    )
-   C: “memmove(” destination “, ” origin “, ” amount “ ¤(2A) sizeof(” thing “))” (“string”)
-   {}
+   {
+    copy memory of ((amount) times (size of entry)) bytes from (memory address of (origin)) to (memory address of (destination))
+   }
 
   action (file)
    (
@@ -327,20 +323,6 @@ extension
      advance (↓ cursor) to next in (list) skipping bounds check
     }
    }
- }
-
-flow (file)
- (
-  English: if (condition: truth value), abort due to memory allocation failure
- )
- C: “if (” condition “)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc([...]) == NULL¤(22));¤(A)}” (
-   “err”
-   “stdlib”
-  )
- {
-  if (condition), {
-   !
-  }
  }
 
 action (unit)

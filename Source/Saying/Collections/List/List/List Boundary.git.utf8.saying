@@ -127,3 +127,12 @@ use (clients)
    Kotlin: “1”
    Swift: “1”
  }
+
+action (unit)
+ (first: list boundary) times (second: list boundary)
+ list boundary
+ C: “” first “ ¤(2A) ” second “”
+ C♯: “” first “ ¤(2A) ” second “”
+ JavaScript: “” first “ ¤(2A) ” second “”
+ Kotlin: “” first “ ¤(2A) ” second “”
+ Swift: «» first “ ¤(2A) ” second „“

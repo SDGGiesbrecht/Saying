@@ -226,7 +226,7 @@ extension
    )
    unmanaged list of (thing)
    {
-    ← create unmanaged list with uncounted (unallocated: unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list)
+    ← create unmanaged list with uncounted (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list)
    }
 
   action (unit)
