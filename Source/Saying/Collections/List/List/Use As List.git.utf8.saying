@@ -268,6 +268,7 @@ extension
    ]
    (
     English: entry after (cursor: boundary) in (list: list) skipping bounds check, according to default use as list
+    Swift: (self: [list]).subscript accordingToDefaultUseAsList (position: [cursor])
    )
    element
    {
