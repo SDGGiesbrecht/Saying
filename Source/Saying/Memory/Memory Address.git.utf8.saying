@@ -21,19 +21,7 @@ use (unit)
 
 action (file)
  (
-  English: (first: memory address) is (second: memory address)
-  English +: (first: [first]) = (second: [second])
-  Deutsch: (erste: [first]) ist (zweite: [second])
-  Deutsch +: (erste: [first]) = (zweite: [second])
-  français : (première: [first]) est (deuxième: [second])
-  français +: (première: [first]) = (deuxième: [second])
-  ελληνικά: (πρώτη: [first]) είναι (δεύτερα: [second])
-  ελληνικά +: (πρώτη: [first]) = (δεύτερα: [second])
-  עברית: (ראשון: [first]) (שני: [second])
-  עברית +: (ראשון: [first]) = (שני: [second])
-  C♯: override (this: [first]).Equals (obj: [second])
-  Kotlin: override (this: [first]).equals (other: [second])
-  Swift: == (lhs: [first]) (rhs: [second])
+  English: (first: memory address) is same address as (second: memory address)
  )
  truth value
  C: “” first “ == ” second “”
@@ -72,7 +60,7 @@ action (unit)
  memory address
  {
   let (• memory: memory address) be (allocate (amount) bytes of memory, skipping success check)
-  if ((memory) is (unallocated)), abort due to memory allocation failure
+  if ((memory) is same address as (unallocated)), abort due to memory allocation failure
   ← memory
  }
 
@@ -99,7 +87,7 @@ action (unit)
  )
  {
   let (• memory: memory address) be (reallocate memory of (address) to (size) bytes, skipping success check)
-  if ((memory) is (unallocated)), abort due to memory allocation failure
+  if ((memory) is same address as (unallocated)), abort due to memory allocation failure
   change (↓ address) to (memory)
  }
 
