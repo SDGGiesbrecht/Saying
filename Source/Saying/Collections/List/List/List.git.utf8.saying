@@ -44,26 +44,16 @@ extension
    )
    list of (thing)
    {
-    let (• memory: memory address) start as (list at (allocate (memory size) bytes of memory))
+    let (• memory: list of (thing)) be (list at (allocate (memory size) bytes of memory): list of (thing))
     initialize (memory) to (list)
     ← memory
    }
 
   action (file)
    (
-    English: memory address of (list: list of (thing))
-   )
-   memory address
-   C: “(void¤(2A))” list “”
-   {
-    ← unallocated
-   }
-
-  action (file)
-   (
     English: list at (address: memory address)
    )
-   memory address
+   list of (thing)
    C: “(list¤(5F)” (thing) sanitized for identifier “¤(2A))” address “”
    {
     ← empty
@@ -157,7 +147,7 @@ extension
      Kotlin: “0”
      Swift: “” list “.startIndex”
      {
-      ← beginning of ((unmanaged (list)))
+      ← beginning of (unmanaged (list))
      }
 
     action (clients)
@@ -182,7 +172,7 @@ extension
      Kotlin: “++” cursor “”
      Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
      {
-      ← advance (↓ cursor) to next in (unmanaged of (list)) skipping bounds check
+      ← advance (↓ cursor) to next in (unmanaged (list)) skipping bounds check
      }
 
     action (clients)
@@ -195,7 +185,7 @@ extension
      Kotlin: “” cursor “ + 1”
      Swift: “” list “.index(after: ” cursor “)”
      {
-      ← boundary after (cursor) in (unmanaged of (list)) skipping bounds check
+      ← boundary after (cursor) in (unmanaged (list)) skipping bounds check
      }
 
     action (clients)
@@ -221,7 +211,7 @@ extension
      Kotlin: “” list “[” cursor “]”
      Swift: “” list “[” cursor “]”
      {
-      ← entry after (cursor) in (unmanaged of (list)) skipping bounds check
+      ← entry after (cursor) in (list) skipping bounds check, according to default use as list
      }
 
     action (clients)
@@ -296,7 +286,7 @@ extension
    Kotlin: “” index “”
    Swift: “” index “”
    {
-    ← boundary before (index) in (unmanaged of (list))
+    ← boundary before (index) in (unmanaged (list))
    }
 
   use (clients)
@@ -356,6 +346,24 @@ extension
    Swift: “”
    {
     insert (element) at (boundary) in (↓ unmanaged (list))
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, insert (example: thing) at (beginning of (list)) in (↓ list) by replacement
+    }
+   ]
+   (
+    English: if most efficient, insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing)) by replacement
+   )
+   C: “”
+   C♯: “”
+   JavaScript: “”
+   Swift: “”
+   {
+    change (↓ list) to ((list) with (element) inserted at (boundary))
    }
 
   action (file)
@@ -576,7 +584,7 @@ extension
      Swift: “” list “.remove(at: ” index “)”
      {
       if most efficient, remove (index) from (↓ list) by replacement
-      if most efficient, remove (index) from (↓ list) by ranged
+      if most efficient, remove (index) from (↓ list) by range
      }
 
     action (clients)

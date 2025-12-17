@@ -118,7 +118,7 @@ ability (clients)
    )
    element
    {
-    ← entry at (index after (cursor) in (list) skipping bounds check) in (list)
+    ← entry after (cursor) in (list) skipping bounds check, according to default use as list
    }
 
   choice (clients)
@@ -257,6 +257,21 @@ extension
      ← wrap (boundary after (cursor) in (list) skipping bounds check) into optional
     }
     ← nothing
+   }
+
+  action (clients)
+   [
+    test {
+     let (• non‐empty: list) be (non‐empty example: list)
+     ignore (entry after (beginning of (non‐empty)) in (non‐empty) skipping bounds check, according to default use as list)
+    }
+   ]
+   (
+    English: entry after (cursor: boundary) in (list: list) skipping bounds check, according to default use as list
+   )
+   element
+   {
+    ← entry at (index after (cursor) in (list) skipping bounds check) in (list)
    }
 
   action (clients)
