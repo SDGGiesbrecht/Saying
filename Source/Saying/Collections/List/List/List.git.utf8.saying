@@ -18,17 +18,19 @@ extension
    Kotlin: “List<” thing “>”
    Swift: “[” thing “]”
    {
-   }
-
-  action (file)
-   (
-    English: unmanaged (list: list of (thing))
-   )
-   unmanaged list of (thing)
-   C: “¤(2A)” list “”
-   {
-    let (• end: list boundary) be (end of (list))
-    ← create unmanaged list with uncounted (uncounted (list)), end (end) and limit (end)
+    part (file)
+     [
+      test {ignore ((unmanaged) of (empty: list of (thing)))}
+     ]
+     (
+      English: unmanaged
+     )
+     unmanaged list of (thing)
+     C: “¤(2A)” . “”
+     C♯: “” . “”
+     JavaScript: “” . “”
+     Kotlin: “” . “”
+     Swift: “” . “”
    }
 
   action (file)
@@ -39,6 +41,9 @@ extension
    {}
 
   action (file)
+   [
+    test {ignore (create list with unmanaged list (empty: unmanaged list of (thing)))}
+   ]
    (
     English: create list with unmanaged list (list: unmanaged list of (thing))
    )
@@ -60,6 +65,9 @@ extension
    }
 
   action (file)
+   [
+    test {ignore (memory size)}
+   ]
    (
     English: memory size
    )
@@ -82,28 +90,25 @@ extension
     C: 1 hold (list: [list])
    )
    list of (thing)
+   C♯: “” list “”
+   JavaScript: “” list “”
+   Kotlin: “” list “”
+   Swift: “” list “”
    {
-    let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-    hold unmanaged (↓ unmanaged)
-    ← list
+    hold unmanaged (↓ (unmanaged) of (list))
    }
 
   action (file)
-   [
-    test (hidden) {
-     let (• list: list of (thing)) be (empty: list of (thing))
-     let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-     hold unmanaged (↓ unmanaged)
-     release (list)
-    }
-   ]
    (
     English: release (list: list of (thing))
     C: 1 release (list: [list])
    )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
    {
-    let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-    release unmanaged (↓ unmanaged)
+    release unmanaged (↓ (unmanaged) of (list))
    }
 
   action (file)
@@ -117,8 +122,11 @@ extension
     C: 1 copy (list: [list])
    )
    list of (thing)
+   C♯: “” list “”
+   JavaScript: “” list “”
+   Swift: “” list “”
    {
-    ← create list with unmanaged list (copy of unmanaged (unmanaged (list)))
+    ← create list with unmanaged list (copy of unmanaged ((unmanaged) of (list)))
    }
 
   use (clients)
@@ -134,7 +142,7 @@ extension
      Kotlin: “” boundary “”
      Swift: “” boundary “”
      {
-      ← index after (boundary) in (unmanaged (list)) skipping bounds check
+      ← index after (boundary) in ((unmanaged) of (list)) skipping bounds check
      }
 
     action (clients)
@@ -147,7 +155,7 @@ extension
      Kotlin: “0”
      Swift: “” list “.startIndex”
      {
-      ← beginning of (unmanaged (list))
+      ← beginning of ((unmanaged) of (list))
      }
 
     action (clients)
@@ -160,7 +168,7 @@ extension
      Kotlin: “” list “.size”
      Swift: “” list “.endIndex”
      {
-      ← end of (unmanaged (list))
+      ← end of ((unmanaged) of (list))
      }
 
     action (clients)
@@ -172,7 +180,7 @@ extension
      Kotlin: “++” cursor “”
      Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
      {
-      ← advance (↓ cursor) to next in (unmanaged (list)) skipping bounds check
+      ← advance (↓ cursor) to next in ((unmanaged) of (list)) skipping bounds check
      }
 
     action (clients)
@@ -185,7 +193,7 @@ extension
      Kotlin: “” cursor “ + 1”
      Swift: “” list “.index(after: ” cursor “)”
      {
-      ← boundary after (cursor) in (unmanaged (list)) skipping bounds check
+      ← boundary after (cursor) in ((unmanaged) of (list)) skipping bounds check
      }
 
     action (clients)
@@ -198,7 +206,7 @@ extension
      Kotlin: “” list “[” cursor “]”
      Swift: “” list “[” cursor “]”
      {
-      ← entry at (cursor) in (unmanaged (list))
+      ← entry at (cursor) in ((unmanaged) of (list))
      }
 
     action (clients)
@@ -286,7 +294,7 @@ extension
    Kotlin: “” index “”
    Swift: “” index “”
    {
-    ← boundary before (index) in (unmanaged (list))
+    ← boundary before (index) in ((unmanaged) of (list))
    }
 
   use (clients)
@@ -309,7 +317,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    replace (index) in (↓ unmanaged (list)) with (element)
+    replace (index) in (↓ (unmanaged) of (list)) with (element)
    }
 
   action (file)
@@ -345,7 +353,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    insert (element) at (boundary) in (↓ unmanaged (list))
+    insert (element) at (boundary) in (↓ (unmanaged) of (list))
    }
 
   action (file)
@@ -623,7 +631,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    replace (range) in (↓ unmanaged (list)) with (unmanaged (list))
+    replace (range) in (↓ (unmanaged) of (list)) with ((unmanaged) of (list))
    }
 
   action (file)
