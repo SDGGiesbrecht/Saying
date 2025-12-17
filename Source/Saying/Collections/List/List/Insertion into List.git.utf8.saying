@@ -28,9 +28,7 @@ ability (clients)
    )
    list
    {
-    let (• copy: list) start as (list)
-    replace (range) in (↓ copy) with (replacement)
-    ← copy
+    ← (list) with (range) replaced with (replacement) according to list insertion
    }
 
   choice (clients)
@@ -145,6 +143,23 @@ ability (clients)
 extension
  insertion from (insertion) into (list) separated by (boundary)
  {
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: insertion) according to list insertion)
+    }
+   ]
+   (
+    English: (list: list) with (range: range of (boundary)) replaced with (replacement: insertion) according to list insertion
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    replace (range) in (↓ copy) with (replacement)
+    ← copy
+   }
+
   action (clients)
    [
     test {ignore ((non‐empty example: list) with (insertion example: insertion) appended according to list insertion)}
