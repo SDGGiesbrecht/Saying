@@ -19,18 +19,15 @@ extension
    Swift: “[” thing “]”
    {
     part (file)
-     [
-      test {ignore ((unmanaged) of (empty: list of (thing)))}
-     ]
      (
       English: unmanaged
      )
      unmanaged list of (thing)
      C: “¤(2A)” . “”
-     C♯: “” . “”
-     JavaScript: “” . “”
-     Kotlin: “” . “”
-     Swift: “” . “”
+     C♯: “”
+     JavaScript: “”
+     Kotlin: “”
+     Swift: “”
    }
 
   action (file)
