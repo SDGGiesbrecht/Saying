@@ -39,14 +39,14 @@ extension
   action (unit)
    [
     test {
-     ignore (uncounted (empty: list of (thing)))
+     ignore (empty placeholder: unmanaged list of (thing) of unknown length)
     }
    ]
    (
-    English: uncounted (managed: list of (thing))
+    English: empty placeholder
    )
    unmanaged list of (thing) of unknown length
-   C: “(” thing “¤(2A))” managed “¤(2D)>data”
+   C: “NULL” (“stddef”)
    create
 
   use (unit)
@@ -61,7 +61,7 @@ extension
    unmanaged list of (thing) of unknown length
    C: “(” thing “¤(2A))” address “”
    {
-    ← uncounted (empty: list of (thing))
+    ← empty placeholder
    }
 
   action (file)
@@ -171,7 +171,7 @@ extension
    unmanaged list of (thing) of unknown length
    C: “” list “ + ” boundary “”
    {
-    ← uncounted (empty: list of (thing))
+    ← empty placeholder
    }
 
   action (file)
