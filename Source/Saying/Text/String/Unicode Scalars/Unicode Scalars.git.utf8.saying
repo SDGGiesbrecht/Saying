@@ -14,7 +14,7 @@ thing (clients)
  (
   English: Unicode scalars
  )
- C: “reference¤(5F)counted¤(5F)string¤(2A)”/“hold¤(5F)string(” string “)”/“release¤(5F)string(” string “)”/“hold¤(5F)string(” string “)” (“glib¤(2D)2.0”) {“REFERENCE¤(5F)COUNTING(GString¤(2A), string, g¤(5F)string¤(5F)free, TRUE)”}
+ C: “reference¤(5F)counted¤(5F)string¤(2A)”/“hold¤(5F)string(” . “)”/“release¤(5F)string(” . “)”/“hold¤(5F)string(” . “)” (“glib¤(2D)2.0”) {“REFERENCE¤(5F)COUNTING(GString¤(2A), string, g¤(5F)string¤(5F)free, TRUE)”}
  C♯: “string”
  Kotlin: “String”
  Swift: “String.UnicodeScalarView”

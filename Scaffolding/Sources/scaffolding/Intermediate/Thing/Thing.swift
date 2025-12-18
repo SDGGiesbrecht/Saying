@@ -245,6 +245,18 @@ extension Thing {
           }
         }
       }
+      for referenceCountingAction in [native.hold, native.release, native.copy].compactMap({ $0 }) {
+        referenceCountingAction.validateReferences(
+          availableParameters: [
+            .nativeParameterStub(names: ["."], type: .compilerGeneratedReference(to: "."))
+          ],
+          requiredAccess: access,
+          testContext: testContext,
+          testOnlyAccess: testOnlyAccess,
+          referenceLookup: referenceLookup,
+          errors: &errors
+        )
+      }
     }
     documentation?.validateReferences(
       inheritedVisibility: access,

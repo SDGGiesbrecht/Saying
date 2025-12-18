@@ -233,7 +233,7 @@ enum C: Platform {
           accessModifier: nil,
           coverageRegistration: nil,
           implementation: [
-            "\(indent)return \(synthesizedHold(on: name)!.textComponents.lazy.map({ String($0) }).joined(separator: "target"));"
+            "\(indent)return \(apply(nativeReferenceCountingAction: synthesizedHold(on: name)!, around: "target", referenceLookup: []));"
           ],
           parentType: nil,
           isMutating: false,

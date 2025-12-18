@@ -9,7 +9,7 @@ extension
     ελληνικά: κατάλογος (πράγμα: [thing])
     עברית: רשימה של (דבר: [thing])
    )
-   C: “list¤(5F)” (thing) sanitized for identifier “¤(2A)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(” list “)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)release(” list “)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(” list “)” [
+   C: “list¤(5F)” (thing) sanitized for identifier “¤(2A)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(” . “)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)release(” . “)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(” . “)” [
      “list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
      “list¤(5F)” (thing) sanitized for identifier “¤(5F)release(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
      “list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(list¤(5F)” (thing) sanitized for identifier “¤(2A))”

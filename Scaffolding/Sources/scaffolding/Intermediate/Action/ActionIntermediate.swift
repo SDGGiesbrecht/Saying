@@ -718,23 +718,14 @@ extension ActionIntermediate {
     )
     let testContext = TestContext.inherited(visibility: access, isTestOnly: testOnlyAccess)
     for native in allNativeImplementations() {
-      for parameterReference in native.expression.parameters {
-        if let typeInstead = parameterReference.typeInstead {
-          typeInstead.validateReferences(
-            requiredAccess: access,
-            testContext: testContext,
-            allowTestOnly: testOnlyAccess,
-            referenceLookup: referenceLookup,
-            errors: &errors
-          )
-        } else {
-          if prototype.parameters.parameter(named: parameterReference.name) == nil,
-            !parameterReference.unique,
-            !parameterReference.remainderOfScope {
-            errors.append(.noSuchParameter(parameterReference.syntaxNode))
-          }
-        }
-      }
+      native.expression.validateReferences(
+        availableParameters: parameters.inAnyOrder,
+        requiredAccess: access,
+        testContext: testContext,
+        testOnlyAccess: testOnlyAccess,
+        referenceLookup: referenceLookup,
+        errors: &errors
+      )
       for parameterReference in native.indirectRequirements.compactMap({ $0.parameters })
         .appending(contentsOf: native.requiredDeclarations.compactMap({ $0.parameters }))
         .joined() {

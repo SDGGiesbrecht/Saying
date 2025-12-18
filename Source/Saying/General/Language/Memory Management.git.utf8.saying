@@ -31,7 +31,7 @@ thing (unit)
  (
   English: reference tracker
  )
- C: “reference¤(5F)tracker¤(2A)”/“hold¤(5F)reference¤(5F)tracker(” tracker “)”/“release¤(5F)reference¤(5F)tracker(” tracker “)”/“copy¤(5F)reference¤(5F)tracker(” tracker “)” (
+ C: “reference¤(5F)tracker¤(2A)”/“hold¤(5F)reference¤(5F)tracker(” . “)”/“release¤(5F)reference¤(5F)tracker(” . “)”/“copy¤(5F)reference¤(5F)tracker(” . “)” (
    “err”
    “stdbool”
    “stdlib”
