@@ -1756,12 +1756,19 @@ extension Platform {
       || action.isMemberWrapper {
       return nil
     }
+    guard action.implementation != nil else {
+      // creation
+      return nil
+    }
 
-    let name = sanitize(
-      identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-      leading: true
+    let name = nativeName(of: action, referenceLookup: referenceLookup)
+      ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+        leading: true
+      )
+    let parameters = action.parameters.ordered(
+      for: nativeNameDeclaration(of: action) ?? action.names.identifier()
     )
-    let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
       .joined(separator: ", ")
 
