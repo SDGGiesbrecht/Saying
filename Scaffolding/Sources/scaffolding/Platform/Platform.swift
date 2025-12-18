@@ -178,6 +178,21 @@ func existsForAnyPlatform<T>(
   return c ?? cSharp ?? javaScript ?? kotlin ?? swift != nil
 }
 
+func impossibleOnAnyPlatform(
+  c: NativeActionImplementationIntermediate?,
+  cSharp: NativeActionImplementationIntermediate?,
+  javaScript: NativeActionImplementationIntermediate?,
+  kotlin: NativeActionImplementationIntermediate?,
+  swift: NativeActionImplementationIntermediate?
+) -> Bool {
+  for native in [c, cSharp, javaScript, kotlin, swift] {
+    if native?.expression.textComponents == [""] {
+      return true
+    }
+  }
+  return false
+}
+
 extension Platform {
 
   static func filterUnsafe(characters: [UInt32]) -> Set<Unicode.Scalar> {

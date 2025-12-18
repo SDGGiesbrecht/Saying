@@ -253,6 +253,7 @@ extension ActionIntermediate {
         kotlin: kotlin,
         swift: swift
       )
+      && !impossibleOnAnyPlatform(c: c, cSharp: cSharp, javaScript: javaScript, kotlin: kotlin, swift: swift)
     )
   }
 
