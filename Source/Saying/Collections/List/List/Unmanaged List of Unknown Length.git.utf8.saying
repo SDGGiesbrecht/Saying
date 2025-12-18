@@ -74,23 +74,13 @@ extension
     ← unallocated
    }
 
-  action (file)
-   (
-    English: size of entry
-   )
-   list boundary
-   C: “sizeof(” thing “)”
-   {
-    ← end of empty list
-   }
-
   action (unit)
    (
     English: allocate memory up to (end: list boundary)
    )
    unmanaged list of (thing) of unknown length
    {
-    ← unmanaged list of unknown length at (allocate ((end) times (size of entry)) bytes of memory)
+    ← unmanaged list of unknown length at (allocate ((end) times (size of (example: thing))) bytes of memory)
    }
 
   action (unit)
@@ -151,7 +141,7 @@ extension
      clean (list) up up to (end of empty list)
     }, otherwise {
      let (• address: memory address) start as (memory address of (list))
-     reallocate memory of (↓ address) to ((end) times (size of entry)) bytes
+     reallocate memory of (↓ address) to ((end) times (size of (example: thing))) bytes
      change (↓ list) to (unmanaged list of unknown length at (address): unmanaged list of (thing) of unknown length)
     }
    }
@@ -161,7 +151,7 @@ extension
     English: copy memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
    )
    {
-    copy memory of ((amount) times (size of entry)) bytes from (memory address of (origin)) to (memory address of (destination))
+    copy memory of ((amount) times (size of (example: thing))) bytes from (memory address of (origin)) to (memory address of (destination))
    }
 
   action (file)

@@ -50,7 +50,7 @@ extension
    )
    list of (thing)
    {
-    let (• memory: list of (thing)) be (list at (allocate (memory size) bytes of memory): list of (thing))
+    let (• memory: list of (thing)) be (list at (allocate (size of (list)) bytes of memory): list of (thing))
     initialize (memory) to (list)
     ← memory
    }
@@ -63,19 +63,6 @@ extension
    C: “(list¤(5F)” (thing) sanitized for identifier “¤(2A))” address “”
    {
     ← empty
-   }
-
-  action (file)
-   [
-    test {ignore (memory size)}
-   ]
-   (
-    English: memory size
-   )
-   list boundary
-   C: “sizeof(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
-   {
-    ← end of empty list
    }
 
   action (file)
