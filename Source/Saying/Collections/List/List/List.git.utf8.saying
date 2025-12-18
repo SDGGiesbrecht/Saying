@@ -13,7 +13,11 @@ extension
      “list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
      “list¤(5F)” (thing) sanitized for identifier “¤(5F)release(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
      “list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
-    ]
+    ] {
+     “list¤(5F)” (thing) sanitized for identifier “¤(2A) list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(list¤(5F)” (thing) sanitized for identifier “¤(2A) list);”
+     “void list¤(5F)” (thing) sanitized for identifier “¤(5F)release(list¤(5F)” (thing) sanitized for identifier “¤(2A) list);”
+     “list¤(5F)” (thing) sanitized for identifier “¤(2A) list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(list¤(5F)” (thing) sanitized for identifier “¤(2A) list);”
+    }
    C♯: “List<” thing “>” (“System.Collections.Generic”)
    Kotlin: “List<” thing “>”
    Swift: “[” thing “]”
