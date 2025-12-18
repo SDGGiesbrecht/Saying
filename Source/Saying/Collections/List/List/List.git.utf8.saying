@@ -121,6 +121,7 @@ extension
    list of (thing)
    C♯: “” list “”
    JavaScript: “” list “”
+   Kotlin: “” list “”
    Swift: “” list “”
    {
     ← create list with unmanaged list (copy of unmanaged ((unmanaged) of (list)))
