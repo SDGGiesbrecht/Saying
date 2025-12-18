@@ -347,8 +347,12 @@ extension Platform {
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
           if index != native.textComponents.indices.last {
-            let type = native.parameters[index].resolvedType!
-            result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
+            let parameter = native.parameters[index]
+            var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+            if parameter.sanitizedForIdentifier {
+              type = identifierPrefix(for: type)
+            }
+            result.append(contentsOf: type)
           }
         }
         return repair(compoundNativeType: result)
