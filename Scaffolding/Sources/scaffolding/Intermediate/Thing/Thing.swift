@@ -385,7 +385,8 @@ extension Thing {
   ) -> [UnicodeText]
   where P: Platform {
     var result: [UnicodeText] = []
-    for part in parts {
+    for part in parts
+      .filter({ platform.nativeImplementation(of: $0.accessor)?.expression.textComponents != [""] }) {
       result.append(
         contentsOf: part.contents.requiredIdentifiers(
           moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
