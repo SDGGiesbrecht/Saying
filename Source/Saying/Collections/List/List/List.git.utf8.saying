@@ -621,7 +621,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    replace (range) in (↓ (unmanaged) of (list)) with ((unmanaged) of (list))
+    replace (range) in (↓ (unmanaged) of (list)) with ((unmanaged) of (insertion))
    }
 
   action (file)
