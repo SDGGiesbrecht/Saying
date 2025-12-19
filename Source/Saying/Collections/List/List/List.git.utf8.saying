@@ -70,7 +70,6 @@ extension
     test {
      let (• list: list of (thing)) be (empty: list of (thing))
      ignore (hold (list))
-     release (list)
     }
    ]
    (
