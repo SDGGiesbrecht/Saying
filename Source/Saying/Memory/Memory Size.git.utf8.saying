@@ -1,0 +1,13 @@
+extension
+ general use of (thing)
+ {
+  action (unit)
+   (
+    English: size of (example: thing)
+   )
+   list boundary
+   C: “sizeof(” thing “)”
+   {
+    ← end of empty list
+   }
+ }

@@ -44,6 +44,35 @@ extension NativeActionExpressionIntermediate {
 }
 
 extension NativeActionExpressionIntermediate {
+  func validateReferences(
+    availableParameters: [ParameterIntermediate],
+    requiredAccess: AccessIntermediate,
+    testContext: TestContext?,
+    testOnlyAccess: Bool,
+    referenceLookup: [ReferenceDictionary],
+    errors: inout [ReferenceError]
+  ) {
+    for parameterReference in parameters {
+      if let typeInstead = parameterReference.typeInstead {
+        typeInstead.validateReferences(
+          requiredAccess: requiredAccess,
+          testContext: testContext,
+          allowTestOnly: testOnlyAccess,
+          referenceLookup: referenceLookup,
+          errors: &errors
+        )
+      } else {
+        if availableParameters.first(where: { $0.names.contains(parameterReference.name) }) == nil,
+          !parameterReference.unique,
+          !parameterReference.remainderOfScope {
+          errors.append(.noSuchParameter(parameterReference.syntaxNode))
+        }
+      }
+    }
+  }
+}
+
+extension NativeActionExpressionIntermediate {
   func specializing(
     typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> NativeActionExpressionIntermediate {

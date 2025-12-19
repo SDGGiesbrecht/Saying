@@ -34,24 +34,19 @@ extension
    )
    C: “” thing “¤(2A)”
    {
-    part (file)
-     (
-      English: managed
-     )
-     list of (thing)
    }
 
   action (unit)
    [
     test {
-     ignore (uncounted (empty: list of (thing)))
+     ignore (empty placeholder: unmanaged list of (thing) of unknown length)
     }
    ]
    (
-    English: uncounted (managed: list of (thing))
+    English: empty placeholder
    )
    unmanaged list of (thing) of unknown length
-   C: “(” thing “¤(2A))” managed “¤(2D)>data”
+   C: “NULL” (“stddef”)
    create
 
   use (unit)
@@ -66,7 +61,7 @@ extension
    unmanaged list of (thing) of unknown length
    C: “(” thing “¤(2A))” address “”
    {
-    ← uncounted (empty: list of (thing))
+    ← empty placeholder
    }
 
   action (file)
@@ -79,46 +74,21 @@ extension
     ← unallocated
    }
 
-  action (file)
-   (
-    English: size of entry
-   )
-   list boundary
-   C: “sizeof(” thing “)”
-   {
-    ← end of empty list
-   }
-
-  action (file)
-   (
-    English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match allocation up to (end: list boundary)
-   )
-   C: “”
-   {
-    while ((end of ((managed) of (list))) is less than (end)), {
-     append (example: thing) to (↓ (managed) of (list))
-    }
-   }
-
   action (unit)
    (
     English: allocate memory up to (end: list boundary)
    )
    unmanaged list of (thing) of unknown length
    {
-    let (• list: unmanaged list of (thing) of unknown length) start as (unmanaged list of unknown length at (allocate ((end) times (size of entry)) bytes of memory): unmanaged list of (thing) of unknown length)
-    synchronize mock behind (↓ list) to match allocation up to (end)
-    ← list
+    ← unmanaged list of unknown length at (allocate ((end) times (size of (example: thing))) bytes of memory)
    }
 
   action (unit)
    (
     English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
-   C: “” list “[” index “] = ” hold on (element) “”
-   {
-    replace (index) in (↓ (managed) of (list)) with (element)
-   }
+   C: “(” list “)[” index “] = ” hold on (element) “”
+   {}
 
   action (file)
    (
@@ -171,9 +141,8 @@ extension
      clean (list) up up to (end of empty list)
     }, otherwise {
      let (• address: memory address) start as (memory address of (list))
-     reallocate memory of (↓ address) to ((end) times (size of entry)) bytes
+     reallocate memory of (↓ address) to ((end) times (size of (example: thing))) bytes
      change (↓ list) to (unmanaged list of unknown length at (address): unmanaged list of (thing) of unknown length)
-     synchronize mock behind (↓ list) to match allocation up to (end)
     }
    }
 
@@ -182,7 +151,7 @@ extension
     English: copy memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
    )
    {
-    copy memory of ((amount) times (size of entry)) bytes from (memory address of (origin)) to (memory address of (destination))
+    copy memory of ((amount) times (size of (example: thing))) bytes from (memory address of (origin)) to (memory address of (destination))
    }
 
   action (file)
@@ -192,18 +161,7 @@ extension
    unmanaged list of (thing) of unknown length
    C: “” list “ + ” boundary “”
    {
-    ← uncounted (empty: list of (thing))
-   }
-
-  action (file)
-   (
-    English: synchronize mock behind (list: ↓ unmanaged list of (thing) of unknown length) to match copy of (range: range of (list boundary)) from (origin: unmanaged list of (thing) of unknown length) to (destination: list boundary)
-   )
-   C: “”
-   {
-    let (• extraction: slice of (list of (thing))) be ((range) in ((managed) of (origin)))
-    let (• overwrite: range of (list boundary)) be (from (destination) to (distance (length of (range)) after (destination)))
-    replace (overwrite) in (↓ (managed) of (list)) with (extraction)
+    ← empty placeholder
    }
 
   action (file)
@@ -212,7 +170,6 @@ extension
    )
    {
     copy memory of (length of (range)) entries from (pointer to ((lower bound) of (range)) in (origin)) to (pointer to (destination) in (list))
-    synchronize mock behind (↓ list) to match copy of (range) from (origin) to (destination)
    }
 
   action (unit)
@@ -245,7 +202,7 @@ extension
    list index
    C: “” boundary “”
    {
-    ← index after (boundary) in ((managed) of (list)) skipping bounds check
+    ← example
    }
 
   action (unit)
@@ -255,7 +212,7 @@ extension
    list boundary
    C: “” index “”
    {
-    ← boundary before (index) in ((managed) of (list))
+    ← end of empty list
    }
 
   action (unit)
@@ -269,7 +226,7 @@ extension
    list boundary
    C: “0”
    {
-    ← beginning of ((managed) of (list))
+    ← end of empty list
    }
 
   action (unit)
@@ -279,7 +236,7 @@ extension
    )
    C: “++” cursor “”
    {
-    advance (↓ cursor) to next in ((managed) of (list)) skipping bounds check
+    change (↓ cursor) to (distance (end of list containing one entry) after (cursor))
    }
 
   action (unit)
@@ -299,7 +256,7 @@ extension
    thing
    C: “” hold on (thing) “” list “[” index “]”
    {
-    ← entry at (index) in ((managed) of (list))
+    ← example
    }
 
   action (unit)

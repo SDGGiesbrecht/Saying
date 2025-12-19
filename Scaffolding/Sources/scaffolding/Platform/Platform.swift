@@ -178,6 +178,21 @@ func existsForAnyPlatform<T>(
   return c ?? cSharp ?? javaScript ?? kotlin ?? swift != nil
 }
 
+func impossibleOnAnyPlatform(
+  c: NativeActionImplementationIntermediate?,
+  cSharp: NativeActionImplementationIntermediate?,
+  javaScript: NativeActionImplementationIntermediate?,
+  kotlin: NativeActionImplementationIntermediate?,
+  swift: NativeActionImplementationIntermediate?
+) -> Bool {
+  for native in [c, cSharp, javaScript, kotlin, swift] {
+    if native?.expression.textComponents == [""] {
+      return true
+    }
+  }
+  return false
+}
+
 extension Platform {
 
   static func filterUnsafe(characters: [UInt32]) -> Set<Unicode.Scalar> {
@@ -332,8 +347,12 @@ extension Platform {
         for index in native.textComponents.indices {
           result.append(contentsOf: String(native.textComponents[index]))
           if index != native.textComponents.indices.last {
-            let type = native.parameters[index].resolvedType!
-            result.append(contentsOf: source(for: type, referenceLookup: referenceLookup))
+            let parameter = native.parameters[index]
+            var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+            if parameter.sanitizedForIdentifier {
+              type = identifierPrefix(for: type)
+            }
+            result.append(contentsOf: type)
           }
         }
         return repair(compoundNativeType: result)
@@ -595,7 +614,11 @@ extension Platform {
           identifier: part.names.identifier(),
           leading: true
         )
-        return hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
+        return apply(
+          nativeReferenceCountingAction: hold,
+          around: "target.\(partName)",
+          referenceLookup: externalReferenceLookup
+        )
       }
       let componentReleases: [String] = thing.parts.compactMap { part in
         guard let release = nativeRelease(of: part.contents, referenceLookup: externalReferenceLookup) else {
@@ -605,7 +628,11 @@ extension Platform {
           identifier: part.names.identifier(),
           leading: true
         )
-        return release.textComponents.lazy.map({ String($0) }).joined(separator: "target.\(partName)")
+        return apply(
+          nativeReferenceCountingAction: release,
+          around: "target.\(partName)",
+          referenceLookup: externalReferenceLookup
+        )
       }
       return thingDeclaration(
         name: name,
@@ -645,7 +672,11 @@ extension Platform {
           identifier: enumerationCase.names.identifier(),
           leading: true
         )
-        let call = hold.textComponents.lazy.map({ String($0) }).joined(separator: "target.value.\(name)_case_\(caseName)")
+        let call = apply(
+          nativeReferenceCountingAction: hold,
+          around: "target.value.\(name)_case_\(caseName)",
+          referenceLookup: externalReferenceLookup
+        )
         return (caseName, call)
       }
       let componentReleases: [(String, String)] = thing.cases.compactMap { enumerationCase in
@@ -657,7 +688,11 @@ extension Platform {
           identifier: enumerationCase.names.identifier(),
           leading: true
         )
-        let call = release.textComponents.lazy.map({ String($0) }).joined(separator: "target.value.\(name)_case_\(caseName)")
+        let call = apply(
+          nativeReferenceCountingAction: release,
+          around: "target.value.\(name)_case_\(caseName)",
+          referenceLookup: externalReferenceLookup
+        )
         return (caseName, call)
       }
       return enumerationTypeDeclaration(
@@ -720,6 +755,31 @@ extension Platform {
     } else {
       return nil
     }
+  }
+
+  static func apply(
+    nativeReferenceCountingAction: NativeActionExpressionIntermediate,
+    around wrappedExpression: String,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
+    var accumulator: String = ""
+    for index in nativeReferenceCountingAction.textComponents.indices {
+      accumulator.append(contentsOf: String(nativeReferenceCountingAction.textComponents[index]))
+      if index != nativeReferenceCountingAction.textComponents.indices.last {
+        let parameter = nativeReferenceCountingAction.parameters[index]
+        if let type = parameter.typeInstead {
+          let typeSource = source(for: type, referenceLookup: referenceLookup)
+          if parameter.sanitizedForIdentifier {
+            accumulator.append(contentsOf: identifierPrefix(for: typeSource))
+          } else {
+            accumulator.append(contentsOf: typeSource)
+          }
+        } else {
+          accumulator.append(wrappedExpression)
+        }
+      }
+    }
+    return accumulator
   }
 
   static func flowCoverageRegistration(
@@ -804,8 +864,7 @@ extension Platform {
       let partiallyUnwrapped = argument.resolvedResultType,
       let parameterType = partiallyUnwrapped,
       let implementation = getImplementation(parameterType, referenceLookup) {
-      let wrapped = implementation.textComponents.lazy.map({ String($0) })
-        .joined(separator: parameter)
+      let wrapped = apply(nativeReferenceCountingAction: implementation, around: parameter, referenceLookup: referenceLookup)
       if delayUntilCleanUp {
         cleanUpCode.prepend(contentsOf: statement(expression: wrapped).appending(contentsOf: "\n"))
       } else {
@@ -962,8 +1021,11 @@ extension Platform {
         bareAction.isAccessor,
         let returnType = bareAction.returnValue,
         let hold = nativeHold(on: returnType, referenceLookup: referenceLookup) {
-        return hold.textComponents.lazy.map({ String($0) })
-          .joined(separator: basicCall)
+        return apply(
+          nativeReferenceCountingAction: hold,
+          around: basicCall,
+          referenceLookup: referenceLookup
+        )
       } else {
         return basicCall
       }
@@ -1138,7 +1200,11 @@ extension Platform {
         }
       }
       if let wrap = nativeWrap {
-        accumulator = wrap.textComponents.lazy.map({ String($0) }).joined(separator: accumulator)
+        accumulator = apply(
+          nativeReferenceCountingAction: wrap,
+          around: accumulator,
+          referenceLookup: referenceLookup
+        )
       }
       if let before = beforeCleanUp {
         cleanUpCode.prepend(contentsOf: accumulator)
@@ -1299,8 +1365,11 @@ extension Platform {
                 let partiallyUnwrapped = actionArgument.resolvedResultType,
                 let memberType: ParsedTypeReference = partiallyUnwrapped,
                 let hold = nativeHold(on: memberType, referenceLookup: referenceLookup) {
-                wrappedCall = hold.textComponents.lazy.map({ String($0) })
-                  .joined(separator: basicCall)
+                wrappedCall = apply(
+                  nativeReferenceCountingAction: hold,
+                  around: basicCall,
+                  referenceLookup: referenceLookup
+                )
               } else {
                 wrappedCall = basicCall
               }
@@ -1463,8 +1532,11 @@ extension Platform {
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode
           )
-          let releaseExpression = release.textComponents.lazy.map({ String($0) })
-            .joined(separator: localName)
+          let releaseExpression = apply(
+            nativeReferenceCountingAction: release,
+            around: localName,
+            referenceLookup: referenceLookup
+          )
           entriesInThisBranch.append(
             ReferenceCountedReturn(
               localStorageDeclaration: "\(typeName) \(localName) = \(call);",
@@ -1567,8 +1639,13 @@ extension Platform {
           )
           if let expectedType = storageType,
             let hold = nativeHold(on: expectedType, referenceLookup: referenceLookup) {
-            entry.append(contentsOf: String(hold.textComponents.first!))
-            closingParenthesis = String(hold.textComponents.last!)
+            let call = apply(
+              nativeReferenceCountingAction: hold,
+              around: "",
+              referenceLookup: referenceLookup
+            )
+            entry.append(contentsOf: call.dropLast())
+            closingParenthesis = String(call.last!)
           }
         }
       }
@@ -1683,12 +1760,19 @@ extension Platform {
       || action.isMemberWrapper {
       return nil
     }
+    guard action.implementation != nil else {
+      // creation
+      return nil
+    }
 
-    let name = sanitize(
-      identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-      leading: true
+    let name = nativeName(of: action, referenceLookup: referenceLookup)
+      ?? sanitize(
+        identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+        leading: true
+      )
+    let parameters = action.parameters.ordered(
+      for: nativeNameDeclaration(of: action) ?? action.names.identifier()
     )
-    let parameters = action.parameters.ordered(for: action.names.identifier())
       .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
       .joined(separator: ", ")
 

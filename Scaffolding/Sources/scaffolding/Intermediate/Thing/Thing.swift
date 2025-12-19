@@ -245,6 +245,18 @@ extension Thing {
           }
         }
       }
+      for referenceCountingAction in [native.hold, native.release, native.copy].compactMap({ $0 }) {
+        referenceCountingAction.validateReferences(
+          availableParameters: [
+            .nativeParameterStub(names: ["."], type: .compilerGeneratedReference(to: "."))
+          ],
+          requiredAccess: access,
+          testContext: testContext,
+          testOnlyAccess: testOnlyAccess,
+          referenceLookup: referenceLookup,
+          errors: &errors
+        )
+      }
     }
     documentation?.validateReferences(
       inheritedVisibility: access,
@@ -385,7 +397,8 @@ extension Thing {
   ) -> [UnicodeText]
   where P: Platform {
     var result: [UnicodeText] = []
-    for part in parts {
+    for part in parts
+      .filter({ platform.nativeImplementation(of: $0.accessor)?.expression.textComponents != [""] }) {
       result.append(
         contentsOf: part.contents.requiredIdentifiers(
           moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup

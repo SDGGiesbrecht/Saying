@@ -311,6 +311,10 @@ struct UnicodeSegments {
   }
 
   subscript(_ position: UnicodeSegments.Boundary) -> Unicode.Scalar {
+    return self[accordingToDefaultUseAsList: position]
+  }
+
+  subscript(accordingToDefaultUseAsList position: UnicodeSegments.Boundary) -> Unicode.Scalar {
     return self[entryIndex: self.indexSkippingBoundsCheck(afterBoundary: position)]
   }
 

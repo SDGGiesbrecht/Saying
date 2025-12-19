@@ -74,7 +74,7 @@ ability (clients)
     Swift: (self: [list]).append contentsOf (newElements: [appendix])
    )
    {
-    replace (from (end of (list)) to (end of (list))) in (↓ list) with (appendix)
+    append (appendix) to (↓ list) according to list insertion
    }
 
   choice (clients)
@@ -158,6 +158,20 @@ extension
     let (• copy: list) start as (list)
     replace (range) in (↓ copy) with (replacement)
     ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     append (insertion example: insertion) to (↓ list) according to list insertion
+    }
+   ]
+   (
+    English: append (appendix: insertion) to (list: ↓ list) according to list insertion
+   )
+   {
+    replace (from (end of (list)) to (end of (list))) in (↓ list) with (appendix)
    }
 
   action (clients)

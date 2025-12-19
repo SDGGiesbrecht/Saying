@@ -158,6 +158,24 @@ extension
    }
 
   action (unit)
+   [
+    test {
+     let (• list: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
+     let (• beginning: list boundary) be (beginning of (list))
+     insert (example: thing) at (beginning) in (↓ list)
+     verify ((boundary before (index after (beginning) in (list) skipping bounds check) in (list)) is (beginning))
+     release unmanaged (↓ list)
+    }
+   ]
+   (
+    English: boundary before (index: list index) in (list: unmanaged list of (thing))
+   )
+   list boundary
+   {
+    ← boundary before (index) in ((uncounted) of (list))
+   }
+
+  action (unit)
    (
     English: beginning of (list: unmanaged list of (thing))
     Deutsch: Anfang von (Liste: [list])

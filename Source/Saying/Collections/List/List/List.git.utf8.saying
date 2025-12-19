@@ -9,31 +9,72 @@ extension
     ελληνικά: κατάλογος (πράγμα: [thing])
     עברית: רשימה של (דבר: [thing])
    )
-   C: “GArray¤(2A)”/“g¤(5F)array¤(5F)ref(” array “)”/“g¤(5F)array¤(5F)unref(” array “)”/“g¤(5F)array¤(5F)ref(” array “)” (“glib¤(2D)2.0”)
+   C: “list¤(5F)” (thing) sanitized for identifier “¤(2A)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(” . “)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)release(” . “)”/“list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(” . “)” [
+     “list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
+     “list¤(5F)” (thing) sanitized for identifier “¤(5F)release(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
+     “list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(list¤(5F)” (thing) sanitized for identifier “¤(2A))”
+    ] {
+     “list¤(5F)” (thing) sanitized for identifier “¤(2A) list¤(5F)” (thing) sanitized for identifier “¤(5F)hold(list¤(5F)” (thing) sanitized for identifier “¤(2A) list);”
+     “void list¤(5F)” (thing) sanitized for identifier “¤(5F)release(list¤(5F)” (thing) sanitized for identifier “¤(2A) list);”
+     “list¤(5F)” (thing) sanitized for identifier “¤(2A) list¤(5F)” (thing) sanitized for identifier “¤(5F)copy(list¤(5F)” (thing) sanitized for identifier “¤(2A) list);”
+    }
    C♯: “List<” thing “>” (“System.Collections.Generic”)
    Kotlin: “List<” thing “>”
    Swift: “[” thing “]”
    {
+    part (file)
+     (
+      English: unmanaged
+     )
+     unmanaged list of (thing)
+     C: “¤(2A)” . “”
+     C♯: “”
+     JavaScript: “”
+     Kotlin: “”
+     Swift: “”
    }
 
   action (file)
    (
-    English: unmanaged (list: list of (thing))
+    English: initialize (list: list of (thing)) to (unmanaged: unmanaged list of (thing))
    )
-   unmanaged list of (thing)
-   {
-    let (• end: list boundary) be (end of (list))
-    ← create unmanaged list with uncounted (uncounted (list)), end (end) and limit (end)
-   }
+   C: “¤(2A)” list “ = ” unmanaged “”
+   {}
 
   action (file)
+   [
+    test {ignore (create list with unmanaged list (empty: unmanaged list of (thing)))}
+   ]
    (
     English: create list with unmanaged list (list: unmanaged list of (thing))
    )
    list of (thing)
-   C: “g¤(5F)array¤(5F)new(FALSE, FALSE, sizeof(” thing “))”
    {
-    ← (managed) of ((uncounted) of (list))
+    let (• memory: list of (thing)) be (list at (allocate (size of (list)) bytes of memory): list of (thing))
+    initialize (memory) to (list)
+    ← memory
+   }
+
+  action (file)
+   (
+    English: list at (address: memory address)
+   )
+   list of (thing)
+   C: “(list¤(5F)” (thing) sanitized for identifier “¤(2A))” address “”
+   {
+    ← empty
+   }
+
+  action (file)
+   (
+    English: hold (list: list of (thing)) without returning
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    hold unmanaged (↓ (unmanaged) of (list))
    }
 
   action (file)
@@ -41,7 +82,6 @@ extension
     test {
      let (• list: list of (thing)) be (empty: list of (thing))
      ignore (hold (list))
-     release (list)
     }
    ]
    (
@@ -49,18 +89,20 @@ extension
     C: 1 hold (list: [list])
    )
    list of (thing)
+   C♯: “” list “”
+   JavaScript: “” list “”
+   Kotlin: “” list “”
+   Swift: “” list “”
    {
-    let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-    hold unmanaged (↓ unmanaged)
+    hold (list) without returning
     ← list
    }
 
   action (file)
    [
-    test (hidden) {
+    test {
      let (• list: list of (thing)) be (empty: list of (thing))
-     let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-     hold unmanaged (↓ unmanaged)
+     hold (list) without returning
      release (list)
     }
    ]
@@ -68,9 +110,12 @@ extension
     English: release (list: list of (thing))
     C: 1 release (list: [list])
    )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
    {
-    let (• unmanaged: unmanaged list of (thing)) start as (unmanaged (list))
-    release unmanaged (↓ unmanaged)
+    release unmanaged (↓ (unmanaged) of (list))
    }
 
   action (file)
@@ -84,8 +129,12 @@ extension
     C: 1 copy (list: [list])
    )
    list of (thing)
+   C♯: “” list “”
+   JavaScript: “” list “”
+   Kotlin: “” list “”
+   Swift: “” list “”
    {
-    ← create list with unmanaged list (copy of unmanaged (unmanaged (list)))
+    ← create list with unmanaged list (copy of unmanaged ((unmanaged) of (list)))
    }
 
   use (clients)
@@ -96,76 +145,90 @@ extension
       English: index after (boundary: list boundary) in (list: list of (thing)) skipping bounds check
      )
      list index
-     C: “” boundary “”
      C♯: “” boundary “”
      JavaScript: “” boundary “”
      Kotlin: “” boundary “”
      Swift: “” boundary “”
+     {
+      ← index after (boundary) in ((unmanaged) of (list)) skipping bounds check
+     }
 
     action (clients)
      (
       English: beginning of (list: list of (thing))
      )
      list boundary
-     C: “0”
      C♯: “0”
      JavaScript: “0”
      Kotlin: “0”
      Swift: “” list “.startIndex”
+     {
+      ← beginning of ((unmanaged) of (list))
+     }
 
     action (clients)
      (
       English: end of (list: list of (thing))
      )
      list boundary
-     C: “” list “¤(2D)>len”
      C♯: “” list “.Count”
      JavaScript: “” list “.length”
      Kotlin: “” list “.size”
      Swift: “” list “.endIndex”
+     {
+      ← end of ((unmanaged) of (list))
+     }
 
     action (clients)
      (
       English: advance (cursor: ↓ list boundary) to next in (list: list of (thing)) skipping bounds check
      )
-     C: “++” cursor “”
      C♯: “++” cursor “”
      JavaScript: “++” cursor “”
      Kotlin: “++” cursor “”
      Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
+     {
+      ← advance (↓ cursor) to next in ((unmanaged) of (list)) skipping bounds check
+     }
 
     action (clients)
      (
       English: boundary after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
      )
      list boundary
-     C: “” cursor “ + 1”
      C♯: “” cursor “ + 1”
      JavaScript: “” cursor “ + 1”
      Kotlin: “” cursor “ + 1”
      Swift: “” list “.index(after: ” cursor “)”
+     {
+      ← boundary after (cursor) in ((unmanaged) of (list)) skipping bounds check
+     }
 
     action (clients)
      (
       English: entry at (cursor: list index) in (list: list of (thing))
      )
      thing
-     C: “” hold on (thing) “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
      C♯: “” list “[” cursor “]”
      JavaScript: “” list “[” cursor “]”
      Kotlin: “” list “[” cursor “]”
      Swift: “” list “[” cursor “]”
+     {
+      ← entry at (cursor) in ((unmanaged) of (list))
+     }
 
     action (clients)
      (
       English: entry after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
      )
      thing
-     C: “” hold on (thing) “g¤(5F)array¤(5F)index(” list “, ” thing “, ” cursor “)”
      C♯: “” list “[” cursor “]”
      JavaScript: “” list “[” cursor “]”
      Kotlin: “” list “[” cursor “]”
      Swift: “” list “[” cursor “]”
+     {
+      ← entry after (cursor) in (list) skipping bounds check, according to default use as list
+     }
 
     action (clients)
      (
@@ -204,11 +267,13 @@ extension
       English: empty
      )
      list of (thing)
-     C: “g¤(5F)array¤(5F)new(FALSE, FALSE, sizeof(” thing “))”
      C♯: “new List<” thing “>()”
      JavaScript: “[]”
      Kotlin: “listOf()”
      Swift: “[]”
+     {
+      ← create list with unmanaged list (empty: unmanaged list of (thing))
+     }
 
     action (clients)
      (
@@ -232,15 +297,35 @@ extension
     English: boundary before (index: list index) in (list: list of (thing))
    )
    list boundary
-   C: “” index “”
    C♯: “” index “”
    JavaScript: “” index “”
    Kotlin: “” index “”
    Swift: “” index “”
+   {
+    ← boundary before (index) in ((unmanaged) of (list))
+   }
 
   use (clients)
    slicing (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: thing) by unmanaged
+    }
+   ]
+   (
+    English: if most efficient, replace (index: list index) in (list: ↓ list of (thing)) with (element: thing) by unmanaged
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    replace (index) in (↓ (unmanaged) of (list)) with (element)
    }
 
   action (file)
@@ -265,6 +350,24 @@ extension
    [
     test {
      let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, insert (example: thing) at (beginning of (list)) in (↓ list) by unmanaged
+    }
+   ]
+   (
+    English: if most efficient, insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing)) by unmanaged
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    insert (element) at (boundary) in (↓ (unmanaged) of (list))
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
      if most efficient, insert (example: thing) at (beginning of (list)) in (↓ list) by replacement
     }
    ]
@@ -283,6 +386,24 @@ extension
    [
     test {
      let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, append (example: thing) to (↓ list) by changeable list
+    }
+   ]
+   (
+    English: if most efficient, append (element: thing) to (list: ↓ list of (thing)) by changeable list
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    append (element) to (↓ list) according to use as changeable list
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
      if most efficient, append (example: thing) to (↓ list) by replacement
     }
    ]
@@ -295,6 +416,26 @@ extension
    Swift: “”
    {
     change (↓ list) to ((list) with (element) appended)
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, remove (index after (beginning of (list)) in (list) skipping bounds check) from (↓ list) by range
+    }
+   ]
+   (
+    English: if most efficient, remove (index: list index) from (list: ↓ list of (thing)) by range
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    let (• before: list boundary) be (boundary before (index) in (list))
+    let (• after: list boundary) be (boundary after (before) in (list) skipping bounds check)
+    remove (from (before) to (after)) from (↓ list)
    }
 
   action (file)
@@ -325,7 +466,6 @@ extension
    (
     English: if most efficient, remove (range: range of (list boundary)) from (list: ↓ list of (thing)) by empty replacement
    )
-   C: “”
    C♯: “”
    JavaScript: “”
    Swift: “”
@@ -343,7 +483,6 @@ extension
    (
     English: remove from (beginning: list boundary) to (end: list boundary) from (list: ↓ list of (thing))
    )
-   C: “g¤(5F)array¤(5F)remove¤(5F)range(” list “, ” beginning “, ” end “ ¤(2D) ” beginning “)”
    C♯: “” list “.RemoveRange(” beginning “, ” end “ ¤(2D) ” beginning “)”
    JavaScript: “” list “.splice(” beginning “, ” end “ ¤(2D) ” beginning “)”
    {}
@@ -358,6 +497,7 @@ extension
    (
     English: if most efficient, remove (range: range of (list boundary)) from (list: ↓ list of (thing)) by bounds
    )
+   C: “”
    Kotlin: “”
    Swift: “”
    {
@@ -371,7 +511,6 @@ extension
      (
       English: replace (index: list index) in (list: ↓ list of (thing)) with (element: thing)
      )
-     C: “g¤(5F)array¤(5F)index(” list “, ” thing “, ” index “) = ” hold on (element) “”
      C♯: “” list “[” index “] = ” element “”
      JavaScript: “” list “[” index “] = ” element “”
      Swift: “” list “[” index “] = ” element “”
@@ -393,12 +532,12 @@ extension
      (
       English: insert (element: thing) at (boundary: list boundary) in (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)insert¤(5F)val(” list “, ” boundary “, ((struct { ” thing “ value; }) { ” hold on (element) “ }).value)”
      C♯: “” list “.Insert(” boundary “, ” element “)”
      JavaScript: “” list “.splice(” boundary “, 0, ” element “)”
      Swift: “” list “.insert(” element “, at: ” boundary “)”
      {
       if most efficient, insert (element) at (boundary) in (↓ list) by replacement
+      if most efficient, insert (element) at (boundary) in (↓ list) by unmanaged
      }
 
     action (clients)
@@ -415,12 +554,12 @@ extension
      (
       English: append (element: thing) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)append¤(5F)val(” list “, ((struct { ” thing “ value; }) { ” hold on (element) “ }).value)”
      C♯: “” list “.Add(” element “)”
      JavaScript: “” list “.push(” element “)”
      Swift: “” list “.append(” element “)”
      {
       if most efficient, append (element) to (↓ list) by replacement
+      if most efficient, append (element) to (↓ list) by changeable list
      }
 
     action (clients)
@@ -437,7 +576,6 @@ extension
      (
       English: prepend (element: thing) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)prepend¤(5F)val(” list “, ((struct { ” thing “ value; }) { ” hold on (element) “ }).value)”
      JavaScript: “” list “.unshift(” element “)”
      {
       prepend (element) to (↓ list) according to use as changeable list
@@ -457,12 +595,12 @@ extension
      (
       English: remove (index: list index) from (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)remove¤(5F)index(” list “, ” index “)”
      C♯: “” list “.RemoveAt(” index “)”
      JavaScript: “” list “.splice(” index “, 0)”
      Swift: “” list “.remove(at: ” index “)”
      {
       if most efficient, remove (index) from (↓ list) by replacement
+      if most efficient, remove (index) from (↓ list) by range
      }
 
     action (clients)
@@ -484,6 +622,24 @@ extension
       if most efficient, remove (range) from (↓ list) by bounds
       if most efficient, remove (range) from (↓ list) by empty replacement
      }
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (thing)) by unmanaged
+    }
+   ]
+   (
+    English: if most efficient, replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing)) by unmanaged
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    replace (range) in (↓ (unmanaged) of (list)) with ((unmanaged) of (insertion))
    }
 
   action (file)
@@ -527,6 +683,7 @@ extension
    (
     English: if most efficient, replace (range: range of (list boundary)) in (list: ↓ list of (thing)) with (insertion: list of (thing)) by replacement
    )
+   C: “”
    JavaScript: “”
    Swift: “”
    {
@@ -564,6 +721,7 @@ extension
     English: (list: list of (thing)) with (beginning: list boundary) to (end: list boundary) replaced with (insertion: list of (thing))
    )
    list of (thing)
+   C: “” hold on (list) “”
    JavaScript: “” list “.toSpliced(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
    {
     ← list
@@ -580,7 +738,7 @@ extension
     English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by bounds
    )
    list of (thing)
-   C: “” list “”
+   C: “” hold on (list) “”
    C♯: “” list “”
    Kotlin: “” list “”
    Swift: “” list “”
@@ -599,7 +757,6 @@ extension
     English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by list insertion
    )
    list of (thing)
-   C: “” list “”
    C♯: “” list “”
    JavaScript: “” list “”
    Kotlin: “” list “”
@@ -635,12 +792,29 @@ extension
    (
     English: if most efficient, insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing)) by list insertion
    )
-   C: “”
    C♯: “”
    Kotlin: “”
    Swift: “”
    {
     insert (insertion) at (boundary) in (↓ list) according to list insertion
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, append (insertion example: list of (thing)) to (↓ list) by list insertion
+    }
+   ]
+   (
+    English: if most efficient, append (appendix: list of (thing)) to (list: ↓ list of (thing)) by list insertion
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    append (appendix) to (↓ list) according to list insertion
    }
 
   action (file)
@@ -659,6 +833,22 @@ extension
    Swift: “”
    {
     change (↓ list) to ((list) with (appendix) appended)
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     if most efficient, prepend (insertion example: list of (thing)) to (↓ list) by list insertion
+    }
+   ]
+   (
+    English: if most efficient, prepend (prefix: list of (thing)) to (list: ↓ list of (thing)) by list insertion
+   )
+   C: “”
+   JavaScript: “”
+   {
+    prepend (prefix) to (↓ list) according to list insertion
    }
 
   action (file)
@@ -688,6 +878,7 @@ extension
      {
       if most efficient, replace (range) in (↓ list) with (insertion) by replacement
       if most efficient, replace (range) in (↓ list) with (insertion) by bounds
+      if most efficient, replace (range) in (↓ list) with (insertion) by unmanaged
      }
 
     action (clients)
@@ -703,7 +894,6 @@ extension
      (
       English: insert (insertion: list of (thing)) at (boundary: list boundary) in (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)insert¤(5F)vals(” list “, ” boundary “, ” insertion “¤(2D)>data, ” insertion “¤(2D)>len)”
      C♯: “” list “.InsertRange(” boundary “, ” insertion “)”
      Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
      {
@@ -725,12 +915,12 @@ extension
      (
       English: append (appendix: list of (thing)) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)append¤(5F)vals(” list “, ” appendix “¤(2D)>data, ” appendix “¤(2D)>len)”
      C♯: “” list “.AddRange(” appendix “)”
      Kotlin: “” list “ += ” appendix “”
      Swift: “” list “ += ” appendix “”
      {
       if most efficient, append (appendix) to (↓ list) by replacement
+      if most efficient, append (appendix) to (↓ list) by list insertion
      }
 
     action (clients)
@@ -738,7 +928,6 @@ extension
       English: (list: list of (thing)) with (appendix: list of (thing)) appended
      )
      list of (thing)
-     C♯: “” list “.Concat(” appendix “).ToList()” (“System.Linq”)
      JavaScript: “” list “.concat(” appendix “)”
      Kotlin: “” list “ + ” appendix “”
      Swift: “” list “ + ” appendix “”
@@ -750,10 +939,10 @@ extension
      (
       English: prepend (prefix: list of (thing)) to (list: ↓ list of (thing))
      )
-     C: “g¤(5F)array¤(5F)prepend¤(5F)vals(” list “, ” prefix “¤(2D)>data, ” prefix “¤(2D)>len)”
      JavaScript: “” list “.unshift(...” prefix “)”
      {
       if most efficient, prepend (prefix) to (↓ list) by replacement
+      if most efficient, prepend (prefix) to (↓ list) by list insertion
      }
 
     action (clients)

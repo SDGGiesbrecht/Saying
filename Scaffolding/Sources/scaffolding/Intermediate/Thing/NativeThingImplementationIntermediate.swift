@@ -170,9 +170,9 @@ extension NativeThingImplementationIntermediate {
     return NativeThingImplementationIntermediate(
       textComponents: textComponents,
       parameters: mappedParameters,
-      hold: hold,
-      release: release,
-      copy: copy,
+      hold: hold?.specializing(typeLookup: typeLookup),
+      release: release?.specializing(typeLookup: typeLookup),
+      copy: copy?.specializing(typeLookup: typeLookup),
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: typeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })
