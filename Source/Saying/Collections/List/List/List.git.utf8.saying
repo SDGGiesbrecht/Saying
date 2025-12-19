@@ -702,6 +702,7 @@ extension
     English: (list: list of (thing)) with (beginning: list boundary) to (end: list boundary) replaced with (insertion: list of (thing))
    )
    list of (thing)
+   C: “” hold on (list) “”
    JavaScript: “” list “.toSpliced(” beginning “, ” end “ ¤(2D) ” beginning “, ...” insertion “)”
    {
     ← list
