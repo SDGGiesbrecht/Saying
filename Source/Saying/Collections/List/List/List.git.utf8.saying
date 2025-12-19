@@ -1000,20 +1000,18 @@ extension
     test {
      let (• list: list of (thing)) be (non‐empty example: list of (thing))
      let (• result: list of (thing)) start as (empty: list of (thing))
-     if most efficient, convert ((from (beginning of (list)) to (end of (list))) in (list)) into list by iteration and store in (↓ result)
+     if most efficient, convert ((from (beginning of (list)) to (end of (list))) in (list)) into list by unmanaged and store in (↓ result)
     }
    ]
    (
-    English: if most efficient, convert (other: slice of (list of (thing))) into list by iteration and store in (result: ↓ list of (thing))
+    English: if most efficient, convert (other: slice of (list of (thing))) into list by unmanaged and store in (result: ↓ list of (thing))
    )
    C♯: “”
    JavaScript: “”
    Kotlin: “”
    Swift: “”
    {
-    for each (• element: thing) in (other), {
-     append (element) to (↓ result)
-    }
+    change (↓ result) to (create list with unmanaged list (copy of ((bounds) of (other)) from ((unmanaged) of ((whole) of (other)))))
    }
 
   action (file)
@@ -1090,7 +1088,7 @@ extension
      {
       let (• copy: list of (thing)) start as (empty: list of (thing))
       if most efficient, convert (other) into list by bounds and store in (↓ copy)
-      if most efficient, convert (other) into list by iteration and store in (↓ copy)
+      if most efficient, convert (other) into list by unmanaged and store in (↓ copy)
       ← copy
      }
 
