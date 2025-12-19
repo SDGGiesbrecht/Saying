@@ -39,12 +39,12 @@ action (file)
  {
   if (beginning) exists, unwrap it as (• start: Git‐style parsing cursor), {
    let (• adjusted offset: natural number) start as ((offset) of (start))
-   if ((adjusted offset) is not ((offset) of (end))), {
-    let (• segment: slice of (Unicode text)) start as ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
-    while ((first in (segment)) is (“ ”: Unicode scalar)), {
-     remove first from (↓ segment) skipping bounds check
-     add (one: natural number) to (↓ adjusted offset)
-    }
+   let (• segment: slice of (Unicode text)) start as ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
+   while ((first in (segment)) is (“ ”: Unicode scalar)), {
+    remove first from (↓ segment) skipping bounds check
+    add (one: natural number) to (↓ adjusted offset)
+   }
+   if ((segment) is not empty), {
     append (Unicode segment at (adjusted offset) containing (convert (segment) into list)) to (↓ segments)
    }
   }
