@@ -738,7 +738,7 @@ extension
     English: if most efficient, (list: list of (thing)) with (range: range of (list boundary)) replaced with (insertion: list of (thing)) by bounds
    )
    list of (thing)
-   C: “” list “”
+   C: “” hold on (list) “”
    C♯: “” list “”
    Kotlin: “” list “”
    Swift: “” list “”
