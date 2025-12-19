@@ -66,6 +66,19 @@ extension
    }
 
   action (file)
+   [
+    test {ignore (memory address of (empty: list of (thing)))}
+   ]
+   (
+    English: memory address of (list: list of (thing))
+   )
+   memory address
+   C: “(void¤(2A))” list “”
+   {
+    ← unallocated
+   }
+
+  action (file)
    (
     English: hold (list: list of (thing)) without returning
    )
@@ -115,7 +128,11 @@ extension
    Kotlin: “”
    Swift: “”
    {
+    let (• deallocating: truth value) be (((references) of ((unmanaged) of (list))) is (one: platform fixed‐width natural number))
     release unmanaged (↓ (unmanaged) of (list))
+    if (deallocating), {
+     deallocate memory (memory address of (list))
+    }
    }
 
   action (file)
