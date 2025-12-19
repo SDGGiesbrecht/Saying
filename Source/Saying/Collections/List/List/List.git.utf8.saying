@@ -66,6 +66,18 @@ extension
    }
 
   action (file)
+   (
+    English: hold (list: list of (thing)) without returning
+   )
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
+    hold unmanaged (↓ (unmanaged) of (list))
+   }
+
+  action (file)
    [
     test {
      let (• list: list of (thing)) be (empty: list of (thing))
@@ -82,11 +94,18 @@ extension
    Kotlin: “” list “”
    Swift: “” list “”
    {
-    hold unmanaged (↓ (unmanaged) of (list))
+    hold (list) without returning
     ← list
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (empty: list of (thing))
+     hold (list) without returning
+     release (list)
+    }
+   ]
    (
     English: release (list: list of (thing))
     C: 1 release (list: [list])
