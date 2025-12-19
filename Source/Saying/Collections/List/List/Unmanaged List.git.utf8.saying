@@ -118,6 +118,18 @@ extension
    }
 
   action (unit)
+   (
+    English: copy of (range: range of (list boundary)) from (list: unmanaged list of (thing))
+   )
+   unmanaged list of (thing)
+   {
+    let (• copy: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
+    resize storage of (↓ copy) to end at (length of (range))
+    replace (from (end of empty list) to (end of empty list)) in (↓ copy) with (range) from (list)
+    ← copy
+   }
+
+  action (unit)
    [
     test {
      let (• tracker: reference tracker) be (create reference tracker)
@@ -141,10 +153,7 @@ extension
    )
    unmanaged list of (thing)
    {
-    let (• copy: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
-    resize storage of (↓ copy) to end at ((end) of (list))
-    replace (from (end of empty list) to (end of empty list)) in (↓ copy) with (list)
-    ← copy
+    ← copy of (from (beginning of (list)) to (end of (list))) from (list)
    }
 
   action (unit)
@@ -303,6 +312,42 @@ extension
    }
 
   action (unit)
+   (
+    English: replace (removal range: range of (list boundary)) in (list: ↓ unmanaged list of (thing)) with (replacement range: range of (list boundary)) from (replacement source: unmanaged list of (thing))
+   )
+   {
+    let (• original end: list boundary) be (end of (list))
+    let (• beginning of removal: list boundary) be ((lower bound) of (removal range))
+    if ((beginning of removal) is greater than (original end)), {
+     !
+    }
+    let (• end of removal: list boundary) be ((upper bound) of (removal range))
+    if ((end of removal) is greater than (original end)), {
+     !
+    }
+    remove (removal range) from (↓ (uncounted) of (list))
+    let (• trailing range: range of (list boundary)) be (from (end of removal) to (original end))
+    let (• length of replacement: list boundary) be (length of (replacement range))
+    let (• end of insertion: list boundary) be (distance (length of replacement) after (beginning of removal))
+    let (• new end: list boundary) be (distance (length of (trailing range)) after (end of insertion))
+    ensure enough storage for (new end) in (↓ list)
+    if ((end of removal) is not (original end)), {
+     if ((new end) is not (original end)), {
+      move (trailing range) to (end of insertion) in (↓ (uncounted) of (list))
+     }
+    }
+    change ((end) of (list)) to (new end)
+    if ((new end) is less than (original end)), {
+     if ((new end) is less than or equal to ((((limit) of (list)) shrunk by (growth factor)) shrunk by (growth factor))), {
+      resize storage of (↓ list) to end at ((new end) grown by (growth factor))
+     }
+    }
+    if ((length of replacement) is greater than (end of empty list)), {
+     copy (from ((lower bound) of (replacement range)) to ((upper bound) of (replacement range))) from ((uncounted) of (replacement source)) to (beginning of removal) in (↓ (uncounted) of (list))
+    }
+   }
+
+  action (unit)
    [
     test {
      let (• replacement: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
@@ -347,35 +392,7 @@ extension
     Swift: (self: [list]).replaceSubrange (subrange: [range]) with (newElements: [replacement])
    )
    {
-    let (• original end: list boundary) be ((end) of (list))
-    let (• beginning of removal: list boundary) be ((lower bound) of (range))
-    if ((beginning of removal) is greater than (original end)), {
-     !
-    }
-    let (• end of removal: list boundary) be ((upper bound) of (range))
-    if ((end of removal) is greater than (original end)), {
-     !
-    }
-    remove (range) from (↓ (uncounted) of (list))
-    let (• trailing range: range of (list boundary)) be (from (end of removal) to (original end))
-    let (• length of replacement: list boundary) be (end of (replacement))
-    let (• end of insertion: list boundary) be (distance (length of replacement) after (beginning of removal))
-    let (• new end: list boundary) be (distance (length of (trailing range)) after (end of insertion))
-    ensure enough storage for (new end) in (↓ list)
-    if ((end of removal) is not (original end)), {
-     if ((new end) is not (original end)), {
-      move (trailing range) to (end of insertion) in (↓ (uncounted) of (list))
-     }
-    }
-    change ((end) of (list)) to (new end)
-    if ((new end) is less than (original end)), {
-     if ((new end) is less than or equal to ((((limit) of (list)) shrunk by (growth factor)) shrunk by (growth factor))), {
-      resize storage of (↓ list) to end at ((new end) grown by (growth factor))
-     }
-    }
-    if ((length of replacement) is greater than (end of empty list)), {
-     copy (from (beginning of (replacement)) to (end of (replacement))) from ((uncounted) of (replacement)) to (beginning of removal) in (↓ (uncounted) of (list))
-    }
+    replace (range) in (↓ list) with (from (beginning of (replacement)) to (end of (replacement))) from (replacement)
    }
  }
 
