@@ -70,6 +70,7 @@ extension
     test {
      let (• list: list of (thing)) be (empty: list of (thing))
      ignore (hold (list))
+     release (list)
     }
    ]
    (
@@ -87,13 +88,6 @@ extension
    }
 
   action (file)
-   [
-    test {
-     let (• list: list of (thing)) be (empty: list of (thing))
-     hold unmanaged (↓ (unmanaged) of (list))
-     release (list)
-    }
-   ]
    (
     English: release (list: list of (thing))
     C: 1 release (list: [list])
