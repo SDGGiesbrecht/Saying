@@ -599,6 +599,12 @@ func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
   return lhs.scalars == rhs.scalars
 }
 
+extension Slice<UnicodeText> {
+  var isNotEmpty: Bool {
+    return self.isNotEmptyAccordingToDefaultUseAsList
+  }
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -643,6 +649,12 @@ private let ensureUnicodeResourcesHaveLoaded: Void = { _ = Locale.current }()
 
 extension String.UnicodeScalarView: Hashable {}
 
+extension Slice<UnicodeText> {
+  var isNotEmptyAccordingToDefaultUseAsList: Bool {
+    return !self.isEmpty
+  }
+}
+
 func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
 }
@@ -663,12 +675,12 @@ func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool
 fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: Git_2010style_0020parsing_0020cursor, _ segments: inout [Unicode_0020segment]) {
   if let start = beginning {
     var adjusted_0020offset: UInt64 = start.offset
-    if adjusted_0020offset != end.offset {
-      var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
-      while segment.first == " " {
-        segment.removeFirst()
-        adjusted_0020offset += 1
-      }
+    var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
+    while segment.first == " " {
+      segment.removeFirst()
+      adjusted_0020offset += 1
+    }
+    if segment.isNotEmpty {
       segments.append(Unicode_0020segment(adjusted_0020offset, UnicodeText(segment)))
     }
   }
