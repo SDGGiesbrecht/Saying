@@ -87,7 +87,7 @@ extension
    (
     English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
-   C: “” list “[” index “] = ” hold on (element) “”
+   C: “(” list “)[” index “] = ” hold on (element) “”
    {}
 
   action (file)
