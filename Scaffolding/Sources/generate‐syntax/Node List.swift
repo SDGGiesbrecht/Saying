@@ -757,7 +757,7 @@ extension Node {
           Node(
             name: "ConcreteParameterType",
             kind: .compound(children: [
-              Child(name: "throughArrow", type: "ThroughArrow", kind: .optional),
+              Child(name: "passage", type: "Passage", kind: .optional),
               Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
               Child(name: "type", type: "ThingReference", kind: .required),
             ])

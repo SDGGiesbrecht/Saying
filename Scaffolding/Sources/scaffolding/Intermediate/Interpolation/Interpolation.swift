@@ -320,7 +320,7 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       parameters: [
         .nativeParameterStub(names: ["enumeration"], type: enumerationType),
         .nativeParameterStub(names: ["case"], type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier)),
-        .nativeParameterStub(names: ["value"], type: valueType),
+        .nativeParameterStub(names: ["value"], type: valueType, passage: .out),
         .nativeParameterStub(names: ["consequence"], type: .statements),
       ],
       reorderings: [

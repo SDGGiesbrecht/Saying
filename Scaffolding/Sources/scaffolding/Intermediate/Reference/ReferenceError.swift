@@ -2,6 +2,7 @@ enum ReferenceError: DiagnosticError {
   case noSuchThing(UnicodeText, reference: ParsedThingReferenceProtocol)
   case noSuchAction(name: UnicodeText, reference: ParsedAction)
   case noSuchAbility(name: UnicodeText, reference: ParsedAbilityReferenceProtocol)
+  case mismatchedPassage(attempted: ParameterPassage, expected: ParameterPassage, location: ParsedAction)
   case unfulfilledRequirement(name: Set<UnicodeText>, ParsedUse)
   case noSuchRequirement(ParsedActionDeclaration)
   case mismatchedParameters(name: UnicodeText, declaration: ParsedActionName)
@@ -27,6 +28,8 @@ enum ReferenceError: DiagnosticError {
       return "\(defaultMessage) (\(name))"
     case .noSuchAbility:
       return defaultMessage
+    case .mismatchedPassage(attempted: let attempted, expected: let expected, location: _):
+      return "\(defaultMessage) (\(attempted) ≠ \(expected))"
     case .unfulfilledRequirement:
       return defaultMessage
     case .noSuchRequirement:
@@ -70,6 +73,8 @@ enum ReferenceError: DiagnosticError {
       return action.location
     case .noSuchAbility(_, reference: let use):
       return use.location
+    case .mismatchedPassage(attempted: _, expected: _, let location):
+      return location.location
     case .unfulfilledRequirement(_, let use):
       return use.location
     case .noSuchRequirement(let declaration):

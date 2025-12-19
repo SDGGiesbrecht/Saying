@@ -27,7 +27,7 @@ flow (clients)
   test {
    let (• value: truth value) start as (true)
    while (value), {
-    change (value) to (false)
+    change (↓ value) to (false)
    }
   }
  ]
@@ -82,7 +82,7 @@ extension
      ← cached
     }
     let (• result: thing) be (compute: thing)
-    change (cache) to (result)
+    change (↓ cache) to (result)
     ← result
    }
  }
@@ -99,7 +99,7 @@ extension
     }
    ]
    (
-    English: for each (entry: element) in (sequence: list), (repetition: {})
+    English: for each (entry: • element) in (sequence: list), (repetition: {})
    )
    Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
      “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
@@ -132,7 +132,7 @@ flow (clients)
    at clean‐up, {
     verify ((value) is (true))
    }
-   change (value) to (true)
+   change (↓ value) to (true)
   }
  ]
  (

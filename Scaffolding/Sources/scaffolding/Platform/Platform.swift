@@ -937,7 +937,7 @@ extension Platform {
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         var returnValue: String
-        if parameter.isThrough {
+        if parameter.passage == .through {
           returnValue = dereference(
             throughParameter: parameterName,
             forwarding: reference.passage == .through && !isNativeArgument
@@ -1344,7 +1344,7 @@ extension Platform {
                     normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                     mode: mode
                   ),
-                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.isThrough == true,
+                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.passage == .through,
                   isAddressee: nativeIsMember(action: action) && argumentsArray.isEmpty
                 )
               )
@@ -1580,7 +1580,7 @@ extension Platform {
       if needsReferencePreparation {
         referenceList = statement.passedReferences()
           .filter({ reference in
-            return context?.parameters.parameter(named: reference.actionName)?.isThrough != true
+            return context?.parameters.parameter(named: reference.actionName)?.passage != .through
           })
           .map({ reference in
             var extracted: [String] = []
@@ -1731,7 +1731,7 @@ extension Platform {
       case .simple, .compound:
         let label = nativeLabel(of: parameter, isCreation: false)
         let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
-        return parameterDeclaration(label: label, name: name, type: typeSource, isThrough: parameter.isThrough)
+        return parameterDeclaration(label: label, name: name, type: typeSource, isThrough: parameter.passage == .through)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
         let label = nativeLabel(of: parameter, isCreation: false)
         let parameters = actionParameters
@@ -1899,7 +1899,7 @@ extension Platform {
     if nativeIsMember(action: action),
       !isInitializer {
       let first = parameterEntries.removeFirst()
-      isMutating = first.isThrough
+      isMutating = first.passage == .through
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
     }
     let parameters: String = parameterEntries

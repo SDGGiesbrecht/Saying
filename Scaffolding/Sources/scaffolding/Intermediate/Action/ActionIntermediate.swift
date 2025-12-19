@@ -1009,7 +1009,7 @@ extension ActionIntermediate {
                     ActionUse(
                       actionName: parameter.names.identifier(),
                       arguments: [],
-                      passage: parameter.isThrough ? .through : .into,
+                      passage: parameter.passage,
                       resolvedResultType: parameter.type
                     )
                   )

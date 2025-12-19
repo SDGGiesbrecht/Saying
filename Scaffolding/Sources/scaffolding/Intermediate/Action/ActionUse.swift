@@ -271,6 +271,11 @@ extension ActionUse {
           unavailableOutsideTestsError: { .actionUnavailableOutsideTests(reference: source!) },
           unavailableInVisibleTestsError: { .actionAccessNarrowerThanDocumentationVisibility(reference: source!) }
         )
+        for (parameter, argument) in zip(action.parameters.ordered(for: actionName), arguments) {
+          if parameter.passage != argument.passage {
+            errors.append(.mismatchedPassage(attempted: argument.passage, expected: parameter.passage, location: argument.source!))
+          }
+        }
       } else {
         if let literal = literal,
            let resolved = resolvedResultType,

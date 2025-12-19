@@ -85,13 +85,13 @@ extension
 
   flow (clients)
    (
-    English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: thing), (consequence: {})
+    English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: • thing), (consequence: {})
    )
    JavaScript: “let ” unique (resolved optional) “ = ” optional “; if (” unique (resolved optional) “ !== null) { const ” unwrapped “ = ” unique (resolved optional) “; {” consequence “}}”
    Kotlin: “val ” unique (resolved optional) “ = ” optional “; if (” unique (resolved optional) “ != null) { val ” unwrapped “ = ” unique (resolved optional) “” consequence “}”
    Swift: “if let ” unwrapped “ = ” optional “ {” consequence “}”
    {
-    if (optional) is (something), unwrap it as (unwrapped), {
+    if (optional) is (something), unwrap it as (• unwrapped), {
      consequence
     }
    }
@@ -110,9 +110,9 @@ extension
 
   flow (clients)
    (
-    English: change (storage: optional (thing)) to (value: thing)
+    English: change (storage: ↓ optional (thing)) to (value: thing)
    )
    {
-    change (storage) to (wrap (value) into optional)
+    change (↓ storage) to (wrap (value) into optional)
    }
  }
