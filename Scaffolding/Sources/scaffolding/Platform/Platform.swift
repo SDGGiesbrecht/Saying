@@ -936,13 +936,20 @@ extension Platform {
       let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
+        var returnValue: String
         if parameter.isThrough {
-          return dereference(
+          returnValue = dereference(
             throughParameter: parameterName,
             forwarding: reference.passage == .through && !isNativeArgument
           )
         } else {
-          return parameterName
+          returnValue = parameterName
+        }
+        if isDirectReturn,
+          let hold = nativeHold(on: parameter.type, referenceLookup: referenceLookup)  {
+          return apply(nativeReferenceCountingAction: hold, around: returnValue, referenceLookup: referenceLookup)
+        } else {
+          return returnValue
         }
       } else {
         return call(
