@@ -820,7 +820,7 @@ extension Platform {
     isArgumentExtraction: Bool,
     isDirectReturn: Bool,
     cleanUpCode: inout String,
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
@@ -888,7 +888,7 @@ extension Platform {
     isThrough: Bool,
     isDirectReturn: Bool,
     cleanUpCode: inout String,
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
@@ -922,7 +922,11 @@ extension Platform {
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
-      return inlined
+      if isNativeArgument {
+        return dereference(throughParameter: inlined.argument, forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument))
+      } else {
+        return inlined.argument
+      }
     } else if reference.passage == .out {
       return String(sanitize(identifier: reference.actionName, leading: true))
     } else if let local = localLookup.lookupAction(
@@ -1052,7 +1056,7 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     extractedArguments: inout [String],
     cleanUpCode: inout String,
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> String {
@@ -1234,30 +1238,34 @@ extension Platform {
       }
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
-      var newInliningArguments: [UnicodeText: String] = [:]
+      var newInliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)] = [:]
       var locals = ReferenceDictionary()
       for index in parameters.indices {
         let parameter = parameters[index]
         let argument = reference.arguments[index]
         switch argument {
         case .action(let action):
-          newInliningArguments[parameter.names.identifier()] = call(
-            to: action,
-            context: context,
-            localLookup: localLookup.appending(locals),
-            referenceLookup: referenceLookup,
-            isNativeArgument: false,
-            contextCoverageIdentifier: contextCoverageIdentifier,
-            extractedCoverageRegistrations: &extractedCoverageRegistrations,
-            coverageRegionCounter: &coverageRegionCounter,
-            clashAvoidanceCounter: &clashAvoidanceCounter,
-            extractedArguments: &extractedArguments,
-            isThrough: action.passage == .through,
-            isDirectReturn: false,
-            cleanUpCode: &cleanUpCode,
-            inliningArguments: inliningArguments,
-            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-            mode: mode
+          newInliningArguments[parameter.names.identifier()] = (
+            argument: call(
+              to: action,
+              context: context,
+              localLookup: localLookup.appending(locals),
+              referenceLookup: referenceLookup,
+              isNativeArgument: false,
+              contextCoverageIdentifier: contextCoverageIdentifier,
+              extractedCoverageRegistrations: &extractedCoverageRegistrations,
+              coverageRegionCounter: &coverageRegionCounter,
+              clashAvoidanceCounter: &clashAvoidanceCounter,
+              extractedArguments: &extractedArguments,
+              isThrough: action.passage == .through,
+              isDirectReturn: false,
+              cleanUpCode: &cleanUpCode,
+              inliningArguments: inliningArguments,
+              normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+              mode: mode
+            ),
+            stillNeedsDereferencingIfNativeArgument: parameter.passage == .through
+              && action.passage == .through
           )
           let newActions = action.localActions()
           for local in newActions {
@@ -1286,7 +1294,10 @@ extension Platform {
           ) {
             source.prepend(coverage)
           }
-          newInliningArguments[parameter.names.identifier()] = source.joined(separator: "\n")
+          newInliningArguments[parameter.names.identifier()] = (
+            argument: source.joined(separator: "\n"),
+            stillNeedsDereferencingIfNativeArgument: false
+          )
         }
       }
       var newCoverageRegionCounter = 0
@@ -1441,7 +1452,7 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode
   ) -> ReferenceCountedReturns {
@@ -1473,7 +1484,7 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     entries: inout ReferenceCountedReturns
@@ -1568,7 +1579,7 @@ extension Platform {
     followingStatements: Array<StatementIntermediate>.SubSequence,
     clashAvoidanceCounter: inout Int,
     cleanUpCode: inout String,
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
     indentationLevel: Int
@@ -1578,7 +1589,7 @@ extension Platform {
       var referenceList: [String] = []
       var extractedCoverageRegistrations: [String] = []
       if needsReferencePreparation {
-        referenceList = statement.passedReferences()
+        referenceList = statement.passedReferences(platform: self, referenceLookup: referenceLookup)
           .filter({ reference in
             return context?.parameters.parameter(named: reference.actionName)?.passage != .through
           })
@@ -1806,7 +1817,7 @@ extension Platform {
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
-    inliningArguments: [UnicodeText: String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode,
     indentationLevel: Int
   ) -> [String] {

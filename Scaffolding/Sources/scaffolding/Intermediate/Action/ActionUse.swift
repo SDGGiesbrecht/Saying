@@ -98,11 +98,36 @@ extension ActionUse {
       return arguments.flatMap { $0.localActions() }
     }
   }
-  func passedReferences() -> [ActionUse] {
+  func passedReferences(
+    platform: Platform.Type,
+    referenceLookup: [ReferenceDictionary],
+    skipLayer: Bool
+  ) -> [ActionUse] {
     if passage == .through {
-      return [self]
+      if skipLayer {
+        return []
+      } else {
+        return [self]
+      }
     } else {
-      return arguments.flatMap { $0.passedReferences() }
+      var skipNextLayer = false
+      if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
+        let action = referenceLookup.lookupAction(
+          actionName,
+          signature: signature,
+          specifiedReturnValue: resolvedResultType
+        ),
+        platform.nativeImplementation(of: action) != nil,
+        action.isFlow {
+        skipNextLayer = true
+      }
+      return arguments.flatMap { argument in
+        return argument.passedReferences(
+          platform: platform,
+          referenceLookup: referenceLookup,
+          skipLayer: skipNextLayer
+        )
+      }
     }
   }
 }

@@ -58,10 +58,18 @@ extension ActionUseArgument {
       return []
     }
   }
-  func passedReferences() -> [ActionUse] {
+  func passedReferences(
+    platform: Platform.Type,
+    referenceLookup: [ReferenceDictionary],
+    skipLayer: Bool
+  ) -> [ActionUse] {
     switch self {
     case .action(let action):
-      return action.passedReferences()
+      return action.passedReferences(
+        platform: platform,
+        referenceLookup: referenceLookup,
+        skipLayer: skipLayer
+      )
     case .flow:
       return []
     }

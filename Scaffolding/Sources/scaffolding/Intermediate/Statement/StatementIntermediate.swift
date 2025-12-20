@@ -39,8 +39,12 @@ extension StatementIntermediate {
   func localActions() -> [ActionIntermediate] {
     return action?.localActions() ?? []
   }
-  func passedReferences() -> [ActionUse] {
-    return action?.passedReferences() ?? []
+  func passedReferences(platform: Platform.Type, referenceLookup: [ReferenceDictionary]) -> [ActionUse] {
+    return action?.passedReferences(
+      platform: platform,
+      referenceLookup: referenceLookup,
+      skipLayer: false
+    ) ?? []
   }
 }
 
