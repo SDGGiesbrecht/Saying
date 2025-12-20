@@ -922,11 +922,10 @@ extension Platform {
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
-      if isNativeArgument {
-        return dereference(throughParameter: inlined.argument, forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument))
-      } else {
-        return inlined.argument
-      }
+      return dereference(
+        throughParameter: inlined.argument,
+        forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument)
+      )
     } else if reference.passage == .out {
       return String(sanitize(identifier: reference.actionName, leading: true))
     } else if let local = localLookup.lookupAction(
