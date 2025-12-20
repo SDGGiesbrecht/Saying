@@ -94,6 +94,24 @@ extension
    [
     test {
      let (• list: list of (thing)) be (empty: list of (thing))
+     hold (list) without returning
+     ignore (return (list) without holding)
+    }
+   ]
+   (
+    English: return (list: list of (thing)) without holding
+   )
+   list of (thing)
+   C: “” list “”
+   C♯: “” list “”
+   JavaScript: “” list “”
+   Kotlin: “” list “”
+   Swift: “” list “”
+
+  action (file)
+   [
+    test {
+     let (• list: list of (thing)) be (empty: list of (thing))
      ignore (hold (list))
     }
    ]
@@ -108,7 +126,7 @@ extension
    Swift: “” list “”
    {
     hold (list) without returning
-    ← list
+    ← return (list) without holding
    }
 
   action (file)
