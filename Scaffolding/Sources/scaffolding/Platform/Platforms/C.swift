@@ -371,13 +371,18 @@ enum C: Platform {
     return nil
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
-    return "&\(argument)"
+    if forwarding {
+      return argument
+    } else {
+      return "&\(argument)"
+    }
   }
   static func unpackReference(to argument: String) -> String? {
     return nil
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
-    return "*\(throughParameter)"
+    let prefix = forwarding ? "" : "*"
+    return "\(prefix)\(throughParameter)"
   }
 
   static var emptyReturnType: String? {

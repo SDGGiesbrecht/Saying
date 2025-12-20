@@ -275,12 +275,12 @@ extension
    {
     if (((limit) of (list)) is (end of empty list)), {
      if ((new limit) is not (end of empty list)), {
-      change ((uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
+      change (↓ (uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
      }
     }, otherwise {
      reallocate memory of (↓ (uncounted) of (list)) up to (new limit)
     }
-    change ((limit) of (list)) to (new limit)
+    change (↓ (limit) of (list)) to (new limit)
    }
 
   action (file)
@@ -336,7 +336,7 @@ extension
       move (trailing range) to (end of insertion) in (↓ (uncounted) of (list))
      }
     }
-    change ((end) of (list)) to (new end)
+    change (↓ (end) of (list)) to (new end)
     if ((new end) is less than (original end)), {
      if ((new end) is less than or equal to ((((limit) of (list)) shrunk by (growth factor)) shrunk by (growth factor))), {
       resize storage of (↓ list) to end at ((new end) grown by (growth factor))

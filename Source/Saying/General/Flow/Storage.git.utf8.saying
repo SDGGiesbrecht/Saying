@@ -9,7 +9,7 @@ extension
     }
    ]
    (
-    English: let (storage: thing) be (value: thing)
+    English: let (storage: • thing) be (value: thing)
    )
    C: “” thing “ const ” storage “ = ” value “”
    C♯: “” thing “ ” storage “ = ” value “”
@@ -22,12 +22,12 @@ extension
     test {
      let (• variable: truth value) start as (false)
      verify ((variable) is (false))
-     change (variable) to (true)
+     change (↓ variable) to (true)
      verify ((variable) is (true))
     }
    ]
    (
-    English: let (storage: thing) start as (value: thing)
+    English: let (storage: • thing) start as (value: thing)
    )
    C: “” thing “ ” held (storage) “ = ” copy of (value) “”
    C♯: “” thing “ ” storage “ = ” value “”
@@ -37,7 +37,7 @@ extension
 
   flow (clients)
    (
-    English: change (storage: thing) to (value: thing)
+    English: change (storage: ↓ thing) to (value: thing)
    )
    C: “” release of (storage) “; ” storage “ = ” hold on (value) “”
    C♯: “” storage “ = ” value “”

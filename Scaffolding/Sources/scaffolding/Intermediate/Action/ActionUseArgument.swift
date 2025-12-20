@@ -39,6 +39,14 @@ extension ActionUseArgument {
       return nil
     }
   }
+  var source: ParsedAction? {
+    switch self {
+    case .action(let use):
+      return use.source
+    case .flow:
+      return nil
+    }
+  }
 }
 
 extension ActionUseArgument {
@@ -50,10 +58,18 @@ extension ActionUseArgument {
       return []
     }
   }
-  func passedReferences() -> [ActionUse] {
+  func passedReferences(
+    platform: Platform.Type,
+    referenceLookup: [ReferenceDictionary],
+    skipLayer: Bool
+  ) -> [ActionUse] {
     switch self {
     case .action(let action):
-      return action.passedReferences()
+      return action.passedReferences(
+        platform: platform,
+        referenceLookup: referenceLookup,
+        skipLayer: skipLayer
+      )
     case .flow:
       return []
     }
@@ -83,6 +99,15 @@ extension ActionUseArgument {
         finalReturnValue: finalReturnValue
       )
       self = .flow(statements)
+    }
+  }
+
+  var passage: ParameterPassage {
+    switch self {
+    case .action(let action):
+      return action.passage
+    case .flow:
+      return .into
     }
   }
 

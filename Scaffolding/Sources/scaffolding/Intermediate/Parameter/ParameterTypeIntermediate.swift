@@ -1,4 +1,4 @@
 struct ParameterTypeIntermediate {
-  var isThrough: Bool
+  var passage: ParameterPassage
   var type: ParsedTypeReference
 }

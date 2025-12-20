@@ -1,7 +1,7 @@
 struct ParameterIntermediate {
   var names: Set<UnicodeText>
   var type: ParsedTypeReference
-  var isThrough: Bool
+  var passage: ParameterPassage
   var passAction: ActionIntermediate
   var executeAction: ActionIntermediate?
   var nativeNames: NativeActionNamesIntermediate
@@ -10,7 +10,7 @@ struct ParameterIntermediate {
   init(
     names: Set<UnicodeText>,
     type: ParsedTypeReference,
-    isThrough: Bool,
+    passage: ParameterPassage,
     passAction: ActionIntermediate,
     executeAction: ActionIntermediate?,
     nativeNames: NativeActionNamesIntermediate,
@@ -18,7 +18,7 @@ struct ParameterIntermediate {
   ) {
     self.names = names
     self.type = type
-    self.isThrough = isThrough
+    self.passage = passage
     self.passAction = passAction
     self.executeAction = executeAction
     self.nativeNames = nativeNames
@@ -29,12 +29,13 @@ struct ParameterIntermediate {
 extension ParameterIntermediate {
   static func nativeParameterStub(
     names: Set<UnicodeText>,
-    type: ParsedTypeReference
+    type: ParsedTypeReference,
+    passage: ParameterPassage = .into
   ) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type,
-      isThrough: false,
+      passage: passage,
       passAction: .parameterAction(names: names, parameters: .none, returnValue: type),
       executeAction: nil,
       nativeNames: NativeActionNamesIntermediate.none,
@@ -50,7 +51,7 @@ extension ParameterIntermediate {
     names: Set<UnicodeText>,
     nestedParameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference,
-    isThrough: Bool,
+    passage: ParameterPassage,
     nativeNames: NativeActionNamesIntermediate,
     swiftLabel: UnicodeText?
   ) {
@@ -79,7 +80,7 @@ extension ParameterIntermediate {
     self.init(
       names: names,
       type: passedType,
-      isThrough: isThrough,
+      passage: passage,
       passAction: passAction,
       executeAction: executeAction,
       nativeNames: nativeNames,
@@ -95,7 +96,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type.resolvingExtensionContext(typeLookup: typeLookup),
-      isThrough: isThrough,
+      passage: passage,
       passAction: passAction.resolvingExtensionContext(typeLookup: typeLookup),
       executeAction: executeAction?.resolvingExtensionContext(typeLookup: typeLookup),
       nativeNames: nativeNames,
@@ -106,7 +107,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names.union(requirement.names),
       type: type,
-      isThrough: isThrough,
+      passage: passage,
       passAction: passAction,
       executeAction: executeAction,
       nativeNames: nativeNames.merging(requirement: requirement.nativeNames),
@@ -121,7 +122,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
       type: type.specializing(typeLookup: typeLookup),
-      isThrough: isThrough,
+      passage: passage,
       passAction: passAction.specializing(
         for: use,
         typeLookup: typeLookup,
@@ -148,7 +149,7 @@ extension ParameterIntermediate {
     return ParameterIntermediate(
       names: Set(names.map({ "\(prefix)\($0)" })),
       type: type,
-      isThrough: isThrough,
+      passage: passage,
       passAction: passAction,
       executeAction: executeAction,
       nativeNames: nativeNames,

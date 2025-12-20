@@ -98,11 +98,36 @@ extension ActionUse {
       return arguments.flatMap { $0.localActions() }
     }
   }
-  func passedReferences() -> [ActionUse] {
+  func passedReferences(
+    platform: Platform.Type,
+    referenceLookup: [ReferenceDictionary],
+    skipLayer: Bool
+  ) -> [ActionUse] {
     if passage == .through {
-      return [self]
+      if skipLayer {
+        return []
+      } else {
+        return [self]
+      }
     } else {
-      return arguments.flatMap { $0.passedReferences() }
+      var skipNextLayer = false
+      if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
+        let action = referenceLookup.lookupAction(
+          actionName,
+          signature: signature,
+          specifiedReturnValue: resolvedResultType
+        ),
+        platform.nativeImplementation(of: action) != nil,
+        action.isFlow {
+        skipNextLayer = true
+      }
+      return arguments.flatMap { argument in
+        return argument.passedReferences(
+          platform: platform,
+          referenceLookup: referenceLookup,
+          skipLayer: skipNextLayer
+        )
+      }
     }
   }
 }
@@ -271,6 +296,11 @@ extension ActionUse {
           unavailableOutsideTestsError: { .actionUnavailableOutsideTests(reference: source!) },
           unavailableInVisibleTestsError: { .actionAccessNarrowerThanDocumentationVisibility(reference: source!) }
         )
+        for (parameter, argument) in zip(action.parameters.ordered(for: actionName), arguments) {
+          if parameter.passage != argument.passage {
+            errors.append(.mismatchedPassage(attempted: argument.passage, expected: parameter.passage, location: argument.source!))
+          }
+        }
       } else {
         if let literal = literal,
            let resolved = resolvedResultType,

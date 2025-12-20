@@ -124,7 +124,7 @@ action (unit)
 
 flow (file)
  (
-  English: let (storage: reference tracker) start as (value: reference tracker) without copying
+  English: let (storage: • reference tracker) start as (value: reference tracker) without copying
  )
  C: “reference¤(5F)tracker¤(2A) ” held (storage) “ = ” hold on (value) “”
  {
