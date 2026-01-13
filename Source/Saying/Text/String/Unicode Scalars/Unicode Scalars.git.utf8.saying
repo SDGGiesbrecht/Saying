@@ -14,11 +14,19 @@ thing (clients)
  (
   English: Unicode scalars
  )
- C: “reference¤(5F)counted¤(5F)string¤(2A)”/“hold¤(5F)string(” . “)”/“release¤(5F)string(” . “)”/“hold¤(5F)string(” . “)” (“glib¤(2D)2.0”) {“REFERENCE¤(5F)COUNTING(GString¤(2A), string, g¤(5F)string¤(5F)free, TRUE)”}
  C♯: “string”
  Kotlin: “String”
  Swift: “String.UnicodeScalarView”
  {
+    part (file)
+     (
+      English: 8‐bit encoding
+     )
+     list of (8‐bit Unicode encoding code unit)
+     C♯: “”
+     JavaScript: “”
+     Kotlin: “”
+     Swift: “”
  }
 
 use (clients)
@@ -38,7 +46,7 @@ action (file)
  ]
  implementation of (first: Unicode scalars) is (second: Unicode scalars)
  truth value
- C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)”
+ C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)” (“glib¤(2D)2.0”)
  C♯: “” first “ == ” second “”
  JavaScript: “” first “ == ” second “”
  Kotlin: “” first “ == ” second “”
@@ -50,7 +58,7 @@ use (clients)
   action (clients)
    (first: Unicode scalars) is (second: Unicode scalars)
    truth value
-   C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)”
+   C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)” (“glib¤(2D)2.0”)
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
@@ -126,7 +134,7 @@ use (clients)
     English: end of (list: Unicode scalars)
    )
    Unicode scalar boundary
-   C: “” list “¤(2D)>target¤(2D)>len”
+   C: “” list “¤(2D)>target¤(2D)>len” (“glib¤(2D)2.0”)
    C♯: “” list “.Length”
    JavaScript: “” list “.length”
    Kotlin: “” list “.length”
@@ -156,7 +164,7 @@ use (clients)
     English: boundary after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar boundary
-   C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)”
+   C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)” (“glib¤(2D)2.0”)
    C♯: “0xD800 <= ” list “[” cursor “] ¤(26)¤(26) ” list “[” cursor “] < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
    JavaScript: “0xD800 <= ” list “.charCodeAt(” cursor “) ¤(26)¤(26) ” list “.charCodeAt(” cursor “) < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
@@ -167,7 +175,7 @@ use (clients)
     English: entry at (cursor: Unicode scalar index) in (list: Unicode scalars)
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)”
+   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)” (“glib¤(2D)2.0”)
    C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
    JavaScript: “” list “.codePointAt(” cursor “)”
    Kotlin: “” list “.codePointAt(” cursor “)”
@@ -178,7 +186,7 @@ use (clients)
     English: entry after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)”
+   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)” (“glib¤(2D)2.0”)
    C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
    JavaScript: “” list “.codePointAt(” cursor “)”
    Kotlin: “” list “.codePointAt(” cursor “)”
@@ -269,7 +277,7 @@ action (file)
  (
   English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) from (list: ↓ Unicode scalars)
  )
- C: “g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)”
+ C: “g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)” (“glib¤(2D)2.0”)
  {
   replace (from (beginning) to (end)) in (↓ list) with (empty: Unicode scalars)
  }
@@ -307,7 +315,7 @@ use (clients)
    (
     English: insert (element: Unicode scalar) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)insert¤(5F)unichar((” list “)¤(2D)>target, ” boundary “, ” element “)”
+   C: “g¤(5F)string¤(5F)insert¤(5F)unichar((” list “)¤(2D)>target, ” boundary “, ” element “)” (“glib¤(2D)2.0”)
    Swift: “” list “.insert(” element “, at: ” boundary “)”
    {
     insert ((element) as scalars) at (boundary) in (↓ list)
@@ -317,7 +325,7 @@ use (clients)
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
+   C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)” (“glib¤(2D)2.0”)
    Swift: “” list “.append(” element “)”
    {
     change (↓ list) to ((list) with (element) appended)
@@ -337,7 +345,7 @@ use (clients)
    (
     English: prepend (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)prepend¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
+   C: “g¤(5F)string¤(5F)prepend¤(5F)unichar((” list “)¤(2D)>target, ” element “)” (“glib¤(2D)2.0”)
    {
     prepend (element) to (↓ list) according to use as changeable list
    }
@@ -406,7 +414,7 @@ use (clients)
    (
     English: insert (insertion: Unicode scalars) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)insert((” list “)¤(2D)>target, ” boundary “, ” insertion “¤(2D)>target¤(2D)>str)”
+   C: “g¤(5F)string¤(5F)insert((” list “)¤(2D)>target, ” boundary “, ” insertion “¤(2D)>target¤(2D)>str)” (“glib¤(2D)2.0”)
    Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
    {
     insert (insertion) at (boundary) in (↓ list) according to list insertion
@@ -427,7 +435,7 @@ use (clients)
    (
     English: append (appendix: Unicode scalars) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)”
+   C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)” (“glib¤(2D)2.0”)
    C♯: “” list “ += ” appendix “”
    JavaScript: “” list “ += ” appendix “”
    Kotlin: “” list “ += ” appendix “”
@@ -450,7 +458,7 @@ use (clients)
    (
     English: prepend (prefix: Unicode scalars) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)prepend((” list “)¤(2D)>target, ” prefix “¤(2D)>target¤(2D)>str)”
+   C: “g¤(5F)string¤(5F)prepend((” list “)¤(2D)>target, ” prefix “¤(2D)>target¤(2D)>str)” (“glib¤(2D)2.0”)
    {
     prepend (prefix) to (↓ list) according to list insertion
    }
@@ -500,7 +508,7 @@ action (file)
   English: convert from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars) into scalars
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” (“glib¤(2D)2.0”) {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
  JavaScript: “” scalars “.substring(” beginning “, ” end “)”
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
@@ -597,7 +605,7 @@ action (file)
   English: compute compatibility decomposition of (scalars: Unicode scalars)
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
+ C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” (“glib¤(2D)2.0”) {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Normalize(NormalizationForm.FormKD)” (
    “System”
    “System.Text”

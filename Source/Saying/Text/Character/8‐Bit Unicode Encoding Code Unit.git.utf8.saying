@@ -8,3 +8,16 @@ thing (clients)
  Swift: “UTF8.CodeUnit”
  {
  }
+
+use (clients)
+ general containers of (8‐bit Unicode encoding code unit)
+ {
+  action (clients)
+   example
+   8‐bit Unicode encoding code unit
+   C: “0x0”
+   C♯: “0x0”
+   JavaScript: “0x0”
+   Kotlin: “0x0”
+   Swift: “0x0”
+ }
