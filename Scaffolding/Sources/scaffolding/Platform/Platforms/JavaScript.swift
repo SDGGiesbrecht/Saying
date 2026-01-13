@@ -297,18 +297,11 @@ enum JavaScript: Platform {
     return false
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return []
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return []
   }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
-  }
-
-  static var memoryManagement: String? {
-    return nil
   }
 
   static var currentTestVariable: String {

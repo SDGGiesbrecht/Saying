@@ -449,18 +449,11 @@ enum Swift: Platform {
     return "import \(importTarget)"
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return []
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return []
   }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
-  }
-
-  static var memoryManagement: String? {
-    return nil
   }
 
   static let preexistingNativeRequirements: Set<String> = [

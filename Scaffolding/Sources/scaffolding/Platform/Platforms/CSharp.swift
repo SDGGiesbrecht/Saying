@@ -412,9 +412,6 @@ enum CSharp: Platform {
     return false
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return []
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return [
       "System",
@@ -426,10 +423,6 @@ enum CSharp: Platform {
       "System.Collections.Generic",
       "System.Linq",
     ]
-  }
-
-  static var memoryManagement: String? {
-    return nil
   }
 
   static var currentTestVariable: String {

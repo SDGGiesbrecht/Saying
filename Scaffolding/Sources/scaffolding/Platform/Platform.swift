@@ -137,10 +137,8 @@ protocol Platform {
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool
 
   // Module
-  static var importsNeededByMemoryManagement: Set<String> { get }
   static var importsNeededByDeadEnd: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
-  static var memoryManagement: String? { get }
   static var currentTestVariable: String { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
@@ -2183,7 +2181,6 @@ extension Platform {
     for module in modules {
       imports.formUnion(nativeImports(for: module.referenceDictionary))
     }
-    imports.formUnion(importsNeededByMemoryManagement)
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
@@ -2191,11 +2188,6 @@ extension Platform {
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
       }
-    }
-
-    if let memoryManagement = memoryManagement {
-      result.appendSeparatorLine()
-      result.append(memoryManagement)
     }
 
     if mode == .testing {

@@ -480,12 +480,6 @@ enum C: Platform {
     return false
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return [
-      "err",
-      "stdlib",
-    ]
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return [
       "stdlib",
@@ -498,39 +492,6 @@ enum C: Platform {
       "stdio",
       "string",
     ]
-  }
-
-  static var memoryManagement: String? {
-    return [
-      "#define REFERENCE_COUNTING(type, name, clean_up, ...) \u{5C}",
-      "typedef struct reference_counted_ ## name { \u{5C}",
-      "\(indent)type target; \u{5C}",
-      "\(indent)unsigned references; \u{5C}",
-      "} reference_counted_ ## name; \u{5C}",
-      "\u{5C}",
-      "reference_counted_ ## name* reference_ ## name(type target) { \u{5C}",
-      "\(indent)reference_counted_ ## name* reference = malloc(sizeof(reference_counted_ ## name)); \u{5C}",
-      "\(indent)if (reference == NULL) { \u{5C}",
-      "\(indent)\(indent)err(EXIT_FAILURE, \u{22}malloc\u{22}); \u{5C}",
-      "\(indent)} \u{5C}",
-      "\(indent)reference->target = target; \u{5C}",
-      "\(indent)reference->references = 1; \u{5C}",
-      "\(indent)return reference; \u{5C}",
-      "} \u{5C}",
-      "\u{5C}",
-      "reference_counted_ ## name* hold_ ## name(reference_counted_ ## name* reference) { \u{5C}",
-      "\(indent)reference->references += 1; \u{5C}",
-      "\(indent)return reference; \u{5C}",
-      "} \u{5C}",
-      "\u{5C}",
-      "void release_ ## name(reference_counted_ ## name* reference) { \u{5C}",
-      "\(indent)reference->references -= 1; \u{5C}",
-      "\(indent)if (reference->references == 0) { \u{5C}",
-      "\(indent)\(indent)clean_up(reference->target, __VA_ARGS__); \u{5C}",
-      "\(indent)\(indent)free(reference); \u{5C}",
-      "\(indent)} \u{5C}",
-      "}",
-    ].joined(separator: "\n")
   }
 
   static var currentTestVariable: String {
