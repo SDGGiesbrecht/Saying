@@ -18,15 +18,15 @@ thing (clients)
  Kotlin: “String”
  Swift: “String.UnicodeScalarView”
  {
-    part (file)
-     (
-      English: 8‐bit encoding
-     )
-     list of (8‐bit Unicode encoding code unit)
-     C♯: “”
-     JavaScript: “”
-     Kotlin: “”
-     Swift: “”
+  part (file)
+   (
+    English: 8‐bit encoding
+   )
+   list of (8‐bit Unicode encoding code unit)
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
  }
 
 use (clients)
