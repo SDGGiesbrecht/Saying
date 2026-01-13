@@ -73,7 +73,7 @@ action (file)
  ]
  direct hash value of (boundary: list boundary)
  hash value
- C: “(guint)” boundary “”
+ C: “(unsigned)” boundary “”
  C♯: “” boundary “”
  JavaScript: “” boundary “”
  Kotlin: “” boundary “”

@@ -106,7 +106,7 @@ action (file)
  ]
  hashing proxy of (integer: integer)
  platform fixed‐width integer
- C: “(guint)” integer “”
+ C: “(unsigned)” integer “”
  C♯: “” integer “.GetHashCode()”
  JavaScript: “” integer “”
  Kotlin: “” integer “.hashCode()”
