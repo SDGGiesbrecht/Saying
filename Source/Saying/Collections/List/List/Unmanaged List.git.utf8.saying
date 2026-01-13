@@ -70,11 +70,17 @@ extension
       English: references
      )
      platform fixed‐width natural number
+
+    part (file)
+     (
+      English: memory is read‐only
+     )
+     truth value
    }
 
   action (file)
    (
-    English: create unmanaged list with uncounted (uncounted: unmanaged list of (thing) of unknown length), end (end: list boundary), limit (limit: list boundary) and references (references: platform fixed‐width natural number)
+    English: create unmanaged list with uncounted (uncounted: unmanaged list of (thing) of unknown length), end (end: list boundary), limit (limit: list boundary) and references (references: platform fixed‐width natural number) where memory is read‐only (memory is read‐only: truth value)
    )
    unmanaged list of (thing)
    create
@@ -86,11 +92,11 @@ extension
 
   action (file)
    (
-    English: create unmanaged list with uncounted (uncounted: unmanaged list of (thing) of unknown length), end (end: list boundary) and limit (limit: list boundary)
+    English: create unmanaged list with uncounted (uncounted: unmanaged list of (thing) of unknown length), end (end: list boundary) and limit (limit: list boundary) where memory is read‐only (memory is read‐only: truth value)
    )
    unmanaged list of (thing)
    {
-    ← create unmanaged list with uncounted (uncounted), end (end), limit (limit) and references (one: platform fixed‐width natural number)
+    ← create unmanaged list with uncounted (uncounted), end (end), limit (limit) and references (one: platform fixed‐width natural number) where memory is read‐only (memory is read‐only)
    }
 
   action (unit)
@@ -112,7 +118,9 @@ extension
     decrement (↓ (references) of (list)) skipping underflow check
     if (((references) of (list)) is (zero: platform fixed‐width natural number)), {
      if (((limit) of (list)) is greater than (end of empty list)), {
-      clean ((uncounted) of (list)) up up to ((end) of (list))
+      if (not ((memory is read‐only) of (list))), {
+       clean ((uncounted) of (list)) up up to ((end) of (list))
+      }
      }
     }
    }
@@ -253,7 +261,7 @@ extension
    )
    unmanaged list of (thing)
    {
-    ← create unmanaged list with uncounted (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list)
+    ← create unmanaged list with uncounted (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list) where memory is read‐only (false)
    }
 
   action (unit)
