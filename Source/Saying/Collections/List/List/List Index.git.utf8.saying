@@ -73,7 +73,7 @@ action (file)
  ]
  direct hash value of (index: list index)
  hash value
- C: “(guint)” index “”
+ C: “(unsigned)” index “”
  C♯: “” index “”
  JavaScript: “” index “”
  Kotlin: “” index “”

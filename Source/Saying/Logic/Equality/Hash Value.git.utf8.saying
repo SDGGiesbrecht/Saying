@@ -2,7 +2,7 @@ thing (unit)
  (
   English: hash value
  )
- C: “guint” (“glib¤(2D)2.0”)
+ C: “unsigned”
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”

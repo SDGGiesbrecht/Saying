@@ -79,7 +79,7 @@ action (file)
  ]
  direct hash value of (integer: platform fixed‐width integer)
  hash value
- C: “(guint)” integer “”
+ C: “(unsigned)” integer “”
  C♯: “” integer “”
  JavaScript: “” integer “”
  Kotlin: “” integer “”

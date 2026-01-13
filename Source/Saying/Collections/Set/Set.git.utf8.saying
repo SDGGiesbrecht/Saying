@@ -9,7 +9,6 @@ extension
     ελληνικά: σύνολο (πράγμα: [thing])
     עברית: קבוצה של (דבר: [thing])
    )
-   C: “GHashTable¤(2A)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” . “)”/“g¤(5F)hash¤(5F)table¤(5F)unref(” . “)”/“g¤(5F)hash¤(5F)table¤(5F)ref(” . “)” (“glib¤(2D)2.0”)
    C♯: “HashSet<” thing “>” (“System.Collections.Generic”) [
      “override ” thing “.Equals(” thing “)”
      “override ” thing “.GetHashCode()”
@@ -46,13 +45,6 @@ extension
     ελληνικά: άδειος
    )
    set of (thing)
-   C: “g¤(5F)hash¤(5F)table¤(5F)new(” (thing) sanitized for identifier “¤(5F)hash¤(5F)reference, ” (thing) sanitized for identifier “¤(5F)equal¤(5F)reference)” [
-     “” (thing) sanitized for identifier “¤(5F)hash(” thing “)”
-     “” (thing) sanitized for identifier “¤(5F)equal(” thing “, ” thing “)”
-    ] {
-     “guint ” (thing) sanitized for identifier “¤(5F)hash¤(5F)reference(gconstpointer element)¤(A){¤(A)return ” (thing) sanitized for identifier “¤(5F)hash(¤(2A)(” thing “ const ¤(2A))element);¤(A)}”
-     “gboolean ” (thing) sanitized for identifier “¤(5F)equal¤(5F)reference(gconstpointer first, gconstpointer second)¤(A){¤(A)return ” (thing) sanitized for identifier “¤(5F)equal(¤(2A)(” thing “ const ¤(2A))first, ¤(2A)(” thing “ const ¤(2A))second) ? TRUE : FALSE;¤(A)}”
-    }
    C♯: “new HashSet<” thing “>()”
    Kotlin: “setOf()”
    Swift: “[]”
