@@ -189,6 +189,9 @@ enum C: Platform {
     for component in components {
       result.append("\(indent)\(component)")
     }
+    if components.isEmpty {
+      result.append("\(indent)char address_occupier;")
+    }
     result.append(contentsOf: [
       "} \(name);"
     ])
