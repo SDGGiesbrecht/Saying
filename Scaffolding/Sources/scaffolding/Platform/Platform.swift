@@ -20,7 +20,7 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
-  static func literal(scalars: String) -> String
+  static func literal(scalars: String, escaped: String) -> String
   static func literal(scalar: Unicode.Scalar) -> String
 
   // Access
@@ -800,7 +800,7 @@ extension Platform {
     if normalize {
       contents = contents.decomposedStringWithCompatibilityMapping
     }
-    return self.literal(scalars: sanitize(stringLiteral: contents))
+    return self.literal(scalars: contents, escaped: sanitize(stringLiteral: contents))
   }
 
   static func call(
