@@ -20,9 +20,9 @@ thing (clients)
  {
   part (file)
    (
-    English: 8‐bit encoding
+    English: 8‐bit encoded
    )
-   list of (8‐bit Unicode encoding code unit)
+   list of (8‐bit Unicode code unit)
    C♯: “”
    JavaScript: “”
    Kotlin: “”

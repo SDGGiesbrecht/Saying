@@ -1,6 +1,6 @@
 thing (clients)
  (
-  English: 8‐bit Unicode encoding code unit
+  English: 8‐bit Unicode code unit
  )
  C: “char”
  C♯: “byte”
@@ -10,11 +10,11 @@ thing (clients)
  }
 
 use (clients)
- general containers of (8‐bit Unicode encoding code unit)
+ general containers of (8‐bit Unicode code unit)
  {
   action (clients)
    example
-   8‐bit Unicode encoding code unit
+   8‐bit Unicode code unit
    C: “0x0”
    C♯: “0x0”
    JavaScript: “0x0”
