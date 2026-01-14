@@ -40,16 +40,16 @@ action (clients)
   test {ignore (Unicode scalars of (empty: list of (8‐bit Unicode code unit)) skipping validity check)}
  ]
  (
-  English: Unicode scalars of (encoded: list of (8‐bit Unicode code unit)) skipping validity check
+  English: Unicode scalars of (8‐bit encoded: list of (8‐bit Unicode code unit)) skipping validity check
  )
  Unicode scalars
- C♯: “Encoding.UTF8.GetString(” encoded “.ToArray())” (
+ C♯: “Encoding.UTF8.GetString(” 8‐bit encoded “.ToArray())” (
    “System.Collections.Generic”
    “System.Text”
   )
- JavaScript: “new TextDecoder().decode(Uint8Array.from(” encoded “))”
- Kotlin: “String(” encoded “.toByteArray(), Charsets.UTF¤(5F)8)”
- Swift: “String(bytes: ” encoded “, encoding: .utf8)!.unicodeScalars”
+ JavaScript: “new TextDecoder().decode(Uint8Array.from(” 8‐bit encoded “))”
+ Kotlin: “String(” 8‐bit encoded “.toByteArray(), Charsets.UTF¤(5F)8)”
+ Swift: “String(bytes: ” 8‐bit encoded “, encoding: .utf8)!.unicodeScalars”
  create
 
 action (clients)
