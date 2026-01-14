@@ -82,7 +82,7 @@ enum C: Platform {
   }
 
   static func literal(scalars: String, escaped: String) -> String {
-    return "reference_string(g_string_new(\u{22}\(escaped)\u{22}))"
+    return "Unicode_scalars_literal(\u{22}\(escaped)\u{22}, \(scalars.utf8.count))"
   }
   static func literal(scalar: Unicode.Scalar) -> String {
     return "0x\(String(scalar.value, radix: 16, uppercase: true))"

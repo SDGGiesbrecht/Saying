@@ -13,6 +13,7 @@ thing (clients)
  ]
  (
   English: Unicode scalars
+  C: Unicode‐scalars
  )
  C♯: “string”
  Kotlin: “String”
@@ -64,6 +65,7 @@ action (clients)
  ]
  (
   English: Unicode scalars of string literal (uncounted: string literal of unknown length) ending at (end: list boundary) skipping validity check
+  C: Unicode‐scalars‐literal (uncounted: [uncounted]) (end: [end])
  )
  Unicode scalars
  C♯: “” uncounted “”
