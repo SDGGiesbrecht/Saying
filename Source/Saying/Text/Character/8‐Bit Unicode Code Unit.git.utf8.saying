@@ -5,7 +5,7 @@ thing (clients)
  C: “char”
  C♯: “byte”
  Kotlin: “Byte”
- Swift: “UTF8.CodeUnit”
+ Swift: “Unicode.UTF8.CodeUnit”
  {
  }
 

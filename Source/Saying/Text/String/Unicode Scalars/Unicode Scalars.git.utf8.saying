@@ -29,6 +29,51 @@ thing (clients)
    Swift: “”
  }
 
+action (clients)
+ [
+  [
+   English: Returns the Unicode scalars of an instance of 8‐bit encoded Unicode (UTF‐8) text without checking that it is valid.
+  ]
+  [
+   English: Skipping the validity check can be more efficient when the encoded text is already known from context to be valid. However, the caller takes responsibility for the logical soundness of the call. Decoding invalid data may cause a fatal error or result in invalid program state.
+  ]
+  test {ignore (Unicode scalars of (empty: list of (8‐bit Unicode code unit)) skipping validity check)}
+ ]
+ (
+  English: Unicode scalars of (encoded: list of (8‐bit Unicode code unit)) skipping validity check
+ )
+ Unicode scalars
+ C♯: “Encoding.UTF8.GetString(” encoded “.ToArray())” (
+   “System.Collections.Generic”
+   “System.Text”
+  )
+ JavaScript: “new TextDecoder().decode(Uint8Array.from(” encoded “))”
+ Kotlin: “String(” encoded “.toByteArray(), Charsets.UTF¤(5F)8)”
+ Swift: “String(bytes: ” encoded “, encoding: .utf8)!.unicodeScalars”
+ create
+
+action (clients)
+ [
+  [
+   English: Returns the Unicode scalars of a string literal as 8‐bit Unicode encoded (UTF‐8) text without checking that it is valid.
+  ]
+  [
+   English: Skipping the validity check is usually more efficient, because the string literal is most often visible at the call site and obviously valid. However, the caller takes responsibility for the logical soundness of the call. Decoding invalid data may cause a fatal error or result in invalid program state.
+  ]
+  test (hidden) {ignore (Unicode scalars of string literal (empty: string literal of unknown length) ending at (end of empty list: list boundary) skipping validity check)}
+ ]
+ (
+  English: Unicode scalars of string literal (uncounted: string literal of unknown length) ending at (end: list boundary) skipping validity check
+ )
+ Unicode scalars
+ C♯: “” uncounted “”
+ JavaScript: “” uncounted “”
+ Kotlin: “” uncounted “”
+ Swift: “” uncounted “.unicodeScalars”
+ {
+  ← Unicode scalars of (list in read‐only memory (8‐bit Unicode code units of (uncounted)) ending at (end)) skipping validity check
+ }
+
 use (clients)
  general containers of (Unicode scalars)
  {
