@@ -93,11 +93,13 @@ action (file)
  ]
  implementation of (first: Unicode scalars) is (second: Unicode scalars)
  truth value
- C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)” (“glib¤(2D)2.0”)
  C♯: “” first “ == ” second “”
  JavaScript: “” first “ == ” second “”
  Kotlin: “” first “ == ” second “”
  Swift: “” first “.elementsEqual(” second “)”
+ {
+  ← ((8‐bit encoded) of (first)) is ((8‐bit encoded) of (second))
+ }
 
 use (clients)
  comparison of (Unicode scalars) for equality
@@ -105,7 +107,6 @@ use (clients)
   action (clients)
    (first: Unicode scalars) is (second: Unicode scalars)
    truth value
-   C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)” (“glib¤(2D)2.0”)
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
