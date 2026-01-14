@@ -34,6 +34,18 @@ extension
      Swift: “”
    }
 
+  action (unit)
+   [
+    test {ignore (list in read‐only memory (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length) ending at (end of empty list))}
+   ]
+   (
+    English: list in read‐only memory (uncounted: unmanaged list of (thing) of unknown length) ending at (end: list boundary)
+   )
+   list of (thing)
+   {
+    ← create list with unmanaged list (unmanaged list in read‐only memory (uncounted) ending at (end))
+   }
+
   action (file)
    (
     English: initialize (list: list of (thing)) to (unmanaged: unmanaged list of (thing))
