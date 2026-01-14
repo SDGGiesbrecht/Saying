@@ -101,6 +101,15 @@ extension
 
   action (unit)
    (
+    English: unmanaged list in read‐only memory (uncounted: unmanaged list of (thing) of unknown length) ending at (end: list boundary)
+   )
+   unmanaged list of (thing)
+   {
+    ← create unmanaged list with uncounted (uncounted), end (end) and limit (end) where memory is read‐only (true)
+   }
+
+  action (unit)
+   (
     English: hold unmanaged (list: ↓ unmanaged list of (thing))
    )
    {
