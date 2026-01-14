@@ -1,0 +1,23 @@
+thing (clients)
+ (
+  English: 8‐bit Unicode code unit
+ )
+ C: “char”
+ C♯: “byte”
+ Kotlin: “Byte”
+ Swift: “UTF8.CodeUnit”
+ {
+ }
+
+use (clients)
+ general containers of (8‐bit Unicode code unit)
+ {
+  action (clients)
+   example
+   8‐bit Unicode code unit
+   C: “0x0”
+   C♯: “0x0”
+   JavaScript: “0x0”
+   Kotlin: “0x0”
+   Swift: “0x0”
+ }
