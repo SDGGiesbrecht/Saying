@@ -11,6 +11,7 @@ extension
   action (clients)
    [
     test {verify ((non‐empty example: list of (thing)) is (non‐empty example: list of (thing)) according to list)}
+    test {verify (not ((non‐empty example: list of (thing)) is (empty: list of (thing)) according to list))}
    ]
    (first: list of (thing)) is (second: list of (thing)) according to list
    truth value
