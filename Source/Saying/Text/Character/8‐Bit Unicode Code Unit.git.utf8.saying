@@ -21,3 +21,119 @@ use (clients)
    Kotlin: “0x0”
    Swift: “0x0”
  }
+
+action (file)
+ [
+  test {ignore (hashing proxy of (example: 8‐bit Unicode code unit))}
+ ]
+ hashing proxy of (number: 8‐bit Unicode code unit)
+ platform fixed‐width integer
+ C: “(unsigned)” number “”
+ C♯: “” number “.GetHashCode()”
+ JavaScript: “” number “”
+ Kotlin: “” number “.hashCode()”
+ Swift: “Int(truncatingIfNeeded: ” number “)”
+
+use (clients)
+ comparison of (8‐bit Unicode code unit) for equality
+ {
+  action (clients)
+   (first: 8‐bit Unicode code unit) is (second: 8‐bit Unicode code unit)
+   truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: 8‐bit Unicode code unit) is not (second: 8‐bit Unicode code unit)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
+
+  action (clients)
+   hash key (key: 8‐bit Unicode code unit) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: 8‐bit Unicode code unit)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   8‐bit Unicode code unit
+   C: “0x1”
+   C♯: “0x1”
+   JavaScript: “0x1”
+   Kotlin: “0x1”
+   Swift: “0x1”
+ }
+
+use (clients)
+ general containers of (list of (8‐bit Unicode code unit))
+ {
+  action (clients)
+   example
+   list of (8‐bit Unicode code unit)
+   {
+    ← non‐empty example
+   }
+ }
+
+use (clients)
+ comparison of lists of (8‐bit Unicode code unit) for equality
+ {
+ }
+
+use (clients)
+ comparison of (list of (8‐bit Unicode code unit)) for equality
+ {
+  action (clients)
+   (first: list of (8‐bit Unicode code unit)) is (second: list of (8‐bit Unicode code unit))
+   truth value
+   C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”)
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “ == ” second “”
+   {
+    ← (first) is (second) according to list
+   }
+
+  action (clients)
+   hash key (key: list of (8‐bit Unicode code unit)) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash key (key) with (↓ hasher) according to list
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: list of (8‐bit Unicode code unit))
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   list of (8‐bit Unicode code unit)
+   {
+    ← differing example according to list
+   }
+ }

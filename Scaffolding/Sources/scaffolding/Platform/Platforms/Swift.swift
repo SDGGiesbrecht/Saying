@@ -477,10 +477,14 @@ enum Swift: Platform {
     "extension UInt64: Hashable {}",
     "extension Unicode.Scalar: Equatable {}",
     "extension Unicode.Scalar: Hashable {}",
+    "extension UTF8.CodeUnit: Equatable {}",
+    "extension UTF8.CodeUnit: Hashable {}",
   ]
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
     if source.hasSuffix("?: Equatable {}")
       || source.hasSuffix("?: Hashable {}")
+      || source.hasSuffix("]: Equatable {}")
+      || source.hasSuffix("]: Hashable {}")
       || source.hasSuffix("]: Collection {}") {
       return true
     }
