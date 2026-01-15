@@ -1,0 +1,58 @@
+ability (clients)
+ (
+  English: comparison of lists of (thing) for equality
+ )
+ {
+ }
+
+extension
+ comparison of lists of (thing) for equality
+ {
+  action (clients)
+   [
+    test {verify ((non‐empty example: list of (thing)) is (non‐empty example: list of (thing)) according to list)}
+   ]
+   (first: list of (thing)) is (second: list of (thing)) according to list
+   truth value
+   C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”) [“override ” thing “.Equals(” thing “)”]
+   Kotlin: “” first “ == ” second “” [“override ” thing “.equals(” thing “)”]
+   Swift: “” first “ == ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   {
+    let (• end of first: list boundary) be (end of (first))
+    if ((end of first) is not (end of (second))), {
+     ← false
+    }
+    let (• cursor: list boundary) start as (beginning of (first))
+    while ((cursor) is less than (end of first)), {
+     let (• index: list index) be (index after (cursor) in (first) skipping bounds check)
+     if ((entry at (index) in (first)) is not (entry at (index) in (second))), {
+      ← false
+     }
+     advance (↓ cursor) to next in (first) skipping bounds check
+    }
+    ← true
+   }
+
+  action (clients)
+   [
+    test {
+     let (• hasher: hasher) start as (create hasher)
+     hash key (non‐empty example: list of (thing)) with (↓ hasher) according to list
+    }
+   ]
+   hash key (key: list of (thing)) with (hasher: ↓ hasher) according to list
+   {
+    for each (• entry: thing) in (key), {
+     hash part (entry) with (↓ hasher)
+    }
+   }
+
+  action (clients)
+   differing example according to list
+   list of (thing)
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    append (differing example: thing) to (↓ list)
+    ← list
+   }
+ }
