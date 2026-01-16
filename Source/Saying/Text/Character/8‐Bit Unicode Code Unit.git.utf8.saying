@@ -5,7 +5,7 @@ thing (clients)
  C: “char”
  C♯: “byte”
  Kotlin: “Byte”
- Swift: “Unicode.UTF8.CodeUnit”
+ Swift: “UTF8.CodeUnit”
  {
  }
 
@@ -15,11 +15,9 @@ use (clients)
   action (clients)
    example
    8‐bit Unicode code unit
-   C: “0x0”
-   C♯: “0x0”
-   JavaScript: “0x0”
-   Kotlin: “0x0”
-   Swift: “0x0”
+   {
+    ← null control code
+   }
  }
 
 action (file)
@@ -137,3 +135,14 @@ use (clients)
     ← differing example according to list
    }
  }
+
+action (clients)
+ (
+  English: null control code
+ )
+ 8‐bit Unicode code unit
+ C: “0x0”
+ C♯: “0x0”
+ JavaScript: “0x0”
+ Kotlin: “0x0”
+ Swift: “0x0”

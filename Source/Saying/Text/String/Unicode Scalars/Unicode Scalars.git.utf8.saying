@@ -53,6 +53,54 @@ action (clients)
  Swift: “String(bytes: ” 8‐bit encoded “, encoding: .utf8)!.unicodeScalars”
  create
 
+action (file)
+ [
+  test {ignore (if possible, list boundary at (example: Unicode scalar boundary))}
+ ]
+ (
+  English: if possible, list boundary at (cursor: Unicode scalar boundary)
+ )
+ list boundary
+ C: “” cursor “”
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
+ {
+  ← example
+ }
+
+action (file)
+ [
+  test {ignore (if possible, scalar boundary at (example: list boundary))}
+ ]
+ (
+  English: if possible, scalar boundary at (cursor: list boundary)
+ )
+ Unicode scalar boundary
+ C: “” cursor “”
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
+ {
+  ← example
+ }
+
+action (file)
+ [
+  test {ignore (if possible, list index at (example: Unicode scalar index))}
+ ]
+ (
+  English: if possible, list index at (index: Unicode scalar index)
+ )
+ list index
+ C: “” index “”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ {
+  ← example
+ }
+
 action (clients)
  [
   [
@@ -152,6 +200,47 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   let (• beginning: list boundary) be (beginning of (list))
+   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
+   ignore (if most efficient, scalar boundary after (beginning) in (list) ending at (end) skipping bounds check)
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: if most efficient, scalar boundary after (cursor: list boundary) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length) ending at (end: list boundary) skipping bounds check
+ )
+ list boundary
+ C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) == NULL ? ” end “ : g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) ¤(2D) ” list “” (“glib¤(2D)2.0”)
+ {
+  ← cursor
+ }
+
+action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   let (• beginning: list boundary) be (beginning of (list))
+   let (• first index: list index) be (index after (beginning) in (list) skipping bounds check)
+   initialize entry at (first index) in (↓ list) to (null control code)
+   ignore (if most efficient, scalar at (first index) in (list))
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: if most efficient, scalar at (cursor: list index) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length)
+ )
+ Unicode scalar
+ C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “ + ” cursor “)” (“glib¤(2D)2.0”)
+ {
+  ← example
+ }
+
 use (clients)
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
@@ -171,22 +260,26 @@ use (clients)
     English: beginning of (list: Unicode scalars)
    )
    Unicode scalar boundary
-   C: “0”
    C♯: “0”
    JavaScript: “0”
    Kotlin: “0”
    Swift: “” list “.startIndex”
+   {
+    ← if possible, scalar boundary at (beginning of ((8‐bit encoded) of (list)))
+   }
 
   action (clients)
    (
     English: end of (list: Unicode scalars)
    )
    Unicode scalar boundary
-   C: “” list “¤(2D)>target¤(2D)>len” (“glib¤(2D)2.0”)
    C♯: “” list “.Length”
    JavaScript: “” list “.length”
    Kotlin: “” list “.length”
    Swift: “” list “.endIndex”
+   {
+    ← if possible, scalar boundary at (end of ((8‐bit encoded) of (list)))
+   }
 
   action (clients)
    (
@@ -212,33 +305,39 @@ use (clients)
     English: boundary after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar boundary
-   C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)” (“glib¤(2D)2.0”)
    C♯: “0xD800 <= ” list “[” cursor “] ¤(26)¤(26) ” list “[” cursor “] < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
    JavaScript: “0xD800 <= ” list “.charCodeAt(” cursor “) ¤(26)¤(26) ” list “.charCodeAt(” cursor “) < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
+   {
+    ← if possible, scalar boundary at (if most efficient, scalar boundary after (if possible, list boundary at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (if possible, list boundary at (end of (list))) skipping bounds check)
+   }
 
   action (clients)
    (
     English: entry at (cursor: Unicode scalar index) in (list: Unicode scalars)
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)” (“glib¤(2D)2.0”)
    C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
    JavaScript: “” list “.codePointAt(” cursor “)”
    Kotlin: “” list “.codePointAt(” cursor “)”
    Swift: “” list “[” cursor “]”
+   {
+    ← if most efficient, scalar at (if possible, list index at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
+   }
 
   action (clients)
    (
     English: entry after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)” (“glib¤(2D)2.0”)
    C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
    JavaScript: “” list “.codePointAt(” cursor “)”
    Kotlin: “” list “.codePointAt(” cursor “)”
    Swift: “” list “[” cursor “]”
+   {
+    ← entry after (cursor) in (list) skipping bounds check, according to default use as list
+   }
 
   action (clients)
    (
