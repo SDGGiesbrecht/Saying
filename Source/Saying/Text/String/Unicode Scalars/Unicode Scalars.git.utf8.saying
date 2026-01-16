@@ -225,8 +225,7 @@ action (file)
   test {
    let (• end: list boundary) be (end of list containing (one: natural number) entries)
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
-   let (• beginning: list boundary) be (beginning of (list))
-   let (• first index: list index) be (index after (beginning) in (list) skipping bounds check)
+   let (• first index: list index) be (index after (beginning of (list)) in (list) skipping bounds check)
    initialize entry at (first index) in (↓ list) to (null control code)
    ignore (if most efficient, scalar at (first index) in (list))
    clean (list) up up to (end)
@@ -404,6 +403,7 @@ action (clients)
   English: (scalar: Unicode scalar) as scalars
  )
  Unicode scalars
+ C: “g¤(5F)unichar¤(5F)to¤(5F)utf8?” (“glib¤(2D)2.0”)
  C♯: “” scalar “.ToString()”
  JavaScript: “String.fromCodePoint(” scalar “)”
  Swift: “String(” scalar “).unicodeScalars”
@@ -416,17 +416,36 @@ action (clients)
 action (file)
  [
   test {
-   let (• list: Unicode scalars) start as (“ ”: Unicode scalars)
-   remove from (beginning of (list)) to (end of (list)) from (↓ list)
-   verify ((list) is (“”: Unicode scalars))
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (example: Unicode scalar) to (↓ scalars) by replacement
   }
  ]
  (
-  English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) from (list: ↓ Unicode scalars)
+  English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by replacement
  )
- C: “g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)” (“glib¤(2D)2.0”)
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Swift: “”
  {
-  replace (from (beginning) to (end)) in (↓ list) with (empty: Unicode scalars)
+  change (↓ list) to ((list) with (element) appended)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (example: Unicode scalar) to (↓ scalars) by changeable list
+  }
+ ]
+ (
+  English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by changeable list
+ )
+ C: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  append (element) to (↓ list) according to use as changeable list
  }
 
 action (file)
@@ -443,7 +462,42 @@ action (file)
  C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “)”
  Kotlin: “” list “.removeRange(” beginning “, ” end “)”
  {
-  ← (list) with (from (beginning) to (end)) removed according to use as changeable list
+  ← list
+ }
+
+action (file)
+ [
+  test {
+   let (• list: Unicode scalars) be (non‐empty example: Unicode scalars)
+   ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) removed by bounds)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) removed by bounds
+ )
+ Unicode scalars
+ C: “” hold on (list) “”
+ JavaScript: “” list “”
+ Swift: “” list “”
+ {
+  ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
+ }
+
+action (file)
+ [
+  test {
+   let (• list: Unicode scalars) be (non‐empty example: Unicode scalars)
+   ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) removed by changeable list)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) removed by changeable list
+ )
+ Unicode scalars
+ C♯: “” list “”
+ Kotlin: “” list “”
+ {
+  ← (list) with (range) removed according to use as changeable list
  }
 
 use (clients)
@@ -462,7 +516,6 @@ use (clients)
    (
     English: insert (element: Unicode scalar) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)insert¤(5F)unichar((” list “)¤(2D)>target, ” boundary “, ” element “)” (“glib¤(2D)2.0”)
    Swift: “” list “.insert(” element “, at: ” boundary “)”
    {
     insert ((element) as scalars) at (boundary) in (↓ list)
@@ -472,10 +525,10 @@ use (clients)
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)” (“glib¤(2D)2.0”)
    Swift: “” list “.append(” element “)”
    {
-    change (↓ list) to ((list) with (element) appended)
+    if most efficient, append (element) to (↓ list) by replacement
+    if most efficient, append (element) to (↓ list) by changeable list
    }
 
   action (clients)
@@ -486,15 +539,6 @@ use (clients)
    Kotlin: “StringBuilder(” list “).appendCodePoint(” element “).toString()”
    {
     ← (list) with ((element) as scalars) appended
-   }
-
-  action (clients)
-   (
-    English: prepend (element: Unicode scalar) to (list: ↓ Unicode scalars)
-   )
-   C: “g¤(5F)string¤(5F)prepend¤(5F)unichar((” list “)¤(2D)>target, ” element “)” (“glib¤(2D)2.0”)
-   {
-    prepend (element) to (↓ list) according to use as changeable list
    }
 
   action (clients)
@@ -513,7 +557,7 @@ use (clients)
    )
    Swift: “” list “.removeSubrange(” range “)”
    {
-    remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
+    remove (range) from (↓ list) according to list insertion
    }
 
   action (clients)
@@ -522,7 +566,7 @@ use (clients)
    )
    Unicode scalars
    {
-    ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
+    ← if most efficient, (if most efficient, (list) with (range) removed by bounds) with (range) removed by changeable list
    }
  }
 
