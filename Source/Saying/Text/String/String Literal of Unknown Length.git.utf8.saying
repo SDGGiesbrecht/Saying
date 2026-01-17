@@ -1,0 +1,35 @@
+thing (clients)
+ (
+  English: string literal of unknown length
+ )
+ C: “char¤(2A)”
+ C♯: “string”
+ Kotlin: “String”
+ Swift: “String”
+
+action (unit)
+ (
+  English: empty
+  Deutsch: leer
+  français : vide
+  ελληνικά: άδειος
+ )
+ string literal of unknown length
+ C: “¤(22)¤(22)”
+ C♯: “¤(22)¤(22)”
+ JavaScript: “¤(22)¤(22)”
+ Kotlin: “¤(22)¤(22)”
+ Swift: “¤(22)¤(22)”
+
+action (unit)
+ [
+  test {ignore (8‐bit Unicode code units of (empty: string literal of unknown length))}
+ ]
+ (
+  English: 8‐bit Unicode code units of (literal: string literal of unknown length)
+ )
+ unmanaged list of (8‐bit Unicode code unit) of unknown length
+ C: “” literal “”
+ {
+  ← empty placeholder
+ }

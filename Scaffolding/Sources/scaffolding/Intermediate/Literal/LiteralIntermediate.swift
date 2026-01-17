@@ -125,6 +125,7 @@ extension LiteralIntermediate {
     type: Thing,
     context: [ReferenceDictionary]
   ) -> [UnicodeText] {
-    return loadingAction(type: type)?.requiredIdentifiers(context: context) ?? []
+    return (loadingAction(type: type)?.requiredIdentifiers(context: context) ?? [])
+      .appending("Unicode scalars of string literal () ending at () skipping validity check")
   }
 }
