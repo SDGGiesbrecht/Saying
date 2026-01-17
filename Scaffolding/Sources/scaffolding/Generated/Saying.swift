@@ -629,9 +629,7 @@ extension String.UnicodeScalarView {
 
 extension String.UnicodeScalarView {
   public func hash(into hasher: inout Hasher) {
-    for scalar in self {
-      hasher.combine(scalar)
-    }
+    if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_0020with_0020_0028_0029_0020by_0020iteration_003AUnicode_0020scalars_003Ahasher_003A(self, &hasher)
   }
 }
 
@@ -648,6 +646,12 @@ func compare(_ first: Int, to second: Int) -> Bool? {
 private let ensureUnicodeResourcesHaveLoaded: Void = { _ = Locale.current }()
 
 extension String.UnicodeScalarView: Hashable {}
+
+fileprivate func if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_0020with_0020_0028_0029_0020by_0020iteration_003AUnicode_0020scalars_003Ahasher_003A(_ key: String.UnicodeScalarView, _ hasher: inout Hasher) {
+  for scalar in key {
+    hasher.combine(scalar)
+  }
+}
 
 extension Slice<UnicodeText> {
   var isNotEmptyAccordingToDefaultUseAsList: Bool {
