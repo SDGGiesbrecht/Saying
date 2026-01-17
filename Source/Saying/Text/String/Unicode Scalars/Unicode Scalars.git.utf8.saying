@@ -755,12 +755,48 @@ action (file)
   English: convert from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars) into scalars
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” (“glib¤(2D)2.0”) {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
  JavaScript: “” scalars “.substring(” beginning “, ” end “)”
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
  {
-  ← convert ((from (beginning) to (end)) in (scalars)) into list
+  ← scalars
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, convert (from (beginning of (scalars)) to (end of (scalars))) in (scalars) into scalars by bounds)
+  }
+ ]
+ (
+  English: if most efficient, convert (range: range of (Unicode scalar boundary)) in (scalars: Unicode scalars) into scalars by bounds
+ )
+ Unicode scalars
+ C: “” hold on (scalars) “”
+ Swift: “” scalars “”
+ {
+  ← convert from ((lower bound) of (range)) to ((upper bound) of (range)) in (scalars) into scalars
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, convert (from (beginning of (scalars)) to (end of (scalars))) in (scalars) into scalars by 8‐bit encoded)
+  }
+ ]
+ (
+  English: if most efficient, convert (range: range of (Unicode scalar boundary)) in (scalars: Unicode scalars) into scalars by 8‐bit encoded
+ )
+ Unicode scalars
+ C♯: “” scalars “”
+ JavaScript: “” scalars “”
+ Kotlin: “” scalars “”
+ Swift: “” scalars “”
+ {
+  let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
+  ← Unicode scalars of (convert ((converted range) in ((8‐bit encoded) of (scalars))) into list) skipping validity check
  }
 
 use (clients)
@@ -800,7 +836,9 @@ use (clients)
    Unicode scalars
    Swift: “String.UnicodeScalarView(” other “)”
    {
-    ← convert from (beginning of (other)) to (end of (other)) in ((whole) of (other)) into scalars
+    let (• bounds: range of (Unicode scalar boundary)) be ((bounds) of (other))
+    let (• whole: Unicode scalars) be ((whole) of (other))
+    ← if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (whole) into scalars by bounds) into scalars by 8‐bit encoded
    }
 
   action (clients)
