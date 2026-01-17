@@ -574,7 +574,7 @@ action (file)
  [
   test {
    let (• scalars: Unicode scalars) be (example: Unicode scalars)
-   verify (((scalars) with (beginning of (scalars)) to (end of (scalars)) replaced with (scalars)) is (scalars))
+   ignore ((scalars) with (beginning of (scalars)) to (end of (scalars)) replaced with (scalars))
   }
  ]
  (
@@ -583,9 +583,64 @@ action (file)
  Unicode scalars
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
-  let (• copy: Unicode scalars) start as (convert from (beginning of (list)) to (beginning) in (list) into scalars)
-  append (insertion) to (↓ copy)
-  append (convert from (end) to (end of (list)) in (list) into scalars) to (↓ copy)
+  ← list
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, (scalars) with (from (beginning of (scalars)) to (end of (scalars))) replaced with (scalars) by bounds)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars) by bounds
+ )
+ Unicode scalars
+ C: “” hold on (list) “”
+ C♯: “” list “”
+ JavaScript: “” list “”
+ Swift: “” list “”
+ {
+  ← (list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (replacement)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, (scalars) with (from (beginning of (scalars)) to (end of (scalars))) replaced with (scalars) by list insertion)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars) by list insertion
+ )
+ Unicode scalars
+ C♯: “” list “”
+ JavaScript: “” list “”
+ Kotlin: “” list “”
+ {
+  ← (list) with (range) replaced with (replacement) according to list insertion
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, (scalars) with (from (beginning of (scalars)) to (end of (scalars))) replaced with (scalars) by appending)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars) by appending
+ )
+ Unicode scalars
+ C: “” hold on (list) “”
+ Kotlin: “” list “”
+ Swift: “” list “”
+ {
+  let (• copy: Unicode scalars) start as (convert from (beginning of (list)) to ((lower bound) of (range)) in (list) into scalars)
+  append (replacement) to (↓ copy)
+  append (convert from ((upper bound) of (range)) to (end of (list)) in (list) into scalars) to (↓ copy)
   ← copy
  }
 
@@ -598,14 +653,22 @@ use (clients)
    )
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
-    change (↓ list) to ((list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (insertion))
+    change (↓ list) to ((list) with (range) replaced with (insertion))
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars)
+   )
+   Unicode scalars
+   {
+    ← if most efficient, (if most efficient, (if most efficient, (list: Unicode scalars) with (range) replaced with (replacement) by bounds) with (range) replaced with (replacement) by list insertion) with (range) replaced with (replacement) by appending
    }
 
   action (clients)
    (
     English: insert (insertion: Unicode scalars) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)insert((” list “)¤(2D)>target, ” boundary “, ” insertion “¤(2D)>target¤(2D)>str)” (“glib¤(2D)2.0”)
    Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
    {
     insert (insertion) at (boundary) in (↓ list) according to list insertion
@@ -626,11 +689,13 @@ use (clients)
    (
     English: append (appendix: Unicode scalars) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)” (“glib¤(2D)2.0”)
    C♯: “” list “ += ” appendix “”
    JavaScript: “” list “ += ” appendix “”
    Kotlin: “” list “ += ” appendix “”
    Swift: “” list “ += ” appendix “”
+   {
+    append (appendix) to (↓ list) according to list insertion
+   }
 
   action (clients)
    (
@@ -643,15 +708,6 @@ use (clients)
    Swift: “” list “ + ” appendix “”
    {
     ← (list) with (appendix) appended according to list insertion
-   }
-
-  action (clients)
-   (
-    English: prepend (prefix: Unicode scalars) to (list: ↓ Unicode scalars)
-   )
-   C: “g¤(5F)string¤(5F)prepend((” list “)¤(2D)>target, ” prefix “¤(2D)>target¤(2D)>str)” (“glib¤(2D)2.0”)
-   {
-    prepend (prefix) to (↓ list) according to list insertion
    }
 
   action (clients)
