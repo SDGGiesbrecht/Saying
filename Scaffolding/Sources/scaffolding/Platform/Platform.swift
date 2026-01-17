@@ -1856,7 +1856,7 @@ extension Platform {
         }
       }
     }
-    return inOrder
+    return inOrder.filter({ !$0.allSatisfy({ $0 == " " }) })
   }
 
   static func declaration(
