@@ -149,6 +149,39 @@ action (file)
   ← ((8‐bit encoded) of (first)) is ((8‐bit encoded) of (second))
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (scalars) with (↓ hasher) by 8‐bit encoded
+  }
+ ]
+ if most efficient, hash key (key: Unicode scalars) with (hasher: ↓ hasher) by 8‐bit encoded
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  hash part ((8‐bit encoded) of (key)) with (↓ hasher)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (scalars) with (↓ hasher) by iteration
+  }
+ ]
+ if most efficient, hash key (key: Unicode scalars) with (hasher: ↓ hasher) by iteration
+ C: “”
+ {
+  for each (• scalar: Unicode scalar) in (key), {
+   hash part (scalar) with (↓ hasher)
+  }
+ }
+
 use (clients)
  comparison of (Unicode scalars) for equality
  {
@@ -176,9 +209,8 @@ use (clients)
   action (clients)
    hash key (key: Unicode scalars) with (hasher: ↓ hasher)
    {
-    for each (• scalar: Unicode scalar) in (key), {
-     hash part (scalar) with (↓ hasher)
-    }
+    if most efficient, hash key (key) with (↓ hasher) by 8‐bit encoded
+    if most efficient, hash key (key) with (↓ hasher) by iteration
    }
 
   action (unit)
@@ -573,6 +605,41 @@ use (clients)
 action (file)
  [
   test {
+   let (• scalars: Unicode scalars) start as (example: Unicode scalars)
+   if most efficient, replace (from (beginning of (scalars)) to (end of (scalars))) in (↓ scalars) with (scalars) by replacement
+  }
+ ]
+ (
+  English: if most efficient, replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars) by replacement
+ )
+ C: “”
+ Swift: “”
+ {
+  change (↓ list) to ((list) with (range) replaced with (insertion))
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (example: Unicode scalars)
+   if most efficient, replace (from (beginning of (scalars)) to (end of (scalars))) in (↓ scalars) with (scalars) by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars) by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
+  replace (converted range) in (↓ (8‐bit encoded) of (list)) with ((8‐bit encoded) of (insertion))
+ }
+
+action (file)
+ [
+  test {
    let (• scalars: Unicode scalars) be (example: Unicode scalars)
    ignore ((scalars) with (beginning of (scalars)) to (end of (scalars)) replaced with (scalars))
   }
@@ -653,7 +720,8 @@ use (clients)
    )
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
-    change (↓ list) to ((list) with (range) replaced with (insertion))
+    if most efficient, replace (range) in (↓ list) with (insertion) by replacement
+    if most efficient, replace (range) in (↓ list) with (insertion) by 8‐bit encoded
    }
 
   action (clients)
