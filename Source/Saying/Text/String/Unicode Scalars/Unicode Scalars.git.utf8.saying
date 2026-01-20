@@ -504,7 +504,6 @@ action (clients)
   English: (scalar: Unicode scalar) as scalars
  )
  Unicode scalars
- C: “g¤(5F)unichar¤(5F)to¤(5F)utf8?” (“glib¤(2D)2.0”)
  C♯: “” scalar “.ToString()”
  JavaScript: “String.fromCodePoint(” scalar “)”
  Swift: “String(” scalar “).unicodeScalars”
