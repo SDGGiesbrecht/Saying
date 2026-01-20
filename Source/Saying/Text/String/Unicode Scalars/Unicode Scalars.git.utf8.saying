@@ -427,6 +427,75 @@ action (clients)
  Kotlin: “” index “”
  Swift: “” index “”
 
+action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (six: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   ignore (insert (example: Unicode scalar) into (↓ list))
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: insert (scalar: Unicode scalar) into (buffer: ↓ unmanaged list of (8‐bit Unicode code unit) of unknown length)
+ )
+ platform fixed‐width integer
+ C: “g¤(5F)unichar¤(5F)to¤(5F)utf8(” scalar “, ” buffer “)” (“glib¤(2D)2.0”)
+ {
+  ← zero
+ }
+
+action (file)
+ [
+  test {ignore (convert (example: platform fixed‐width integer) into natural number implicitly)}
+ ]
+ (
+  English: convert (integer: platform fixed‐width integer) into natural number implicitly
+ )
+ natural number
+ C: “” integer “”
+ {
+  ← zero
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, fill (↓ scalars) with (example: Unicode scalar) by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, fill (empty: ↓ Unicode scalars) with (scalar: Unicode scalar) by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  ensure enough storage for (end of list containing (six: natural number) entries) in (↓ (unmanaged) of ((8‐bit encoded) of (empty)))
+  let (• length: platform fixed‐width integer) be (insert (scalar) into (↓ (uncounted) of ((unmanaged) of ((8‐bit encoded) of (empty)))))
+  change (↓ (end) of ((unmanaged) of ((8‐bit encoded) of (empty)))) to (end of list containing (convert (length) into natural number implicitly) entries)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, fill (↓ scalars) with (example: Unicode scalar) by appending
+  }
+ ]
+ (
+  English: if most efficient, fill (empty: ↓ Unicode scalars) with (scalar: Unicode scalar) by appending
+ )
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Swift: “”
+ {
+  append (scalar) to (↓ empty)
+ }
+
 action (clients)
  [
   test {verify (((“ ”: Unicode scalar) as scalars) is (“ ”: Unicode scalars))}
@@ -441,7 +510,8 @@ action (clients)
  Swift: “String(” scalar “).unicodeScalars”
  {
   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
-  append (scalar) to (↓ scalars)
+  if most efficient, fill (↓ scalars) with (scalar) by appending
+  if most efficient, fill (↓ scalars) with (scalar) by 8‐bit encoded
   ← scalars
  }
 
