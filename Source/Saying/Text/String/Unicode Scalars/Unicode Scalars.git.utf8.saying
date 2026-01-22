@@ -544,7 +544,6 @@ action (file)
  (
   English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by changeable list
  )
- C: “”
  Kotlin: “”
  Swift: “”
  {
