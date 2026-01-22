@@ -10,6 +10,10 @@ thing (clients)
   [
    English: However, literals originate in source files, which are text. As such, any tool handling the source files may change their representation. To prevent inconsistency, the compiler reads source files according to compatibility decomposition (NFKD). This means that literals can safely include NFKD scalars directly, but must use escape codes to preserve non‐NFKD scalars.
   ]
+  [
+   English: Unicode scalars are not null‐terminated; the null control is a valid scalar.
+  ]
+  test {verify ((“¤(0)”: Unicode scalars) is not empty)}
  ]
  (
   English: Unicode scalars
