@@ -284,7 +284,14 @@ enum CSharp: Platform {
   static var needsReferencePreparation: Bool {
     return false
   }
-  static func prepareReference(to argument: String, update: Bool) -> String? {
+  static func prepareReference(
+    to argument: String,
+    update: Bool,
+    type: String?,
+    temporaryStorage: String?,
+    copy: String?,
+    release: String?
+  ) -> String? {
     return nil
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {

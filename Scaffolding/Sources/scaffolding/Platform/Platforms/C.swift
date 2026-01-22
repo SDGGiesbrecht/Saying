@@ -31,6 +31,12 @@ import Foundation
 //         release(structure);
 //   • Note that this rule describes even passed references.
 // • Holds and releases may be omitted in pairs, either by a code author or by compiler optimization, provided the pair is known from context to be unnecessary.
+// • Memory‐managed types share data using the copy‐on‐write technique.
+//     • A copy must be made before modification if other references may exist.
+//     • Literals must be copied before modification.
+//   • Copies are shallow.
+//     • Immediate structure members and list elements of a copy are safe to replace entirely.
+//     • Structure members and list elements must be replaced with a copy before nested modifications.
 
 enum C: Platform {
 
@@ -368,10 +374,24 @@ enum C: Platform {
     return "(\(type)) {\(parts)}"
   }
   static var needsReferencePreparation: Bool {
-    return false
+    return true
   }
-  static func prepareReference(to argument: String, update: Bool) -> String? {
-    return nil
+  static func prepareReference(
+    to argument: String,
+    update: Bool,
+    type: String?,
+    temporaryStorage: String?,
+    copy: String?,
+    release: String?
+  ) -> String? {
+    if let type = type,
+      let temporaryStorage = temporaryStorage,
+      let copy = copy,
+      let release = release {
+      return "/* Here: \(type) \(temporaryStorage) = \(argument); \(argument) = \(copy); \(release); */"
+    } else {
+      return nil
+    }
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {
