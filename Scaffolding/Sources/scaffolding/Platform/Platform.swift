@@ -20,7 +20,7 @@ protocol Platform {
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
   static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
-  static func literal(scalars: String) -> String
+  static func literal(scalars: String, escaped: String) -> String
   static func literal(scalar: Unicode.Scalar) -> String
 
   // Access
@@ -137,10 +137,8 @@ protocol Platform {
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool
 
   // Module
-  static var importsNeededByMemoryManagement: Set<String> { get }
   static var importsNeededByDeadEnd: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
-  static var memoryManagement: String? { get }
   static var currentTestVariable: String { get }
   static func coverageRegionSet(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
@@ -802,7 +800,7 @@ extension Platform {
     if normalize {
       contents = contents.decomposedStringWithCompatibilityMapping
     }
-    return self.literal(scalars: sanitize(stringLiteral: contents))
+    return self.literal(scalars: contents, escaped: sanitize(stringLiteral: contents))
   }
 
   static func call(
@@ -1858,7 +1856,7 @@ extension Platform {
         }
       }
     }
-    return inOrder
+    return inOrder.filter({ !$0.allSatisfy({ $0 == " " }) })
   }
 
   static func declaration(
@@ -2183,7 +2181,6 @@ extension Platform {
     for module in modules {
       imports.formUnion(nativeImports(for: module.referenceDictionary))
     }
-    imports.formUnion(importsNeededByMemoryManagement)
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
@@ -2191,11 +2188,6 @@ extension Platform {
       for importTarget in imports.sorted() {
         result.append(statementImporting(importTarget))
       }
-    }
-
-    if let memoryManagement = memoryManagement {
-      result.appendSeparatorLine()
-      result.append(memoryManagement)
     }
 
     if mode == .testing {

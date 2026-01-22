@@ -55,8 +55,8 @@ enum Kotlin: Platform {
     }).joined()
   }
 
-  static func literal(scalars: String) -> String {
-    return "\u{22}\(scalars)\u{22}"
+  static func literal(scalars: String, escaped: String) -> String {
+    return "\u{22}\(escaped)\u{22}"
   }
   static func literal(scalar: Unicode.Scalar) -> String {
     return "0x\(String(scalar.value, radix: 16, uppercase: true))"
@@ -351,18 +351,11 @@ enum Kotlin: Platform {
     return false
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return []
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return ["kotlin.system"]
   }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
-  }
-
-  static var memoryManagement: String? {
-    return nil
   }
 
   static var currentTestVariable: String {
@@ -510,7 +503,7 @@ enum Kotlin: Platform {
     try ([
       "android.useAndroidX=true",
       "org.gradle.jvmargs=-Xmx1g", // 512m ran out in the Android CI.
-      "kotlin.daemon.jvmargs=-Xmx2g", // 1G ran out in the Android CI.
+      "kotlin.daemon.jvmargs=-Xmx4g", // 2G ran out in the Android CI.
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
     try ([

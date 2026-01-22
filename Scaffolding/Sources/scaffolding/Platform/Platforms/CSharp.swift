@@ -45,8 +45,8 @@ enum CSharp: Platform {
     return "\u{5C}U\(digits)"
   }
 
-  static func literal(scalars: String) -> String {
-    return "\u{22}\(scalars)\u{22}"
+  static func literal(scalars: String, escaped: String) -> String {
+    return "\u{22}\(escaped)\u{22}"
   }
   static func literal(scalar: Unicode.Scalar) -> String {
     return "new Rune(0x\(String(scalar.value, radix: 16, uppercase: true)))"
@@ -412,9 +412,6 @@ enum CSharp: Platform {
     return false
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return []
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return [
       "System",
@@ -426,10 +423,6 @@ enum CSharp: Platform {
       "System.Collections.Generic",
       "System.Linq",
     ]
-  }
-
-  static var memoryManagement: String? {
-    return nil
   }
 
   static var currentTestVariable: String {

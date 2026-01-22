@@ -10,15 +10,122 @@ thing (clients)
   [
    English: However, literals originate in source files, which are text. As such, any tool handling the source files may change their representation. To prevent inconsistency, the compiler reads source files according to compatibility decomposition (NFKD). This means that literals can safely include NFKD scalars directly, but must use escape codes to preserve non‐NFKD scalars.
   ]
+  [
+   English: Unicode scalars are not null‐terminated; the null control is a valid scalar.
+  ]
+  test {verify ((“¤(0)”: Unicode scalars) is not empty)}
  ]
  (
   English: Unicode scalars
+  C: Unicode‐scalars
  )
- C: “reference¤(5F)counted¤(5F)string¤(2A)”/“hold¤(5F)string(” . “)”/“release¤(5F)string(” . “)”/“hold¤(5F)string(” . “)” (“glib¤(2D)2.0”) {“REFERENCE¤(5F)COUNTING(GString¤(2A), string, g¤(5F)string¤(5F)free, TRUE)”}
  C♯: “string”
  Kotlin: “String”
  Swift: “String.UnicodeScalarView”
  {
+  part (file)
+   (
+    English: 8‐bit encoded
+   )
+   list of (8‐bit Unicode code unit)
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+ }
+
+action (clients)
+ [
+  [
+   English: Returns the Unicode scalars of an instance of 8‐bit encoded Unicode (UTF‐8) text without checking that it is valid.
+  ]
+  [
+   English: Skipping the validity check can be more efficient when the encoded text is already known from context to be valid. However, the caller takes responsibility for the logical soundness of the call. Decoding invalid data may cause a fatal error or result in invalid program state.
+  ]
+  test {ignore (Unicode scalars of (empty: list of (8‐bit Unicode code unit)) skipping validity check)}
+ ]
+ (
+  English: Unicode scalars of (8‐bit encoded: list of (8‐bit Unicode code unit)) skipping validity check
+ )
+ Unicode scalars
+ C♯: “Encoding.UTF8.GetString(” 8‐bit encoded “.ToArray())” (
+   “System.Collections.Generic”
+   “System.Text”
+  )
+ JavaScript: “new TextDecoder().decode(Uint8Array.from(” 8‐bit encoded “))”
+ Kotlin: “String(” 8‐bit encoded “.toByteArray(), Charsets.UTF¤(5F)8)”
+ Swift: “String(bytes: ” 8‐bit encoded “, encoding: .utf8)!.unicodeScalars”
+ create
+
+action (file)
+ [
+  test {ignore (if possible, list boundary at (example: Unicode scalar boundary))}
+ ]
+ (
+  English: if possible, list boundary at (cursor: Unicode scalar boundary)
+ )
+ list boundary
+ C: “” cursor “”
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
+ {
+  ← example
+ }
+
+action (file)
+ [
+  test {ignore (if possible, scalar boundary at (example: list boundary))}
+ ]
+ (
+  English: if possible, scalar boundary at (cursor: list boundary)
+ )
+ Unicode scalar boundary
+ C: “” cursor “”
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
+ {
+  ← example
+ }
+
+action (file)
+ [
+  test {ignore (if possible, list index at (example: Unicode scalar index))}
+ ]
+ (
+  English: if possible, list index at (index: Unicode scalar index)
+ )
+ list index
+ C: “” index “”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ {
+  ← example
+ }
+
+action (clients)
+ [
+  [
+   English: Returns the Unicode scalars of a string literal as 8‐bit Unicode encoded (UTF‐8) text without checking that it is valid.
+  ]
+  [
+   English: Skipping the validity check is usually more efficient, because the string literal is most often visible at the call site and obviously valid. However, the caller takes responsibility for the logical soundness of the call. Decoding invalid data may cause a fatal error or result in invalid program state.
+  ]
+  test (hidden) {ignore (Unicode scalars of string literal (empty: string literal of unknown length) ending at (end of empty list: list boundary) skipping validity check)}
+ ]
+ (
+  English: Unicode scalars of string literal (uncounted: string literal of unknown length) ending at (end: list boundary) skipping validity check
+  C: Unicode‐scalars‐literal (uncounted: [uncounted]) (end: [end])
+ )
+ Unicode scalars
+ C♯: “” uncounted “”
+ JavaScript: “” uncounted “”
+ Kotlin: “” uncounted “”
+ Swift: “” uncounted “.unicodeScalars”
+ {
+  ← Unicode scalars of (list in read‐only memory (8‐bit Unicode code units of (uncounted)) ending at (end)) skipping validity check
  }
 
 use (clients)
@@ -38,11 +145,46 @@ action (file)
  ]
  implementation of (first: Unicode scalars) is (second: Unicode scalars)
  truth value
- C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)”
  C♯: “” first “ == ” second “”
  JavaScript: “” first “ == ” second “”
  Kotlin: “” first “ == ” second “”
  Swift: “” first “.elementsEqual(” second “)”
+ {
+  ← ((8‐bit encoded) of (first)) is ((8‐bit encoded) of (second))
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (scalars) with (↓ hasher) by 8‐bit encoded
+  }
+ ]
+ if most efficient, hash key (key: Unicode scalars) with (hasher: ↓ hasher) by 8‐bit encoded
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  hash part ((8‐bit encoded) of (key)) with (↓ hasher)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (scalars) with (↓ hasher) by iteration
+  }
+ ]
+ if most efficient, hash key (key: Unicode scalars) with (hasher: ↓ hasher) by iteration
+ C: “”
+ {
+  for each (• scalar: Unicode scalar) in (key), {
+   hash part (scalar) with (↓ hasher)
+  }
+ }
 
 use (clients)
  comparison of (Unicode scalars) for equality
@@ -50,7 +192,6 @@ use (clients)
   action (clients)
    (first: Unicode scalars) is (second: Unicode scalars)
    truth value
-   C: “g¤(5F)string¤(5F)equal(” first “¤(2D)>target, ” second “¤(2D)>target)”
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
@@ -72,9 +213,8 @@ use (clients)
   action (clients)
    hash key (key: Unicode scalars) with (hasher: ↓ hasher)
    {
-    for each (• scalar: Unicode scalar) in (key), {
-     hash part (scalar) with (↓ hasher)
-    }
+    if most efficient, hash key (key) with (↓ hasher) by 8‐bit encoded
+    if most efficient, hash key (key) with (↓ hasher) by iteration
    }
 
   action (unit)
@@ -96,6 +236,46 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   let (• beginning: list boundary) be (beginning of (list))
+   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
+   ignore (if most efficient, scalar boundary after (beginning) in (list) ending at (end) skipping bounds check)
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: if most efficient, scalar boundary after (cursor: list boundary) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length) ending at (end: list boundary) skipping bounds check
+ )
+ list boundary
+ C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) == NULL ? ” end “ : g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) ¤(2D) ” list “” (“glib¤(2D)2.0”)
+ {
+  ← cursor
+ }
+
+action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   let (• first index: list index) be (index after (beginning of (list)) in (list) skipping bounds check)
+   initialize entry at (first index) in (↓ list) to (null control code)
+   ignore (if most efficient, scalar at (first index) in (list))
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: if most efficient, scalar at (cursor: list index) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length)
+ )
+ Unicode scalar
+ C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “ + ” cursor “)” (“glib¤(2D)2.0”)
+ {
+  ← example
+ }
+
 use (clients)
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
@@ -115,22 +295,26 @@ use (clients)
     English: beginning of (list: Unicode scalars)
    )
    Unicode scalar boundary
-   C: “0”
    C♯: “0”
    JavaScript: “0”
    Kotlin: “0”
    Swift: “” list “.startIndex”
+   {
+    ← if possible, scalar boundary at (beginning of ((8‐bit encoded) of (list)))
+   }
 
   action (clients)
    (
     English: end of (list: Unicode scalars)
    )
    Unicode scalar boundary
-   C: “” list “¤(2D)>target¤(2D)>len”
    C♯: “” list “.Length”
    JavaScript: “” list “.length”
    Kotlin: “” list “.length”
    Swift: “” list “.endIndex”
+   {
+    ← if possible, scalar boundary at (end of ((8‐bit encoded) of (list)))
+   }
 
   action (clients)
    (
@@ -156,33 +340,39 @@ use (clients)
     English: boundary after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar boundary
-   C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) == NULL ? ” list “¤(2D)>target¤(2D)>len : (g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “, ” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” list “¤(2D)>target¤(2D)>len) ¤(2D) ” list “¤(2D)>target¤(2D)>str) / sizeof(gchar)”
    C♯: “0xD800 <= ” list “[” cursor “] ¤(26)¤(26) ” list “[” cursor “] < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
    JavaScript: “0xD800 <= ” list “.charCodeAt(” cursor “) ¤(26)¤(26) ” list “.charCodeAt(” cursor “) < 0xDC00 ? ” cursor “ + 2 : ” cursor “ + 1”
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
+   {
+    ← if possible, scalar boundary at (if most efficient, scalar boundary after (if possible, list boundary at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (if possible, list boundary at (end of (list))) skipping bounds check)
+   }
 
   action (clients)
    (
     English: entry at (cursor: Unicode scalar index) in (list: Unicode scalars)
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)”
    C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
    JavaScript: “” list “.codePointAt(” cursor “)”
    Kotlin: “” list “.codePointAt(” cursor “)”
    Swift: “” list “[” cursor “]”
+   {
+    ← if most efficient, scalar at (if possible, list index at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
+   }
 
   action (clients)
    (
     English: entry after (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar
-   C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “¤(2D)>target¤(2D)>str + sizeof(gchar) ¤(2A) ” cursor “)”
    C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
    JavaScript: “” list “.codePointAt(” cursor “)”
    Kotlin: “” list “.codePointAt(” cursor “)”
    Swift: “” list “[” cursor “]”
+   {
+    ← entry after (cursor) in (list) skipping bounds check, according to default use as list
+   }
 
   action (clients)
    (
@@ -241,6 +431,77 @@ action (clients)
  Kotlin: “” index “”
  Swift: “” index “”
 
+action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (six: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   ignore (insert (example: Unicode scalar) into (↓ list))
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: insert (scalar: Unicode scalar) into (buffer: ↓ unmanaged list of (8‐bit Unicode code unit) of unknown length)
+ )
+ platform fixed‐width integer
+ C: “g¤(5F)unichar¤(5F)to¤(5F)utf8(” scalar “, ” buffer “)” (“glib¤(2D)2.0”)
+ {
+  ← zero
+ }
+
+action (file)
+ [
+  test {ignore (convert (example: platform fixed‐width integer) into natural number implicitly)}
+ ]
+ (
+  English: convert (integer: platform fixed‐width integer) into natural number implicitly
+ )
+ natural number
+ C: “” integer “”
+ {
+  ← zero
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, fill (↓ scalars) with (example: Unicode scalar) by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, fill (empty: ↓ Unicode scalars) with (scalar: Unicode scalar) by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• copy: list of (8‐bit Unicode code unit)) start as ((8‐bit encoded) of (empty))
+  ensure enough storage for (end of list containing (six: natural number) entries) in (↓ (unmanaged) of (copy))
+  let (• length: platform fixed‐width integer) be (insert (scalar) into (↓ (uncounted) of ((unmanaged) of (copy))))
+  change (↓ (end) of ((unmanaged) of (copy))) to (end of list containing (convert (length) into natural number implicitly) entries)
+  change (↓ (8‐bit encoded) of (empty)) to (copy)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, fill (↓ scalars) with (example: Unicode scalar) by appending
+  }
+ ]
+ (
+  English: if most efficient, fill (empty: ↓ Unicode scalars) with (scalar: Unicode scalar) by appending
+ )
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Swift: “”
+ {
+  append (scalar) to (↓ empty)
+ }
+
 action (clients)
  [
   test {verify (((“ ”: Unicode scalar) as scalars) is (“ ”: Unicode scalars))}
@@ -254,24 +515,43 @@ action (clients)
  Swift: “String(” scalar “).unicodeScalars”
  {
   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
-  append (scalar) to (↓ scalars)
+  if most efficient, fill (↓ scalars) with (scalar) by appending
+  if most efficient, fill (↓ scalars) with (scalar) by 8‐bit encoded
   ← scalars
  }
 
 action (file)
  [
   test {
-   let (• list: Unicode scalars) start as (“ ”: Unicode scalars)
-   remove from (beginning of (list)) to (end of (list)) from (↓ list)
-   verify ((list) is (“”: Unicode scalars))
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (example: Unicode scalar) to (↓ scalars) by replacement
   }
  ]
  (
-  English: remove from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) from (list: ↓ Unicode scalars)
+  English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by replacement
  )
- C: “g¤(5F)string¤(5F)erase((” list “)¤(2D)>target, ” beginning “, ” end “ ¤(2D) ” beginning “)”
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Swift: “”
  {
-  replace (from (beginning) to (end)) in (↓ list) with (empty: Unicode scalars)
+  change (↓ list) to ((list) with (element) appended)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (example: Unicode scalar) to (↓ scalars) by changeable list
+  }
+ ]
+ (
+  English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by changeable list
+ )
+ Kotlin: “”
+ Swift: “”
+ {
+  append (element) to (↓ list) according to use as changeable list
  }
 
 action (file)
@@ -288,7 +568,42 @@ action (file)
  C♯: “” list “.Remove(” beginning “, ” end “ ¤(2D) ” beginning “)”
  Kotlin: “” list “.removeRange(” beginning “, ” end “)”
  {
-  ← (list) with (from (beginning) to (end)) removed according to use as changeable list
+  ← list
+ }
+
+action (file)
+ [
+  test {
+   let (• list: Unicode scalars) be (non‐empty example: Unicode scalars)
+   ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) removed by bounds)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) removed by bounds
+ )
+ Unicode scalars
+ C: “” hold on (list) “”
+ JavaScript: “” list “”
+ Swift: “” list “”
+ {
+  ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
+ }
+
+action (file)
+ [
+  test {
+   let (• list: Unicode scalars) be (non‐empty example: Unicode scalars)
+   ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) removed by changeable list)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) removed by changeable list
+ )
+ Unicode scalars
+ C♯: “” list “”
+ Kotlin: “” list “”
+ {
+  ← (list) with (range) removed according to use as changeable list
  }
 
 use (clients)
@@ -307,7 +622,6 @@ use (clients)
    (
     English: insert (element: Unicode scalar) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)insert¤(5F)unichar((” list “)¤(2D)>target, ” boundary “, ” element “)”
    Swift: “” list “.insert(” element “, at: ” boundary “)”
    {
     insert ((element) as scalars) at (boundary) in (↓ list)
@@ -317,10 +631,10 @@ use (clients)
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
    Swift: “” list “.append(” element “)”
    {
-    change (↓ list) to ((list) with (element) appended)
+    if most efficient, append (element) to (↓ list) by replacement
+    if most efficient, append (element) to (↓ list) by changeable list
    }
 
   action (clients)
@@ -331,15 +645,6 @@ use (clients)
    Kotlin: “StringBuilder(” list “).appendCodePoint(” element “).toString()”
    {
     ← (list) with ((element) as scalars) appended
-   }
-
-  action (clients)
-   (
-    English: prepend (element: Unicode scalar) to (list: ↓ Unicode scalars)
-   )
-   C: “g¤(5F)string¤(5F)prepend¤(5F)unichar((” list “)¤(2D)>target, ” element “)”
-   {
-    prepend (element) to (↓ list) according to use as changeable list
    }
 
   action (clients)
@@ -358,7 +663,7 @@ use (clients)
    )
    Swift: “” list “.removeSubrange(” range “)”
    {
-    remove from ((lower bound) of (range)) to ((upper bound) of (range)) from (↓ list)
+    remove (range) from (↓ list) according to list insertion
    }
 
   action (clients)
@@ -367,15 +672,53 @@ use (clients)
    )
    Unicode scalars
    {
-    ← (list) with from ((lower bound) of (range)) to ((upper bound) of (range)) removed
+    ← if most efficient, (if most efficient, (list) with (range) removed by bounds) with (range) removed by changeable list
    }
  }
 
 action (file)
  [
   test {
+   let (• scalars: Unicode scalars) start as (example: Unicode scalars)
+   if most efficient, replace (from (beginning of (scalars)) to (end of (scalars))) in (↓ scalars) with (scalars) by replacement
+  }
+ ]
+ (
+  English: if most efficient, replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars) by replacement
+ )
+ C: “”
+ Swift: “”
+ {
+  change (↓ list) to ((list) with (range) replaced with (insertion))
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (example: Unicode scalars)
+   if most efficient, replace (from (beginning of (scalars)) to (end of (scalars))) in (↓ scalars) with (scalars) by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, replace (range: range of (Unicode scalar boundary)) in (list: ↓ Unicode scalars) with (insertion: Unicode scalars) by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
+  let (• replacement: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (insertion))
+  let (• copy: list of (8‐bit Unicode code unit)) start as ((8‐bit encoded) of (list))
+  replace (converted range) in (↓ copy) with (replacement)
+  change (↓ (8‐bit encoded) of (list)) to (copy)
+ }
+
+action (file)
+ [
+  test {
    let (• scalars: Unicode scalars) be (example: Unicode scalars)
-   verify (((scalars) with (beginning of (scalars)) to (end of (scalars)) replaced with (scalars)) is (scalars))
+   ignore ((scalars) with (beginning of (scalars)) to (end of (scalars)) replaced with (scalars))
   }
  ]
  (
@@ -384,9 +727,64 @@ action (file)
  Unicode scalars
  Kotlin: “” list “.replaceRange(” beginning “, ” end “, ” insertion “)”
  {
-  let (• copy: Unicode scalars) start as (convert from (beginning of (list)) to (beginning) in (list) into scalars)
-  append (insertion) to (↓ copy)
-  append (convert from (end) to (end of (list)) in (list) into scalars) to (↓ copy)
+  ← list
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, (scalars) with (from (beginning of (scalars)) to (end of (scalars))) replaced with (scalars) by bounds)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars) by bounds
+ )
+ Unicode scalars
+ C: “” hold on (list) “”
+ C♯: “” list “”
+ JavaScript: “” list “”
+ Swift: “” list “”
+ {
+  ← (list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (replacement)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, (scalars) with (from (beginning of (scalars)) to (end of (scalars))) replaced with (scalars) by list insertion)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars) by list insertion
+ )
+ Unicode scalars
+ C♯: “” list “”
+ JavaScript: “” list “”
+ Kotlin: “” list “”
+ {
+  ← (list) with (range) replaced with (replacement) according to list insertion
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, (scalars) with (from (beginning of (scalars)) to (end of (scalars))) replaced with (scalars) by appending)
+  }
+ ]
+ (
+  English: if most efficient, (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars) by appending
+ )
+ Unicode scalars
+ C: “” hold on (list) “”
+ Kotlin: “” list “”
+ Swift: “” list “”
+ {
+  let (• copy: Unicode scalars) start as (convert from (beginning of (list)) to ((lower bound) of (range)) in (list) into scalars)
+  append (replacement) to (↓ copy)
+  append (convert from ((upper bound) of (range)) to (end of (list)) in (list) into scalars) to (↓ copy)
   ← copy
  }
 
@@ -399,14 +797,23 @@ use (clients)
    )
    Swift: “” list “.replaceSubrange(” range “, with: ” insertion “)”
    {
-    change (↓ list) to ((list) with ((lower bound) of (range)) to ((upper bound) of (range)) replaced with (insertion))
+    if most efficient, replace (range) in (↓ list) with (insertion) by replacement
+    if most efficient, replace (range) in (↓ list) with (insertion) by 8‐bit encoded
+   }
+
+  action (clients)
+   (
+    English: (list: Unicode scalars) with (range: range of (Unicode scalar boundary)) replaced with (replacement: Unicode scalars)
+   )
+   Unicode scalars
+   {
+    ← if most efficient, (if most efficient, (if most efficient, (list: Unicode scalars) with (range) replaced with (replacement) by bounds) with (range) replaced with (replacement) by list insertion) with (range) replaced with (replacement) by appending
    }
 
   action (clients)
    (
     English: insert (insertion: Unicode scalars) at (boundary: Unicode scalar boundary) in (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)insert((” list “)¤(2D)>target, ” boundary “, ” insertion “¤(2D)>target¤(2D)>str)”
    Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
    {
     insert (insertion) at (boundary) in (↓ list) according to list insertion
@@ -427,11 +834,13 @@ use (clients)
    (
     English: append (appendix: Unicode scalars) to (list: ↓ Unicode scalars)
    )
-   C: “g¤(5F)string¤(5F)append((” list “)¤(2D)>target, ” appendix “¤(2D)>target¤(2D)>str)”
    C♯: “” list “ += ” appendix “”
    JavaScript: “” list “ += ” appendix “”
    Kotlin: “” list “ += ” appendix “”
    Swift: “” list “ += ” appendix “”
+   {
+    append (appendix) to (↓ list) according to list insertion
+   }
 
   action (clients)
    (
@@ -444,15 +853,6 @@ use (clients)
    Swift: “” list “ + ” appendix “”
    {
     ← (list) with (appendix) appended according to list insertion
-   }
-
-  action (clients)
-   (
-    English: prepend (prefix: Unicode scalars) to (list: ↓ Unicode scalars)
-   )
-   C: “g¤(5F)string¤(5F)prepend((” list “)¤(2D)>target, ” prefix “¤(2D)>target¤(2D)>str)”
-   {
-    prepend (prefix) to (↓ list) according to list insertion
    }
 
   action (clients)
@@ -500,12 +900,48 @@ action (file)
   English: convert from (beginning: Unicode scalar boundary) to (end: Unicode scalar boundary) in (scalars: Unicode scalars) into scalars
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(g¤(5F)utf8¤(5F)substring(” scalars “¤(2D)>target¤(2D)>str, ” beginning “, ” end “)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)slicing(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Substring(” beginning “, ” end “ ¤(2D) ” beginning “)” (“System”)
  JavaScript: “” scalars “.substring(” beginning “, ” end “)”
  Kotlin: “” scalars “.slice(” beginning “..<” end “)”
  {
-  ← convert ((from (beginning) to (end)) in (scalars)) into list
+  ← scalars
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, convert (from (beginning of (scalars)) to (end of (scalars))) in (scalars) into scalars by bounds)
+  }
+ ]
+ (
+  English: if most efficient, convert (range: range of (Unicode scalar boundary)) in (scalars: Unicode scalars) into scalars by bounds
+ )
+ Unicode scalars
+ C: “” hold on (scalars) “”
+ Swift: “” scalars “”
+ {
+  ← convert from ((lower bound) of (range)) to ((upper bound) of (range)) in (scalars) into scalars
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, convert (from (beginning of (scalars)) to (end of (scalars))) in (scalars) into scalars by 8‐bit encoded)
+  }
+ ]
+ (
+  English: if most efficient, convert (range: range of (Unicode scalar boundary)) in (scalars: Unicode scalars) into scalars by 8‐bit encoded
+ )
+ Unicode scalars
+ C♯: “” scalars “”
+ JavaScript: “” scalars “”
+ Kotlin: “” scalars “”
+ Swift: “” scalars “”
+ {
+  let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
+  ← Unicode scalars of (convert ((converted range) in ((8‐bit encoded) of (scalars))) into list) skipping validity check
  }
 
 use (clients)
@@ -545,7 +981,9 @@ use (clients)
    Unicode scalars
    Swift: “String.UnicodeScalarView(” other “)”
    {
-    ← convert from (beginning of (other)) to (end of (other)) in ((whole) of (other)) into scalars
+    let (• bounds: range of (Unicode scalar boundary)) be ((bounds) of (other))
+    let (• whole: Unicode scalars) be ((whole) of (other))
+    ← if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (whole) into scalars by bounds) into scalars by 8‐bit encoded
    }
 
   action (clients)
@@ -593,11 +1031,30 @@ action (file)
  {}
 
 action (file)
+ [
+  test {
+   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
+   let (• beginning: list boundary) be (beginning of (list))
+   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
+   clean (if most efficient, compute compatibility decomposition of (list) up to (end)) up up to (end)
+   clean (list) up up to (end)
+  }
+ ]
+ (
+  English: if most efficient, compute compatibility decomposition of (8‐bit encoded: unmanaged list of (8‐bit Unicode code unit) of unknown length) up to (end: list boundary)
+ )
+ unmanaged list of (8‐bit Unicode code unit) of unknown length
+ C: “g¤(5F)utf8¤(5F)normalize(” 8‐bit encoded “, ” end “, G¤(5F)NORMALIZE¤(5F)ALL)” (“glib¤(2D)2.0”)
+ {
+  ← 8‐bit encoded
+ }
+
+action (file)
  (
   English: compute compatibility decomposition of (scalars: Unicode scalars)
  )
  Unicode scalars
- C: “reference¤(5F)string(g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(g¤(5F)utf8¤(5F)normalize(” scalars “¤(2D)>target¤(2D)>str, ” scalars “¤(2D)>target¤(2D)>len, G¤(5F)NORMALIZE¤(5F)ALL)))” {“GString¤(2A) g¤(5F)string¤(5F)copying¤(5F)and¤(5F)freeing¤(5F)for¤(5F)normalization(gchar¤(2A) init)¤(A){¤(A)GString¤(2A) string = g¤(5F)string¤(5F)new(init);¤(A)free(init);¤(A)return string;¤(A)}”}
  C♯: “” scalars “.Normalize(NormalizationForm.FormKD)” (
    “System”
    “System.Text”
@@ -605,6 +1062,14 @@ action (file)
  JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
  Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
  Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
+ {
+  let (• normalized: unmanaged list of (8‐bit Unicode code unit) of unknown length) be (if most efficient, compute compatibility decomposition of ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (scalars)))) up to (if possible, list boundary at (end of (scalars))))
+  let (• end: list boundary) start as (end of empty list)
+  while ((entry at (index after (end) in (normalized) skipping bounds check) in (normalized)) is not (null control code)), {
+   advance (↓ end) to next in (normalized) skipping bounds check
+  }
+  ← Unicode scalars of (create list with unmanaged list (create unmanaged list with uncounted (normalized), end (end), limit (end) and references (one: platform fixed‐width natural number) where memory is read‐only (false))) skipping validity check
+ }
 
 action (clients)
  [

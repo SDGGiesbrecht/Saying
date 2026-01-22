@@ -100,8 +100,8 @@ enum Swift: Platform {
     return "\u{5C}u{\(character.hexadecimalCode)}"
   }
 
-  static func literal(scalars: String) -> String {
-    return "\u{22}\(scalars)\u{22}.unicodeScalars"
+  static func literal(scalars: String, escaped: String) -> String {
+    return "\u{22}\(escaped)\u{22}.unicodeScalars"
   }
   static func literal(scalar: Unicode.Scalar) -> String {
     let contents = sanitize(stringLiteral: "\(scalar)")
@@ -449,18 +449,11 @@ enum Swift: Platform {
     return "import \(importTarget)"
   }
 
-  static var importsNeededByMemoryManagement: Set<String> {
-    return []
-  }
   static var importsNeededByDeadEnd: Set<String> {
     return []
   }
   static var importsNeededByTestScaffolding: Set<String> {
     return []
-  }
-
-  static var memoryManagement: String? {
-    return nil
   }
 
   static let preexistingNativeRequirements: Set<String> = [
