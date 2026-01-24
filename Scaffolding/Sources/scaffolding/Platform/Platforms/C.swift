@@ -388,7 +388,7 @@ enum C: Platform {
       let temporaryStorage = temporaryStorage,
       let copy = copy,
       let release = release {
-      return "/* Here: \(type) \(temporaryStorage) = \(argument); \(argument) = \(copy); \(release); */"
+      return "\(type) \(temporaryStorage) = \(argument); \(argument) = \(copy); \(release); "
     } else {
       return nil
     }
