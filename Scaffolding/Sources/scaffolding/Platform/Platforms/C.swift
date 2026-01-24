@@ -63,6 +63,7 @@ enum C: Platform {
   }
   static var disallowedStringLiteralPoints: [UInt32] {
     var values: [UInt32] = []
+    values.append(0x0) // null (compiler warning)
     values.append(0x22) // "
     values.append(0xC5) // \
     return values
@@ -77,8 +78,13 @@ enum C: Platform {
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
-    digits.scalars.fill(to: 8, with: "0", from: .start)
-    return "\u{5C}U\(digits)"
+    if character.value < 0xA0 {
+      digits.scalars.fill(to: 2, with: "0", from: .start)
+      return "\u{5C}x\(digits)"
+    } else {
+      digits.scalars.fill(to: 8, with: "0", from: .start)
+      return "\u{5C}U\(digits)"
+    }
   }
 
   static func literal(scalars: String, escaped: String) -> String {
