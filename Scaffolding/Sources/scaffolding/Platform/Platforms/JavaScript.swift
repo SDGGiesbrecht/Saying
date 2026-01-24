@@ -195,7 +195,14 @@ enum JavaScript: Platform {
   static var needsReferencePreparation: Bool {
     return true
   }
-  static func prepareReference(to argument: String, update: Bool) -> String? {
+  static func prepareReference(
+    to argument: String,
+    update: Bool,
+    type: String?,
+    temporaryStorage: String?,
+    copy: String?,
+    release: String?
+  ) -> String? {
     let keyword = update ? "" : "let "
     let name = sanitize(identifier: UnicodeText(argument), leading: true)
     return "\(keyword)\(name)Reference = { value: \(argument) }; "

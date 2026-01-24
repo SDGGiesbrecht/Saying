@@ -477,11 +477,9 @@ action (file)
  Kotlin: “”
  Swift: “”
  {
-  let (• copy: list of (8‐bit Unicode code unit)) start as ((8‐bit encoded) of (empty))
-  ensure enough storage for (end of list containing (six: natural number) entries) in (↓ (unmanaged) of (copy))
-  let (• length: platform fixed‐width integer) be (insert (scalar) into (↓ (uncounted) of ((unmanaged) of (copy))))
-  change (↓ (end) of ((unmanaged) of (copy))) to (end of list containing (convert (length) into natural number implicitly) entries)
-  change (↓ (8‐bit encoded) of (empty)) to (copy)
+  ensure enough storage for (end of list containing (six: natural number) entries) in (↓ (unmanaged) of ((8‐bit encoded) of (empty)))
+  let (• length: platform fixed‐width integer) be (insert (scalar) into (↓ (uncounted) of ((unmanaged) of ((8‐bit encoded) of (empty)))))
+  change (↓ (end) of ((unmanaged) of ((8‐bit encoded) of (empty)))) to (end of list containing (convert (length) into natural number implicitly) entries)
  }
 
 action (file)
@@ -709,9 +707,7 @@ action (file)
  {
   let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
   let (• replacement: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (insertion))
-  let (• copy: list of (8‐bit Unicode code unit)) start as ((8‐bit encoded) of (list))
-  replace (converted range) in (↓ copy) with (replacement)
-  change (↓ (8‐bit encoded) of (list)) to (copy)
+  replace (converted range) in (↓ (8‐bit encoded) of (list)) with (replacement)
  }
 
 action (file)

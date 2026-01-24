@@ -95,7 +95,14 @@ protocol Platform {
   static func createInstance(of type: String, parts: String) -> String
   static func constructorSetter(name: String) -> String
   static var needsReferencePreparation: Bool { get }
-  static func prepareReference(to argument: String, update: Bool) -> String?
+  static func prepareReference(
+    to argument: String,
+    update: Bool,
+    type: String?,
+    temporaryStorage: String?,
+    copy: String?,
+    release: String?
+  ) -> String?
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String
   static func unpackReference(to argument: String) -> String?
   static func dereference(throughParameter: String, forwarding: Bool) -> String
@@ -884,6 +891,7 @@ extension Platform {
     extractedArguments: inout [String],
     isArgumentExtraction: Bool = false,
     isThrough: Bool,
+    isDetachment: Bool = false,
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
@@ -1026,6 +1034,7 @@ extension Platform {
         )
       }
       if !isThrough,
+        !isDetachment,
         bareAction.isAccessor,
         let returnType = bareAction.returnValue,
         let hold = nativeHold(on: returnType, referenceLookup: referenceLookup) {
@@ -1583,7 +1592,7 @@ extension Platform {
   ) -> [String] {
     var entry = ""
     if let action = statement.action {
-      var referenceList: [String] = []
+      var referenceList: [PassedReference] = []
       var extractedCoverageRegistrations: [String] = []
       if needsReferencePreparation {
         referenceList = statement.passedReferences(platform: self, referenceLookup: referenceLookup)
@@ -1592,7 +1601,7 @@ extension Platform {
           })
           .map({ reference in
             var extracted: [String] = []
-            return call(
+            let call = self.call(
               to: reference,
               context: context,
               localLookup: localLookup,
@@ -1604,17 +1613,43 @@ extension Platform {
               clashAvoidanceCounter: &clashAvoidanceCounter,
               extractedArguments: &extracted,
               isThrough: false,
+              isDetachment: true,
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: false,
               mode: mode
             )
+            var type: String?
+            var temporaryStorage: String?
+            var copy: String?
+            var release: String?
+            if !call.unicodeScalars.allSatisfy({ allowedIdentifierContinuationCharacters.contains($0) }),
+              let referenceType = reference.resolvedResultType?.flatMap({ $0 }),
+              let copyAction = nativeCopy(of: referenceType, referenceLookup: referenceLookup),
+              let releaseAction = nativeRelease(of: referenceType, referenceLookup: referenceLookup) {
+              type = source(for: referenceType, referenceLookup: referenceLookup)
+              clashAvoidanceCounter += 1
+              temporaryStorage = "old\(clashAvoidanceCounter)"
+              copy = apply(nativeReferenceCountingAction: copyAction, around: temporaryStorage!, referenceLookup: referenceLookup)
+              release = apply(nativeReferenceCountingAction: releaseAction, around: temporaryStorage!, referenceLookup: referenceLookup)
+            }
+            return PassedReference(
+              reference: call,
+              type: type,
+              temporaryStorage: temporaryStorage,
+              copy: copy,
+              release: release
+            )
           })
         for reference in referenceList {
           if let preparation = prepareReference(
-            to: reference,
-            update: existingReferences.contains(reference)
+            to: reference.reference,
+            update: existingReferences.contains(reference.reference),
+            type: reference.type,
+            temporaryStorage: reference.temporaryStorage,
+            copy: reference.copy,
+            release: reference.release
           ) {
             entry.append(preparation)
           }
@@ -1701,7 +1736,7 @@ extension Platform {
         entry.append(coverage)
       }
       for reference in referenceList.reversed() {
-        if let unpack = unpackReference(to: reference) {
+        if let unpack = unpackReference(to: reference.reference) {
           entry.append(unpack)
         }
       }
@@ -1711,7 +1746,7 @@ extension Platform {
           entry.append(contentsOf: delayedReturn)
         }
         for reference in referenceList {
-          existingReferences.insert(reference)
+          existingReferences.insert(reference.reference)
         }
       }
     } else if statement.isReturn {
