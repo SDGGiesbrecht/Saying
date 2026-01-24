@@ -79,11 +79,11 @@ enum C: Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
     if character.value < 0xA0 {
-      digits.scalars.fill(to: 8, with: "0", from: .start)
-      return "\u{5C}U\(digits)"
-    } else {
       digits.scalars.fill(to: 2, with: "0", from: .start)
       return "\u{5C}x\(digits)"
+    } else {
+      digits.scalars.fill(to: 8, with: "0", from: .start)
+      return "\u{5C}U\(digits)"
     }
   }
 
