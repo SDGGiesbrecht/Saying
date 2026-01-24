@@ -78,7 +78,7 @@ enum C: Platform {
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
-    if character < 0xA0 {
+    if character.value < 0xA0 {
       digits.scalars.fill(to: 8, with: "0", from: .start)
       return "\u{5C}U\(digits)"
     } else {
