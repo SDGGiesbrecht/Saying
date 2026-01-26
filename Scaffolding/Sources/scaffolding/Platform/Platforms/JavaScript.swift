@@ -116,6 +116,9 @@ enum JavaScript: Platform {
   static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
     return nil
   }
+  static func synthesizedDetachment(from thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return ""
   }
@@ -134,9 +137,12 @@ enum JavaScript: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String]
+    componentReleases: [String],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String? {
     return nil
   }
@@ -147,9 +153,12 @@ enum JavaScript: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)]
+    componentReleases: [(String, String)],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String {
     var result: [String] = [
       "const \(name) = Object.freeze({"
@@ -195,14 +204,7 @@ enum JavaScript: Platform {
   static var needsReferencePreparation: Bool {
     return true
   }
-  static func prepareReference(
-    to argument: String,
-    update: Bool,
-    type: String?,
-    temporaryStorage: String?,
-    copy: String?,
-    release: String?
-  ) -> String? {
+  static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "let "
     let name = sanitize(identifier: UnicodeText(argument), leading: true)
     return "\(keyword)\(name)Reference = { value: \(argument) }; "

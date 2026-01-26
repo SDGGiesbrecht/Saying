@@ -134,6 +134,9 @@ enum Kotlin: Platform {
   static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
     return nil
   }
+  static func synthesizedDetachment(from thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"
   }
@@ -156,9 +159,12 @@ enum Kotlin: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String]
+    componentReleases: [String],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String? {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let constructorAccess = constructorAccessModifier == accessModifier
@@ -184,9 +190,12 @@ enum Kotlin: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)]
+    componentReleases: [(String, String)],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let keyword = simple ? "enum" : "sealed"
@@ -235,14 +244,7 @@ enum Kotlin: Platform {
   static var needsReferencePreparation: Bool {
     return true
   }
-  static func prepareReference(
-    to argument: String,
-    update: Bool,
-    type: String?,
-    temporaryStorage: String?,
-    copy: String?,
-    release: String?
-  ) -> String? {
+  static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "var "
     let name = sanitize(identifier: UnicodeText(argument), leading: true)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "

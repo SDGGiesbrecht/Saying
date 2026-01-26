@@ -66,9 +66,12 @@ protocol Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String]
+    componentReleases: [String],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String?
   static func enumerationTypeDeclaration(
     name: String,
@@ -77,13 +80,17 @@ protocol Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)]
+    componentReleases: [(String, String)],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String
   static func synthesizedHold(on thing: String) -> NativeActionExpressionIntermediate?
   static func synthesizedRelease(of thing: String) -> NativeActionExpressionIntermediate?
   static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate?
+  static func synthesizedDetachment(from thing: String) -> NativeActionExpressionIntermediate?
 
   // Actions
   static func nativeNameDeclaration(of action: ActionIntermediate) -> UnicodeText?
@@ -95,14 +102,7 @@ protocol Platform {
   static func createInstance(of type: String, parts: String) -> String
   static func constructorSetter(name: String) -> String
   static var needsReferencePreparation: Bool { get }
-  static func prepareReference(
-    to argument: String,
-    update: Bool,
-    type: String?,
-    temporaryStorage: String?,
-    copy: String?,
-    release: String?
-  ) -> String?
+  static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String
   static func unpackReference(to argument: String) -> String?
   static func dereference(throughParameter: String, forwarding: Bool) -> String
@@ -639,6 +639,22 @@ extension Platform {
           referenceLookup: externalReferenceLookup
         )
       }
+      let copyOld: String? = (thing.requiresCleanUp == true ? synthesizedCopy(of: name) : nil)
+        .map { copy in
+          apply(
+            nativeReferenceCountingAction: copy,
+            around: "old",
+            referenceLookup: externalReferenceLookup
+          )
+        }
+      let releaseOld: String? = (thing.requiresCleanUp == true ? synthesizedRelease(of: name) : nil)
+        .map { release in
+          apply(
+            nativeReferenceCountingAction: release,
+            around: "old",
+            referenceLookup: externalReferenceLookup
+          )
+        }
       return thingDeclaration(
         name: name,
         components: components,
@@ -647,9 +663,12 @@ extension Platform {
         constructorAccessModifier: constructorAccess,
         constructorSetters: constructorSetters,
         otherMembers: members,
+        isReferenceCounted: thing.requiresCleanUp == true,
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
-        componentReleases: componentReleases
+        componentReleases: componentReleases,
+        copyOld: copyOld,
+        releaseOld: releaseOld
       )
     } else {
       var cases: [String] = []
@@ -700,6 +719,22 @@ extension Platform {
         )
         return (caseName, call)
       }
+      let copyOld: String? = (thing.requiresCleanUp == true ? synthesizedCopy(of: name) : nil)
+        .map { copy in
+          apply(
+            nativeReferenceCountingAction: copy,
+            around: "old",
+            referenceLookup: externalReferenceLookup
+          )
+        }
+      let releaseOld: String? = (thing.requiresCleanUp == true ? synthesizedRelease(of: name) : nil)
+        .map { release in
+          apply(
+            nativeReferenceCountingAction: release,
+            around: "old",
+            referenceLookup: externalReferenceLookup
+          )
+        }
       return enumerationTypeDeclaration(
         name: name,
         cases: cases,
@@ -707,9 +742,12 @@ extension Platform {
         simple: thing.isSimple,
         storageCases: storageCases,
         otherMembers: members,
+        isReferenceCounted: thing.requiresCleanUp == true,
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
-        componentReleases: componentReleases
+        componentReleases: componentReleases,
+        copyOld: copyOld,
+        releaseOld: releaseOld
       )
     }
   }
@@ -757,6 +795,20 @@ extension Platform {
       return native.copy
     } else if type.requiresCleanUp == true {
       return synthesizedCopy(of: source(for: thing, referenceLookup: referenceLookup))
+    } else {
+      return nil
+    }
+  }
+
+  static func nativeDetachment(
+    from thing: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary]
+  ) -> NativeActionExpressionIntermediate? {
+    guard let type = referenceLookup.lookupThing(thing.key) else {
+      return nil
+    }
+    if type.requiresCleanUp == true {
+      return synthesizedDetachment(from: source(for: thing, referenceLookup: referenceLookup))
     } else {
       return nil
     }
@@ -1342,29 +1394,36 @@ extension Platform {
           switch argument {
           case .action(let actionArgument):
             if actionArgument.passage == .through {
+              let nestedCall = call(
+                to: actionArgument,
+                context: context,
+                localLookup: localLookup,
+                referenceLookup: referenceLookup,
+                isNativeArgument: false,
+                contextCoverageIdentifier: contextCoverageIdentifier,
+                extractedCoverageRegistrations: &extractedCoverageRegistrations,
+                coverageRegionCounter: &coverageRegionCounter,
+                clashAvoidanceCounter: &clashAvoidanceCounter,
+                extractedArguments: &extractedArguments,
+                isThrough: actionArgument.passage == .through,
+                isDirectReturn: false,
+                cleanUpCode: &cleanUpCode,
+                inliningArguments: inliningArguments,
+                normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+                mode: mode
+              )
+              var reference = passReference(
+                to: nestedCall,
+                forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.passage == .through,
+                isAddressee: nativeIsMember(action: action) && argumentsArray.isEmpty
+              )
+              if !nestedCall.unicodeScalars.allSatisfy({ allowedIdentifierContinuationCharacters.contains($0) }),
+                let referenceType = actionArgument.resolvedResultType?.flatMap({ $0 }),
+                let detachmentAction = nativeDetachment(from: referenceType, referenceLookup: referenceLookup) {
+                reference = apply(nativeReferenceCountingAction: detachmentAction, around: reference, referenceLookup: referenceLookup)
+              }
               argumentsArray.append(
-                parameterLabel + passReference(
-                  to: call(
-                    to: actionArgument,
-                    context: context,
-                    localLookup: localLookup,
-                    referenceLookup: referenceLookup,
-                    isNativeArgument: false,
-                    contextCoverageIdentifier: contextCoverageIdentifier,
-                    extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                    coverageRegionCounter: &coverageRegionCounter,
-                    clashAvoidanceCounter: &clashAvoidanceCounter,
-                    extractedArguments: &extractedArguments,
-                    isThrough: actionArgument.passage == .through,
-                    isDirectReturn: false,
-                    cleanUpCode: &cleanUpCode,
-                    inliningArguments: inliningArguments,
-                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                    mode: mode
-                  ),
-                  forwarding: context?.parameters.parameter(named: actionArgument.actionName)?.passage == .through,
-                  isAddressee: nativeIsMember(action: action) && argumentsArray.isEmpty
-                )
+                parameterLabel + reference
               )
             } else {
               let basicCall = call(
@@ -1593,7 +1652,7 @@ extension Platform {
   ) -> [String] {
     var entry = ""
     if let action = statement.action {
-      var referenceList: [PassedReference] = []
+      var referenceList: [String] = []
       var extractedCoverageRegistrations: [String] = []
       if needsReferencePreparation {
         referenceList = statement.passedReferences(platform: self, referenceLookup: referenceLookup)
@@ -1602,7 +1661,7 @@ extension Platform {
           })
           .map({ reference in
             var extracted: [String] = []
-            let call = self.call(
+            return self.call(
               to: reference,
               context: context,
               localLookup: localLookup,
@@ -1621,36 +1680,11 @@ extension Platform {
               normalizeNextNestedLiteral: false,
               mode: mode
             )
-            var type: String?
-            var temporaryStorage: String?
-            var copy: String?
-            var release: String?
-            if !call.unicodeScalars.allSatisfy({ allowedIdentifierContinuationCharacters.contains($0) }),
-              let referenceType = reference.resolvedResultType?.flatMap({ $0 }),
-              let copyAction = nativeCopy(of: referenceType, referenceLookup: referenceLookup),
-              let releaseAction = nativeRelease(of: referenceType, referenceLookup: referenceLookup) {
-              type = source(for: referenceType, referenceLookup: referenceLookup)
-              clashAvoidanceCounter += 1
-              temporaryStorage = "old\(clashAvoidanceCounter)"
-              copy = apply(nativeReferenceCountingAction: copyAction, around: temporaryStorage!, referenceLookup: referenceLookup)
-              release = apply(nativeReferenceCountingAction: releaseAction, around: temporaryStorage!, referenceLookup: referenceLookup)
-            }
-            return PassedReference(
-              reference: call,
-              type: type,
-              temporaryStorage: temporaryStorage,
-              copy: copy,
-              release: release
-            )
           })
         for reference in referenceList {
           if let preparation = prepareReference(
-            to: reference.reference,
-            update: existingReferences.contains(reference.reference),
-            type: reference.type,
-            temporaryStorage: reference.temporaryStorage,
-            copy: reference.copy,
-            release: reference.release
+            to: reference,
+            update: existingReferences.contains(reference)
           ) {
             entry.append(preparation)
           }
@@ -1737,7 +1771,7 @@ extension Platform {
         entry.append(coverage)
       }
       for reference in referenceList.reversed() {
-        if let unpack = unpackReference(to: reference.reference) {
+        if let unpack = unpackReference(to: reference) {
           entry.append(unpack)
         }
       }
@@ -1747,7 +1781,7 @@ extension Platform {
           entry.append(contentsOf: delayedReturn)
         }
         for reference in referenceList {
-          existingReferences.insert(reference.reference)
+          existingReferences.insert(reference)
         }
       }
     } else if statement.isReturn {
