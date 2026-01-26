@@ -1002,6 +1002,7 @@ extension Platform {
         )!
       if !isDirectReturn,
         !isArgumentExtraction,
+        reference.passage != .through,
         !extractedArguments.isEmpty,
         let result = action.returnValue,
         nativeRelease(of: result, referenceLookup: referenceLookup) != nil {

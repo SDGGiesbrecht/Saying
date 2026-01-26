@@ -706,8 +706,7 @@ action (file)
  Swift: “”
  {
   let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
-  let (• replacement: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (insertion))
-  replace (converted range) in (↓ (8‐bit encoded) of (list)) with (replacement)
+  replace (converted range) in (↓ (8‐bit encoded) of (list)) with ((8‐bit encoded) of (insertion))
  }
 
 action (file)
