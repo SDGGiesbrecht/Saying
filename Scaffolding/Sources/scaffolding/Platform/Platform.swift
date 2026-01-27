@@ -574,13 +574,14 @@ extension Platform {
             name: name,
             externalReferenceLookup: externalReferenceLookup
           ) {
-          result.append(
-            detachDeclaration(
-              name: name,
-              copyOld: copy,
-              releaseOld: release
-            )
+          let detach = detachDeclaration(
+            name: name,
+            copyOld: copy,
+            releaseOld: release
           )
+          if alreadyHandledNativeRequirements.insert(detach).inserted {
+            result.append(detach)
+          }
         }
       }
       return result.isEmpty ? nil : result.joined(separator: "\n\n")
