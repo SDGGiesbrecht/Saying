@@ -6,7 +6,7 @@ enumeration (clients)
  {
   case
    (
-    English: UTF‐8
+    English: 8‐bit encoded Unicode
     Swift: utf8
    )
    Unicode segments
