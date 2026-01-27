@@ -566,17 +566,20 @@ extension Platform {
       }
       if thing.requiresCleanUp == true {
         let name: String = source(for: native, referenceLookup: externalReferenceLookup)
-        result.append(
-          detachDeclaration(
+        if let copy = copyOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup),
+          let release = releaseOld(
+            thing: thing,
             name: name,
-            copyOld: copyOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup)!,
-            releaseOld: releaseOld(
-              thing: thing,
+            externalReferenceLookup: externalReferenceLookup
+          ) {
+          result.append(
+            detachDeclaration(
               name: name,
-              externalReferenceLookup: externalReferenceLookup
-            )!
+              copyOld: copy,
+              releaseOld: release
+            )
           )
-        )
+        }
       }
       return result.joined(separator: "\n\n")
     }
