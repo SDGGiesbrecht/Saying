@@ -581,7 +581,7 @@ extension Platform {
           )
         }
       }
-      return result.joined(separator: "\n\n")
+      return result.isEmpty ? nil : result.joined(separator: "\n\n")
     }
     if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
