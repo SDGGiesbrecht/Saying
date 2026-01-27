@@ -189,6 +189,31 @@ enum C: Platform {
   static var infersConstructors: Bool {
     return true
   }
+  static func detachDeclaration(
+    name: String,
+    copyOld: String,
+    releaseOld: String
+  ) -> String {
+    actionDeclaration(
+      name: String(String.UnicodeScalarView(synthesizedDetachment(from: name)!.textComponents.first!.dropLast())),
+      parameters: "\(name)* reference",
+      returnSection: "\(name)*",
+      accessModifier: nil,
+      coverageRegistration: nil,
+      implementation: [
+        "\(indent)\(name) old = *reference;",
+        "\(indent)*reference = \(copyOld);",
+        "\(indent)\(releaseOld);",
+        "\(indent)return reference;",
+      ],
+      parentType: nil,
+      isMutating: false,
+      isAbsorbedMember: false,
+      isOverride: false,
+      propertyInstead: false,
+      initializerInstead: false
+    ).full
+  }
   static func thingDeclaration(
     name: String,
     components: [String],
@@ -271,25 +296,7 @@ enum C: Platform {
     if isReferenceCounted {
       result.append(contentsOf: [
         "",
-        actionDeclaration(
-          name: String(String.UnicodeScalarView(synthesizedDetachment(from: name)!.textComponents.first!.dropLast())),
-          parameters: "\(name)* reference",
-          returnSection: "\(name)*",
-          accessModifier: nil,
-          coverageRegistration: nil,
-          implementation: [
-            "\(indent)\(name) old = *reference;",
-            "\(indent)*reference = \(copyOld!);",
-            "\(indent)\(releaseOld!);",
-            "\(indent)return reference;",
-          ],
-          parentType: nil,
-          isMutating: false,
-          isAbsorbedMember: false,
-          isOverride: false,
-          propertyInstead: false,
-          initializerInstead: false
-        ).full,
+        detachDeclaration(name: name, copyOld: copyOld!, releaseOld: releaseOld!),
       ])
     }
     return result.joined(separator: "\n")

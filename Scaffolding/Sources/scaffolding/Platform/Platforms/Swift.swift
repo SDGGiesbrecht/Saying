@@ -194,6 +194,13 @@ enum Swift: Platform {
   static var infersConstructors: Bool {
     return false
   }
+  static func detachDeclaration(
+    name: String,
+    copyOld: String,
+    releaseOld: String
+  ) -> String {
+    return ""
+  }
   static func thingDeclaration(
     name: String,
     components: [String],

@@ -151,6 +151,13 @@ enum Kotlin: Platform {
   static var infersConstructors: Bool {
     return true
   }
+  static func detachDeclaration(
+    name: String,
+    copyOld: String,
+    releaseOld: String
+  ) -> String {
+    return ""
+  }
   static func thingDeclaration(
     name: String,
     components: [String],

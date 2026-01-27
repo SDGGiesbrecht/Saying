@@ -58,6 +58,11 @@ protocol Platform {
   static func actionType(parameters: String, returnValue: String) -> String
   static func actionReferencePrefix(isVariable: Bool) -> String?
   static var infersConstructors: Bool { get }
+  static func detachDeclaration(
+    name: String,
+    copyOld: String,
+    releaseOld: String
+  ) -> String
   static func thingDeclaration(
     name: String,
     components: [String],
@@ -331,6 +336,24 @@ extension Platform {
     }
     return intermediate.isSimple
   }
+  static func source(
+    for native: NativeThingImplementationIntermediate,
+    referenceLookup: [ReferenceDictionary]
+  ) -> String {
+    var result = ""
+    for index in native.textComponents.indices {
+      result.append(contentsOf: String(native.textComponents[index]))
+      if index != native.textComponents.indices.last {
+        let parameter = native.parameters[index]
+        var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+        if parameter.sanitizedForIdentifier {
+          type = identifierPrefix(for: type)
+        }
+        result.append(contentsOf: type)
+      }
+    }
+    return repair(compoundNativeType: result)
+  }
   static func source(for type: ParsedTypeReference, referenceLookup: [ReferenceDictionary]) -> String {
     switch type {
     case .simple(let simple):
@@ -348,19 +371,7 @@ extension Platform {
         components: components.map({ $0.key })
       )!
       if let native = nativeType(of: type) {
-        var result = ""
-        for index in native.textComponents.indices {
-          result.append(contentsOf: String(native.textComponents[index]))
-          if index != native.textComponents.indices.last {
-            let parameter = native.parameters[index]
-            var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
-            if parameter.sanitizedForIdentifier {
-              type = identifierPrefix(for: type)
-            }
-            result.append(contentsOf: type)
-          }
-        }
-        return repair(compoundNativeType: result)
+        return source(for: native, referenceLookup: referenceLookup)
       } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
         return native
       } else {
@@ -504,6 +515,34 @@ extension Platform {
       parentType: parentType
     )
   }
+  static func copyOld(
+    thing: Thing,
+    name: String,
+    externalReferenceLookup: [ReferenceDictionary]
+  ) -> String? {
+    return (thing.requiresCleanUp == true ? synthesizedCopy(of: name) : nil)
+      .map { copy in
+        apply(
+          nativeReferenceCountingAction: copy,
+          around: "old",
+          referenceLookup: externalReferenceLookup
+        )
+      }
+  }
+  static func releaseOld(
+    thing: Thing,
+    name: String,
+    externalReferenceLookup: [ReferenceDictionary]
+  ) -> String? {
+    return (thing.requiresCleanUp == true ? synthesizedRelease(of: name) : nil)
+      .map { release in
+        apply(
+          nativeReferenceCountingAction: release,
+          around: "old",
+          referenceLookup: externalReferenceLookup
+        )
+      }
+  }
   static func declaration(
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary],
@@ -517,7 +556,29 @@ extension Platform {
       return nil
     }
     if let native = nativeType(of: thing) {
-      return source(for: native.requiredDeclarations, referenceLookup: externalReferenceLookup, alreadyHandled: &alreadyHandledNativeRequirements)
+      var result: [String] = []
+      if let required = source(
+        for: native.requiredDeclarations,
+        referenceLookup: externalReferenceLookup,
+        alreadyHandled: &alreadyHandledNativeRequirements
+      ) {
+        result.append(required)
+      }
+      if thing.requiresCleanUp == true {
+        let name: String = source(for: native, referenceLookup: externalReferenceLookup)
+        result.append(
+          detachDeclaration(
+            name: name,
+            copyOld: copyOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup)!,
+            releaseOld: releaseOld(
+              thing: thing,
+              name: name,
+              externalReferenceLookup: externalReferenceLookup
+            )!
+          )
+        )
+      }
+      return result.joined(separator: "\n\n")
     }
     if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
@@ -639,22 +700,6 @@ extension Platform {
           referenceLookup: externalReferenceLookup
         )
       }
-      let copyOld: String? = (thing.requiresCleanUp == true ? synthesizedCopy(of: name) : nil)
-        .map { copy in
-          apply(
-            nativeReferenceCountingAction: copy,
-            around: "old",
-            referenceLookup: externalReferenceLookup
-          )
-        }
-      let releaseOld: String? = (thing.requiresCleanUp == true ? synthesizedRelease(of: name) : nil)
-        .map { release in
-          apply(
-            nativeReferenceCountingAction: release,
-            around: "old",
-            referenceLookup: externalReferenceLookup
-          )
-        }
       return thingDeclaration(
         name: name,
         components: components,
@@ -667,8 +712,8 @@ extension Platform {
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
         componentReleases: componentReleases,
-        copyOld: copyOld,
-        releaseOld: releaseOld
+        copyOld: copyOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup),
+        releaseOld: releaseOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup)
       )
     } else {
       var cases: [String] = []
