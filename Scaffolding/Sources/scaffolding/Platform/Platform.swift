@@ -520,28 +520,30 @@ extension Platform {
     name: String,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    return (thing.requiresCleanUp == true ? synthesizedCopy(of: name) : nil)
-      .map { copy in
-        apply(
-          nativeReferenceCountingAction: copy,
-          around: "old",
-          referenceLookup: externalReferenceLookup
-        )
-      }
+    guard thing.requiresCleanUp == true,
+      let copy = nativeType(of: thing)?.copy ?? synthesizedCopy(of: name) else {
+      return nil
+    }
+    return apply(
+      nativeReferenceCountingAction: copy,
+      around: "old",
+      referenceLookup: externalReferenceLookup
+    )
   }
   static func releaseOld(
     thing: Thing,
     name: String,
     externalReferenceLookup: [ReferenceDictionary]
   ) -> String? {
-    return (thing.requiresCleanUp == true ? synthesizedRelease(of: name) : nil)
-      .map { release in
-        apply(
-          nativeReferenceCountingAction: release,
-          around: "old",
-          referenceLookup: externalReferenceLookup
-        )
-      }
+    guard thing.requiresCleanUp == true,
+      let release = nativeType(of: thing)?.release ?? synthesizedRelease(of: name) else {
+      return nil
+    }
+    return apply(
+      nativeReferenceCountingAction: release,
+      around: "old",
+      referenceLookup: externalReferenceLookup
+    )
   }
   static func declaration(
     for thing: Thing,
