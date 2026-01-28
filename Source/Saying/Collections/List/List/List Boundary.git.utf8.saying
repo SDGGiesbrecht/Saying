@@ -18,6 +18,22 @@ thing (clients)
 
 action (unit)
  [
+  test {ignore (memory offset of (example: list boundary))}
+ ]
+ (
+  English: memory offset of (boundary: list boundary)
+ )
+ memory offset
+ C♯: “” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “”
+ Swift: “” boundary “”
+ {
+  ← (offset) of (boundary)
+ }
+
+action (unit)
+ [
   test {ignore (boundary at (memory offset of (example: natural number)))}
  ]
  (
@@ -25,6 +41,7 @@ action (unit)
  )
  list boundary
  C♯: “” offset “”
+ JavaScript: “” offset “”
  Kotlin: “” offset “”
  Swift: “” offset “”
  create

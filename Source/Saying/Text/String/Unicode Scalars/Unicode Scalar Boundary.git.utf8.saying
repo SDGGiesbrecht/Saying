@@ -17,6 +17,30 @@ thing (clients)
    Swift: “”
  }
 
+action (unit)
+ [
+  test {ignore (if possible, list boundary at (example: Unicode scalar boundary))}
+ ]
+ (
+  English: if possible, list boundary at (cursor: Unicode scalar boundary)
+ )
+ list boundary
+ Swift: “0”
+ {
+  ← (boundary) of (cursor)
+ }
+
+action (unit)
+ [
+  test {ignore (if possible, Unicode scalar boundary at (example: list boundary))}
+ ]
+ (
+  English: if possible, Unicode scalar boundary at (boundary: list boundary)
+ )
+ Unicode scalar boundary
+ Swift: “¤(22)¤(22).unicodeScalars.startIndex”
+ create
+
 use (clients)
  general containers of (Unicode scalar boundary)
  {

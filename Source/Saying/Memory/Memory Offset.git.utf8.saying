@@ -1,4 +1,4 @@
-thing (unit)
+thing (clients)
  (
   English: memory offset
  )
@@ -6,6 +6,11 @@ thing (unit)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
+
+use (unit)
+ general use of (memory offset)
+ {
+ }
 
 action (unit)
  (

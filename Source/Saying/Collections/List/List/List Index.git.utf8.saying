@@ -16,6 +16,22 @@ thing (clients)
    Swift: “”
  }
 
+action (unit)
+ [
+  test {ignore (memory offset of (example: list index))}
+ ]
+ (
+  English: memory offset of (index: list index)
+ )
+ memory offset
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “” index “”
+ {
+  ← (offset) of ((preceding boundary) of (index))
+ }
+
 use (clients)
  general containers of (list index)
  {
