@@ -15,12 +15,26 @@ thing (clients)
    (
     English: beginning
    )
-   list index
+   Unicode scalar boundary
    C♯: “”
    JavaScript: “”
    Kotlin: “”
    Swift: “”
  }
+
+action (unit)
+ [
+  test {ignore (index after (example: Unicode scalar boundary) skipping bounds check)}
+ ]
+ (
+  English: index after (beginning: Unicode scalar boundary) skipping bounds check
+ )
+ Unicode scalar index
+ C♯: “” beginning “”
+ JavaScript: “” beginning “”
+ Kotlin: “” beginning “”
+ Swift: “” beginning “”
+ create
 
 use (clients)
  general containers of (Unicode scalar index)

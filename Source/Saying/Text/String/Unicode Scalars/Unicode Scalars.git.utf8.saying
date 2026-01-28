@@ -89,22 +89,6 @@ action (file)
   ← example
  }
 
-action (file)
- [
-  test {ignore (if possible, list index at (example: Unicode scalar index))}
- ]
- (
-  English: if possible, list index at (index: Unicode scalar index)
- )
- list index
- C: “” index “”
- C♯: “” index “”
- JavaScript: “” index “”
- Kotlin: “” index “”
- {
-  ← example
- }
-
 action (clients)
  [
   [
@@ -261,14 +245,14 @@ action (file)
   test {
    let (• end: list boundary) be (end of list containing (one: natural number) entries)
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
-   let (• first index: list index) be (index after (beginning of (list)) in (list) skipping bounds check)
-   initialize entry at (first index) in (↓ list) to (null control code)
-   ignore (if most efficient, scalar at (first index) in (list))
+   let (• beginning: list boundary) be (beginning of (list))
+   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
+   ignore (if most efficient, scalar beginning at (beginning) in (list))
    clean (list) up up to (end)
   }
  ]
  (
-  English: if most efficient, scalar at (cursor: list index) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length)
+  English: if most efficient, scalar beginning at (cursor: list boundary) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length)
  )
  Unicode scalar
  C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “ + ” cursor “)” (“glib¤(2D)2.0”)
@@ -284,11 +268,13 @@ use (clients)
     English: index after (boundary: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar index
-   C: “” boundary “”
    C♯: “” boundary “”
    JavaScript: “” boundary “”
    Kotlin: “” boundary “”
    Swift: “” boundary “”
+   {
+    ← index after (boundary) skipping bounds check
+   }
 
   action (clients)
    (
@@ -350,15 +336,15 @@ use (clients)
 
   action (clients)
    (
-    English: entry at (cursor: Unicode scalar index) in (list: Unicode scalars)
+    English: entry at (index: Unicode scalar index) in (list: Unicode scalars)
    )
    Unicode scalar
-   C♯: “Rune.GetRuneAt(” list “, ” cursor “)”
-   JavaScript: “” list “.codePointAt(” cursor “)”
-   Kotlin: “” list “.codePointAt(” cursor “)”
-   Swift: “” list “[” cursor “]”
+   C♯: “Rune.GetRuneAt(” list “, ” index “)”
+   JavaScript: “” list “.codePointAt(” index “)”
+   Kotlin: “” list “.codePointAt(” index “)”
+   Swift: “” list “[” index “]”
    {
-    ← if most efficient, scalar at (if possible, list index at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
+    ← if most efficient, scalar beginning at (if possible, list boundary at ((beginning) of (index))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
    }
 
   action (clients)
@@ -425,11 +411,13 @@ action (clients)
   English: boundary before (index: Unicode scalar index) in (scalars: Unicode scalars)
  )
  Unicode scalar boundary
- C: “” index “”
  C♯: “” index “”
  JavaScript: “” index “”
  Kotlin: “” index “”
  Swift: “” index “”
+ {
+  ← (beginning) of (index)
+ }
 
 action (file)
  [
