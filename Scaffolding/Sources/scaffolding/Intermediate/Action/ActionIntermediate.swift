@@ -751,6 +751,21 @@ extension ActionIntermediate {
       allowTestOnly: testOnlyAccess,
       errors: &errors
     )
+    if isCreation,
+      let created = returnValue,
+      let type = referenceLookup.lookupThing(created.key) {
+      var expected = type.parts
+      for parameter in parameters.ordered(for: names.identifier()) {
+        if let found = expected.firstIndex(where: { $0.names.overlaps(parameter.names) }) {
+          expected.remove(at: found)
+        } else {
+          errors.append(.noSuchPart(name: parameter.names, creationAction: self.declaration!))
+        }
+      }
+      for remaining in expected {
+        errors.append(.missingPart(name: remaining.names, creationAction: self.declaration!))
+      }
+    }
     documentation?.validateReferences(
       inheritedVisibility: access,
       referenceLookup: externalAndParameters,
