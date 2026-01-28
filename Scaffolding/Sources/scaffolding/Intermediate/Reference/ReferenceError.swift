@@ -2,6 +2,8 @@ enum ReferenceError: DiagnosticError {
   case noSuchThing(UnicodeText, reference: ParsedThingReferenceProtocol)
   case noSuchAction(name: UnicodeText, reference: ParsedAction)
   case noSuchAbility(name: UnicodeText, reference: ParsedAbilityReferenceProtocol)
+  case noSuchPart(name: Set<UnicodeText>, creationAction: ParsedActionDeclarationPrototype)
+  case missingPart(name: Set<UnicodeText>, creationAction: ParsedActionDeclarationPrototype)
   case mismatchedPassage(attempted: ParameterPassage, expected: ParameterPassage, location: ParsedAction)
   case unfulfilledRequirement(name: Set<UnicodeText>, ParsedUse)
   case noSuchRequirement(ParsedActionDeclaration)
@@ -28,6 +30,10 @@ enum ReferenceError: DiagnosticError {
       return "\(defaultMessage) (\(name))"
     case .noSuchAbility:
       return defaultMessage
+    case .noSuchPart(name: let name, creationAction: _):
+      return "\(defaultMessage) (\(name))"
+    case .missingPart(name: let name, creationAction: _):
+      return "\(defaultMessage) (\(name))"
     case .mismatchedPassage(attempted: let attempted, expected: let expected, location: _):
       return "\(defaultMessage) (\(attempted) ≠ \(expected))"
     case .unfulfilledRequirement:
@@ -73,6 +79,10 @@ enum ReferenceError: DiagnosticError {
       return action.location
     case .noSuchAbility(_, reference: let use):
       return use.location
+    case .noSuchPart(name: _, creationAction: let action):
+      return action.location
+    case .missingPart(name: _, creationAction: let action):
+      return action.location
     case .mismatchedPassage(attempted: _, expected: _, let location):
       return location.location
     case .unfulfilledRequirement(_, let use):
