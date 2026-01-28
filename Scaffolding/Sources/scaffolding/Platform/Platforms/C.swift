@@ -37,6 +37,9 @@ import Foundation
 //   • Copies are shallow.
 //     • Immediate structure members and list elements of a copy are safe to replace entirely.
 //     • Structure members and list elements must be replaced with a copy before nested modifications.
+//   • detach() is shorthand for replacing with a copy and releasing the previous data.
+//     • Its return value is the same reference, so that calls can succinctly be wrapped around arguments.
+//       modify(detach(&value))
 
 enum C: Platform {
 
@@ -173,6 +176,9 @@ enum C: Platform {
   static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
     return synthesized("copy", for: thing)
   }
+  static func synthesizedDetachment(from thing: String) -> NativeActionExpressionIntermediate? {
+    return synthesized("detach", for: thing)
+  }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "\(returnValue) (*)(\(parameters))"
   }
@@ -183,6 +189,31 @@ enum C: Platform {
   static var infersConstructors: Bool {
     return true
   }
+  static func detachDeclaration(
+    name: String,
+    copyOld: String,
+    releaseOld: String
+  ) -> String {
+    actionDeclaration(
+      name: String(String.UnicodeScalarView(synthesizedDetachment(from: name)!.textComponents.first!.dropLast())),
+      parameters: "\(name)* reference",
+      returnSection: "\(name)*",
+      accessModifier: nil,
+      coverageRegistration: nil,
+      implementation: [
+        "\(indent)\(name) old = *reference;",
+        "\(indent)*reference = \(copyOld);",
+        "\(indent)\(releaseOld);",
+        "\(indent)return reference;",
+      ],
+      parentType: nil,
+      isMutating: false,
+      isAbsorbedMember: false,
+      isOverride: false,
+      propertyInstead: false,
+      initializerInstead: false
+    ).full
+  }
   static func thingDeclaration(
     name: String,
     components: [String],
@@ -191,9 +222,12 @@ enum C: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String]
+    componentReleases: [String],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String? {
     var result: [String] = [
       "typedef struct \(name) {"
@@ -259,6 +293,12 @@ enum C: Platform {
         ).full,
       ])
     }
+    if isReferenceCounted {
+      result.append(contentsOf: [
+        "",
+        detachDeclaration(name: name, copyOld: copyOld!, releaseOld: releaseOld!),
+      ])
+    }
     return result.joined(separator: "\n")
   }
   static func enumerationTypeDeclaration(
@@ -268,9 +308,12 @@ enum C: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)]
+    componentReleases: [(String, String)],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String {
     if simple {
       var result: [String] = [
@@ -293,9 +336,12 @@ enum C: Platform {
           simple: true,
           storageCases: [],
           otherMembers: [],
+          isReferenceCounted: false,
           synthesizeReferenceCounting: false,
           componentHolds: [],
-          componentReleases: []
+          componentReleases: [],
+          copyOld: nil,
+          releaseOld: nil
         )
       )
       result.append("typedef union \(name)_value {")
@@ -327,9 +373,12 @@ enum C: Platform {
           constructorAccessModifier: nil,
           constructorSetters: [],
           otherMembers: [],
+          isReferenceCounted: isReferenceCounted,
           synthesizeReferenceCounting: synthesizeReferenceCounting,
           componentHolds: switchCases(componentHolds, parentType: name),
-          componentReleases: switchCases(componentReleases, parentType: name)
+          componentReleases: switchCases(componentReleases, parentType: name),
+          copyOld: copyOld,
+          releaseOld: releaseOld
         )!
       )
       return result.joined(separator: "\n")
@@ -380,24 +429,10 @@ enum C: Platform {
     return "(\(type)) {\(parts)}"
   }
   static var needsReferencePreparation: Bool {
-    return true
+    return false
   }
-  static func prepareReference(
-    to argument: String,
-    update: Bool,
-    type: String?,
-    temporaryStorage: String?,
-    copy: String?,
-    release: String?
-  ) -> String? {
-    if let type = type,
-      let temporaryStorage = temporaryStorage,
-      let copy = copy,
-      let release = release {
-      return "\(type) \(temporaryStorage) = \(argument); \(argument) = \(copy); \(release); "
-    } else {
-      return nil
-    }
+  static func prepareReference(to argument: String, update: Bool) -> String? {
+    return nil
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {

@@ -173,6 +173,9 @@ enum Swift: Platform {
   static func synthesizedCopy(of thing: String) -> NativeActionExpressionIntermediate? {
     return nil
   }
+  static func synthesizedDetachment(from thing: String) -> NativeActionExpressionIntermediate? {
+    return nil
+  }
   static func repair(compoundNativeType: String) -> String {
     if compoundNativeType.contains("].") {
       return compoundNativeType
@@ -192,6 +195,13 @@ enum Swift: Platform {
   static var infersConstructors: Bool {
     return false
   }
+  static func detachDeclaration(
+    name: String,
+    copyOld: String,
+    releaseOld: String
+  ) -> String {
+    return ""
+  }
   static func thingDeclaration(
     name: String,
     components: [String],
@@ -200,9 +210,12 @@ enum Swift: Platform {
     constructorAccessModifier: String?,
     constructorSetters: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [String],
-    componentReleases: [String]
+    componentReleases: [String],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String? {
     var typeName = name
     var extraIndent = ""
@@ -247,9 +260,12 @@ enum Swift: Platform {
     simple: Bool,
     storageCases: [String],
     otherMembers: [String],
+    isReferenceCounted: Bool,
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
-    componentReleases: [(String, String)]
+    componentReleases: [(String, String)],
+    copyOld: String?,
+    releaseOld: String?
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     var result: [String] = [
@@ -299,14 +315,7 @@ enum Swift: Platform {
   static var needsReferencePreparation: Bool {
     return false
   }
-  static func prepareReference(
-    to argument: String,
-    update: Bool,
-    type: String?,
-    temporaryStorage: String?,
-    copy: String?,
-    release: String?
-  ) -> String? {
+  static func prepareReference(to argument: String, update: Bool) -> String? {
     return nil
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
