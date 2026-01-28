@@ -7,10 +7,15 @@ thing (clients)
  (
   English: Unicode scalar boundary
  )
- C: “size¤(5F)t” (“stddef”)
- C♯: “int”
- Kotlin: “Int”
  Swift: “String.UnicodeScalarView.Index”
+ {
+  part (unit/nowhere)
+   (
+    English: boundary
+   )
+   list boundary
+   Swift: “”
+ }
 
 use (clients)
  general containers of (Unicode scalar boundary)

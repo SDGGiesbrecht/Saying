@@ -2,10 +2,32 @@ thing (clients)
  (
   English: list boundary
  )
- C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
+ {
+  part (unit/nowhere)
+   (
+    English: offset
+   )
+   memory offset
+   C♯: “”
+   Kotlin: “”
+   Swift: “”
+ }
+
+action (unit)
+ [
+  test {ignore (boundary at (memory offset of (example: natural number)))}
+ ]
+ (
+  English: boundary at (offset: memory offset)
+ )
+ list boundary
+ C♯: “” offset “”
+ Kotlin: “” offset “”
+ Swift: “” offset “”
+ create
 
 use (clients)
  general containers of (list boundary)

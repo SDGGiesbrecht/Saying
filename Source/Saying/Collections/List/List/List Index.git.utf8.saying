@@ -2,10 +2,19 @@ thing (clients)
  (
   English: list index
  )
- C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
+ {
+  part (unit/nowhere)
+   (
+    English: preceding boundary
+   )
+   list boundary
+   C♯: “”
+   Kotlin: “”
+   Swift: “”
+ }
 
 use (clients)
  general containers of (list index)

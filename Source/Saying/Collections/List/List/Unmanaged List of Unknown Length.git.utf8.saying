@@ -287,11 +287,13 @@ action (unit)
   English: end of list containing (end: natural number) entries
  )
  list boundary
- C: “(size¤(5F)t)” end “”
  C♯: “(int)” end “”
  JavaScript: “” end “”
  Kotlin: “” end “.toInt()”
  Swift: “Int(” end “)”
+ {
+  ← boundary at (memory offset of (end))
+ }
 
 action (unit)
  (

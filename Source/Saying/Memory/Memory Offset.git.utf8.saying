@@ -1,0 +1,19 @@
+thing (unit)
+ (
+  English: memory offset
+ )
+ C: “size¤(5F)t” (“stddef”)
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “Int”
+
+action (unit)
+ (
+  English: memory offset of (offset: natural number)
+ )
+ memory offset
+ C: “(size¤(5F)t)” offset “”
+ C♯: “(int)” offset “”
+ JavaScript: “” offset “”
+ Kotlin: “” offset “.toInt()”
+ Swift: “Int(” offset “)”
