@@ -90,7 +90,7 @@ action (file)
  Kotlin: “”
  Swift: “”
  {
-  hash key ((beginning) of (key)) with (↓ hasher)
+  hash part ((beginning) of (key)) with (↓ hasher)
  }
 
 use (clients)
