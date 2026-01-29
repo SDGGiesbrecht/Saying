@@ -1,0 +1,8 @@
+thing (clients)
+ (
+  English: memory offset
+ )
+ C: “size¤(5F)t” (“stddef”)
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “Int”
