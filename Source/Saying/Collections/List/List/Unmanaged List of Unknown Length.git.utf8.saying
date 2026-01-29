@@ -83,7 +83,7 @@ extension
     ← unmanaged list of unknown length at (allocate ((end) times (size of (example: thing))) bytes of memory)
    }
 
-  action (unit)
+  action (file)
    (
     English: initialize entry at offset (index: memory offset) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
