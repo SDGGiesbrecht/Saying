@@ -85,7 +85,7 @@ ability (clients)
      “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
     ] {“extension ” thing “: Comparable {}”}
    {
-    ← (second) is less than (first)
+    ← (first) is greater than (second) according to comparison for order
    }
 
   choice (clients)
@@ -132,7 +132,7 @@ ability (clients)
      “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
     ] {“extension ” thing “: Comparable {}”}
    {
-    ← not ((first) is greater than (second))
+    ← (first) is less than or equal to (second) according to comparison for order
    }
 
   choice (clients)
@@ -179,7 +179,7 @@ ability (clients)
      “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
     ] {“extension ” thing “: Comparable {}”}
    {
-    ← not ((first) is less than (second))
+    ← (first) is greater than or equal to (second) according to comparison for order
    }
 
   requirement (clients)
@@ -195,6 +195,42 @@ ability (clients)
 extension
  comparison of (thing) for order
  {
+  action (clients)
+   [
+    test {verify ((greater example: thing) is greater than (example: thing) according to comparison for order)}
+   ]
+   (
+    English: (first: thing) is greater than (second: thing) according to comparison for order
+   )
+   truth value
+   {
+    ← (second) is less than (first)
+   }
+
+  action (clients)
+   [
+    test {verify ((example: thing) is less than or equal to (greater example: thing) according to comparison for order)}
+   ]
+   (
+    English: (first: thing) is less than or equal to (second: thing) according to comparison for order
+   )
+   truth value
+   {
+    ← not ((first) is greater than (second))
+   }
+
+  action (clients)
+   [
+    test {verify ((greater example: thing) is greater than or equal to (example: thing) according to comparison for order)}
+   ]
+   (
+    English: (first: thing) is greater than or equal to (second: thing) according to comparison for order
+   )
+   truth value
+   {
+    ← not ((first) is less than (second))
+   }
+
   action (clients)
    [
     [

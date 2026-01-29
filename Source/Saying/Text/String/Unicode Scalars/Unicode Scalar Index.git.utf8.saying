@@ -7,10 +7,34 @@ thing (clients)
  (
   English: Unicode scalar index
  )
- C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “String.UnicodeScalarView.Index”
+ {
+  part (unit/nowhere)
+   (
+    English: beginning
+   )
+   Unicode scalar boundary
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+ }
+
+action (unit)
+ [
+  test {ignore (index after (example: Unicode scalar boundary) skipping bounds check)}
+ ]
+ (
+  English: index after (beginning: Unicode scalar boundary) skipping bounds check
+ )
+ Unicode scalar index
+ C♯: “” beginning “”
+ JavaScript: “” beginning “”
+ Kotlin: “” beginning “”
+ Swift: “” beginning “”
+ create
 
 use (clients)
  general containers of (Unicode scalar index)
@@ -23,32 +47,83 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (hashing proxy of (example: Unicode scalar index))}
+ ]
+ hashing proxy of (index: Unicode scalar index)
+ platform fixed‐width integer
+ C: “0”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “0”
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: Unicode scalar index) with (↓ hasher) by integer
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: Unicode scalar index) with (hasher: ↓ hasher) by integer
+ )
+ C: “”
+ Swift: “”
+ {
+  hash part (hashing proxy of (key)) with (↓ hasher)
+ }
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: Unicode scalar index) with (↓ hasher) by beginning
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: Unicode scalar index) with (hasher: ↓ hasher) by beginning
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  hash part ((beginning) of (key)) with (↓ hasher)
+ }
+
 use (clients)
  comparison of (Unicode scalar index) for equality
  {
   action (clients)
    (first: Unicode scalar index) is (second: Unicode scalar index)
    truth value
-   C: “” first “ == ” second “”
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
    Swift: “” first “ == ” second “”
+   {
+    ← ((beginning) of (first)) is ((beginning) of (second))
+   }
 
   action (clients)
    (first: Unicode scalar index) is not (second: Unicode scalar index)
    truth value
-   C: “” first “ != ” second “”
    C♯: “” first “ != ” second “”
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: “” first “ != ” second “”
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
 
   action (clients)
    hash key (key: Unicode scalar index) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash part (hashing proxy of (key)) with (↓ hasher)
+    if most efficient, hash key (key) with (↓ hasher) by integer
+    if most efficient, hash key (key) with (↓ hasher) by beginning
    }
 
   action (unit)
@@ -70,56 +145,52 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (hashing proxy of (example: Unicode scalar index))}
- ]
- hashing proxy of (index: Unicode scalar index)
- platform fixed‐width integer
- C: “(int)” index “”
- C♯: “” index “”
- JavaScript: “” index “”
- Kotlin: “” index “”
- Swift: “{var hasher = Hasher(); hasher.combine(” index “); return hasher.finalize()}()”
-
 use (clients)
  comparison of (Unicode scalar index) for order
  {
   action (clients)
    (first: Unicode scalar index) is less than (second: Unicode scalar index)
    truth value
-   C: “” first “ < ” second “”
    C♯: “” first “ < ” second “”
    JavaScript: “” first “ < ” second “”
    Kotlin: “” first “ < ” second “”
    Swift: “” first “ < ” second “”
+   {
+    ← ((beginning) of (first)) is less than ((beginning) of (second))
+   }
 
   action (clients)
    (first: Unicode scalar index) is greater than (second: Unicode scalar index)
    truth value
-   C: “” first “ > ” second “”
    C♯: “” first “ > ” second “”
    JavaScript: “” first “ > ” second “”
    Kotlin: “” first “ > ” second “”
    Swift: “” first “ > ” second “”
+   {
+    ← (first) is greater than (second) according to comparison for order
+   }
 
   action (clients)
    (first: Unicode scalar index) is less than or equal to (second: Unicode scalar index)
    truth value
-   C: “” first “ <= ” second “”
    C♯: “” first “ <= ” second “”
    JavaScript: “” first “ <= ” second “”
    Kotlin: “” first “ <= ” second “”
    Swift: “” first “ <= ” second “”
+   {
+    ← (first) is less than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    (first: Unicode scalar index) is greater than or equal to (second: Unicode scalar index)
    truth value
-   C: “” first “ >= ” second “”
    C♯: “” first “ >= ” second “”
    JavaScript: “” first “ >= ” second “”
    Kotlin: “” first “ >= ” second “”
    Swift: “” first “ >= ” second “”
+   {
+    ← (first) is greater than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    greater example
