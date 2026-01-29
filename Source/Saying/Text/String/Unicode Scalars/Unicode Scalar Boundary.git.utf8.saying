@@ -7,10 +7,50 @@ thing (clients)
  (
   English: Unicode scalar boundary
  )
- C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “String.UnicodeScalarView.Index”
+ {
+  part (unit/nowhere)
+   (
+    English: 8‐bit boundary
+   )
+   list boundary
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+ }
+
+action (unit)
+ [
+  test {ignore (if possible, 8‐bit boundary at (example: Unicode scalar boundary))}
+ ]
+ (
+  English: if possible, 8‐bit boundary at (cursor: Unicode scalar boundary)
+ )
+ list boundary
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
+ Swift: “0”
+ {
+  ← (8‐bit boundary) of (cursor)
+ }
+
+action (unit)
+ [
+  test {ignore (if possible, scalar boundary at 8‐bit boundary (example: list boundary))}
+ ]
+ (
+  English: if possible, scalar boundary at 8‐bit boundary (8‐bit boundary: list boundary)
+ )
+ Unicode scalar boundary
+ C♯: “” 8‐bit boundary “”
+ JavaScript: “” 8‐bit boundary “”
+ Kotlin: “” 8‐bit boundary “”
+ Swift: “¤(22)¤(22).unicodeScalars.startIndex”
+ create
 
 use (clients)
  general containers of (Unicode scalar boundary)
@@ -23,32 +63,83 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {ignore (hashing proxy of (example: Unicode scalar boundary))}
+ ]
+ hashing proxy of (boundary: Unicode scalar boundary)
+ platform fixed‐width integer
+ C: “0”
+ C♯: “” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “”
+ Swift: “0”
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: Unicode scalar boundary) with (↓ hasher) by integer
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher) by integer
+ )
+ C: “”
+ Swift: “”
+ {
+  hash part (hashing proxy of (key)) with (↓ hasher)
+ }
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: Unicode scalar boundary) with (↓ hasher) by 8‐bit
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher) by 8‐bit
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  hash part ((8‐bit boundary) of (key)) with (↓ hasher)
+ }
+
 use (clients)
  comparison of (Unicode scalar boundary) for equality
  {
   action (clients)
    (first: Unicode scalar boundary) is (second: Unicode scalar boundary)
    truth value
-   C: “” first “ == ” second “”
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
    Swift: “” first “ == ” second “”
+   {
+    ← ((8‐bit boundary) of (first)) is ((8‐bit boundary) of (second))
+   }
 
   action (clients)
    (first: Unicode scalar boundary) is not (second: Unicode scalar boundary)
    truth value
-   C: “” first “ != ” second “”
    C♯: “” first “ != ” second “”
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: “” first “ != ” second “”
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
 
   action (clients)
    hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash part (hashing proxy of (key)) with (↓ hasher)
+    if most efficient, hash key (key) with (↓ hasher) by integer
+    if most efficient, hash key (key) with (↓ hasher) by 8‐bit
    }
 
   action (unit)
@@ -70,56 +161,52 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (hashing proxy of (example: Unicode scalar boundary))}
- ]
- hashing proxy of (boundary: Unicode scalar boundary)
- platform fixed‐width integer
- C: “(int)” boundary “”
- C♯: “” boundary “”
- JavaScript: “” boundary “”
- Kotlin: “” boundary “”
- Swift: “{var hasher = Hasher(); hasher.combine(” boundary “); return hasher.finalize()}()”
-
 use (clients)
  comparison of (Unicode scalar boundary) for order
  {
   action (clients)
    (first: Unicode scalar boundary) is less than (second: Unicode scalar boundary)
    truth value
-   C: “” first “ < ” second “”
    C♯: “” first “ < ” second “”
    JavaScript: “” first “ < ” second “”
    Kotlin: “” first “ < ” second “”
    Swift: “” first “ < ” second “”
+   {
+    ← ((8‐bit boundary) of (first)) is less than ((8‐bit boundary) of (second))
+   }
 
   action (clients)
    (first: Unicode scalar boundary) is greater than (second: Unicode scalar boundary)
    truth value
-   C: “” first “ > ” second “”
    C♯: “” first “ > ” second “”
    JavaScript: “” first “ > ” second “”
    Kotlin: “” first “ > ” second “”
    Swift: “” first “ > ” second “”
+   {
+    ← (first) is greater than (second) according to comparison for order
+   }
 
   action (clients)
    (first: Unicode scalar boundary) is less than or equal to (second: Unicode scalar boundary)
    truth value
-   C: “” first “ <= ” second “”
    C♯: “” first “ <= ” second “”
    JavaScript: “” first “ <= ” second “”
    Kotlin: “” first “ <= ” second “”
    Swift: “” first “ <= ” second “”
+   {
+    ← (first) is less than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    (first: Unicode scalar boundary) is greater than or equal to (second: Unicode scalar boundary)
    truth value
-   C: “” first “ >= ” second “”
    C♯: “” first “ >= ” second “”
    JavaScript: “” first “ >= ” second “”
    Kotlin: “” first “ >= ” second “”
    Swift: “” first “ >= ” second “”
+   {
+    ← (first) is greater than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    greater example

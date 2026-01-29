@@ -57,38 +57,6 @@ action (clients)
  Swift: “String(bytes: ” 8‐bit encoded “, encoding: .utf8)!.unicodeScalars”
  create
 
-action (file)
- [
-  test {ignore (if possible, list boundary at (example: Unicode scalar boundary))}
- ]
- (
-  English: if possible, list boundary at (cursor: Unicode scalar boundary)
- )
- list boundary
- C: “” cursor “”
- C♯: “” cursor “”
- JavaScript: “” cursor “”
- Kotlin: “” cursor “”
- {
-  ← example
- }
-
-action (file)
- [
-  test {ignore (if possible, scalar boundary at (example: list boundary))}
- ]
- (
-  English: if possible, scalar boundary at (cursor: list boundary)
- )
- Unicode scalar boundary
- C: “” cursor “”
- C♯: “” cursor “”
- JavaScript: “” cursor “”
- Kotlin: “” cursor “”
- {
-  ← example
- }
-
 action (clients)
  [
   [
@@ -286,7 +254,7 @@ use (clients)
    Kotlin: “0”
    Swift: “” list “.startIndex”
    {
-    ← if possible, scalar boundary at (beginning of ((8‐bit encoded) of (list)))
+    ← if possible, scalar boundary at 8‐bit boundary (beginning of ((8‐bit encoded) of (list)))
    }
 
   action (clients)
@@ -299,7 +267,7 @@ use (clients)
    Kotlin: “” list “.length”
    Swift: “” list “.endIndex”
    {
-    ← if possible, scalar boundary at (end of ((8‐bit encoded) of (list)))
+    ← if possible, scalar boundary at 8‐bit boundary (end of ((8‐bit encoded) of (list)))
    }
 
   action (clients)
@@ -331,7 +299,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
    {
-    ← if possible, scalar boundary at (if most efficient, scalar boundary after (if possible, list boundary at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (if possible, list boundary at (end of (list))) skipping bounds check)
+    ← if possible, scalar boundary at 8‐bit boundary (if most efficient, scalar boundary after (if possible, 8‐bit boundary at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (if possible, 8‐bit boundary at (end of (list))) skipping bounds check)
    }
 
   action (clients)
@@ -344,7 +312,7 @@ use (clients)
    Kotlin: “” list “.codePointAt(” index “)”
    Swift: “” list “[” index “]”
    {
-    ← if most efficient, scalar beginning at (if possible, list boundary at ((beginning) of (index))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
+    ← if most efficient, scalar beginning at (if possible, 8‐bit boundary at ((beginning) of (index))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
    }
 
   action (clients)
@@ -693,7 +661,7 @@ action (file)
  Kotlin: “”
  Swift: “”
  {
-  let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
+  let (• converted range: range of (list boundary)) be (from (if possible, 8‐bit boundary at ((lower bound) of (range))) to (if possible, 8‐bit boundary at ((upper bound) of (range))))
   replace (converted range) in (↓ (8‐bit encoded) of (list)) with ((8‐bit encoded) of (insertion))
  }
 
@@ -923,7 +891,7 @@ action (file)
  Kotlin: “” scalars “”
  Swift: “” scalars “”
  {
-  let (• converted range: range of (list boundary)) be (from (if possible, list boundary at ((lower bound) of (range))) to (if possible, list boundary at ((upper bound) of (range))))
+  let (• converted range: range of (list boundary)) be (from (if possible, 8‐bit boundary at ((lower bound) of (range))) to (if possible, 8‐bit boundary at ((upper bound) of (range))))
   ← Unicode scalars of (convert ((converted range) in ((8‐bit encoded) of (scalars))) into list) skipping validity check
  }
 
@@ -1046,7 +1014,7 @@ action (file)
  Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
  Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
  {
-  let (• normalized: unmanaged list of (8‐bit Unicode code unit) of unknown length) be (if most efficient, compute compatibility decomposition of ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (scalars)))) up to (if possible, list boundary at (end of (scalars))))
+  let (• normalized: unmanaged list of (8‐bit Unicode code unit) of unknown length) be (if most efficient, compute compatibility decomposition of ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (scalars)))) up to (if possible, 8‐bit boundary at (end of (scalars))))
   let (• end: list boundary) start as (end of empty list)
   while ((entry at (index after (end) in (normalized) skipping bounds check) in (normalized)) is not (null control code)), {
    advance (↓ end) to next in (normalized) skipping bounds check
