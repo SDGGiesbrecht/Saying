@@ -2,10 +2,34 @@ thing (clients)
  (
   English: list index
  )
- C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
+ {
+  part (unit/nowhere)
+   (
+    English: beginning
+   )
+   list boundary
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+ }
+
+action (unit)
+ [
+  test {ignore (index after (example: list boundary) skipping bounds check)}
+ ]
+ (
+  English: index after (beginning: list boundary) skipping bounds check
+ )
+ list index
+ C♯: “” beginning “”
+ JavaScript: “” beginning “”
+ Kotlin: “” beginning “”
+ Swift: “” beginning “”
+ create
 
 use (clients)
  general containers of (list index)
@@ -13,11 +37,55 @@ use (clients)
   action (clients)
    example
    list index
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0”
-   Swift: “0”
+   {
+    ← index after (example: list boundary) skipping bounds check
+   }
+ }
+
+action (file)
+ [
+  test {ignore (direct hash value of (example: list index))}
+ ]
+ direct hash value of (index: list index)
+ hash value
+ C: “0”
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “” index “”
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: list index) with (↓ hasher) directly
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: list index) with (hasher: ↓ hasher) directly
+ )
+ C: “”
+ Swift: “”
+ {
+  feed (direct hash value of (key)) into (↓ hasher)
+ }
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: list index) with (↓ hasher) by beginning
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: list index) with (hasher: ↓ hasher) by beginning
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  hash part ((beginning) of (key)) with (↓ hasher)
  }
 
 use (clients)
@@ -26,26 +94,31 @@ use (clients)
   action (clients)
    (first: list index) is (second: list index)
    truth value
-   C: “” first “ == ” second “”
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
    Swift: «» first “ == ” second „“
+   {
+    ← ((beginning) of (first)) is ((beginning) of (second))
+   }
 
   action (clients)
    (first: list index) is not (second: list index)
    truth value
-   C: “” first “ != ” second “”
    C♯: “” first “ != ” second “”
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
 
   action (clients)
    hash key (key: list index) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    feed (direct hash value of (key)) into (↓ hasher)
+    if most efficient, hash key (key) with (↓ hasher) directly
+    if most efficient, hash key (key) with (↓ hasher) by beginning
    }
 
   action (unit)
@@ -67,56 +140,52 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (direct hash value of (example: list index))}
- ]
- direct hash value of (index: list index)
- hash value
- C: “(unsigned)” index “”
- C♯: “” index “”
- JavaScript: “” index “”
- Kotlin: “” index “”
- Swift: “” index “”
-
 use (clients)
  comparison of (list index) for order
  {
   action (clients)
    (first: list index) is less than (second: list index)
    truth value
-   C: “” first “ < ” second “”
    C♯: “” first “ < ” second “”
    JavaScript: “” first “ < ” second “”
    Kotlin: “” first “ < ” second “”
    Swift: «» first “ < ” second „“
+   {
+    ← ((beginning) of (first)) is less than ((beginning) of (second))
+   }
 
   action (clients)
    (first: list index) is greater than (second: list index)
    truth value
-   C: “” first “ > ” second “”
    C♯: “” first “ > ” second “”
    JavaScript: “” first “ > ” second “”
    Kotlin: “” first “ > ” second “”
    Swift: «» first “ > ” second „“
+   {
+    ← (first) is greater than (second) according to comparison for order
+   }
 
   action (clients)
    (first: list index) is less than or equal to (second: list index)
    truth value
-   C: “” first “ <= ” second “”
    C♯: “” first “ <= ” second “”
    JavaScript: “” first “ <= ” second “”
    Kotlin: “” first “ <= ” second “”
    Swift: «» first “ <= ” second „“
+   {
+    ← (first) is less than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    (first: list index) is greater than or equal to (second: list index)
    truth value
-   C: “” first “ >= ” second “”
    C♯: “” first “ >= ” second “”
    JavaScript: “” first “ >= ” second “”
    Kotlin: “” first “ >= ” second “”
    Swift: «» first “ >= ” second „“
+   {
+    ← (first) is greater than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    greater example
