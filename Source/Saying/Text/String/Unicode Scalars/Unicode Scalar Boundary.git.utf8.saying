@@ -22,6 +22,36 @@ thing (clients)
    Swift: “”
  }
 
+action (unit)
+ [
+  test {ignore (if possible, 8‐bit boundary at (example: Unicode scalar boundary))}
+ ]
+ (
+  English: if possible, 8‐bit boundary at (cursor: Unicode scalar boundary)
+ )
+ list boundary
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
+ Swift: “0”
+ {
+  ← (8‐bit boundary) of (cursor)
+ }
+
+action (unit)
+ [
+  test {ignore (if possible, scalar boundary at 8‐bit boundary (example: list boundary))}
+ ]
+ (
+  English: if possible, scalar boundary at 8‐bit boundary (8‐bit boundary: list boundary)
+ )
+ Unicode scalar boundary
+ C♯: “” 8‐bit boundary “”
+ JavaScript: “” 8‐bit boundary “”
+ Kotlin: “” 8‐bit boundary “”
+ Swift: “¤(22)¤(22).unicodeScalars.startIndex”
+ create
+
 use (clients)
  general containers of (Unicode scalar boundary)
  {
