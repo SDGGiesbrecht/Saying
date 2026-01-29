@@ -31,6 +31,28 @@ action (unit)
  Swift: “” beginning “”
  create
 
+action (unit)
+ (
+  English: boundary before (index: list index)
+ )
+ list boundary
+ C♯: “” index “”
+ JavaScript: “” index “”
+ Kotlin: “” index “”
+ Swift: “” index “”
+ {
+  ← (beginning) of (index)
+ }
+
+action (unit)
+ (
+  English: memory offset of (index: list index)
+ )
+ memory offset
+ {
+  ← memory offset of (boundary before (index))
+ }
+
 use (clients)
  general containers of (list index)
  {

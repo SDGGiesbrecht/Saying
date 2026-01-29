@@ -200,9 +200,8 @@ extension
     Swift: (self: [list]).indexSkippingBoundsCheck afterBoundary (boundary: [boundary])
    )
    list index
-   C: “” boundary “”
    {
-    ← example
+    ← index after (boundary) skipping bounds check
    }
 
   action (unit)
@@ -210,9 +209,8 @@ extension
     English: boundary before (index: list index) in (list: unmanaged list of (thing) of unknown length)
    )
    list boundary
-   C: “” index “”
    {
-    ← end of empty list
+    ← boundary before (index)
    }
 
   action (unit)
@@ -248,15 +246,24 @@ extension
     ← (boundary before (index) in (list)) is less than (end)
    }
 
+  action (file)
+   (
+    English: entry at offset (index: memory offset) in (list: unmanaged list of (thing) of unknown length)
+   )
+   thing
+   C: “” hold on (thing) “” list “[” index “]”
+   {
+    ← example
+   }
+
   action (unit)
    (
     English: entry at (index: list index) in (list: unmanaged list of (thing) of unknown length)
     Swift: (self: [list]).subscript entryIndex (index: [index])
    )
    thing
-   C: “” hold on (thing) “” list “[” index “]”
    {
-    ← example
+    ← entry at offset (memory offset of (index)) in (list)
    }
 
   action (unit)

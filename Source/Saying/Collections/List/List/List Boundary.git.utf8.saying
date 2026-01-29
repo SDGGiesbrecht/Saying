@@ -7,6 +7,17 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Int”
 
+action (unit)
+ (
+  English: memory offset of (boundary: list boundary)
+ )
+ memory offset
+ C: “” boundary “”
+ C♯: “” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “”
+ Swift: “” boundary “”
+
 use (clients)
  general containers of (list boundary)
  {
