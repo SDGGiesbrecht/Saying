@@ -6,3 +6,133 @@ thing (clients)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
+
+use (clients)
+ general containers of (memory offset)
+ {
+  action (clients)
+   example
+   memory offset
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
+   Swift: “0”
+ }
+
+action (file)
+ [
+  test {ignore (direct hash value of (example: memory offset))}
+ ]
+ direct hash value of (offset: memory offset)
+ hash value
+ C: “(unsigned)” offset “”
+ C♯: “” offset “”
+ JavaScript: “” offset “”
+ Kotlin: “” offset “”
+ Swift: “” offset “”
+
+use (clients)
+ comparison of (memory offset) for equality
+ {
+  action (clients)
+   (first: memory offset) is (second: memory offset)
+   truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: memory offset) is not (second: memory offset)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
+
+  action (clients)
+   hash key (key: memory offset) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    feed (direct hash value of (key)) into (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: memory offset)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   memory offset
+   {
+    ← greater example
+   }
+ }
+
+use (clients)
+ comparison of (memory offset) for order
+ {
+  action (clients)
+   (first: memory offset) is less than (second: memory offset)
+   truth value
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
+   Swift: «» first “ < ” second „“
+
+  action (clients)
+   (first: memory offset) is greater than (second: memory offset)
+   truth value
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: «» first “ > ” second „“
+
+  action (clients)
+   (first: memory offset) is less than or equal to (second: memory offset)
+   truth value
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: «» first “ <= ” second „“
+
+  action (clients)
+   (first: memory offset) is greater than or equal to (second: memory offset)
+   truth value
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: «» first “ >= ” second „“
+
+  action (clients)
+   greater example
+   memory offset
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1”
+   Swift: “1”
+ }
+
+action (unit)
+ (first: memory offset) times (second: memory offset)
+ memory offset
+ C: “” first “ ¤(2A) ” second “”
+ C♯: “” first “ ¤(2A) ” second “”
+ JavaScript: “” first “ ¤(2A) ” second “”
+ Kotlin: “” first “ ¤(2A) ” second “”
+ Swift: «» first “ ¤(2A) ” second „“

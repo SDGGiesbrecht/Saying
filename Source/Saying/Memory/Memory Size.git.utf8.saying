@@ -5,9 +5,9 @@ extension
    (
     English: size of (example: thing)
    )
-   list boundary
+   memory offset
    C: “sizeof(” thing “)”
    {
-    ← end of empty list
+    ← memory offset of (end of empty list)
    }
  }

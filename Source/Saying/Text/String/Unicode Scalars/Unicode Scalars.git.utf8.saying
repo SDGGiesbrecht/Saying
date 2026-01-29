@@ -65,10 +65,10 @@ action (clients)
   [
    English: Skipping the validity check is usually more efficient, because the string literal is most often visible at the call site and obviously valid. However, the caller takes responsibility for the logical soundness of the call. Decoding invalid data may cause a fatal error or result in invalid program state.
   ]
-  test (hidden) {ignore (Unicode scalars of string literal (empty: string literal of unknown length) ending at (end of empty list: list boundary) skipping validity check)}
+  test (hidden) {ignore (Unicode scalars of string literal (empty: string literal of unknown length) ending at (memory offset of (end of empty list: list boundary)) skipping validity check)}
  ]
  (
-  English: Unicode scalars of string literal (uncounted: string literal of unknown length) ending at (end: list boundary) skipping validity check
+  English: Unicode scalars of string literal (uncounted: string literal of unknown length) ending at (end: memory offset) skipping validity check
   C: Unicode‐scalars‐literal (uncounted: [uncounted]) (end: [end])
  )
  Unicode scalars
@@ -77,7 +77,7 @@ action (clients)
  Kotlin: “” uncounted “”
  Swift: “” uncounted “.unicodeScalars”
  {
-  ← Unicode scalars of (list in read‐only memory (8‐bit Unicode code units of (uncounted)) ending at (end)) skipping validity check
+  ← Unicode scalars of (list in read‐only memory (8‐bit Unicode code units of (uncounted)) ending at (boundary at (end))) skipping validity check
  }
 
 use (clients)

@@ -2,21 +2,47 @@ thing (clients)
  (
   English: list boundary
  )
- C: “size¤(5F)t” (“stddef”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “Int”
+ {
+  part (unit/nowhere)
+   (
+    English: offset
+   )
+   memory offset
+   C♯: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+ }
 
 action (unit)
  (
   English: memory offset of (boundary: list boundary)
  )
  memory offset
- C: “” boundary “”
  C♯: “” boundary “”
  JavaScript: “” boundary “”
  Kotlin: “” boundary “”
  Swift: “” boundary “”
+ {
+  ← (offset) of (boundary)
+ }
+
+action (unit)
+ [
+  test {ignore (if possible, scalar boundary at 8‐bit boundary (example: list boundary))}
+ ]
+ (
+  English: boundary at (offset: memory offset)
+ )
+ list boundary
+ C♯: “” offset “”
+ JavaScript: “” offset “”
+ Kotlin: “” offset “”
+ Swift: “” offset “”
+ create
 
 use (clients)
  general containers of (list boundary)
@@ -24,11 +50,55 @@ use (clients)
   action (clients)
    example
    list boundary
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0”
-   Swift: “0”
+   {
+    ← boundary at (example: memory offset)
+   }
+ }
+
+action (file)
+ [
+  test {ignore (direct hash value of (example: list boundary))}
+ ]
+ direct hash value of (boundary: list boundary)
+ hash value
+ C: “0”
+ C♯: “” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “”
+ Swift: “” boundary “”
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: list boundary) with (↓ hasher) directly
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: list boundary) with (hasher: ↓ hasher) directly
+ )
+ C: “”
+ Swift: “”
+ {
+  feed (direct hash value of (key)) into (↓ hasher)
+ }
+
+action (file)
+ [
+  test {
+   let (• hasher: hasher) start as (create hasher)
+   if most efficient, hash key (example: list boundary) with (↓ hasher) by offset
+  }
+ ]
+ (
+  English: if most efficient, hash key (key: list boundary) with (hasher: ↓ hasher) by offset
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  hash part ((offset) of (key)) with (↓ hasher)
  }
 
 use (clients)
@@ -37,26 +107,31 @@ use (clients)
   action (clients)
    (first: list boundary) is (second: list boundary)
    truth value
-   C: “” first “ == ” second “”
    C♯: “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
    Swift: «» first “ == ” second „“
+   {
+    ← ((offset) of (first)) is ((offset) of (second))
+   }
 
   action (clients)
    (first: list boundary) is not (second: list boundary)
    truth value
-   C: “” first “ != ” second “”
    C♯: “” first “ != ” second “”
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
 
   action (clients)
    hash key (key: list boundary) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    feed (direct hash value of (key)) into (↓ hasher)
+    if most efficient, hash key (key) with (↓ hasher) directly
+    if most efficient, hash key (key) with (↓ hasher) by offset
    }
 
   action (unit)
@@ -78,72 +153,57 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (direct hash value of (example: list boundary))}
- ]
- direct hash value of (boundary: list boundary)
- hash value
- C: “(unsigned)” boundary “”
- C♯: “” boundary “”
- JavaScript: “” boundary “”
- Kotlin: “” boundary “”
- Swift: “” boundary “”
-
 use (clients)
  comparison of (list boundary) for order
  {
   action (clients)
    (first: list boundary) is less than (second: list boundary)
    truth value
-   C: “” first “ < ” second “”
    C♯: “” first “ < ” second “”
    JavaScript: “” first “ < ” second “”
    Kotlin: “” first “ < ” second “”
    Swift: «» first “ < ” second „“
+   {
+    ← (memory offset of (first)) is less than (memory offset of (second))
+   }
 
   action (clients)
    (first: list boundary) is greater than (second: list boundary)
    truth value
-   C: “” first “ > ” second “”
    C♯: “” first “ > ” second “”
    JavaScript: “” first “ > ” second “”
    Kotlin: “” first “ > ” second “”
    Swift: «» first “ > ” second „“
+   {
+    ← (first) is greater than (second) according to comparison for order
+   }
 
   action (clients)
    (first: list boundary) is less than or equal to (second: list boundary)
    truth value
-   C: “” first “ <= ” second “”
    C♯: “” first “ <= ” second “”
    JavaScript: “” first “ <= ” second “”
    Kotlin: “” first “ <= ” second “”
    Swift: «» first “ <= ” second „“
+   {
+    ← (first) is less than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    (first: list boundary) is greater than or equal to (second: list boundary)
    truth value
-   C: “” first “ >= ” second “”
    C♯: “” first “ >= ” second “”
    JavaScript: “” first “ >= ” second “”
    Kotlin: “” first “ >= ” second “”
    Swift: «» first “ >= ” second „“
+   {
+    ← (first) is greater than or equal to (second) according to comparison for order
+   }
 
   action (clients)
    greater example
    list boundary
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1”
-   Swift: “1”
+   {
+    ← boundary at (greater example: memory offset)
+   }
  }
-
-action (unit)
- (first: list boundary) times (second: list boundary)
- list boundary
- C: “” first “ ¤(2A) ” second “”
- C♯: “” first “ ¤(2A) ” second “”
- JavaScript: “” first “ ¤(2A) ” second “”
- Kotlin: “” first “ ¤(2A) ” second “”
- Swift: «» first “ ¤(2A) ” second „“

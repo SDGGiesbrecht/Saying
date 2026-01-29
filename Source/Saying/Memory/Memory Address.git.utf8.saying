@@ -31,7 +31,7 @@ action (file)
 
 action (file)
  (
-  English: allocate (amount: list boundary) bytes of memory, skipping success check
+  English: allocate (amount: memory offset) bytes of memory, skipping success check
  )
  memory address
  C: “malloc(” amount “)” (“stdlib”)
@@ -55,7 +55,7 @@ flow (file)
 
 action (unit)
  (
-  English: allocate (amount: list boundary) bytes of memory
+  English: allocate (amount: memory offset) bytes of memory
  )
  memory address
  {
@@ -73,7 +73,7 @@ action (unit)
 
 action (file)
  (
-  English: reallocate memory of (address: memory address) to (size: list boundary) bytes, skipping success check
+  English: reallocate memory of (address: memory address) to (size: memory offset) bytes, skipping success check
  )
  memory address
  C: “realloc(” address “, ” size “)” (“stdlib”)
@@ -83,7 +83,7 @@ action (file)
 
 action (unit)
  (
-  English: reallocate memory of (address: ↓ memory address) to (size: list boundary) bytes
+  English: reallocate memory of (address: ↓ memory address) to (size: memory offset) bytes
  )
  {
   let (• memory: memory address) be (reallocate memory of (address) to (size) bytes, skipping success check)
@@ -93,7 +93,7 @@ action (unit)
 
 action (unit)
  (
-  English: copy memory of (amount: list boundary) bytes from (origin: memory address) to (destination: memory address)
+  English: copy memory of (amount: memory offset) bytes from (origin: memory address) to (destination: memory address)
  )
  C: “memmove(” destination “, ” origin “, ” amount “)” (“string”)
  {}
