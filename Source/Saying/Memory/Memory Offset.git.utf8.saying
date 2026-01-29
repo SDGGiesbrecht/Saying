@@ -128,6 +128,113 @@ use (clients)
    Swift: “1”
  }
 
+use (clients)
+ additive arithmetic with (memory offset)
+ {
+  action (clients)
+   (
+    English: zero
+   )
+   memory offset
+   C: “0”
+   C♯: “0”
+   JavaScript: “0”
+   Kotlin: “0”
+   Swift: “0”
+
+  action (clients)
+   (
+    English: one
+   )
+   memory offset
+   C: “1”
+   C♯: “1”
+   JavaScript: “1”
+   Kotlin: “1”
+   Swift: “1”
+ }
+
+use (clients)
+ incrementation of (memory offset)
+ {
+  action (clients)
+   (
+    English: increment (value: ↓ memory offset)
+   )
+   C: “++” value “”
+   C♯: “++” value “”
+   JavaScript: “++” value “”
+   Kotlin: “++” value “”
+   Swift: “” value “ += 1”
+
+  action (clients)
+   (
+    English: decrement (value: ↓ memory offset) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” value “”
+   C♯: “¤(2D)¤(2D)” value “”
+   JavaScript: “¤(2D)¤(2D)” value “”
+   Kotlin: “¤(2D)¤(2D)” value “”
+   Swift: “” value “ ¤(2D)= 1”
+
+  action (clients)
+   (
+    English: can decrement (value: memory offset)
+   )
+   truth value
+   {
+    ← true
+   }
+
+  action (clients)
+   (
+    English: successor example
+   )
+   memory offset
+   {
+    ← one
+   }
+ }
+
+action (unit)
+ (
+  English: (augend: memory offset) plus (addend: memory offset)
+  English +: (augend: [augend]) + (addend: [addend])
+  español: (primer sumando: [augend]) más (segundo sumando: [addend])
+  español +: (primer sumando: [augend]) + (segundo sumando: [addend])
+  português: (primeiro sumado: [augend]) mais (segundo sumado: [addend])
+  português +: (primeiro sumado: [augend]) + (segundo sumado: [addend])
+  français : (cumulande: [augend]) plus (cumulateur: [addend])
+  français + : (cumulande: [augend]) + (cumulateur: [addend])
+  Deutsch: (erster Summand: [augend]) plus (zweiter Summand: [addend])
+  Deutsch: (erster Summand: [augend]) + (zweiter Summand: [addend])
+  italiano: (auguendo: [augend]) più (addendo: [addend])
+  italiano +: (auguendo: [augend]) + (addendo: [addend])
+  Nederlands: (eerste term: [augend]) plus (tweede term: [addend])
+  Nederlands +: (eerste term: [augend]) + (tweede term: [addend])
+  ελληνικά: (προσθέτης: [augend]) συν (προσθετέος: [addend])
+  ελληνικά +: (προσθέτης: [augend]) + (προσθετέος: [addend])
+  עברית: (מחובר ראשון: [augend]) ועוד (מחובר שני: [addend])
+  עברית +: (מחובר ראשון: [augend]) + (מחובר שני: [addend])
+ )
+ memory offset
+ C: “” augend “ + ” addend “”
+ C♯: “” augend “ + ” addend “”
+ JavaScript: “” augend “ + ” addend “”
+ Kotlin: “” augend “ + ” addend “”
+ Swift: “” augend “ + ” addend “”
+
+action (unit)
+ (
+  English: (minuend: memory offset) minus (subtrahend: memory offset)
+ )
+ memory offset
+ C: “” minuend “ ¤(2D) ” subtrahend “”
+ C♯: “” minuend “ ¤(2D) ” subtrahend “”
+ JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+ Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+ Swift: “” minuend “ ¤(2D) ” subtrahend “”
+
 action (unit)
  (first: memory offset) times (second: memory offset)
  memory offset

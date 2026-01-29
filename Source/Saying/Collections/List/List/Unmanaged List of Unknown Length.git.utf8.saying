@@ -156,10 +156,20 @@ extension
 
   action (file)
    (
-    English: copy memory of (amount: list boundary) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
+    English: copy memory of (amount: memory offset) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
    )
    {
-    copy memory of ((memory offset of (amount)) times (size of (example: thing))) bytes from (memory address of (origin)) to (memory address of (destination))
+    copy memory of ((amount) times (size of (example: thing))) bytes from (memory address of (origin)) to (memory address of (destination))
+   }
+
+  action (file)
+   (
+    English: pointer to (offset: memory offset) in (list: unmanaged list of (thing) of unknown length)
+   )
+   unmanaged list of (thing) of unknown length
+   C: “” list “ + ” offset “”
+   {
+    ← empty placeholder
    }
 
   action (file)
@@ -167,9 +177,8 @@ extension
     English: pointer to (boundary: list boundary) in (list: unmanaged list of (thing) of unknown length)
    )
    unmanaged list of (thing) of unknown length
-   C: “” list “ + ” boundary “”
    {
-    ← empty placeholder
+    ← pointer to (memory offset of (boundary)) in (list)
    }
 
   action (file)
@@ -230,7 +239,6 @@ extension
     Swift: var (self: [list]).startIndex
    )
    list boundary
-   C: “0”
    {
     ← end of empty list
    }
@@ -240,9 +248,12 @@ extension
     English: advance (cursor: ↓ list boundary) to next in (list: unmanaged list of (thing) of unknown length) skipping bounds check
     Swift: (self: [list]).formIndex after (i: [cursor])
    )
-   C: “++” cursor “”
+   C♯: “++” cursor “”
+   JavaScript: “++” cursor “”
+   Kotlin: “++” cursor “”
+   Swift: “” cursor “ += 1”
    {
-    change (↓ cursor) to (distance (end of list containing one entry) after (cursor))
+    increment (↓ (offset) of (cursor))
    }
 
   action (unit)
@@ -297,11 +308,11 @@ extension
    }
  }
 
-action (unit)
+action (file)
  (
-  English: end of list containing (end: natural number) entries
+  English: offset of end of list containing (end: natural number) entries
  )
- list boundary
+ memory offset
  C: “(size¤(5F)t)” end “”
  C♯: “(int)” end “”
  JavaScript: “” end “”
@@ -310,12 +321,40 @@ action (unit)
 
 action (unit)
  (
+  English: end of list containing (end: natural number) entries
+ )
+ list boundary
+ {
+  ← boundary at (offset of end of list containing (end) entries)
+ }
+
+action (file)
+ (
+  English: offset of end of empty list
+ )
+ memory offset
+ C: “0”
+ {
+  ← offset of end of list containing (zero: natural number) entries
+ }
+
+action (unit)
+ (
   English: end of empty list
  )
  list boundary
- C: “0”
  {
-  ← end of list containing (zero: natural number) entries
+  ← boundary at (offset of end of empty list)
+ }
+
+action (file)
+ (
+  English: offset of end of list containing one entry
+ )
+ memory offset
+ C: “1”
+ {
+  ← offset of end of list containing (one: natural number) entries
  }
 
 action (unit)
@@ -323,41 +362,36 @@ action (unit)
   English: end of list containing one entry
  )
  list boundary
- C: “1”
  {
-  ← end of list containing (one: natural number) entries
+  ← boundary at (offset of end of list containing (one: natural number) entries)
  }
 
 action (file)
  (
   English: distance from (lower bound: list boundary) to (upper bound: list boundary)
  )
- list boundary
- C: “” upper bound “ ¤(2D) ” lower bound “”
- C♯: “” upper bound “ ¤(2D) ” lower bound “”
- JavaScript: “” upper bound “ ¤(2D) ” lower bound “”
- Kotlin: “” upper bound “ ¤(2D) ” lower bound “”
- Swift: “” upper bound “ ¤(2D) ” lower bound “”
+ memory offset
+ {
+  ← (memory offset of (upper bound)) minus (memory offset of (lower bound))
+ }
 
 action (file)
  [
-  test {verify ((distance (end of list containing (one: natural number) entries) after (end of list containing (one: natural number) entries)) is (end of list containing (two: natural number) entries))}
+  test {verify ((distance (one: memory offset) after (end of list containing (one: natural number) entries)) is (end of list containing (two: natural number) entries))}
  ]
  (
-  English: distance (distance: list boundary) after (boundary: list boundary)
+  English: distance (distance: memory offset) after (boundary: list boundary)
  )
  list boundary
- C: “” boundary “ + ” distance “”
- C♯: “” boundary “ + ” distance “”
- JavaScript: “” boundary “ + ” distance “”
- Kotlin: “” boundary “ + ” distance “”
- Swift: “” boundary “ + ” distance “”
+ {
+  ← boundary at ((memory offset of (boundary)) plus (distance))
+ }
 
 action (file)
  (
   English: length of (range: range of (list boundary))
  )
- list boundary
+ memory offset
  {
   ← distance from ((lower bound) of (range)) to ((upper bound) of (range))
  }

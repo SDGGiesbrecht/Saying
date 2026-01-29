@@ -141,7 +141,7 @@ extension
    unmanaged list of (thing)
    {
     let (• copy: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
-    resize storage of (↓ copy) to end at (length of (range))
+    resize storage of (↓ copy) to end at (boundary at (length of (range)))
     replace (from (end of empty list) to (end of empty list)) in (↓ copy) with (range) from (list)
     ← copy
    }
@@ -319,7 +319,7 @@ extension
     if ((boundary) is greater than (original end)), {
      !
     }
-    let (• new end: list boundary) be (distance (end of list containing one entry) after (original end))
+    let (• new end: list boundary) be (distance (memory offset of (end of list containing one entry)) after (original end))
     ensure enough storage for (new end) in (↓ list)
     if ((boundary) is not (original end)), {
      move (from (boundary) to (original end)) to (boundary after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list))
@@ -344,7 +344,7 @@ extension
     }
     remove (removal range) from (↓ (uncounted) of (list))
     let (• trailing range: range of (list boundary)) be (from (end of removal) to (original end))
-    let (• length of replacement: list boundary) be (length of (replacement range))
+    let (• length of replacement: memory offset) be (length of (replacement range))
     let (• end of insertion: list boundary) be (distance (length of replacement) after (beginning of removal))
     let (• new end: list boundary) be (distance (length of (trailing range)) after (end of insertion))
     ensure enough storage for (new end) in (↓ list)
@@ -359,7 +359,7 @@ extension
       resize storage of (↓ list) to end at ((new end) grown by (growth factor))
      }
     }
-    if ((length of replacement) is greater than (end of empty list)), {
+    if ((boundary at (length of replacement)) is greater than (end of empty list)), {
      copy (from ((lower bound) of (replacement range)) to ((upper bound) of (replacement range))) from ((uncounted) of (replacement source)) to (beginning of removal) in (↓ (uncounted) of (list))
     }
    }
