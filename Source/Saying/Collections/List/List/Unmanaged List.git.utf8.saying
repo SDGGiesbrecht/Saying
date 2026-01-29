@@ -417,7 +417,7 @@ action (file)
  (
   English: growth factor
  )
- list boundary
+ memory offset
  C: “2”
  C♯: “2”
  JavaScript: “2”
@@ -426,22 +426,18 @@ action (file)
 
 action (file)
  (
-  English: (end: list boundary) grown by (factor: list boundary)
+  English: (end: list boundary) grown by (factor: memory offset)
  )
  list boundary
- C: “” end “ ¤(2A) ” factor “”
- C♯: “” end “ ¤(2A) ” factor “”
- JavaScript: “” end “ ¤(2A) ” factor “”
- Kotlin: “” end “ ¤(2A) ” factor “”
- Swift: “” end “ ¤(2A) ” factor “”
+ {
+  ← boundary at ((memory offset of (end)) times (factor))
+ }
 
 action (file)
  (
-  English: (end: list boundary) shrunk by (factor: list boundary)
+  English: (end: list boundary) shrunk by (factor: memory offset)
  )
  list boundary
- C: “” end “ / ” factor “”
- C♯: “” end “ / ” factor “”
- JavaScript: “Math.floor(” end “ / ” factor “)”
- Kotlin: “” end “ / ” factor “”
- Swift: “” end “ / ” factor “”
+ {
+  ← boundary at ((memory offset of (end)) divided by (factor))
+ }

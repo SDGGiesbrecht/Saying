@@ -136,3 +136,14 @@ action (unit)
  JavaScript: “” first “ ¤(2A) ” second “”
  Kotlin: “” first “ ¤(2A) ” second “”
  Swift: «» first “ ¤(2A) ” second „“
+
+action (unit)
+ (
+  English: (dividend: memory offset) divided by (divisor: memory offset)
+ )
+ memory offset
+ C: “” dividend “ / ” divisor “”
+ C♯: “” dividend “ / ” divisor “”
+ JavaScript: “Math.floor(” dividend “ / ” divisor “)”
+ Kotlin: “” dividend “ / ” divisor “”
+ Swift: “” dividend “ / ” divisor “”
