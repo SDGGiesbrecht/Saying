@@ -212,9 +212,7 @@ use (clients)
   action (clients)
    greater example
    list index
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1”
-   Swift: “1”
+   {
+    ← index after (greater example: list boundary) skipping bounds check
+   }
  }

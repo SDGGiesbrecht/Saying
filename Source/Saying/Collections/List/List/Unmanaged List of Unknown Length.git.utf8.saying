@@ -85,10 +85,18 @@ extension
 
   action (unit)
    (
-    English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
+    English: initialize entry at offset (index: memory offset) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
    C: “(” list “)[” index “] = ” hold on (element) “”
    {}
+
+  action (unit)
+   (
+    English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
+   )
+   {
+    initialize entry at offset (memory offset of (index)) in (↓ list) to (element)
+   }
 
   action (file)
    (
