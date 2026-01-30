@@ -6,28 +6,15 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Int”
  {
-  part (unit/nowhere)
+  part (unit/unit)
    (
     English: offset
    )
    memory offset
-   C♯: “”
-   JavaScript: “”
-   Kotlin: “”
-   Swift: “”
- }
-
-action (unit)
- (
-  English: memory offset of (boundary: list boundary)
- )
- memory offset
- C♯: “” boundary “”
- JavaScript: “” boundary “”
- Kotlin: “” boundary “”
- Swift: “” boundary “”
- {
-  ← (offset) of (boundary)
+   C♯: “” . “”
+   JavaScript: “” . “”
+   Kotlin: “” . “”
+   Swift: “” . “”
  }
 
 action (unit)
@@ -164,7 +151,7 @@ use (clients)
    Kotlin: “” first “ < ” second “”
    Swift: «» first “ < ” second „“
    {
-    ← (memory offset of (first)) is less than (memory offset of (second))
+    ← ((offset) of (first)) is less than ((offset) of (second))
    }
 
   action (clients)

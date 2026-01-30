@@ -15,7 +15,7 @@ extension
      let (• beginning: list boundary) be (beginning of (list))
      insert (restart (original tracker)) at (beginning) in (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (one: natural number) entries))
+     verify (((end) of (list)) is (boundary at (one: memory offset)))
      hold unmanaged (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      release unmanaged (↓ list)
@@ -24,18 +24,18 @@ extension
      insert (restart (insertion tracker)) at (beginning) in (↓ list)
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((end) of (list)) is (boundary at (two: memory offset)))
      let (• first: list index) be (index after (beginning) in (list) skipping bounds check)
      ignore (entry at (first) in (list))
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (three: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((end) of (list)) is (boundary at (two: memory offset)))
      let (• replacement tracker: reference tracker) be (create reference tracker)
      replace (first) in (↓ list) with (restart (replacement tracker))
      verify (reference count of (original tracker) is (two: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
      verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((end) of (list)) is (boundary at (two: memory offset)))
      release unmanaged (↓ list)
      verify (reference count of (original tracker) is (one: platform fixed‐width integer))
      verify (reference count of (insertion tracker) is (two: platform fixed‐width integer))
@@ -126,7 +126,7 @@ extension
     }
     decrement (↓ (references) of (list)) skipping underflow check
     if (((references) of (list)) is (zero: platform fixed‐width natural number)), {
-     if (((limit) of (list)) is greater than (end of empty list)), {
+     if (((offset) of ((limit) of (list))) is greater than (zero: memory offset)), {
       if (not ((memory is read‐only) of (list))), {
        clean ((uncounted) of (list)) up up to ((end) of (list))
       }
@@ -142,7 +142,8 @@ extension
    {
     let (• copy: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
     resize storage of (↓ copy) to end at (boundary at (length of (range)))
-    replace (from (end of empty list) to (end of empty list)) in (↓ copy) with (range) from (list)
+    let (• beginning: list boundary) be (boundary at (zero: memory offset))
+    replace (from (beginning) to (beginning)) in (↓ copy) with (range) from (list)
     ← copy
    }
 
@@ -270,7 +271,8 @@ extension
    )
    unmanaged list of (thing)
    {
-    ← create unmanaged list with uncounted (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length), end (end of empty list) and limit (end of empty list) where memory is read‐only (false)
+    let (• beginning: list boundary) be (boundary at (zero: memory offset))
+    ← create unmanaged list with uncounted (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length), end (beginning) and limit (beginning) where memory is read‐only (false)
    }
 
   action (unit)
@@ -290,8 +292,8 @@ extension
     English: resize storage of (list: ↓ unmanaged list of (thing)) to end at (new limit: list boundary)
    )
    {
-    if (((limit) of (list)) is (end of empty list)), {
-     if ((new limit) is not (end of empty list)), {
+    if (((offset) of ((limit) of (list))) is (zero: memory offset)), {
+     if (((offset) of (new limit)) is not (zero: memory offset)), {
       change (↓ (uncounted) of (list)) to (allocate memory up to (new limit): unmanaged list of (thing) of unknown length)
      }
     }, otherwise {
@@ -319,7 +321,7 @@ extension
     if ((boundary) is greater than (original end)), {
      !
     }
-    let (• new end: list boundary) be (distance (memory offset of (end of list containing one entry)) after (original end))
+    let (• new end: list boundary) be (distance (one: memory offset) after (original end))
     ensure enough storage for (new end) in (↓ list)
     if ((boundary) is not (original end)), {
      move (from (boundary) to (original end)) to (boundary after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list))
@@ -359,7 +361,7 @@ extension
       resize storage of (↓ list) to end at ((new end) grown by (growth factor))
      }
     }
-    if ((boundary at (length of replacement)) is greater than (end of empty list)), {
+    if ((length of replacement) is greater than (zero: memory offset)), {
      copy (from ((lower bound) of (replacement range)) to ((upper bound) of (replacement range))) from ((uncounted) of (replacement source)) to (beginning of removal) in (↓ (uncounted) of (list))
     }
    }
@@ -372,34 +374,34 @@ extension
      insert (restart (tracker)) at (beginning of (replacement)) in (↓ replacement)
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
      let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
-     verify (((end) of (list)) is (end of empty list))
-     verify (((limit) of (list)) is (end of empty list))
+     verify (((end) of (list)) is (boundary at (zero: memory offset)))
+     verify (((limit) of (list)) is (boundary at (zero: memory offset)))
      let (• beginning: list boundary) be (beginning of (list))
      replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
      verify (reference count of (tracker) is (three: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing one entry))
-     verify (((limit) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((end) of (list)) is (boundary at (one: memory offset)))
+     verify (((limit) of (list)) is (boundary at (two: memory offset)))
      replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
      verify (reference count of (tracker) is (four: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
-     verify (((limit) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((end) of (list)) is (boundary at (two: memory offset)))
+     verify (((limit) of (list)) is (boundary at (two: memory offset)))
      replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
      verify (reference count of (tracker) is (five: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (three: natural number) entries))
-     verify (((limit) of (list)) is (end of list containing (six: natural number) entries))
+     verify (((end) of (list)) is (boundary at (three: memory offset)))
+     verify (((limit) of (list)) is (boundary at (six: memory offset)))
      let (• first: range of (list boundary)) be (from (beginning) to (boundary after (beginning) in (list) skipping bounds check))
      replace (first) in (↓ list) with (empty: unmanaged list of (reference tracker))
      verify (reference count of (tracker) is (four: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing (two: natural number) entries))
-     verify (((limit) of (list)) is (end of list containing (six: natural number) entries))
+     verify (((end) of (list)) is (boundary at (two: memory offset)))
+     verify (((limit) of (list)) is (boundary at (six: memory offset)))
      replace (first) in (↓ list) with (empty: unmanaged list of (reference tracker))
      verify (reference count of (tracker) is (three: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of list containing one entry))
-     verify (((limit) of (list)) is (end of list containing (two: natural number) entries))
+     verify (((end) of (list)) is (boundary at (one: memory offset)))
+     verify (((limit) of (list)) is (boundary at (two: memory offset)))
      replace (first) in (↓ list) with (empty: unmanaged list of (reference tracker))
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
-     verify (((end) of (list)) is (end of empty list))
-     verify (((limit) of (list)) is (end of empty list))
+     verify (((end) of (list)) is (boundary at (zero: memory offset)))
+     verify (((limit) of (list)) is (boundary at (zero: memory offset)))
      release unmanaged (↓ list)
      release unmanaged (↓ replacement)
     }
@@ -430,7 +432,7 @@ action (file)
  )
  list boundary
  {
-  ← boundary at ((memory offset of (end)) times (factor))
+  ← boundary at (((offset) of (end)) times (factor))
  }
 
 action (file)
@@ -439,5 +441,5 @@ action (file)
  )
  list boundary
  {
-  ← boundary at ((memory offset of (end)) divided by (factor))
+  ← boundary at (((offset) of (end)) divided by (factor))
  }

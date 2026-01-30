@@ -7,6 +7,20 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Int”
 
+action (unit)
+ [
+  test {ignore ((example: platform fixed‐width integer) as memory offset skipping overflow check)}
+ ]
+ (
+  English: (integer: platform fixed‐width integer) as memory offset skipping overflow check
+ )
+ memory offset
+ C: “(size¤(5F)t)” integer “”
+ C♯: “” integer “”
+ JavaScript: “” integer “”
+ Kotlin: “” integer “”
+ Swift: “” integer “”
+
 use (clients)
  general containers of (memory offset)
  {
@@ -254,3 +268,50 @@ action (unit)
  JavaScript: “Math.floor(” dividend “ / ” divisor “)”
  Kotlin: “” dividend “ / ” divisor “”
  Swift: “” dividend “ / ” divisor “”
+
+extension
+ general use of (thing)
+ {
+  action (unit)
+   (
+    English: size of (example: thing)
+   )
+   memory offset
+   C: “sizeof(” thing “)”
+   {
+    ← zero
+   }
+ }
+
+action (unit)
+ (
+  English: two
+ )
+ memory offset
+ C: “2”
+ C♯: “2”
+ JavaScript: “2”
+ Kotlin: “2”
+ Swift: “2”
+
+action (unit)
+ (
+  English: three
+ )
+ memory offset
+ C: “3”
+ C♯: “3”
+ JavaScript: “3”
+ Kotlin: “3”
+ Swift: “3”
+
+action (unit)
+ (
+  English: six
+ )
+ memory offset
+ C: “6”
+ C♯: “6”
+ JavaScript: “6”
+ Kotlin: “6”
+ Swift: “6”

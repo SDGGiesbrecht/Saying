@@ -36,7 +36,7 @@ extension
 
   action (unit)
    [
-    test {ignore (list in read‐only memory (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length) ending at (end of empty list))}
+    test {ignore (list in read‐only memory (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length) ending at (boundary at (zero: memory offset)))}
    ]
    (
     English: list in read‐only memory (uncounted: unmanaged list of (thing) of unknown length) ending at (end: list boundary)
