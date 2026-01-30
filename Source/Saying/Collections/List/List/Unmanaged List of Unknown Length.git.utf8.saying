@@ -251,7 +251,6 @@ extension
    C♯: “++” cursor “”
    JavaScript: “++” cursor “”
    Kotlin: “++” cursor “”
-   Swift: “” cursor “ += 1”
    {
     increment (↓ (offset) of (cursor))
    }

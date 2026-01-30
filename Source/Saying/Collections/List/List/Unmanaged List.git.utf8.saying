@@ -374,7 +374,7 @@ extension
      insert (restart (tracker)) at (beginning of (replacement)) in (↓ replacement)
      verify (reference count of (tracker) is (two: platform fixed‐width integer))
      let (• list: unmanaged list of (reference tracker)) start as (empty: unmanaged list of (reference tracker))
-     verify ((((end) of (list)) is (boundary at (zero: memory offset)))
+     verify (((end) of (list)) is (boundary at (zero: memory offset)))
      verify (((limit) of (list)) is (boundary at (zero: memory offset)))
      let (• beginning: list boundary) be (beginning of (list))
      replace (from (beginning) to (beginning)) in (↓ list) with (replacement)
