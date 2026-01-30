@@ -202,7 +202,7 @@ action (file)
  (
   English: if most efficient, scalar boundary after (cursor: memory offset) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length) ending at (end: memory offset) skipping bounds check
  )
- list boundary
+ memory offset
  C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) == NULL ? ” end “ : g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) ¤(2D) ” list “” (“glib¤(2D)2.0”)
  {
   ← cursor
@@ -299,7 +299,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
    {
-    ← if possible, scalar boundary at 8‐bit boundary (if most efficient, scalar boundary after (memory offset of (if possible, 8‐bit boundary at (cursor))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (memory offset of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check)
+    ← if possible, scalar boundary at 8‐bit boundary (boundary at (if most efficient, scalar boundary after (memory offset of (if possible, 8‐bit boundary at (cursor))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (memory offset of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check))
    }
 
   action (clients)
