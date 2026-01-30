@@ -195,12 +195,12 @@ action (file)
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
    let (• beginning: list boundary) be (beginning of (list))
    initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   ignore (if most efficient, scalar boundary after (beginning) in (list) ending at (memory offset of (end)) skipping bounds check)
+   ignore (if most efficient, scalar boundary after (memory offset of (beginning)) in (list) ending at (memory offset of (end)) skipping bounds check)
    clean (list) up up to (end)
   }
  ]
  (
-  English: if most efficient, scalar boundary after (cursor: list boundary) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length) ending at (end: memory offset) skipping bounds check
+  English: if most efficient, scalar boundary after (cursor: memory offset) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length) ending at (end: memory offset) skipping bounds check
  )
  list boundary
  C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) == NULL ? ” end “ : g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) ¤(2D) ” list “” (“glib¤(2D)2.0”)
@@ -299,7 +299,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
    {
-    ← if possible, scalar boundary at 8‐bit boundary (if most efficient, scalar boundary after (if possible, 8‐bit boundary at (cursor)) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (memory offset of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check)
+    ← if possible, scalar boundary at 8‐bit boundary (if most efficient, scalar boundary after (memory offset of (if possible, 8‐bit boundary at (cursor))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (memory offset of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check)
    }
 
   action (clients)
