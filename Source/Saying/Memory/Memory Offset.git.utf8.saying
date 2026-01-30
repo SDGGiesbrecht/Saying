@@ -21,10 +21,10 @@ action (unit)
  Kotlin: “” integer “”
  Swift: “” integer “”
 
-use (clients)
+use (unit)
  general containers of (memory offset)
  {
-  action (clients)
+  action (unit)
    example
    memory offset
    C: “0”
@@ -46,10 +46,10 @@ action (file)
  Kotlin: “” offset “”
  Swift: “” offset “”
 
-use (clients)
+use (unit)
  comparison of (memory offset) for equality
  {
-  action (clients)
+  action (unit)
    (first: memory offset) is (second: memory offset)
    truth value
    C: “” first “ == ” second “”
@@ -58,7 +58,7 @@ use (clients)
    Kotlin: “” first “ == ” second “”
    Swift: «» first “ == ” second „“
 
-  action (clients)
+  action (unit)
    (first: memory offset) is not (second: memory offset)
    truth value
    C: “” first “ != ” second “”
@@ -67,7 +67,7 @@ use (clients)
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
 
-  action (clients)
+  action (unit)
    hash key (key: memory offset) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
@@ -85,7 +85,7 @@ use (clients)
     ← hash value of (key) according to comparison for equality
    }
 
-  action (clients)
+  action (unit)
    differing example
    memory offset
    {
@@ -93,10 +93,10 @@ use (clients)
    }
  }
 
-use (clients)
+use (unit)
  comparison of (memory offset) for order
  {
-  action (clients)
+  action (unit)
    (first: memory offset) is less than (second: memory offset)
    truth value
    C: “” first “ < ” second “”
@@ -105,7 +105,7 @@ use (clients)
    Kotlin: “” first “ < ” second “”
    Swift: «» first “ < ” second „“
 
-  action (clients)
+  action (unit)
    (first: memory offset) is greater than (second: memory offset)
    truth value
    C: “” first “ > ” second “”
@@ -114,7 +114,7 @@ use (clients)
    Kotlin: “” first “ > ” second “”
    Swift: «» first “ > ” second „“
 
-  action (clients)
+  action (unit)
    (first: memory offset) is less than or equal to (second: memory offset)
    truth value
    C: “” first “ <= ” second “”
@@ -123,7 +123,7 @@ use (clients)
    Kotlin: “” first “ <= ” second “”
    Swift: «» first “ <= ” second „“
 
-  action (clients)
+  action (unit)
    (first: memory offset) is greater than or equal to (second: memory offset)
    truth value
    C: “” first “ >= ” second “”
@@ -132,7 +132,7 @@ use (clients)
    Kotlin: “” first “ >= ” second “”
    Swift: «» first “ >= ” second „“
 
-  action (clients)
+  action (unit)
    greater example
    memory offset
    C: “1”
@@ -142,10 +142,10 @@ use (clients)
    Swift: “1”
  }
 
-use (clients)
+use (unit)
  additive arithmetic with (memory offset)
  {
-  action (clients)
+  action (unit)
    (
     English: zero
    )
@@ -156,7 +156,7 @@ use (clients)
    Kotlin: “0”
    Swift: “0”
 
-  action (clients)
+  action (unit)
    (
     English: one
    )
@@ -168,10 +168,10 @@ use (clients)
    Swift: “1”
  }
 
-use (clients)
+use (unit)
  incrementation of (memory offset)
  {
-  action (clients)
+  action (unit)
    (
     English: increment (value: ↓ memory offset)
    )
@@ -181,7 +181,7 @@ use (clients)
    Kotlin: “++” value “”
    Swift: “” value “ += 1”
 
-  action (clients)
+  action (unit)
    (
     English: decrement (value: ↓ memory offset) skipping underflow check
    )
@@ -191,7 +191,7 @@ use (clients)
    Kotlin: “¤(2D)¤(2D)” value “”
    Swift: “” value “ ¤(2D)= 1”
 
-  action (clients)
+  action (unit)
    (
     English: can decrement (value: memory offset)
    )
@@ -200,7 +200,7 @@ use (clients)
     ← true
    }
 
-  action (clients)
+  action (unit)
    (
     English: successor example
    )
