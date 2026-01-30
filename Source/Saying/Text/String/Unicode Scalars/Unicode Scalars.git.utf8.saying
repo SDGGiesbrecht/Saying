@@ -65,7 +65,7 @@ action (clients)
   [
    English: Skipping the validity check is usually more efficient, because the string literal is most often visible at the call site and obviously valid. However, the caller takes responsibility for the logical soundness of the call. Decoding invalid data may cause a fatal error or result in invalid program state.
   ]
-  test (hidden) {ignore (Unicode scalars of string literal (empty: string literal of unknown length) ending at (memory offset of (end of empty list: list boundary)) skipping validity check)}
+  test (hidden) {ignore (Unicode scalars of string literal (empty: string literal of unknown length) ending at (zero: memory offset) skipping validity check)}
  ]
  (
   English: Unicode scalars of string literal (uncounted: string literal of unknown length) ending at (end: memory offset) skipping validity check
@@ -191,11 +191,11 @@ use (clients)
 action (file)
  [
   test {
-   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• end: list boundary) be (boundary at (one: memory offset))
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
    let (• beginning: list boundary) be (beginning of (list))
    initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   ignore (if most efficient, scalar boundary after (memory offset of (beginning)) in (list) ending at (memory offset of (end)) skipping bounds check)
+   ignore (if most efficient, scalar boundary after ((offset) of (beginning)) in (list) ending at ((offset) of (end)) skipping bounds check)
    clean (list) up up to (end)
   }
  ]
@@ -211,11 +211,11 @@ action (file)
 action (file)
  [
   test {
-   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• end: list boundary) be (boundary at (one: memory offset))
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
    let (• beginning: list boundary) be (beginning of (list))
    initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   ignore (if most efficient, scalar beginning at (memory offset of (beginning)) in (list))
+   ignore (if most efficient, scalar beginning at ((offset) of (beginning)) in (list))
    clean (list) up up to (end)
   }
  ]
@@ -299,7 +299,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
    {
-    ← if possible, scalar boundary at 8‐bit boundary (boundary at (if most efficient, scalar boundary after (memory offset of (if possible, 8‐bit boundary at (cursor))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at (memory offset of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check))
+    ← if possible, scalar boundary at 8‐bit boundary (boundary at (if most efficient, scalar boundary after ((offset) of (if possible, 8‐bit boundary at (cursor))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at ((offset) of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check))
    }
 
   action (clients)
@@ -312,7 +312,7 @@ use (clients)
    Kotlin: “” list “.codePointAt(” index “)”
    Swift: “” list “[” index “]”
    {
-    ← if most efficient, scalar beginning at (memory offset of (if possible, 8‐bit boundary at ((beginning) of (index)))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
+    ← if most efficient, scalar beginning at ((offset) of (if possible, 8‐bit boundary at ((beginning) of (index)))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
    }
 
   action (clients)
@@ -390,7 +390,7 @@ action (clients)
 action (file)
  [
   test {
-   let (• end: list boundary) be (end of list containing (six: natural number) entries)
+   let (• end: list boundary) be (boundary at (six: memory offset))
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
    ignore (insert (example: Unicode scalar) into (↓ list))
    clean (list) up up to (end)
@@ -401,19 +401,6 @@ action (file)
  )
  platform fixed‐width integer
  C: “g¤(5F)unichar¤(5F)to¤(5F)utf8(” scalar “, ” buffer “)” (“glib¤(2D)2.0”)
- {
-  ← zero
- }
-
-action (file)
- [
-  test {ignore (convert (example: platform fixed‐width integer) into natural number implicitly)}
- ]
- (
-  English: convert (integer: platform fixed‐width integer) into natural number implicitly
- )
- natural number
- C: “” integer “”
  {
   ← zero
  }
@@ -433,9 +420,9 @@ action (file)
  Kotlin: “”
  Swift: “”
  {
-  ensure enough storage for (end of list containing (six: natural number) entries) in (↓ (unmanaged) of ((8‐bit encoded) of (empty)))
+  ensure enough storage for (boundary at (six: memory offset)) in (↓ (unmanaged) of ((8‐bit encoded) of (empty)))
   let (• length: platform fixed‐width integer) be (insert (scalar) into (↓ (uncounted) of ((unmanaged) of ((8‐bit encoded) of (empty)))))
-  change (↓ (end) of ((unmanaged) of ((8‐bit encoded) of (empty)))) to (end of list containing (convert (length) into natural number implicitly) entries)
+  change (↓ (end) of ((unmanaged) of ((8‐bit encoded) of (empty)))) to (boundary at ((length) as memory offset skipping overflow check))
  }
 
 action (file)
@@ -984,11 +971,11 @@ action (file)
 action (file)
  [
   test {
-   let (• end: list boundary) be (end of list containing (one: natural number) entries)
+   let (• end: list boundary) be (boundary at (one: memory offset))
    let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
    let (• beginning: list boundary) be (beginning of (list))
    initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   clean (if most efficient, compute compatibility decomposition of (list) up to (memory offset of (end))) up up to (end)
+   clean (if most efficient, compute compatibility decomposition of (list) up to ((offset) of (end))) up up to (end)
    clean (list) up up to (end)
   }
  ]
@@ -1014,8 +1001,8 @@ action (file)
  Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
  Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
  {
-  let (• normalized: unmanaged list of (8‐bit Unicode code unit) of unknown length) be (if most efficient, compute compatibility decomposition of ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (scalars)))) up to (memory offset of (if possible, 8‐bit boundary at (end of (scalars)))))
-  let (• end: list boundary) start as (end of empty list)
+  let (• normalized: unmanaged list of (8‐bit Unicode code unit) of unknown length) be (if most efficient, compute compatibility decomposition of ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (scalars)))) up to ((offset) of (if possible, 8‐bit boundary at (end of (scalars)))))
+  let (• end: list boundary) start as (boundary at (zero: memory offset))
   while ((entry at (index after (end) in (normalized) skipping bounds check) in (normalized)) is not (null control code)), {
    advance (↓ end) to next in (normalized) skipping bounds check
   }

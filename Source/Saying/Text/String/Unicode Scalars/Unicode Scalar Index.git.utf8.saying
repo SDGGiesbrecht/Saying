@@ -16,10 +16,10 @@ thing (clients)
     English: beginning
    )
    Unicode scalar boundary
-   C♯: “”
-   JavaScript: “”
-   Kotlin: “”
-   Swift: “”
+   C♯: “” . “”
+   JavaScript: “” . “”
+   Kotlin: “” . “”
+   Swift: “” . “”
  }
 
 action (unit)

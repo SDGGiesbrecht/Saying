@@ -13,7 +13,7 @@ extension
      English: While the lifetime of the list itself is the reponsibility of the developer, ownership of individual entries is managed automatically by the compiler. However, for it to work properly, two rules must be followed. (1) Indices must be initialized before being accessed in any other way. (2) At clean‐up, the specified endpoint must encompass all initialized indices and none that are uninitialized.
     ]
     test {
-     let (• end: list boundary) be (end of list containing (one: natural number) entries)
+     let (• end: list boundary) be (boundary at (one: memory offset))
      let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (end): unmanaged list of (reference tracker) of unknown length)
      let (• first index: list index) be (index after (beginning of (list)) in (list) skipping bounds check)
      let (• original tracker: reference tracker) be (create reference tracker)
@@ -80,12 +80,12 @@ extension
    )
    unmanaged list of (thing) of unknown length
    {
-    ← unmanaged list of unknown length at (allocate ((memory offset of (end)) times (size of (example: thing))) bytes of memory)
+    ← unmanaged list of unknown length at (allocate (((offset) of (end)) times (size of (example: thing))) bytes of memory)
    }
 
   action (file)
    (
-    English: initialize entry at offset (index: memory offset) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
+    English: initialize entry at (index: memory offset) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
    C: “(” list “)[” index “] = ” hold on (element) “”
    {}
@@ -95,7 +95,7 @@ extension
     English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
    {
-    initialize entry at offset (memory offset of (index)) in (↓ list) to (element)
+    initialize entry at ((offset) of (index)) in (↓ list) to (element)
    }
 
   action (file)
@@ -136,20 +136,20 @@ extension
   action (unit)
    [
     test {
-     let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (end of list containing (one: natural number) entries): unmanaged list of (reference tracker) of unknown length)
-     reallocate memory of (↓ list) up to (end of list containing (two: natural number) entries)
-     clean (list) up up to (end of list containing (zero: natural number) entries)
+     let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (boundary at (one: memory offset)): unmanaged list of (reference tracker) of unknown length)
+     reallocate memory of (↓ list) up to (boundary at (two: memory offset))
+     clean (list) up up to (boundary at (zero: memory offset))
     }
    ]
    (
     English: reallocate memory of (list: ↓ unmanaged list of (thing) of unknown length) up to (end: list boundary)
    )
    {
-    if ((end) is (end of empty list)), {
-     clean (list) up up to (end of empty list)
+    if (((offset) of (end)) is (zero: memory offset)), {
+     clean (list) up up to (end)
     }, otherwise {
      let (• address: memory address) start as (memory address of (list))
-     reallocate memory of (↓ address) to ((memory offset of (end)) times (size of (example: thing))) bytes
+     reallocate memory of (↓ address) to (((offset) of (end)) times (size of (example: thing))) bytes
      change (↓ list) to (unmanaged list of unknown length at (address): unmanaged list of (thing) of unknown length)
     }
    }
@@ -178,7 +178,7 @@ extension
    )
    unmanaged list of (thing) of unknown length
    {
-    ← pointer to (memory offset of (boundary)) in (list)
+    ← pointer to ((offset) of (boundary)) in (list)
    }
 
   action (file)
@@ -227,7 +227,7 @@ extension
    )
    list boundary
    {
-    ← boundary before (index)
+    ← (beginning) of (index)
    }
 
   action (unit)
@@ -240,7 +240,7 @@ extension
    )
    list boundary
    {
-    ← end of empty list
+    ← boundary at (zero: memory offset)
    }
 
   action (unit)
@@ -267,7 +267,7 @@ extension
 
   action (file)
    (
-    English: entry at offset (index: memory offset) in (list: unmanaged list of (thing) of unknown length)
+    English: entry at (index: memory offset) in (list: unmanaged list of (thing) of unknown length)
    )
    thing
    C: “” hold on (thing) “” list “[” index “]”
@@ -282,7 +282,7 @@ extension
    )
    thing
    {
-    ← entry at offset (memory offset of (index)) in (list)
+    ← entry at ((offset) of (index)) in (list)
    }
 
   action (unit)
@@ -310,81 +310,23 @@ extension
 
 action (file)
  (
-  English: offset of end of list containing (end: natural number) entries
- )
- memory offset
- C: “(size¤(5F)t)” end “”
- C♯: “(int)” end “”
- JavaScript: “” end “”
- Kotlin: “” end “.toInt()”
- Swift: “Int(” end “)”
-
-action (unit)
- (
-  English: end of list containing (end: natural number) entries
- )
- list boundary
- {
-  ← boundary at (offset of end of list containing (end) entries)
- }
-
-action (file)
- (
-  English: offset of end of empty list
- )
- memory offset
- C: “0”
- {
-  ← offset of end of list containing (zero: natural number) entries
- }
-
-action (unit)
- (
-  English: end of empty list
- )
- list boundary
- {
-  ← boundary at (offset of end of empty list)
- }
-
-action (file)
- (
-  English: offset of end of list containing one entry
- )
- memory offset
- C: “1”
- {
-  ← offset of end of list containing (one: natural number) entries
- }
-
-action (unit)
- (
-  English: end of list containing one entry
- )
- list boundary
- {
-  ← boundary at (offset of end of list containing one entry)
- }
-
-action (file)
- (
   English: distance from (lower bound: list boundary) to (upper bound: list boundary)
  )
  memory offset
  {
-  ← (memory offset of (upper bound)) minus (memory offset of (lower bound))
+  ← ((offset) of (upper bound)) minus ((offset) of (lower bound))
  }
 
 action (file)
  [
-  test {verify ((distance (one: memory offset) after (end of list containing (one: natural number) entries)) is (end of list containing (two: natural number) entries))}
+  test {verify ((distance (one: memory offset) after (boundary at (one: memory offset))) is (boundary at (two: memory offset)))}
  ]
  (
   English: distance (distance: memory offset) after (boundary: list boundary)
  )
  list boundary
  {
-  ← boundary at ((memory offset of (boundary)) plus (distance))
+  ← boundary at (((offset) of (boundary)) plus (distance))
  }
 
 action (file)
