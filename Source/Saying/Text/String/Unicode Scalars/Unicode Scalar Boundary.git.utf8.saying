@@ -30,6 +30,9 @@ action (unit)
   English: if possible, 8‐bit boundary at (cursor: Unicode scalar boundary)
  )
  list boundary
+ C♯: “” cursor “”
+ JavaScript: “” cursor “”
+ Kotlin: “” cursor “”
  Swift: “0”
  {
   ← (8‐bit boundary) of (cursor)
