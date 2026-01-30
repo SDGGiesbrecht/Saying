@@ -6,7 +6,7 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Int”
  {
-  part (unit/nowhere)
+  part (unit/unit)
    (
     English: offset
    )

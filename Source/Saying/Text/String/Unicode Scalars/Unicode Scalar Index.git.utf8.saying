@@ -12,6 +12,9 @@ thing (clients)
  Swift: “String.UnicodeScalarView.Index”
  {
   part (unit/nowhere)
+   [
+    test {ignore ((beginning) of (example: Unicode scalar index))}
+   ]
    (
     English: beginning
    )
