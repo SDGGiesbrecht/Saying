@@ -95,7 +95,7 @@ extension
     English: initialize entry at (index: list index) in (list: ↓ unmanaged list of (thing) of unknown length) to (element: thing)
    )
    {
-    initialize entry at ((offset) of (index)) in (↓ list) to (element)
+    initialize entry at ((offset) of ((beginning) of (index))) in (↓ list) to (element)
    }
 
   action (file)
@@ -281,7 +281,7 @@ extension
    )
    thing
    {
-    ← entry at ((offset) of (index)) in (list)
+    ← entry at ((offset) of ((beginning) of (index))) in (list)
    }
 
   action (unit)
