@@ -363,7 +363,7 @@ action (unit)
  )
  list boundary
  {
-  ← boundary at (offset of end of list containing (one: natural number) entries)
+  ← boundary at (offset of end of list containing one entry)
  }
 
 action (file)
