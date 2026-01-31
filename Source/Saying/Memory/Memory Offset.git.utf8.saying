@@ -385,6 +385,13 @@ action (unit)
  Swift: “1”
 
 action (unit)
+ [
+  test {
+   let (• offset: memory offset) start as (zero: memory offset)
+   increment (↓ offset)
+   verify ((offset) is (one: memory offset))
+  }
+ ]
  (
   English: increment (value: ↓ memory offset)
  )
