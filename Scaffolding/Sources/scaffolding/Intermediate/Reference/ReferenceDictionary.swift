@@ -484,12 +484,12 @@ extension ReferenceDictionary {
         for (overload, action) in returnOverloads {
           if action.isSpecialized {
             let proxy = ParsedTypeReference.action(parameters: action.parameters.inAnyOrder.map({ $0.type }), returnValue: action.returnValue)
-            let access = proxy.derivedAccessLimit(referenceLookup: allLookup)
+            let access = min(action.access, proxy.derivedAccessLimit(referenceLookup: allLookup))
             if access != action.access {
               actions[actionName]![signature]![overload]!.resolveSpecializedAccess(to: access)
               changedSomething = true
             }
-            let testOnly = proxy.derivedTestAccess(referenceLookup: allLookup)
+            let testOnly = action.testOnlyAccess || proxy.derivedTestAccess(referenceLookup: allLookup)
             if testOnly != action.testOnlyAccess {
               actions[actionName]![signature]![overload]!.testOnlyAccess = testOnly
               changedSomething = true
