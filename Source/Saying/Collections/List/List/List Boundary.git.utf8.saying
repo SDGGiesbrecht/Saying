@@ -38,7 +38,7 @@ use (clients)
    example
    list boundary
    {
-    ← boundary at (example: memory offset)
+    ← boundary at (zero: memory offset)
    }
  }
 
@@ -85,7 +85,7 @@ action (file)
  Kotlin: “”
  Swift: “”
  {
-  hash part ((offset) of (key)) with (↓ hasher)
+  feed (direct hash value of ((offset) of (key))) into (↓ hasher)
  }
 
 use (clients)
@@ -110,7 +110,7 @@ use (clients)
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
    {
-    ← (first) is not (second) according to comparison for equality
+    ← ((offset) of (first)) is not ((offset) of (second))
    }
 
   action (clients)
@@ -162,7 +162,7 @@ use (clients)
    Kotlin: “” first “ > ” second “”
    Swift: «» first “ > ” second „“
    {
-    ← (first) is greater than (second) according to comparison for order
+    ← ((offset) of (first)) is greater than ((offset) of (second))
    }
 
   action (clients)
@@ -173,7 +173,7 @@ use (clients)
    Kotlin: “” first “ <= ” second “”
    Swift: «» first “ <= ” second „“
    {
-    ← (first) is less than or equal to (second) according to comparison for order
+    ← ((offset) of (first)) is less than or equal to ((offset) of (second))
    }
 
   action (clients)
@@ -184,13 +184,13 @@ use (clients)
    Kotlin: “” first “ >= ” second “”
    Swift: «» first “ >= ” second „“
    {
-    ← (first) is greater than or equal to (second) according to comparison for order
+    ← ((offset) of (first)) is greater than or equal to ((offset) of (second))
    }
 
   action (clients)
    greater example
    list boundary
    {
-    ← boundary at (greater example: memory offset)
+    ← boundary at (one: memory offset)
    }
  }
