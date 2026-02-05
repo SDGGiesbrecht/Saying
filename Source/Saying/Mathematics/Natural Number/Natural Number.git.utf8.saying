@@ -225,22 +225,18 @@ use (clients)
     English: zero
    )
    natural number
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0uL”
-   Swift: “0”
+   {
+    ← “0”
+   }
 
   action (clients)
    (
     English: one
    )
    natural number
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1uL”
-   Swift: “1”
+   {
+    ← “1”
+   }
  }
 
 use (clients)

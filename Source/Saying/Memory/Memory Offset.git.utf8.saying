@@ -71,7 +71,7 @@ action (unit)
 
 action (file)
  [
-  test {ignore (direct hash value of (zero: memory offset))}
+  test {ignore (direct hash value of (“0”: memory offset))}
  ]
  direct hash value of (offset: memory offset)
  hash value
@@ -83,7 +83,7 @@ action (file)
 
 action (unit)
  [
-  test {verify ((zero: memory offset) is less than (one: memory offset))}
+  test {verify ((“0”: memory offset) is less than (“1”: memory offset))}
  ]
  (
   English: (first: memory offset) is less than (second: memory offset)
@@ -128,7 +128,7 @@ action (unit)
 
 action (unit)
  [
-  test {verify ((zero: memory offset) is less than or equal to (one: memory offset))}
+  test {verify ((“0”: memory offset) is less than or equal to (“1”: memory offset))}
  ]
  (
   English: (first: memory offset) is less than or equal to (second: memory offset)
@@ -152,7 +152,7 @@ action (unit)
 
 action (unit)
  [
-  test {verify ((zero: memory offset) is greater than or equal to (zero: memory offset))}
+  test {verify ((“0”: memory offset) is greater than or equal to (“0”: memory offset))}
  ]
  (
   English: (first: memory offset) is greater than or equal to (second: memory offset)
@@ -175,221 +175,11 @@ action (unit)
  Swift: «» first “ >= ” second „“
 
 action (unit)
- (
-  English: zero
-  English +: 0
-  हिन्दी: शून्य
-  हिन्दी +: ०
-  español: cero
-  español +: 0
-  العربية: صفر
-  العربية +: ٠
-  português: zero
-  português +: 0
-  русский: ноль
-  русский +: 0
-  français : zéro
-  français + : 0
-  Deutsch: null
-  Deutsch: 0
-  tiếng Việt: không
-  tiếng Việt +: 0
-  Türkçe: sıfır
-  Türkçe +: 0
-  italiano: zero
-  italiano +: 0
-  فارسی: صفر
-  فارسی +: ۰
-  polski: zero
-  polski +: 0
-  oʻzbekcha: nol
-  oʻzbekcha +: 0
-  українська: нуль
-  українська +: 0
-  Nederlands: nul
-  Nederlands +: 0
-  اردو: صفر
-  اردو +: ۰
-  română: zero
-  română +: 0
-  қазақша: нөл
-  қазақша +: 0
-  ελληνικά: μηδέν
-  ελληνικά +: 0
-  svenska: noll
-  svenska +: 0
-  azərbaycanca: sıfır
-  azərbaycanca +: 0
-  čeština: nula
-  čeština +: 0
-  Afrikaans: nul
-  Afrikaans +: 0
-  català: zero
-  català +: 0
-  magyar: nulla
-  magyar +: 0
-  тоҷикӣ: сифр
-  тоҷикӣ +: 0
-  српски: нула
-  српски +: 0
-  עברית: אפס
-  עברית +: 0
-  dansk: nul
-  dansk +: 0
-  norsk: null
-  norsk +: 0
-  suomi: nolla
-  suomi +: 0
-  български: нула
-  български +: 0
-  shqip: zero
-  shqip +: 0
-  кыргызча: нөл
-  кыргызча +: 0
-  slovenčina: nula
-  slovenčina +: 0
-  hrvatski: nula
-  hrvatski +: 0
-  беларуская: нуль
-  беларуская +: 0
-  հայերեն: զրո
-  հայերեն +: 0
-  ქართული: ნული
-  ქართული +: 0
-  lietuvių: nulis
-  lietuvių +: 0
-  slovenščina: nič
-  slovenščina +: 0
-  bosanski: nula
-  bosanski +: 0
-  македонски: нула
-  македонски +: 0
-  latviešu +: nulle
-  latviešu: 0
-  eesti +: null
-  eesti: 0
-  íslenska +: núll
-  íslenska: 0
- )
- memory offset
- C: “0”
- C♯: “0”
- JavaScript: “0”
- Kotlin: “0”
- Swift: “0”
-
-action (unit)
- (
-  English: one
-  English +: 1
-  हिन्दी: एक
-  हिन्दी +: १
-  español: uno
-  español +: 1
-  العربية: واحد
-  العربية +: ١
-  português: um
-  português +: 1
-  русский: один
-  русский +: 1
-  français : un
-  français + : 1
-  Deutsch: eins
-  Deutsch: 1
-  tiếng Việt: một
-  tiếng Việt +: 1
-  Türkçe: bir
-  Türkçe +: 1
-  italiano: uno
-  italiano +: 1
-  فارسی: یک
-  فارسی +: ۱
-  polski: jeden
-  polski +: 1
-  oʻzbekcha: bir
-  oʻzbekcha +: 1
-  українська: один
-  українська +: 1
-  Nederlands: een
-  Nederlands +: 1
-  اردو: ایک
-  اردو +: ۱
-  română: unu
-  română +: 1
-  қазақша: бір
-  қазақша +: 1
-  ελληνικά: ένα
-  ελληνικά +: 1
-  svenska: en
-  svenska +: 1
-  azərbaycanca: bir
-  azərbaycanca +: 1
-  čeština: jedna
-  čeština +: 1
-  Afrikaans: een
-  Afrikaans +: 1
-  català: u
-  català +: 1
-  magyar: egy
-  magyar +: 1
-  тоҷикӣ: як
-  тоҷикӣ +: 1
-  српски: један
-  српски +: 1
-  עברית: אחת
-  עברית +: 1
-  dansk: en
-  dansk +: 1
-  norsk: én
-  norsk +: 1
-  suomi: yksi
-  suomi +: 1
-  български: едно
-  български +: 1
-  shqip: një
-  shqip +: 1
-  кыргызча: бир
-  кыргызча +: 1
-  slovenčina: jeden
-  slovenčina +: 1
-  hrvatski: jedan
-  hrvatski +: 1
-  беларуская: адзін
-  беларуская +: 1
-  հայերեն: մեկ
-  հայերեն +: 1
-  ქართული: ერთი
-  ქართული +: 1
-  lietuvių: vienas
-  lietuvių +: 1
-  slovenščina: êna
-  slovenščina +: 1
-  bosanski: jedan
-  bosanski +: 1
-  македонски: еден
-  македонски +: 1
-  latviešu +: viens
-  latviešu: 1
-  eesti +: üks
-  eesti: 1
-  Lëtzebuergesch +: eent
-  Lëtzebuergesch: 1
-  íslenska +: einn
-  íslenska: 1
- )
- memory offset
- C: “1”
- C♯: “1”
- JavaScript: “1”
- Kotlin: “1”
- Swift: “1”
-
-action (unit)
  [
   test {
-   let (• offset: memory offset) start as (zero: memory offset)
+   let (• offset: memory offset) start as (“0”: memory offset)
    increment (↓ offset)
-   verify ((offset) is (one: memory offset))
+   verify ((offset) is (“1”: memory offset))
   }
  ]
  (
@@ -470,39 +260,6 @@ extension
    memory offset
    C: “sizeof(” thing “)”
    {
-    ← zero
+    ← “0”
    }
  }
-
-action (unit)
- (
-  English: two
- )
- memory offset
- C: “2”
- C♯: “2”
- JavaScript: “2”
- Kotlin: “2”
- Swift: “2”
-
-action (unit)
- (
-  English: three
- )
- memory offset
- C: “3”
- C♯: “3”
- JavaScript: “3”
- Kotlin: “3”
- Swift: “3”
-
-action (unit)
- (
-  English: six
- )
- memory offset
- C: “6”
- C♯: “6”
- JavaScript: “6”
- Kotlin: “6”
- Swift: “6”

@@ -13,20 +13,20 @@ extension
      English: While the lifetime of the list itself is the reponsibility of the developer, ownership of individual entries is managed automatically by the compiler. However, for it to work properly, two rules must be followed. (1) Indices must be initialized before being accessed in any other way. (2) At clean‐up, the specified endpoint must encompass all initialized indices and none that are uninitialized.
     ]
     test {
-     let (• end: list boundary) be (boundary at (one: memory offset))
+     let (• end: list boundary) be (boundary at (“1”: memory offset))
      let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (end): unmanaged list of (reference tracker) of unknown length)
      let (• first index: list index) be (index after (beginning of (list)) in (list) skipping bounds check)
      let (• original tracker: reference tracker) be (create reference tracker)
      initialize entry at (first index) in (↓ list) to (restart (original tracker))
-     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (original tracker) is (“2”: platform fixed‐width integer))
      ignore (entry at (first index) in (list))
-     verify (reference count of (original tracker) is (three: platform fixed‐width integer))
+     verify (reference count of (original tracker) is (“3”: platform fixed‐width integer))
      let (• replacement tracker: reference tracker) be (create reference tracker)
      replace (first index) in (↓ list) with (restart (replacement tracker))
-     verify (reference count of (original tracker) is (two: platform fixed‐width integer))
-     verify (reference count of (replacement tracker) is (two: platform fixed‐width integer))
+     verify (reference count of (original tracker) is (“2”: platform fixed‐width integer))
+     verify (reference count of (replacement tracker) is (“2”: platform fixed‐width integer))
      clean (list) up up to (end)
-     verify (reference count of (replacement tracker) is (one: platform fixed‐width integer))
+     verify (reference count of (replacement tracker) is (“1”: platform fixed‐width integer))
     }
    ]
    (
@@ -136,16 +136,16 @@ extension
   action (unit)
    [
     test {
-     let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (boundary at (one: memory offset)): unmanaged list of (reference tracker) of unknown length)
-     reallocate memory of (↓ list) up to (boundary at (two: memory offset))
-     clean (list) up up to (boundary at (zero: memory offset))
+     let (• list: unmanaged list of (reference tracker) of unknown length) start as (allocate memory up to (boundary at (“1”: memory offset)): unmanaged list of (reference tracker) of unknown length)
+     reallocate memory of (↓ list) up to (boundary at (“2”: memory offset))
+     clean (list) up up to (boundary at (“0”: memory offset))
     }
    ]
    (
     English: reallocate memory of (list: ↓ unmanaged list of (thing) of unknown length) up to (end: list boundary)
    )
    {
-    if (((offset) of (end)) is (zero: memory offset)), {
+    if (((offset) of (end)) is (“0”: memory offset)), {
      clean (list) up up to (end)
     }, otherwise {
      let (• address: memory address) start as (memory address of (list))
@@ -240,7 +240,7 @@ extension
    )
    list boundary
    {
-    ← boundary at (zero: memory offset)
+    ← boundary at (“0”: memory offset)
    }
 
   action (unit)
@@ -318,7 +318,7 @@ action (file)
 
 action (file)
  [
-  test {verify ((distance (one: memory offset) after (boundary at (one: memory offset))) is (boundary at (two: memory offset)))}
+  test {verify ((distance (“1”: memory offset) after (boundary at (“1”: memory offset))) is (boundary at (“2”: memory offset)))}
  ]
  (
   English: distance (distance: memory offset) after (boundary: list boundary)

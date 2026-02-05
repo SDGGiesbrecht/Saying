@@ -56,11 +56,12 @@ action (file)
  ]
  hashing proxy of (index: Unicode scalar index)
  platform fixed‐width integer
- C: “0”
  C♯: “” index “”
  JavaScript: “” index “”
  Kotlin: “” index “”
- Swift: “0”
+ {
+  ← zero
+ }
 
 action (file)
  [

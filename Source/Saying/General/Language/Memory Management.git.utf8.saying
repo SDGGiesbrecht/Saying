@@ -5,23 +5,23 @@ thing (unit)
   ]
   test {
    let (• secret hold: reference tracker) be (create reference tracker)
-   verify (reference count of (secret hold) is (one: platform fixed‐width integer))
+   verify (reference count of (secret hold) is (“1”: platform fixed‐width integer))
    let (• tracker: reference tracker) be (restart (secret hold))
-   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+   verify (reference count of (tracker) is (“1”: platform fixed‐width integer))
    release (tracker)
-   verify (reference count of (tracker) is (zero: platform fixed‐width integer))
+   verify (reference count of (tracker) is (“0”: platform fixed‐width integer))
    hold (tracker)
-   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+   verify (reference count of (tracker) is (“1”: platform fixed‐width integer))
   }
   test (hidden) {
    let (• original: reference tracker) be (create reference tracker)
    hold (original)
    hold (original)
    hold (original)
-   verify (reference count of (original) is (four: platform fixed‐width integer))
+   verify (reference count of (original) is (“4”: platform fixed‐width integer))
    let (• copy: reference tracker) start as (original)
-   verify (reference count of (original) is (four: platform fixed‐width integer))
-   verify (reference count of (copy) is (one: platform fixed‐width integer))
+   verify (reference count of (original) is (“4”: platform fixed‐width integer))
+   verify (reference count of (copy) is (“1”: platform fixed‐width integer))
    change nothing about (↓ copy)
    release (original)
    release (original)
@@ -206,7 +206,7 @@ action (file) (tests)
   test {
    let (• tracker: reference tracker) be (create reference tracker)
    let (• returned: reference tracker) be (directly return parameter using (restart (tracker)))
-   verify (reference count of (tracker) is (two: platform fixed‐width integer))
+   verify (reference count of (tracker) is (“2”: platform fixed‐width integer))
    ignore (returned)
   }
  ]
@@ -262,9 +262,9 @@ action (file) (tests)
  )
  {
   let (• changeable: reference tracker) start as (restart (tracker)) without copying
-  verify (reference count of (changeable) is (two: platform fixed‐width integer))
-  accept reference (↓ accessor of (changeable)) as through parameter at reference count of (two: platform fixed‐width integer)
-  verify (reference count of (changeable) is (two: platform fixed‐width integer))
+  verify (reference count of (changeable) is (“2”: platform fixed‐width integer))
+  accept reference (↓ accessor of (changeable)) as through parameter at reference count of (“2”: platform fixed‐width integer)
+  verify (reference count of (changeable) is (“2”: platform fixed‐width integer))
   ignore (changeable)
  }
 
@@ -283,15 +283,15 @@ action (file) (tests)
  )
  {
   let (• changeable: reference tracker) start as (restart (original)) without copying
-  verify (reference count of (original) is (two: platform fixed‐width integer))
-  verify (reference count of (changeable) is (two: platform fixed‐width integer))
+  verify (reference count of (original) is (“2”: platform fixed‐width integer))
+  verify (reference count of (changeable) is (“2”: platform fixed‐width integer))
   hold (original)
   hold (original)
-  verify (reference count of (original) is (four: platform fixed‐width integer))
-  verify (reference count of (changeable) is (four: platform fixed‐width integer))
+  verify (reference count of (original) is (“4”: platform fixed‐width integer))
+  verify (reference count of (changeable) is (“4”: platform fixed‐width integer))
   change (↓ changeable) to (restart (replacement))
-  verify (reference count of (original) is (three: platform fixed‐width integer))
-  verify (reference count of (changeable) is (two: platform fixed‐width integer))
+  verify (reference count of (original) is (“3”: platform fixed‐width integer))
+  verify (reference count of (changeable) is (“2”: platform fixed‐width integer))
   release (original)
   release (original)
  }
@@ -300,22 +300,22 @@ action (file) (tests)
  [
   test {
    let (• original: reference tracker) be (create reference tracker)
-   verify (reference count of (original) is (one: platform fixed‐width integer))
+   verify (reference count of (original) is (“1”: platform fixed‐width integer))
    let (• reference: reference tracker) start as (original) without copying
-   verify (reference count of (original) is (two: platform fixed‐width integer))
-   verify (reference count of (reference) is (two: platform fixed‐width integer))
+   verify (reference count of (original) is (“2”: platform fixed‐width integer))
+   verify (reference count of (reference) is (“2”: platform fixed‐width integer))
    change passed reference (↓ reference)
-   verify (reference count of (original) is (one: platform fixed‐width integer))
-   verify (reference count of (reference) is (one: platform fixed‐width integer))
+   verify (reference count of (original) is (“1”: platform fixed‐width integer))
+   verify (reference count of (reference) is (“1”: platform fixed‐width integer))
   }
  ]
  (
   English: change passed reference (reference: ↓ reference tracker)
  )
  {
-  verify (reference count of (reference) is (two: platform fixed‐width integer))
+  verify (reference count of (reference) is (“2”: platform fixed‐width integer))
   change (↓ reference) to (create reference tracker)
-  verify (reference count of (reference) is (two: platform fixed‐width integer))
+  verify (reference count of (reference) is (“2”: platform fixed‐width integer))
  }
 
 thing (file)
@@ -355,7 +355,7 @@ action (file) (tests)
  )
  {
   let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
-  verify (reference count of (tracker) is (two: platform fixed‐width integer))
+  verify (reference count of (tracker) is (“2”: platform fixed‐width integer))
   ignore (thing)
  }
 
@@ -363,11 +363,11 @@ action (file) (tests)
  [
   test {
    let (• tracker: reference tracker) be (create reference tracker)
-   verify (reference count of (tracker) is (one: platform fixed‐width integer))
+   verify (reference count of (tracker) is (“1”: platform fixed‐width integer))
    let (• thing: thing with reference part) be (create thing with reference part containing (tracker))
-   verify (reference count of (tracker) is (two: platform fixed‐width integer))
-   withdraw reference from (thing) at reference count of (three: platform fixed‐width integer)
-   verify (reference count of (tracker) is (two: platform fixed‐width integer))
+   verify (reference count of (tracker) is (“2”: platform fixed‐width integer))
+   withdraw reference from (thing) at reference count of (“3”: platform fixed‐width integer)
+   verify (reference count of (tracker) is (“2”: platform fixed‐width integer))
   }
  ]
  (
@@ -409,6 +409,6 @@ action (file) (tests)
  )
  {
   let (• enumeration: enumeration with reference case) be (wrap (tracker) as (reference))
-  verify (reference count of (tracker) is (two: platform fixed‐width integer))
+  verify (reference count of (tracker) is (“2”: platform fixed‐width integer))
   ignore (enumeration)
  }
