@@ -51,6 +51,9 @@ enum CSharp: Platform {
   static func literal(scalar: Unicode.Scalar) -> String {
     return "new Rune(0x\(String(scalar.value, radix: 16, uppercase: true)))"
   }
+  static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
+    return number
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

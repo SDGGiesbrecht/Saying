@@ -22,6 +22,7 @@ protocol Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
   static func literal(scalars: String, escaped: String) -> String
   static func literal(scalar: Unicode.Scalar) -> String
+  static func literal(number: String, typeNames: Set<UnicodeText>) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -951,14 +952,14 @@ extension Platform {
         normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
         mode: mode
       )
+    } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
+      return self.literal(scalar: literal.string.unicodeScalars.first!)
     } else if type.names.contains(LiteralIntermediate.naturalNumberName)
       || type.names.contains(LiteralIntermediate.integerName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
       || type.names.contains(LiteralIntermediate.memoryOffsetName) {
-      return literal.string
-    } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
-      return self.literal(scalar: literal.string.unicodeScalars.first!)
+      return self.literal(number: literal.string, typeNames: type.names)
     } else {
       return call(scalarLiteral: literal, normalize: normalizeNextNestedLiteral)
     }
