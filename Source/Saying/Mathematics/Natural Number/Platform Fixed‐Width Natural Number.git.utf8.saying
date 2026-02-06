@@ -146,22 +146,18 @@ use (clients)
     English: zero
    )
    platform fixed‐width natural number
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0u”
-   Swift: “0”
+   {
+    ← “0”
+   }
 
   action (clients)
    (
     English: one
    )
    platform fixed‐width natural number
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1u”
-   Swift: “1”
+   {
+    ← “1”
+   }
  }
 
 use (clients)

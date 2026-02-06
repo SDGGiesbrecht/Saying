@@ -38,7 +38,7 @@ use (clients)
    example
    list boundary
    {
-    ← boundary at (zero: memory offset)
+    ← boundary at (“0”: memory offset)
    }
  }
 
@@ -191,6 +191,6 @@ use (clients)
    greater example
    list boundary
    {
-    ← boundary at (one: memory offset)
+    ← boundary at (“1”: memory offset)
    }
  }

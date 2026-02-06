@@ -61,6 +61,14 @@ enum Kotlin: Platform {
   static func literal(scalar: Unicode.Scalar) -> String {
     return "0x\(String(scalar.value, radix: 16, uppercase: true))"
   }
+  static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
+    var result = number
+    if typeNames.contains(LiteralIntermediate.naturalNumberName)
+      || typeNames.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName) {
+      result.append("u")
+    }
+    return result
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

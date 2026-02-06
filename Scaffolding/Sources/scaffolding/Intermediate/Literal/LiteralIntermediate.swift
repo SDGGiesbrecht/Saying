@@ -60,6 +60,22 @@ extension LiteralIntermediate {
     return "Unicode scalar"
   }
 
+  static var naturalNumberName: UnicodeText {
+    return "natural number"
+  }
+  static var integerName: UnicodeText {
+    return "integer"
+  }
+  static var platformFixedWidthNaturalNumberName: UnicodeText {
+    return "platform fixed‐width natural number"
+  }
+  static var platformFixedWidthIntegerName: UnicodeText {
+    return "platform fixed‐width integer"
+  }
+  static var memoryOffsetName: UnicodeText {
+    return "memory offset"
+  }
+
   func validate(
     as type: Thing,
     reference: ParsedTypeReference,
@@ -72,9 +88,43 @@ extension LiteralIntermediate {
       if !string.unicodeScalars.dropFirst().isEmpty {
         errors.append(.multipleScalars(source))
       }
+    } else if type.names.contains(LiteralIntermediate.naturalNumberName)
+      || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName) {
+      if !validateNaturalNumber(literal: string) {
+        errors.append(.notANaturalNumber(source))
+      }
+    } else if type.names.contains(LiteralIntermediate.integerName)
+      || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
+      || type.names.contains(LiteralIntermediate.memoryOffsetName) {
+      if !validateInteger(literal: string) {
+        errors.append(.notAnInteger(source))
+      }
     } else {
       errors.append(.thingCannotBeExpressedAsLiteral(source, thing: reference))
     }
+  }
+
+  private static let zeros: Set<Unicode.Scalar> = ["0"]
+  private static let digits: Set<Unicode.Scalar> = zeros.union([
+    "1", "2", "3", "4", "5", "6", "7", "8", "9",
+  ])
+  func validateNaturalNumber(literal: String) -> Bool {
+    if literal.unicodeScalars.isEmpty {
+      return false
+    } else if literal.unicodeScalars.elementsEqual("0".unicodeScalars) {
+      return true
+    } else if literal.unicodeScalars.count <= 4,
+      literal.unicodeScalars.allSatisfy({ LiteralIntermediate.digits.contains($0) }),
+      !LiteralIntermediate.zeros.contains(literal.unicodeScalars.first!) {
+      return true
+    } else {
+      // Larger numbers and other languages not implemented yet.
+      return false
+    }
+  }
+  func validateInteger(literal: String) -> Bool {
+    // Negative numbers and other languages not implemented yet.
+    return validateNaturalNumber(literal: literal)
   }
 }
 

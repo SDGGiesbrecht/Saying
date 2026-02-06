@@ -108,6 +108,9 @@ enum Swift: Platform {
     let contents = sanitize(stringLiteral: "\(scalar)")
     return "\u{22}\(contents)\u{22}"
   }
+  static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
+    return number
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

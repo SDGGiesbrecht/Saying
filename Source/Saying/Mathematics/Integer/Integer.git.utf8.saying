@@ -219,22 +219,18 @@ use (clients)
     English: zero
    )
    integer
-   C: “0”
-   C♯: “0”
-   JavaScript: “0”
-   Kotlin: “0L”
-   Swift: “0”
+   {
+    ← “0”
+   }
 
   action (clients)
    (
     English: one
    )
    integer
-   C: “1”
-   C♯: “1”
-   JavaScript: “1”
-   Kotlin: “1L”
-   Swift: “1”
+   {
+    ← “1”
+   }
  }
 
 use (clients)

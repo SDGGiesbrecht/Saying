@@ -99,6 +99,7 @@ ability (clients)
     eesti: 0
     íslenska +: núll
     íslenska: 0
+    Swift: zero
    )
    number
 
@@ -203,6 +204,7 @@ ability (clients)
     Lëtzebuergesch: 1
     íslenska +: einn
     íslenska: 1
+    Swift: one
    )
    number
  }

@@ -69,11 +69,12 @@ action (file)
  ]
  hashing proxy of (boundary: Unicode scalar boundary)
  platform fixed‐width integer
- C: “0”
  C♯: “” boundary “”
  JavaScript: “” boundary “”
  Kotlin: “” boundary “”
- Swift: “0”
+ {
+  ← zero
+ }
 
 action (file)
  [
