@@ -951,6 +951,12 @@ extension Platform {
         normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
         mode: mode
       )
+    } else if type.names.contains(LiteralIntermediate.naturalNumberName)
+      || type.names.contains(LiteralIntermediate.integerName)
+      || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName)
+      || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
+      || type.names.contains(LiteralIntermediate.memoryOffsetName) {
+      return literal.string
     } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
       return self.literal(scalar: literal.string.unicodeScalars.first!)
     } else {
