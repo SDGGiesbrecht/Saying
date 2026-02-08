@@ -140,6 +140,7 @@ use (clients)
     English: zero
    )
    platform fixed‐width integer
+   Swift: “Int.zero”
    {
     ← “0”
    }

@@ -99,7 +99,7 @@ ability (clients)
     eesti: 0
     íslenska +: núll
     íslenska: 0
-    Swift: zero
+    Swift: var Self.zero
    )
    number
 
@@ -204,7 +204,7 @@ ability (clients)
     Lëtzebuergesch: 1
     íslenska +: einn
     íslenska: 1
-    Swift: one
+    Swift: var Self.one
    )
    number
  }

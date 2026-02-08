@@ -225,6 +225,7 @@ use (clients)
     English: zero
    )
    natural number
+   Swift: “UInt64.zero”
    {
     ← “0”
    }

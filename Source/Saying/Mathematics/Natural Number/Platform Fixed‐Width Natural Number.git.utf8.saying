@@ -146,6 +146,7 @@ use (clients)
     English: zero
    )
    platform fixed‐width natural number
+   Swift: “UInt.zero”
    {
     ← “0”
    }

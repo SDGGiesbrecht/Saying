@@ -380,6 +380,7 @@ enum Swift: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
@@ -400,6 +401,7 @@ enum Swift: Platform {
       access = "public "
     }
 
+    let staticKeyword = isStatic ? "static " : ""
     let mutating = isMutating ? "mutating " : ""
     let keyword = propertyInstead ? "var "
       : initializerInstead ? ""
@@ -420,7 +422,7 @@ enum Swift: Platform {
       ])
     }
     result.append(contentsOf: [
-      "\(extraIndent)\(access)\(mutating)\(keyword)\(name)\(signature) {",
+      "\(extraIndent)\(access)\(staticKeyword)\(mutating)\(keyword)\(name)\(signature) {",
     ])
     let uniquenessDefinition = result
     let returnPrefix = "\(indent)return "
@@ -648,6 +650,9 @@ enum Swift: Platform {
   }
   static var memberPrefix: UnicodeText? {
     return "()."
+  }
+  static var staticMemberPrefix: UnicodeText? {
+    return "Self."
   }
   static var overridePrefix: UnicodeText? {
     return nil

@@ -360,6 +360,7 @@ enum CSharp: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
@@ -568,6 +569,9 @@ enum CSharp: Platform {
   }
   static var memberPrefix: UnicodeText? {
     return "()."
+  }
+  static var staticMemberPrefix: UnicodeText? {
+    return nil
   }
   static var overridePrefix: UnicodeText? {
     return "override "

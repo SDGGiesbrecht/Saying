@@ -278,6 +278,7 @@ enum JavaScript: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
@@ -418,6 +419,9 @@ enum JavaScript: Platform {
     return ""
   }
   static var memberPrefix: UnicodeText? {
+    return nil
+  }
+  static var staticMemberPrefix: UnicodeText? {
     return nil
   }
   static var overridePrefix: UnicodeText? {

@@ -219,6 +219,7 @@ use (clients)
     English: zero
    )
    integer
+   Swift: “Int64.zero”
    {
     ← “0”
    }
