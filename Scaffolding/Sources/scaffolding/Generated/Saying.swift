@@ -633,12 +633,10 @@ extension String.UnicodeScalarView {
   }
 }
 
-func zero() -> UInt64 {
-  return 0
-}
-
-func one() -> UInt64 {
-  return 1
+extension UInt64 {
+  static var one: UInt64 {
+    return 1
+  }
 }
 
 func compare(_ first: Int, to second: Int) -> Bool? {
@@ -690,7 +688,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
     var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
     while segment.first == " " {
       segment.removeFirst()
-      adjusted_0020offset += one()
+      adjusted_0020offset += .one
     }
     if segment.isNotEmpty {
       segments.append(Unicode_0020segment(adjusted_0020offset, UnicodeText(segment)))
@@ -702,8 +700,8 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
 fileprivate func shim_0020unit_0020access_0020to_0020Git_2010style_0020line_0020parsing_003A() {
   let source_0020text: UnicodeText = UnicodeText(skippingNormalizationOf: " ...".unicodeScalars)
   let source: GitStyleSayingSource = GitStyleSayingSource(origin: UnicodeText(skippingNormalizationOf: "".unicodeScalars), code: source_0020text)
-  var beginning: Git_2010style_0020parsing_0020cursor? = Git_2010style_0020parsing_0020cursor(source_0020text.startIndex, zero()) as Git_2010style_0020parsing_0020cursor?
-  let end: Git_2010style_0020parsing_0020cursor = Git_2010style_0020parsing_0020cursor(source_0020text.endIndex, one())
+  var beginning: Git_2010style_0020parsing_0020cursor? = Git_2010style_0020parsing_0020cursor(source_0020text.startIndex, UInt64.zero) as Git_2010style_0020parsing_0020cursor?
+  let end: Git_2010style_0020parsing_0020cursor = Git_2010style_0020parsing_0020cursor(source_0020text.endIndex, .one)
   var segments: [Unicode_0020segment] = []
   parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(source, &beginning, end, &segments)
 }

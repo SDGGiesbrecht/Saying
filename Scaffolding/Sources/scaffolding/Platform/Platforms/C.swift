@@ -210,6 +210,7 @@ enum C: Platform {
         "\(indent)return reference;",
       ],
       parentType: nil,
+      isStatic: false,
       isMutating: false,
       isAbsorbedMember: false,
       isOverride: false,
@@ -256,6 +257,7 @@ enum C: Platform {
           implementation: componentHolds.map({"\(indent)\($0);"})
             .appending("\(indent)return target;"),
           parentType: nil,
+          isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
           isOverride: false,
@@ -271,6 +273,7 @@ enum C: Platform {
           coverageRegistration: nil,
           implementation: componentReleases.map({"\(indent)\($0);"}),
           parentType: nil,
+          isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
           isOverride: false,
@@ -288,6 +291,7 @@ enum C: Platform {
             "\(indent)return \(apply(nativeReferenceCountingAction: synthesizedHold(on: name)!, around: "target", referenceLookup: []));"
           ],
           parentType: nil,
+          isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
           isOverride: false,
@@ -500,6 +504,7 @@ enum C: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
@@ -694,6 +699,9 @@ enum C: Platform {
     return ""
   }
   static var memberPrefix: UnicodeText? {
+    return nil
+  }
+  static var staticMemberPrefix: UnicodeText? {
     return nil
   }
   static var overridePrefix: UnicodeText? {

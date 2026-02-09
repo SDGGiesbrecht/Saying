@@ -134,6 +134,7 @@ protocol Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
     isOverride: Bool,
@@ -173,6 +174,7 @@ protocol Platform {
   static var emptyParameterLabel: UnicodeText { get }
   static var parameterLabelSuffix: UnicodeText { get }
   static var memberPrefix: UnicodeText? { get }
+  static var staticMemberPrefix: UnicodeText? { get }
   static var overridePrefix: UnicodeText? { get }
   static var variablePrefix: UnicodeText? { get }
   static var initializerSuffix: UnicodeText? { get }
@@ -467,6 +469,24 @@ extension Platform {
         return true
       }
       if nativeDeclarationIsInitializer(declaration: UnicodeText(name)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  static func nativeIsStaticMember(action: ActionIntermediate) -> Bool {
+    if var name = nativeNameDeclaration(of: action) {
+      if nativeIsInitializer(action: action) {
+        return false
+      }
+
+      if let variable = variablePrefix,
+         name.starts(with: variable) {
+        name.removeFirst(variable.count)
+      }
+      if let member = staticMemberPrefix,
+        name.starts(with: member) {
         return true
       }
     }
@@ -1542,6 +1562,8 @@ extension Platform {
             var modifiedName = name
             if nativeIsInitializer(action: action) {
               modifiedName = source(for: action.returnValue!, referenceLookup: referenceLookup)
+            } else if nativeIsStaticMember(action: action) {
+              modifiedName.unicodeScalars.removeFirst(staticMemberPrefix!.count - 1)
             } else if nativeIsMember(action: action) {
               let first = argumentsArray.removeFirst()
               result.append(contentsOf: first)
@@ -1550,7 +1572,7 @@ extension Platform {
               }
             }
             if nativeIsProperty(action: action) {
-              result.append(contentsOf: name)
+              result.append(contentsOf: modifiedName)
             } else {
               let arguments = argumentsArray.joined(separator: ", ")
               if name == "subscript" {
@@ -2018,7 +2040,7 @@ extension Platform {
       return nil
     }
 
-    let name = nativeName(of: action, referenceLookup: externalReferenceLookup)
+    var name = nativeName(of: action, referenceLookup: externalReferenceLookup)
       ?? sanitize(
         identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
         leading: true
@@ -2048,6 +2070,12 @@ extension Platform {
       returnValue = source(for: specified, referenceLookup: externalReferenceLookup)
     } else {
       returnValue = emptyReturnType
+    }
+    var isStatic = false
+    if nativeIsStaticMember(action: action) {
+      name.unicodeScalars.removeFirst(staticMemberPrefix!.count)
+      parentType = returnValue
+      isStatic = true
     }
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0, isProperty: isProperty) })
@@ -2084,6 +2112,7 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation,
       parentType: parentType,
+      isStatic: isStatic,
       isMutating: isMutating,
       isAbsorbedMember: isAbsorbedMember,
       isOverride: isOverride,
@@ -2128,6 +2157,7 @@ extension Platform {
         indentationLevel: 0
       ),
       parentType: nil,
+      isStatic: false,
       isMutating: false,
       isAbsorbedMember: false,
       isOverride: false,
