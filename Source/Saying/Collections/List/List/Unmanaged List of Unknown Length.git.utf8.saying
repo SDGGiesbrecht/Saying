@@ -80,7 +80,7 @@ extension
    )
    unmanaged list of (thing) of unknown length
    {
-    ← unmanaged list of unknown length at (allocate (((offset) of (end)) times (size of (example: thing))) bytes of memory)
+    ← unmanaged list of unknown length at (allocate (((offset) of (end)) times (size of (example: thing)) skipping negative overflow checks, but aborting on positive overflow) bytes of memory)
    }
 
   action (file)
@@ -149,7 +149,7 @@ extension
      clean (list) up up to (end)
     }, otherwise {
      let (• address: memory address) start as (memory address of (list))
-     reallocate memory of (↓ address) to (((offset) of (end)) times (size of (example: thing))) bytes
+     reallocate memory of (↓ address) to (((offset) of (end)) times (size of (example: thing)) skipping negative overflow checks, but aborting on positive overflow) bytes
      change (↓ list) to (unmanaged list of unknown length at (address): unmanaged list of (thing) of unknown length)
     }
    }
@@ -159,7 +159,7 @@ extension
     English: copy memory of (amount: memory offset) entries from (origin: unmanaged list of (thing) of unknown length) to (destination: unmanaged list of (thing) of unknown length)
    )
    {
-    copy memory of ((amount) times (size of (example: thing))) bytes from (memory address of (origin)) to (memory address of (destination))
+    copy memory of ((amount) times (size of (example: thing)) skipping overflow check) bytes from (memory address of (origin)) to (memory address of (destination))
    }
 
   action (file)
@@ -204,7 +204,7 @@ extension
    {
     copy memory of (range) from (origin) to (destination) in (↓ list)
     let (• cursor: list boundary) start as (destination)
-    let (• end: list boundary) be (distance (length of (range)) after (destination))
+    let (• end: list boundary) be (distance (length of (range)) after (destination) skipping overflow check)
     while ((cursor) is less than (end)), {
      hold entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
      advance (↓ cursor) to next in (list) skipping bounds check
@@ -252,7 +252,7 @@ extension
    JavaScript: “++” cursor “”
    Kotlin: “++” cursor “”
    {
-    increment (↓ (offset) of (cursor))
+    increment (↓ (offset) of (cursor)) skipping overflow check
    }
 
   action (unit)
@@ -313,22 +313,34 @@ action (file)
  )
  memory offset
  {
-  ← ((offset) of (upper bound)) minus ((offset) of (lower bound))
+  ← ((offset) of (upper bound)) minus ((offset) of (lower bound)) skipping overflow check
  }
 
 action (file)
  [
-  test {verify ((distance (“1”: memory offset) after (boundary at (“1”: memory offset))) is (boundary at (“2”: memory offset)))}
+  test {verify ((distance (“1”: memory offset) after (boundary at (“1”: memory offset)) skipping overflow check) is (boundary at (“2”: memory offset)))}
  ]
  (
-  English: distance (distance: memory offset) after (boundary: list boundary)
+  English: distance (distance: memory offset) after (boundary: list boundary) skipping overflow check
  )
  list boundary
  {
-  ← boundary at (((offset) of (boundary)) plus (distance))
+  ← boundary at (((offset) of (boundary)) plus (distance) skipping overflow check)
  }
 
-action (file)
+action (unit)
+ [
+  test {verify ((distance (“1”: memory offset) after (boundary at (“1”: memory offset)) skipping negative overflow checks, but aborting on positive overflow) is (boundary at (“2”: memory offset)))}
+ ]
+ (
+  English: distance (distance: memory offset) after (boundary: list boundary) skipping negative overflow checks, but aborting on positive overflow
+ )
+ list boundary
+ {
+  ← boundary at (((offset) of (boundary)) plus (distance) skipping negative overflow checks, but aborting on positive overflow)
+ }
+
+action (unit)
  (
   English: length of (range: range of (list boundary))
  )

@@ -7,6 +7,20 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Int”
 
+action (file)
+ [
+  test {ignore (maximum representable value)}
+ ]
+ (
+  English: maximum representable value
+ )
+ memory offset
+ C: “SIZE¤(5F)MAX” (“stdint”)
+ C♯: “int.MaxValue” (“System”)
+ JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+ Kotlin: “Int.MAX¤(5F)VALUE”
+ Swift: “Int.max”
+
 action (unit)
  [
   test {ignore ((example: platform fixed‐width integer) as memory offset skipping overflow check)}
@@ -178,12 +192,12 @@ action (unit)
  [
   test {
    let (• offset: memory offset) start as (“0”: memory offset)
-   increment (↓ offset)
+   increment (↓ offset) skipping overflow check
    verify ((offset) is (“1”: memory offset))
   }
  ]
  (
-  English: increment (value: ↓ memory offset)
+  English: increment (value: ↓ memory offset) skipping overflow check
  )
  C: “++” value “”
  C♯: “++” value “”
@@ -193,55 +207,100 @@ action (unit)
 
 action (unit)
  (
-  English: (augend: memory offset) plus (addend: memory offset)
-  English +: (augend: [augend]) + (addend: [addend])
-  español: (primer sumando: [augend]) más (segundo sumando: [addend])
-  español +: (primer sumando: [augend]) + (segundo sumando: [addend])
-  português: (primeiro sumado: [augend]) mais (segundo sumado: [addend])
-  português +: (primeiro sumado: [augend]) + (segundo sumado: [addend])
-  français : (cumulande: [augend]) plus (cumulateur: [addend])
-  français + : (cumulande: [augend]) + (cumulateur: [addend])
-  Deutsch: (erster Summand: [augend]) plus (zweiter Summand: [addend])
-  Deutsch: (erster Summand: [augend]) + (zweiter Summand: [addend])
-  italiano: (auguendo: [augend]) più (addendo: [addend])
-  italiano +: (auguendo: [augend]) + (addendo: [addend])
-  Nederlands: (eerste term: [augend]) plus (tweede term: [addend])
-  Nederlands +: (eerste term: [augend]) + (tweede term: [addend])
-  ελληνικά: (προσθέτης: [augend]) συν (προσθετέος: [addend])
-  ελληνικά +: (προσθέτης: [augend]) + (προσθετέος: [addend])
-  עברית: (מחובר ראשון: [augend]) ועוד (מחובר שני: [addend])
-  עברית +: (מחובר ראשון: [augend]) + (מחובר שני: [addend])
+  English: (augend: memory offset) plus (addend: memory offset) skipping overflow check
  )
  memory offset
  C: “” augend “ + ” addend “”
- C♯: “” augend “ + ” addend “”
+ C♯: “unchecked(” augend “ + ” addend “)”
  JavaScript: “” augend “ + ” addend “”
  Kotlin: “” augend “ + ” addend “”
- Swift: “” augend “ + ” addend “”
+ Swift: “” augend “ ¤(26)+ ” addend “”
+
+flow (file)
+ [
+  test {if (false), abort due to addition overflow}
+ ]
+ (
+  English: if (condition: truth value), abort due to addition overflow
+ )
+ C: “if (” condition “)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)[...] + [...] > SIZE¤(5F)MAX¤(22));¤(A)}” (
+   “err”
+   “stdlib”
+  )
+ JavaScript: “if (” condition “) {¤(A)throw new Error(¤(22)[...] + [...] > Number.MAX¤(5F)SAFE¤(5F)INTEGER¤(22));¤(A)}”
+ {
+  if (condition), {
+   !
+  }
+ }
 
 action (unit)
  (
-  English: (minuend: memory offset) minus (subtrahend: memory offset)
+  English: (augend: memory offset) plus (addend: memory offset) skipping negative overflow checks, but aborting on positive overflow
+ )
+ memory offset
+ C♯: “checked(” augend “ + ” addend “)”
+ Kotlin: “Math.addExact(” augend “, ” addend “)” (“java.lang.Math”)
+ Swift: “” augend “ + ” addend “”
+ {
+  if ((addend) is greater than ((maximum representable value) minus (addend) skipping overflow check)), abort due to addition overflow
+  ← (augend) plus (addend) skipping overflow check
+ }
+
+action (unit)
+ (
+  English: (minuend: memory offset) minus (subtrahend: memory offset) skipping overflow check
  )
  memory offset
  C: “” minuend “ ¤(2D) ” subtrahend “”
- C♯: “” minuend “ ¤(2D) ” subtrahend “”
+ C♯: “unchecked(” minuend “ ¤(2D) ” subtrahend “)”
  JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
  Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
- Swift: “” minuend “ ¤(2D) ” subtrahend “”
+ Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
 
 action (unit)
- (first: memory offset) times (second: memory offset)
+ (first: memory offset) times (second: memory offset) skipping overflow check
  memory offset
  C: “” first “ ¤(2A) ” second “”
- C♯: “” first “ ¤(2A) ” second “”
+ C♯: “unchecked(” first “ ¤(2A) ” second “)”
  JavaScript: “” first “ ¤(2A) ” second “”
  Kotlin: “” first “ ¤(2A) ” second “”
+ Swift: «» first “ ¤(26)¤(2A) ” second „“
+
+flow (file)
+ [
+  test {if (false), abort due to multiplication overflow}
+ ]
+ (
+  English: if (condition: truth value), abort due to multiplication overflow
+ )
+ C: “if (” condition “)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)[...] ¤(2A) [...] > SIZE¤(5F)MAX¤(22));¤(A)}” (
+   “err”
+   “stdlib”
+  )
+ JavaScript: “if (” condition “) {¤(A)throw new Error(¤(22)[...] ¤(2A) [...] > Number.MAX¤(5F)SAFE¤(5F)INTEGER¤(22));¤(A)}”
+ {
+  if (condition), {
+   !
+  }
+ }
+
+action (unit)
+ (first: memory offset) times (second: memory offset) skipping negative overflow checks, but aborting on positive overflow
+ memory offset
+ C♯: “checked(” first “ ¤(2A) ” second “)”
+ Kotlin: “Math.multiplyExact(” first “, ” second “)” (“java.lang.Math”)
  Swift: «» first “ ¤(2A) ” second „“
+ {
+  if ((first) is greater than (“0”: memory offset)), {
+   if (((maximum representable value) divided by (first) skipping zero and overflow checks) is less than (second)), abort due to multiplication overflow
+  }
+  ← (first) times (second) skipping overflow check
+ }
 
 action (unit)
  (
-  English: (dividend: memory offset) divided by (divisor: memory offset)
+  English: (dividend: memory offset) divided by (divisor: memory offset) skipping zero and overflow checks
  )
  memory offset
  C: “” dividend “ / ” divisor “”
@@ -259,7 +318,9 @@ extension
    )
    memory offset
    C: “sizeof(” thing “)”
+   C♯: “Marshal.SizeOf<” thing “>()” (“System.Runtime.InteropServices”)
+   Swift: “MemoryLayout<” thing “>.stride”
    {
-    ← “0”
+    ← “1”
    }
  }
