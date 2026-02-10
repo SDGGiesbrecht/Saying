@@ -54,7 +54,7 @@ enum JavaScript: Platform {
     return "0x\(String(scalar.value, radix: 16, uppercase: true))"
   }
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
-    return number
+    return number.replacingOccurrences(of: "−", with: "-")
   }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {

@@ -139,6 +139,104 @@ use (clients)
  }
 
 use (clients)
+ fixed‐width arithmetic with (platform fixed‐width natural number)
+ {
+  action (clients)
+   (
+    English: maximum representable
+   )
+   platform fixed‐width natural number
+   C: “UINT¤(5F)MAX” (“limits”)
+   C♯: “uint.MaxValue” (“System”)
+   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “UInt.MAX¤(5F)VALUE”
+   Swift: “UInt.max”
+
+  action (clients)
+   (
+    English: minimum representable
+   )
+   platform fixed‐width natural number
+   C♯: “uint.MinValue” (“System”)
+   Kotlin: “UInt.MIN¤(5F)VALUE”
+   Swift: “UInt.min”
+   {
+    ← “0”
+   }
+
+  action (clients)
+   (
+    English: add (addend: platform fixed‐width natural number) to (cumulative sum: ↓ platform fixed‐width natural number) skipping overflow check
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “unchecked(” cumulative sum “ += ” addend “)”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: platform fixed‐width natural number) plus (addend: platform fixed‐width natural number), skipping overflow check
+   )
+   platform fixed‐width natural number
+   C: “” augend “ + ” addend “”
+   C♯: “unchecked(” augend “ + ” addend “)”
+   JavaScript: “” augend “ + ” addend “”
+   Kotlin: “” augend “ + ” addend “”
+   Swift: “” augend “ ¤(26)+ ” addend “”
+
+  action (clients)
+   (
+    English: can add (addend: platform fixed‐width natural number) to (augend: platform fixed‐width natural number)
+   )
+   truth value
+   {
+    ← (augend) is less than or equal to ((maximum representable: platform fixed‐width natural number) minus (addend) skipping overflow check)
+   }
+
+  action (clients)
+   (
+    English: example augend
+   )
+   platform fixed‐width natural number
+   {
+    ← example augend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example addend
+   )
+   platform fixed‐width natural number
+   {
+    ← example addend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example sum
+   )
+   platform fixed‐width natural number
+   {
+    ← example sum according to additive arithmetic
+   }
+ }
+
+action (file)
+ [
+  test {verify (((example sum: platform fixed‐width natural number) minus (example addend: platform fixed‐width natural number) skipping overflow check) is (example augend: platform fixed‐width natural number))}
+ ]
+ (
+  English: (minuend: platform fixed‐width natural number) minus (subtrahend: platform fixed‐width natural number) skipping overflow check
+ )
+ platform fixed‐width natural number
+ C: “” minuend “ ¤(2D) ” subtrahend “”
+ C♯: “unchecked(” minuend “ ¤(2D) ” subtrahend “)”
+ JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+ Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+ Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+use (clients)
  additive arithmetic with (platform fixed‐width natural number)
  {
   action (clients)

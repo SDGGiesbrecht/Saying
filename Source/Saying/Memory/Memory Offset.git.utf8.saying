@@ -9,10 +9,10 @@ thing (clients)
 
 action (file)
  [
-  test {ignore (maximum representable value)}
+  test {ignore (maximum representable: memory offset)}
  ]
  (
-  English: maximum representable value
+  English: maximum representable
  )
  memory offset
  C: “SIZE¤(5F)MAX” (“stdint”)
@@ -243,7 +243,7 @@ action (unit)
  Kotlin: “Math.addExact(” augend “, ” addend “)” (“java.lang.Math”)
  Swift: “” augend “ + ” addend “”
  {
-  if ((addend) is greater than ((maximum representable value) minus (addend) skipping overflow check)), abort due to addition overflow
+  if ((augend) is greater than ((maximum representable: memory offset) minus (addend) skipping overflow check)), abort due to addition overflow
   ← (augend) plus (addend) skipping overflow check
  }
 
@@ -293,7 +293,7 @@ action (unit)
  Swift: «» first “ ¤(2A) ” second „“
  {
   if ((first) is greater than (“0”: memory offset)), {
-   if (((maximum representable value) divided by (first) skipping zero and overflow checks) is less than (second)), abort due to multiplication overflow
+   if (((maximum representable: memory offset) divided by (first) skipping zero and overflow checks) is less than (second)), abort due to multiplication overflow
   }
   ← (first) times (second) skipping overflow check
  }

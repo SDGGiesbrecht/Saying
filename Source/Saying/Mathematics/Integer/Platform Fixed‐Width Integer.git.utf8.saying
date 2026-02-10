@@ -133,6 +133,117 @@ use (clients)
  }
 
 use (clients)
+ fixed‐width arithmetic with (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: maximum representable
+   )
+   platform fixed‐width integer
+   C: “INT¤(5F)MAX” (“limits”)
+   C♯: “int.MaxValue” (“System”)
+   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “Int.MAX¤(5F)VALUE”
+   Swift: “Int.max”
+
+  action (clients)
+   (
+    English: minimum representable
+   )
+   platform fixed‐width integer
+   C: “INT¤(5F)MIN” (“limits”)
+   C♯: “int.MinValue” (“System”)
+   JavaScript: “Number.MIN¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “Int.MIN¤(5F)VALUE”
+   Swift: “Int.min”
+
+  action (clients)
+   (
+    English: add (addend: platform fixed‐width integer) to (cumulative sum: ↓ platform fixed‐width integer) skipping overflow check
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “unchecked(” cumulative sum “ += ” addend “)”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: platform fixed‐width integer) plus (addend: platform fixed‐width integer), skipping overflow check
+   )
+   platform fixed‐width integer
+   C: “” augend “ + ” addend “”
+   C♯: “unchecked(” augend “ + ” addend “)”
+   JavaScript: “” augend “ + ” addend “”
+   Kotlin: “” augend “ + ” addend “”
+   Swift: “” augend “ ¤(26)+ ” addend “”
+
+  action (clients)
+   [
+    test {verify (can add (“−1”: platform fixed‐width integer) to (“−1”: platform fixed‐width integer))}
+    test {verify (not (can add (“−1”: platform fixed‐width integer) to (minimum representable: platform fixed‐width integer)))}
+   ]
+   (
+    English: can add (addend: platform fixed‐width integer) to (augend: platform fixed‐width integer)
+   )
+   truth value
+   {
+    if ((addend) is greater than (zero: platform fixed‐width integer)), {
+     if ((augend) is greater than ((maximum representable: platform fixed‐width integer) minus (addend) skipping overflow check)), {
+      ← false
+     }
+    }
+    if ((addend) is less than (zero: platform fixed‐width integer)), {
+     if ((augend) is less than ((minimum representable: platform fixed‐width integer) minus (addend) skipping overflow check)), {
+      ← false
+     }
+    }
+    ← true
+   }
+
+  action (clients)
+   (
+    English: example augend
+   )
+   platform fixed‐width integer
+   {
+    ← example augend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example addend
+   )
+   platform fixed‐width integer
+   {
+    ← example addend according to additive arithmetic
+   }
+
+  action (clients)
+   (
+    English: example sum
+   )
+   platform fixed‐width integer
+   {
+    ← example sum according to additive arithmetic
+   }
+ }
+
+action (file)
+ [
+  test {verify (((example sum: platform fixed‐width integer) minus (example addend: platform fixed‐width integer) skipping overflow check) is (example augend: platform fixed‐width integer))}
+ ]
+ (
+  English: (minuend: platform fixed‐width integer) minus (subtrahend: platform fixed‐width integer) skipping overflow check
+ )
+ platform fixed‐width integer
+ C: “” minuend “ ¤(2D) ” subtrahend “”
+ C♯: “unchecked(” minuend “ ¤(2D) ” subtrahend “)”
+ JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+ Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+ Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+use (clients)
  additive arithmetic with (platform fixed‐width integer)
  {
   action (clients)

@@ -123,8 +123,12 @@ extension LiteralIntermediate {
     }
   }
   func validateInteger(literal: String) -> Bool {
-    // Negative numbers and other languages not implemented yet.
-    return validateNaturalNumber(literal: literal)
+    var natural = literal
+    // Other languages not implemented yet.
+    if natural.unicodeScalars.first == "−" {
+      natural.unicodeScalars.removeFirst()
+    }
+    return validateNaturalNumber(literal: natural)
   }
 }
 
