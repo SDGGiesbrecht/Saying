@@ -321,7 +321,7 @@ extension
     if ((boundary) is greater than (original end)), {
      !
     }
-    let (• new end: list boundary) be (distance (“1”: memory offset) after (original end))
+    let (• new end: list boundary) be (distance (“1”: memory offset) after (original end) skipping negative overflow checks, but aborting on positive overflow)
     ensure enough storage for (new end) in (↓ list)
     if ((boundary) is not (original end)), {
      move (from (boundary) to (original end)) to (boundary after (boundary) in (list) skipping bounds check) in (↓ (uncounted) of (list))
@@ -347,8 +347,8 @@ extension
     remove (removal range) from (↓ (uncounted) of (list))
     let (• trailing range: range of (list boundary)) be (from (end of removal) to (original end))
     let (• length of replacement: memory offset) be (length of (replacement range))
-    let (• end of insertion: list boundary) be (distance (length of replacement) after (beginning of removal))
-    let (• new end: list boundary) be (distance (length of (trailing range)) after (end of insertion))
+    let (• end of insertion: list boundary) be (distance (length of replacement) after (beginning of removal) skipping negative overflow checks, but aborting on positive overflow)
+    let (• new end: list boundary) be (distance (length of (trailing range)) after (end of insertion) skipping negative overflow checks, but aborting on positive overflow)
     ensure enough storage for (new end) in (↓ list)
     if ((end of removal) is not (original end)), {
      if ((new end) is not (original end)), {
@@ -430,7 +430,7 @@ action (file)
  )
  list boundary
  {
-  ← boundary at (((offset) of (end)) times (factor))
+  ← boundary at (((offset) of (end)) times (factor) skipping negative overflow checks, but aborting on positive overflow)
  }
 
 action (file)
@@ -439,5 +439,5 @@ action (file)
  )
  list boundary
  {
-  ← boundary at (((offset) of (end)) divided by (factor))
+  ← boundary at (((offset) of (end)) divided by (factor) skipping zero and overflow checks)
  }
