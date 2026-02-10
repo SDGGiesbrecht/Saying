@@ -318,7 +318,6 @@ extension
    )
    memory offset
    C: “sizeof(” thing “)”
-   C♯: “Marshal.SizeOf<” thing “>()” (“System.Runtime.InteropServices”)
    Swift: “MemoryLayout<” thing “>.stride”
    {
     ← “1”
