@@ -173,7 +173,7 @@ use (clients)
    )
    platform fixed‐width integer
    C: “” augend “ + ” addend “”
-   C♯: “unchecked(” augend “ + ” addend “)”
+   C♯: “” augend “ + ” addend “”
    JavaScript: “” augend “ + ” addend “”
    Kotlin: “” augend “ + ” addend “”
    Swift: “” augend “ ¤(26)+ ” addend “”
@@ -238,7 +238,7 @@ action (file)
  )
  platform fixed‐width integer
  C: “” minuend “ ¤(2D) ” subtrahend “”
- C♯: “unchecked(” minuend “ ¤(2D) ” subtrahend “)”
+ C♯: “” minuend “ ¤(2D) ” subtrahend “”
  JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
  Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
  Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
