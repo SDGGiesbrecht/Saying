@@ -160,8 +160,7 @@ extension
    optional (number)
    {
     let (• sum: number) start as (augend)
-    let (• succeeded: truth value) be (add (addend) to (↓ sum))
-    if (succeeded), {
+    if (add (addend) to (↓ sum)), {
      ← wrap (sum) into optional
     }
     ← nothing
