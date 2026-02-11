@@ -2146,7 +2146,7 @@ extension Platform {
       accessModifier: nil,
       coverageRegistration: nil,
       implementation: source(
-        for: test.statements,
+        for: test.statements.statements,
         context: nil,
         localLookup: [],
         coverageRegionCounter: &coverageRegionCounter,

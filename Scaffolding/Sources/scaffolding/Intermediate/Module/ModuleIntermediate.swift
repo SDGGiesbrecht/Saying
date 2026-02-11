@@ -246,23 +246,12 @@ extension ModuleIntermediate {
     let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
     referenceDictionary.resolveTypes(parentContexts: parentContexts)
     let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
-    for testIndex in tests.indices {
-      var locals = ReferenceDictionary()
-      for statementIndex in tests[testIndex].statements.indices {
-        let statement = tests[testIndex].statements[statementIndex]
-        tests[testIndex].statements[statementIndex].resolveTypes(
-          context: nil,
-          referenceLookup: externalAndModuleLookup.appending(locals),
-          finalReturnValue: .none
-        )
-        let newActions = statement.action?.localActions() ?? []
-        for local in newActions {
-          _ = locals.add(action: local)
-        }
-        if !newActions.isEmpty {
-          locals.resolveTypeIdentifiers(externalLookup: externalAndModuleLookup)
-        }
-      }
+    for index in tests.indices {
+      tests[index].statements.resolveTypes(
+        context: nil,
+        referenceLookup: externalAndModuleLookup,
+        finalReturnValue: .none
+      )
     }
   }
 
@@ -278,22 +267,12 @@ extension ModuleIntermediate {
     let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
     for test in tests {
       let testContext = TestContext(isHidden: test.isHidden, inheritedVisibility: test.inheritedVisibility)
-      var locals = ReferenceDictionary()
-      for statement in test.statements {
-        statement.validateReferences(
-          context: externalAndModuleLookup.appending(locals),
-          testContext: testContext,
-          allowTestOnly: true,
-          errors: &errors
-        )
-        let newActions = statement.action?.localActions() ?? []
-        for local in newActions {
-          _ = locals.add(action: local)
-        }
-        if !newActions.isEmpty {
-          locals.resolveTypeIdentifiers(externalLookup: externalAndModuleLookup)
-        }
-      }
+      test.statements.validateReferences(
+        context: externalAndModuleLookup,
+        testContext: testContext,
+        allowTestOnly: true,
+        errors: &errors
+      )
     }
     for language in languageNodes {
       var identifier = StrictString(language.identifierText())
