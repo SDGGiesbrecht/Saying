@@ -9,10 +9,10 @@ thing (clients)
 
 action (file)
  [
-  test {ignore (maximum representable value)}
+  test {ignore (maximum representable: memory offset)}
  ]
  (
-  English: maximum representable value
+  English: maximum representable
  )
  memory offset
  C: “SIZE¤(5F)MAX” (“stdint”)
@@ -211,7 +211,7 @@ action (unit)
  )
  memory offset
  C: “” augend “ + ” addend “”
- C♯: “unchecked(” augend “ + ” addend “)”
+ C♯: “” augend “ + ” addend “”
  JavaScript: “” augend “ + ” addend “”
  Kotlin: “” augend “ + ” addend “”
  Swift: “” augend “ ¤(26)+ ” addend “”
@@ -243,7 +243,7 @@ action (unit)
  Kotlin: “Math.addExact(” augend “, ” addend “)” (“java.lang.Math”)
  Swift: “” augend “ + ” addend “”
  {
-  if ((addend) is greater than ((maximum representable value) minus (addend) skipping overflow check)), abort due to addition overflow
+  if ((augend) is greater than ((maximum representable: memory offset) minus (addend) skipping overflow check)), abort due to addition overflow
   ← (augend) plus (addend) skipping overflow check
  }
 
@@ -253,7 +253,7 @@ action (unit)
  )
  memory offset
  C: “” minuend “ ¤(2D) ” subtrahend “”
- C♯: “unchecked(” minuend “ ¤(2D) ” subtrahend “)”
+ C♯: “” minuend “ ¤(2D) ” subtrahend “”
  JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
  Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
  Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
@@ -262,7 +262,7 @@ action (unit)
  (first: memory offset) times (second: memory offset) skipping overflow check
  memory offset
  C: “” first “ ¤(2A) ” second “”
- C♯: “unchecked(” first “ ¤(2A) ” second “)”
+ C♯: “” first “ ¤(2A) ” second “”
  JavaScript: “” first “ ¤(2A) ” second “”
  Kotlin: “” first “ ¤(2A) ” second “”
  Swift: «» first “ ¤(26)¤(2A) ” second „“
@@ -293,7 +293,7 @@ action (unit)
  Swift: «» first “ ¤(2A) ” second „“
  {
   if ((first) is greater than (“0”: memory offset)), {
-   if (((maximum representable value) divided by (first) skipping zero and overflow checks) is less than (second)), abort due to multiplication overflow
+   if (((maximum representable: memory offset) divided by (first) skipping zero and overflow checks) is less than (second)), abort due to multiplication overflow
   }
   ← (first) times (second) skipping overflow check
  }

@@ -62,7 +62,7 @@ enum Kotlin: Platform {
     return "0x\(String(scalar.value, radix: 16, uppercase: true))"
   }
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
-    var result = number
+    var result = number.replacingOccurrences(of: "−", with: "-")
     if typeNames.contains(LiteralIntermediate.naturalNumberName)
       || typeNames.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName) {
       result.append("u")

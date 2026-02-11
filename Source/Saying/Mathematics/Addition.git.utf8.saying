@@ -1,4 +1,12 @@
 ability (clients)
+ [
+  [
+   English: Some form of addition of one instance to another.
+  ]
+  [
+   English: When used with numbers, this ability generally implies arithmetic addition. But the ability intentionally supports other forms of addition (such as concatenation) when applied to other things.
+  ]
+ ]
  (
   English: addition of (number)
   español: adición de (número: [number])

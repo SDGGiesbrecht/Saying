@@ -109,7 +109,7 @@ enum Swift: Platform {
     return "\u{22}\(contents)\u{22}"
   }
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
-    return number
+    return number.replacingOccurrences(of: "−", with: "-")
   }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
