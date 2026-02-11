@@ -162,7 +162,7 @@ use (clients)
     English: add (addend: platform fixed‐width integer) to (cumulative sum: ↓ platform fixed‐width integer) skipping overflow check
    )
    C: “” cumulative sum “ += ” addend “”
-   C♯: “unchecked(” cumulative sum “ += ” addend “)”
+   C♯: “” cumulative sum “ += ” addend “”
    JavaScript: “” cumulative sum “ += ” addend “”
    Kotlin: “” cumulative sum “ += ” addend “”
    Swift: “” cumulative sum “ += ” addend “”

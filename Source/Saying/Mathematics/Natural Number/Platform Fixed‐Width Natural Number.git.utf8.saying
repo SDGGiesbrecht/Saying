@@ -169,7 +169,7 @@ use (clients)
     English: add (addend: platform fixed‐width natural number) to (cumulative sum: ↓ platform fixed‐width natural number) skipping overflow check
    )
    C: “” cumulative sum “ += ” addend “”
-   C♯: “unchecked(” cumulative sum “ += ” addend “)”
+   C♯: “” cumulative sum “ += ” addend “”
    JavaScript: “” cumulative sum “ += ” addend “”
    Kotlin: “” cumulative sum “ += ” addend “”
    Swift: “” cumulative sum “ += ” addend “”
