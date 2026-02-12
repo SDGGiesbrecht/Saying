@@ -4,6 +4,11 @@ struct StatementIntermediate {
   var isDeadEnd: Bool {
     return !isReturn && action == nil
   }
+
+  init(isReturn: Bool, action: ActionUse?) {
+    self.isReturn = isReturn
+    self.action = action
+  }
 }
 
 extension StatementIntermediate {
