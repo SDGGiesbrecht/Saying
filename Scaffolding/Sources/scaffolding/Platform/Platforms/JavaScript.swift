@@ -211,13 +211,16 @@ enum JavaScript: Platform {
   static func constructorSetter(name: String) -> String {
     return ""
   }
+  static func localStorage(named name: String, ofType type: String, containing contents: String) -> String {
+    return "const \(name) = \(contents);"
+  }
   static var needsReferencePreparation: Bool {
     return true
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "let "
     let name = sanitize(identifier: UnicodeText(argument), leading: true)
-    return "\(keyword)\(name)Reference = { value: \(argument) }; "
+    return "\(keyword)\(name)Reference = { value: \(argument) };"
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {
@@ -227,7 +230,7 @@ enum JavaScript: Platform {
     }
   }
   static func unpackReference(to argument: String) -> String? {
-    return " \(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference.value;"
+    return "\(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference.value;"
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
     let suffix = forwarding ? "" : ".value"

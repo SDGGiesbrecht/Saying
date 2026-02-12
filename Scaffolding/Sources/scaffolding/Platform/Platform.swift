@@ -107,6 +107,7 @@ protocol Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
   static func createInstance(of type: String, parts: String) -> String
   static func constructorSetter(name: String) -> String
+  static func localStorage(named name: String, ofType type: String, containing contents: String) -> String
   static var needsReferencePreparation: Bool { get }
   static func prepareReference(to argument: String, update: Bool) -> String?
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String
@@ -945,7 +946,8 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
-    extractedArguments: inout [String],
+    extractedArgumentsForReferenceUnpacking: inout [String],
+    extractedArgumentsForReferenceCounting: inout [String],
     isArgumentExtraction: Bool,
     isDirectReturn: Bool,
     cleanUpCode: inout String,
@@ -964,7 +966,8 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
-        extractedArguments: &extractedArguments,
+        extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+        extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
         isThrough: false,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
@@ -1018,7 +1021,8 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
-    extractedArguments: inout [String],
+    extractedArgumentsForReferenceUnpacking: inout [String],
+    extractedArgumentsForReferenceCounting: inout [String],
     isArgumentExtraction: Bool = false,
     isThrough: Bool,
     isDetachment: Bool = false,
@@ -1031,9 +1035,9 @@ extension Platform {
     if let literal = reference.literal {
       let resolvedReference = reference.resolvedResultType!!
       if !isArgumentExtraction,
-        !extractedArguments.isEmpty,
+        !extractedArgumentsForReferenceCounting.isEmpty,
         nativeRelease(of: resolvedReference, referenceLookup: referenceLookup) != nil {
-        return extractedArguments.removeFirst()
+        return extractedArgumentsForReferenceCounting.removeFirst()
       }
       let type = referenceLookup.lookupThing(resolvedReference.key)!
       return call(
@@ -1047,7 +1051,8 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
-        extractedArguments: &extractedArguments,
+        extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+        extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
         isArgumentExtraction: isArgumentExtraction,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
@@ -1103,7 +1108,8 @@ extension Platform {
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
-          extractedArguments: &extractedArguments,
+          extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+          extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
           cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1131,12 +1137,17 @@ extension Platform {
           specifiedReturnValue: reference.resolvedResultType
         )!
       if !isDirectReturn,
-        !isArgumentExtraction,
-        reference.passage != .through,
-        !extractedArguments.isEmpty,
-        let result = action.returnValue,
-        nativeRelease(of: result, referenceLookup: referenceLookup) != nil {
-        return extractedArguments.removeFirst()
+         !isArgumentExtraction {
+        if !extractedArgumentsForReferenceCounting.isEmpty,
+           reference.passage != .through,
+           let result = action.returnValue,
+           nativeRelease(of: result, referenceLookup: referenceLookup) != nil {
+          return extractedArgumentsForReferenceCounting.removeFirst()
+        }
+        if !extractedArgumentsForReferenceUnpacking.isEmpty,
+          reference.arguments.contains(where: { $0.passage == .through }) {
+          return extractedArgumentsForReferenceUnpacking.removeFirst()
+        }
       }
       let basicCall: String = call(
         to: bareAction.isFlow ? bareAction : action,
@@ -1150,7 +1161,8 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
-        extractedArguments: &extractedArguments,
+        extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+        extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1191,7 +1203,8 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
-    extractedArguments: inout [String],
+    extractedArgumentsForReferenceUnpacking: inout [String],
+    extractedArgumentsForReferenceCounting: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1261,7 +1274,8 @@ extension Platform {
                   extractedCoverageRegistrations: &extractedCoverageRegistrations,
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
-                  extractedArguments: &extractedArguments,
+                  extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+                  extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
                   isThrough: actionArgument.passage == .through,
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
@@ -1393,7 +1407,8 @@ extension Platform {
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
-              extractedArguments: &extractedArguments,
+              extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+              extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
               isThrough: action.passage == .through,
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
@@ -1482,7 +1497,8 @@ extension Platform {
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
                 coverageRegionCounter: &coverageRegionCounter,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
-                extractedArguments: &extractedArguments,
+                extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+                extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
                 isThrough: actionArgument.passage == .through,
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
@@ -1514,7 +1530,8 @@ extension Platform {
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
                 coverageRegionCounter: &coverageRegionCounter,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
-                extractedArguments: &extractedArguments,
+                extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+                extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
                 isThrough: actionArgument.passage == .through,
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
@@ -1588,6 +1605,130 @@ extension Platform {
     }
   }
 
+  static func argumentsNeedingExtractionForImmediateReferenceUnpacking(
+    from action: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    extractedArgumentsForReferenceCounting: inout [String],
+    cleanUpCode: inout String,
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    normalizeNextNestedLiteral: Bool,
+    mode: CompilationMode
+  ) -> ReferencePassingExtractions {
+    var entries = ReferencePassingExtractions()
+
+    if action.arguments.allSatisfy({ argument in
+      if case .flow = argument {
+        return false
+      } else {
+        return true
+      }
+    }) {
+      return entries
+    }
+
+    extractArgumentsForImmediateReferenceUnpacking(
+      from: action,
+      context: context,
+      localLookup: localLookup,
+      referenceLookup: referenceLookup,
+      contextCoverageIdentifier: contextCoverageIdentifier,
+      extractedCoverageRegistrations: &extractedCoverageRegistrations,
+      coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
+      extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+      cleanUpCode: &cleanUpCode,
+      inliningArguments: inliningArguments,
+      normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+      mode: mode,
+      entries: &entries
+    )
+    return entries
+  }
+  static func extractArgumentsForImmediateReferenceUnpacking(
+    from action: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    contextCoverageIdentifier: UnicodeText?,
+    extractedCoverageRegistrations: inout [String],
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    extractedArgumentsForReferenceCounting: inout [String],
+    cleanUpCode: inout String,
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    normalizeNextNestedLiteral: Bool,
+    mode: CompilationMode,
+    entries: inout ReferencePassingExtractions
+  ) {
+    for argument in action.arguments {
+      var entriesInThisBranch = ReferencePassingExtractions()
+      defer {
+        entries.append(contentsOf: entriesInThisBranch)
+      }
+      switch argument {
+      case .action(let action):
+        extractArgumentsForImmediateReferenceUnpacking(
+          from: action,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: contextCoverageIdentifier,
+          extractedCoverageRegistrations: &extractedCoverageRegistrations,
+          coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
+          extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+          cleanUpCode: &cleanUpCode,
+          inliningArguments: inliningArguments,
+          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+          mode: mode,
+          entries: &entriesInThisBranch
+        )
+
+        if action.arguments.contains(where: { $0.passage == .through }),
+          let result = argument.resolvedResultType,
+          let actualResult = result {
+          clashAvoidanceCounter += 1
+          let localName = "local\(clashAvoidanceCounter)"
+          let typeName = source(for: actualResult, referenceLookup: referenceLookup)
+          let call = self.call(
+            to: action,
+            context: context,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            isNativeArgument: false,
+            contextCoverageIdentifier: contextCoverageIdentifier,
+            extractedCoverageRegistrations: &extractedCoverageRegistrations,
+            coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
+            extractedArgumentsForReferenceUnpacking: &entriesInThisBranch.unused,
+            extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+            isArgumentExtraction: true,
+            isThrough: action.passage == .through,
+            isDirectReturn: false,
+            cleanUpCode: &cleanUpCode,
+            inliningArguments: inliningArguments,
+            normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+            mode: mode
+          )
+          entriesInThisBranch.append(
+            ReferencePassingExtraction(
+              localStorageDeclaration: localStorage(named: localName, ofType: typeName, containing: call),
+              localName: localName
+            )
+          )
+        }
+      case .flow:
+        break
+      }
+    }
+  }
+
   static func argumentsExtractedForReferenceCounting(
     from action: ActionUse,
     context: ActionIntermediate?,
@@ -1597,6 +1738,7 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    extractedArgumentsForReferenceUnpacking: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1612,6 +1754,7 @@ extension Platform {
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
       coverageRegionCounter: &coverageRegionCounter,
       clashAvoidanceCounter: &clashAvoidanceCounter,
+      extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
       cleanUpCode: &cleanUpCode,
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1629,6 +1772,7 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    extractedArgumentsForReferenceUnpacking: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1663,6 +1807,7 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1687,7 +1832,8 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
-            extractedArguments: &entriesInThisBranch.unused,
+            extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+            extractedArgumentsForReferenceCounting: &entriesInThisBranch.unused,
             isArgumentExtraction: true,
             isThrough: action.passage == .through,
             isDirectReturn: false,
@@ -1734,13 +1880,31 @@ extension Platform {
     if let action = statement.action {
       var referenceList: [String] = []
       var extractedCoverageRegistrations: [String] = []
+      var extractedForReferenceUnpacking = ReferencePassingExtractions()
       if needsReferencePreparation {
+        var extractedArgumentsForReferenceCounting: [String] = []
+        extractedForReferenceUnpacking = argumentsNeedingExtractionForImmediateReferenceUnpacking(
+          from: action,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          contextCoverageIdentifier: contextCoverageIdentifier,
+          extractedCoverageRegistrations: &extractedCoverageRegistrations,
+          coverageRegionCounter: &coverageRegionCounter,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
+          extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+          cleanUpCode: &cleanUpCode,
+          inliningArguments: inliningArguments,
+          normalizeNextNestedLiteral: false,
+          mode: mode
+        )
         referenceList = statement.passedReferences(platform: self, referenceLookup: referenceLookup)
           .filter({ reference in
             return context?.parameters.parameter(named: reference.actionName)?.passage != .through
           })
           .map({ reference in
-            var extracted: [String] = []
+            var extractedArgumentsForReferenceUnpacking: [String] = []
+            var extractedArgumentsForReferenceCounting: [String] = []
             return self.call(
               to: reference,
               context: context,
@@ -1751,7 +1915,8 @@ extension Platform {
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
-              extractedArguments: &extracted,
+              extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+              extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
               isThrough: false,
               isDetachment: true,
               isDirectReturn: false,
@@ -1766,11 +1931,23 @@ extension Platform {
             to: reference,
             update: existingReferences.contains(reference)
           ) {
-            entry.append(preparation)
+            entry.append(preparation.appending("\n"))
           }
         }
+        if !extractedForReferenceUnpacking.all.isEmpty {
+          for argument in extractedForReferenceUnpacking.all {
+            entry.append(argument.localStorageDeclaration.appending("\n"))
+          }
+          for reference in referenceList.reversed() {
+            if let unpack = unpackReference(to: reference) {
+              entry.append(unpack.appending("\n"))
+            }
+          }
+          referenceList = []
+        }
       }
-      let extractedArguments = argumentsExtractedForReferenceCounting(
+      var remainingExtractedArgumentsForReferenceUnpacking = extractedForReferenceUnpacking.unused
+      let extractedForReferenceCounting = argumentsExtractedForReferenceCounting(
         from: action,
         context: context,
         localLookup: localLookup,
@@ -1779,13 +1956,14 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: false,
         mode: mode
       )
-      if !extractedArguments.all.isEmpty {
-        for argument in extractedArguments.all {
+      if !extractedForReferenceCounting.all.isEmpty {
+        for argument in extractedForReferenceCounting.all {
           entry.append(argument.localStorageDeclaration.appending("\n"))
           cleanUpCode.prepend(contentsOf: argument.releaseStatement.appending("\n"))
         }
@@ -1815,7 +1993,7 @@ extension Platform {
         }
       }
       let before = coverageRegionCounter
-      var remainingExtractedArguments = extractedArguments.unused
+      var remainingExtractedArgumentsForReferenceCounting = extractedForReferenceCounting.unused
       entry.append(
         contentsOf: self.statement(
           expression: call(
@@ -1828,7 +2006,8 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
-            extractedArguments: &remainingExtractedArguments,
+            extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
+            extractedArgumentsForReferenceCounting: &remainingExtractedArgumentsForReferenceCounting,
             isThrough: false,
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
@@ -1852,7 +2031,7 @@ extension Platform {
       }
       for reference in referenceList.reversed() {
         if let unpack = unpackReference(to: reference) {
-          entry.append(unpack)
+          entry.append(unpack.prepending("\n"))
         }
       }
       if !referenceList.isEmpty || !cleanUpCode.isEmpty {

@@ -256,13 +256,16 @@ enum Kotlin: Platform {
   static func constructorSetter(name: String) -> String {
     return ""
   }
+  static func localStorage(named name: String, ofType type: String, containing contents: String) -> String {
+    return "val \(name): \(type) = \(contents)"
+  }
   static var needsReferencePreparation: Bool {
     return true
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "var "
     let name = sanitize(identifier: UnicodeText(argument), leading: true)
-    return "\(keyword)\(name)Reference = mutableListOf(\(argument)); "
+    return "\(keyword)\(name)Reference = mutableListOf(\(argument))"
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {
@@ -272,7 +275,7 @@ enum Kotlin: Platform {
     }
   }
   static func unpackReference(to argument: String) -> String? {
-    return "; \(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference[0]"
+    return "\(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference[0]"
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
     let suffix = forwarding ? "" : "[0]"

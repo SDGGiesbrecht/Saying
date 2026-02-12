@@ -315,6 +315,9 @@ enum Swift: Platform {
   static func constructorSetter(name: String) -> String {
     return "self.\(name) = \(name)"
   }
+  static func localStorage(named name: String, ofType type: String, containing contents: String) -> String {
+    return ""
+  }
   static var needsReferencePreparation: Bool {
     return false
   }
