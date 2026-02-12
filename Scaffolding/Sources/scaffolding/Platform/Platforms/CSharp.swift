@@ -300,6 +300,9 @@ enum CSharp: Platform {
   static func createInstance(of type: String, parts: String) -> String {
     return "new \(type)(\(parts))"
   }
+  static func localStorage(named name: String, ofType type: String, containing contents: String) -> String {
+    return ""
+  }
   static var needsReferencePreparation: Bool {
     return false
   }

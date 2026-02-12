@@ -2,7 +2,7 @@ struct TestIntermediate {
   var location: [Set<UnicodeText>]
   var isHidden: Bool
   var inheritedVisibility: AccessIntermediate
-  var statements: [StatementIntermediate]
+  var statements: StatementListIntermediate
 }
 
 extension TestIntermediate {
@@ -45,7 +45,7 @@ extension TestIntermediate {
         location: nestedLocation,
         isHidden: isHidden,
         inheritedVisibility: inheritedVisibility,
-        statements: statements
+        statements: StatementListIntermediate(statements: statements)
       )
     )
   }
@@ -59,7 +59,7 @@ extension TestIntermediate {
       location: location,
       isHidden: isHidden,
       inheritedVisibility: inheritedVisibility,
-      statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+      statements: statements.resolvingExtensionContext(typeLookup: typeLookup)
     )
   }
 
@@ -72,7 +72,7 @@ extension TestIntermediate {
       location: location.appending(contentsOf: specializationNamespace),
       isHidden: isHidden,
       inheritedVisibility: min(self.inheritedVisibility, specializationVisibility),
-      statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
+      statements: statements.specializing(typeLookup: typeLookup)
     )
   }
 }

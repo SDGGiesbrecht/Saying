@@ -330,7 +330,11 @@ extension ActionUse {
       source: source,
       passage: passage,
       explicitResultType: explicitResultType
-        .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+        .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      resolvedResultType: resolvedResultType
+        .flatMap({ $0?.resolvingExtensionContext(typeLookup: typeLookup) }),
+      narrowedResultTypes: narrowedResultTypes?
+        .map({ $0?.resolvingExtensionContext(typeLookup: typeLookup) })
     )
   }
 
@@ -343,7 +347,9 @@ extension ActionUse {
       literal: literal,
       source: source,
       passage: passage,
-      explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) })
+      explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) }),
+      resolvedResultType: resolvedResultType.flatMap({ $0?.specializing(typeLookup: typeLookup) }),
+      narrowedResultTypes: narrowedResultTypes?.map({ $0?.specializing(typeLookup: typeLookup) })
     )
   }
 }
