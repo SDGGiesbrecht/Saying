@@ -207,7 +207,7 @@ use (clients)
    )
    platform fixed‐width integer
    {
-    ← example augend according to additive arithmetic
+    ← example augend according to natural arithmetic
    }
 
   action (clients)
@@ -216,7 +216,7 @@ use (clients)
    )
    platform fixed‐width integer
    {
-    ← example addend according to additive arithmetic
+    ← example addend according to natural arithmetic
    }
 
   action (clients)
@@ -225,7 +225,7 @@ use (clients)
    )
    platform fixed‐width integer
    {
-    ← example sum according to additive arithmetic
+    ← example sum according to natural arithmetic
    }
  }
 
@@ -244,7 +244,7 @@ action (file)
  Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
 
 use (clients)
- additive arithmetic with (platform fixed‐width integer)
+ natural arithmetic with (platform fixed‐width integer)
  {
   action (clients)
    (

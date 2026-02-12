@@ -195,7 +195,7 @@ use (clients)
    )
    natural number
    {
-    ← example augend according to additive arithmetic
+    ← example augend according to natural arithmetic
    }
 
   action (clients)
@@ -204,7 +204,7 @@ use (clients)
    )
    natural number
    {
-    ← example addend according to additive arithmetic
+    ← example addend according to natural arithmetic
    }
 
   action (clients)
@@ -213,12 +213,30 @@ use (clients)
    )
    natural number
    {
-    ← example sum according to additive arithmetic
+    ← example sum according to natural arithmetic
    }
  }
 
 use (clients)
  additive arithmetic with (natural number)
+ {
+  action (clients)
+   (
+    English: additive identity
+   )
+   natural number
+   {
+    ← zero
+   }
+ }
+
+use (clients)
+ one‐dimensional additive arithmetic with (natural number)
+ {
+ }
+
+use (clients)
+ natural arithmetic with (natural number)
  {
   action (clients)
    (

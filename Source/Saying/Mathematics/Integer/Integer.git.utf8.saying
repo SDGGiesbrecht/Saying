@@ -189,7 +189,7 @@ use (clients)
    )
    integer
    {
-    ← example augend according to additive arithmetic
+    ← example augend according to natural arithmetic
    }
 
   action (clients)
@@ -198,7 +198,7 @@ use (clients)
    )
    integer
    {
-    ← example addend according to additive arithmetic
+    ← example addend according to natural arithmetic
    }
 
   action (clients)
@@ -207,12 +207,30 @@ use (clients)
    )
    integer
    {
-    ← example sum according to additive arithmetic
+    ← example sum according to natural arithmetic
    }
  }
 
 use (clients)
  additive arithmetic with (integer)
+ {
+  action (clients)
+   (
+    English: additive identity
+   )
+   integer
+   {
+    ← zero
+   }
+ }
+
+use (clients)
+ one‐dimensional additive arithmetic with (integer)
+ {
+ }
+
+use (clients)
+ natural arithmetic with (integer)
  {
   action (clients)
    (

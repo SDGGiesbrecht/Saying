@@ -1,0 +1,14 @@
+ability (clients)
+ [
+  [
+   English: Additive arithmetic in one‐dimension.
+  ]
+  [
+   English: Besides numbers, this ability intentionally supports things that have no fixed scale, such as measurements of length or mass.
+  ]
+ ]
+ (
+  English: one‐dimensional additive arithmetic with (number)
+ )
+ {
+ }
