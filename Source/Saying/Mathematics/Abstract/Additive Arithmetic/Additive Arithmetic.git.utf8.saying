@@ -15,7 +15,7 @@ ability (clients)
    [
     test {
      let (• value: number) start as (example sum: number)
-     subract (example addend: number) from (↓ value)
+     subtract (example addend: number) from (↓ value)
      verify ((value) is (example augend: number))
     }
    ]
@@ -50,7 +50,7 @@ ability (clients)
    number
    {
     let (• value: number) start as (minuend)
-    subract (addend) from (↓ value)
+    subtract (addend) from (↓ value)
     ← value
    }
  }

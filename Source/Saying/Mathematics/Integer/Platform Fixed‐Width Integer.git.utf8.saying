@@ -203,7 +203,7 @@ use (clients)
 
   action (clients)
    (
-    English: subract (subtrahend: platform fixed‐width integer) from (value: ↓ platform fixed‐width integer) skipping overflow check
+    English: subtract (subtrahend: platform fixed‐width integer) from (value: ↓ platform fixed‐width integer) skipping overflow check
    )
    C: “” value “ ¤(2D)= ” subtrahend “”
    C♯: “” value “ ¤(2D)= ” subtrahend “”
@@ -224,7 +224,7 @@ use (clients)
 
   action (clients)
    (
-    English: can subract (subtrahend: platform fixed‐width integer) from (minuend: platform fixed‐width integer)
+    English: can subtract (subtrahend: platform fixed‐width integer) from (minuend: platform fixed‐width integer)
    )
    truth value
    {

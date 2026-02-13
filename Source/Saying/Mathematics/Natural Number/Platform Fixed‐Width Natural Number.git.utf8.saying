@@ -196,7 +196,7 @@ use (clients)
 
   action (clients)
    (
-    English: subract (subtrahend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
+    English: subtract (subtrahend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
    )
    C: “” value “ ¤(2D)= ” subtrahend “”
    C♯: “” value “ ¤(2D)= ” subtrahend “”
@@ -217,7 +217,7 @@ use (clients)
 
   action (clients)
    (
-    English: can subract (subtrahend: platform fixed‐width natural number) from (minuend: platform fixed‐width natural number)
+    English: can subtract (subtrahend: platform fixed‐width natural number) from (minuend: platform fixed‐width natural number)
    )
    truth value
    {

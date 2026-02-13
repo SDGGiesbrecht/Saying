@@ -82,19 +82,19 @@ ability (clients)
      English: Subracts from the value without checking whether the result is representable.
     ]
     [
-     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {subract () from ()} instead.
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {subtract () from ()} instead.
     ]
     [
      English: Skipping the overflow check can also be more efficient when the resulting difference is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
     ]
     test {
      let (• value: number) start as (example sum: number)
-     subract (example addend: number) from (↓ value) skipping overflow check
+     subtract (example addend: number) from (↓ value) skipping overflow check
      verify ((value) is (example augend: number))
     }
    ]
    (
-    English: subract (subtrahend: number) from (value: ↓ number) skipping overflow check
+    English: subtract (subtrahend: number) from (value: ↓ number) skipping overflow check
    )
 
   choice (clients)
@@ -116,7 +116,7 @@ ability (clients)
    number
    {
     let (• value: number) start as (minuend)
-    subract (subtrahend) from (↓ value) skipping overflow check
+    subtract (subtrahend) from (↓ value) skipping overflow check
     ← value
    }
 
@@ -228,12 +228,12 @@ extension
     ]
     test {
      let (• value: number) start as (example sum: number)
-     verify (subract (example addend: number) from (↓ value))
+     verify (subtract (example addend: number) from (↓ value))
      verify ((value) is (example augend: number))
     }
     test {
      let (• value: number) start as (minimum representable: number)
-     verify (not (subract (one: number) from (↓ value)))
+     verify (not (subtract (one: number) from (↓ value)))
      verify ((value) is (minimum representable: number))
     }
    ]
@@ -243,7 +243,7 @@ extension
    truth value
    {
     if (can subtract (subtrahend) from (value)), {
-     subract (subtrahend) from (↓ value) skipping overflow check
+     subtract (subtrahend) from (↓ value) skipping overflow check
      ← true
     }
     ← false
@@ -382,15 +382,15 @@ use (file)
 
   action (file)
    (
-    English: subract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
+    English: subtract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
    )
    {
-    subract ((number) of (subrahend)) from (↓ (number) of (value)) skipping overflow check
+    subtract ((number) of (subrahend)) from (↓ (number) of (value)) skipping overflow check
 }
 
   action (file)
    (
-    English: can subract (subtrahend: minimal fixed‐width arithmetic example) from (minuend: minimal fixed‐width arithmetic example)
+    English: can subtract (subtrahend: minimal fixed‐width arithmetic example) from (minuend: minimal fixed‐width arithmetic example)
    )
    truth value
    {
