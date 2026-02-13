@@ -191,7 +191,7 @@ use (clients)
    )
    truth value
    {
-    ← (augend) is less than or equal to ((maximum representable: platform fixed‐width natural number) minus (addend) skipping overflow check)
+    ← (augend) is less than or equal to ((maximum representable: platform fixed‐width natural number) minus (addend), skipping overflow check)
    }
 
   action (clients)

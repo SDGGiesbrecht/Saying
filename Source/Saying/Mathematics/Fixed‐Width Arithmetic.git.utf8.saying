@@ -127,7 +127,7 @@ ability (clients)
     ]
    ]
    (
-    English: can subract (subtrahend: number) from (minuend: number)
+    English: can subtract (subtrahend: number) from (minuend: number)
    )
    truth value
 
@@ -283,7 +283,7 @@ extension
    number
    {
     let (• value: number) start as (minuend)
-    subract (subtrahend) from (↓ value)
+    subtract (subtrahend) from (↓ value)
     ← value
    }
  }
@@ -394,7 +394,7 @@ use (file)
    )
    truth value
    {
-    ← can subract ((number) of (subrahend)) from ((number) of (minuend))
+    ← can subtract ((number) of (subrahend)) from ((number) of (minuend))
    }
 
   action (file)
