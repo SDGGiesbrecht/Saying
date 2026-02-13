@@ -116,7 +116,7 @@ ability (clients)
    number
    {
     let (• value: number) start as (minuend)
-    subract (subrahend) from (↓ value) skipping overflow check
+    subract (subtrahend) from (↓ value) skipping overflow check
     ← value
    }
 
@@ -283,7 +283,7 @@ extension
    number
    {
     let (• value: number) start as (minuend)
-    subract (addend) from (↓ value)
+    subract (subtrahend) from (↓ value)
     ← value
    }
  }
@@ -380,7 +380,7 @@ use (file)
     ← can add ((number) of (addend)) to ((number) of (augend))
    }
 
-  action (clients)
+  action (file)
    (
     English: subract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
    )
@@ -388,7 +388,7 @@ use (file)
     subract ((number) of (subrahend)) from (↓ (number) of (value)) skipping overflow check
 }
 
-  action (clients)
+  action (file)
    (
     English: can subract (subtrahend: minimal fixed‐width arithmetic example) from (minuend: minimal fixed‐width arithmetic example)
    )

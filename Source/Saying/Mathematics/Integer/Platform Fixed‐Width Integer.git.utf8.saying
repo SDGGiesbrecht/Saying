@@ -189,12 +189,12 @@ use (clients)
    truth value
    {
     if ((addend) is greater than (zero: platform fixed‐width integer)), {
-     if ((augend) is greater than ((maximum representable: platform fixed‐width integer) minus (addend) skipping overflow check)), {
+     if ((augend) is greater than ((maximum representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
       ← false
      }
     }
     if ((addend) is less than (zero: platform fixed‐width integer)), {
-     if ((augend) is less than ((minimum representable: platform fixed‐width integer) minus (addend) skipping overflow check)), {
+     if ((augend) is less than ((minimum representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
       ← false
      }
     }
@@ -229,12 +229,12 @@ use (clients)
    truth value
    {
     if ((subtrahend) is greater than (zero: platform fixed‐width integer)), {
-     if ((minuend) is less than ((minimum representable: platform fixed‐width integer) plus (subtrahend) skipping overflow check)), {
+     if ((minuend) is less than ((minimum representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
       ← false
      }
     }
     if ((subtrahend) is less than (zero: platform fixed‐width integer)), {
-     if ((minuend) is greater than ((maximum representable: platform fixed‐width integer) plus (subtrahend) skipping overflow check)), {
+     if ((minuend) is greater than ((maximum representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
       ← false
      }
     }
