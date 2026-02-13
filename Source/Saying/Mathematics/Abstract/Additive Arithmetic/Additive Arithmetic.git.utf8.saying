@@ -1,0 +1,22 @@
+ability (clients)
+ [
+  [
+   English: Additive arithmetic.
+  ]
+  [
+   English: Besides numbers, this ability intentionally supports things that have no comparison order, such as vectors with more than one dimension.
+  ]
+ ]
+ (
+  English: additive arithmetic with (number)
+ )
+ {
+  requirement (clients)
+   [
+    test {verify (((example augend: number) + (additive identity: number)) = (example augend: number))}
+   ]
+   (
+    English: additive identity
+   )
+   number
+ }

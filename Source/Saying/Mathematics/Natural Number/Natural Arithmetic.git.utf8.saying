@@ -1,6 +1,11 @@
 ability (clients)
+ [
+  [
+   English: Arithmetic involving only natural numbers.
+  ]
+ ]
  (
-  English: additive arithmetic with (number)
+  English: natural arithmetic with (number)
  )
  {
   requirement (clients)
@@ -210,11 +215,11 @@ ability (clients)
  }
 
 extension
- additive arithmetic with (number)
+ natural arithmetic with (number)
  {
   action (clients)
    (
-    English: example augend according to additive arithmetic
+    English: example augend according to natural arithmetic
    )
    number
    {
@@ -223,7 +228,7 @@ extension
 
   action (clients)
    (
-    English: example addend according to additive arithmetic
+    English: example addend according to natural arithmetic
    )
    number
    {
@@ -232,7 +237,7 @@ extension
 
   action (clients)
    (
-    English: example sum according to additive arithmetic
+    English: example sum according to natural arithmetic
    )
    number
    {
