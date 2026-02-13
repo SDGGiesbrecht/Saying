@@ -196,13 +196,13 @@ use (clients)
 
   action (clients)
    (
-    English: subract (minuend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
+    English: subract (subtrahend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
    )
-   C: “” value “ ¤(2D)= ” minuend “”
-   C♯: “” value “ ¤(2D)= ” minuend “”
-   JavaScript: “” value “ ¤(2D)= ” minuend “”
-   Kotlin: “” value “ ¤(2D)= ” minuend “”
-   Swift: “” value “ ¤(2D)= ” minuend “”
+   C: “” value “ ¤(2D)= ” subtrahend “”
+   C♯: “” value “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+   Swift: “” value “ ¤(2D)= ” subtrahend “”
 
   action (clients)
    (
@@ -221,7 +221,7 @@ use (clients)
    )
    truth value
    {
-    ← (minuend) is less than or equal to (subtrahend)
+    ← (subtrahend) is less than or equal to (minuend)
    }
 
   action (clients)

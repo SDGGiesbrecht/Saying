@@ -1,0 +1,22 @@
+ability (clients)
+ [
+  [
+   English: Additive arithmetic involving only natural numbers.
+  ]
+  [
+   English: This ability is the subset of additive arithmetic that can never underflow with natural numbers.
+  ]
+ ]
+ (
+  English: natural additive arithmetic with (number)
+ )
+ {
+  requirement (clients)
+   [
+    test {verify (((example augend: number) + (additive identity: number)) = (example augend: number))}
+   ]
+   (
+    English: additive identity
+   )
+   number
+ }

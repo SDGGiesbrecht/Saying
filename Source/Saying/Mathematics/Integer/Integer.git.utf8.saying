@@ -212,7 +212,7 @@ use (clients)
  }
 
 use (clients)
- additive arithmetic with (integer)
+ natural additive arithmetic with (integer)
  {
   action (clients)
    (
@@ -222,6 +222,31 @@ use (clients)
    {
     ← zero
    }
+ }
+
+use (clients)
+ additive arithmetic with (integer)
+ {
+  action (clients)
+   (
+    English: subtract (subtrahend: integer) from (value: ↓ integer)
+   )
+   C: “” value “ ¤(2D)= ” subtrahend “”
+   C♯: “” value “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+   Swift: “” value “ ¤(2D)= ” subtrahend “”
+
+  action (clients)
+   (
+    English: (minuend: integer) minus (subtrahend: integer)
+   )
+   integer
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(2D) ” subtrahend “”
  }
 
 use (clients)
@@ -250,31 +275,6 @@ use (clients)
    {
     ← “1”
    }
- }
-
-use (clients)
- integral arithmetic with (integer)
- {
-  action (clients)
-   (
-    English: subtract (subtrahend: integer) from (value: ↓ integer)
-   )
-   C: “” minuend “ ¤(2D)= ” subtrahend “”
-   C♯: “” minuend “ ¤(2D)= ” subtrahend “”
-   JavaScript: “” minuend “ ¤(2D)= ” subtrahend “”
-   Kotlin: “” minuend “ ¤(2D)= ” subtrahend “”
-   Swift: “” minuend “ ¤(2D)= ” subtrahend “”
-
-  action (clients)
-   (
-    English: (minuend: integer) minus (subtrahend: integer)
-   )
-   integer
-   C: “” minuend “ ¤(2D) ” subtrahend “”
-   C♯: “” minuend “ ¤(2D) ” subtrahend “”
-   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
-   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
-   Swift: “” minuend “ ¤(2D) ” subtrahend “”
  }
 
 use (clients)

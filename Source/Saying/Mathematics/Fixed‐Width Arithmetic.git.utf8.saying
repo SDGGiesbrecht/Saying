@@ -94,7 +94,7 @@ ability (clients)
     }
    ]
    (
-    English: subract (minuend: number) from (value: ↓ number) skipping overflow check
+    English: subract (subtrahend: number) from (value: ↓ number) skipping overflow check
    )
 
   choice (clients)
@@ -378,6 +378,23 @@ use (file)
    truth value
    {
     ← can add ((number) of (addend)) to ((number) of (augend))
+   }
+
+  action (clients)
+   (
+    English: subract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
+   )
+   {
+    subract ((number) of (subrahend)) from (↓ (number) of (value)) skipping overflow check
+}
+
+  action (clients)
+   (
+    English: can subract (subtrahend: minimal fixed‐width arithmetic example) from (minuend: minimal fixed‐width arithmetic example)
+   )
+   truth value
+   {
+    ← can subract ((subtrahend) of (addend)) from ((minuend) of (augend))
    }
 
   action (file)
