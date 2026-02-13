@@ -394,7 +394,7 @@ use (file)
    )
    truth value
    {
-    ← can subract ((subtrahend) of (addend)) from ((minuend) of (augend))
+    ← can subract ((number) of (subrahend)) from ((number) of (minuend))
    }
 
   action (file)
