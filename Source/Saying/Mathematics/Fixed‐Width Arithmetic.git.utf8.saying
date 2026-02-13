@@ -77,6 +77,61 @@ ability (clients)
    truth value
 
   requirement (clients)
+   [
+    [
+     English: Subracts from the value without checking whether the result is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {subract () from ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the resulting difference is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• value: number) start as (example sum: number)
+     subract (example addend: number) from (↓ value) skipping overflow check
+     verify ((value) is (example augend: number))
+    }
+   ]
+   (
+    English: subract (minuend: number) from (value: ↓ number) skipping overflow check
+   )
+
+  choice (clients)
+   [
+    [
+     English: Returns the difference of the minuend minus the subrahend without checking whether the difference is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {() minus ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the difference is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {verify (((example sum: number) minus (example addend: number), skipping overflow check) = (example augend: number))}
+   ]
+   (
+    English: (minuend: number) minus (subtrahend: number), skipping overflow check
+   )
+   number
+   {
+    let (• value: number) start as (minuend)
+    subract (subrahend) from (↓ value) skipping overflow check
+    ← value
+   }
+
+  requirement (clients)
+   [
+    [
+     English: Returns a truth value indicating whether the difference will be representable.
+    ]
+   ]
+   (
+    English: can subract (subtrahend: number) from (minuend: number)
+   )
+   truth value
+
+  requirement (clients)
    (
     English: example augend
    )
@@ -164,6 +219,72 @@ extension
      ← wrap (sum) into optional
     }
     ← nothing
+   }
+
+  action (clients)
+   [
+    [
+     English: Subracts the subtrahend from the value if possible and then returns whether or not the subtraction succeeded.
+    ]
+    test {
+     let (• value: number) start as (example sum: number)
+     verify (subract (example addend: number) from (↓ value))
+     verify ((value) is (example augend: number))
+    }
+    test {
+     let (• value: number) start as (minimum representable: number)
+     verify (not (subract (one: number) from (↓ value)))
+     verify ((value) is (minimum representable: number))
+    }
+   ]
+   (
+    English: subtract (subtrahend: number) from (value: ↓ number)
+   )
+   truth value
+   {
+    if (can subtract (subtrahend) from (value)), {
+     subract (subtrahend) from (↓ value) skipping overflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    test {
+     if ((example sum: number) − (example addend: number)) exists, unwrap it as (• difference: number), {
+      verify ((difference) = (example augend: number))
+     }
+    }
+    test {
+     verify (((minimum representable: number) − (one: number)) does not exist)
+    }
+   ]
+   (
+    English: (minuend: number) minus (subtrahend: number)
+    English +: (minuend: [minuend]) − (subtrahend: [subtrahend])
+    español: (minuendo: [minuend]) menos (sustraendo: [subtrahend])
+    español +: (minuendo: [minuend]) − (sustraendo: [subtrahend])
+    português: (minuendo: [minuend]) menos (subtraendo: [subtrahend])
+    português +: (minuendo: [minuend]) − (subtraendo: [subtrahend])
+    français : (diminuende: [minuend]) moins (diminuteur: [subtrahend])
+    français + : (diminuende: [minuend]) − (diminuteur: [subtrahend])
+    Deutsch: (Minuend: [minuend]) minus (Subtrahend: [subtrahend])
+    Deutsch: (Minuend: [minuend]) − (Subtrahend: [subtrahend])
+    italiano: (minuendo: [minuend]) meno (sottraendo: [subtrahend])
+    italiano +: (minuendo: [minuend]) − (sottraendo: [subtrahend])
+    Nederlands: (aftrekgetal: [minuend]) min (aftrekker: [subtrahend])
+    Nederlands +: (aftrekgetal: [minuend]) − (aftrekker: [subtrahend])
+    ελληνικά: (μειωτέος: [minuend]) μείον (αφαιρετέος: [subtrahend])
+    ελληνικά +: (μειωτέος: [minuend]) − (αφαιρετέος: [subtrahend])
+    עברית: (מחוסר: [minuend]) פחות (מחסר: [subtrahend])
+    עברית +: (מחוסר: [minuend]) − (מחסר: [subtrahend])
+   )
+   number
+   {
+    let (• value: number) start as (minuend)
+    subract (addend) from (↓ value)
+    ← value
    }
  }
 

@@ -253,6 +253,31 @@ use (clients)
  }
 
 use (clients)
+ integral arithmetic with (integer)
+ {
+  action (clients)
+   (
+    English: subtract (subtrahend: integer) from (value: ↓ integer)
+   )
+   C: “” minuend “ ¤(2D)= ” subtrahend “”
+   C♯: “” minuend “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D)= ” subtrahend “”
+   Swift: “” minuend “ ¤(2D)= ” subtrahend “”
+
+  action (clients)
+   (
+    English: (minuend: integer) minus (subtrahend: integer)
+   )
+   integer
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(2D) ” subtrahend “”
+ }
+
+use (clients)
  incrementation of (integer)
  {
   action (clients)

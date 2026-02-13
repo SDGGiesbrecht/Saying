@@ -1,0 +1,53 @@
+ability (clients)
+ [
+  [
+   English: Arithmetic involving only integers.
+  ]
+ ]
+ (
+  English: integral arithmetic with (number)
+ )
+ {
+  requirement (clients)
+   [
+    test {
+     let (• value: number) start as (example sum: number)
+     subract (example addend: number) from (↓ value)
+     verify ((value) is (example augend: number))
+    }
+   ]
+   (
+    English: subtract (subtrahend: number) from (value: ↓ number)
+   )
+
+  choice (clients)
+   [
+    test {verify (((example sum: number) − (example addend: number)) = (example augend: number))}
+   ]
+   (
+    English: (minuend: number) minus (subtrahend: number)
+    English +: (minuend: [minuend]) − (subtrahend: [subtrahend])
+    español: (minuendo: [minuend]) menos (sustraendo: [subtrahend])
+    español +: (minuendo: [minuend]) − (sustraendo: [subtrahend])
+    português: (minuendo: [minuend]) menos (subtraendo: [subtrahend])
+    português +: (minuendo: [minuend]) − (subtraendo: [subtrahend])
+    français : (diminuende: [minuend]) moins (diminuteur: [subtrahend])
+    français + : (diminuende: [minuend]) − (diminuteur: [subtrahend])
+    Deutsch: (Minuend: [minuend]) minus (Subtrahend: [subtrahend])
+    Deutsch: (Minuend: [minuend]) − (Subtrahend: [subtrahend])
+    italiano: (minuendo: [minuend]) meno (sottraendo: [subtrahend])
+    italiano +: (minuendo: [minuend]) − (sottraendo: [subtrahend])
+    Nederlands: (aftrekgetal: [minuend]) min (aftrekker: [subtrahend])
+    Nederlands +: (aftrekgetal: [minuend]) − (aftrekker: [subtrahend])
+    ελληνικά: (μειωτέος: [minuend]) μείον (αφαιρετέος: [subtrahend])
+    ελληνικά +: (μειωτέος: [minuend]) − (αφαιρετέος: [subtrahend])
+    עברית: (מחוסר: [minuend]) פחות (מחסר: [subtrahend])
+    עברית +: (מחוסר: [minuend]) − (מחסר: [subtrahend])
+   )
+   number
+   {
+    let (• value: number) start as (minuend)
+    subract (addend) from (↓ value)
+    ← value
+   }
+ }

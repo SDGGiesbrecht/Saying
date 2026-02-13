@@ -203,6 +203,46 @@ use (clients)
 
   action (clients)
    (
+    English: subract (minuend: platform fixed‐width integer) from (value: ↓ platform fixed‐width integer) skipping overflow check
+   )
+   C: “” value “ ¤(2D)= ” minuend “”
+   C♯: “” value “ ¤(2D)= ” minuend “”
+   JavaScript: “” value “ ¤(2D)= ” minuend “”
+   Kotlin: “” value “ ¤(2D)= ” minuend “”
+   Swift: “” value “ ¤(2D)= ” minuend “”
+
+  action (clients)
+   (
+    English: (minuend: platform fixed‐width integer) minus (subtrahend: platform fixed‐width integer), skipping overflow check
+   )
+   platform fixed‐width integer
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+  action (clients)
+   (
+    English: can subract (subtrahend: platform fixed‐width integer) from (minuend: platform fixed‐width integer)
+   )
+   truth value
+   {
+    if ((minuend) is greater than (zero: platform fixed‐width integer)), {
+     if ((subtrahend) is less than ((minimum representable: platform fixed‐width integer) plus (minuend) skipping overflow check)), {
+      ← false
+     }
+    }
+    if ((minuend) is less than (zero: platform fixed‐width integer)), {
+     if ((subtrahend) is greater than ((maximum representable: platform fixed‐width integer) plus (minuend) skipping overflow check)), {
+      ← false
+     }
+    }
+    ← true
+   }
+
+  action (clients)
+   (
     English: example augend
    )
    platform fixed‐width integer
@@ -228,20 +268,6 @@ use (clients)
     ← example sum according to natural arithmetic
    }
  }
-
-action (file)
- [
-  test {verify (((example sum: platform fixed‐width integer) minus (example addend: platform fixed‐width integer) skipping overflow check) is (example augend: platform fixed‐width integer))}
- ]
- (
-  English: (minuend: platform fixed‐width integer) minus (subtrahend: platform fixed‐width integer) skipping overflow check
- )
- platform fixed‐width integer
- C: “” minuend “ ¤(2D) ” subtrahend “”
- C♯: “” minuend “ ¤(2D) ” subtrahend “”
- JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
- Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
- Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
 
 use (clients)
  natural arithmetic with (platform fixed‐width integer)

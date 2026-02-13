@@ -196,6 +196,36 @@ use (clients)
 
   action (clients)
    (
+    English: subract (minuend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
+   )
+   C: “” value “ ¤(2D)= ” minuend “”
+   C♯: “” value “ ¤(2D)= ” minuend “”
+   JavaScript: “” value “ ¤(2D)= ” minuend “”
+   Kotlin: “” value “ ¤(2D)= ” minuend “”
+   Swift: “” value “ ¤(2D)= ” minuend “”
+
+  action (clients)
+   (
+    English: (minuend: platform fixed‐width natural number) minus (subtrahend: platform fixed‐width natural number), skipping overflow check
+   )
+   platform fixed‐width natural number
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+  action (clients)
+   (
+    English: can subract (subtrahend: platform fixed‐width natural number) from (minuend: platform fixed‐width natural number)
+   )
+   truth value
+   {
+    ← (minuend) is less than or equal to (subtrahend)
+   }
+
+  action (clients)
+   (
     English: example augend
    )
    platform fixed‐width natural number
@@ -221,20 +251,6 @@ use (clients)
     ← example sum according to natural arithmetic
    }
  }
-
-action (file)
- [
-  test {verify (((example sum: platform fixed‐width natural number) minus (example addend: platform fixed‐width natural number) skipping overflow check) is (example augend: platform fixed‐width natural number))}
- ]
- (
-  English: (minuend: platform fixed‐width natural number) minus (subtrahend: platform fixed‐width natural number) skipping overflow check
- )
- platform fixed‐width natural number
- C: “” minuend “ ¤(2D) ” subtrahend “”
- C♯: “” minuend “ ¤(2D) ” subtrahend “”
- JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
- Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
- Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
 
 use (clients)
  natural arithmetic with (platform fixed‐width natural number)
