@@ -388,7 +388,7 @@ use (file)
    )
    {
     subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
-}
+   }
 
   action (file)
    (
