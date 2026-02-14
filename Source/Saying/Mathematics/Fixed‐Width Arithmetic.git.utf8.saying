@@ -67,18 +67,16 @@ ability (clients)
 
   requirement (clients)
    [
-    test {verify (can add (one: number) to (zero: number))}
-    test {verify (not (can add (one: number) to (maximum representable: number)))}
-    test {
-     if (“0” − “1”) exists, unwrap it as (• negative one: number), {
-      verify (not (can add (negative one) to (minimum representable: number)))
-     }
-    }
-   ]
-   [
     [
      English: Returns a truth value indicating whether the sum will be representable.
     ]
+    test {verify (can add (one: number) to (zero: number))}
+    test {verify (not (can add (one: number) to (maximum representable: number)))}
+    test {
+     if ((“0”: number) − (“1”: number)) exists, unwrap it as (• negative one: number), {
+      verify (not (can add (negative one) to (minimum representable: number)))
+     }
+    }
    ]
    (
     English: can add (addend: number) to (augend: number)
@@ -134,15 +132,13 @@ ability (clients)
     [
      English: Returns a truth value indicating whether the difference will be representable.
     ]
-    [
-     test {verify (can subract (one: number) from (one: number))}
-     test {verify (not (can subract (one: number) from (minimum representable: number)))}
-     test {
-      if (“0” − “1”) exists, unwrap it as (• negative one: number), {
-       verify (not (can subract (negative one) from (maximum representable: number)))
-      }
+    test {verify (can subract (one: number) from (one: number))}
+    test {verify (not (can subract (one: number) from (minimum representable: number)))}
+    test {
+     if ((“0”: number) − (“1”: number)) exists, unwrap it as (• negative one: number), {
+      verify (not (can subract (negative one) from (maximum representable: number)))
      }
-    ]
+    }
    ]
    (
     English: can subtract (subtrahend: number) from (minuend: number)
