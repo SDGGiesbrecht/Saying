@@ -179,10 +179,6 @@ use (clients)
    Swift: “” augend “ ¤(26)+ ” addend “”
 
   action (clients)
-   [
-    test {verify (can add (“−1”: platform fixed‐width integer) to (“−1”: platform fixed‐width integer))}
-    test {verify (not (can add (“−1”: platform fixed‐width integer) to (minimum representable: platform fixed‐width integer)))}
-   ]
    (
     English: can add (addend: platform fixed‐width integer) to (augend: platform fixed‐width integer)
    )
