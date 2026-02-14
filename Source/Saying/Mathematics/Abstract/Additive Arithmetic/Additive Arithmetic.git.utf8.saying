@@ -50,7 +50,112 @@ ability (clients)
    number
    {
     let (• value: number) start as (minuend)
-    subtract (addend) from (↓ value)
+    subtract (subtrahend) from (↓ value)
     ← value
+   }
+ }
+
+thing (file)
+ (
+  English: minimal additive arithmetic example
+ )
+ {
+  part (file)
+   (
+    English: number
+   )
+   integer
+ }
+
+action (file)
+ (
+  English: minimal additive arithmetic example wrapping (number: integer)
+ )
+ minimal additive arithmetic example
+ create
+
+use (file)
+ general containers of (minimal additive arithmetic example)
+ {
+  action (file)
+   example
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example: integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal additive arithmetic example) for equality
+ {
+  action (file)
+   (first: minimal additive arithmetic example) is (second: minimal additive arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is ((number) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal additive arithmetic example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (differing example: integer)
+   }
+ }
+
+use (file)
+ addition of (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal additive arithmetic example) to (cumulative sum: ↓ minimal additive arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
+   }
+
+  action (file)
+   (
+    English: example augend
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example augend: integer)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example addend: integer)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example sum: integer)
+   }
+ }
+
+use (file)
+ additive arithmetic with (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal additive arithmetic example) from (value: ↓ minimal additive arithmetic example)
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value))
    }
  }
