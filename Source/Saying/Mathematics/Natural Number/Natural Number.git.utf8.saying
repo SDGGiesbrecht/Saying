@@ -218,7 +218,7 @@ use (clients)
  }
 
 use (clients)
- additive arithmetic with (natural number)
+ natural additive arithmetic with (natural number)
  {
   action (clients)
    (
@@ -228,11 +228,6 @@ use (clients)
    {
     ← zero
    }
- }
-
-use (clients)
- one‐dimensional additive arithmetic with (natural number)
- {
  }
 
 use (clients)

@@ -179,22 +179,58 @@ use (clients)
    Swift: “” augend “ ¤(26)+ ” addend “”
 
   action (clients)
-   [
-    test {verify (can add (“−1”: platform fixed‐width integer) to (“−1”: platform fixed‐width integer))}
-    test {verify (not (can add (“−1”: platform fixed‐width integer) to (minimum representable: platform fixed‐width integer)))}
-   ]
    (
     English: can add (addend: platform fixed‐width integer) to (augend: platform fixed‐width integer)
    )
    truth value
    {
     if ((addend) is greater than (zero: platform fixed‐width integer)), {
-     if ((augend) is greater than ((maximum representable: platform fixed‐width integer) minus (addend) skipping overflow check)), {
+     if ((augend) is greater than ((maximum representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
       ← false
      }
     }
     if ((addend) is less than (zero: platform fixed‐width integer)), {
-     if ((augend) is less than ((minimum representable: platform fixed‐width integer) minus (addend) skipping overflow check)), {
+     if ((augend) is less than ((minimum representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
+      ← false
+     }
+    }
+    ← true
+   }
+
+  action (clients)
+   (
+    English: subtract (subtrahend: platform fixed‐width integer) from (value: ↓ platform fixed‐width integer) skipping overflow check
+   )
+   C: “” value “ ¤(2D)= ” subtrahend “”
+   C♯: “” value “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+   Swift: “” value “ ¤(2D)= ” subtrahend “”
+
+  action (clients)
+   (
+    English: (minuend: platform fixed‐width integer) minus (subtrahend: platform fixed‐width integer), skipping overflow check
+   )
+   platform fixed‐width integer
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+  action (clients)
+   (
+    English: can subtract (subtrahend: platform fixed‐width integer) from (minuend: platform fixed‐width integer)
+   )
+   truth value
+   {
+    if ((subtrahend) is greater than (zero: platform fixed‐width integer)), {
+     if ((minuend) is less than ((minimum representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
+      ← false
+     }
+    }
+    if ((subtrahend) is less than (zero: platform fixed‐width integer)), {
+     if ((minuend) is greater than ((maximum representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
       ← false
      }
     }
@@ -228,20 +264,6 @@ use (clients)
     ← example sum according to natural arithmetic
    }
  }
-
-action (file)
- [
-  test {verify (((example sum: platform fixed‐width integer) minus (example addend: platform fixed‐width integer) skipping overflow check) is (example augend: platform fixed‐width integer))}
- ]
- (
-  English: (minuend: platform fixed‐width integer) minus (subtrahend: platform fixed‐width integer) skipping overflow check
- )
- platform fixed‐width integer
- C: “” minuend “ ¤(2D) ” subtrahend “”
- C♯: “” minuend “ ¤(2D) ” subtrahend “”
- JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
- Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
- Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
 
 use (clients)
  natural arithmetic with (platform fixed‐width integer)
