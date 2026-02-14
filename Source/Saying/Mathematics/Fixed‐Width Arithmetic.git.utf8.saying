@@ -100,7 +100,7 @@ ability (clients)
   choice (clients)
    [
     [
-     English: Returns the difference of the minuend minus the subrahend without checking whether the difference is representable.
+     English: Returns the difference of the minuend minus the subtrahend without checking whether the difference is representable.
     ]
     [
      English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {() minus ()} instead.
@@ -280,11 +280,13 @@ extension
     עברית: (מחוסר: [minuend]) פחות (מחסר: [subtrahend])
     עברית +: (מחוסר: [minuend]) − (מחסר: [subtrahend])
    )
-   number
+   optional (number)
    {
     let (• value: number) start as (minuend)
-    subtract (subtrahend) from (↓ value)
-    ← value
+    if (subtract (subtrahend) from (↓ value)), {
+     ← wrap (value) into optional
+    }
+    ← nothing
    }
  }
 
@@ -385,7 +387,7 @@ use (file)
     English: subtract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
    )
    {
-    subtract ((number) of (subrahend)) from (↓ (number) of (value)) skipping overflow check
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
 }
 
   action (file)
@@ -394,7 +396,7 @@ use (file)
    )
    truth value
    {
-    ← can subtract ((number) of (subrahend)) from ((number) of (minuend))
+    ← can subtract ((number) of (subtrahend)) from ((number) of (minuend))
    }
 
   action (file)
