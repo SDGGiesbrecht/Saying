@@ -287,8 +287,17 @@ use (clients)
     English: append (appendix: Unicode text) to (list: ↓ Unicode text)
    )
    {
-    append ((scalars) of (appendix)) to (↓ (scalars) of (list))
-    decompose (↓ (scalars) of (list)) according to compatibility decomposition
+    if ((list) is empty), {
+     change (↓ list) to (appendix)
+     ←
+    }
+    if (first in (appendix)) exists, unwrap it as (• next: Unicode scalar), {
+     append ((scalars) of (appendix)) to (↓ (scalars) of (list))
+     if ((value of (next)) is less than (value of (“¤(300)”: Unicode scalar))), {
+      ←
+     }
+     decompose (↓ (scalars) of (list)) according to compatibility decomposition
+    }
    }
 
   action (clients)
