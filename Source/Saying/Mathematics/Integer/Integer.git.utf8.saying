@@ -255,7 +255,7 @@ use (clients)
  }
 
 use (clients)
- natural arithmetic with (integer)
+ natural constants as (integer)
  {
   action (clients)
    (
@@ -278,45 +278,33 @@ use (clients)
  }
 
 use (clients)
- incrementation of (integer)
+ natural arithmetic with (integer)
  {
   action (clients)
    (
-    English: increment (value: ↓ integer)
+    English: increment (counter: ↓ integer)
    )
-   C: “++” value “”
-   C♯: “++” value “”
-   JavaScript: “++” value “”
-   Kotlin: “++” value “”
+   C: “++” counter “”
+   C♯: “++” counter “”
+   JavaScript: “++” counter “”
+   Kotlin: “++” counter “”
    {
-    add (one: integer) to (↓ value)
+    increment (↓ counter) according to natural arithmetic
    }
+ }
 
+use (clients)
+ integral arithmetic with (integer)
+ {
   action (clients)
    (
-    English: decrement (value: ↓ integer) skipping underflow check
+    English: decrement (counter: ↓ integer)
    )
-   C: “¤(2D)¤(2D)” value “”
-   C♯: “¤(2D)¤(2D)” value “”
-   JavaScript: “¤(2D)¤(2D)” value “”
-   Kotlin: “¤(2D)¤(2D)” value “”
-   Swift: “” value “ ¤(2D)= 1”
-
-  action (clients)
-   (
-    English: can decrement (value: integer)
-   )
-   truth value
+   C: “¤(2D)¤(2D)” counter “”
+   C♯: “¤(2D)¤(2D)” counter “”
+   JavaScript: “¤(2D)¤(2D)” counter “”
+   Kotlin: “¤(2D)¤(2D)” counter “”
    {
-    ← true
-   }
-
-  action (clients)
-   (
-    English: successor example
-   )
-   integer
-   {
-    ← one
+    decrement (↓ counter) according to integral arithmetic
    }
  }
