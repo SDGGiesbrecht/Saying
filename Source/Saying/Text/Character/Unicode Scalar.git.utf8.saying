@@ -41,7 +41,7 @@ action (clients)
  C♯: “(ulong)(” scalar “.Value)”
  JavaScript: “” scalar “”
  Kotlin: “” scalar “.toULong()”
- Swift: “UInt64(” scalar “.value)”
+ Swift: “UInt64((” scalar “).value)”
 
 use (clients)
  comparison of (Unicode scalar) for equality

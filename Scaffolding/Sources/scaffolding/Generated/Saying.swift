@@ -36,8 +36,17 @@ struct UnicodeText {
   }
 
   mutating func append(contentsOf newElements: UnicodeText) {
-    self.scalars += newElements.scalars
-    self.scalars.decomposeAccordingToCompatibilityDecomposition()
+    if self.isEmpty {
+      self = newElements
+      return
+    }
+    if let next = newElements.first {
+      self.scalars += newElements.scalars
+      if UInt64((next).value) < UInt64(("\u{0300}" as Unicode.Scalar).value) {
+        return
+      }
+      self.scalars.decomposeAccordingToCompatibilityDecomposition()
+    }
   }
 
   var endIndex: String.UnicodeScalarView.Index {
@@ -46,6 +55,10 @@ struct UnicodeText {
 
   subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
     return self.scalars[index]
+  }
+
+  var first: Unicode.Scalar? {
+    return self.scalars.first
   }
 
   func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
@@ -686,7 +699,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
   if let start = beginning {
     var adjusted_0020offset: UInt64 = start.offset
     var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
-    while segment.first == " " {
+    while segment.first == " " as Unicode.Scalar {
       segment.removeFirst()
       adjusted_0020offset += .one
     }

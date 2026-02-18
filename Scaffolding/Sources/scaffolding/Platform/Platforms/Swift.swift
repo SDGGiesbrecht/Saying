@@ -106,7 +106,7 @@ enum Swift: Platform {
   }
   static func literal(scalar: Unicode.Scalar) -> String {
     let contents = sanitize(stringLiteral: "\(scalar)")
-    return "\u{22}\(contents)\u{22}"
+    return "\u{22}\(contents)\u{22} as Unicode.Scalar"
   }
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
     return number.replacingOccurrences(of: "−", with: "-")
