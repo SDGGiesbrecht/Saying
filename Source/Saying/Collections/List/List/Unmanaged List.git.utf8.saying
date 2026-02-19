@@ -113,7 +113,9 @@ extension
     English: hold unmanaged (list: ↓ unmanaged list of (thing))
    )
    {
-    increment (↓ (references) of (list))
+    if (not (increment (↓ (references) of (list)))), {
+     !
+    }
    }
 
   action (unit)

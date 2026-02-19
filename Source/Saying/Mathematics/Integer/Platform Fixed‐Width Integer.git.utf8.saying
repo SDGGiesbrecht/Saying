@@ -239,6 +239,30 @@ use (clients)
 
   action (clients)
    (
+    English: increment (counter: ↓ platform fixed‐width integer) skipping overflow check
+   )
+   C: “++” counter “”
+   C♯: “++” counter “”
+   JavaScript: “++” counter “”
+   Kotlin: “++” counter “”
+   {
+    ← increment (↓ counter) skipping overflow check according to fixed‐width arithmetic
+   }
+
+  action (clients)
+   (
+    English: decrement (counter: ↓ platform fixed‐width integer) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” counter “”
+   C♯: “¤(2D)¤(2D)” counter “”
+   JavaScript: “¤(2D)¤(2D)” counter “”
+   Kotlin: “¤(2D)¤(2D)” counter “”
+   {
+    ← decrement (↓ counter) skipping underflow check according to fixed‐width arithmetic
+   }
+
+  action (clients)
+   (
     English: example augend
    )
    platform fixed‐width integer
@@ -266,7 +290,7 @@ use (clients)
  }
 
 use (clients)
- natural arithmetic with (platform fixed‐width integer)
+ natural constants as (platform fixed‐width integer)
  {
   action (clients)
    (
@@ -285,47 +309,5 @@ use (clients)
    platform fixed‐width integer
    {
     ← “1”
-   }
- }
-
-use (clients)
- incrementation of (platform fixed‐width integer)
- {
-  action (clients)
-   (
-    English: increment (value: ↓ platform fixed‐width integer)
-   )
-   C: “++” value “”
-   C♯: “++” value “”
-   JavaScript: “++” value “”
-   Kotlin: “++” value “”
-   Swift: “” value “ += 1”
-
-  action (clients)
-   (
-    English: decrement (value: ↓ platform fixed‐width integer) skipping underflow check
-   )
-   C: “¤(2D)¤(2D)” value “”
-   C♯: “¤(2D)¤(2D)” value “”
-   JavaScript: “¤(2D)¤(2D)” value “”
-   Kotlin: “¤(2D)¤(2D)” value “”
-   Swift: “” value “ ¤(2D)= 1”
-
-  action (clients)
-   (
-    English: can decrement (value: platform fixed‐width integer)
-   )
-   truth value
-   {
-    ← true
-   }
-
-  action (clients)
-   (
-    English: successor example
-   )
-   platform fixed‐width integer
-   {
-    ← one
    }
  }

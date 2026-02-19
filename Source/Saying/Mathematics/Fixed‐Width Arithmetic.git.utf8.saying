@@ -91,7 +91,7 @@ ability (clients)
   requirement (clients)
    [
     [
-     English: Subracts from the value without checking whether the result is representable.
+     English: subtracts from the value without checking whether the result is representable.
     ]
     [
      English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {subtract () from ()} instead.
@@ -155,6 +155,100 @@ ability (clients)
    )
    truth value
 
+  choice (clients)
+   [
+    [
+     English: Increments the counter without checking whether the next state is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {increment ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the counter is already known from context to have a representable successor state. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• counter: number) start as (zero: number)
+     increment (↓ counter) skipping overflow check
+     verify ((counter) is (one: number))
+    }
+   ]
+   (
+    English: increment (counter: ↓ number) skipping overflow check
+   )
+   {
+    increment (↓ counter) skipping overflow check according to fixed‐width arithmetic
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the next number without checking whether said successor is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {successor to ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the value is already known from context to have a representable successor. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     verify ((successor to (zero: number) skipping overflow check) is (one: number))
+    }
+   ]
+   (
+    English: successor to (number: number) skipping overflow check
+   )
+   number
+   {
+    ← (number) plus (one: number), skipping overflow check
+   }
+
+  choice (clients)
+   [
+    [
+     English: Decrements the counter without checking whether the previous state is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {decrement ()} instead.
+    ]
+    [
+     English: Skipping the underflow check can also be more efficient when the counter is already known from context to have a representable predecessor state. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• counter: number) start as (one: number)
+     decrement (↓ counter) skipping underflow check
+     verify ((counter) is (zero: number))
+    }
+   ]
+   (
+    English: decrement (counter: ↓ number) skipping underflow check
+   )
+   {
+    decrement (↓ counter) skipping underflow check according to fixed‐width arithmetic
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the previous number without checking whether said predecessor is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {predecessor to ()} instead.
+    ]
+    [
+     English: Skipping the underflow check can also be more efficient when the value is already known from context to have a representable predecessor. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     verify ((predecessor to (one: number) skipping underflow check) is (zero: number))
+    }
+   ]
+   (
+    English: predecessor to (number: number) skipping underflow check
+   )
+   number
+   {
+    ← (number) minus (one: number), skipping overflow check
+   }
+
   requirement (clients)
    (
     English: example augend
@@ -180,7 +274,7 @@ extension
   action (clients)
    [
     [
-     English: Adds the value to the cumulative sum if possible and then returns whether or not the addition succeeded.
+     English: Adds the number to the cumulative sum if possible and then returns whether or not the addition succeeded.
     ]
     test {
      let (• cumulative sum: number) start as (example augend: number)
@@ -248,7 +342,7 @@ extension
   action (clients)
    [
     [
-     English: Subracts the subtrahend from the value if possible and then returns whether or not the subtraction succeeded.
+     English: subtracts the subtrahend from the value if possible and then returns whether or not the subtraction succeeded.
     ]
     test {
      let (• value: number) start as (example sum: number)
@@ -312,6 +406,110 @@ extension
     }
     ← nothing
    }
+
+  action (clients)
+   (
+    English: increment (number: ↓ number) skipping overflow check according to fixed‐width arithmetic
+   )
+   {
+    add (one: number) to (↓ number) skipping overflow check
+   }
+
+  action (clients)
+   [
+    [
+     English: Increments the counter if it has a representable successor state and then returns whether or not the incrementation succeeded.
+    ]
+    test {
+     let (• counter: number) start as (zero: number)
+     verify (increment (↓ counter))
+    }
+   ]
+   (
+    English: increment (counter: ↓ number)
+   )
+   truth value
+   {
+    if (can add (one: number) to (counter)), {
+     increment (↓ counter) skipping overflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    [
+     English: Returns the next number if it is representable.
+    ]
+    test {
+     verify ((successor to (zero: number)) exists)
+     verify ((successor to (maximum representable: number)) does not exist)
+    }
+   ]
+   (
+    English: successor to (number: number)
+   )
+   optional (number)
+   {
+    let (• copy: number) start as (number)
+    if (increment (↓ copy)), {
+     ← wrap (copy) into optional
+    }
+    ← nothing
+   }
+
+  action (clients)
+   (
+    English: decrement (number: ↓ number) skipping underflow check according to fixed‐width arithmetic
+   )
+   {
+    subtract (one: number) from (↓ number) skipping overflow check
+   }
+
+  action (clients)
+   [
+    [
+     English: Decrements the counter if it has a representable predecessor state and then returns whether or not the decrementation succeeded.
+    ]
+    test {
+     let (• counter: number) start as (one: number)
+     verify (decrement (↓ counter))
+    }
+   ]
+   (
+    English: decrement (counter: ↓ number)
+   )
+   truth value
+   {
+    if (can subtract (one: number) from (counter)), {
+     decrement (↓ counter) skipping underflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    [
+     English: Returns the previous number if it is representable.
+    ]
+    test {
+     verify ((predecessor to (one: number)) exists)
+     verify ((predecessor to (minimum representable: number)) does not exist)
+    }
+   ]
+   (
+    English: predecessor to (number: number)
+   )
+   optional (number)
+   {
+    let (• copy: number) start as (number)
+    if (decrement (↓ copy)), {
+     ← wrap (copy) into optional
+    }
+    ← nothing
+   }
  }
 
 thing (file)
@@ -340,7 +538,7 @@ use (file)
    example
    minimal fixed‐width arithmetic example
    {
-    ← example augend
+    ← minimal fixed‐width arithmetic example wrapping (example: platform fixed‐width natural number)
    }
  }
 
@@ -364,7 +562,7 @@ use (file)
    differing example
    minimal fixed‐width arithmetic example
    {
-    ← example sum
+    ← minimal fixed‐width arithmetic example wrapping (differing example: platform fixed‐width natural number)
    }
  }
 
@@ -452,7 +650,7 @@ use (file)
  }
 
 use (file)
- natural arithmetic with (minimal fixed‐width arithmetic example)
+ natural constants as (minimal fixed‐width arithmetic example)
  {
   action (file)
    (
