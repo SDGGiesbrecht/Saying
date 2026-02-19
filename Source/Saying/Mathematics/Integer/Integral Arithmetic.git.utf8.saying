@@ -56,10 +56,154 @@ extension
  integral arithmetic with (number)
  {
   action (clients)
+   [
+    test {
+     let (• counter: number) start as (one: number)
+     decrement (↓ counter) according to integral arithmetic
+     verify ((counter) is (zero: number))
+    }
+   ]
    (
     English: decrement (counter: ↓ number) according to integral arithmetic
    )
    {
     subtract (one: number) from (↓ counter)
    }
+ }
+
+thing (file)
+ (
+  English: minimal integral arithmetic example
+ )
+ {
+  part (file)
+   (
+    English: number
+   )
+   integer
+ }
+
+action (file)
+ (
+  English: minimal integral arithmetic example wrapping (number: integer)
+ )
+ minimal integral arithmetic example
+ create
+
+use (file)
+ general use of (minimal integral arithmetic example)
+ {
+ }
+
+use (file)
+ general containers of (minimal integral arithmetic example)
+ {
+  action (file)
+   example
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (example: integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal integral arithmetic example) for equality
+ {
+  action (file)
+   (first: minimal integral arithmetic example) is (second: minimal integral arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is ((number) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal integral arithmetic example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (differing example: integer)
+   }
+ }
+
+use (file)
+ addition of (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal integral arithmetic example) to (cumulative sum: ↓ minimal integral arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
+   }
+
+  action (file)
+   (
+    English: example augend
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (example augend: integer)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (example addend: integer)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (example sum: integer)
+   }
+ }
+
+use (file)
+ additive arithmetic with (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal integral arithmetic example) from (value: ↓ minimal integral arithmetic example)
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value))
+   }
+ }
+
+use (file)
+ natural constants as (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: zero
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (zero: integer)
+   }
+
+  action (file)
+   (
+    English: one
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (one: integer)
+   }
+ }
+
+use (file)
+ integral arithmetic with (minimal integral arithmetic example)
+ {
  }

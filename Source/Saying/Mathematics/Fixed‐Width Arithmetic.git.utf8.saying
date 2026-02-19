@@ -538,7 +538,7 @@ use (file)
    example
    minimal fixed‐width arithmetic example
    {
-    ← example augend
+    ← minimal fixed‐width arithmetic example wrapping (example: platform fixed‐width natural number)
    }
  }
 
@@ -562,7 +562,7 @@ use (file)
    differing example
    minimal fixed‐width arithmetic example
    {
-    ← example sum
+    ← minimal fixed‐width arithmetic example wrapping (differing example: platform fixed‐width natural number)
    }
  }
 

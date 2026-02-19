@@ -56,10 +56,142 @@ extension
  natural arithmetic with (number)
  {
   action (clients)
+   [
+    test {
+     let (• counter: number) start as (zero: number)
+     increment (↓ counter) according to natural arithmetic
+     verify ((counter) is (one: number))
+    }
+   ]
    (
     English: increment (number: ↓ number) according to natural arithmetic
    )
    {
     add (one: number) to (↓ number)
    }
+ }
+
+thing (file)
+ (
+  English: minimal natural arithmetic example
+ )
+ {
+  part (file)
+   (
+    English: number
+   )
+   natural number
+ }
+
+action (file)
+ (
+  English: minimal natural arithmetic example wrapping (number: natural number)
+ )
+ minimal natural arithmetic example
+ create
+
+use (file)
+ general use of (minimal natural arithmetic example)
+ {
+ }
+
+use (file)
+ general containers of (minimal natural arithmetic example)
+ {
+  action (file)
+   example
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (example: natural number)
+   }
+ }
+
+use (file)
+ comparison of (minimal natural arithmetic example) for equality
+ {
+  action (file)
+   (first: minimal natural arithmetic example) is (second: minimal natural arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is ((number) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal natural arithmetic example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (differing example: natural number)
+   }
+ }
+
+use (file)
+ addition of (minimal natural arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal natural arithmetic example) to (cumulative sum: ↓ minimal natural arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
+   }
+
+  action (file)
+   (
+    English: example augend
+   )
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (example augend: natural number)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (example addend: natural number)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (example sum: natural number)
+   }
+ }
+
+use (file)
+ natural constants as (minimal natural arithmetic example)
+ {
+  action (file)
+   (
+    English: zero
+   )
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (zero: natural number)
+   }
+
+  action (file)
+   (
+    English: one
+   )
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (one: natural number)
+   }
+ }
+
+use (file)
+ natural arithmetic with (minimal natural arithmetic example)
+ {
  }
