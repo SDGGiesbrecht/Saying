@@ -1,4 +1,25 @@
 ability (clients)
+ [
+  test {verify (not (can add (one: number) to (maximum representable: number)))}
+  test {
+   if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
+    verify (not (can add (negative one) to (minimum representable: number)))
+   }
+  }
+  test {
+   if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
+    verify (can add (negative one) to (zero: number))
+   }
+  }
+  test {
+   let (• cumulative sum: value) start as (maximum representable: value)
+   verify (not (add (one: value) to (↓ cumulative sum)))
+   verify ((cumulative sum) is (maximum representable: value))
+  }
+  test {
+   verify (((maximum representable: value) + (one: value)) does not exist)
+  }
+ ]
  (
   English: fixed‐width arithmetic with (number)
  )
@@ -20,73 +41,6 @@ ability (clients)
     English: minimum representable
    )
    number
-
-  requirement (clients)
-   [
-    [
-     English: Adds to the cumulative sum without checking whether the result is representable.
-    ]
-    [
-     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {add () to ()} instead.
-    ]
-    [
-     English: Skipping the overflow check can also be more efficient when the resulting sum is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
-    ]
-    test {
-     let (• cumulative sum: number) start as (example augend: number)
-     add (example addend: number) to (↓ cumulative sum) skipping overflow check
-     verify ((cumulative sum) is (example sum: number))
-    }
-   ]
-   (
-    English: add (addend: number) to (cumulative sum: ↓ number) skipping overflow check
-   )
-
-  choice (clients)
-   [
-    [
-     English: Returns the sum of two values without checking whether the sum is representable.
-    ]
-    [
-     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {() plus ()} instead.
-    ]
-    [
-     English: Skipping the overflow check can also be more efficient when the sum is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
-    ]
-    test {verify (((example augend: number) plus (example addend: number), skipping overflow check) = (example sum: number))}
-   ]
-   (
-    English: (augend: number) plus (addend: number), skipping overflow check
-   )
-   number
-   {
-    let (• sum: number) start as (augend)
-    add (addend) to (↓ sum) skipping overflow check
-    ← sum
-   }
-
-  requirement (clients)
-   [
-    [
-     English: Returns a truth value indicating whether the sum will be representable.
-    ]
-    test {verify (can add (one: number) to (zero: number))}
-    test {verify (not (can add (one: number) to (maximum representable: number)))}
-    test {
-     if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
-      verify (not (can add (negative one) to (minimum representable: number)))
-     }
-    }
-    test {
-     if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
-      verify (can add (negative one) to (zero: number))
-     }
-    }
-   ]
-   (
-    English: can add (addend: number) to (augend: number)
-   )
-   truth value
 
   requirement (clients)
    [
@@ -248,97 +202,11 @@ ability (clients)
    {
     ← (number) minus (one: number), skipping overflow check
    }
-
-  requirement (clients)
-   (
-    English: example augend
-   )
-   number
-
-  requirement (clients)
-   (
-    English: example addend
-   )
-   number
-
-  requirement (clients)
-   (
-    English: example sum
-   )
-   number
  }
 
 extension
  fixed‐width arithmetic with (number)
  {
-  action (clients)
-   [
-    [
-     English: Adds the number to the cumulative sum if possible and then returns whether or not the addition succeeded.
-    ]
-    test {
-     let (• cumulative sum: number) start as (example augend: number)
-     verify (add (example addend: number) to (↓ cumulative sum))
-     verify ((cumulative sum) is (example sum: number))
-    }
-    test {
-     let (• cumulative sum: number) start as (maximum representable: number)
-     verify (not (add (one: number) to (↓ cumulative sum)))
-     verify ((cumulative sum) is (maximum representable: number))
-    }
-   ]
-   (
-    English: add (addend: number) to (cumulative sum: ↓ number)
-   )
-   truth value
-   {
-    if (can add (addend) to (cumulative sum)), {
-     add (addend) to (↓ cumulative sum) skipping overflow check
-     ← true
-    }
-    ← false
-   }
-
-  action (clients)
-   [
-    test {
-     if ((example augend: number) + (example addend: number)) exists, unwrap it as (• sum: number), {
-      verify ((sum) = (example sum: number))
-     }
-    }
-    test {
-     verify (((maximum representable: number) + (one: number)) does not exist)
-    }
-   ]
-   (
-    English: (augend: number) plus (addend: number)
-    English +: (augend: [augend]) + (addend: [addend])
-    español: (primer sumando: [augend]) más (segundo sumando: [addend])
-    español +: (primer sumando: [augend]) + (segundo sumando: [addend])
-    português: (primeiro sumado: [augend]) mais (segundo sumado: [addend])
-    português +: (primeiro sumado: [augend]) + (segundo sumado: [addend])
-    français : (cumulande: [augend]) plus (cumulateur: [addend])
-    français + : (cumulande: [augend]) + (cumulateur: [addend])
-    Deutsch: (erster Summand: [augend]) plus (zweiter Summand: [addend])
-    Deutsch: (erster Summand: [augend]) + (zweiter Summand: [addend])
-    italiano: (auguendo: [augend]) più (addendo: [addend])
-    italiano +: (auguendo: [augend]) + (addendo: [addend])
-    Nederlands: (eerste term: [augend]) plus (tweede term: [addend])
-    Nederlands +: (eerste term: [augend]) + (tweede term: [addend])
-    ελληνικά: (προσθέτης: [augend]) συν (προσθετέος: [addend])
-    ελληνικά +: (προσθέτης: [augend]) + (προσθετέος: [addend])
-    עברית: (מחובר ראשון: [augend]) ועוד (מחובר שני: [addend])
-    עברית +: (מחובר ראשון: [augend]) + (מחובר שני: [addend])
-   )
-   optional (number)
-   {
-    let (• sum: number) start as (augend)
-    if (add (addend) to (↓ sum)), {
-     ← wrap (sum) into optional
-    }
-    ← nothing
-   }
-
   action (clients)
    [
     [
@@ -567,60 +435,8 @@ use (file)
  }
 
 use (file)
- fixed‐width arithmetic with (minimal fixed‐width arithmetic example)
+ addition examples as (minimal fixed‐width arithmetic example)
  {
-  action (file)
-   (
-    English: maximum representable
-   )
-   minimal fixed‐width arithmetic example
-   {
-    ← minimal fixed‐width arithmetic example wrapping (maximum representable: platform fixed‐width natural number)
-   }
-
-  action (file)
-   (
-    English: minimum representable
-   )
-   minimal fixed‐width arithmetic example
-   {
-    ← minimal fixed‐width arithmetic example wrapping (minimum representable: platform fixed‐width natural number)
-   }
-
-  action (file)
-   (
-    English: add (addend: minimal fixed‐width arithmetic example) to (cumulative sum: ↓ minimal fixed‐width arithmetic example) skipping overflow check
-   )
-   {
-    add ((number) of (addend)) to (↓ (number) of (cumulative sum)) skipping overflow check
-   }
-
-  action (file)
-   (
-    English: can add (addend: minimal fixed‐width arithmetic example) to (augend: minimal fixed‐width arithmetic example)
-   )
-   truth value
-   {
-    ← can add ((number) of (addend)) to ((number) of (augend))
-   }
-
-  action (file)
-   (
-    English: subtract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
-   )
-   {
-    subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
-   }
-
-  action (file)
-   (
-    English: can subtract (subtrahend: minimal fixed‐width arithmetic example) from (minuend: minimal fixed‐width arithmetic example)
-   )
-   truth value
-   {
-    ← can subtract ((number) of (subtrahend)) from ((number) of (minuend))
-   }
-
   action (file)
    (
     English: example augend
@@ -650,6 +466,27 @@ use (file)
  }
 
 use (file)
+ limited addition of (minimal fixed‐width arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal fixed‐width arithmetic example) to (cumulative sum: ↓ minimal fixed‐width arithmetic example) skipping overflow check
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can add (addend: minimal fixed‐width arithmetic example) to (augend: minimal fixed‐width arithmetic example)
+   )
+   truth value
+   {
+    ← can add ((number) of (addend)) to ((number) of (augend))
+   }
+ }
+
+use (file)
  natural constants as (minimal fixed‐width arithmetic example)
  {
   action (file)
@@ -668,5 +505,44 @@ use (file)
    minimal fixed‐width arithmetic example
    {
     ← minimal fixed‐width arithmetic example wrapping (one: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ fixed‐width arithmetic with (minimal fixed‐width arithmetic example)
+ {
+  action (file)
+   (
+    English: maximum representable
+   )
+   minimal fixed‐width arithmetic example
+   {
+    ← minimal fixed‐width arithmetic example wrapping (maximum representable: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: minimum representable
+   )
+   minimal fixed‐width arithmetic example
+   {
+    ← minimal fixed‐width arithmetic example wrapping (minimum representable: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: subtract (subtrahend: minimal fixed‐width arithmetic example) from (value: ↓ minimal fixed‐width arithmetic example) skipping overflow check
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can subtract (subtrahend: minimal fixed‐width arithmetic example) from (minuend: minimal fixed‐width arithmetic example)
+   )
+   truth value
+   {
+    ← can subtract ((number) of (subtrahend)) from ((number) of (minuend))
    }
  }

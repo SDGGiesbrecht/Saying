@@ -1,0 +1,258 @@
+ability (clients)
+ [
+  [
+   English: Some form of addition of one value to another, where every pair of terms has a valid sum.
+  ]
+  [
+   English: When used with numbers, this ability generally implies arithmetic addition. But the ability intentionally supports other forms of addition (such as concatenation) when applied to other things.
+  ]
+ ]
+ (
+  English: unlimited addition of (value)
+  español: adición ilimitada de (número: [value])
+  português: adição ilimitada de (número: [value])
+  français : addition illimitée de (nombre: [value])
+  Deutsch: unbegrenzte Zusammenzählung von (Zahl: [value])
+  italiano: addizione illimitata di (numero: [value])
+  Nederlands: onbeperkte optellen van (getal: [value])
+  ελληνικά: απεριόριστη πρόθεση (αριθμός: [value])
+  עברית: חיבות בלתי מוגבלת של (מספר: [value])
+ )
+ {
+  requirement (clients)
+   [
+    test {
+     let (• cumulative sum: value) start as (example augend: value)
+     add (example addend: value) to (↓ cumulative sum)
+     verify ((cumulative sum) is (example sum: value))
+    }
+   ]
+   (
+    English: add (addend: value) to (cumulative sum: ↓ value)
+   )
+
+  choice (clients)
+   [
+    test {verify (((example augend: value) + (example addend: value)) = (example sum: value))}
+   ]
+   (
+    English: (augend: value) plus (addend: value)
+    English +: (augend: [augend]) + (addend: [addend])
+    español: (primer sumando: [augend]) más (segundo sumando: [addend])
+    español +: (primer sumando: [augend]) + (segundo sumando: [addend])
+    português: (primeiro sumado: [augend]) mais (segundo sumado: [addend])
+    português +: (primeiro sumado: [augend]) + (segundo sumado: [addend])
+    français : (cumulande: [augend]) plus (cumulateur: [addend])
+    français + : (cumulande: [augend]) + (cumulateur: [addend])
+    Deutsch: (erster Summand: [augend]) plus (zweiter Summand: [addend])
+    Deutsch: (erster Summand: [augend]) + (zweiter Summand: [addend])
+    italiano: (auguendo: [augend]) più (addendo: [addend])
+    italiano +: (auguendo: [augend]) + (addendo: [addend])
+    Nederlands: (eerste term: [augend]) plus (tweede term: [addend])
+    Nederlands +: (eerste term: [augend]) + (tweede term: [addend])
+    ελληνικά: (προσθέτης: [augend]) συν (προσθετέος: [addend])
+    ελληνικά +: (προσθέτης: [augend]) + (προσθετέος: [addend])
+    עברית: (מחובר ראשון: [augend]) ועוד (מחובר שני: [addend])
+    עברית +: (מחובר ראשון: [augend]) + (מחובר שני: [addend])
+   )
+   value
+   {
+    let (• sum: value) start as (augend)
+    add (addend) to (↓ sum)
+    ← sum
+   }
+ }
+
+thing (file)
+ (
+  English: minimal addition example
+ )
+ {
+  part (file)
+   (
+    English: value
+   )
+   natural number
+ }
+
+action (file)
+ (
+  English: minimal addition example wrapping (value: natural number)
+ )
+ minimal addition example
+ create
+
+use (file)
+ general containers of (minimal addition example)
+ {
+  action (file)
+   example
+   minimal addition example
+   {
+    ← example augend
+   }
+ }
+
+use (file)
+ comparison of (minimal addition example) for equality
+ {
+  action (file)
+   (first: minimal addition example) is (second: minimal addition example)
+   truth value
+   {
+    ← ((value) of (first)) is ((value) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal addition example) with (hasher: ↓ hasher)
+   {
+    hash part ((value) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal addition example
+   {
+    ← example sum
+   }
+ }
+
+use (file)
+ addition examples as (minimal addition example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal addition example
+   {
+    ← minimal addition example wrapping (example augend: natural number)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal addition example
+   {
+    ← minimal addition example wrapping (example addend: natural number)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal addition example
+   {
+    ← minimal addition example wrapping (example sum: natural number)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal addition example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal addition example) to (cumulative sum: ↓ minimal addition example)
+   )
+   {
+    add ((value) of (addend)) to (↓ (value) of (cumulative sum))
+   }
+ }
+
+thing (file)
+ (
+  English: minimal concatenation example
+ )
+ {
+  part (file)
+   (
+    English: text
+   )
+   Unicode text
+ }
+
+action (file)
+ (
+  English: minimal concatenation example wrapping (text: Unicode text)
+ )
+ minimal concatenation example
+ create
+
+use (file)
+ general containers of (minimal concatenation example)
+ {
+  action (file)
+   example
+   minimal concatenation example
+   {
+    ← minimal concatenation example wrapping (example: Unicode text)
+   }
+ }
+
+use (file)
+ comparison of (minimal concatenation example) for equality
+ {
+  action (file)
+   (first: minimal concatenation example) is (second: minimal concatenation example)
+   truth value
+   {
+    ← ((text) of (first)) is ((text) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal concatenation example) with (hasher: ↓ hasher)
+   {
+    hash part ((text) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal concatenation example
+   {
+    ← minimal concatenation example wrapping (differing example: Unicode text)
+   }
+ }
+
+use (file)
+ addition examples as (minimal concatenation example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal concatenation example
+   {
+    ← minimal concatenation example wrapping (“A”)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal concatenation example
+   {
+    ← minimal concatenation example wrapping (“AB”)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal concatenation example
+   {
+    ← minimal concatenation example wrapping (“AB”)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal concatenation example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal concatenation example) to (cumulative sum: ↓ minimal concatenation example)
+   )
+   {
+    append ((text) of (addend)) to (↓ (text) of (cumulative sum))
+   }
+ }

@@ -1,0 +1,28 @@
+ability (clients)
+ [
+  [
+   English: Examples used by both kinds of addition.
+  ]
+ ]
+ (
+  English: addition examples as (value)
+ )
+ {
+  requirement (clients)
+   (
+    English: example augend
+   )
+   value
+
+  requirement (clients)
+   (
+    English: example addend
+   )
+   value
+
+  requirement (clients)
+   (
+    English: example sum
+   )
+   value
+ }

@@ -1,0 +1,138 @@
+ability (clients)
+ [
+  [
+   English: Some form of addition of one value to another, where some pairs of terms have no valid sum.
+  ]
+ ]
+ (
+  English: limited addition of (value)
+  español: adición limitada de (número: [value])
+  português: adição limitada de (número: [value])
+  français : addition limitée de (nombre: [value])
+  Deutsch: begrenzte Zusammenzählung von (Zahl: [value])
+  italiano: addizione limitata di (numero: [value])
+  Nederlands: beperkte optellen van (getal: [value])
+  ελληνικά: περιορισμένη πρόθεση (αριθμός: [value])
+  עברית: חיבות מוגבלת של (מספר: [value])
+ )
+ {
+  requirement (clients)
+   [
+    [
+     English: Adds to the cumulative sum without checking whether the result is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {add () to ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the resulting sum is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• cumulative sum: value) start as (example augend: value)
+     add (example addend: value) to (↓ cumulative sum) skipping overflow check
+     verify ((cumulative sum) is (example sum: value))
+    }
+   ]
+   (
+    English: add (addend: value) to (cumulative sum: ↓ value) skipping overflow check
+   )
+
+  choice (clients)
+   [
+    [
+     English: Returns the sum of two values without checking whether the sum is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {() plus ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the sum is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {verify (((example augend: value) plus (example addend: value), skipping overflow check) = (example sum: value))}
+   ]
+   (
+    English: (augend: value) plus (addend: value), skipping overflow check
+   )
+   value
+   {
+    let (• sum: value) start as (augend)
+    add (addend) to (↓ sum) skipping overflow check
+    ← sum
+   }
+
+  requirement (clients)
+   [
+    [
+     English: Returns a truth value indicating whether the sum will be representable.
+    ]
+    test {verify (can add (example addend: value) to (example augend: value))}
+   ]
+   (
+    English: can add (addend: value) to (augend: value)
+   )
+   truth value
+ }
+
+extension
+ limited addition of (value)
+ {
+  action (clients)
+   [
+    [
+     English: Adds to the cumulative sum if possible and then returns whether or not the addition succeeded.
+    ]
+    test {
+     let (• cumulative sum: value) start as (example augend: value)
+     verify (add (example addend: value) to (↓ cumulative sum))
+     verify ((cumulative sum) is (example sum: value))
+    }
+   ]
+   (
+    English: add (addend: value) to (cumulative sum: ↓ value)
+   )
+   truth value
+   {
+    if (can add (addend) to (cumulative sum)), {
+     add (addend) to (↓ cumulative sum) skipping overflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    test {
+     if ((example augend: value) + (example addend: value)) exists, unwrap it as (• sum: value), {
+      verify ((sum) = (example sum: value))
+     }
+    }
+   ]
+   (
+    English: (augend: value) plus (addend: value)
+    English +: (augend: [augend]) + (addend: [addend])
+    español: (primer sumando: [augend]) más (segundo sumando: [addend])
+    español +: (primer sumando: [augend]) + (segundo sumando: [addend])
+    português: (primeiro sumado: [augend]) mais (segundo sumado: [addend])
+    português +: (primeiro sumado: [augend]) + (segundo sumado: [addend])
+    français : (cumulande: [augend]) plus (cumulateur: [addend])
+    français + : (cumulande: [augend]) + (cumulateur: [addend])
+    Deutsch: (erster Summand: [augend]) plus (zweiter Summand: [addend])
+    Deutsch: (erster Summand: [augend]) + (zweiter Summand: [addend])
+    italiano: (auguendo: [augend]) più (addendo: [addend])
+    italiano +: (auguendo: [augend]) + (addendo: [addend])
+    Nederlands: (eerste term: [augend]) plus (tweede term: [addend])
+    Nederlands +: (eerste term: [augend]) + (tweede term: [addend])
+    ελληνικά: (προσθέτης: [augend]) συν (προσθετέος: [addend])
+    ελληνικά +: (προσθέτης: [augend]) + (προσθετέος: [addend])
+    עברית: (מחובר ראשון: [augend]) ועוד (מחובר שני: [addend])
+    עברית +: (מחובר ראשון: [augend]) + (מחובר שני: [addend])
+   )
+   optional (value)
+   {
+    let (• sum: value) start as (augend)
+    if (add (addend) to (↓ sum)), {
+     ← wrap (sum) into optional
+    }
+    ← nothing
+   }
+ }

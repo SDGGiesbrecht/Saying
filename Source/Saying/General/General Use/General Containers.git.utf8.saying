@@ -6,7 +6,7 @@ ability (clients)
   requirement (clients)
    [
     [
-     English: An arbitrary example instance intended for use in tests.
+     English: An arbitrary example value intended for use in tests.
     ]
    ]
    example

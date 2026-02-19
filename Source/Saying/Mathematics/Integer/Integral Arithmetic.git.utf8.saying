@@ -131,16 +131,8 @@ use (file)
  }
 
 use (file)
- addition of (minimal integral arithmetic example)
+ addition examples as (minimal integral arithmetic example)
  {
-  action (file)
-   (
-    English: add (addend: minimal integral arithmetic example) to (cumulative sum: ↓ minimal integral arithmetic example)
-   )
-   {
-    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
-   }
-
   action (file)
    (
     English: example augend
@@ -166,6 +158,18 @@ use (file)
    minimal integral arithmetic example
    {
     ← minimal integral arithmetic example wrapping (example sum: integer)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal integral arithmetic example) to (cumulative sum: ↓ minimal integral arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
    }
  }
 
