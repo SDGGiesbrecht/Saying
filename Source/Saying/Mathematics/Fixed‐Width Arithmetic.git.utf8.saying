@@ -12,12 +12,12 @@ ability (clients)
    }
   }
   test {
-   let (• cumulative sum: value) start as (maximum representable: value)
-   verify (not (add (one: value) to (↓ cumulative sum)))
-   verify ((cumulative sum) is (maximum representable: value))
+   let (• cumulative sum: number) start as (maximum representable: number)
+   verify (not (add (one: number) to (↓ cumulative sum)))
+   verify ((cumulative sum) is (maximum representable: number))
   }
   test {
-   verify (((maximum representable: value) + (one: value)) does not exist)
+   verify (((maximum representable: number) + (one: number)) does not exist)
   }
  ]
  (
