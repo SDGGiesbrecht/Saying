@@ -131,7 +131,7 @@ use (file)
  }
 
 use (file)
- addition examples as (minimal integral arithmetic example)
+ any addition of (minimal integral arithmetic example)
  {
   action (file)
    (
@@ -174,7 +174,20 @@ use (file)
  }
 
 use (file)
- additive arithmetic with (minimal integral arithmetic example)
+ any additive arithmetic with (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (additive identity: integer)
+   }
+ }
+
+use (file)
+ unlimited subtraction with (minimal integral arithmetic example)
  {
   action (file)
    (
@@ -183,6 +196,11 @@ use (file)
    {
     subtract ((number) of (subtrahend)) from (↓ (number) of (value))
    }
+ }
+
+use (file)
+ unlimited additive arithmetic with (minimal integral arithmetic example)
+ {
  }
 
 use (file)

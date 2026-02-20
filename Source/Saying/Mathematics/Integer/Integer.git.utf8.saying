@@ -160,7 +160,7 @@ use (clients)
  }
 
 use (clients)
- addition examples as (integer)
+ any addition of (integer)
  {
   action (clients)
    (
@@ -216,20 +216,21 @@ use (clients)
  }
 
 use (clients)
- natural additive arithmetic with (integer)
+ any additive arithmetic with (integer)
  {
   action (clients)
    (
     English: additive identity
    )
    integer
+   Swift: “Int64.zero”
    {
     ← zero
    }
  }
 
 use (clients)
- additive arithmetic with (integer)
+ unlimited subtraction with (integer)
  {
   action (clients)
    (
@@ -254,6 +255,11 @@ use (clients)
  }
 
 use (clients)
+ unlimited additive arithmetic with (integer)
+ {
+ }
+
+use (clients)
  one‐dimensional additive arithmetic with (integer)
  {
  }
@@ -266,7 +272,6 @@ use (clients)
     English: zero
    )
    integer
-   Swift: “Int64.zero”
    {
     ← “0”
    }

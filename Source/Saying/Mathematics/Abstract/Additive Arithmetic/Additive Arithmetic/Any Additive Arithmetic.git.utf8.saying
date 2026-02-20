@@ -1,0 +1,22 @@
+ability (clients)
+ [
+  [
+   English: Capability common to limited, unlimited and natural additive arithmetic.
+  ]
+  [
+   English: Besides numbers, additive arithmetic intentionally supports things that have no comparison order, such as vectors with more than one dimension.
+  ]
+ ]
+ (
+  English: any additive arithmetic with (value)
+ )
+ {
+  requirement (clients)
+   [
+    test {ignore (additive identity: value)}
+   ]
+   (
+    English: additive identity
+   )
+   value
+ }

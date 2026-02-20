@@ -1,10 +1,7 @@
 ability (clients)
  [
   [
-   English: Some form of addition of one value to another, where every pair of terms has a valid sum.
-  ]
-  [
-   English: When used with numbers, this ability generally implies arithmetic addition. But the ability intentionally supports other forms of addition (such as concatenation) when applied to other things.
+   English: Addition where every pair of terms has a valid sum.
   ]
  ]
  (
@@ -118,7 +115,7 @@ use (file)
  }
 
 use (file)
- addition examples as (minimal addition example)
+ any addition of (minimal addition example)
  {
   action (file)
    (
@@ -215,7 +212,7 @@ use (file)
  }
 
 use (file)
- addition examples as (minimal concatenation example)
+ any addition of (minimal concatenation example)
  {
   action (file)
    (
