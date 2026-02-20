@@ -110,16 +110,8 @@ use (file)
  }
 
 use (file)
- addition of (minimal additive arithmetic example)
+ addition examples as (minimal additive arithmetic example)
  {
-  action (file)
-   (
-    English: add (addend: minimal additive arithmetic example) to (cumulative sum: ↓ minimal additive arithmetic example)
-   )
-   {
-    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
-   }
-
   action (file)
    (
     English: example augend
@@ -145,6 +137,18 @@ use (file)
    minimal additive arithmetic example
    {
     ← minimal additive arithmetic example wrapping (example sum: integer)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal additive arithmetic example) to (cumulative sum: ↓ minimal additive arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
    }
  }
 

@@ -185,7 +185,7 @@ ability (clients)
   requirement (clients)
    [
     [
-     English: A separate example instance which is greater than the main example.
+     English: A separate example value which is greater than the main example.
     ]
    ]
    greater example

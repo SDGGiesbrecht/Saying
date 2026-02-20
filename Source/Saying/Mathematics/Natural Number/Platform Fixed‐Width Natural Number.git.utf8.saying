@@ -139,31 +139,39 @@ use (clients)
  }
 
 use (clients)
- fixed‐width arithmetic with (platform fixed‐width natural number)
+ addition examples as (platform fixed‐width natural number)
  {
   action (clients)
    (
-    English: maximum representable
+    English: example augend
    )
    platform fixed‐width natural number
-   C: “UINT¤(5F)MAX” (“limits”)
-   C♯: “uint.MaxValue” (“System”)
-   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
-   Kotlin: “UInt.MAX¤(5F)VALUE”
-   Swift: “UInt.max”
+   {
+    ← example augend according to natural arithmetic
+   }
 
   action (clients)
    (
-    English: minimum representable
+    English: example addend
    )
    platform fixed‐width natural number
-   C♯: “uint.MinValue” (“System”)
-   Kotlin: “UInt.MIN¤(5F)VALUE”
-   Swift: “UInt.min”
    {
-    ← “0”
+    ← example addend according to natural arithmetic
    }
 
+  action (clients)
+   (
+    English: example sum
+   )
+   platform fixed‐width natural number
+   {
+    ← example sum according to natural arithmetic
+   }
+ }
+
+use (clients)
+ limited addition of (platform fixed‐width natural number)
+ {
   action (clients)
    (
     English: add (addend: platform fixed‐width natural number) to (cumulative sum: ↓ platform fixed‐width natural number) skipping overflow check
@@ -192,6 +200,56 @@ use (clients)
    truth value
    {
     ← (augend) is less than or equal to ((maximum representable: platform fixed‐width natural number) minus (addend), skipping overflow check)
+   }
+ }
+
+use (clients)
+ natural constants as (platform fixed‐width natural number)
+ {
+  action (clients)
+   (
+    English: zero
+   )
+   platform fixed‐width natural number
+   Swift: “UInt.zero”
+   {
+    ← “0”
+   }
+
+  action (clients)
+   (
+    English: one
+   )
+   platform fixed‐width natural number
+   {
+    ← “1”
+   }
+ }
+
+use (clients)
+ fixed‐width arithmetic with (platform fixed‐width natural number)
+ {
+  action (clients)
+   (
+    English: maximum representable
+   )
+   platform fixed‐width natural number
+   C: “UINT¤(5F)MAX” (“limits”)
+   C♯: “uint.MaxValue” (“System”)
+   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “UInt.MAX¤(5F)VALUE”
+   Swift: “UInt.max”
+
+  action (clients)
+   (
+    English: minimum representable
+   )
+   platform fixed‐width natural number
+   C♯: “uint.MinValue” (“System”)
+   Kotlin: “UInt.MIN¤(5F)VALUE”
+   Swift: “UInt.min”
+   {
+    ← “0”
    }
 
   action (clients)
@@ -246,55 +304,5 @@ use (clients)
    Kotlin: “¤(2D)¤(2D)” counter “”
    {
     ← decrement (↓ counter) skipping underflow check according to fixed‐width arithmetic
-   }
-
-  action (clients)
-   (
-    English: example augend
-   )
-   platform fixed‐width natural number
-   {
-    ← example augend according to natural arithmetic
-   }
-
-  action (clients)
-   (
-    English: example addend
-   )
-   platform fixed‐width natural number
-   {
-    ← example addend according to natural arithmetic
-   }
-
-  action (clients)
-   (
-    English: example sum
-   )
-   platform fixed‐width natural number
-   {
-    ← example sum according to natural arithmetic
-   }
- }
-
-use (clients)
- natural constants as (platform fixed‐width natural number)
- {
-  action (clients)
-   (
-    English: zero
-   )
-   platform fixed‐width natural number
-   Swift: “UInt.zero”
-   {
-    ← “0”
-   }
-
-  action (clients)
-   (
-    English: one
-   )
-   platform fixed‐width natural number
-   {
-    ← “1”
    }
  }

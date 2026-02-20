@@ -131,16 +131,8 @@ use (file)
  }
 
 use (file)
- addition of (minimal natural arithmetic example)
+ addition examples as (minimal natural arithmetic example)
  {
-  action (file)
-   (
-    English: add (addend: minimal natural arithmetic example) to (cumulative sum: ↓ minimal natural arithmetic example)
-   )
-   {
-    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
-   }
-
   action (file)
    (
     English: example augend
@@ -166,6 +158,18 @@ use (file)
    minimal natural arithmetic example
    {
     ← minimal natural arithmetic example wrapping (example sum: natural number)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal natural arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal natural arithmetic example) to (cumulative sum: ↓ minimal natural arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
    }
  }
 

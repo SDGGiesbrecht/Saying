@@ -166,29 +166,8 @@ use (clients)
  }
 
 use (clients)
- addition of (natural number)
+ addition examples as (natural number)
  {
-  action (clients)
-   (
-    English: add (addend: natural number) to (cumulative sum: ↓ natural number)
-   )
-   C: “” cumulative sum “ += ” addend “”
-   C♯: “” cumulative sum “ += ” addend “”
-   JavaScript: “” cumulative sum “ += ” addend “”
-   Kotlin: “” cumulative sum “ += ” addend “”
-   Swift: “” cumulative sum “ += ” addend “”
-
-  action (clients)
-   (
-    English: (augend: natural number) plus (addend: natural number)
-   )
-   natural number
-   C: “” augend “ + ” addend “”
-   C♯: “” augend “ + ” addend “”
-   JavaScript: “” augend “ + ” addend “”
-   Kotlin: “” augend “ + ” addend “”
-   Swift: “” augend “ + ” addend “”
-
   action (clients)
    (
     English: example augend
@@ -215,6 +194,31 @@ use (clients)
    {
     ← example sum according to natural arithmetic
    }
+ }
+
+use (clients)
+ unlimited addition of (natural number)
+ {
+  action (clients)
+   (
+    English: add (addend: natural number) to (cumulative sum: ↓ natural number)
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “” cumulative sum “ += ” addend “”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: natural number) plus (addend: natural number)
+   )
+   natural number
+   C: “” augend “ + ” addend “”
+   C♯: “” augend “ + ” addend “”
+   JavaScript: “” augend “ + ” addend “”
+   Kotlin: “” augend “ + ” addend “”
+   Swift: “” augend “ + ” addend “”
  }
 
 use (clients)

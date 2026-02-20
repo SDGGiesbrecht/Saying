@@ -3,6 +3,7 @@ import SDGText
 struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary()
   var uses: [UseIntermediate] = []
+  var useTests: [TestIntermediate] = []
   var extensions: [ExtensionIntermediate] = []
   var tests: [TestIntermediate] = []
   var languageNodes: [ParsedUninterruptedIdentifier] = []
@@ -219,6 +220,15 @@ extension ModuleIntermediate {
         errors: &errors
       )
     }
+    for test in ability.documentation?.tests ?? [] {
+      useTests.append(
+        test.specializing(
+          typeLookup: useTypes,
+          specializationNamespace: specializationNamespace,
+          specializationVisibility: use.access
+        )
+      )
+    }
   }
 
   mutating func resolveTypeIdentifiers(externalReferenceLookup: [ReferenceDictionary]) {
@@ -238,6 +248,7 @@ extension ModuleIntermediate {
     ].joined() {
       tests.append(contentsOf: documentation.tests)
     }
+    tests.append(contentsOf: useTests)
   }
 
   mutating func resolveTypes(

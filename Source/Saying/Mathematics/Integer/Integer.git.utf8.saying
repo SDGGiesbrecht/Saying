@@ -160,29 +160,8 @@ use (clients)
  }
 
 use (clients)
- addition of (integer)
+ addition examples as (integer)
  {
-  action (clients)
-   (
-    English: add (addend: integer) to (cumulative sum: ↓ integer)
-   )
-   C: “” cumulative sum “ += ” addend “”
-   C♯: “” cumulative sum “ += ” addend “”
-   JavaScript: “” cumulative sum “ += ” addend “”
-   Kotlin: “” cumulative sum “ += ” addend “”
-   Swift: “” cumulative sum “ += ” addend “”
-
-  action (clients)
-   (
-    English: (augend: integer) plus (addend: integer)
-   )
-   integer
-   C: “” augend “ + ” addend “”
-   C♯: “” augend “ + ” addend “”
-   JavaScript: “” augend “ + ” addend “”
-   Kotlin: “” augend “ + ” addend “”
-   Swift: “” augend “ + ” addend “”
-
   action (clients)
    (
     English: example augend
@@ -209,6 +188,31 @@ use (clients)
    {
     ← example sum according to natural arithmetic
    }
+ }
+
+use (clients)
+ unlimited addition of (integer)
+ {
+  action (clients)
+   (
+    English: add (addend: integer) to (cumulative sum: ↓ integer)
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “” cumulative sum “ += ” addend “”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: integer) plus (addend: integer)
+   )
+   integer
+   C: “” augend “ + ” addend “”
+   C♯: “” augend “ + ” addend “”
+   JavaScript: “” augend “ + ” addend “”
+   Kotlin: “” augend “ + ” addend “”
+   Swift: “” augend “ + ” addend “”
  }
 
 use (clients)
