@@ -166,7 +166,7 @@ use (clients)
  }
 
 use (clients)
- addition examples as (natural number)
+ any addition of (natural number)
  {
   action (clients)
    (
@@ -222,16 +222,56 @@ use (clients)
  }
 
 use (clients)
- natural additive arithmetic with (natural number)
+ any additive arithmetic with (natural number)
  {
   action (clients)
    (
     English: additive identity
    )
    natural number
+   Swift: “UInt64.zero”
    {
     ← zero
    }
+ }
+
+use (clients)
+ limited subtraction with (natural number)
+ {
+  action (clients)
+   (
+    English: subtract (subtrahend: natural number) from (value: ↓ natural number) skipping overflow check
+   )
+   C: “” value “ ¤(2D)= ” subtrahend “”
+   C♯: “” value “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+   Swift: “” value “ ¤(2D)= ” subtrahend “”
+
+  action (clients)
+   (
+    English: (minuend: natural number) minus (subtrahend: natural number), skipping overflow check
+   )
+   natural number
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+  action (clients)
+   (
+    English: can subtract (subtrahend: natural number) from (minuend: natural number)
+   )
+   truth value
+   {
+    ← (subtrahend) is less than or equal to (minuend)
+   }
+ }
+
+use (clients)
+ natural additive arithmetic with (natural number)
+ {
  }
 
 use (clients)
@@ -242,7 +282,6 @@ use (clients)
     English: zero
    )
    natural number
-   Swift: “UInt64.zero”
    {
     ← “0”
    }

@@ -1,0 +1,31 @@
+ability (clients)
+ [
+  [
+   English: Capability common to both limited and unlimited addition.
+  ]
+  [
+   English: When used with numbers, addition generally implies arithmetic addition. But the abilities intentionally supports other forms of addition (such as concatenation) when applied to other things.
+  ]
+ ]
+ (
+  English: any addition of (value)
+ )
+ {
+  requirement (clients)
+   (
+    English: example augend
+   )
+   value
+
+  requirement (clients)
+   (
+    English: example addend
+   )
+   value
+
+  requirement (clients)
+   (
+    English: example sum
+   )
+   value
+ }

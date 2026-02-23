@@ -1,0 +1,275 @@
+ability (clients)
+ [
+  [
+   English: Additive arithmetic where every pair of terms has a valid result.
+  ]
+  test {verify (((example augend: value) + (additive identity: value)) = (example augend: value))}
+ ]
+ (
+  English: unlimited additive arithmetic with (value)
+ )
+ {
+ }
+
+thing (file)
+ (
+  English: minimal additive arithmetic example
+ )
+ {
+  part (file)
+   (
+    English: number
+   )
+   integer
+ }
+
+action (file)
+ (
+  English: minimal additive arithmetic example wrapping (number: integer)
+ )
+ minimal additive arithmetic example
+ create
+
+use (file)
+ general containers of (minimal additive arithmetic example)
+ {
+  action (file)
+   example
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example: integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal additive arithmetic example) for equality
+ {
+  action (file)
+   (first: minimal additive arithmetic example) is (second: minimal additive arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is ((number) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal additive arithmetic example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (differing example: integer)
+   }
+ }
+
+use (file)
+ any addition of (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example augend: integer)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example addend: integer)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (example sum: integer)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal additive arithmetic example) to (cumulative sum: ↓ minimal additive arithmetic example)
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum))
+   }
+ }
+
+use (file)
+ any additive arithmetic with (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal additive arithmetic example
+   {
+    ← minimal additive arithmetic example wrapping (additive identity: integer)
+   }
+ }
+
+use (file)
+ unlimited subtraction with (minimal additive arithmetic example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal additive arithmetic example) from (value: ↓ minimal additive arithmetic example)
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value))
+   }
+ }
+
+use (file)
+ unlimited additive arithmetic with (minimal additive arithmetic example)
+ {
+ }
+
+thing (file)
+ (
+  English: minimal two‐dimensional vector example
+ )
+ {
+  part (file)
+   (
+    English: x
+   )
+   integer
+
+  part (file)
+   (
+    English: y
+   )
+   integer
+ }
+
+action (file)
+ (
+  English: minimal two‐dimensional vector example of (x: integer), (y: integer)
+ )
+ minimal two‐dimensional vector example
+ create
+
+use (file)
+ general containers of (minimal two‐dimensional vector example)
+ {
+  action (file)
+   example
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (zero: integer), (zero: integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal two‐dimensional vector example) for equality
+ {
+  action (file)
+   (first: minimal two‐dimensional vector example) is (second: minimal two‐dimensional vector example)
+   truth value
+   {
+    ← (((x) of (first)) is ((x) of (second))) and (((y) of (first)) is ((y) of (second)))
+   }
+
+  action (file)
+   hash key (key: minimal two‐dimensional vector example) with (hasher: ↓ hasher)
+   {
+    hash part ((x) of (key)) with (↓ hasher)
+    hash part ((y) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (zero: integer), (one: integer)
+   }
+ }
+
+use (file)
+ any addition of (minimal two‐dimensional vector example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (“0”: integer), (“1”: integer)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (“2”: integer), (“3”: integer)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (“2”: integer), (“4”: integer)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal two‐dimensional vector example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal two‐dimensional vector example) to (cumulative sum: ↓ minimal two‐dimensional vector example)
+   )
+   {
+    add ((x) of (addend)) to (↓ (x) of (cumulative sum))
+    add ((y) of (addend)) to (↓ (y) of (cumulative sum))
+   }
+ }
+
+use (file)
+ any additive arithmetic with (minimal two‐dimensional vector example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (additive identity: integer), (additive identity: integer)
+   }
+ }
+
+use (file)
+ unlimited subtraction with (minimal two‐dimensional vector example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal two‐dimensional vector example) from (value: ↓ minimal two‐dimensional vector example)
+   )
+   {
+    subtract ((x) of (subtrahend)) from (↓ (x) of (value))
+    subtract ((y) of (subtrahend)) from (↓ (y) of (value))
+   }
+ }
+
+use (file)
+ unlimited additive arithmetic with (minimal two‐dimensional vector example)
+ {
+ }

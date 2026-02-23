@@ -139,7 +139,7 @@ use (clients)
  }
 
 use (clients)
- addition examples as (platform fixed‐width natural number)
+ any addition of (platform fixed‐width natural number)
  {
   action (clients)
    (
@@ -204,6 +204,59 @@ use (clients)
  }
 
 use (clients)
+ any additive arithmetic with (platform fixed‐width natural number)
+ {
+  action (clients)
+   (
+    English: additive identity
+   )
+   platform fixed‐width natural number
+   Swift: “UInt.zero”
+   {
+    ← zero
+   }
+ }
+
+use (clients)
+ limited subtraction with (platform fixed‐width natural number)
+ {
+  action (clients)
+   (
+    English: subtract (subtrahend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
+   )
+   C: “” value “ ¤(2D)= ” subtrahend “”
+   C♯: “” value “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+   Swift: “” value “ ¤(2D)= ” subtrahend “”
+
+  action (clients)
+   (
+    English: (minuend: platform fixed‐width natural number) minus (subtrahend: platform fixed‐width natural number), skipping overflow check
+   )
+   platform fixed‐width natural number
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+  action (clients)
+   (
+    English: can subtract (subtrahend: platform fixed‐width natural number) from (minuend: platform fixed‐width natural number)
+   )
+   truth value
+   {
+    ← (subtrahend) is less than or equal to (minuend)
+   }
+ }
+
+use (clients)
+ limited additive arithmetic with (platform fixed‐width natural number)
+ {
+ }
+
+use (clients)
  natural constants as (platform fixed‐width natural number)
  {
   action (clients)
@@ -211,7 +264,6 @@ use (clients)
     English: zero
    )
    platform fixed‐width natural number
-   Swift: “UInt.zero”
    {
     ← “0”
    }
@@ -250,36 +302,6 @@ use (clients)
    Swift: “UInt.min”
    {
     ← “0”
-   }
-
-  action (clients)
-   (
-    English: subtract (subtrahend: platform fixed‐width natural number) from (value: ↓ platform fixed‐width natural number) skipping overflow check
-   )
-   C: “” value “ ¤(2D)= ” subtrahend “”
-   C♯: “” value “ ¤(2D)= ” subtrahend “”
-   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
-   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
-   Swift: “” value “ ¤(2D)= ” subtrahend “”
-
-  action (clients)
-   (
-    English: (minuend: platform fixed‐width natural number) minus (subtrahend: platform fixed‐width natural number), skipping overflow check
-   )
-   platform fixed‐width natural number
-   C: “” minuend “ ¤(2D) ” subtrahend “”
-   C♯: “” minuend “ ¤(2D) ” subtrahend “”
-   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
-   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
-   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
-
-  action (clients)
-   (
-    English: can subtract (subtrahend: platform fixed‐width natural number) from (minuend: platform fixed‐width natural number)
-   )
-   truth value
-   {
-    ← (subtrahend) is less than or equal to (minuend)
    }
 
   action (clients)

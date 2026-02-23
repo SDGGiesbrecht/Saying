@@ -133,7 +133,7 @@ use (clients)
  }
 
 use (clients)
- addition examples as (platform fixed‐width integer)
+ any addition of (platform fixed‐width integer)
  {
   action (clients)
    (
@@ -208,53 +208,22 @@ use (clients)
  }
 
 use (clients)
- natural constants as (platform fixed‐width integer)
+ any additive arithmetic with (platform fixed‐width integer)
  {
   action (clients)
    (
-    English: zero
+    English: additive identity
    )
    platform fixed‐width integer
    Swift: “Int.zero”
    {
-    ← “0”
-   }
-
-  action (clients)
-   (
-    English: one
-   )
-   platform fixed‐width integer
-   {
-    ← “1”
+    ← zero
    }
  }
 
 use (clients)
- fixed‐width arithmetic with (platform fixed‐width integer)
+ limited subtraction with (platform fixed‐width integer)
  {
-  action (clients)
-   (
-    English: maximum representable
-   )
-   platform fixed‐width integer
-   C: “INT¤(5F)MAX” (“limits”)
-   C♯: “int.MaxValue” (“System”)
-   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
-   Kotlin: “Int.MAX¤(5F)VALUE”
-   Swift: “Int.max”
-
-  action (clients)
-   (
-    English: minimum representable
-   )
-   platform fixed‐width integer
-   C: “INT¤(5F)MIN” (“limits”)
-   C♯: “int.MinValue” (“System”)
-   JavaScript: “Number.MIN¤(5F)SAFE¤(5F)INTEGER”
-   Kotlin: “Int.MIN¤(5F)VALUE”
-   Swift: “Int.min”
-
   action (clients)
    (
     English: subtract (subtrahend: platform fixed‐width integer) from (value: ↓ platform fixed‐width integer) skipping overflow check
@@ -294,6 +263,59 @@ use (clients)
     }
     ← true
    }
+ }
+
+use (clients)
+ limited additive arithmetic with (platform fixed‐width integer)
+ {
+ }
+
+use (clients)
+ natural constants as (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: zero
+   )
+   platform fixed‐width integer
+   {
+    ← “0”
+   }
+
+  action (clients)
+   (
+    English: one
+   )
+   platform fixed‐width integer
+   {
+    ← “1”
+   }
+ }
+
+use (clients)
+ fixed‐width arithmetic with (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: maximum representable
+   )
+   platform fixed‐width integer
+   C: “INT¤(5F)MAX” (“limits”)
+   C♯: “int.MaxValue” (“System”)
+   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “Int.MAX¤(5F)VALUE”
+   Swift: “Int.max”
+
+  action (clients)
+   (
+    English: minimum representable
+   )
+   platform fixed‐width integer
+   C: “INT¤(5F)MIN” (“limits”)
+   C♯: “int.MinValue” (“System”)
+   JavaScript: “Number.MIN¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “Int.MIN¤(5F)VALUE”
+   Swift: “Int.min”
 
   action (clients)
    (
