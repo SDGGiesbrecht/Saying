@@ -104,7 +104,7 @@ ability (clients)
     eesti: 0
     íslenska +: núll
     íslenska: 0
-    Swift: var Self.zero
+    Swift: var Self.arithmeticZero
    )
    number
 
