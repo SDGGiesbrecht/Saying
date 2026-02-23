@@ -3,6 +3,11 @@ ability (clients)
   English: comparison of lists of (thing) for equality
  )
  {
+  ability (clients)
+  comparison of (thing) for equality
+
+  ability (clients)
+  general containers of (thing)
  }
 
 extension

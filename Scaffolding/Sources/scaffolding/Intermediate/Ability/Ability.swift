@@ -2,6 +2,7 @@ struct Ability {
   var names: Set<UnicodeText>
   var parameters: Interpolation<AbilityParameterIntermediate>
   var identifierMapping: [UnicodeText: MappedIdentifier]
+  var requiredAbilities: [RequiredAbility]
   var requirements: [UnicodeText: [[TypeReference]: [TypeReference?: RequirementIntermediate]]]
   var defaults: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
   var provisionThings: [Thing]
@@ -53,6 +54,7 @@ extension Ability {
       names.insert(name)
     }
     var identifierMapping: [UnicodeText: MappedIdentifier] = [:]
+    var requiredAbilities: [RequiredAbility] = []
     var requirements: [UnicodeText: [[TypeReference]: [TypeReference?: RequirementIntermediate]]] = [:]
     var defaults: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     let abilityNamespace = namespace.appending(names)
@@ -103,6 +105,8 @@ extension Ability {
           defaultImplementation = constructed
         }
         defaults[identifier, default: [:]][defaultImplementation.signature(orderedFor: identifier).map({ $0.key }), default: [:]][defaultImplementation.returnValue?.key] = defaultImplementation
+      case .ability(let requiredAbility):
+        requiredAbilities.append(RequiredAbility.construct(requiredAbility))
       }
     }
     let access = AccessIntermediate(declaration.access)
@@ -130,6 +134,7 @@ extension Ability {
         names: names,
         parameters: parameters,
         identifierMapping: identifierMapping,
+        requiredAbilities: requiredAbilities,
         requirements: requirements,
         defaults: defaults,
         provisionThings: [],
