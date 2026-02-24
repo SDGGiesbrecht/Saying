@@ -1495,12 +1495,23 @@ extension Node {
               Child(name: "implementation", type: "ActionImplementations", kind: .required),
             ])
           ),
+          Node(
+            name: "RequirementAbilityDeclaration",
+            kind: .compound(children: [
+              Child(name: "keyword", type: "AbilityKeyword", kind: .required),
+              Child(name: "access", type: "Access", kind: .optional),
+              Child(name: "testAccess", type: "TestAccess", kind: .optional),
+              Child(name: "keywordLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "use", type: "UseSignature", kind: .required),
+            ])
+          ),
           
           Node(
             name: "RequirementsElement",
             kind: .alternates([
               Alternate(name: "requirement", type: "RequirementDeclaration"),
               Alternate(name: "choice", type: "ChoiceDeclaration"),
+              Alternate(name: "ability", type: "RequirementAbilityDeclaration"),
             ])
           ),
         ],

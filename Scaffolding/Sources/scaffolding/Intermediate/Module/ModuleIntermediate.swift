@@ -4,6 +4,7 @@ struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary()
   var uses: [UseIntermediate] = []
   var useTests: [TestIntermediate] = []
+  var distantUseRequirements: [DistantRequiredUse] = []
   var extensions: [ExtensionIntermediate] = []
   var tests: [TestIntermediate] = []
   var languageNodes: [ParsedUninterruptedIdentifier] = []
@@ -150,6 +151,15 @@ extension ModuleIntermediate {
         return components.map({ Set([$0]) })
       })
 
+    for requirement in ability.requiredAbilities {
+      distantUseRequirements.append(
+        DistantRequiredUse(
+          requiredAbility: requirement.specializing(for: use, typeLookup: useTypes),
+          dependentUse: use.declaration
+        )
+      )
+    }
+
     var prototypeActions = use.actions
     for requirement in ability.requirements.values.lazy.flatMap({ $0.values }).flatMap({ $0.values }) {
       if let provisionIndex = prototypeActions.firstIndex(where: { action in
@@ -266,16 +276,61 @@ extension ModuleIntermediate {
     }
   }
 
+  func validateTransitiveAbilityRequirements(
+    externalAndModuleLookup: [ReferenceDictionary],
+    errors: inout [ReferenceError]
+  ) {
+    for requirement in distantUseRequirements {
+      guard let ability = externalAndModuleLookup.lookupAbility(identifier: requirement.requiredAbility.ability) else {
+        errors.append(.noSuchAbility(name: requirement.requiredAbility.ability, reference: requirement.requiredAbility.declaration.use))
+        continue
+      }
+      if uses.contains(where: { use in
+        guard ability.names.contains(use.ability) else {
+          return false
+        }
+        for (requiredArgument, existingArgument) in zip(
+          requirement.requiredAbility.arguments,
+          order(
+            use.arguments,
+            for: ability.parameters.reordering(from: use.ability, to: requirement.requiredAbility.ability)
+          )
+        ) {
+          if requiredArgument.key.resolving(fromReferenceLookup: externalAndModuleLookup)
+            != existingArgument.key.resolving(fromReferenceLookup: externalAndModuleLookup) {
+            return false
+          }
+        }
+        return true
+      }) {
+        continue
+      } else {
+        errors.append(
+          .unfulfilledAbilityRequirement(name: ability.names, requirement.dependentUse)
+        )
+      }
+    }
+  }
+
   func validateReferences(
     moduleWideImports: [ModuleIntermediate]
   ) throws {
     var errors: [ReferenceError] = []
+    let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
+    let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
+
+    validateTransitiveAbilityRequirements(
+      externalAndModuleLookup: externalAndModuleLookup,
+      errors: &errors
+    )
+    if !errors.isEmpty {
+      throw ErrorList(errors) // Since these will lead to a sea of the following, obscuring the real issue.
+    }
+
     referenceDictionary.validateReferencesAsModule(
       moduleWideImports: moduleWideImports,
       errors: &errors
     )
-    let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
-    let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
     for test in tests {
       let testContext = TestContext(isHidden: test.isHidden, inheritedVisibility: test.inheritedVisibility)
       test.statements.validateReferences(

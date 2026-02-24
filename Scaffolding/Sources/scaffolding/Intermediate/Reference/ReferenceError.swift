@@ -6,6 +6,7 @@ enum ReferenceError: DiagnosticError {
   case missingPart(name: Set<UnicodeText>, creationAction: ParsedActionDeclarationPrototype)
   case mismatchedPassage(attempted: ParameterPassage, expected: ParameterPassage, location: ParsedAction)
   case unfulfilledRequirement(name: Set<UnicodeText>, ParsedUse)
+  case unfulfilledAbilityRequirement(name: Set<UnicodeText>, ParsedUse)
   case noSuchRequirement(ParsedActionDeclaration)
   case mismatchedParameters(name: UnicodeText, declaration: ParsedActionName)
   case fulfillmentAccessNarrowerThanRequirement(declaration: ParsedActionName)
@@ -38,8 +39,10 @@ enum ReferenceError: DiagnosticError {
       return "\(defaultMessage) (\(name))"
     case .mismatchedPassage(attempted: let attempted, expected: let expected, location: _):
       return "\(defaultMessage) (\(attempted) ≠ \(expected))"
-    case .unfulfilledRequirement:
-      return defaultMessage
+    case .unfulfilledRequirement(name: let name, _):
+      return "\(defaultMessage) (\(name))"
+    case .unfulfilledAbilityRequirement(name: let name, _):
+      return "\(defaultMessage) (\(name))"
     case .noSuchRequirement:
       return defaultMessage
     case .mismatchedParameters:
@@ -92,6 +95,8 @@ enum ReferenceError: DiagnosticError {
     case .mismatchedPassage(attempted: _, expected: _, let location):
       return location.location
     case .unfulfilledRequirement(_, let use):
+      return use.location
+    case .unfulfilledAbilityRequirement(_, let use):
       return use.location
     case .noSuchRequirement(let declaration):
       return declaration.location
