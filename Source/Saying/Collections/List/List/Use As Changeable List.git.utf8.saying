@@ -3,6 +3,9 @@ ability (clients)
   English: use of (list) as changeable list of (element) indexed by (index) separated by (boundary)
  )
  {
+  ability (clients)
+   use of (list) as list of (element) indexed by (index) separated by (boundary)
+
   requirement (clients)
    [
     test {

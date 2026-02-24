@@ -1,8 +1,11 @@
 ability (clients)
  (
-  English: insertion from (insertion) into (list) separated by (boundary)
+  English: insertion from (insertion) into (list) as list of (element) indexed by (index) separated by (boundary)
  )
  {
+  ability (clients)
+   use of (list) as changeable list of (element) indexed by (index) separated by (boundary)
+
   requirement (clients)
    [
     test {
@@ -141,7 +144,7 @@ ability (clients)
  }
 
 extension
- insertion from (insertion) into (list) separated by (boundary)
+ insertion from (insertion) into (list) as list of (element) indexed by (index) separated by (boundary)
  {
   action (clients)
    [
@@ -257,7 +260,7 @@ extension
  }
 
 use (unit)
- insertion from (minimal list example) into (minimal list example) separated by (list boundary)
+ insertion from (minimal list example) into (minimal list example) as list of (truth value) indexed by (list index) separated by (list boundary)
  {
   action (unit)
    (

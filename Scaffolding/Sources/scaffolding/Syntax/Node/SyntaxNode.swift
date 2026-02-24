@@ -27,7 +27,7 @@ extension SyntaxNode {
       case .lineBreakSyntax:
         accumulator.append("\n")
         accumulator.append(contentsOf: String(repeating: " ", count: indent))
-      case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .nativeImport, .nativeIndirectRequirements, .nativeRequiredCode, .parameterDocumentation, .partDeclaration, .requirementDeclaration, .thingDeclaration, .use:
+      case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .nativeImport, .nativeIndirectRequirements, .nativeRequiredCode, .parameterDocumentation, .partDeclaration, .requirementAbilityDeclaration, .requirementDeclaration, .thingDeclaration, .use:
         accumulator.append(
           contentsOf: node.children
             .lazy.map({ String($0.formattedGitStyleSource(indent: indent + 1)) })

@@ -727,7 +727,7 @@ action (file)
  }
 
 use (clients)
- insertion from (Unicode scalars) into (Unicode scalars) separated by (Unicode scalar boundary)
+ insertion from (Unicode scalars) into (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
    (
@@ -883,7 +883,7 @@ action (file)
  }
 
 use (clients)
- insertion from (slice of (Unicode scalars)) into (Unicode scalars) separated by (Unicode scalar boundary)
+ insertion from (slice of (Unicode scalars)) into (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
    (
