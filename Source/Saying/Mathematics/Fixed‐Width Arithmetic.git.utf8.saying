@@ -388,6 +388,19 @@ use (file)
  }
 
 use (file)
+ any additive arithmetic with (minimal fixed‐width arithmetic example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal fixed‐width arithmetic example
+   {
+    ← minimal fixed‐width arithmetic example wrapping (additive identity: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
  limited additive arithmetic with (minimal fixed‐width arithmetic example)
  {
  }

@@ -3,6 +3,9 @@ ability (clients)
   English: comparison of (thing) for order
  )
  {
+  ability (clients)
+   comparison of (thing) for equality
+
   requirement (clients)
    [
     [

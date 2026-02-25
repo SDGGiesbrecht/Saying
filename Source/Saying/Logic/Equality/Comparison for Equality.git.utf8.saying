@@ -4,6 +4,9 @@ ability (clients)
   Deutsch: Vergleich von (Ding: [thing]) auf Gleichheit
  )
  {
+  ability (clients)
+   general containers of (thing)
+
   requirement (clients)
    [
     [

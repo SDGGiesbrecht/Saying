@@ -11,6 +11,9 @@ ability (clients)
   English: any addition of (value)
  )
  {
+  ability (clients)
+   comparison of (value) for equality
+
   requirement (clients)
    (
     English: example augend

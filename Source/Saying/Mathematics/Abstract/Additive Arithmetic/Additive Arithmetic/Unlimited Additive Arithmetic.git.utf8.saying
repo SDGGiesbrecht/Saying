@@ -9,6 +9,14 @@ ability (clients)
   English: unlimited additive arithmetic with (value)
  )
  {
+  ability (clients)
+   unlimited addition of (value)
+
+  ability (clients)
+   unlimited subtraction with (value)
+
+  ability (clients)
+   any additive arithmetic with (value)
  }
 
 thing (file)

@@ -8,6 +8,9 @@ ability (clients)
   English: unlimited subtraction with (value)
  )
  {
+  ability (clients)
+   unlimited addition of (value)
+
   requirement (clients)
    [
     test {
