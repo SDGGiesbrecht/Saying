@@ -257,6 +257,16 @@ use (clients)
  }
 
 use (clients)
+ any one‐dimensional additive arithmetic with (platform fixed‐width natural number)
+ {
+ }
+
+use (clients)
+ limited one‐dimensional additive arithmetic with (platform fixed‐width natural number)
+ {
+ }
+
+use (clients)
  natural constants as (platform fixed‐width natural number)
  {
   action (clients)
