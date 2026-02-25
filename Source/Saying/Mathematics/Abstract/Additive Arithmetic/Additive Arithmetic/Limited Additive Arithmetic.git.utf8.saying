@@ -8,4 +8,12 @@ ability (clients)
   English: limited additive arithmetic with (value)
  )
  {
+  ability (clients)
+   limited addition of (value)
+
+  ability (clients)
+   limited subtraction with (value)
+
+  ability (clients)
+   any additive arithmetic with (value)
  }

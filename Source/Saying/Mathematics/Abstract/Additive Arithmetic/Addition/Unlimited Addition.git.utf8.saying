@@ -16,6 +16,9 @@ ability (clients)
   עברית: חיבות בלתי מוגבלת של (ערך: [value])
  )
  {
+  ability (clients)
+   any addition of (value)
+
   requirement (clients)
    [
     test {

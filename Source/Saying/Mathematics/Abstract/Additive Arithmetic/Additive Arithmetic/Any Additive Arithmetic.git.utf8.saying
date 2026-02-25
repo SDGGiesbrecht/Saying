@@ -11,6 +11,9 @@ ability (clients)
   English: any additive arithmetic with (value)
  )
  {
+  ability (clients)
+   any addition of (value)
+
   requirement (clients)
    [
     test {ignore (additive identity: value)}
