@@ -314,8 +314,6 @@ extension ModuleIntermediate {
         errors.append(
           .unfulfilledAbilityRequirement(
             name: ability.names,
-            arguments: requirement.requiredAbility.arguments
-              .map({ $0.key.resolving(fromReferenceLookup: externalAndModuleLookup) }),
             reason: requirement.dependentUse.use
           )
         )
