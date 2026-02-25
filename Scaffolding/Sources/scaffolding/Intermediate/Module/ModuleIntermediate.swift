@@ -117,9 +117,11 @@ extension ModuleIntermediate {
 
   mutating func resolveUses(externalLookup: [ReferenceDictionary]) throws {
     var errors: [ReferenceError] = []
+    var nestedUses: [UseIntermediate] = []
     for use in uses {
-      resolve(use, externalLookup: externalLookup, errors: &errors)
+      resolve(use, externalLookup: externalLookup, nestedUses: &nestedUses, errors: &errors)
     }
+    self.uses.append(contentsOf: nestedUses)
     if !errors.isEmpty {
       throw ErrorList(errors)
     }
@@ -127,6 +129,7 @@ extension ModuleIntermediate {
   mutating func resolve(
     _ use: UseIntermediate,
     externalLookup: [ReferenceDictionary],
+    nestedUses: inout [UseIntermediate],
     errors: inout [ReferenceError]
   ) {
     let identifier = use.ability
@@ -224,11 +227,14 @@ extension ModuleIntermediate {
       }
     }
     for use in ability.provisionUses {
+      let specialized = use.specializing(typeLookup: useTypes, specializationNamespace: specializationNamespace)
       resolve(
-        use.specializing(typeLookup: useTypes, specializationNamespace: specializationNamespace),
+        specialized,
         externalLookup: externalLookup,
+        nestedUses: &nestedUses,
         errors: &errors
       )
+      nestedUses.append(specialized)
     }
     for test in ability.documentation?.tests ?? [] {
       useTests.append(
@@ -306,7 +312,10 @@ extension ModuleIntermediate {
         continue
       } else {
         errors.append(
-          .unfulfilledAbilityRequirement(name: ability.names, requirement.dependentUse)
+          .unfulfilledAbilityRequirement(
+            name: ability.names,
+            reason: requirement.dependentUse.use
+          )
         )
       }
     }

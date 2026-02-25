@@ -265,7 +265,7 @@ use (clients)
  }
 
 use (clients)
- insertion from (Unicode text) into (Unicode text) separated by (Unicode scalar boundary)
+ insertion from (Unicode text) into (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
    (
@@ -320,7 +320,7 @@ use (clients)
  }
 
 use (clients)
- insertion from (slice of (Unicode text)) into (Unicode text) separated by (Unicode scalar boundary)
+ insertion from (slice of (Unicode text)) into (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
    (

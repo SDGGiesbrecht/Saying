@@ -914,7 +914,7 @@ extension
    }
 
   use (clients)
-   insertion from (list of (thing)) into (list of (thing)) separated by (list boundary)
+   insertion from (list of (thing)) into (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {
     action (clients)
      (
@@ -1080,7 +1080,7 @@ extension
    }
 
   use (clients)
-   insertion from (slice of (list of (thing))) into (list of (thing)) separated by (list boundary)
+   insertion from (slice of (list of (thing))) into (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
    {
     action (clients)
      (

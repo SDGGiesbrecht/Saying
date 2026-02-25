@@ -6,7 +6,7 @@ enum ReferenceError: DiagnosticError {
   case missingPart(name: Set<UnicodeText>, creationAction: ParsedActionDeclarationPrototype)
   case mismatchedPassage(attempted: ParameterPassage, expected: ParameterPassage, location: ParsedAction)
   case unfulfilledRequirement(name: Set<UnicodeText>, ParsedUse)
-  case unfulfilledAbilityRequirement(name: Set<UnicodeText>, ParsedUse)
+  case unfulfilledAbilityRequirement(name: Set<UnicodeText>, reason: ParsedUseSignature)
   case noSuchRequirement(ParsedActionDeclaration)
   case mismatchedParameters(name: UnicodeText, declaration: ParsedActionName)
   case fulfillmentAccessNarrowerThanRequirement(declaration: ParsedActionName)
@@ -41,7 +41,7 @@ enum ReferenceError: DiagnosticError {
       return "\(defaultMessage) (\(attempted) ≠ \(expected))"
     case .unfulfilledRequirement(name: let name, _):
       return "\(defaultMessage) (\(name))"
-    case .unfulfilledAbilityRequirement(name: let name, _):
+    case .unfulfilledAbilityRequirement(name: let name, reason: _):
       return "\(defaultMessage) (\(name))"
     case .noSuchRequirement:
       return defaultMessage
