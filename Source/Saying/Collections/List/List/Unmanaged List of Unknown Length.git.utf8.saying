@@ -305,6 +305,15 @@ extension
      advance (↓ cursor) to next in (list) skipping bounds check
     }
    }
+
+  action (unit)
+   (
+    English: memory of (first: unmanaged list of (thing) of unknown length) and (second: unmanaged list of (thing) of unknown length) are equal up to (end: list boundary)
+   )
+   truth value
+   {
+    ← (((offset) of (end)) times (size of (example: thing)) skipping overflow check) bytes of memory at (memory address of (first)) and (memory address of (second)) are equal
+   }
  }
 
 action (file)

@@ -97,3 +97,22 @@ action (unit)
  )
  C: “memmove(” destination “, ” origin “, ” amount “)” (“string”)
  {}
+
+action (file)
+ (
+  English: compare (amount: memory offset) bytes of memory at (first: memory address) and (second: memory address)
+ )
+ platform fixed‐width integer
+ C: “memcmp(” first “, ” second “, ” amount “)” (“string”)
+ {
+  ← zero
+ }
+
+action (unit)
+ (
+  English: (amount: memory offset) bytes of memory at (first: memory address) and (second: memory address) are equal
+ )
+ truth value
+ {
+  ← (compare (amount) bytes of memory at (first) and (second)) is (zero: platform fixed‐width integer)
+ }
