@@ -1,0 +1,113 @@
+ability (clients)
+ [
+  [
+   English: Unlimited additive arithmetic in one dimension.
+  ]
+ ]
+ (
+  English: unlimited one‐dimensional additive arithmetic with (value)
+ )
+ {
+  ability (clients)
+   any one‐dimensional additive arithmetic with (value)
+
+  ability (clients)
+   unlimited additive arithmetic with (value)
+ }
+
+thing (file)
+ (
+  English: minimal measurement example
+ )
+ {
+  part (file)
+   (
+    English: in days
+   )
+   integer
+ }
+
+action (file)
+ (
+  English: minimal measurement example in days (in days: integer)
+ )
+ minimal measurement example
+ create
+
+use (file)
+ general containers of (minimal measurement example)
+ {
+  action (file)
+   example
+   minimal measurement example
+   {
+    ← minimal measurement example in days (example: integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal measurement example) for equality
+ {
+  action (file)
+   (first: minimal measurement example) is (second: minimal measurement example)
+   truth value
+   {
+    ← ((in days) of (first)) is ((in days) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal measurement example) with (hasher: ↓ hasher)
+   {
+    hash part ((in days) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal measurement example
+   {
+    ← minimal measurement example in days (differing example: integer)
+   }
+ }
+
+use (file)
+ any addition of (minimal measurement example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal measurement example
+   {
+    ← minimal measurement example in days (example augend: integer)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal measurement example
+   {
+    ← minimal measurement example in days (example addend: integer)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal measurement example
+   {
+    ← minimal measurement example in days (example sum: integer)
+   }
+ }
+
+use (file)
+ unlimited addition of (minimal measurement example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal measurement example) to (cumulative sum: ↓ minimal measurement example)
+   )
+   {
+    add ((in days) of (addend)) to (↓ (in days) of (cumulative sum))
+   }
+ }

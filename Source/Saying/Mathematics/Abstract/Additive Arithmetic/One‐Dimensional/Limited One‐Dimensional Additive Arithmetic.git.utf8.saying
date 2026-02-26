@@ -1,0 +1,16 @@
+ability (clients)
+ [
+  [
+   English: Limited additive arithmetic in one dimension.
+  ]
+ ]
+ (
+  English: limited one‐dimensional additive arithmetic with (value)
+ )
+ {
+  ability (clients)
+   any one‐dimensional additive arithmetic with (value)
+
+  ability (clients)
+   limited additive arithmetic with (value)
+ }

@@ -260,7 +260,12 @@ use (clients)
  }
 
 use (clients)
- one‐dimensional additive arithmetic with (integer)
+ any one‐dimensional additive arithmetic with (integer)
+ {
+ }
+
+use (clients)
+ unlimited one‐dimensional additive arithmetic with (integer)
  {
  }
 

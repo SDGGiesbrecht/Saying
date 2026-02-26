@@ -1,0 +1,19 @@
+ability (clients)
+ [
+  [
+   English: Capability common to limited, unlimited and natural one‐dimensional additive arithmetic.
+  ]
+  [
+   English: Besides numbers, this ability intentionally supports things that have no inherent scale, such as measurements of length or mass.
+  ]
+ ]
+ (
+  English: any one‐dimensional additive arithmetic with (value)
+ )
+ {
+  ability (clients)
+   any additive arithmetic with (value)
+
+  ability (clients)
+   comparison of (value) for order
+ }
