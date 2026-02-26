@@ -359,3 +359,8 @@ use (clients)
  limited natural arithmetic with (platform fixed‐width integer)
  {
  }
+
+use (clients)
+ limited integral arithmetic with (platform fixed‐width integer)
+ {
+ }
