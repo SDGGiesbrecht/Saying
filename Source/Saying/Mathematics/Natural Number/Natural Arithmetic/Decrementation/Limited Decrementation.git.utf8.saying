@@ -1,0 +1,116 @@
+ability (clients)
+ (
+  English: limited decrementation of (number)
+ )
+ {
+  ability (clients)
+   limited subtraction with (number)
+
+  ability (clients)
+   any natural arithmetic with (number)
+
+  choice (clients)
+   [
+    [
+     English: Decrements the counter without checking whether the previous state is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {decrement ()} instead.
+    ]
+    [
+     English: Skipping the underflow check can also be more efficient when the counter is already known from context to have a representable predecessor state. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• counter: number) start as (one: number)
+     decrement (↓ counter) skipping underflow check
+     verify ((counter) is (zero: number))
+    }
+   ]
+   (
+    English: decrement (counter: ↓ number) skipping underflow check
+   )
+   {
+    decrement (↓ counter) skipping underflow check according to limited decrementation
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the previous number without checking whether said predecessor is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {predecessor to ()} instead.
+    ]
+    [
+     English: Skipping the underflow check can also be more efficient when the value is already known from context to have a representable predecessor. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {verify ((predecessor to (one: number) skipping underflow check) is (zero: number))}
+   ]
+   (
+    English: predecessor to (number: number) skipping underflow check
+   )
+   number
+   {
+    ← (number) minus (one: number), skipping overflow check
+   }
+ }
+
+extension
+ limited decrementation of (number)
+ {
+  action (clients)
+   (
+    English: decrement (number: ↓ number) skipping underflow check according to limited decrementation
+   )
+   {
+    subtract (one: number) from (↓ number) skipping overflow check
+   }
+
+  action (clients)
+   [
+    [
+     English: Decrements the counter if it has a representable predecessor state and then returns whether or not the decrementation succeeded.
+    ]
+    test {
+     let (• counter: number) start as (one: number)
+     verify (decrement (↓ counter))
+    }
+   ]
+   (
+    English: decrement (counter: ↓ number)
+   )
+   truth value
+   {
+    if (can subtract (one: number) from (counter)), {
+     decrement (↓ counter) skipping underflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    [
+     English: Returns the previous number if it is representable.
+    ]
+    test {verify ((predecessor to (one: number)) exists)}
+    test {
+     if (can subtract (one: number) from (zero: number)), {
+      verify ((predecessor to (zero: number)) exists)
+     }, otherwise {
+      verify ((predecessor to (zero: number)) does not exist)
+     }
+    }
+   ]
+   (
+    English: predecessor to (number: number)
+   )
+   optional (number)
+   {
+    let (• copy: number) start as (number)
+    if (decrement (↓ copy)), {
+     ← wrap (copy) into optional
+    }
+    ← nothing
+   }
+ }

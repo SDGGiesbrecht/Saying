@@ -194,12 +194,12 @@ use (clients)
    truth value
    {
     if ((addend) is greater than (zero: platform fixed‐width integer)), {
-     if ((augend) is greater than ((maximum representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
+     if ((augend) is greater than ((greatest representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
       ← false
      }
     }
     if ((addend) is less than (zero: platform fixed‐width integer)), {
-     if ((augend) is less than ((minimum representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
+     if ((augend) is less than ((least representable: platform fixed‐width integer) minus (addend), skipping overflow check)), {
       ← false
      }
     }
@@ -252,12 +252,12 @@ use (clients)
    truth value
    {
     if ((subtrahend) is greater than (zero: platform fixed‐width integer)), {
-     if ((minuend) is less than ((minimum representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
+     if ((minuend) is less than ((least representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
       ← false
      }
     }
     if ((subtrahend) is less than (zero: platform fixed‐width integer)), {
-     if ((minuend) is greater than ((maximum representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
+     if ((minuend) is greater than ((greatest representable: platform fixed‐width integer) plus (subtrahend), skipping overflow check)), {
       ← false
      }
     }
@@ -278,10 +278,31 @@ use (clients)
 use (clients)
  limited one‐dimensional additive arithmetic with (platform fixed‐width integer)
  {
+  action (clients)
+   (
+    English: greatest representable
+   )
+   platform fixed‐width integer
+   C: “INT¤(5F)MAX” (“limits”)
+   C♯: “int.MaxValue” (“System”)
+   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “Int.MAX¤(5F)VALUE”
+   Swift: “Int.max”
+
+  action (clients)
+   (
+    English: least representable
+   )
+   platform fixed‐width integer
+   C: “INT¤(5F)MIN” (“limits”)
+   C♯: “int.MinValue” (“System”)
+   JavaScript: “Number.MIN¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “Int.MIN¤(5F)VALUE”
+   Swift: “Int.min”
  }
 
 use (clients)
- natural constants as (platform fixed‐width integer)
+ any natural arithmetic with (platform fixed‐width integer)
  {
   action (clients)
    (
@@ -303,30 +324,8 @@ use (clients)
  }
 
 use (clients)
- fixed‐width arithmetic with (platform fixed‐width integer)
+ limited incrementation of (platform fixed‐width integer)
  {
-  action (clients)
-   (
-    English: maximum representable
-   )
-   platform fixed‐width integer
-   C: “INT¤(5F)MAX” (“limits”)
-   C♯: “int.MaxValue” (“System”)
-   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
-   Kotlin: “Int.MAX¤(5F)VALUE”
-   Swift: “Int.max”
-
-  action (clients)
-   (
-    English: minimum representable
-   )
-   platform fixed‐width integer
-   C: “INT¤(5F)MIN” (“limits”)
-   C♯: “int.MinValue” (“System”)
-   JavaScript: “Number.MIN¤(5F)SAFE¤(5F)INTEGER”
-   Kotlin: “Int.MIN¤(5F)VALUE”
-   Swift: “Int.min”
-
   action (clients)
    (
     English: increment (counter: ↓ platform fixed‐width integer) skipping overflow check
@@ -336,9 +335,13 @@ use (clients)
    JavaScript: “++” counter “”
    Kotlin: “++” counter “”
    {
-    ← increment (↓ counter) skipping overflow check according to fixed‐width arithmetic
+    ← increment (↓ counter) skipping overflow check according to limited natural arithmetic
    }
+ }
 
+use (clients)
+ limited decrementation of (platform fixed‐width integer)
+ {
   action (clients)
    (
     English: decrement (counter: ↓ platform fixed‐width integer) skipping underflow check
@@ -348,6 +351,11 @@ use (clients)
    JavaScript: “¤(2D)¤(2D)” counter “”
    Kotlin: “¤(2D)¤(2D)” counter “”
    {
-    ← decrement (↓ counter) skipping underflow check according to fixed‐width arithmetic
+    ← decrement (↓ counter) skipping underflow check according to limited decrementation
    }
+ }
+
+use (clients)
+ limited natural arithmetic with (platform fixed‐width integer)
+ {
  }

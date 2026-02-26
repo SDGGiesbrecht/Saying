@@ -8,67 +8,6 @@ ability (clients)
   English: integral arithmetic with (number)
  )
  {
-  choice (clients)
-   [
-    [
-     English: Decrements the counter by one.
-    ]
-    [
-     English: This action is most useful when working with integers, but even when the counter’s starting state is not at an integer, it still subtracts exactly one.
-    ]
-    test {
-     let (• counter: number) start as (one: number)
-     decrement (↓ counter)
-     verify ((counter) is (zero: number))
-    }
-   ]
-   (
-    English: decrement (counter: ↓ number)
-   )
-   {
-    decrement (↓ counter) according to integral arithmetic
-   }
-
-  choice (clients)
-   [
-    [
-     English: Returns a number less by one.
-    ]
-    [
-     English: This action is most useful when working with integers, but even when the starting number is not at an integer, it still subtracts exactly one.
-    ]
-    test {
-     verify ((predecessor to (one: number)) is (zero: number))
-    }
-   ]
-   (
-    English: predecessor to (number: number)
-   )
-   number
-   {
-    let (• copy: number) start as (number)
-    decrement (↓ copy)
-    ← copy
-   }
- }
-
-extension
- integral arithmetic with (number)
- {
-  action (clients)
-   [
-    test {
-     let (• counter: number) start as (one: number)
-     decrement (↓ counter) according to integral arithmetic
-     verify ((counter) is (zero: number))
-    }
-   ]
-   (
-    English: decrement (counter: ↓ number) according to integral arithmetic
-   )
-   {
-    subtract (one: number) from (↓ counter)
-   }
  }
 
 thing (file)
@@ -127,6 +66,24 @@ use (file)
    minimal integral arithmetic example
    {
     ← minimal integral arithmetic example wrapping (differing example: integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal integral arithmetic example) for order
+ {
+  action (file)
+   (first: minimal integral arithmetic example) is less than (second: minimal integral arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is less than ((number) of (second))
+   }
+
+  action (file)
+   greater example
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (greater example: integer)
    }
  }
 
@@ -204,7 +161,17 @@ use (file)
  }
 
 use (file)
- natural constants as (minimal integral arithmetic example)
+ any one‐dimensional additive arithmetic with (minimal integral arithmetic example)
+ {
+ }
+
+use (file)
+ unlimited one‐dimensional additive arithmetic with (minimal integral arithmetic example)
+ {
+ }
+
+use (file)
+ any natural arithmetic with (minimal integral arithmetic example)
  {
   action (file)
    (
@@ -223,6 +190,16 @@ use (file)
    {
     ← minimal integral arithmetic example wrapping (one: integer)
    }
+ }
+
+use (file)
+ unlimited incrementation of (minimal integral arithmetic example)
+ {
+ }
+
+use (file)
+ unlimited decrementation of (minimal integral arithmetic example)
+ {
  }
 
 use (file)

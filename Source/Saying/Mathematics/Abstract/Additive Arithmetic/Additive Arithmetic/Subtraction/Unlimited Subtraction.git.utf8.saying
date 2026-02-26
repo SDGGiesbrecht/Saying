@@ -9,6 +9,9 @@ ability (clients)
  )
  {
   ability (clients)
+   any additive arithmetic with (value)
+
+  ability (clients)
    unlimited addition of (value)
 
   requirement (clients)

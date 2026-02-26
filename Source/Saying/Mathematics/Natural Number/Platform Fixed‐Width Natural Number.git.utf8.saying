@@ -199,7 +199,7 @@ use (clients)
    )
    truth value
    {
-    ← (augend) is less than or equal to ((maximum representable: platform fixed‐width natural number) minus (addend), skipping overflow check)
+    ← (augend) is less than or equal to ((greatest representable: platform fixed‐width natural number) minus (addend), skipping overflow check)
    }
  }
 
@@ -264,10 +264,32 @@ use (clients)
 use (clients)
  limited one‐dimensional additive arithmetic with (platform fixed‐width natural number)
  {
+  action (clients)
+   (
+    English: greatest representable
+   )
+   platform fixed‐width natural number
+   C: “UINT¤(5F)MAX” (“limits”)
+   C♯: “uint.MaxValue” (“System”)
+   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
+   Kotlin: “UInt.MAX¤(5F)VALUE”
+   Swift: “UInt.max”
+
+  action (clients)
+   (
+    English: least representable
+   )
+   platform fixed‐width natural number
+   C♯: “uint.MinValue” (“System”)
+   Kotlin: “UInt.MIN¤(5F)VALUE”
+   Swift: “UInt.min”
+   {
+    ← “0”
+   }
  }
 
 use (clients)
- natural constants as (platform fixed‐width natural number)
+ any natural arithmetic with (platform fixed‐width natural number)
  {
   action (clients)
    (
@@ -289,31 +311,8 @@ use (clients)
  }
 
 use (clients)
- fixed‐width arithmetic with (platform fixed‐width natural number)
+ limited incrementation of (platform fixed‐width natural number)
  {
-  action (clients)
-   (
-    English: maximum representable
-   )
-   platform fixed‐width natural number
-   C: “UINT¤(5F)MAX” (“limits”)
-   C♯: “uint.MaxValue” (“System”)
-   JavaScript: “Number.MAX¤(5F)SAFE¤(5F)INTEGER”
-   Kotlin: “UInt.MAX¤(5F)VALUE”
-   Swift: “UInt.max”
-
-  action (clients)
-   (
-    English: minimum representable
-   )
-   platform fixed‐width natural number
-   C♯: “uint.MinValue” (“System”)
-   Kotlin: “UInt.MIN¤(5F)VALUE”
-   Swift: “UInt.min”
-   {
-    ← “0”
-   }
-
   action (clients)
    (
     English: increment (counter: ↓ platform fixed‐width natural number) skipping overflow check
@@ -323,9 +322,13 @@ use (clients)
    JavaScript: “++” counter “”
    Kotlin: “++” counter “”
    {
-    ← increment (↓ counter) skipping overflow check according to fixed‐width arithmetic
+    ← increment (↓ counter) skipping overflow check according to limited natural arithmetic
    }
+ }
 
+use (clients)
+ limited decrementation of (platform fixed‐width natural number)
+ {
   action (clients)
    (
     English: decrement (counter: ↓ platform fixed‐width natural number) skipping underflow check
@@ -335,6 +338,11 @@ use (clients)
    JavaScript: “¤(2D)¤(2D)” counter “”
    Kotlin: “¤(2D)¤(2D)” counter “”
    {
-    ← decrement (↓ counter) skipping underflow check according to fixed‐width arithmetic
+    ← decrement (↓ counter) skipping underflow check according to limited decrementation
    }
+ }
+
+use (clients)
+ limited natural arithmetic with (platform fixed‐width natural number)
+ {
  }

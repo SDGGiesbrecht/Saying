@@ -9,7 +9,7 @@ ability (clients)
  )
  {
   ability (clients)
-   any addition of (value)
+   any additive arithmetic with (value)
 
   requirement (clients)
    [

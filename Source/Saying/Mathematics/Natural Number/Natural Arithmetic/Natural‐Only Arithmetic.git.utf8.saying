@@ -1,74 +1,24 @@
 ability (clients)
  [
   [
-   English: Arithmetic involving only natural numbers.
+   English: Natural arithmetic with no upper limit, but confined to natural numbers.
   ]
  ]
  (
-  English: natural arithmetic with (number)
+  English: natural‐only arithmetic with (number)
  )
  {
-  choice (clients)
-   [
-    [
-     English: Increments the counter by one.
-    ]
-    [
-     English: This action is most useful when working with integers, but even when the counter’s starting state is not at an integer, it still adds exactly one.
-    ]
-    test {
-     let (• counter: number) start as (zero: number)
-     increment (↓ counter)
-     verify ((counter) is (one: number))
-    }
-   ]
-   (
-    English: increment (counter: ↓ number)
-   )
-   {
-    increment (↓ counter) according to natural arithmetic
-   }
+  ability (clients)
+   any natural arithmetic with (number)
 
-  choice (clients)
-   [
-    [
-     English: Returns a number greater by one.
-    ]
-    [
-     English: This action is most useful when working with integers, but even when the starting number is not at an integer, it still adds exactly one.
-    ]
-    test {
-     verify ((successor to (zero: number)) is (one: number))
-    }
-   ]
-   (
-    English: successor to (number: number)
-   )
-   number
-   {
-    let (• copy: number) start as (number)
-    increment (↓ copy)
-    ← copy
-   }
- }
+  ability (clients)
+   natural one‐dimensional additive arithmetic with (number)
 
-extension
- natural arithmetic with (number)
- {
-  action (clients)
-   [
-    test {
-     let (• counter: number) start as (zero: number)
-     increment (↓ counter) according to natural arithmetic
-     verify ((counter) is (one: number))
-    }
-   ]
-   (
-    English: increment (number: ↓ number) according to natural arithmetic
-   )
-   {
-    add (one: number) to (↓ number)
-   }
+  ability (clients)
+   unlimited incrementation of (number)
+
+  ability (clients)
+   limited decrementation of (number)
  }
 
 thing (file)
@@ -131,6 +81,24 @@ use (file)
  }
 
 use (file)
+ comparison of (minimal natural arithmetic example) for order
+ {
+  action (file)
+   (first: minimal natural arithmetic example) is less than (second: minimal natural arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is less than ((number) of (second))
+   }
+
+  action (file)
+   greater example
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (greater example: natural number)
+   }
+ }
+
+use (file)
  any addition of (minimal natural arithmetic example)
  {
   action (file)
@@ -174,7 +142,56 @@ use (file)
  }
 
 use (file)
- natural constants as (minimal natural arithmetic example)
+ any additive arithmetic with (minimal natural arithmetic example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal natural arithmetic example
+   {
+    ← minimal natural arithmetic example wrapping (additive identity: natural number)
+   }
+ }
+
+use (file)
+ limited subtraction with (minimal natural arithmetic example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal natural arithmetic example) from (value: ↓ minimal natural arithmetic example) skipping overflow check
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can subtract (subtrahend: minimal natural arithmetic example) from (minuend: minimal natural arithmetic example)
+   )
+   truth value
+   {
+    ← can subtract ((number) of (subtrahend)) from ((number) of (minuend))
+   }
+ }
+
+use (file)
+ natural additive arithmetic with (minimal natural arithmetic example)
+ {
+ }
+
+use (file)
+ any one‐dimensional additive arithmetic with (minimal natural arithmetic example)
+ {
+ }
+
+use (file)
+ natural one‐dimensional additive arithmetic with (minimal natural arithmetic example)
+ {
+ }
+
+use (file)
+ any natural arithmetic with (minimal natural arithmetic example)
  {
   action (file)
    (
@@ -196,6 +213,16 @@ use (file)
  }
 
 use (file)
- natural arithmetic with (minimal natural arithmetic example)
+ unlimited incrementation of (minimal natural arithmetic example)
+ {
+ }
+
+use (file)
+ limited decrementation of (minimal natural arithmetic example)
+ {
+ }
+
+use (file)
+ natural‐only arithmetic with (minimal natural arithmetic example)
  {
  }
