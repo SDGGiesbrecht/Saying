@@ -1,13 +1,16 @@
 ability (clients)
  [
   [
-   English: Arithmetic constants which are natural numbers.
+   English: Capability common to limited, unlimited and natural‐only natural arithmetic.
   ]
  ]
  (
-  English: natural constants as (number)
+  English: any natural arithmetic with (number)
  )
  {
+  ability (clients)
+   any one‐dimensional additive arithmetic with (number)
+
   requirement (clients)
    (
     English: zero
@@ -215,7 +218,7 @@ ability (clients)
  }
 
 extension
- natural constants as (number)
+ any natural arithmetic with (number)
  {
   action (clients)
    (

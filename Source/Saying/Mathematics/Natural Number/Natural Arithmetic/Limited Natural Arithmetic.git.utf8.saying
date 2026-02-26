@@ -1,0 +1,283 @@
+ability (clients)
+ [
+  [
+   English: Natural arithmetic with an upper limit.
+  ]
+  test {verify (not (can add (one: number) to (greatest representable: number)))}
+  test {verify (not (can subtract (one: number) from (least representable: number)))}
+  test {
+   if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
+    verify (not (can subtract (negative one) from (greatest representable: number)))
+   }
+  }
+  test {
+   if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
+    verify (not (can add (negative one) to (least representable: number)))
+   }
+  }
+  test {
+   if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
+    verify (can add (negative one) to (zero: number))
+   }
+  }
+  test {
+   if ((zero: number) minus (one: number)) exists, unwrap it as (• negative one: number), {
+    verify (can subtract (negative one) from (zero: number))
+   }
+  }
+  test {
+   let (• cumulative sum: number) start as (greatest representable: number)
+   verify (not (add (one: number) to (↓ cumulative sum)))
+   verify ((cumulative sum) is (greatest representable: number))
+  }
+  test {
+   let (• value: number) start as (least representable: number)
+   verify (not (subtract (one: number) from (↓ value)))
+   verify ((value) is (least representable: number))
+  }
+  test {verify (((greatest representable: number) + (one: number)) does not exist)}
+  test {verify (((least representable: number) − (one: number)) does not exist)}
+ ]
+ (
+  English: limited natural arithmetic with (number)
+ )
+ {
+  ability (clients)
+   any natural arithmetic with (number)
+
+  ability (clients)
+   limited one‐dimensional additive arithmetic with (number)
+
+  ability (clients)
+   limited incrementation of (number)
+
+  ability (clients)
+   limited decrementation of (number)
+ }
+
+thing (file)
+ (
+  English: minimal limited natural arithmetic example
+ )
+ {
+  part (file)
+   (
+    English: number
+   )
+   platform fixed‐width natural number
+ }
+
+action (file)
+ (
+  English: minimal limited natural arithmetic example wrapping (number: platform fixed‐width natural number)
+ )
+ minimal limited natural arithmetic example
+ create
+
+use (file)
+ general containers of (minimal limited natural arithmetic example)
+ {
+  action (file)
+   example
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (example: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ comparison of (minimal limited natural arithmetic example) for equality
+ {
+  action (file)
+   (first: minimal limited natural arithmetic example) is (second: minimal limited natural arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is ((number) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal limited natural arithmetic example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (differing example: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ comparison of (minimal limited natural arithmetic example) for order
+ {
+  action (file)
+   (first: minimal limited natural arithmetic example) is less than (second: minimal limited natural arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is less than ((number) of (second))
+   }
+
+  action (file)
+   greater example
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (greater example: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ any addition of (minimal limited natural arithmetic example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (example augend: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (example addend: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (example sum: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ limited addition of (minimal limited natural arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal limited natural arithmetic example) to (cumulative sum: ↓ minimal limited natural arithmetic example) skipping overflow check
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can add (addend: minimal limited natural arithmetic example) to (augend: minimal limited natural arithmetic example)
+   )
+   truth value
+   {
+    ← can add ((number) of (addend)) to ((number) of (augend))
+   }
+ }
+
+use (file)
+ limited subtraction with (minimal limited natural arithmetic example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal limited natural arithmetic example) from (value: ↓ minimal limited natural arithmetic example) skipping overflow check
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can subtract (subtrahend: minimal limited natural arithmetic example) from (minuend: minimal limited natural arithmetic example)
+   )
+   truth value
+   {
+    ← can subtract ((number) of (subtrahend)) from ((number) of (minuend))
+   }
+ }
+
+use (file)
+ any additive arithmetic with (minimal limited natural arithmetic example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (additive identity: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ limited additive arithmetic with (minimal limited natural arithmetic example)
+ {
+ }
+
+use (file)
+ any one‐dimensional additive arithmetic with (minimal limited natural arithmetic example)
+ {
+ }
+
+use (file)
+ limited one‐dimensional additive arithmetic with (minimal limited natural arithmetic example)
+ {
+  action (file)
+   (
+    English: greatest representable
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (greatest representable: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: least representable
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (least representable: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ any natural arithmetic with (minimal limited natural arithmetic example)
+ {
+  action (file)
+   (
+    English: zero
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (zero: platform fixed‐width natural number)
+   }
+
+  action (file)
+   (
+    English: one
+   )
+   minimal limited natural arithmetic example
+   {
+    ← minimal limited natural arithmetic example wrapping (one: platform fixed‐width natural number)
+   }
+ }
+
+use (file)
+ limited incrementation of (minimal limited natural arithmetic example)
+ {
+ }
+
+use (file)
+ limited decrementation of (minimal limited natural arithmetic example)
+ {
+ }
+
+use (file)
+ limited natural arithmetic with (minimal limited natural arithmetic example)
+ {
+ }

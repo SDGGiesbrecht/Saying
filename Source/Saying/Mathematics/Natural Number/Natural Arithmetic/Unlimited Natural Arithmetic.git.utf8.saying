@@ -1,0 +1,22 @@
+ability (clients)
+ [
+  [
+   English: Natural arithmetic with no upper limit.
+  ]
+ ]
+ (
+  English: unlimited natural arithmetic with (number)
+ )
+ {
+  ability (clients)
+   any natural arithmetic with (number)
+
+  ability (clients)
+   unlimited one‐dimensional additive arithmetic with (number)
+
+  ability (clients)
+   unlimited incrementation of (number)
+
+  ability (clients)
+   unlimited decrementation of (number)
+ }

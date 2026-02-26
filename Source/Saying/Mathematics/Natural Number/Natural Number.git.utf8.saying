@@ -285,7 +285,7 @@ use (clients)
  }
 
 use (clients)
- natural constants as (natural number)
+ any natural arithmetic with (natural number)
  {
   action (clients)
    (
@@ -307,7 +307,7 @@ use (clients)
  }
 
 use (clients)
- natural arithmetic with (natural number)
+ unlimited incrementation of (natural number)
  {
   action (clients)
    (
@@ -318,6 +318,27 @@ use (clients)
    JavaScript: “++” counter “”
    Kotlin: “++” counter “”
    {
-    increment (↓ counter) according to natural arithmetic
+    increment (↓ counter) according to unlimited incrementation
    }
+ }
+
+use (clients)
+ limited decrementation of (natural number)
+ {
+  action (clients)
+   (
+    English: decrement (counter: ↓ natural number) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” counter “”
+   C♯: “¤(2D)¤(2D)” counter “”
+   JavaScript: “¤(2D)¤(2D)” counter “”
+   Kotlin: “¤(2D)¤(2D)” counter “”
+   {
+    ← decrement (↓ counter) skipping underflow check according to limited decrementation
+   }
+ }
+
+use (clients)
+ natural‐only arithmetic with (natural number)
+ {
  }

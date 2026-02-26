@@ -13,4 +13,22 @@ ability (clients)
 
   ability (clients)
    limited additive arithmetic with (value)
+
+  requirement (clients)
+   [
+    test {ignore (greatest representable: value)}
+   ]
+   (
+    English: greatest representable
+   )
+   value
+
+  requirement (clients)
+   [
+    test {ignore (least representable: value)}
+   ]
+   (
+    English: least representable
+   )
+   value
  }

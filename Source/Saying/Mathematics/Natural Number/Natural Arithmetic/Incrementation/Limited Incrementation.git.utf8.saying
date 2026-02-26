@@ -1,0 +1,110 @@
+ability (clients)
+ (
+  English: limited incrementation of (number)
+ )
+ {
+  ability (clients)
+   limited one‐dimensional additive arithmetic with (number)
+
+  ability (clients)
+   any natural arithmetic with (number)
+
+  choice (clients)
+   [
+    [
+     English: Increments the counter without checking whether the next state is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {increment ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the counter is already known from context to have a representable successor state. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• counter: number) start as (zero: number)
+     increment (↓ counter) skipping overflow check
+     verify ((counter) is (one: number))
+    }
+   ]
+   (
+    English: increment (counter: ↓ number) skipping overflow check
+   )
+   {
+    increment (↓ counter) skipping overflow check according to limited natural arithmetic
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the next number without checking whether said successor is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {successor to ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the value is already known from context to have a representable successor. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {verify ((successor to (zero: number) skipping overflow check) is (one: number))}
+   ]
+   (
+    English: successor to (number: number) skipping overflow check
+   )
+   number
+   {
+    ← (number) plus (one: number), skipping overflow check
+   }
+ }
+
+extension
+ limited incrementation of (number)
+ {
+  action (clients)
+   (
+    English: increment (number: ↓ number) skipping overflow check according to limited natural arithmetic
+   )
+   {
+    add (one: number) to (↓ number) skipping overflow check
+   }
+
+  action (clients)
+   [
+    [
+     English: Increments the counter if it has a representable successor state and then returns whether or not the incrementation succeeded.
+    ]
+    test {
+     let (• counter: number) start as (zero: number)
+     verify (increment (↓ counter))
+    }
+   ]
+   (
+    English: increment (counter: ↓ number)
+   )
+   truth value
+   {
+    if (can add (one: number) to (counter)), {
+     increment (↓ counter) skipping overflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    [
+     English: Returns the next number if it is representable.
+    ]
+    test {verify ((successor to (zero: number)) exists)}
+    test {verify ((successor to (greatest representable: number)) does not exist)}
+   ]
+   (
+    English: successor to (number: number)
+   )
+   optional (number)
+   {
+    let (• copy: number) start as (number)
+    if (increment (↓ copy)), {
+     ← wrap (copy) into optional
+    }
+    ← nothing
+   }
+ }

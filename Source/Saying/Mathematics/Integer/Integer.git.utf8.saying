@@ -270,7 +270,7 @@ use (clients)
  }
 
 use (clients)
- natural constants as (integer)
+ any natural arithmetic with (integer)
  {
   action (clients)
    (
@@ -292,7 +292,7 @@ use (clients)
  }
 
 use (clients)
- natural arithmetic with (integer)
+ unlimited incrementation of (integer)
  {
   action (clients)
    (
@@ -303,12 +303,12 @@ use (clients)
    JavaScript: “++” counter “”
    Kotlin: “++” counter “”
    {
-    increment (↓ counter) according to natural arithmetic
+    increment (↓ counter) according to unlimited incrementation
    }
  }
 
 use (clients)
- integral arithmetic with (integer)
+ unlimited decrementation of (integer)
  {
   action (clients)
    (
@@ -319,6 +319,16 @@ use (clients)
    JavaScript: “¤(2D)¤(2D)” counter “”
    Kotlin: “¤(2D)¤(2D)” counter “”
    {
-    decrement (↓ counter) according to integral arithmetic
+    decrement (↓ counter) according to unlimited decrementation
    }
+ }
+
+use (clients)
+ unlimited natural arithmetic with (integer)
+ {
+ }
+
+use (clients)
+ integral arithmetic with (integer)
+ {
  }
