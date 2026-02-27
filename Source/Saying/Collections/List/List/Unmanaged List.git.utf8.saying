@@ -415,6 +415,30 @@ extension
    {
     replace (range) in (↓ list) with (from (beginning of (replacement)) to (end of (replacement))) from (replacement)
    }
+
+  action (unit)
+   [
+    test {
+     let (• first: unmanaged list of (truth value)) start as (empty: unmanaged list of (truth value))
+     let (• second: unmanaged list of (truth value)) start as (empty: unmanaged list of (truth value))
+     verify (memory of (first) and (second) are equal)
+     insert (false) at (beginning of (second)) in (↓ second)
+     verify (not (memory of (first) and (second) are equal))
+     release unmanaged (↓ first)
+     release unmanaged (↓ second)
+    }
+   ]
+   (
+    English: memory of (first: unmanaged list of (thing)) and (second: unmanaged list of (thing)) are equal
+   )
+   truth value
+   {
+    let (• end: list boundary) be ((end) of (first))
+    if (((end) of (second)) is (end)), {
+     ← memory of ((uncounted) of (first)) and ((uncounted) of (second)) are equal up to (end)
+    }
+    ← false
+   }
  }
 
 action (file)

@@ -102,7 +102,7 @@ action (file)
  Kotlin: “” first “ == ” second “”
  Swift: “” first “.elementsEqual(” second “)”
  {
-  ← ((8‐bit encoded) of (first)) is ((8‐bit encoded) of (second))
+  ← if possible, memory of ((8‐bit encoded) of (first)) and ((8‐bit encoded) of (second)) are equal, otherwise return (false)
  }
 
 action (file)
