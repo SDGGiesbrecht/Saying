@@ -530,7 +530,7 @@ enum Kotlin: Platform {
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
     try ([
       "android.useAndroidX=true",
-      "org.gradle.jvmargs=-Xmx1g", // 512m ran out in the Android CI.
+      "org.gradle.jvmargs=-Xmx2g", // 1G ran out in the Android CI.
       "kotlin.daemon.jvmargs=-Xmx4g", // 2G ran out in the Android CI.
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("gradle.properties"))

@@ -1,0 +1,13 @@
+ability (clients)
+ [
+  [
+   English: Integral arithmetic with an upper and lower limit.
+  ]
+ ]
+ (
+  English: limited integral arithmetic with (number)
+ )
+ {
+  ability (clients)
+   limited natural arithmetic with (number)
+ }

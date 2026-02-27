@@ -1,13 +1,15 @@
 ability (clients)
  [
   [
-   English: Arithmetic involving only integers.
+   English: Integral arithmetic with no upper or lower limits.
   ]
  ]
  (
-  English: integral arithmetic with (number)
+  English: unlimited integral arithmetic with (number)
  )
  {
+  ability (clients)
+   unlimited natural arithmetic with (number)
  }
 
 thing (file)
@@ -203,6 +205,11 @@ use (file)
  }
 
 use (file)
- integral arithmetic with (minimal integral arithmetic example)
+ unlimited natural arithmetic with (minimal integral arithmetic example)
+ {
+ }
+
+use (file)
+ unlimited integral arithmetic with (minimal integral arithmetic example)
  {
  }
