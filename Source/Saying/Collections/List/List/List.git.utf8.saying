@@ -1131,4 +1131,20 @@ extension
       ← entirety of (insertion example: list of (thing))
      }
    }
+
+  action (unit)
+   [
+    test {verify (if possible, memory of (empty: list of (thing)) and (empty: list of (thing)) are equal, otherwise return (true))}
+   ]
+   (
+    English: if possible, memory of (first: list of (thing)) and (second: list of (thing)) are equal, otherwise return (placeholder: truth value)
+   )
+   truth value
+   C♯: “” placeholder “”
+   JavaScript: “” placeholder “”
+   Kotlin: “” placeholder “”
+   Swift: “” placeholder “”
+   {
+    ← memory of ((unmanaged) of (first)) and ((unmanaged) of (second)) are equal
+   }
  }
