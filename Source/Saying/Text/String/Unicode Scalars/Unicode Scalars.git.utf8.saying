@@ -223,7 +223,7 @@ action (file)
   English: if most efficient, scalar beginning at (cursor: memory offset) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length)
  )
  Unicode scalar
- C: “g¤(5F)utf8¤(5F)get¤(5F)char(” list “ + ” cursor “)” (“glib¤(2D)2.0”)
+ C: “(char32¤(5F)t)g¤(5F)utf8¤(5F)get¤(5F)char(” list “ + ” cursor “)” (“glib¤(2D)2.0”)
  {
   ← example
  }
@@ -400,7 +400,7 @@ action (file)
   English: insert (scalar: Unicode scalar) into (buffer: ↓ unmanaged list of (8‐bit Unicode code unit) of unknown length)
  )
  platform fixed‐width integer
- C: “g¤(5F)unichar¤(5F)to¤(5F)utf8(” scalar “, ” buffer “)” (“glib¤(2D)2.0”)
+ C: “g¤(5F)unichar¤(5F)to¤(5F)utf8((gunichar)” scalar “, ” buffer “)” (“glib¤(2D)2.0”)
  {
   ← zero
  }
