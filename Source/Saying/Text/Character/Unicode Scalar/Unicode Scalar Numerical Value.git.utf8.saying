@@ -2,7 +2,7 @@ thing (clients)
  (
   English: Unicode scalar numerical value
  )
- C: “gunichar” (“glib¤(2D)2.0”)
+ C: “uint¤(5F)least32¤(5F)t” (“stdint”)
  C♯: “int”
  Kotlin: “Int”
  Swift: “UInt32”

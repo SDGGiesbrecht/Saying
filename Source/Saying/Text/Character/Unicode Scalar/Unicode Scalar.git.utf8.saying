@@ -21,7 +21,7 @@ thing (clients)
     English: numerical value
    )
    Unicode scalar numerical value
-   C: “” . “”
+   C: “(uint¤(5F)least32¤(5F)t)” . “” (“stdint”)
    C♯: “” . “.Value”
    JavaScript: “” . “”
    Kotlin: “” . “”
