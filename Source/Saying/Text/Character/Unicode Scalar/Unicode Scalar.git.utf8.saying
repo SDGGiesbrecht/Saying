@@ -16,6 +16,16 @@ thing (clients)
  Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
+  part (clients/nowhere)
+   (
+    English: numerical value
+   )
+   Unicode scalar numerical value
+   C: “” . “”
+   C♯: “” . “.Value”
+   JavaScript: “” . “”
+   Kotlin: “” . “”
+   Swift: “(” . “).value”
  }
 
 use (clients)
@@ -29,20 +39,6 @@ use (clients)
    }
  }
 
-action (clients)
- [
-  test {ignore (value of (“ ”: Unicode scalar))}
- ]
- (
-  English: value of (scalar: Unicode scalar)
- )
- natural number
- C: “(uintmax¤(5F)t)(” scalar “)”
- C♯: “(ulong)(” scalar “.Value)”
- JavaScript: “” scalar “”
- Kotlin: “” scalar “.toULong()”
- Swift: “UInt64((” scalar “).value)”
-
 use (clients)
  comparison of (Unicode scalar) for equality
  {
@@ -54,6 +50,9 @@ use (clients)
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
    Swift: «» first “ == ” second „“
+   {
+    ← ((numerical value) of (first)) is ((numerical value) of (second))
+   }
 
   action (clients)
    (first: Unicode scalar) is not (second: Unicode scalar)
@@ -63,12 +62,15 @@ use (clients)
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
 
   action (clients)
    hash key (key: Unicode scalar) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash part (value of (key)) with (↓ hasher)
+    hash part ((numerical value) of (key)) with (↓ hasher)
    }
 
   action (unit)

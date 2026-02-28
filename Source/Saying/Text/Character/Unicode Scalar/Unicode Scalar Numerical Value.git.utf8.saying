@@ -1,0 +1,125 @@
+thing (clients)
+ (
+  English: Unicode scalar numerical value
+ )
+ C: “gunichar” (“glib¤(2D)2.0”)
+ C♯: “int”
+ Kotlin: “Int”
+ Swift: “UInt32”
+
+use (clients)
+ general containers of (Unicode scalar numerical value)
+ {
+  action (clients)
+   example
+   Unicode scalar numerical value
+   {
+    ← (numerical value) of (“ ”: Unicode scalar)
+   }
+ }
+
+action (file)
+ [
+  test {ignore (hashing proxy of (example: Unicode scalar numerical value))}
+ ]
+ hashing proxy of (number: Unicode scalar numerical value)
+ platform fixed‐width integer
+ C: “(unsigned)” number “”
+ C♯: “” number “.GetHashCode()”
+ JavaScript: “” number “”
+ Kotlin: “” number “.hashCode()”
+ Swift: “Int(truncatingIfNeeded: ” number “)”
+
+use (clients)
+ comparison of (Unicode scalar numerical value) for equality
+ {
+  action (clients)
+   (first: Unicode scalar numerical value) is (second: Unicode scalar numerical value)
+   truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: Unicode scalar numerical value) is not (second: Unicode scalar numerical value)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
+
+  action (clients)
+   hash key (key: Unicode scalar numerical value) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: Unicode scalar numerical value)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   Unicode scalar numerical value
+   {
+    ← greater example
+   }
+ }
+
+use (clients)
+ comparison of (Unicode scalar numerical value) for order
+ {
+  action (clients)
+   (first: Unicode scalar numerical value) is less than (second: Unicode scalar numerical value)
+   truth value
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
+   Swift: «» first “ < ” second „“
+
+  action (clients)
+   (first: Unicode scalar numerical value) is greater than (second: Unicode scalar numerical value)
+   truth value
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: «» first “ > ” second „“
+
+  action (clients)
+   (first: Unicode scalar numerical value) is less than or equal to (second: Unicode scalar numerical value)
+   truth value
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: «» first “ <= ” second „“
+
+  action (clients)
+   (first: Unicode scalar numerical value) is greater than or equal to (second: Unicode scalar numerical value)
+   truth value
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: «» first “ >= ” second „“
+
+  action (clients)
+   greater example
+   Unicode scalar numerical value
+   {
+    ← (numerical value) of (“!”: Unicode scalar)
+   }
+ }
