@@ -42,7 +42,7 @@ struct UnicodeText {
     }
     if let next = newElements.first {
       self.scalars += newElements.scalars
-      if UInt64((next).value) < UInt64(("\u{0300}" as Unicode.Scalar).value) {
+      if (next).value < ("\u{0300}" as Unicode.Scalar).value {
         return
       }
       self.scalars.decomposeAccordingToCompatibilityDecomposition()
