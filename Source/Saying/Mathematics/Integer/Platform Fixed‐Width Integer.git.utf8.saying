@@ -1,7 +1,7 @@
 thing (clients)
  [
   [
-   English: A natural number stored in a fixed amound of memory.
+   English: A natural number stored in a fixed amount of memory.
   ]
   [
    English: {platform fixed‐width integer} makes the same design tradeoffs as {platform fixed‐width natural number}. See {platform fixed‐width natural number} for more information.
