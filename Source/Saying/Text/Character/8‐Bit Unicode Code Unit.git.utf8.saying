@@ -4,7 +4,7 @@ thing (clients)
  )
  C: “char”
  C♯: “byte”
- Kotlin: “UByte”
+ Kotlin: “Byte”
  Swift: “UTF8.CodeUnit”
  {
  }
@@ -167,7 +167,7 @@ action (file)
  C: “” unit “ ¤(26) ” mask “”
  C♯: “(byte)(” unit “ ¤(26) ” mask “)”
  JavaScript: “” unit “ ¤(26) ” mask “”
- Kotlin: “” unit “ and ” mask “”
+ Kotlin: “(” unit “.toInt() and ” mask “.toInt()).toByte()”
  Swift: “” unit “ ¤(26) ” mask “”
 
 action (file)
