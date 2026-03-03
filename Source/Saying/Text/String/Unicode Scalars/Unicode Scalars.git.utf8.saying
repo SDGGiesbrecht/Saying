@@ -191,21 +191,46 @@ use (clients)
 action (file)
  [
   test {
-   let (• end: list boundary) be (boundary at (“1”: memory offset))
-   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
-   let (• beginning: list boundary) be (beginning of (list))
-   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   ignore (if most efficient, scalar boundary after ((offset) of (beginning)) in (list) ending at ((offset) of (end)) skipping bounds check)
-   clean (list) up up to (end)
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• cursor: Unicode scalar boundary) start as (beginning of (scalars))
+   if most efficient, advance (↓ cursor) to next in (scalars) skipping bounds check by replacement
   }
  ]
  (
-  English: if most efficient, scalar boundary after (cursor: memory offset) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length) ending at (end: memory offset) skipping bounds check
+  English: if most efficient, advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode scalars) skipping bounds check by replacement
  )
- memory offset
- C: “g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) == NULL ? ” end “ : g¤(5F)utf8¤(5F)find¤(5F)next¤(5F)char(” list “ + ” cursor “, ” list “ + ” end “) ¤(2D) ” list “” (“glib¤(2D)2.0”)
+ C: “”
+ Swift: “”
  {
-  ← cursor
+  change (↓ cursor) to (boundary after (cursor) in (list) skipping bounds check)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• cursor: Unicode scalar boundary) start as (beginning of (scalars))
+   if most efficient, advance (↓ cursor) to next in (scalars) skipping bounds check by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, advance (cursor: ↓ Unicode scalar boundary) to next in (list: Unicode scalars) skipping bounds check by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
+  advance (↓ (8‐bit boundary) of (cursor)) to next in (8‐bit) skipping bounds check
+  let (• end: list boundary) be (end of (8‐bit))
+  while (((8‐bit boundary) of (cursor)) is less than (end)), {
+   if ((entry after ((8‐bit boundary) of (cursor)) in (8‐bit) skipping bounds check) is continuation), {
+    advance (↓ (8‐bit boundary) of (cursor)) to next in (8‐bit) skipping bounds check
+   }, otherwise {
+    ←
+   }
+  }
  }
 
 action (file)
@@ -276,7 +301,8 @@ use (clients)
    )
    Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
    {
-    change (↓ cursor) to (boundary after (cursor) in (list) skipping bounds check)
+    if most efficient, advance (↓ cursor) to next in (list) skipping bounds check by replacement
+    if most efficient, advance (↓ cursor) to next in (list) skipping bounds check by 8‐bit encoded
    }
 
   action (clients)
@@ -299,7 +325,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
    {
-    ← if possible, scalar boundary at 8‐bit boundary (boundary at (if most efficient, scalar boundary after ((offset) of (if possible, 8‐bit boundary at (cursor))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list)))) ending at ((offset) of (if possible, 8‐bit boundary at (end of (list)))) skipping bounds check))
+    ← boundary after (cursor) in (list) skipping bounds check according to use as list
    }
 
   action (clients)
