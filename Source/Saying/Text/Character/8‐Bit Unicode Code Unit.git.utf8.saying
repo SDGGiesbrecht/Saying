@@ -167,7 +167,7 @@ action (file)
  C: “” unit “ ¤(26) ” mask “”
  C♯: “(byte)(” unit “ ¤(26) ” mask “)”
  JavaScript: “” unit “ ¤(26) ” mask “”
- Kotlin: “(” unit “.toInt() and ” mask “.toInt()).toByte()”
+ Kotlin: “(” unit “.toUByte() and ” mask “.toUByte()).toByte()”
  Swift: “” unit “ ¤(26) ” mask “”
 
 action (file)
@@ -178,7 +178,7 @@ action (file)
  C: “0b11000000”
  C♯: “0b¤(5F)1100¤(5F)0000”
  JavaScript: “0b11000000”
- Kotlin: “0b1100¤(5F)0000”
+ Kotlin: “0b1100¤(5F)0000.toByte()”
  Swift: “0b1100¤(5F)0000”
 
 action (file)
@@ -189,5 +189,5 @@ action (file)
  C: “0b10000000”
  C♯: “0b¤(5F)1000¤(5F)0000”
  JavaScript: “0b10000000”
- Kotlin: “0b1000¤(5F)0000”
+ Kotlin: “0b1000¤(5F)0000.toByte()”
  Swift: “0b1000¤(5F)0000”
