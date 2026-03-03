@@ -146,3 +146,48 @@ action (clients)
  JavaScript: “0x0”
  Kotlin: “0x0”
  Swift: “0x0”
+
+action (clients)
+ [
+  test {verify (not ((null control code) is continuation))}
+ ]
+ (
+  English: (unit: 8‐bit Unicode code unit) is continuation
+ )
+ truth value
+ {
+  ← (apply mask (mask for first two bits) to (unit)) is (first bits one‐zero)
+ }
+
+action (file)
+ (
+  English: apply mask (mask: 8‐bit Unicode code unit) to (unit: 8‐bit Unicode code unit)
+ )
+ 8‐bit Unicode code unit
+ C: “” unit “ ¤(26) ” mask “”
+ C♯: “(byte)(” unit “ ¤(26) ” mask “)”
+ JavaScript: “” unit “ ¤(26) ” mask “”
+ Kotlin: “(” unit “.toUByte() and ” mask “.toUByte()).toByte()”
+ Swift: “” unit “ ¤(26) ” mask “”
+
+action (file)
+ (
+  English: mask for first two bits
+ )
+ 8‐bit Unicode code unit
+ C: “0b11000000”
+ C♯: “0b¤(5F)1100¤(5F)0000”
+ JavaScript: “0b11000000”
+ Kotlin: “0b1100¤(5F)0000.toByte()”
+ Swift: “0b1100¤(5F)0000”
+
+action (file)
+ (
+  English: first bits one‐zero
+ )
+ 8‐bit Unicode code unit
+ C: “0b10000000”
+ C♯: “0b¤(5F)1000¤(5F)0000”
+ JavaScript: “0b10000000”
+ Kotlin: “0b1000¤(5F)0000.toByte()”
+ Swift: “0b1000¤(5F)0000”

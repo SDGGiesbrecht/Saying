@@ -86,9 +86,7 @@ ability (clients)
    )
    boundary
    {
-    let (• copy: boundary) start as (cursor)
-    advance (↓ copy) to next in (list) skipping bounds check
-    ← copy
+    ← boundary after (cursor) in (list) skipping bounds check according to use as list
    }
 
   requirement (clients)
@@ -237,6 +235,17 @@ extension
      ← wrap (index after (boundary) in (list) skipping bounds check) into optional
     }
     ← nothing
+   }
+
+  action (clients)
+   (
+    English: boundary after (cursor: boundary) in (list: list) skipping bounds check according to use as list
+   )
+   boundary
+   {
+    let (• copy: boundary) start as (cursor)
+    advance (↓ copy) to next in (list) skipping bounds check
+    ← copy
    }
 
   action (clients)
