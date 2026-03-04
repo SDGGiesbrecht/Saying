@@ -76,6 +76,10 @@ extension LiteralIntermediate {
     return "memory offset"
   }
 
+  static var byteName: UnicodeText {
+    return "byte"
+  }
+
   func validate(
     as type: Thing,
     reference: ParsedTypeReference,
@@ -98,6 +102,10 @@ extension LiteralIntermediate {
       || type.names.contains(LiteralIntermediate.memoryOffsetName) {
       if !validateInteger(literal: string) {
         errors.append(.notAnInteger(source))
+      }
+    } else if type.names.contains(LiteralIntermediate.byteName) {
+      if !validateByte(literal: string) {
+        errors.append(.notAByte(source))
       }
     } else {
       errors.append(.thingCannotBeExpressedAsLiteral(source, thing: reference))
@@ -129,6 +137,28 @@ extension LiteralIntermediate {
       natural.unicodeScalars.removeFirst()
     }
     return validateNaturalNumber(literal: natural)
+  }
+
+  private static let binaryDigits: Set<Unicode.Scalar> = ["0", "1"]
+  private static let hexadecimalDigits: Set<Unicode.Scalar> = [
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"
+  ]
+  func validateByte(literal: String) -> Bool {
+    let count = literal.unicodeScalars.count
+    if count == 2 {
+      return literal.unicodeScalars.allSatisfy({ LiteralIntermediate.hexadecimalDigits.contains($0) })
+    } else if count == 9 {
+      return literal.unicodeScalars.indices.enumerated().allSatisfy({ entry in
+        let scalar = literal.unicodeScalars[entry.element]
+        if entry.offset == 4 {
+          return scalar == " "
+        } else {
+          return LiteralIntermediate.binaryDigits.contains(scalar)
+        }
+      })
+    } else {
+      return false
+    }
   }
 }
 

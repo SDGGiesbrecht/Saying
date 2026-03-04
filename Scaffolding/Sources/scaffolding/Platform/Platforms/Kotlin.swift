@@ -69,6 +69,17 @@ enum Kotlin: Platform {
     }
     return result
   }
+  static func literal(byte: String) -> String {
+    if byte.unicodeScalars.count == 2 {
+      return "0x\(byte)"
+    } else {
+      var base = "0b\(byte.replacingMatches(for: " ", with: "_"))"
+      if byte.unicodeScalars.first == "1" {
+        base.append(contentsOf: ".toByte()")
+      }
+      return base
+    }
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

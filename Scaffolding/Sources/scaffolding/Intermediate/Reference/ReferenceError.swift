@@ -24,6 +24,7 @@ enum ReferenceError: DiagnosticError {
   case multipleScalars(ParsedLiteral)
   case notANaturalNumber(ParsedLiteral)
   case notAnInteger(ParsedLiteral)
+  case notAByte(ParsedLiteral)
 
   var message: String {
     switch self {
@@ -76,6 +77,8 @@ enum ReferenceError: DiagnosticError {
     case .notANaturalNumber:
       return defaultMessage
     case .notAnInteger:
+      return defaultMessage
+    case .notAByte:
       return defaultMessage
     }
   }
@@ -131,6 +134,8 @@ enum ReferenceError: DiagnosticError {
     case .notANaturalNumber(let literal):
       return literal.location
     case .notAnInteger(let literal):
+      return literal.location
+    case .notAByte(let literal):
       return literal.location
     }
   }
