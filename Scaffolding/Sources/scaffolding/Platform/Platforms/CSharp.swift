@@ -54,6 +54,13 @@ enum CSharp: Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
     return number.replacingOccurrences(of: "−", with: "-")
   }
+  static func literal(byte: String) -> String {
+    if byte.unicodeScalars.count == 2 {
+      return "0x\(byte)"
+    } else {
+      return "0b_\(byte.replacingMatches(for: " ", with: "_"))"
+    }
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

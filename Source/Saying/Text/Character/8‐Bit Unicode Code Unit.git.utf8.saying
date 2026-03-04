@@ -5,9 +5,31 @@ thing (clients)
  C: “char”
  C♯: “byte”
  Kotlin: “Byte”
- Swift: “UTF8.CodeUnit”
+ Swift: “UInt8”
  {
  }
+
+action (clients)
+ (
+  English: (byte: byte) as Unicode code unit
+ )
+ 8‐bit Unicode code unit
+ C: “” byte “”
+ C♯: “” byte “”
+ JavaScript: “” byte “”
+ Kotlin: “” byte “”
+ Swift: “” byte “”
+
+action (clients)
+ (
+  English: (unit: 8‐bit Unicode code unit) as byte
+ )
+ byte
+ C: “” unit “”
+ C♯: “” unit “”
+ JavaScript: “” unit “”
+ Kotlin: “” unit “”
+ Swift: “” unit “”
 
 use (clients)
  general containers of (8‐bit Unicode code unit)
@@ -16,7 +38,7 @@ use (clients)
    example
    8‐bit Unicode code unit
    {
-    ← null control code
+    ← (“00”: byte) as Unicode code unit
    }
  }
 
@@ -74,11 +96,9 @@ use (clients)
   action (clients)
    differing example
    8‐bit Unicode code unit
-   C: “0x1”
-   C♯: “0x1”
-   JavaScript: “0x1”
-   Kotlin: “0x1”
-   Swift: “0x1”
+   {
+    ← (“01”: byte) as Unicode code unit
+   }
  }
 
 use (clients)
@@ -141,11 +161,9 @@ action (clients)
   English: null control code
  )
  8‐bit Unicode code unit
- C: “0x0”
- C♯: “0x0”
- JavaScript: “0x0”
- Kotlin: “0x0”
- Swift: “0x0”
+ {
+  ← (“00”: byte) as Unicode code unit
+ }
 
 action (clients)
  [
@@ -156,38 +174,5 @@ action (clients)
  )
  truth value
  {
-  ← (apply mask (mask for first two bits) to (unit)) is (first bits one‐zero)
+  ← (((unit) as byte) and (“1100 0000”: byte)) is (“1000 0000”: byte)
  }
-
-action (file)
- (
-  English: apply mask (mask: 8‐bit Unicode code unit) to (unit: 8‐bit Unicode code unit)
- )
- 8‐bit Unicode code unit
- C: “” unit “ ¤(26) ” mask “”
- C♯: “(byte)(” unit “ ¤(26) ” mask “)”
- JavaScript: “” unit “ ¤(26) ” mask “”
- Kotlin: “(” unit “.toUByte() and ” mask “.toUByte()).toByte()”
- Swift: “” unit “ ¤(26) ” mask “”
-
-action (file)
- (
-  English: mask for first two bits
- )
- 8‐bit Unicode code unit
- C: “0b11000000”
- C♯: “0b¤(5F)1100¤(5F)0000”
- JavaScript: “0b11000000”
- Kotlin: “0b1100¤(5F)0000.toByte()”
- Swift: “0b1100¤(5F)0000”
-
-action (file)
- (
-  English: first bits one‐zero
- )
- 8‐bit Unicode code unit
- C: “0b10000000”
- C♯: “0b¤(5F)1000¤(5F)0000”
- JavaScript: “0b10000000”
- Kotlin: “0b1000¤(5F)0000.toByte()”
- Swift: “0b1000¤(5F)0000”

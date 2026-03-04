@@ -105,6 +105,13 @@ enum C: Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
     return number.replacingOccurrences(of: "−", with: "-")
   }
+  static func literal(byte: String) -> String {
+    if byte.unicodeScalars.count == 2 {
+      return "0x\(byte)"
+    } else {
+      return "0b\(byte.replacingMatches(for: " ", with: ""))"
+    }
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil

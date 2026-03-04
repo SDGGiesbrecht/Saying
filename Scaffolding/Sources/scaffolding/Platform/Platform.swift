@@ -23,6 +23,7 @@ protocol Platform {
   static func literal(scalars: String, escaped: String) -> String
   static func literal(scalar: Unicode.Scalar) -> String
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String
+  static func literal(byte: String) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -983,6 +984,8 @@ extension Platform {
       || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
       || type.names.contains(LiteralIntermediate.memoryOffsetName) {
       return self.literal(number: literal.string, typeNames: type.names)
+    } else if type.names.contains(LiteralIntermediate.byteName) {
+      return self.literal(byte: literal.string)
     } else {
       return call(scalarLiteral: literal, normalize: normalizeNextNestedLiteral)
     }

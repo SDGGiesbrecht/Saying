@@ -111,6 +111,13 @@ enum Swift: Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
     return number.replacingOccurrences(of: "−", with: "-")
   }
+  static func literal(byte: String) -> String {
+    if byte.unicodeScalars.count == 2 {
+      return "0x\(byte)"
+    } else {
+      return "0b\(byte.replacingMatches(for: " ", with: "_"))"
+    }
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
@@ -503,10 +510,10 @@ enum Swift: Platform {
     "extension UInt64: Comparable {}",
     "extension UInt64: Equatable {}",
     "extension UInt64: Hashable {}",
+    "extension UInt8: Equatable {}",
+    "extension UInt8: Hashable {}",
     "extension Unicode.Scalar: Equatable {}",
     "extension Unicode.Scalar: Hashable {}",
-    "extension UTF8.CodeUnit: Equatable {}",
-    "extension UTF8.CodeUnit: Hashable {}",
   ]
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
     if source.hasSuffix("?: Equatable {}")

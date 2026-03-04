@@ -1,0 +1,105 @@
+thing (clients)
+ [
+  [
+   English: Eight bits of binary data.
+  ]
+ ]
+ (
+  English: byte
+ )
+ C: “char”
+ C♯: “byte”
+ Kotlin: “Byte”
+ Swift: “UInt8”
+ {
+ }
+
+use (clients)
+ general containers of (byte)
+ {
+  action (clients)
+   example
+   byte
+   {
+    ← “0000 0000”
+   }
+ }
+
+action (file)
+ [
+  test {ignore (hashing proxy of (example: byte))}
+ ]
+ hashing proxy of (number: byte)
+ platform fixed‐width integer
+ C: “(unsigned)” number “”
+ C♯: “” number “.GetHashCode()”
+ JavaScript: “” number “”
+ Kotlin: “” number “.hashCode()”
+ Swift: “Int(truncatingIfNeeded: ” number “)”
+
+use (clients)
+ comparison of (byte) for equality
+ {
+  action (clients)
+   (first: byte) is (second: byte)
+   truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: byte) is not (second: byte)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
+
+  action (clients)
+   hash key (key: byte) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: byte)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   byte
+   {
+    ← “0000 0001”
+   }
+ }
+
+action (clients)
+ (
+  English: (first: byte) and (second: byte)
+  English +: (first: [first]) ∧ (second: [second])
+  Deutsch: (erste: [first]) und (zweite: [second])
+  Deutsch +: (erste: [first]) ∧ (zweite: [second])
+  français : (première: [first]) et (deuxième: [second])
+  français +: (première: [first]) ∧ (deuxième: [second])
+  ελληνικά: (πρώτη: [first]) και (δεύτερα: [second])
+  ελληνικά +: (πρώτη: [first]) ∧ (δεύτερα: [second])
+  עברית: (ראשון: [first]) ו(שני: [second])
+  עברית +: (ראשון: [first]) ∧ (שני: [second])
+ )
+ byte
+ C: “” first “ ¤(26) ” second “”
+ C♯: “(byte)(” first “ ¤(26) ” second “)”
+ JavaScript: “” first “ ¤(26) ” second “”
+ Kotlin: “(” first “.toUByte() and ” second “.toUByte()).toByte()”
+ Swift: “” first “ ¤(26) ” second “”
