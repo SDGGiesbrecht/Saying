@@ -84,22 +84,164 @@ use (clients)
    }
  }
 
-action (clients)
+action (file)
  (
-  English: (first: byte) and (second: byte)
-  English +: (first: [first]) ∧ (second: [second])
-  Deutsch: (erste: [first]) und (zweite: [second])
-  Deutsch +: (erste: [first]) ∧ (zweite: [second])
-  français : (première: [first]) et (deuxième: [second])
-  français +: (première: [first]) ∧ (deuxième: [second])
-  ελληνικά: (πρώτη: [first]) και (δεύτερα: [second])
-  ελληνικά +: (πρώτη: [first]) ∧ (δεύτερα: [second])
-  עברית: (ראשון: [first]) ו(שני: [second])
-  עברית +: (ראשון: [first]) ∧ (שני: [second])
+  English: widen (byte: byte)
+ )
+ platform fixed‐width natural number
+ C: “(unsigned)” byte “”
+ C♯: “(uint)” byte “”
+ JavaScript: “” byte “”
+ Kotlin: “” byte “.toUInt()”
+ Swift: “UInt(” byte “)”
+
+action (file)
+ (
+  English: truncate (number: platform fixed‐width natural number) skipping overflow check
  )
  byte
- C: “” first “ ¤(26) ” second “”
- C♯: “(byte)(” first “ ¤(26) ” second “)”
+ C: “(unsigned char)” number “”
+ C♯: “unchecked((byte)” number “)”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toByte()”
+ Swift: “UInt8(truncatingIfNeeded: ” number “)”
+
+action (file)
+ (
+  English: (number: platform fixed‐width natural number) with byte overflow pre‐cleared if necessary
+ )
+ platform fixed‐width natural number
+ C♯: “” number “”
+ Kotlin: “” number “”
+ Swift: “” number “”
+ {
+  ← bitwise intersection of (number) and (widen (“1111 1111”: byte))
+ }
+
+action (file)
+ [
+  test {verify ((truncate (widen (“1111 1111”: byte))) is (“1111 1111”: byte))}
+  test {
+   if ((widen (“1111 1111”: byte)) plus (“1”: platform fixed‐width natural number)) exists, unwrap it as (• overflowing: platform fixed‐width natural number), {
+    verify ((truncate (overflowing)) = (“0000 0000”: byte))
+   }
+  }
+ ]
+ (
+  English: truncate (number: platform fixed‐width natural number)
+ )
+ byte
+ {
+  ← truncate ((number) with byte overflow pre‐cleared if necessary) skipping overflow check
+ }
+
+action (clients)
+ [
+  test {verify ((bitwise complement of (“0011 1100”: byte)) is (“1100 0011”: byte))}
+ ]
+ (
+  English: bitwise complement of (bits: byte)
+ )
+ byte
+ Swift: “¤(7E)” bits “”
+ {
+  ← truncate (bitwise complement of (widen (bits)))
+ }
+
+action (file)
+ [
+  test {ignore (bitwise complement of (example: platform fixed‐width natural number))}
+ ]
+ (
+  English: bitwise complement of (bits: platform fixed‐width natural number)
+ )
+ platform fixed‐width natural number
+ C: “¤(7E)” bits “”
+ C♯: “¤(7E)” bits “”
+ JavaScript: “¤(7E)” bits “”
+ Kotlin: “” bits “.inv()”
+ Swift: “¤(7E)” bits “”
+
+action (clients)
+ [
+  test {verify ((bitwise intersection of (“0011 1100”: byte) and (“0101 1010”: byte)) is (“0001 1000”: byte))}
+ ]
+ (
+  English: bitwise intersection of (first: byte) and (second: byte)
+ )
+ byte
  JavaScript: “” first “ ¤(26) ” second “”
- Kotlin: “(” first “.toUByte() and ” second “.toUByte()).toByte()”
  Swift: “” first “ ¤(26) ” second “”
+ {
+  ← truncate (bitwise intersection of (widen (first)) and (widen (second))) skipping overflow check
+ }
+
+action (file)
+ [
+  test {ignore (bitwise intersection of (example: platform fixed‐width natural number) and (differing example: platform fixed‐width natural number))}
+ ]
+ (
+  English: bitwise intersection of (first: platform fixed‐width natural number) and (second: platform fixed‐width natural number)
+ )
+ platform fixed‐width natural number
+ C: “” first “ ¤(26) ” second “”
+ C♯: “” first “ ¤(26) ” second “”
+ JavaScript: “” first “ ¤(26) ” second “”
+ Kotlin: “” first “ and ” second “”
+ Swift: “” first “ ¤(26) ” second “”
+
+action (clients)
+ [
+  test {verify ((bitwise union of (“0011 1100”: byte) and (“0101 1010”: byte)) is (“0111 1110”: byte))}
+ ]
+ (
+  English: bitwise union of (first: byte) and (second: byte)
+ )
+ byte
+ JavaScript: “” first “ ¤(7C) ” second “”
+ Swift: “” first “ ¤(7C) ” second “”
+ {
+  ← truncate (bitwise union of (widen (first)) and (widen (second))) skipping overflow check
+ }
+
+action (file)
+ [
+  test {ignore (bitwise union of (example: platform fixed‐width natural number) and (differing example: platform fixed‐width natural number))}
+ ]
+ (
+  English: bitwise union of (first: platform fixed‐width natural number) and (second: platform fixed‐width natural number)
+ )
+ platform fixed‐width natural number
+ C: “” first “ ¤(7C) ” second “”
+ C♯: “” first “ ¤(7C) ” second “”
+ JavaScript: “” first “ ¤(7C) ” second “”
+ Kotlin: “” first “ or ” second “”
+ Swift: “” first “ ¤(7C) ” second “”
+
+action (clients)
+ [
+  test {verify ((bitwise symmetric difference between (“0011 1100”: byte) and (“0101 1010”: byte)) is (“0110 0110”: byte))}
+ ]
+ (
+  English: bitwise symmetric difference between (first: byte) and (second: byte)
+ )
+ byte
+ JavaScript: “” first “ ¤(5E) ” second “”
+ Swift: “” first “ ¤(5E) ” second “”
+ {
+  ← truncate (bitwise symmetric difference between (widen (first)) and (widen (second))) skipping overflow check
+ }
+
+action (file)
+ [
+  test {ignore (bitwise symmetric difference between (example: platform fixed‐width natural number) and (differing example: platform fixed‐width natural number))}
+ ]
+ (
+  English: bitwise symmetric difference between (first: platform fixed‐width natural number) and (second: platform fixed‐width natural number)
+ )
+ platform fixed‐width natural number
+ C: “” first “ ¤(5E) ” second “”
+ C♯: “” first “ ¤(5E) ” second “”
+ JavaScript: “” first “ ¤(5E) ” second “”
+ Kotlin: “” first “ xor ” second “”
+ Swift: “” first “ ¤(5E) ” second “”
