@@ -70,15 +70,20 @@ enum Kotlin: Platform {
     return result
   }
   static func literal(byte: String) -> String {
+    let base: String
+    var needsWraparound: Bool = false
     if byte.unicodeScalars.count == 2 {
-      return "0x\(byte)"
-    } else {
-      var base = "0b\(byte.replacingMatches(for: " ", with: "_"))"
-      if byte.unicodeScalars.first == "1" {
-        base.append(contentsOf: ".toByte()")
+      base = "0x\(byte)"
+      if byte.unicodeScalars.first!.value >= ("8" as Unicode.Scalar).value {
+        needsWraparound = true
       }
-      return base
+    } else {
+      base = "0b\(byte.replacingMatches(for: " ", with: "_"))"
+      if byte.unicodeScalars.first == "1" {
+        needsWraparound = true
+      }
     }
+    return needsWraparound ? "\(base).toByte()" : base
   }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
