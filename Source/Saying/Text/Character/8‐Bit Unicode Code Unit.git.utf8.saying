@@ -10,22 +10,33 @@ thing (clients)
  }
 
 action (clients)
+ [
+  test {
+   let (• units: list of (8‐bit Unicode code unit)) start as (empty: list of (8‐bit Unicode code unit))
+   append ((“C2”: byte) as Unicode code unit) to (↓ units)
+   append ((“A1”: byte) as Unicode code unit) to (↓ units)
+   verify ((Unicode scalars of (units) skipping validity check) is (“¡”: Unicode scalars))
+  }
+ ]
  (
   English: (byte: byte) as Unicode code unit
  )
  8‐bit Unicode code unit
- C: “” byte “”
+ C: “(char)” byte “”
  C♯: “” byte “”
  JavaScript: “” byte “”
  Kotlin: “” byte “”
  Swift: “” byte “”
 
 action (clients)
+ [
+  test {verify ((((“FF”: byte) as Unicode code unit) as byte) is (“FF”: byte))}
+ ]
  (
   English: (unit: 8‐bit Unicode code unit) as byte
  )
  byte
- C: “” unit “”
+ C: “(unsigned char)” unit “”
  C♯: “” unit “”
  JavaScript: “” unit “”
  Kotlin: “” unit “”

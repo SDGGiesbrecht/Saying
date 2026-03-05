@@ -7,7 +7,7 @@ thing (clients)
  (
   English: byte
  )
- C: “char”
+ C: “unsigned char”
  C♯: “byte”
  Kotlin: “Byte”
  Swift: “UInt8”
