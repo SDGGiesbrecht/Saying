@@ -185,5 +185,5 @@ action (clients)
  )
  truth value
  {
-  ← (((unit) as byte) and (“1100 0000”: byte)) is (“1000 0000”: byte)
+  ← (bitwise intersection of ((unit) as byte) and (“1100 0000”: byte)) is (“1000 0000”: byte)
  }
