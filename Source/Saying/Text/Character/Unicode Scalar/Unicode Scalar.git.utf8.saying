@@ -28,6 +28,66 @@ thing (clients)
    Swift: “(” . “).value”
  }
 
+action (clients)
+ [
+  [
+   English: Creates a Unicode scalar from a numerical value, without checking if the result is valid.
+  ]
+  [
+   English: It is generally advised to use the safer variant {Unicode scalar with value ()} instead.
+  ]
+  [
+   English: Skipping the validity check can be more efficient when the value is known from context to be valid. However, the caller takes responsibility for the logical soundness of the call. Creating an invalid scalar may cause a fatal error or escape into invalid program state.
+  ]
+  test {ignore (Unicode scalar with value (“0”: Unicode scalar numerical value) skipping validity check)}
+ ]
+ (
+  English: Unicode scalar with value (numerical value: Unicode scalar numerical value) skipping validity check
+ )
+ Unicode scalar
+ C: “(char32¤(5F)t)” numerical value “”
+ C♯: “Rune(” numerical value “)”
+ JavaScript: “” numerical value “”
+ Kotlin: “” numerical value “”
+ {
+  if (Unicode scalar with value (numerical value)) exists, unwrap it as (• scalar: Unicode scalar), {
+   ← scalar
+  }
+  !
+ }
+
+action (clients)
+ [
+  [
+   English: Creates a Unicode scalar from a numerical value.
+  ]
+  test {verify ((Unicode scalar with value (“0”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“D7FF”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“D800”: Unicode scalar numerical value)) does not exist)}
+  test {verify ((Unicode scalar with value (“DFFF”: Unicode scalar numerical value)) does not exist)}
+  test {verify ((Unicode scalar with value (“E000”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“10FFFF”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“110000”: Unicode scalar numerical value)) does not exist)}
+ ]
+ (
+  English: Unicode scalar with value (numerical value: Unicode scalar numerical value)
+ )
+ optional (Unicode scalar)
+ Swift: “Unicode.Scalar(” numerical value “)”
+ {
+  if ((numerical value) is greater than or equal to (“0”: Unicode scalar numerical value)), {
+   if ((numerical value) is less than or equal to (“D7FF”: Unicode scalar numerical value)), {
+    ← wrap (Unicode scalar with value (numerical value) skipping validity check) into optional
+   }
+   if ((numerical value) is greater than or equal to (“E000”: Unicode scalar numerical value)), {
+    if ((numerical value) is less than or equal to (“10FFFF”: Unicode scalar numerical value)), {
+     ← wrap (Unicode scalar with value (numerical value) skipping validity check) into optional
+    }
+   }
+  }
+  ← nothing
+ }
+
 use (clients)
  general containers of (Unicode scalar)
  {

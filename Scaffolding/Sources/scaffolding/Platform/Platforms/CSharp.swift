@@ -61,6 +61,9 @@ enum CSharp: Platform {
       return "0b_\(byte.replacingMatches(for: " ", with: "_"))"
     }
   }
+  static func literal(unicodeScalarNumericalValue: String) -> String {
+    return "0x\(unicodeScalarNumericalValue)"
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {

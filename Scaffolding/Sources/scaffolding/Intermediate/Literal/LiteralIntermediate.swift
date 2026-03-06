@@ -79,6 +79,9 @@ extension LiteralIntermediate {
   static var byteName: UnicodeText {
     return "byte"
   }
+  static var unicodeScalarNumericalValueName: UnicodeText {
+    return "Unicode scalar numerical value"
+  }
 
   func validate(
     as type: Thing,
@@ -106,6 +109,10 @@ extension LiteralIntermediate {
     } else if type.names.contains(LiteralIntermediate.byteName) {
       if !validateByte(literal: string) {
         errors.append(.notAByte(source))
+      }
+    } else if type.names.contains(LiteralIntermediate.unicodeScalarNumericalValueName) {
+      if !validateUnicodeScalarNumericalValue(literal: string) {
+        errors.append(.notAUnicodeScalarNumericalValue(source))
       }
     } else {
       errors.append(.thingCannotBeExpressedAsLiteral(source, thing: reference))
@@ -159,6 +166,20 @@ extension LiteralIntermediate {
     } else {
       return false
     }
+  }
+  func validateUnicodeScalarNumericalValue(literal: String) -> Bool {
+    guard literal.unicodeScalars.allSatisfy({ scalar in
+      return LiteralIntermediate.hexadecimalDigits.contains(scalar)
+    }) else {
+      return false
+    }
+    if literal.unicodeScalars.first == "0" {
+      let count = literal.unicodeScalars.count
+      if count != 1 && count != 4 {
+        return false
+      }
+    }
+    return true
   }
 }
 

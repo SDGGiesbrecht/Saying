@@ -112,6 +112,9 @@ enum C: Platform {
       return "0b\(byte.replacingMatches(for: " ", with: ""))"
     }
   }
+  static func literal(unicodeScalarNumericalValue: String) -> String {
+    return "0x\(unicodeScalarNumericalValue)"
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
