@@ -233,26 +233,6 @@ action (file)
   }
  }
 
-action (file)
- [
-  test {
-   let (• end: list boundary) be (boundary at (“1”: memory offset))
-   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
-   let (• beginning: list boundary) be (beginning of (list))
-   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   ignore (if most efficient, scalar beginning at ((offset) of (beginning)) in (list))
-   clean (list) up up to (end)
-  }
- ]
- (
-  English: if most efficient, scalar beginning at (cursor: memory offset) in (list: unmanaged list of (8‐bit Unicode code unit) of unknown length)
- )
- Unicode scalar
- C: “(char32¤(5F)t)g¤(5F)utf8¤(5F)get¤(5F)char(” list “ + ” cursor “)” (“glib¤(2D)2.0”)
- {
-  ← example
- }
-
 use (clients)
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
@@ -338,7 +318,37 @@ use (clients)
    Kotlin: “” list “.codePointAt(” index “)”
    Swift: “” list “[” index “]”
    {
-    ← if most efficient, scalar beginning at ((offset) of (if possible, 8‐bit boundary at ((beginning) of (index)))) in ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (list))))
+    let (• beginning: list boundary) be (if possible, 8‐bit boundary at ((beginning) of (index)))
+    let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
+    let (• first: 8‐bit Unicode code unit) be (entry after (beginning) in (8‐bit) skipping bounds check)
+    if ((first) is single‐byte scalar), {
+     ← Unicode scalar with value ((first) as Unicode scalar numerical value, skipping sign extension check) skipping validity check
+    }
+    let (• mask: byte) start as (“0000 0000”: byte)
+    let (• pending: platform fixed‐width natural number) start as (“0”: platform fixed‐width natural number)
+    if ((first) starts two‐byte scalar), {
+     change (↓ mask) to (“0001 1111”: byte)
+     change (↓ pending) to (“1”: platform fixed‐width natural number)
+    }, otherwise {
+     if ((first) starts three‐byte scalar), {
+      change (↓ mask) to (“0000 1111”: byte)
+      change (↓ pending) to (“2”: platform fixed‐width natural number)
+     }, otherwise {
+      if ((first) starts four‐byte scalar), {
+       change (↓ mask) to (“0000 0111”: byte)
+       change (↓ pending) to (“3”: platform fixed‐width natural number)
+      }
+     }
+    }
+    let (• value: Unicode scalar numerical value) start as ((bitwise intersection of ((first) as byte) and (mask)) as Unicode scalar numerical value, skipping sign extension check)
+    let (• cursor: list boundary) start as (beginning)
+    while ((pending) < (“0”: platform fixed‐width natural number)), {
+     decrement (↓ pending) skipping underflow check
+     advance (↓ cursor) to next in (8‐bit) skipping bounds check
+     shift bits of (↓ value) left (“0006”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+     engage bits of ((bitwise intersection of ((entry after (cursor) in (8‐bit) skipping bounds check) as byte) and (“0011 1111”: byte)) as Unicode scalar numerical value, skipping sign extension check) in (↓ value)
+    }
+    ← Unicode scalar with value (value) skipping validity check
    }
 
   action (clients)

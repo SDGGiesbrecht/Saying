@@ -178,6 +178,18 @@ action (clients)
 
 action (clients)
  [
+  test {verify ((null control code) is single‐byte scalar)}
+ ]
+ (
+  English: (unit: 8‐bit Unicode code unit) is single‐byte scalar
+ )
+ truth value
+ {
+  ← (bitwise intersection of ((unit) as byte) and (“1000 0000”: byte)) is (“0000 0000”: byte)
+ }
+
+action (clients)
+ [
   test {verify (not ((null control code) is continuation))}
  ]
  (
@@ -186,4 +198,40 @@ action (clients)
  truth value
  {
   ← (bitwise intersection of ((unit) as byte) and (“1100 0000”: byte)) is (“1000 0000”: byte)
+ }
+
+action (clients)
+ [
+  test {verify (not ((null control code) starts two‐byte scalar))}
+ ]
+ (
+  English: (unit: 8‐bit Unicode code unit) starts two‐byte scalar
+ )
+ truth value
+ {
+  ← (bitwise intersection of ((unit) as byte) and (“1110 0000”: byte)) is (“1100 0000”: byte)
+ }
+
+action (clients)
+ [
+  test {verify (not ((null control code) starts three‐byte scalar))}
+ ]
+ (
+  English: (unit: 8‐bit Unicode code unit) starts three‐byte scalar
+ )
+ truth value
+ {
+  ← (bitwise intersection of ((unit) as byte) and (“1111 0000”: byte)) is (“1110 0000”: byte)
+ }
+
+action (clients)
+ [
+  test {verify (not ((null control code) starts four‐byte scalar))}
+ ]
+ (
+  English: (unit: 8‐bit Unicode code unit) starts four‐byte scalar
+ )
+ truth value
+ {
+  ← (bitwise intersection of ((unit) as byte) and (“1111 1000”: byte)) is (“1111 0000”: byte)
  }
