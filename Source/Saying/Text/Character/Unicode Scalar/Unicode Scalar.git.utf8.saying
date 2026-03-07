@@ -46,7 +46,7 @@ action (clients)
  )
  Unicode scalar
  C: “(char32¤(5F)t)” numerical value “”
- C♯: “Rune(” numerical value “)”
+ C♯: “new Rune(” numerical value “)”
  JavaScript: “” numerical value “”
  Kotlin: “” numerical value “”
  {
