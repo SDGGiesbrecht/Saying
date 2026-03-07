@@ -12,7 +12,7 @@ thing (clients)
   English: Unicode scalar
  )
  C: “char32¤(5F)t” (“uchar”)
- C♯: “Rune” (“System.Text”) {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public readonly struct Rune¤(A){¤(A)internal const int MaxUtf16CharsPerRune = 2;¤(A)private readonly uint ¤(5F)value;¤(A)public Rune(uint value)¤(A){¤(A)¤(5F)value = value;¤(A)}¤(A)private Rune(uint scalarValue, bool ¤(5F))¤(A){¤(A)¤(5F)value = scalarValue;¤(A)}¤(A)public static bool operator ==(Rune left, Rune right) => left.¤(5F)value == right.¤(5F)value;¤(A)public static bool operator !=(Rune left, Rune right) => left.¤(5F)value != right.¤(5F)value;¤(A)public bool IsBmp => ¤(5F)value <= 0xFFFFu;¤(A)public int Value => (int)¤(5F)value;¤(A)public override bool Equals(object obj) => (obj is Rune other) ¤(26)¤(26) Equals(other);¤(A)public override int GetHashCode() => Value;¤(A)internal static Rune UnsafeCreate(uint scalarValue) => new Rune(scalarValue, false);¤(A)public static Rune GetRuneAt(string input, int index)¤(A){¤(A)uint returnValue = input[index];¤(A)if (0xD800U <= returnValue ¤(26)¤(26) returnValue < 0xDC00U)¤(A){¤(A)uint lowSurrogate = input[index + 1];¤(A)returnValue = (returnValue << 10) + lowSurrogate ¤(2D) ((0xD800U << 10) + 0xDC00U ¤(2D) (1 << 16));¤(A)}¤(A)return UnsafeCreate(returnValue);¤(A)}¤(A)public override string ToString()¤(A){¤(A)if (IsBmp)¤(A){¤(A)return ((char)¤(5F)value).ToString();¤(A)}¤(A)else¤(A){¤(A)char[] chars = {(char)((¤(5F)value + ((0xD800u ¤(2D) 0x40u) << 10)) >> 10), (char)((¤(5F)value ¤(26) 0x3FFu) + 0xDC00u)};¤(A)return new string(chars);¤(A)}¤(A)}¤(A)}¤(A)¤(23)endif”}
+ C♯: “Rune” (“System.Text”) {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public readonly struct Rune¤(A){¤(A)internal const int MaxUtf16CharsPerRune = 2;¤(A)private readonly uint ¤(5F)value;¤(A)public Rune(int value)¤(A): this((uint)value)¤(A){¤(A)}¤(A)public Rune(uint value)¤(A){¤(A)¤(5F)value = value;¤(A)}¤(A)private Rune(uint scalarValue, bool ¤(5F))¤(A){¤(A)¤(5F)value = scalarValue;¤(A)}¤(A)public static bool operator ==(Rune left, Rune right) => left.¤(5F)value == right.¤(5F)value;¤(A)public static bool operator !=(Rune left, Rune right) => left.¤(5F)value != right.¤(5F)value;¤(A)public bool IsBmp => ¤(5F)value <= 0xFFFFu;¤(A)public int Value => (int)¤(5F)value;¤(A)public override bool Equals(object obj) => (obj is Rune other) ¤(26)¤(26) Equals(other);¤(A)public override int GetHashCode() => Value;¤(A)internal static Rune UnsafeCreate(uint scalarValue) => new Rune(scalarValue, false);¤(A)public static Rune GetRuneAt(string input, int index)¤(A){¤(A)uint returnValue = input[index];¤(A)if (0xD800U <= returnValue ¤(26)¤(26) returnValue < 0xDC00U)¤(A){¤(A)uint lowSurrogate = input[index + 1];¤(A)returnValue = (returnValue << 10) + lowSurrogate ¤(2D) ((0xD800U << 10) + 0xDC00U ¤(2D) (1 << 16));¤(A)}¤(A)return UnsafeCreate(returnValue);¤(A)}¤(A)public override string ToString()¤(A){¤(A)if (IsBmp)¤(A){¤(A)return ((char)¤(5F)value).ToString();¤(A)}¤(A)else¤(A){¤(A)char[] chars = {(char)((¤(5F)value + ((0xD800u ¤(2D) 0x40u) << 10)) >> 10), (char)((¤(5F)value ¤(26) 0x3FFu) + 0xDC00u)};¤(A)return new string(chars);¤(A)}¤(A)}¤(A)}¤(A)¤(23)endif”}
  Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
@@ -26,6 +26,66 @@ thing (clients)
    JavaScript: “” . “”
    Kotlin: “” . “”
    Swift: “(” . “).value”
+ }
+
+action (clients)
+ [
+  [
+   English: Creates a Unicode scalar from a numerical value, without checking if the result is valid.
+  ]
+  [
+   English: It is generally advised to use the safer variant {Unicode scalar with value ()} instead.
+  ]
+  [
+   English: Skipping the validity check can be more efficient when the value is known from context to be valid. However, the caller takes responsibility for the logical soundness of the call. Creating an invalid scalar may cause a fatal error or escape into invalid program state.
+  ]
+  test {ignore (Unicode scalar with value (“0”: Unicode scalar numerical value) skipping validity check)}
+ ]
+ (
+  English: Unicode scalar with value (numerical value: Unicode scalar numerical value) skipping validity check
+ )
+ Unicode scalar
+ C: “(char32¤(5F)t)” numerical value “”
+ C♯: “new Rune(” numerical value “)”
+ JavaScript: “” numerical value “”
+ Kotlin: “” numerical value “”
+ {
+  if (Unicode scalar with value (numerical value)) exists, unwrap it as (• scalar: Unicode scalar), {
+   ← scalar
+  }
+  !
+ }
+
+action (clients)
+ [
+  [
+   English: Creates a Unicode scalar from a numerical value.
+  ]
+  test {verify ((Unicode scalar with value (“0”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“D7FF”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“D800”: Unicode scalar numerical value)) does not exist)}
+  test {verify ((Unicode scalar with value (“DFFF”: Unicode scalar numerical value)) does not exist)}
+  test {verify ((Unicode scalar with value (“E000”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“10FFFF”: Unicode scalar numerical value)) exists)}
+  test {verify ((Unicode scalar with value (“110000”: Unicode scalar numerical value)) does not exist)}
+ ]
+ (
+  English: Unicode scalar with value (numerical value: Unicode scalar numerical value)
+ )
+ optional (Unicode scalar)
+ Swift: “Unicode.Scalar(” numerical value “)”
+ {
+  if ((numerical value) is greater than or equal to (“0”: Unicode scalar numerical value)), {
+   if ((numerical value) is less than or equal to (“D7FF”: Unicode scalar numerical value)), {
+    ← wrap (Unicode scalar with value (numerical value) skipping validity check) into optional
+   }
+   if ((numerical value) is greater than or equal to (“E000”: Unicode scalar numerical value)), {
+    if ((numerical value) is less than or equal to (“10FFFF”: Unicode scalar numerical value)), {
+     ← wrap (Unicode scalar with value (numerical value) skipping validity check) into optional
+    }
+   }
+  }
+  ← nothing
  }
 
 use (clients)

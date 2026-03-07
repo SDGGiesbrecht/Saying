@@ -35,7 +35,7 @@ action (file)
  C♯: “” number “.GetHashCode()”
  JavaScript: “” number “”
  Kotlin: “” number “.hashCode()”
- Swift: “Int(truncatingIfNeeded: ” number “)”
+ Swift: “Int(” number “)”
 
 use (clients)
  comparison of (byte) for equality

@@ -24,6 +24,7 @@ protocol Platform {
   static func literal(scalar: Unicode.Scalar) -> String
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String
   static func literal(byte: String) -> String
+  static func literal(unicodeScalarNumericalValue: String) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -986,6 +987,8 @@ extension Platform {
       return self.literal(number: literal.string, typeNames: type.names)
     } else if type.names.contains(LiteralIntermediate.byteName) {
       return self.literal(byte: literal.string)
+    } else if type.names.contains(LiteralIntermediate.unicodeScalarNumericalValueName) {
+      return self.literal(unicodeScalarNumericalValue: literal.string)
     } else {
       return call(scalarLiteral: literal, normalize: normalizeNextNestedLiteral)
     }
