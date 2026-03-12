@@ -137,6 +137,21 @@ action (file)
 
 action (clients)
  [
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   invert bits of (↓ bits)
+   verify ((bits) is (“1100 0011”: byte))
+  }
+ ]
+ (
+  English: invert bits of (bits: ↓ byte)
+ )
+ {
+  change (↓ bits) to (bitwise complement of (bits))
+ }
+
+action (clients)
+ [
   test {verify ((bitwise complement of (“0011 1100”: byte)) is (“1100 0011”: byte))}
  ]
  (
@@ -161,6 +176,25 @@ action (file)
  JavaScript: “¤(7E)” bits “”
  Kotlin: “” bits “.inv()”
  Swift: “¤(7E)” bits “”
+
+action (clients)
+ [
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   disable bits of (“0101 1010”: byte) in (↓ bits)
+   verify ((bits) is (“0001 1000”: byte))
+  }
+ ]
+ (
+  English: disable bits of (other: byte) in (bits: ↓ byte)
+ )
+ C: “” bits “ ¤(26)= ” other “”
+ C♯: “” bits “ ¤(26)= ” other “”
+ JavaScript: “” bits “ ¤(26)= ” other “”
+ Swift: “” bits “ ¤(26)= ” other “”
+ {
+  change (↓ bits) to (bitwise intersection of (bits) and (other))
+ }
 
 action (clients)
  [
@@ -192,6 +226,25 @@ action (file)
 
 action (clients)
  [
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   engage bits of (“0101 1010”: byte) in (↓ bits)
+   verify ((bits) is (“0111 1110”: byte))
+  }
+ ]
+ (
+  English: engage bits of (other: byte) in (bits: ↓ byte)
+ )
+ C: “” bits “ ¤(7C)= ” other “”
+ C♯: “” bits “ ¤(7C)= ” other “”
+ JavaScript: “” bits “ ¤(7C)= ” other “”
+ Swift: “” bits “ ¤(7C)= ” other “”
+ {
+  change (↓ bits) to (bitwise union of (bits) and (other))
+ }
+
+action (clients)
+ [
   test {verify ((bitwise union of (“0011 1100”: byte) and (“0101 1010”: byte)) is (“0111 1110”: byte))}
  ]
  (
@@ -217,6 +270,25 @@ action (file)
  JavaScript: “” first “ ¤(7C) ” second “”
  Kotlin: “” first “ or ” second “”
  Swift: “” first “ ¤(7C) ” second “”
+
+action (clients)
+ [
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   invert bits of (“0101 1010”: byte) in (↓ bits)
+   verify ((bits) is (“0110 0110”: byte))
+  }
+ ]
+ (
+  English: invert bits of (other: byte) in (bits: ↓ byte)
+ )
+ C: “” bits “ ¤(5E)= ” other “”
+ C♯: “” bits “ ¤(5E)= ” other “”
+ JavaScript: “” bits “ ¤(5E)= ” other “”
+ Swift: “” bits “ ¤(5E)= ” other “”
+ {
+  change (↓ bits) to (bitwise symmetric difference between (bits) and (other))
+ }
 
 action (clients)
  [
