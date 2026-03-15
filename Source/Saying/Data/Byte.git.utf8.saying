@@ -336,6 +336,11 @@ action (file)
  Swift: “” first “ ¤(5E) ” second “”
 
 action (file)
+ [
+  test {verify ((byte representing (“1”: natural number), skipping overflow check) is (“0000 0001”: byte))}
+  test {verify ((byte representing (“2”: natural number), skipping overflow check) is (“0000 0010”: byte))}
+  test {verify ((byte representing (“3”: natural number), skipping overflow check) is (“0000 0011”: byte))}
+ ]
  (
   English: byte representing (number: natural number), skipping overflow check
  )
@@ -400,6 +405,12 @@ action (file)
  }
 
 action (file)
+ [
+  test {
+   let (• byte: byte) start as (“0000 0000”: byte)
+   if simple, shift bits of (↓ byte) left by amount represented as unsigned binary integer (“0000 0000”: byte), skipping excessive distance check
+  }
+ ]
  (
   English: if simple, shift bits of (bits: ↓ byte) left by amount represented as unsigned binary integer (distance: byte), skipping excessive distance check
  )
@@ -521,6 +532,12 @@ action (file)
  }
 
 action (file)
+ [
+  test {
+   let (• byte: byte) start as (“0000 0000”: byte)
+   if most efficient, shift bits of (↓ byte) right (“0”: natural number), skipping excessive distance check, by binary representation
+  }
+ ]
  (
   English: if most efficient, shift bits of (bits: ↓ byte) right (distance: natural number), skipping excessive distance check, by binary representation
  )
@@ -533,6 +550,12 @@ action (file)
  }
 
 action (file)
+ [
+  test {
+   let (• byte: byte) start as (“0000 0000”: byte)
+   if simple, shift bits of (↓ byte) right by amount represented as unsigned binary integer (“0000 0000”: byte), skipping excessive distance check
+  }
+ ]
  (
   English: if simple, shift bits of (bits: ↓ byte) right by amount represented as unsigned binary integer (distance: byte), skipping excessive distance check
  )
@@ -540,6 +563,12 @@ action (file)
  {}
 
 action (file)
+ [
+  test {
+   let (• byte: byte) start as (“0000 0000”: byte)
+   if most efficient, shift bits of (↓ byte) right (“0”: natural number), skipping excessive distance check, by integer
+  }
+ ]
  (
   English: if most efficient, shift bits of (bits: ↓ byte) right (distance: natural number), skipping excessive distance check, by integer
  )
