@@ -559,7 +559,7 @@ enum CSharp: Platform {
       "    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>",
       "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
       "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
-      "    <SelfContained>false</SelfContained>",
+      "    <SelfContained>true</SelfContained>",
       "  </PropertyGroup>",
       "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")
