@@ -48,6 +48,48 @@ thing (clients)
  Kotlin: “ULong”
  Swift: “UInt64”
 
+action (clients)
+ [
+  test {verify (((zero: integer) as natural number, skipping underflow check) is (zero: natural number))}
+ ]
+ (
+  English: (number: integer) as natural number, skipping underflow check
+ )
+ natural number
+ C: “(uintmax¤(5F)t)” number “”
+ C♯: “(ulong)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toULong()”
+ Swift: “UInt64(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: platform fixed‐width natural number) as natural number) is (zero: natural number))}
+ ]
+ (
+  English: (number: platform fixed‐width natural number) as natural number
+ )
+ natural number
+ C: “(uintmax¤(5F)t)” number “”
+ C♯: “(ulong)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toULong()”
+ Swift: “UInt64(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: platform fixed‐width integer) as natural number, skipping underflow check) is (zero: natural number))}
+ ]
+ (
+  English: (number: platform fixed‐width integer) as natural number, skipping underflow check
+ )
+ natural number
+ C: “(uintmax¤(5F)t)” number “”
+ C♯: “(ulong)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toULong()”
+ Swift: “UInt64(” number “)”
+
 use (clients)
  general containers of (natural number)
  {
