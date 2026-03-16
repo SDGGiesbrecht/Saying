@@ -464,7 +464,7 @@ action (file)
   English: if most efficient, shift bits of (bits: ↓ byte) left (distance: platform fixed‐width integer), skipping excessive distance check
  )
  C: “” bits “ <<= ” distance “”
- C♯: “unchecked(” bits “ <<= ” distance “)”
+ C♯: “unchecked { ” bits “ <<= ” distance “; }”
  {
   change (↓ bits) to (truncate (if simple, bits of (widen (bits)) shifted left (distance), skipping excessive distance check))
  }
