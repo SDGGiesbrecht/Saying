@@ -34,7 +34,7 @@ enumeration
   test {verify ((example case with nothing) is case (example case with nothing))}
   test {
    let (• something: example enumeration) be (wrap (true) as (example case with something))
-   verify (not (something) is case (example case with nothing))
+   verify (not ((something) is case (example case with nothing)))
   }
  ]
  (
