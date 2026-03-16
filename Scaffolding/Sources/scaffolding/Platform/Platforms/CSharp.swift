@@ -560,16 +560,11 @@ enum CSharp: Platform {
       "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
       "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
       "    <SelfContained>true</SelfContained>",
+      "    <NoWarn>CS0184</NoWarn>",
       "  </PropertyGroup>",
       "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
-    try ([
-      "root = true",
-      "[*.cs]",
-      "dotnet_diagnostic.CS0184.severity = none",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent(".editorconfig"))
   }
 
   static var usesSnakeCase: Bool {
