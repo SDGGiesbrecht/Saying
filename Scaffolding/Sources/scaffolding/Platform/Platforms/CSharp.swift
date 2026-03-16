@@ -564,6 +564,12 @@ enum CSharp: Platform {
       "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
+    try ([
+      "root = true",
+      "[*.cs]",
+      "dotnet_diagnostic.CS0184.severity = none",
+    ] as [String]).joined(separator: "\n").appending("\n")
+      .save(to: projectDirectory.appendingPathComponent(".editorconfig"))
   }
 
   static var usesSnakeCase: Bool {
