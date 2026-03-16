@@ -107,6 +107,23 @@ action (file)
  Swift: “UInt8(truncatingIfNeeded: ” number “)”
 
 action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   clear overflow from (↓ bits)
+  }
+ ]
+ (
+  English: clear overflow from (byte: ↓ byte)
+ )
+ C♯: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  disable all but bits of (“1111 1111”: byte) in (↓ byte)
+ }
+
+action (file)
  (
   English: (number: platform fixed‐width natural number) with byte overflow pre‐cleared if necessary
  )
@@ -181,12 +198,12 @@ action (clients)
  [
   test {
    let (• bits: byte) start as (“0011 1100”: byte)
-   disable bits of (“0101 1010”: byte) in (↓ bits)
+   disable all but bits of (“0101 1010”: byte) in (↓ bits)
    verify ((bits) is (“0001 1000”: byte))
   }
  ]
  (
-  English: disable bits of (other: byte) in (bits: ↓ byte)
+  English: disable all but bits of (other: byte) in (bits: ↓ byte)
  )
  C: “” bits “ ¤(26)= ” other “”
  C♯: “” bits “ ¤(26)= ” other “”
@@ -317,3 +334,277 @@ action (file)
  JavaScript: “” first “ ¤(5E) ” second “”
  Kotlin: “” first “ xor ” second “”
  Swift: “” first “ ¤(5E) ” second “”
+
+action (file)
+ [
+  test {verify ((byte representing (“1”: natural number), skipping overflow check) is (“0000 0001”: byte))}
+  test {verify ((byte representing (“2”: natural number), skipping overflow check) is (“0000 0010”: byte))}
+  test {verify ((byte representing (“3”: natural number), skipping overflow check) is (“0000 0011”: byte))}
+ ]
+ (
+  English: byte representing (number: natural number), skipping overflow check
+ )
+ byte
+ C: “(unsigned char)” number “”
+ C♯: “(byte)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toByte()”
+ Swift: “UInt8(” number “)”
+
+action (clients)
+ [
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   shift bits of (↓ bits) left (“1”: natural number)
+   verify ((bits) is (“0111 1000”: byte))
+  }
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   shift bits of (↓ bits) left (“64”: natural number)
+   verify ((bits) is (“0000 0000”: byte))
+  }
+ ]
+ (
+  English: shift bits of (bits: ↓ byte) left (distance: natural number)
+ )
+ {
+  if ((distance) ≥ (“8”: natural number)), {
+   change (↓ bits) to (“0000 0000”: byte)
+  }, otherwise {
+   if most efficient, shift bits of (↓ bits) left (distance), skipping excessive distance check, by binary representation
+   if most efficient, shift bits of (↓ bits) left (distance), skipping excessive distance check, by widening
+   if most efficient, shift bits of (↓ bits) left (distance), skipping excessive distance check, by integer
+  }
+ }
+
+action (clients)
+ [
+  test {verify ((bits of (“0011 1100”: byte) shifted left (“1”: natural number)) is (“0111 1000”: byte))}
+  test {verify ((bits of (“0011 1100”: byte) shifted left (“64”: natural number)) is (“0000 0000”: byte))}
+ ]
+ (
+  English: bits of (bits: byte) shifted left (distance: natural number)
+ )
+ byte
+ {
+  let (• copy: byte) start as (bits)
+  shift bits of (↓ copy) left (distance)
+  ← copy
+ }
+
+action (file)
+ (
+  English: if most efficient, shift bits of (bits: ↓ byte) left (distance: natural number), skipping excessive distance check, by binary representation
+ )
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ {
+  if simple, shift bits of (↓ bits) left by amount represented as unsigned binary integer (byte representing (distance), skipping overflow check), skipping excessive distance check
+ }
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if simple, shift bits of (↓ bits) left by amount represented as unsigned binary integer (“0000 0000”: byte), skipping excessive distance check
+  }
+ ]
+ (
+  English: if simple, shift bits of (bits: ↓ byte) left by amount represented as unsigned binary integer (distance: byte), skipping excessive distance check
+ )
+ Swift: “” bits “ <<= ” distance “”
+ {}
+
+action (file)
+ (
+  English: if most efficient, shift bits of (bits: ↓ byte) left (distance: natural number), skipping excessive distance check, by widening
+ )
+ C: “”
+ C♯: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  if simple, shift bits of (↓ bits) left (distance), skipping oveflow and excessive distance checks
+  clear overflow from (↓ bits)
+ }
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if simple, shift bits of (↓ bits) left (zero: natural number), skipping oveflow and excessive distance checks
+  }
+ ]
+ (
+  English: if simple, shift bits of (bits: ↓ byte) left (distance: natural number), skipping oveflow and excessive distance checks
+ )
+ JavaScript: “” bits “ <<= ” distance “”
+ {}
+
+action (file)
+ (
+  English: if most efficient, shift bits of (bits: ↓ byte) left (distance: natural number), skipping excessive distance check, by integer
+ )
+ JavaScript: “”
+ Swift: “”
+ {
+  if most efficient, shift bits of (↓ bits) left ((distance) as platform fixed‐width integer, skipping overflow check), skipping excessive distance check
+ }
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if most efficient, shift bits of (↓ bits) left (zero: platform fixed‐width integer), skipping excessive distance check
+  }
+ ]
+ (
+  English: if most efficient, shift bits of (bits: ↓ byte) left (distance: platform fixed‐width integer), skipping excessive distance check
+ )
+ C: “” bits “ <<= ” distance “”
+ C♯: “unchecked { ” bits “ <<= ” distance “; }”
+ {
+  change (↓ bits) to (truncate (if simple, bits of (widen (bits)) shifted left (distance), skipping excessive distance check))
+ }
+
+action (file)
+ [
+  test {ignore (if simple, bits of (zero: platform fixed‐width natural number) shifted left (zero: platform fixed‐width integer), skipping excessive distance check)}
+ ]
+ (
+  English: if simple, bits of (bits: platform fixed‐width natural number) shifted left (distance: platform fixed‐width integer), skipping excessive distance check
+ )
+ platform fixed‐width natural number
+ Kotlin: “” bits “ shl ” distance “”
+ {
+  ← zero
+ }
+
+action (clients)
+ [
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   shift bits of (↓ bits) right (“1”: natural number)
+   verify ((bits) is (“0001 1110”: byte))
+  }
+  test {
+   let (• bits: byte) start as (“0011 1100”: byte)
+   shift bits of (↓ bits) right (“64”: natural number)
+   verify ((bits) is (“0000 0000”: byte))
+  }
+ ]
+ (
+  English: shift bits of (bits: ↓ byte) right (distance: natural number)
+ )
+ {
+  if ((distance) ≥ (“8”: natural number)), {
+   change (↓ bits) to (“0000 0000”: byte)
+  }, otherwise {
+   shift bits of (↓ bits) right (distance), skipping excessive distance check
+  }
+ }
+
+action (clients)
+ [
+  test {verify ((bits of (“0011 1100”: byte) shifted right (“1”: natural number)) is (“0001 1110”: byte))}
+  test {verify ((bits of (“0011 1100”: byte) shifted right (“64”: natural number)) is (“0000 0000”: byte))}
+ ]
+ (
+  English: bits of (bits: byte) shifted right (distance: natural number)
+ )
+ byte
+ {
+  let (• copy: byte) start as (bits)
+  shift bits of (↓ copy) right (distance)
+  ← copy
+ }
+
+action (file)
+ (
+  English: shift bits of (bits: ↓ byte) right (distance: natural number), skipping excessive distance check
+ )
+ JavaScript: “” bits “ >>>= ” distance “”
+ {
+  if most efficient, shift bits of (↓ bits) right (distance), skipping excessive distance check, by binary representation
+  if most efficient, shift bits of (↓ bits) right (distance), skipping excessive distance check, by integer
+ }
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if most efficient, shift bits of (↓ bits) right (“0”: natural number), skipping excessive distance check, by binary representation
+  }
+ ]
+ (
+  English: if most efficient, shift bits of (bits: ↓ byte) right (distance: natural number), skipping excessive distance check, by binary representation
+ )
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ {
+  if simple, shift bits of (↓ bits) right by amount represented as unsigned binary integer (byte representing (distance), skipping overflow check), skipping excessive distance check
+ }
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if simple, shift bits of (↓ bits) right by amount represented as unsigned binary integer (“0000 0000”: byte), skipping excessive distance check
+  }
+ ]
+ (
+  English: if simple, shift bits of (bits: ↓ byte) right by amount represented as unsigned binary integer (distance: byte), skipping excessive distance check
+ )
+ Swift: “” bits “ >>= ” distance “”
+ {}
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if most efficient, shift bits of (↓ bits) right (“0”: natural number), skipping excessive distance check, by integer
+  }
+ ]
+ (
+  English: if most efficient, shift bits of (bits: ↓ byte) right (distance: natural number), skipping excessive distance check, by integer
+ )
+ JavaScript: “”
+ Swift: “”
+ {
+  if simple, shift bits of (↓ bits) right ((distance) as platform fixed‐width integer, skipping overflow check), skipping excessive distance check
+ }
+
+action (file)
+ [
+  test {
+   let (• bits: byte) start as (“0000 0000”: byte)
+   if simple, shift bits of (↓ bits) right (zero: platform fixed‐width integer), skipping excessive distance check
+  }
+ ]
+ (
+  English: if simple, shift bits of (bits: ↓ byte) right (distance: platform fixed‐width integer), skipping excessive distance check
+ )
+ C: “” bits “ >>= ” distance “”
+ C♯: “” bits “ >>= ” distance “”
+ JavaScript: “” bits “ >>>= ” distance “”
+ {
+  change (↓ bits) to (truncate (if simple, bits of (widen (bits)) shifted right (distance), skipping excessive distance check))
+ }
+
+action (file)
+ [
+  test {ignore (if simple, bits of (zero: platform fixed‐width natural number) shifted right (zero: platform fixed‐width integer), skipping excessive distance check)}
+ ]
+ (
+  English: if simple, bits of (bits: platform fixed‐width natural number) shifted right (distance: platform fixed‐width integer), skipping excessive distance check
+ )
+ platform fixed‐width natural number
+ JavaScript: “” bits “ >>> ” distance “”
+ Kotlin: “” bits “ shr ” distance “”
+ {
+  ← zero
+ }

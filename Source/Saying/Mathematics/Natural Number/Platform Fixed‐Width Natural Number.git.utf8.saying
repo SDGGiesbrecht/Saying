@@ -21,6 +21,48 @@ thing (clients)
  Kotlin: “UInt”
  Swift: “UInt”
 
+action (clients)
+ [
+  test {verify (((zero: natural number) as platform fixed‐width natural number, skipping overflow check) is (zero: platform fixed‐width natural number))}
+ ]
+ (
+  English: (number: natural number) as platform fixed‐width natural number, skipping overflow check
+ )
+ platform fixed‐width natural number
+ C: “(unsigned)” number “”
+ C♯: “(uint)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUInt()”
+ Swift: “UInt(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: integer) as platform fixed‐width natural number, skipping overflow check) is (zero: platform fixed‐width natural number))}
+ ]
+ (
+  English: (number: integer) as platform fixed‐width natural number, skipping overflow check
+ )
+ platform fixed‐width natural number
+ C: “(unsigned)” number “”
+ C♯: “(uint)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUInt()”
+ Swift: “UInt(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: platform fixed‐width integer) as platform fixed‐width natural number, skipping underflow check) is (zero: platform fixed‐width natural number))}
+ ]
+ (
+  English: (number: platform fixed‐width integer) as platform fixed‐width natural number, skipping underflow check
+ )
+ platform fixed‐width natural number
+ C: “(unsigned)” number “”
+ C♯: “(uint)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUInt()”
+ Swift: “UInt(” number “)”
+
 use (clients)
  general containers of (platform fixed‐width natural number)
  {
