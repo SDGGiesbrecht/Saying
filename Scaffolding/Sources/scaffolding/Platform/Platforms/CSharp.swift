@@ -560,6 +560,7 @@ enum CSharp: Platform {
       "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
       "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
       "    <SelfContained>true</SelfContained>",
+      "    <NoWarn>CS0184</NoWarn>",
       "  </PropertyGroup>",
       "</Project>",
     ] as [String]).joined(separator: "\n").appending("\n")

@@ -50,6 +50,11 @@ enumeration
    )
  }
 
+use
+ general use of (example enumeration)
+ {
+ }
+
 action
  [
   test {verify (not (use example enumeration (example case with nothing)))}
