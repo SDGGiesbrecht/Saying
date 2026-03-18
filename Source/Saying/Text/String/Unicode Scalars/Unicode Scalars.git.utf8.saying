@@ -1063,7 +1063,7 @@ action (file)
   let (• end: Unicode scalar boundary) be (end of (scalars))
   while ((beginning cursor) is less than (end)), {
    let (• end cursor: Unicode scalar boundary) start as (beginning cursor)
-   while (((end cursor) is less than (end)) and ((entry after (end cursor) in (scalars) skipping bounds check) is not (“¤(0)”: Unicode scalar))), {
+   while (((end cursor) is less than (end)) and ((first in ((from (end cursor) to (end)) in (scalars))) is not (“¤(0)”: Unicode scalar))), {
     advance (↓ end cursor) to next in (scalars) skipping bounds check
    }
    append (if most efficient, compute compatibility decomposition of (convert ((from (beginning cursor) to (end cursor)) in (scalars)) into list) skipping null control check) to (↓ normalized)
