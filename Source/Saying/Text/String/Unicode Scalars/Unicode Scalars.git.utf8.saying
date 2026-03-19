@@ -342,7 +342,7 @@ use (clients)
     }
     let (• value: Unicode scalar numerical value) start as ((bitwise intersection of ((first) as byte) and (mask)) as Unicode scalar numerical value, skipping sign extension check)
     let (• cursor: list boundary) start as (beginning)
-    while ((pending) < (“0”: platform fixed‐width natural number)), {
+    while ((pending) > (“0”: platform fixed‐width natural number)), {
      decrement (↓ pending) skipping underflow check
      advance (↓ cursor) to next in (8‐bit) skipping bounds check
      shift bits of (↓ value) left (“0006”: Unicode scalar numerical value), skipping overflow and excessive distance checks
