@@ -146,44 +146,6 @@ extension
     hash key (part) with (↓ hasher)
    }
 
-  action (unit)
-   [
-    [
-     English: Forwards to an equality check.
-    ]
-    [
-     English: This alias exists to provide a predictable name for C’s set implementation to reference. The check’s C name cannot be specified on the requirement itself, because there it might be overridden by a native fulfillment.
-    ]
-    test {verify (predictably named (example: thing) is (example: thing))}
-   ]
-   (
-    English: predictably named (first: thing) is (second: thing)
-    C: 1 equal (first: [first]) (second: [second])
-   )
-   truth value
-   {
-    ← (first) is (second)
-   }
-
-  action (unit)
-   [
-    [
-     English: Forwards to a hash computation.
-    ]
-    [
-     English: This alias exists to provide a predictable name for C’s set implementation to reference. The check’s C name cannot be specified on the requirement itself, because there it might be overridden by a native fulfillment.
-    ]
-    test {ignore (predictably named hash value of (example: thing))}
-   ]
-   (
-    English: predictably named hash value of (key: thing)
-    C: 1 hash (key: [key])
-   )
-   hash value
-   {
-    ← hash value of (key)
-   }
-
   action (clients)
    [
     test {verify ((example: thing) is not (differing example: thing) according to comparison for equality)}

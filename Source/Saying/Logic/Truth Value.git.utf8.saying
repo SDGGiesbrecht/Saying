@@ -294,7 +294,7 @@ use (clients)
 action (file)
  [
   test {ignore (hashing proxy of (true))}
-  test {ignore (hashing proxy of (false))}
+  test (hidden) {ignore (hashing proxy of (false))}
  ]
  hashing proxy of (value: truth value)
  platform fixed‐width integer

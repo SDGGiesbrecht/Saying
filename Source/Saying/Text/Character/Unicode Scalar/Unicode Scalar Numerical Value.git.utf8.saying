@@ -34,7 +34,7 @@ action (unit)
 
 action (unit)
  [
-  test {verify (((“0000 0000”: byte) as Unicode scalar numerical value, skipping sign extension check) is (“0000”: Unicode scalar numerical value))}
+  test {verify (((“0000 0000”: byte) as Unicode scalar numerical value, skipping sign extension check) is (“0”: Unicode scalar numerical value))}
  ]
  (
   English: (byte: byte) as Unicode scalar numerical value, skipping sign extension check
@@ -48,7 +48,7 @@ action (unit)
 
 action (unit)
  [
-  test {verify (((“0000”: Unicode scalar numerical value) as byte, skipping overflow check) is (“0000 0000”: byte))}
+  test {verify (((“0”: Unicode scalar numerical value) as byte, skipping overflow check) is (“0000 0000”: byte))}
  ]
  (
   English: (value: Unicode scalar numerical value) as byte, skipping overflow check
@@ -169,9 +169,9 @@ use (clients)
 action (clients)
  [
   test {
-   let (• bits: Unicode scalar numerical value) start as (“0003”: Unicode scalar numerical value)
-   disable all but bits of (“0001”: Unicode scalar numerical value) in (↓ bits)
-   verify ((bits) is (“0001”: Unicode scalar numerical value))
+   let (• bits: Unicode scalar numerical value) start as (“3”: Unicode scalar numerical value)
+   disable all but bits of (“1”: Unicode scalar numerical value) in (↓ bits)
+   verify ((bits) is (“1”: Unicode scalar numerical value))
   }
  ]
  (
@@ -187,7 +187,7 @@ action (clients)
 
 action (file)
  [
-  test {verify ((bitwise intersection of (“0003”: Unicode scalar numerical value) and (“0001”: Unicode scalar numerical value)) is (“0001”: Unicode scalar numerical value))}
+  test {verify ((bitwise intersection of (“3”: Unicode scalar numerical value) and (“1”: Unicode scalar numerical value)) is (“1”: Unicode scalar numerical value))}
  ]
  (
   English: bitwise intersection of (first: Unicode scalar numerical value) and (second: Unicode scalar numerical value)
@@ -202,9 +202,9 @@ action (file)
 action (unit)
  [
   test {
-   let (• bits: Unicode scalar numerical value) start as (“0001”: Unicode scalar numerical value)
-   engage bits of (“0002”: Unicode scalar numerical value) in (↓ bits)
-   verify ((bits) is (“0003”: Unicode scalar numerical value))
+   let (• bits: Unicode scalar numerical value) start as (“1”: Unicode scalar numerical value)
+   engage bits of (“2”: Unicode scalar numerical value) in (↓ bits)
+   verify ((bits) is (“3”: Unicode scalar numerical value))
   }
  ]
  (
@@ -220,7 +220,7 @@ action (unit)
 
 action (file)
  [
-  test {verify ((bitwise union of (“0001”: Unicode scalar numerical value) and (“0002”: Unicode scalar numerical value)) is (“0003”: Unicode scalar numerical value))}
+  test {verify ((bitwise union of (“1”: Unicode scalar numerical value) and (“2”: Unicode scalar numerical value)) is (“3”: Unicode scalar numerical value))}
  ]
  (
   English: bitwise union of (first: Unicode scalar numerical value) and (second: Unicode scalar numerical value)
@@ -235,9 +235,9 @@ action (file)
 action (unit)
  [
   test {
-   let (• bits: Unicode scalar numerical value) start as (“0001”: Unicode scalar numerical value)
-   shift bits of (↓ bits) left (“0001”: Unicode scalar numerical value), skipping overflow and excessive distance checks
-   verify ((bits) is (“0002”: Unicode scalar numerical value))
+   let (• bits: Unicode scalar numerical value) start as (“1”: Unicode scalar numerical value)
+   shift bits of (↓ bits) left (“1”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+   verify ((bits) is (“2”: Unicode scalar numerical value))
   }
  ]
  (
@@ -253,7 +253,7 @@ action (unit)
 
 action (file)
  [
-  test {verify ((bits of (“0001”: Unicode scalar numerical value) shifted left (“0001”: Unicode scalar numerical value), skipping overflow and excessive distance checks) is (“0002”: Unicode scalar numerical value))}
+  test {verify ((bits of (“1”: Unicode scalar numerical value) shifted left (“1”: Unicode scalar numerical value), skipping overflow and excessive distance checks) is (“2”: Unicode scalar numerical value))}
  ]
  (
   English: bits of (bits: Unicode scalar numerical value) shifted left (distance: Unicode scalar numerical value), skipping overflow and excessive distance checks
@@ -268,9 +268,9 @@ action (file)
 action (unit)
  [
   test {
-   let (• bits: Unicode scalar numerical value) start as (“0002”: Unicode scalar numerical value)
-   shift bits of (↓ bits) right (“0001”: Unicode scalar numerical value), skipping sign and excessive distance checks
-   verify ((bits) is (“0001”: Unicode scalar numerical value))
+   let (• bits: Unicode scalar numerical value) start as (“2”: Unicode scalar numerical value)
+   shift bits of (↓ bits) right (“1”: Unicode scalar numerical value), skipping sign and excessive distance checks
+   verify ((bits) is (“1”: Unicode scalar numerical value))
   }
  ]
  (
@@ -286,7 +286,7 @@ action (unit)
 
 action (file)
  [
-  test {verify ((bits of (“0002”: Unicode scalar numerical value) shifted right (“0001”: Unicode scalar numerical value), skipping sign and excessive distance checks) is (“0001”: Unicode scalar numerical value))}
+  test {verify ((bits of (“2”: Unicode scalar numerical value) shifted right (“1”: Unicode scalar numerical value), skipping sign and excessive distance checks) is (“1”: Unicode scalar numerical value))}
  ]
  (
   English: bits of (bits: Unicode scalar numerical value) shifted right (distance: Unicode scalar numerical value), skipping sign and excessive distance checks
