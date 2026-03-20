@@ -18,6 +18,34 @@ use (clients)
    }
  }
 
+action (unit)
+ [
+  test {verify (((null control code) as Unicode scalar numerical value, skipping sign extension check) is (“0000”: Unicode scalar numerical value))}
+ ]
+ (
+  English: (unit: 8‐bit Unicode code unit) as Unicode scalar numerical value, skipping sign extension check
+ )
+ Unicode scalar numerical value
+ C: “(uint¤(5F)least32¤(5F)t)” unit “”
+ C♯: “(int)” unit “”
+ JavaScript: “” unit “”
+ Kotlin: “” unit “.toInt()”
+ Swift: “UInt32(” unit “)”
+
+action (unit)
+ [
+  test {verify (((“0000 0000”: byte) as Unicode scalar numerical value, skipping sign extension check) is (“0000”: Unicode scalar numerical value))}
+ ]
+ (
+  English: (byte: byte) as Unicode scalar numerical value, skipping sign extension check
+ )
+ Unicode scalar numerical value
+ C: “(uint¤(5F)least32¤(5F)t)” byte “”
+ C♯: “(int)” byte “”
+ JavaScript: “” byte “”
+ Kotlin: “” byte “.toInt()”
+ Swift: “UInt32(” byte “)”
+
 action (file)
  [
   test {ignore (hashing proxy of (example: Unicode scalar numerical value))}
@@ -123,3 +151,69 @@ use (clients)
     ← (numerical value) of (“!”: Unicode scalar)
    }
  }
+
+action (unit)
+ [
+  test {
+   let (• bits: Unicode scalar numerical value) start as (“0001”: Unicode scalar numerical value)
+   engage bits of (“0002”: Unicode scalar numerical value) in (↓ bits)
+   verify ((bits) is (“0003”: Unicode scalar numerical value))
+  }
+ ]
+ (
+  English: engage bits of (other: Unicode scalar numerical value) in (bits: ↓ Unicode scalar numerical value)
+ )
+ C: “” bits “ ¤(7C)= ” other “”
+ C♯: “” bits “ ¤(7C)= ” other “”
+ JavaScript: “” bits “ ¤(7C)= ” other “”
+ Swift: “” bits “ ¤(7C)= ” other “”
+ {
+  change (↓ bits) to (bitwise union of (bits) and (other))
+ }
+
+action (file)
+ [
+  test {verify ((bitwise union of (“0001”: Unicode scalar numerical value) and (“0002”: Unicode scalar numerical value)) is (“0003”: Unicode scalar numerical value))}
+ ]
+ (
+  English: bitwise union of (first: Unicode scalar numerical value) and (second: Unicode scalar numerical value)
+ )
+ Unicode scalar numerical value
+ C: “” first “ ¤(7C) ” second “”
+ C♯: “” first “ ¤(7C) ” second “”
+ JavaScript: “” first “ ¤(7C) ” second “”
+ Kotlin: “” first “ or ” second “”
+ Swift: “” first “ ¤(7C) ” second “”
+
+action (unit)
+ [
+  test {
+   let (• bits: Unicode scalar numerical value) start as (“0001”: Unicode scalar numerical value)
+   shift bits of (↓ bits) left (“0001”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+   verify ((bits) is (“0002”: Unicode scalar numerical value))
+  }
+ ]
+ (
+  English: shift bits of (bits: ↓ Unicode scalar numerical value) left (distance: Unicode scalar numerical value), skipping overflow and excessive distance checks
+ )
+ C: “” bits “ <<= ” distance “”
+ C♯: “” bits “ <<= ” distance “”
+ JavaScript: “” bits “ <<= ” distance “”
+ Swift: “” bits “ <<= ” distance “”
+ {
+  change (↓ bits) to (bits of (bits) shifted left (distance), skipping overflow and excessive distance checks)
+ }
+
+action (file)
+ [
+  test {verify ((bits of (“0001”: Unicode scalar numerical value) shifted left (“0001”: Unicode scalar numerical value), skipping overflow and excessive distance checks) is (“0002”: Unicode scalar numerical value))}
+ ]
+ (
+  English: bits of (bits: Unicode scalar numerical value) shifted left (distance: Unicode scalar numerical value), skipping overflow and excessive distance checks
+ )
+ Unicode scalar numerical value
+ C: “” bits “ << ” distance “”
+ C♯: “” bits “ << ” distance “”
+ JavaScript: “” bits “ << ” distance “”
+ Kotlin: “” bits “ shl ” distance “”
+ Swift: “” bits “ << ” distance “”
