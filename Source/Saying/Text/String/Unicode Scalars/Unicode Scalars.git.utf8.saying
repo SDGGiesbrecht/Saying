@@ -309,6 +309,24 @@ use (clients)
    }
 
   action (clients)
+   [
+    test (hidden) {
+     let (• scalars: Unicode scalars) be (“¤(0)”: Unicode scalars)
+     verify (((numerical value) of (entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars))) is (“0000”: Unicode scalar numerical value))
+    }
+    test (hidden) {
+     let (• scalars: Unicode scalars) be (“¤(80)”: Unicode scalars)
+     verify (((numerical value) of (entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars))) is (“0080”: Unicode scalar numerical value))
+    }
+    test (hidden) {
+     let (• scalars: Unicode scalars) be (“¤(800)”: Unicode scalars)
+     verify (((numerical value) of (entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars))) is (“0800”: Unicode scalar numerical value))
+    }
+    test (hidden) {
+     let (• scalars: Unicode scalars) be (“¤(10000)”: Unicode scalars)
+     verify (((numerical value) of (entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars))) is (“10000”: Unicode scalar numerical value))
+    }
+   ]
    (
     English: entry at (index: Unicode scalar index) in (list: Unicode scalars)
    )
