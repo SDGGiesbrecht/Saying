@@ -22,6 +22,12 @@ jobs:
           set -x
           cd .Construction/C
           make test
+    - name: Check for warnings
+      uses: ./.github/actions/Ubuntu
+      with:
+        run: |
+          set -x
+          cd .Construction/C
           make check‐for‐warnings
     - name: Check repository for changes
       shell: bash
