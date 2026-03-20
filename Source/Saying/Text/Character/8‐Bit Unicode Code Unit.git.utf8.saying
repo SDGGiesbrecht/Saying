@@ -42,6 +42,21 @@ action (clients)
  Kotlin: “” unit “”
  Swift: “” unit “”
 
+action (unit)
+ [
+  test {verify (((“0000”: Unicode scalar numerical value) as single 8‐bit Unicode code unit, skipping validity check) is ((“00”: byte) as Unicode code unit))}
+  test {verify (((“007F”: Unicode scalar numerical value) as single 8‐bit Unicode code unit, skipping validity check) is ((“7F”: byte) as Unicode code unit))}
+ ]
+ (
+  English: (value: Unicode scalar numerical value) as single 8‐bit Unicode code unit, skipping validity check
+ )
+ 8‐bit Unicode code unit
+ C: “(char)” value “”
+ C♯: “(byte)” value “”
+ JavaScript: “” value “”
+ Kotlin: “” value “.toByte()”
+ Swift: “UInt8(” value “)”
+
 use (clients)
  general containers of (8‐bit Unicode code unit)
  {
