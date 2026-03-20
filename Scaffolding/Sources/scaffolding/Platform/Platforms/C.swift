@@ -687,11 +687,30 @@ enum C: Platform {
       .map({ "$(shell pkg-config --libs \($0))" })
       .joined(separator: " ")
     try ([
+      "test: test‐target",
+      "check‐for‐warnings: check‐for‐warnings‐target",
+      "clean: clean‐target",
+      "",
+      "ensure‐directory = mkdir -p $(@D)",
+      "",
       "CFLAGS = \(cFlags)",
       "LIBS = \(libs)",
       "",
-      "test: test.c",
-      "\u{9}cc $(CFLAGS) test.c -o test $(LIBS)",
+      "build‐flags = $(CFLAGS) test.c -o .Construction/test $(LIBS)",
+      "",
+      "test‐target: .Construction/test",
+      "\u{9}.Construction/test",
+      "",
+      "check‐for‐warnings‐target: test.c",
+      "\u{9}$(ensure‐directory)",
+      "\u{9}cc -Werror $(build‐flags)",
+      "",
+      "clean‐target:",
+      "\u{9}rm -rf .Construction",
+      "",
+      ".Construction/test: test.c",
+      "\u{9}$(ensure‐directory)",
+      "\u{9}cc $(build‐flags)",
     ] as [String]).joined(separator: "\n").appending("\n")
       .save(to: projectDirectory.appendingPathComponent("Makefile"))
   }
