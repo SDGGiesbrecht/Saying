@@ -610,6 +610,28 @@ use (clients)
    }
 
   action (clients)
+   [
+    test (hidden) {
+     let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+     append (“¤(0)”: Unicode scalar) to (↓ scalars)
+     verify ((scalars) is (“¤(0)”: Unicode scalars))
+    }
+    test (hidden) {
+     let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+     append (“¤(80)”: Unicode scalar) to (↓ scalars)
+     verify ((scalars) is (“¤(80)”: Unicode scalars))
+    }
+    test (hidden) {
+     let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+     append (“¤(800)”: Unicode scalar) to (↓ scalars)
+     verify ((scalars) is (“¤(800)”: Unicode scalars))
+    }
+    test (hidden) {
+     let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+     append (“¤(10000)”: Unicode scalar) to (↓ scalars)
+     verify ((scalars) is (“¤(10000)”: Unicode scalars))
+    }
+   ]
    (
     English: append (element: Unicode scalar) to (list: ↓ Unicode scalars)
    )
