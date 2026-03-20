@@ -441,62 +441,6 @@ action (clients)
   ← (beginning) of (index)
  }
 
-action (file)
- [
-  test {
-   let (• end: list boundary) be (boundary at (“6”: memory offset))
-   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
-   ignore (insert (example: Unicode scalar) into (↓ list))
-   clean (list) up up to (end)
-  }
- ]
- (
-  English: insert (scalar: Unicode scalar) into (buffer: ↓ unmanaged list of (8‐bit Unicode code unit) of unknown length)
- )
- platform fixed‐width integer
- C: “g¤(5F)unichar¤(5F)to¤(5F)utf8((gunichar)” scalar “, ” buffer “)” (“glib¤(2D)2.0”)
- {
-  ← zero
- }
-
-action (file)
- [
-  test {
-   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
-   if most efficient, fill (↓ scalars) with (example: Unicode scalar) by 8‐bit encoded
-  }
- ]
- (
-  English: if most efficient, fill (empty: ↓ Unicode scalars) with (scalar: Unicode scalar) by 8‐bit encoded
- )
- C♯: “”
- JavaScript: “”
- Kotlin: “”
- Swift: “”
- {
-  ensure enough storage for (boundary at (“6”: memory offset)) in (↓ (unmanaged) of ((8‐bit encoded) of (empty)))
-  let (• length: platform fixed‐width integer) be (insert (scalar) into (↓ (uncounted) of ((unmanaged) of ((8‐bit encoded) of (empty)))))
-  change (↓ (end) of ((unmanaged) of ((8‐bit encoded) of (empty)))) to (boundary at ((length) as memory offset skipping overflow check))
- }
-
-action (file)
- [
-  test {
-   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
-   if most efficient, fill (↓ scalars) with (example: Unicode scalar) by appending
-  }
- ]
- (
-  English: if most efficient, fill (empty: ↓ Unicode scalars) with (scalar: Unicode scalar) by appending
- )
- C: “”
- C♯: “”
- JavaScript: “”
- Swift: “”
- {
-  append (scalar) to (↓ empty)
- }
-
 action (clients)
  [
   test {verify (((“ ”: Unicode scalar) as scalars) is (“ ”: Unicode scalars))}
@@ -510,8 +454,7 @@ action (clients)
  Swift: “String(” scalar “).unicodeScalars”
  {
   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
-  if most efficient, fill (↓ scalars) with (scalar) by appending
-  if most efficient, fill (↓ scalars) with (scalar) by 8‐bit encoded
+  append (scalar) to (↓ scalars)
   ← scalars
  }
 
@@ -543,10 +486,54 @@ action (file)
  (
   English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by changeable list
  )
+ C: “”
  Kotlin: “”
  Swift: “”
  {
   append (element) to (↓ list) according to use as changeable list
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (example: Unicode scalar) to (↓ scalars) by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, append (element: Unicode scalar) to (list: ↓ Unicode scalars) by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• value: Unicode scalar numerical value) start as ((numerical value) of (element))
+  if ((value) < (“0080”: Unicode scalar numerical value)), {
+   append ((value) as single 8‐bit Unicode code unit, skipping validity check) to (↓ (8‐bit encoded) of (list))
+  }, otherwise {
+   let (• cursor: list boundary) be (end of ((8‐bit encoded) of (list)))
+   let (• header: byte) start as (“0000 0000”: byte)
+   let (• pending: platform fixed‐width natural number) start as (“0”: platform fixed‐width natural number)
+   if ((value) < (“0800”: Unicode scalar numerical value)), {
+    change (↓ header) to (“1100 0000”: byte)
+    change (↓ pending) to (“1”: platform fixed‐width natural number)
+   }, otherwise {
+    if ((value) < (“10000”: Unicode scalar numerical value)), {
+     change (↓ header) to (“1110 0000”: byte)
+     change (↓ pending) to (“2”: platform fixed‐width natural number)
+    }, otherwise {
+     change (↓ header) to (“1111 0000”: byte)
+     change (↓ pending) to (“3”: platform fixed‐width natural number)
+    }
+   }
+   while ((pending) > (“0”: platform fixed‐width natural number)), {
+    decrement (↓ pending) skipping underflow check
+    insert ((bitwise union of ((bitwise intersection of (value) and (“3F”: Unicode scalar numerical value)) as byte, skipping overflow check) and (“1000 0000”: byte)) as Unicode code unit) at (cursor) in (↓ (8‐bit encoded) of (list))
+    shift bits of (↓ value) right (“0006”: Unicode scalar numerical value), skipping sign and excessive distance checks
+   }
+   insert ((bitwise union of ((value) as byte, skipping overflow check) and (header)) as Unicode code unit) at (cursor) in (↓ (8‐bit encoded) of (list))
+  }
  }
 
 action (file)
@@ -630,6 +617,7 @@ use (clients)
    {
     if most efficient, append (element) to (↓ list) by replacement
     if most efficient, append (element) to (↓ list) by changeable list
+    if most efficient, append (element) to (↓ list) by 8‐bit encoded
    }
 
   action (clients)
