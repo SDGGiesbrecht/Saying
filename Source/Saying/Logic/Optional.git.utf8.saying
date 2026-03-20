@@ -10,8 +10,8 @@ extension
    {
     case
      [
-      test {verify ((wrap (true) into optional) is case (something))}
-      test {
+      test (hidden) {verify ((wrap (true) into optional) is case (something))}
+      test (hidden) {
        if (wrap (true) into optional) is (something), unwrap it as (• unwrapped: truth value), {
         ignore (unwrapped)
        }

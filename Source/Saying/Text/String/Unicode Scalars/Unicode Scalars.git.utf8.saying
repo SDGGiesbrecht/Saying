@@ -363,7 +363,7 @@ use (clients)
     while ((pending) > (“0”: platform fixed‐width natural number)), {
      decrement (↓ pending) skipping underflow check
      advance (↓ cursor) to next in (8‐bit) skipping bounds check
-     shift bits of (↓ value) left (“0006”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+     shift bits of (↓ value) left (“6”: Unicode scalar numerical value), skipping overflow and excessive distance checks
      engage bits of ((bitwise intersection of ((entry after (cursor) in (8‐bit) skipping bounds check) as byte) and (“0011 1111”: byte)) as Unicode scalar numerical value, skipping sign extension check) in (↓ value)
     }
     ← Unicode scalar with value (value) skipping validity check
@@ -530,7 +530,7 @@ action (file)
    while ((pending) > (“0”: platform fixed‐width natural number)), {
     decrement (↓ pending) skipping underflow check
     insert ((bitwise union of ((bitwise intersection of (value) and (“3F”: Unicode scalar numerical value)) as byte, skipping overflow check) and (“1000 0000”: byte)) as Unicode code unit) at (cursor) in (↓ (8‐bit encoded) of (list))
-    shift bits of (↓ value) right (“0006”: Unicode scalar numerical value), skipping sign and excessive distance checks
+    shift bits of (↓ value) right (“6”: Unicode scalar numerical value), skipping sign and excessive distance checks
    }
    insert ((bitwise union of ((value) as byte, skipping overflow check) and (header)) as Unicode code unit) at (cursor) in (↓ (8‐bit encoded) of (list))
   }
@@ -1134,7 +1134,7 @@ action (clients)
    English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
   ]
   test {verify ((compatibility decomposition of (“¤(A0)”: Unicode scalars)) is (“¤(20)”: Unicode scalars))}
-  test {verify ((compatibility decomposition of (“¤(A0)¤(0)¤(A0)”: Unicode scalars)) is (“¤(20)¤(0)¤(20)”: Unicode scalars))}
+  test (hidden) {verify ((compatibility decomposition of (“¤(A0)¤(0)¤(A0)”: Unicode scalars)) is (“¤(20)¤(0)¤(20)”: Unicode scalars))}
  ]
  (
   English: compatibility decomposition of (scalars: Unicode scalars)

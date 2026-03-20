@@ -8,6 +8,8 @@ thing (clients)
   [
    English: Maintaining normalization means that insertions and removals may also expand or rearrange scalars. Positions and distances recorded before a change are no longer valid afterward.
   ]
+  test {verify (((“!”) with (“¤(A8)”: Unicode scalar) prepended) is (“¤(20)¤(308)!”))}
+  test {verify (((“¤(315)”) with (“¤(300)”) appended) is (“¤(300)¤(315)”))}
  ]
  (
   English: Unicode text

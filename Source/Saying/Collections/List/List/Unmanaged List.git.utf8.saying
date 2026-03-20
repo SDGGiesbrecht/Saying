@@ -163,7 +163,7 @@ extension
      release unmanaged (↓ copy)
      verify (reference count of (tracker) is (“1”: platform fixed‐width integer))
     }
-    test {
+    test (hidden) {
      let (• list: unmanaged list of (thing)) start as (copy of unmanaged (empty: unmanaged list of (thing)))
      release unmanaged (↓ list)
     }
