@@ -62,4 +62,4 @@ jobs:
       shell: cmd
       run: |
         echo on
-        msbuild .Construction\C♯\Project.csproj -target:Build -property:TreatWarningsAsErrors=true
+        msbuild .Construction\C♯\Project.csproj -target:Clean;Build -property:TreatWarningsAsErrors=true
