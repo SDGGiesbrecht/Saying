@@ -561,7 +561,7 @@ extension ActionIntermediate {
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
-          textComponents: ["", " is ", ""].map({ UnicodeText($0) }),
+          textComponents: ["\u{A}#pragma warning disable CS0184\u{A}", " is ", "\u{A}#pragma warning restore CS0184\u{A}"].map({ UnicodeText($0) }),
           parameters: [
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
