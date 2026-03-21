@@ -22,6 +22,12 @@ jobs:
       run: |
         set -x
         swift run --package-path Scaffolding scaffolding test‐tvos
+    - name: Check for warnings
+      shell: bash
+      run: |
+        set -x
+        cd .Construction/Swift
+        xcrun xcodebuild build -scheme Package -destination 'generic/platform=tvOS' SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
     - name: Check repository for changes
       shell: bash
       run: |
