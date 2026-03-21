@@ -1,0 +1,18 @@
+thing (file)
+ [
+  [
+   English: Tests to ensure the compiler successfully sanitizes special cases.
+  ]
+  [
+   English: Local storage named with keywords.
+  ]
+  test {
+   let (• return: truth value) be (true)
+   ignore (return)
+  }
+ ]
+ (
+  English: valid identifier
+ )
+ {
+ }

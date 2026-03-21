@@ -18,6 +18,7 @@ protocol Platform {
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>? { get set }
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>? { get set }
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>? { get set }
+  static var reservedIdentifiers: Set<UnicodeText> { get }
   static var identifierLengthLimit: Int? { get }
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String
   static func literal(scalars: String, escaped: String) -> String
@@ -278,7 +279,7 @@ extension Platform {
     || scalar.isVulnerableToNormalization
   }
 
-  static func sanitize(identifier: UnicodeText, leading: Bool) -> String {
+  static func sanitize(identifier: UnicodeText, leading: Bool, entire: Bool) -> String {
     var result: String = identifier.lazy
       .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
       .joined()
@@ -287,6 +288,10 @@ extension Platform {
       !allowedAsIdentifierStart(first) {
       result.scalars.removeFirst()
       result.prepend(contentsOf: "_\(first.hexadecimalCode)")
+    }
+    if entire && reservedIdentifiers.contains(UnicodeText(result)) {
+      let last = result.scalars.removeLast()
+      result.append(contentsOf: "_\(last.hexadecimalCode)")
     }
     return result
   }
@@ -369,7 +374,7 @@ extension Platform {
       } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
         return native
       } else {
-        return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true)
+        return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true, entire: true)
       }
     case .compound(identifier: let identifier, components: let components):
       let type = referenceLookup.lookupThing(
@@ -383,7 +388,8 @@ extension Platform {
       } else {
         return sanitize(
           identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-          leading: true
+          leading: true,
+          entire: true
         )
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
@@ -505,7 +511,8 @@ extension Platform {
   ) -> String {
     let name = sanitize(
       identifier: enumerationCase.names.identifier(),
-      leading: true
+      leading: true,
+      entire: true
     )
     let contents = enumerationCase.contents
       .map({ source(for: $0, referenceLookup: referenceLookup) })
@@ -531,7 +538,8 @@ extension Platform {
     }
     let name = sanitize(
       identifier: enumerationCase.names.identifier(),
-      leading: true
+      leading: true,
+      entire: true
     )
     return caseStorageDeclaration(
       name: name,
@@ -619,7 +627,8 @@ extension Platform {
 
     let name = nativeName(of: thing, referenceLookup: externalReferenceLookup) ?? sanitize(
       identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-      leading: true
+      leading: true,
+      entire: true
     )
     let access = accessModifier(for: thing.access, memberScope: false)
     var members: [String] = []
@@ -666,7 +675,8 @@ extension Platform {
       let components = thing.parts.map({ part in
         let name = sanitize(
           identifier: part.names.identifier(),
-          leading: true
+          leading: true,
+          entire: true
         )
         let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
         let access = accessModifier(for: part.readAccess, memberScope: true)
@@ -688,7 +698,8 @@ extension Platform {
         constructorParameters = thing.parts.map({ part in
           let name = sanitize(
             identifier: part.names.identifier(),
-            leading: true
+            leading: true,
+            entire: true
           )
           let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
           return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
@@ -698,7 +709,8 @@ extension Platform {
       let constructorSetters = thing.parts.map({ part in
         let name = sanitize(
           identifier: part.names.identifier(),
-          leading: true
+          leading: true,
+          entire: true
         )
         return constructorSetter(name: name)
       })
@@ -708,7 +720,8 @@ extension Platform {
         }
         let partName = sanitize(
           identifier: part.names.identifier(),
-          leading: true
+          leading: true,
+          entire: true
         )
         return apply(
           nativeReferenceCountingAction: hold,
@@ -722,7 +735,8 @@ extension Platform {
         }
         let partName = sanitize(
           identifier: part.names.identifier(),
-          leading: true
+          leading: true,
+          entire: true
         )
         return apply(
           nativeReferenceCountingAction: release,
@@ -769,7 +783,8 @@ extension Platform {
         }
         let caseName = sanitize(
           identifier: enumerationCase.names.identifier(),
-          leading: true
+          leading: true,
+          entire: true
         )
         let call = apply(
           nativeReferenceCountingAction: hold,
@@ -785,7 +800,8 @@ extension Platform {
         }
         let caseName = sanitize(
           identifier: enumerationCase.names.identifier(),
-          leading: true
+          leading: true,
+          entire: true
         )
         let call = apply(
           nativeReferenceCountingAction: release,
@@ -1074,16 +1090,16 @@ extension Platform {
         forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument)
       )
     } else if reference.passage == .out {
-      return String(sanitize(identifier: reference.actionName, leading: true))
+      return String(sanitize(identifier: reference.actionName, leading: true, entire: true))
     } else if let local = localLookup.lookupAction(
       reference.actionName,
       signature: signature,
       specifiedReturnValue: reference.resolvedResultType,
       externalLookup: referenceLookup
     ) {
-      return String(sanitize(identifier: local.names.identifier(), leading: true))
+      return String(sanitize(identifier: local.names.identifier(), leading: true, entire: true))
     } else if let parameter = context?.lookupParameter(reference.actionName) {
-      let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
+      let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         var returnValue: String
@@ -1250,7 +1266,7 @@ extension Platform {
               fatalError("Only enumeration cases should be stored in “caseInstead”.")
             case .enumerationCase(enumeration: let type, identifier: let identifier):
               let reference = caseReference(
-                name: sanitize(identifier: identifier, leading: true),
+                name: sanitize(identifier: identifier, leading: true, entire: true),
                 type: source(for: type, referenceLookup: referenceLookup),
                 simple: false,
                 ignoringValue: true
@@ -1260,7 +1276,7 @@ extension Platform {
           } else {
             let name = parameter.name
             if parameter.unique {
-              accumulator.append(sanitize(identifier: name, leading: true))
+              accumulator.append(sanitize(identifier: name, leading: true, entire: true))
               accumulator.append(String(clashAvoidanceCounter))
               didUseClashAvoidance = true
             } else if parameter.remainderOfScope {
@@ -1381,7 +1397,7 @@ extension Platform {
         return accumulator
       }
     } else if action.isMemberWrapper {
-      let name = parameterName ?? sanitize(identifier: action.names.identifier(), leading: true)
+      let name = parameterName ?? sanitize(identifier: action.names.identifier(), leading: true, entire: true)
       if case .partReference = action.returnValue! {
         return name
       } else {
@@ -1475,7 +1491,8 @@ extension Platform {
         ?? parameterName
         ?? sanitize(
           identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-          leading: true
+          leading: true,
+          entire: true
         )
       if action.isReferenceWrapper {
         let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
@@ -1578,7 +1595,7 @@ extension Platform {
           return createInstance(of: type, parts: arguments)
         } else {
           let nameStart = name.unicodeScalars.first(where: { $0 != "_" }).map({ String($0) }) ?? ""
-          if sanitize(identifier: UnicodeText(nameStart), leading: false) != nameStart {
+          if sanitize(identifier: UnicodeText(nameStart), leading: false, entire: false) != nameStart {
             return "\(argumentsArray.joined(separator: " \(name) "))"
           } else {
             var result: String = ""
@@ -2066,7 +2083,7 @@ extension Platform {
     for parameter: ParameterIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String {
-    let name = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true)
+    let name = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
     if !isTyped {
       return name
     } else {
@@ -2118,7 +2135,8 @@ extension Platform {
     let name = nativeName(of: action, referenceLookup: referenceLookup)
       ?? sanitize(
         identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-        leading: true
+        leading: true,
+        entire: true
       )
     let parameters = action.parameters.ordered(
       for: nativeNameDeclaration(of: action) ?? action.names.identifier()
@@ -2228,7 +2246,8 @@ extension Platform {
     var name = nativeName(of: action, referenceLookup: externalReferenceLookup)
       ?? sanitize(
         identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-        leading: true
+        leading: true,
+        entire: true
       )
     let isOverride = nativeIsOverride(action: action)
     let isProperty = nativeIsProperty(action: action)
@@ -2311,9 +2330,9 @@ extension Platform {
       .map({ String($0.identifier()) })
       .joined(separator: ":")
   }
-  static func identifier(for test: TestIntermediate, leading: Bool) -> String {
+  static func identifier(for test: TestIntermediate, leading: Bool, entire: Bool) -> String {
     return test.location.lazy.enumerated()
-      .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0) })
+      .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0, entire: entire && test.location.count == 1) })
       .joined(separator: "_")
   }
 
@@ -2325,7 +2344,7 @@ extension Platform {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
     return actionDeclaration(
-      name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex),
+      name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex),
       parameters: "",
       returnSection: emptyReturnType.flatMap({ self.returnSection(with: $0, isProperty: false) }),
       accessModifier: nil,
@@ -2352,7 +2371,7 @@ extension Platform {
   }
 
   static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> [String] {
-    let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false))", index: &identifierIndex)
+    let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex)
     return [
       register(test: "\(sayingIdentifier(for: test)) (\(name))"),
       statement(expression: "\(name)()")

@@ -39,6 +39,45 @@ enum JavaScript: Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
+  static var reservedIdentifiers: Set<UnicodeText> = [
+    "break",
+    "case",
+    "catch",
+    "class",
+    "const",
+    "continue",
+    "debugger",
+    "default",
+    "delete",
+    "do",
+    "else",
+    "enum",
+    "export",
+    "extends",
+    "false",
+    "finally",
+    "for",
+    "function",
+    "if",
+    "import",
+    "in",
+    "instanceof",
+    "let",
+    "new",
+    "null",
+    "return",
+    "super",
+    "switch",
+    "this",
+    "throw",
+    "true",
+    "try",
+    "typeof",
+    "var",
+    "void",
+    "while",
+    "with",
+  ]
   static var identifierLengthLimit: Int? {
     return nil
   }
@@ -200,7 +239,7 @@ enum JavaScript: Platform {
   }
   static func nativeLabel(of parameter: ParameterIntermediate, isCreation: Bool) -> String? {
     if isCreation {
-      return sanitize(identifier: parameter.names.identifier(), leading: true)
+      return sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
     } else {
       return nil
     }
@@ -229,18 +268,18 @@ enum JavaScript: Platform {
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "let "
-    let name = sanitize(identifier: UnicodeText(argument), leading: true)
+    let name = sanitize(identifier: UnicodeText(argument), leading: true, entire: false)
     return "\(keyword)\(name)Reference = { value: \(argument) };"
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {
       return argument
     } else {
-      return "\(sanitize(identifier: UnicodeText(argument), leading: true))Reference"
+      return "\(sanitize(identifier: UnicodeText(argument), leading: true, entire: false))Reference"
     }
   }
   static func unpackReference(to argument: String) -> String? {
-    return "\(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference.value;"
+    return "\(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true, entire: false))Reference.value;"
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
     let suffix = forwarding ? "" : ".value"

@@ -81,6 +81,40 @@ enum C: Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
+  static var reservedIdentifiers: Set<UnicodeText> = [
+    "auto",
+    "break",
+    "case",
+    "char",
+    "const",
+    "continue",
+    "default",
+    "do",
+    "double",
+    "else",
+    "enum",
+    "extern",
+    "float",
+    "for",
+    "goto",
+    "if",
+    "int",
+    "long",
+    "register",
+    "return",
+    "short",
+    "signed",
+    "sizeof",
+    "static",
+    "struct",
+    "switch",
+    "typedef",
+    "union",
+    "unsigned",
+    "void",
+    "volatile",
+    "while",
+  ]
   static var identifierLengthLimit: Int? {
     return nil
   }
