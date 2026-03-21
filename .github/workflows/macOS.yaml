@@ -22,6 +22,11 @@ jobs:
       run: |
         set -x
         swift run --package-path Scaffolding scaffolding test‐swift
+    - name: Check for warnings
+      shell: bash
+      run: |
+        set -x
+        swift build --package-path .Construction/Swift --build-tests -Xswiftc -warnings-as-errors
     - name: Check repository for changes
       shell: bash
       run: |
