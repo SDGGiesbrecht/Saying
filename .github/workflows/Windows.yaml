@@ -43,7 +43,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
       with:
         vs-version: '[17.14,17.15)'
-    - name: Build All
+    - name: Build all
       shell: cmd
       run: |
         echo on
@@ -58,3 +58,8 @@ jobs:
       run: |
         echo on
         .Construction\C♯\bin\Debug\netcoreapp3.0\win-x86\Project.exe
+    - name: Check for warnings
+      shell: cmd
+      run: |
+        echo on
+        msbuild .Construction\C♯\Project.csproj -target:Build -property:TreatWarningsAsErrors=true
