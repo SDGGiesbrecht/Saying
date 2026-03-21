@@ -687,6 +687,7 @@ enum C: Platform {
       .map({ "$(shell pkg-config --libs \($0))" })
       .joined(separator: " ")
     try ([
+      ".PHONY: test",
       "test: test‐target",
       "check‐for‐warnings: check‐for‐warnings‐target",
       "clean: clean‐target",
