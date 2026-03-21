@@ -62,3 +62,10 @@ jobs:
         api-level: 24
         script: |
           cd .Construction/Kotlin ; ./gradlew connectedDebugAndroidTest
+    - name: Check for warnings
+      shell: bash
+      run: |
+        set -x
+        cd .Construction/Kotlin
+        ./gradlew check -PcheckForWarnings=true
+        ./gradlew assembleAndroidTest -PcheckForWarnings=true

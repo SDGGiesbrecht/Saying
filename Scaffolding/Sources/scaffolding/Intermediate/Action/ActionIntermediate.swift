@@ -579,7 +579,7 @@ extension ActionIntermediate {
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
-          textComponents: ["", " is ", ""].map({ UnicodeText($0) }),
+          textComponents: ["@Suppress(\u{22}USELESS_IS_CHECK\u{22})(", " is ", ")"].map({ UnicodeText($0) }),
           parameters: [
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
