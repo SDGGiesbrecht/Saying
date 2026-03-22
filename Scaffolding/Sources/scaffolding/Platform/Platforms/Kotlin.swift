@@ -43,6 +43,36 @@ enum Kotlin: Platform {
   static var _allowedIdentifierContinuationCharactersCache: Set<Unicode.Scalar>?
   static var _disallowedStringLiteralCharactersCache: Set<Unicode.Scalar>?
 
+  static var reservedIdentifiers: Set<UnicodeText> = [
+    "as",
+    "break",
+    "class",
+    "continue",
+    "do",
+    "else",
+    "false",
+    "for",
+    "fun",
+    "if",
+    "in",
+    "interface",
+    "is",
+    "null",
+    "object",
+    "package",
+    "return",
+    "super",
+    "this",
+    "throw",
+    "true",
+    "try",
+    "typealias",
+    "typeof",
+    "val",
+    "var",
+    "when",
+    "while",
+  ]
   static var identifierLengthLimit: Int? {
     return 128 // 248 caused compiler‐generated files to exceed file name size limits in the Android CI.
   }
@@ -283,18 +313,18 @@ enum Kotlin: Platform {
   }
   static func prepareReference(to argument: String, update: Bool) -> String? {
     let keyword = update ? "" : "var "
-    let name = sanitize(identifier: UnicodeText(argument), leading: true)
+    let name = sanitize(identifier: UnicodeText(argument), leading: true, entire: false)
     return "\(keyword)\(name)Reference = mutableListOf(\(argument))"
   }
   static func passReference(to argument: String, forwarding: Bool, isAddressee: Bool) -> String {
     if forwarding {
       return argument
     } else {
-      return "\(sanitize(identifier: UnicodeText(argument), leading: true))Reference"
+      return "\(sanitize(identifier: UnicodeText(argument), leading: true, entire: false))Reference"
     }
   }
   static func unpackReference(to argument: String) -> String? {
-    return "\(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true))Reference[0]"
+    return "\(argument) = \(sanitize(identifier: UnicodeText(argument), leading: true, entire: false))Reference[0]"
   }
   static func dereference(throughParameter: String, forwarding: Bool) -> String {
     let suffix = forwarding ? "" : "[0]"
