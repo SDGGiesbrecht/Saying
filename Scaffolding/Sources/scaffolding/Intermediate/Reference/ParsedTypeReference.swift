@@ -22,14 +22,17 @@ extension ParsedTypeReference {
       )
     }
   }
+  init(_ node: ParsedConcreteParameterType) {
+    if node.yieldArrow == nil {
+      self.init(node.type)
+    } else {
+      self = .action(parameters: [], returnValue: ParsedTypeReference(node.type))
+    }
+  }
   init(_ node: ParsedParameterType) {
     switch node {
     case .type(let typeNode):
-      if typeNode.yieldArrow == nil {
-        self.init(typeNode.type)
-      } else {
-        self = .action(parameters: [], returnValue: ParsedTypeReference(typeNode.type))
-      }
+      self.init(typeNode)
     case .statements:
       self = .statements
     }

@@ -143,6 +143,9 @@ enum CSharp: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func numberedParameter(position: Int) -> String {
+    return "p\(position)"
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
@@ -510,6 +513,13 @@ enum CSharp: Platform {
       full: result.joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
     )
+  }
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String
+  ) -> String {
+    return "(\(fromOutside)) => \(passedFunction)(\(forFurtherIn))"
   }
 
   static var fileSettings: String? {

@@ -35,3 +35,34 @@ action
  {
   ← query
  }
+
+action
+ (
+  English: subtraction with parameters in order, (minuend: integer) minus (subtrahend: integer)
+ )
+ integer
+ {
+  ← (minuend) minus (subtrahend)
+ }
+
+action
+ (
+  English: subtraction with parameters reversed, (subtrahend: integer) less than (minuend: integer)
+ )
+ integer
+ {
+  ← (minuend) minus (subtrahend)
+ }
+
+action
+ [
+  test {verify ((excercise parameter matching by doing (subtraction with parameters in order, () minus (): (minuend: integer) (subtrahend: integer) → integer)) is (“1”: integer))}
+  test {verify ((excercise parameter matching by doing (subtraction with parameters reversed, () less than (): (subtrahend: integer) (minuend: integer) → integer)) is (“1”: integer))}
+ ]
+ (
+  English: excercise parameter matching by doing (somehow compute (minuend: integer) minus (subtrahend: integer): → integer)
+ )
+ integer
+ {
+  ← somehow compute (“3”: integer) minus (“2”: integer)
+ }

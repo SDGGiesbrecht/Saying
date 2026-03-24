@@ -149,6 +149,9 @@ enum C: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func numberedParameter(position: Int) -> String {
+    return ""
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
@@ -578,6 +581,13 @@ enum C: Platform {
       full: result.joined(separator: "\n"),
       uniquenessDefinition: uniquenessDefinition.joined(separator: "\n")
     )
+  }
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String
+  ) -> String {
+    return "!!!"
   }
 
   static var fileSettings: String? {

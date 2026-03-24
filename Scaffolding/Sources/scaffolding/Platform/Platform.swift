@@ -26,6 +26,7 @@ protocol Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String
   static func literal(byte: String) -> String
   static func literal(unicodeScalarNumericalValue: String) -> String
+  static func numberedParameter(position: Int) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -145,6 +146,11 @@ protocol Platform {
     propertyInstead: Bool,
     initializerInstead: Bool
   ) -> UniqueDeclaration
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String
+  ) -> String
 
   // Imports
   static var fileSettings: String? { get }
@@ -976,6 +982,7 @@ extension Platform {
     if let loading = literal.loadingAction(type: type) {
       return call(
         to: loading,
+        expectedPassedActionParameters: nil,
         context: context,
         localLookup: localLookup,
         referenceLookup: referenceLookup,
@@ -1033,8 +1040,16 @@ extension Platform {
     }
   }
 
+  static func resolveExpectedParameterOrder(for action: ActionIntermediate?) -> [ParameterIntermediate]? {
+    return action.map { action in
+      let outputName = nativeNameDeclaration(of: action) ?? action.names.identifier()
+      return action.parameters.ordered(for: outputName)
+    }
+  }
+
   static func call(
     to reference: ActionUse,
+    expectedPassedActionParameters: [ParameterIntermediate]?,
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
@@ -1122,6 +1137,7 @@ extension Platform {
           to: parameter.executeAction!,
           bareAction: parameter.executeAction!,
           reference: reference,
+          expectedPassedActionParameters: expectedPassedActionParameters,
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
@@ -1175,6 +1191,7 @@ extension Platform {
         to: bareAction.isFlow ? bareAction : action,
         bareAction: bareAction,
         reference: reference,
+        expectedPassedActionParameters: expectedPassedActionParameters,
         context: context,
         localLookup: localLookup,
         referenceLookup: referenceLookup,
@@ -1217,6 +1234,7 @@ extension Platform {
     to action: ActionIntermediate,
     bareAction: ActionIntermediate,
     reference: ActionUse,
+    expectedPassedActionParameters: [ParameterIntermediate]?,
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
@@ -1288,6 +1306,7 @@ extension Platform {
               case .action(let actionArgument):
                 var result = call(
                   to: actionArgument,
+                  expectedPassedActionParameters: resolveExpectedParameterOrder(for: usedParameters[argumentIndex].executeAction),
                   context: context,
                   localLookup: localLookup.appending(local),
                   referenceLookup: referenceLookup,
@@ -1421,6 +1440,7 @@ extension Platform {
           newInliningArguments[parameter.names.identifier()] = (
             argument: call(
               to: action,
+              expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
               context: context,
               localLookup: localLookup.appending(locals),
               referenceLookup: referenceLookup,
@@ -1495,8 +1515,32 @@ extension Platform {
           entire: true
         )
       if action.isReferenceWrapper {
-        let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
-        return "\(prefix)\(name)"
+        guard case .action(let returnedActionParameters, let returnedActionReturn) = bareAction.returnValue! else { fatalError() }
+        if returnedActionParameters.count <= 1 {
+          let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
+          return "\(prefix)\(name)"
+        } else {
+          if !reference.rearrangedParameters.isEmpty {
+            let bareIdentifier = bareAction.names.identifier()
+            let callAction = referenceLookup.lookupAction(bareIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
+            let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
+            let callOrder = order(reference.rearrangedParameters, for: callAction.parameters.reordering(from: reference.actionName, to: outputName))
+            let reordering = expectedPassedActionParameters!.map({ parameter in
+              return callOrder.firstIndex(where: { parameter.names.contains($0) })!
+            })
+            let sorted = reordering.sorted()
+            if reordering == sorted {
+              let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
+              return "\(prefix)\(name)"
+            } else {
+              let from = sorted.map({ numberedParameter(position: $0 + 1) }).joined(separator: ", ")
+              let to = reordering.map({ numberedParameter(position: $0 + 1) }).joined(separator: ", ")
+              return wrap(passedFunction: name, rearrangingParametersFrom: from, to: to)
+            }
+          } else {
+            fatalError("Parameter rearrangement inference based on types has not been implemented yet.")
+          }
+        }
       } else {
         var argumentsArray: [String] = []
         let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
@@ -1512,6 +1556,7 @@ extension Platform {
             if actionArgument.passage == .through {
               let nestedCall = call(
                 to: actionArgument,
+                expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
                 context: context,
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
@@ -1545,6 +1590,7 @@ extension Platform {
             } else {
               let basicCall = call(
                 to: actionArgument,
+                expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
                 context: context,
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
@@ -1721,6 +1767,7 @@ extension Platform {
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
           let call = self.call(
             to: action,
+            expectedPassedActionParameters: nil,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
@@ -1847,6 +1894,7 @@ extension Platform {
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
           let call = self.call(
             to: action,
+            expectedPassedActionParameters: nil,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
@@ -1930,6 +1978,7 @@ extension Platform {
             var extractedArgumentsForReferenceCounting: [String] = []
             return self.call(
               to: reference,
+              expectedPassedActionParameters: nil,
               context: context,
               localLookup: localLookup,
               referenceLookup: referenceLookup,
@@ -2021,6 +2070,7 @@ extension Platform {
         contentsOf: self.statement(
           expression: call(
             to: action,
+            expectedPassedActionParameters: nil,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
