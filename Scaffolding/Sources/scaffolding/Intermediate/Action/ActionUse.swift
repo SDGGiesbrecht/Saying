@@ -2,6 +2,7 @@ struct ActionUse {
   var actionName: UnicodeText
   var arguments: [ActionUseArgument]
   var literal: LiteralIntermediate?
+  var actionLiteral: ActionLiteralIntermediate?
   var source: ParsedAction?
   var passage: ParameterPassage
   var explicitResultType: ParsedTypeReference?
@@ -70,28 +71,48 @@ extension ActionUse {
   }
 
   static func construct(_ use: ParsedAnnotatedAction) -> Result<ActionUse, ErrorList<LiteralIntermediate.ConstructionError>> {
-    return ActionUse.construct(use.action).map { action in
-      var annotated = action
-      let type = use.type.map({ ParsedTypeReference($0.type) })
-      if let actionPrefix = use.type?.actionPrefix {
-        var parameters: [ParsedTypeReference] = []
-        for parameter in actionPrefix.parameters?.parameters.parameters ?? [] {
-          annotated.rearrangedParameters.append(parameter.name.name())
-          parameters.append(ParsedTypeReference(parameter.type))
-        }
-        annotated.explicitResultType = .action(parameters: parameters, returnValue: type)
-      } else {
-        annotated.explicitResultType = type
+    let passage: ParameterPassage
+    switch use.passage {
+    case .none:
+      passage = .into
+    case .bullet:
+      passage = .out
+    case .throughArrow:
+      passage = .through
+    }
+    let type = use.type.map({ ParsedTypeReference($0.type) })
+    var rearrangedParameters: [UnicodeText] = []
+    let explicitResultType: ParsedTypeReference?
+    if let actionPrefix = use.type?.actionPrefix {
+      var parameters: [ParsedTypeReference] = []
+      for parameter in actionPrefix.parameters?.parameters.parameters ?? [] {
+        rearrangedParameters.append(parameter.name.name())
+        parameters.append(ParsedTypeReference(parameter.type))
       }
-      switch use.passage {
-      case .none:
-        annotated.passage = .into
-      case .bullet:
-        annotated.passage = .out
-      case .throughArrow:
-        annotated.passage = .through
+      explicitResultType = .action(parameters: parameters, returnValue: type)
+    } else {
+      explicitResultType = type
+    }
+    switch use.action {
+    case .referenced(let referenced):
+      return ActionUse.construct(referenced).map { action in
+        var annotated = action
+        annotated.passage = passage
+        annotated.rearrangedParameters = rearrangedParameters
+        annotated.explicitResultType = explicitResultType
+        return annotated
       }
-      return annotated
+    case .literal(let literal):
+      return StatementListIntermediate.construct(literal).map { statements in
+        return ActionUse(
+          actionName: "",
+          arguments: [],
+          actionLiteral: ActionLiteralIntermediate(implementation: statements),
+          passage: passage,
+          explicitResultType: explicitResultType,
+          rearrangedParameters: rearrangedParameters
+        )
+      }
     }
   }
 }
@@ -146,7 +167,8 @@ extension ActionUse {
   }
   mutating func resolveArgumentTypes(
     specifiedReturnValue: ParsedTypeReference??,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    context: ActionIntermediate?
   ) -> ArgumentTypeResolutionResult {
     var guesses: [[ParsedTypeReference]] = [[]]
     for argument in arguments {
@@ -192,6 +214,19 @@ extension ActionUse {
         .some(.some(.compilerGeneratedReference(to: LiteralIntermediate.unicodeTextName)))
       )
     }
+    if let actionLiteral = actionLiteral {
+      self.actionLiteral?.resolveTypes(
+        parameters: actionLiteral.parameterDictionary(
+          rearrangedParameters: rearrangedParameters,
+          explicitSignature: explicitResultType!,
+          referenceLookup: referenceLookup
+        ),
+        returnType: actionLiteral.returnType(explicitSignature: explicitResultType!),
+        context: context,
+        referenceLookup: referenceLookup
+      )
+      return .resolved(.some(explicitResultType))
+    }
     return .failed
   }
   mutating func resolveTypes(
@@ -227,10 +262,12 @@ extension ActionUse {
     switch specifiedReturnValue {
     case .some(.some(let value)):
       resolvedResultType = value
-      if arguments.contains(where: { $0.resolvedResultType == nil }) {
+      if arguments.contains(where: { $0.resolvedResultType == nil })
+        || actionLiteral != nil {
         _ = resolveArgumentTypes(
           specifiedReturnValue: specifiedReturnValue,
-          referenceLookup: referenceLookupWithFlowLocals
+          referenceLookup: referenceLookupWithFlowLocals,
+          context: context
         )
       }
     case .some(.none):
@@ -238,7 +275,8 @@ extension ActionUse {
       if arguments.contains(where: { $0.resolvedResultType == nil }) {
         _ = resolveArgumentTypes(
           specifiedReturnValue: specifiedReturnValue,
-          referenceLookup: referenceLookupWithFlowLocals
+          referenceLookup: referenceLookupWithFlowLocals,
+          context: context
         )
       }
     case .none:
@@ -247,13 +285,15 @@ extension ActionUse {
         if arguments.contains(where: { $0.resolvedResultType == nil }) {
           _ = resolveArgumentTypes(
             specifiedReturnValue: specifiedReturnValue,
-            referenceLookup: referenceLookupWithFlowLocals
+            referenceLookup: referenceLookupWithFlowLocals,
+            context: context
           )
         }
       } else {
         switch resolveArgumentTypes(
           specifiedReturnValue: specifiedReturnValue,
-          referenceLookup: referenceLookupWithFlowLocals
+          referenceLookup: referenceLookupWithFlowLocals,
+          context: context
         ) {
         case .resolved(let resolved):
           resolvedResultType = resolved
@@ -317,6 +357,18 @@ extension ActionUse {
             reference: reference,
             errors: &errors
           )
+        } else if let actionLiteral = actionLiteral {
+          actionLiteral.validateReferences(
+            parameters: actionLiteral.parameterDictionary(
+              rearrangedParameters: rearrangedParameters,
+              explicitSignature: explicitResultType!,
+              referenceLookup: context
+            ),
+            context: context,
+            testContext: testContext,
+            allowTestOnly: allowTestOnly,
+            errors: &errors
+          )
         } else {
           errors.append(.noSuchAction(name: actionName, reference: source!))
         }
@@ -333,6 +385,7 @@ extension ActionUse {
       actionName: actionName,
       arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       literal: literal,
+      actionLiteral: actionLiteral?.resolvingExtensionContext(typeLookup: typeLookup),
       source: source,
       passage: passage,
       explicitResultType: explicitResultType
@@ -351,6 +404,7 @@ extension ActionUse {
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
       literal: literal,
+      actionLiteral: actionLiteral?.specializing(typeLookup: typeLookup),
       source: source,
       passage: passage,
       explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) }),
@@ -376,7 +430,11 @@ extension ActionUse {
 
 extension ActionUse {
   func coverageSubregions(counter: inout Int) -> [Int] {
-    return arguments.flatMap { $0.coverageSubregions(counter: &counter) }
+    if let action = actionLiteral {
+      return action.implementation.coverageSubregions(counter: &counter)
+    } else {
+      return arguments.flatMap { $0.coverageSubregions(counter: &counter) }
+    }
   }
 }
 
@@ -410,6 +468,24 @@ extension ActionUse {
       if let loading = literal.loadingAction(type: thing) {
         result.append(contentsOf: loading.requiredIdentifiers(context: context))
       }
+    }
+    if let actionLiteral = self.actionLiteral,
+      case .action(let parameters, let returnType) = explicitResultType {
+      for parameter in parameters {
+        result.append(contentsOf: parameter.requiredIdentifiers(moduleAndExternalReferenceLookup: context))
+      }
+      returnType.map { type in
+        result.append(contentsOf: type.requiredIdentifiers(moduleAndExternalReferenceLookup: context))
+      }
+      result.append(
+        contentsOf: actionLiteral.implementation.requiredIdentifiers(
+          context: context.appending(actionLiteral.parameterDictionary(
+            rearrangedParameters: rearrangedParameters,
+            explicitSignature: explicitResultType!,
+            referenceLookup: context
+          ))
+        )
+      )
     }
     return result
   }

@@ -1057,6 +1057,49 @@ extension Platform {
       return action.parameters.ordered(for: outputName)
     }
   }
+  static func pass(
+    actionLiteral: ActionLiteralIntermediate,
+    reference: ActionUse,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    context: ActionIntermediate?,
+    coverageRegionCounter: inout Int,
+    clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
+    extractedAnonymousFunctions: inout [String],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    mode: CompilationMode
+  ) -> String {
+    let parameters = reference.rearrangedParameters.map({ String($0) }).joined(separator: ", ")
+    var closure = [
+      "{ \(parameters) in"
+    ]
+    closure.append(
+      contentsOf: source(
+        for: actionLiteral.implementation.statements,
+        context: context,
+        localLookup: localLookup.appending(
+          actionLiteral.parameterDictionary(
+            rearrangedParameters: reference.rearrangedParameters,
+            explicitSignature: reference.explicitResultType!,
+            referenceLookup: referenceLookup
+          )
+        ),
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
+        referenceLookup: referenceLookup,
+        inliningArguments: inliningArguments,
+        mode: mode,
+        indentationLevel: 1
+      )
+    )
+    closure.append(contentsOf: [
+      "}"
+    ])
+    return closure.joined(separator: "\n")
+  }
 
   static func call(
     to reference: ActionUse,
@@ -1110,6 +1153,21 @@ extension Platform {
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+        mode: mode
+      )
+    }
+    if let actionLiteral = reference.actionLiteral {
+      return pass(
+        actionLiteral: actionLiteral,
+        reference: reference,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        context: context,
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
+        inliningArguments: inliningArguments,
         mode: mode
       )
     }
