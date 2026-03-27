@@ -606,7 +606,7 @@ enum C: Platform {
     return [
       "\(returnValue) \(wrapperName!)(\(fromOutside))",
       "{",
-      "\(indent)return \(passedFunction)(\(forFurtherIn))",
+      "\(indent)return \(passedFunction)(\(forFurtherIn));",
       "}",
     ].joined(separator: "\n")
   }
