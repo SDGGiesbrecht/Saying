@@ -1,0 +1,2431 @@
+action (unit)
+ [
+  test {ignore (canonical combining class of (“0000”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0300”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0315”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0316”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“031A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“031B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“031C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0321”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0323”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0327”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0329”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0334”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0339”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“033D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0345”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0346”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0347”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“034A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“034D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“034F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0350”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0353”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0357”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0358”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0359”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“035B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“035C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“035D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“035F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0360”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0362”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0363”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0370”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0483”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0488”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0591”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0592”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0596”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0597”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“059A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“059B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“059C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05A2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05A8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05AA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05AB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05AD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05AE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05AF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05B9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05BB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05BC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05BD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05BE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05BF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“05C8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0610”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0618”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0619”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“061A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“061B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“064B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“064C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“064D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“064E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“064F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0650”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0651”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0652”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0653”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0655”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0657”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“065C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“065D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“065F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0660”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0670”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0671”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06D6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06DD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06DF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06E3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06E4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06E5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06E7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06E9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06EA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06EB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06ED”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“06EE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0711”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0712”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0730”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0731”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0732”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0734”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0735”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0737”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“073A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“073B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“073D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“073E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“073F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0742”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0743”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0744”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0745”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0746”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0747”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0748”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0749”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“074B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“07EB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“07F2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“07F3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“07F4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“07FD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“07FE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0816”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“081A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“081B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0824”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0825”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0828”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0829”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“082E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0859”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“085C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0897”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0899”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“089C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08A0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08CA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08CF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08D4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08E2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08E3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08E4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08E6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08E7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08E9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08EA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08ED”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08F9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“08FB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0900”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“093C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“093D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“094D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“094E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0951”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0952”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0953”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0955”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“09BC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“09BD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“09CD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“09CE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“09FE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“09FF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0A3C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0A3D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0A4D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0A4E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0ABC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0ABD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0ACD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0ACE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0B3C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0B3D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0B4D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0B4E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0BCD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0BCE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C3C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C3D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C4D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C4E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C55”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C56”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0C57”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0CBC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0CBD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0CCD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0CCE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0D3B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0D3D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0D4D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0D4E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0DCA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0DCB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0E38”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0E3A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0E3B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0E48”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0E4C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0EB8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0EBA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0EBB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0EC8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0ECC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F18”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F1A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F35”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F36”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F37”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F38”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F39”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F3A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F71”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F72”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F73”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F74”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F75”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F7A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F7E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F80”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F81”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F82”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F84”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F85”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F86”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0F88”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0FC6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“0FC7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1037”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1038”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1039”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“103B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“108D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“108E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“135D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1360”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1714”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1716”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1734”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1735”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“17D2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“17D3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“17DD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“17DE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“18A9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“18AA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1939”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“193A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“193B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“193C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A17”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A18”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A19”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A60”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A61”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A75”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A7D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A7F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1A80”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AB0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AB5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ABB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ABD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ABE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ABF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AC1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AC3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AC5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ACA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ACB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ADD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1ADE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AE0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AE6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AE7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AEB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1AEC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B34”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B35”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B44”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B45”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B6B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B6C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B6D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1B74”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BAA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BAC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BE6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BE7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BF2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BF4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1C37”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1C38”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CD0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CD3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CD4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CD5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CDA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CDC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CE0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CE1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CE2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CE9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CED”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CEE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CF4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CF5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CF8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1CFA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DC0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DC2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DC3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DCA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DCB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DCD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DCE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DCF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DD0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DD1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DF6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DF7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DF9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DFA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DFB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DFC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DFD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DFE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1DFF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E00”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20D0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20D2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20D4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20D8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20DB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20DD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20E1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20E2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20E5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20E7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20E8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20E9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20EA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20EC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“20F1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“2CEF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“2CF2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“2D7F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“2D80”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“2DE0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“2E00”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“302A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“302B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“302C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“302D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“302E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“3030”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“3099”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“309B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A66F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A670”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A674”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A67E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A69E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A6A0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A6F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A6F2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A806”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A807”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A82C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A82D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A8C4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A8C5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A8E0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A8F2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A92B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A92E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A953”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A954”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A9B3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A9B4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A9C0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“A9C1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAB9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AABE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAC0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAC1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAC2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAF6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“AAF7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“ABED”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“ABEE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“FB1E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“FB1F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“FE20”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“FE27”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“FE2E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“FE30”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“101FD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“101FE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“102E0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“102E1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10376”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1037B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A0D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A0E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A0F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A10”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A38”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A39”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A3A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A3B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A3F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10A40”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10AE5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10AE6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10AE7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10D24”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10D28”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10D69”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10D6E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10EAB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10EAD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10EFA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10EFC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10EFD”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F00”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F46”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F48”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F4B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F4C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F4D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F51”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F82”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F83”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F84”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F85”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“10F86”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11046”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11047”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11070”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11071”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1107F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11080”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“110B9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“110BA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“110BB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11100”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11103”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11133”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11135”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11173”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11174”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“111C0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“111C1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“111CA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“111CB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11235”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11236”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11237”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“112E9”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“112EA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“112EB”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1133B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1133D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1134D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1134E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11366”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1136D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11370”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11375”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“113CE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“113D1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11442”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11443”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11446”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11447”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1145E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1145F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“114C2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“114C3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“114C4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“115BF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“115C0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“115C1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1163F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11640”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“116B6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“116B7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“116B8”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1172B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1172C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11839”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1183A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1183B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1193D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1193F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11943”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11944”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“119E0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“119E1”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11A34”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11A35”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11A47”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11A48”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11A99”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11A9A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11C3F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11C40”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11D42”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11D43”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11D44”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11D46”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11D97”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11D98”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11F41”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“11F43”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1612F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16130”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16AF0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16AF5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16B30”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16B37”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16FF0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“16FF2”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BC9E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1BC9F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D165”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D167”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D16A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D16D”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D16E”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D173”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D17B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D183”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D185”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D18A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D18C”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D1AA”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D1AE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D242”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1D245”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E000”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E007”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E008”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E019”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E01B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E022”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E023”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E025”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E026”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E02B”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E08F”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E090”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E130”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E137”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E2AE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E2AF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E2EC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E2F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E4EC”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E4EE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E4EF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E4F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E5EE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E5EF”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E5F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6E3”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6E4”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6E6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6E7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6EE”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6F0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6F5”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E6F6”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E8D0”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E8D7”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E944”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E94A”: Unicode scalar numerical value))}
+  test {ignore (canonical combining class of (“1E94B”: Unicode scalar numerical value))}
+ ]
+ (
+  English: canonical combining class of (scalar: Unicode scalar numerical value)
+ )
+ 8‐bit natural number
+ {
+  if ((scalar) is less than (“0300”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0315”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0316”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than (“031A”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“031B”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than (“031C”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than (“0321”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0323”: Unicode scalar numerical value)), {
+   ← “202”
+  }
+  if ((scalar) is less than (“0327”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0329”: Unicode scalar numerical value)), {
+   ← “202”
+  }
+  if ((scalar) is less than (“0334”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0339”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“033D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0345”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0346”: Unicode scalar numerical value)), {
+   ← “240”
+  }
+  if ((scalar) is less than (“0347”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“034A”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“034D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“034F”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0350”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0353”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0357”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0358”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0359”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than (“035B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“035C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“035D”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than (“035F”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than (“0360”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than (“0362”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than (“0363”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than (“0370”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0483”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0488”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0591”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0592”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0596”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0597”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“059A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“059B”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than (“059C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“05A2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“05A8”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“05AA”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“05AB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“05AD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“05AE”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than (“05AF”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than (“05B0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“05B1”: Unicode scalar numerical value)), {
+   ← “10”
+  }
+  if ((scalar) is less than (“05B2”: Unicode scalar numerical value)), {
+   ← “11”
+  }
+  if ((scalar) is less than (“05B3”: Unicode scalar numerical value)), {
+   ← “12”
+  }
+  if ((scalar) is less than (“05B4”: Unicode scalar numerical value)), {
+   ← “13”
+  }
+  if ((scalar) is less than (“05B5”: Unicode scalar numerical value)), {
+   ← “14”
+  }
+  if ((scalar) is less than (“05B6”: Unicode scalar numerical value)), {
+   ← “15”
+  }
+  if ((scalar) is less than (“05B7”: Unicode scalar numerical value)), {
+   ← “16”
+  }
+  if ((scalar) is less than (“05B8”: Unicode scalar numerical value)), {
+   ← “17”
+  }
+  if ((scalar) is less than (“05B9”: Unicode scalar numerical value)), {
+   ← “18”
+  }
+  if ((scalar) is less than (“05BB”: Unicode scalar numerical value)), {
+   ← “19”
+  }
+  if ((scalar) is less than (“05BC”: Unicode scalar numerical value)), {
+   ← “20”
+  }
+  if ((scalar) is less than (“05BD”: Unicode scalar numerical value)), {
+   ← “21”
+  }
+  if ((scalar) is less than (“05BE”: Unicode scalar numerical value)), {
+   ← “22”
+  }
+  if ((scalar) is less than (“05BF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“05C0”: Unicode scalar numerical value)), {
+   ← “23”
+  }
+  if ((scalar) is less than (“05C1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“05C2”: Unicode scalar numerical value)), {
+   ← “24”
+  }
+  if ((scalar) is less than (“05C3”: Unicode scalar numerical value)), {
+   ← “25”
+  }
+  if ((scalar) is less than (“05C4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“05C5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“05C6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“05C7”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“05C8”: Unicode scalar numerical value)), {
+   ← “18”
+  }
+  if ((scalar) is less than (“0610”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0618”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0619”: Unicode scalar numerical value)), {
+   ← “30”
+  }
+  if ((scalar) is less than (“061A”: Unicode scalar numerical value)), {
+   ← “31”
+  }
+  if ((scalar) is less than (“061B”: Unicode scalar numerical value)), {
+   ← “32”
+  }
+  if ((scalar) is less than (“064B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“064C”: Unicode scalar numerical value)), {
+   ← “27”
+  }
+  if ((scalar) is less than (“064D”: Unicode scalar numerical value)), {
+   ← “28”
+  }
+  if ((scalar) is less than (“064E”: Unicode scalar numerical value)), {
+   ← “29”
+  }
+  if ((scalar) is less than (“064F”: Unicode scalar numerical value)), {
+   ← “30”
+  }
+  if ((scalar) is less than (“0650”: Unicode scalar numerical value)), {
+   ← “31”
+  }
+  if ((scalar) is less than (“0651”: Unicode scalar numerical value)), {
+   ← “32”
+  }
+  if ((scalar) is less than (“0652”: Unicode scalar numerical value)), {
+   ← “33”
+  }
+  if ((scalar) is less than (“0653”: Unicode scalar numerical value)), {
+   ← “34”
+  }
+  if ((scalar) is less than (“0655”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0657”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“065C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“065D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“065F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0660”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0670”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0671”: Unicode scalar numerical value)), {
+   ← “35”
+  }
+  if ((scalar) is less than (“06D6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“06DD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“06DF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“06E3”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“06E4”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“06E5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“06E7”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“06E9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“06EA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“06EB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“06ED”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“06EE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0711”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0712”: Unicode scalar numerical value)), {
+   ← “36”
+  }
+  if ((scalar) is less than (“0730”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0731”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0732”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0734”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0735”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0737”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“073A”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“073B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“073D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“073E”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“073F”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0742”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0743”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0744”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0745”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0746”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0747”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0748”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0749”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“074B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“07EB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“07F2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“07F3”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“07F4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“07FD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“07FE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0816”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“081A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“081B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0824”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0825”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0828”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0829”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“082E”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0859”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“085C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0897”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0899”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“089C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08A0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08CA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“08CF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08D4”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08E2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08E3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“08E4”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08E6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08E7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08E9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08EA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08ED”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08F0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08F1”: Unicode scalar numerical value)), {
+   ← “27”
+  }
+  if ((scalar) is less than (“08F2”: Unicode scalar numerical value)), {
+   ← “28”
+  }
+  if ((scalar) is less than (“08F3”: Unicode scalar numerical value)), {
+   ← “29”
+  }
+  if ((scalar) is less than (“08F6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08F7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“08F9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“08FB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0900”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“093C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“093D”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“094D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“094E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0951”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0952”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0953”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0955”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“09BC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“09BD”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“09CD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“09CE”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“09FE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“09FF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0A3C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0A3D”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“0A4D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0A4E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0ABC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0ABD”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“0ACD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0ACE”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0B3C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0B3D”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“0B4D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0B4E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0BCD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0BCE”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0C3C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0C3D”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“0C4D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0C4E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0C55”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0C56”: Unicode scalar numerical value)), {
+   ← “84”
+  }
+  if ((scalar) is less than (“0C57”: Unicode scalar numerical value)), {
+   ← “91”
+  }
+  if ((scalar) is less than (“0CBC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0CBD”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“0CCD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0CCE”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0D3B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0D3D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0D4D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0D4E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0DCA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0DCB”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0E38”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0E3A”: Unicode scalar numerical value)), {
+   ← “103”
+  }
+  if ((scalar) is less than (“0E3B”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0E48”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0E4C”: Unicode scalar numerical value)), {
+   ← “107”
+  }
+  if ((scalar) is less than (“0EB8”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0EBA”: Unicode scalar numerical value)), {
+   ← “118”
+  }
+  if ((scalar) is less than (“0EBB”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0EC8”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0ECC”: Unicode scalar numerical value)), {
+   ← “122”
+  }
+  if ((scalar) is less than (“0F18”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F1A”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0F35”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F36”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0F37”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F38”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“0F39”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F3A”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than (“0F71”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F72”: Unicode scalar numerical value)), {
+   ← “129”
+  }
+  if ((scalar) is less than (“0F73”: Unicode scalar numerical value)), {
+   ← “130”
+  }
+  if ((scalar) is less than (“0F74”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F75”: Unicode scalar numerical value)), {
+   ← “132”
+  }
+  if ((scalar) is less than (“0F7A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F7E”: Unicode scalar numerical value)), {
+   ← “130”
+  }
+  if ((scalar) is less than (“0F80”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F81”: Unicode scalar numerical value)), {
+   ← “130”
+  }
+  if ((scalar) is less than (“0F82”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F84”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0F85”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“0F86”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0F88”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“0FC6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“0FC7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1037”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1038”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1039”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“103B”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“108D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“108E”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“135D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1360”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1714”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1716”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1734”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1735”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“17D2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“17D3”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“17DD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“17DE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“18A9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“18AA”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than (“1939”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“193A”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than (“193B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“193C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1A17”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1A18”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1A19”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1A60”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1A61”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1A75”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1A7D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1A7F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1A80”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1AB0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1AB5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1ABB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1ABD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1ABE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1ABF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1AC1”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1AC3”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1AC5”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1ACA”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1ACB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1ADD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1ADE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1AE0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1AE6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1AE7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1AEB”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1AEC”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than (“1B34”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1B35”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1B44”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1B45”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1B6B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1B6C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1B6D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1B74”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1BAA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1BAC”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1BE6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1BE7”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1BF2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1BF4”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1C37”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1C38”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1CD0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1CD3”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1CD4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1CD5”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“1CDA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1CDC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1CE0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1CE1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1CE2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1CE9”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“1CED”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1CEE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1CF4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1CF5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1CF8”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1CFA”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1DC0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1DC2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1DC3”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1DCA”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1DCB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1DCD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1DCE”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than (“1DCF”: Unicode scalar numerical value)), {
+   ← “214”
+  }
+  if ((scalar) is less than (“1DD0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1DD1”: Unicode scalar numerical value)), {
+   ← “202”
+  }
+  if ((scalar) is less than (“1DF6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1DF7”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than (“1DF9”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than (“1DFA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1DFB”: Unicode scalar numerical value)), {
+   ← “218”
+  }
+  if ((scalar) is less than (“1DFC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1DFD”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than (“1DFE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1DFF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E00”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“20D0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“20D2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“20D4”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“20D8”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“20DB”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“20DD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“20E1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“20E2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“20E5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“20E7”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“20E8”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“20E9”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“20EA”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“20EC”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“20F0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“20F1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“2CEF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“2CF2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“2D7F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“2D80”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“2DE0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“2E00”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“302A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“302B”: Unicode scalar numerical value)), {
+   ← “218”
+  }
+  if ((scalar) is less than (“302C”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than (“302D”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than (“302E”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than (“3030”: Unicode scalar numerical value)), {
+   ← “224”
+  }
+  if ((scalar) is less than (“3099”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“309B”: Unicode scalar numerical value)), {
+   ← “8”
+  }
+  if ((scalar) is less than (“A66F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A670”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“A674”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A67E”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“A69E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A6A0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“A6F0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A6F2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“A806”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A807”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“A82C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A82D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“A8C4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A8C5”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“A8E0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A8F2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“A92B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A92E”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“A953”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A954”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“A9B3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A9B4”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“A9C0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“A9C1”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“AAB0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“AAB1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“AAB2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“AAB4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“AAB5”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“AAB7”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“AAB9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“AABE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“AAC0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“AAC1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“AAC2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“AAF6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“AAF7”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“ABED”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“ABEE”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“FB1E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“FB1F”: Unicode scalar numerical value)), {
+   ← “26”
+  }
+  if ((scalar) is less than (“FE20”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“FE27”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“FE2E”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“FE30”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“101FD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“101FE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“102E0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“102E1”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10376”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1037B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10A0D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10A0E”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10A0F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10A10”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10A38”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10A39”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10A3A”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“10A3B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10A3F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10A40”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“10AE5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10AE6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10AE7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10D24”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10D28”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10D69”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10D6E”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10EAB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10EAD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10EFA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10EFC”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10EFD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10F00”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10F46”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10F48”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10F4B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10F4C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10F4D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10F51”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10F82”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“10F83”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10F84”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“10F85”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“10F86”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“11046”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11047”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11070”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11071”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1107F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11080”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“110B9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“110BA”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“110BB”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“11100”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11103”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“11133”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11135”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11173”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11174”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“111C0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“111C1”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“111CA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“111CB”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“11235”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11236”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11237”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“112E9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“112EA”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“112EB”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1133B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1133D”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1134D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1134E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11366”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1136D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“11370”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11375”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“113CE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“113D1”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11442”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11443”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11446”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11447”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1145E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1145F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“114C2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“114C3”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“114C4”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“115BF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“115C0”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“115C1”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1163F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11640”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“116B6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“116B7”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“116B8”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1172B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1172C”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11839”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1183A”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1183B”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“1193D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1193F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11943”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11944”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“119E0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“119E1”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11A34”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11A35”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11A47”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11A48”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11A99”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11A9A”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11C3F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11C40”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11D42”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11D43”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than (“11D44”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11D46”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11D97”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11D98”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“11F41”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“11F43”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“1612F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“16130”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than (“16AF0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“16AF5”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“16B30”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“16B37”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“16FF0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“16FF2”: Unicode scalar numerical value)), {
+   ← “6”
+  }
+  if ((scalar) is less than (“1BC9E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1BC9F”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“1D165”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1D167”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than (“1D16A”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than (“1D16D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1D16E”: Unicode scalar numerical value)), {
+   ← “226”
+  }
+  if ((scalar) is less than (“1D173”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than (“1D17B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1D183”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1D185”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1D18A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1D18C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1D1AA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1D1AE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1D242”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1D245”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E000”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E007”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E008”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E019”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E01B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E022”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E023”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E025”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E026”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E02B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E08F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E090”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E130”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E137”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E2AE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E2AF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E2EC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E2F0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E4EC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E4EE”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than (“1E4EF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1E4F0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E5EE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E5EF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E5F0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1E6E3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E6E4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E6E6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E6E7”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E6EE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E6F0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E6F5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E6F6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E8D0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E8D7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than (“1E944”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than (“1E94A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than (“1E94B”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  ← “0”
+ }

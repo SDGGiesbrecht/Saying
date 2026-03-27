@@ -33,6 +33,12 @@ let package = Package(
       dependencies: [
         .product(name: "SDGPersistence", package: "SDGCornerstone"),
       ]
+    ),
+    .executableTarget(
+      name: "update‐unicode",
+      dependencies: [
+        .product(name: "SDGPersistence", package: "SDGCornerstone"),
+      ]
     )
   ]
 )

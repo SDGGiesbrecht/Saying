@@ -1,0 +1,13 @@
+thing (clients)
+ (
+  English: 8‐bit natural number
+ )
+ C: “uint8¤(5F)t” (“stdint”)
+ C♯: “byte”
+ Kotlin: “UByte”
+ Swift: “UInt8”
+
+use (clients)
+ general use of (8‐bit natural number)
+ {
+ }

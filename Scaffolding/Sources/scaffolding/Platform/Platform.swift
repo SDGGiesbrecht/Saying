@@ -1016,6 +1016,7 @@ extension Platform {
       || type.names.contains(LiteralIntermediate.integerName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
+      || type.names.contains(LiteralIntermediate.eightBitNaturalNumberName)
       || type.names.contains(LiteralIntermediate.memoryOffsetName) {
       return self.literal(number: literal.string, typeNames: type.names)
     } else if type.names.contains(LiteralIntermediate.byteName) {
