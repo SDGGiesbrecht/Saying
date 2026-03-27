@@ -72,6 +72,9 @@ extension LiteralIntermediate {
   static var platformFixedWidthIntegerName: UnicodeText {
     return "platform fixed‐width integer"
   }
+  static var eightBitNaturalNumberName: UnicodeText {
+    return "8‐bit natural number"
+  }
   static var memoryOffsetName: UnicodeText {
     return "memory offset"
   }
@@ -96,7 +99,8 @@ extension LiteralIntermediate {
         errors.append(.multipleScalars(source))
       }
     } else if type.names.contains(LiteralIntermediate.naturalNumberName)
-      || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName) {
+      || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName)
+      || type.names.contains(LiteralIntermediate.eightBitNaturalNumberName) {
       if !validateNaturalNumber(literal: string) {
         errors.append(.notANaturalNumber(source))
       }

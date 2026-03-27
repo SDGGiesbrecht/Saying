@@ -94,7 +94,8 @@ enum Kotlin: Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String {
     var result = number.replacingOccurrences(of: "−", with: "-")
     if typeNames.contains(LiteralIntermediate.naturalNumberName)
-      || typeNames.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName) {
+      || typeNames.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName)
+      || typeNames.contains(LiteralIntermediate.eightBitNaturalNumberName) {
       result.append("u")
     }
     return result
