@@ -118,7 +118,7 @@ enum Kotlin: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
-  static func numberedParameter(position: Int) -> String {
+  static func numberedParameter(position: Int, type: String?) -> String {
     return "p\(position)"
   }
 
@@ -383,7 +383,8 @@ enum Kotlin: Platform {
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
-    initializerInstead: Bool
+    initializerInstead: Bool,
+    extractedDeclarations: [String]
   ) -> UniqueDeclaration {
     let access = isOverride ? "public " : accessModifier.map({ "\($0) " }) ?? ""
     let override = isOverride ? "override " : ""
@@ -418,10 +419,15 @@ enum Kotlin: Platform {
       uniquenessDefinition: result.joined(separator: "\n")
     )
   }
+  static var needsFunctionLiteralsExtracted: Bool {
+    return false
+  }
   static func wrap(
     passedFunction: String,
     rearrangingParametersFrom fromOutside: String,
-    to forFurtherIn: String
+    to forFurtherIn: String,
+    wrapperName: String?,
+    returnType: String?
   ) -> String {
     return "{ \(fromOutside) -> \(passedFunction)(\(forFurtherIn)) }"
   }

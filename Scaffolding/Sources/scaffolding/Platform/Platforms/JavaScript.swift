@@ -105,7 +105,7 @@ enum JavaScript: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
-  static func numberedParameter(position: Int) -> String {
+  static func numberedParameter(position: Int, type: String?) -> String {
     return "p\(position)"
   }
 
@@ -338,7 +338,8 @@ enum JavaScript: Platform {
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
-    initializerInstead: Bool
+    initializerInstead: Bool,
+    extractedDeclarations: [String]
   ) -> UniqueDeclaration {
     var result: [String] = [
       "function \(name)(\(parameters)) {",
@@ -359,10 +360,15 @@ enum JavaScript: Platform {
       uniquenessDefinition: result.joined(separator: "\n")
     )
   }
+  static var needsFunctionLiteralsExtracted: Bool {
+    return false
+  }
   static func wrap(
     passedFunction: String,
     rearrangingParametersFrom fromOutside: String,
-    to forFurtherIn: String
+    to forFurtherIn: String,
+    wrapperName: String?,
+    returnType: String?
   ) -> String {
     return "(\(fromOutside)) => \(passedFunction)(\(forFurtherIn))"
   }
