@@ -503,10 +503,44 @@ extension Node {
             ])
           ),
           Node(
+            name: "ActionTypeParameter",
+            kind: .compound(children: [
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "name", type: "Signature", kind: .required),
+              Child(name: "colon", type: "Colon", kind: .required),
+              Child(name: "type", type: "ConcreteParameterType", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "ParameterDictionary",
+          entryName: "parameter", entryNamePlural: "parameters",
+          entryType: "ActionTypeParameter",
+          separatorName: "space",
+          separatorType: "SpaceSyntax",
+          fixedSeparator: true
+        ),
+        [
+          Node(
+            name: "ActionTypeParameters",
+            kind: .compound(children: [
+              Child(name: "parameters", type: "ParameterDictionary", kind: .required),
+              Child(name: "space", type: "SpaceSyntax", kind: .required),
+            ])
+          ),
+          Node(
+            name: "TypeAnnotationActionPrefix",
+            kind: .compound(children: [
+              Child(name: "parameters", type: "ActionTypeParameters", kind: .optional),
+              Child(name: "yieldArrow", type: "YieldArrow", kind: .required),
+            ])
+          ),
+          Node(
             name: "TypeAnnotation",
             kind: .compound(children: [
               Child(name: "colon", type: "Colon", kind: .required),
-              Child(name: "yieldArrow", type: "YieldArrow", kind: .optional),
+              Child(name: "actionPrefix", type: "TypeAnnotationActionPrefix", kind: .optional),
               Child(name: "type", type: "ThingReference", kind: .required),
             ])
           ),

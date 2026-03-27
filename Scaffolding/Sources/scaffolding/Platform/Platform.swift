@@ -26,6 +26,7 @@ protocol Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String
   static func literal(byte: String) -> String
   static func literal(unicodeScalarNumericalValue: String) -> String
+  static func numberedParameter(position: Int, type: String?) -> String
 
   // Access
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
@@ -143,8 +144,17 @@ protocol Platform {
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
-    initializerInstead: Bool
+    initializerInstead: Bool,
+    extractedDeclarations: [String]
   ) -> UniqueDeclaration
+  static var needsFunctionLiteralsExtracted: Bool { get }
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String,
+    wrapperName: String?,
+    returnType: String?
+  ) -> String
 
   // Imports
   static var fileSettings: String? { get }
@@ -583,6 +593,7 @@ extension Platform {
     mode: CompilationMode,
     relocatedActions: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
+    anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String? {
     if !isTyped,
@@ -662,7 +673,8 @@ extension Platform {
           mode: mode,
           isAbsorbedMember: true,
           hasBeenRelocated: false,
-          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          anonymousCounter: &anonymousCounter
         ) {
           if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
             relocatedActions.insert(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
@@ -964,9 +976,11 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
     extractedArgumentsForReferenceCounting: inout [String],
     isArgumentExtraction: Bool,
+    extractedAnonymousFunctions: inout [String],
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
@@ -976,6 +990,7 @@ extension Platform {
     if let loading = literal.loadingAction(type: type) {
       return call(
         to: loading,
+        expectedPassedActionParameters: nil,
         context: context,
         localLookup: localLookup,
         referenceLookup: referenceLookup,
@@ -984,8 +999,10 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
         extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         isThrough: false,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
@@ -1033,8 +1050,16 @@ extension Platform {
     }
   }
 
+  static func resolveExpectedParameterOrder(for action: ActionIntermediate?) -> [ParameterIntermediate]? {
+    return action.map { action in
+      let outputName = nativeNameDeclaration(of: action) ?? action.names.identifier()
+      return action.parameters.ordered(for: outputName)
+    }
+  }
+
   static func call(
     to reference: ActionUse,
+    expectedPassedActionParameters: [ParameterIntermediate]?,
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
@@ -1043,9 +1068,11 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
     extractedArgumentsForReferenceCounting: inout [String],
     isArgumentExtraction: Bool = false,
+    extractedAnonymousFunctions: inout [String],
     isThrough: Bool,
     isDetachment: Bool = false,
     isDirectReturn: Bool,
@@ -1073,9 +1100,11 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
         extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
         isArgumentExtraction: isArgumentExtraction,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
@@ -1122,6 +1151,7 @@ extension Platform {
           to: parameter.executeAction!,
           bareAction: parameter.executeAction!,
           reference: reference,
+          expectedPassedActionParameters: expectedPassedActionParameters,
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
@@ -1130,8 +1160,10 @@ extension Platform {
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          anonymousCounter: &anonymousCounter,
           extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+          extractedAnonymousFunctions: &extractedAnonymousFunctions,
           cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1175,6 +1207,7 @@ extension Platform {
         to: bareAction.isFlow ? bareAction : action,
         bareAction: bareAction,
         reference: reference,
+        expectedPassedActionParameters: expectedPassedActionParameters,
         context: context,
         localLookup: localLookup,
         referenceLookup: referenceLookup,
@@ -1183,8 +1216,10 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
         extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1217,6 +1252,7 @@ extension Platform {
     to action: ActionIntermediate,
     bareAction: ActionIntermediate,
     reference: ActionUse,
+    expectedPassedActionParameters: [ParameterIntermediate]?,
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
@@ -1225,8 +1261,10 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
     extractedArgumentsForReferenceCounting: inout [String],
+    extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1288,6 +1326,7 @@ extension Platform {
               case .action(let actionArgument):
                 var result = call(
                   to: actionArgument,
+                  expectedPassedActionParameters: resolveExpectedParameterOrder(for: usedParameters[argumentIndex].executeAction),
                   context: context,
                   localLookup: localLookup.appending(local),
                   referenceLookup: referenceLookup,
@@ -1296,8 +1335,10 @@ extension Platform {
                   extractedCoverageRegistrations: &extractedCoverageRegistrations,
                   coverageRegionCounter: &coverageRegionCounter,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
+                  anonymousCounter: &anonymousCounter,
                   extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
                   extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+                  extractedAnonymousFunctions: &extractedAnonymousFunctions,
                   isThrough: actionArgument.passage == .through,
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
@@ -1362,6 +1403,8 @@ extension Platform {
                     localLookup: localLookup.appending(local),
                     coverageRegionCounter: &coverageRegionCounter,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
+                    anonymousCounter: &anonymousCounter,
+                    extractedAnonymousFunctions: &extractedAnonymousFunctions,
                     referenceLookup: referenceLookup,
                     inliningArguments: inliningArguments,
                     mode: mode,
@@ -1421,6 +1464,7 @@ extension Platform {
           newInliningArguments[parameter.names.identifier()] = (
             argument: call(
               to: action,
+              expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
               context: context,
               localLookup: localLookup.appending(locals),
               referenceLookup: referenceLookup,
@@ -1429,8 +1473,10 @@ extension Platform {
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
+              anonymousCounter: &anonymousCounter,
               extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
               extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+              extractedAnonymousFunctions: &extractedAnonymousFunctions,
               isThrough: action.passage == .through,
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
@@ -1455,6 +1501,8 @@ extension Platform {
             localLookup: localLookup.appending(locals),
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments,
             mode: mode,
@@ -1481,6 +1529,8 @@ extension Platform {
         localLookup: localLookup,
         coverageRegionCounter: &newCoverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments,
         mode: mode,
@@ -1495,8 +1545,46 @@ extension Platform {
           entire: true
         )
       if action.isReferenceWrapper {
-        let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
-        return "\(prefix)\(name)"
+        guard case .action(let returnedActionParameters, let returnedActionReturn) = bareAction.returnValue! else { fatalError() }
+        if returnedActionParameters.count <= 1 {
+          let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
+          return "\(prefix)\(name)"
+        } else {
+          if !reference.rearrangedParameters.isEmpty {
+            let bareIdentifier = bareAction.names.identifier()
+            let callAction = referenceLookup.lookupAction(bareIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
+            let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
+            let callOrder = order(reference.rearrangedParameters, for: callAction.parameters.reordering(from: reference.actionName, to: outputName))
+            let reordering = expectedPassedActionParameters!.map({ parameter in
+              return callOrder.firstIndex(where: { parameter.names.contains($0) })!
+            })
+            let sorted = reordering.sorted()
+            if reordering == sorted {
+              let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
+              return "\(prefix)\(name)"
+            } else {
+              let fromParameters = callAction.parameters.ordered(for: outputName)
+              let from = sorted.map({ index in
+                return numberedParameter(
+                  position: index + 1,
+                  type: source(for: fromParameters[index].type, referenceLookup: referenceLookup)
+                )
+              }).joined(separator: ", ")
+              let to = reordering.map({ numberedParameter(position: $0 + 1, type: nil) }).joined(separator: ", ")
+              let returnType = returnedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
+              if needsFunctionLiteralsExtracted {
+                anonymousCounter += 1
+                let wrapperName = "anonymous_\(anonymousCounter)"
+                extractedAnonymousFunctions.append(wrap(passedFunction: name, rearrangingParametersFrom: from, to: to, wrapperName: wrapperName, returnType: returnType))
+                return wrapperName
+              } else {
+                return wrap(passedFunction: name, rearrangingParametersFrom: from, to: to, wrapperName: nil, returnType: returnType)
+              }
+            }
+          } else {
+            fatalError("Parameter rearrangement inference based on types has not been implemented yet.")
+          }
+        }
       } else {
         var argumentsArray: [String] = []
         let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
@@ -1512,6 +1600,7 @@ extension Platform {
             if actionArgument.passage == .through {
               let nestedCall = call(
                 to: actionArgument,
+                expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
                 context: context,
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
@@ -1520,8 +1609,10 @@ extension Platform {
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
                 coverageRegionCounter: &coverageRegionCounter,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
+                anonymousCounter: &anonymousCounter,
                 extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
                 extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+                extractedAnonymousFunctions: &extractedAnonymousFunctions,
                 isThrough: actionArgument.passage == .through,
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
@@ -1545,6 +1636,7 @@ extension Platform {
             } else {
               let basicCall = call(
                 to: actionArgument,
+                expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
                 context: context,
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
@@ -1553,8 +1645,10 @@ extension Platform {
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
                 coverageRegionCounter: &coverageRegionCounter,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
+                anonymousCounter: &anonymousCounter,
                 extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
                 extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+                extractedAnonymousFunctions: &extractedAnonymousFunctions,
                 isThrough: actionArgument.passage == .through,
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
@@ -1637,7 +1731,9 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceCounting: inout [String],
+    extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1664,7 +1760,9 @@ extension Platform {
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
       coverageRegionCounter: &coverageRegionCounter,
       clashAvoidanceCounter: &clashAvoidanceCounter,
+      anonymousCounter: &anonymousCounter,
       extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+      extractedAnonymousFunctions: &extractedAnonymousFunctions,
       cleanUpCode: &cleanUpCode,
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1682,7 +1780,9 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceCounting: inout [String],
+    extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1705,7 +1805,9 @@ extension Platform {
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          anonymousCounter: &anonymousCounter,
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+          extractedAnonymousFunctions: &extractedAnonymousFunctions,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1721,6 +1823,7 @@ extension Platform {
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
           let call = self.call(
             to: action,
+            expectedPassedActionParameters: nil,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
@@ -1729,9 +1832,11 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &entriesInThisBranch.unused,
             extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
             isArgumentExtraction: true,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
             isThrough: action.passage == .through,
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
@@ -1761,7 +1866,9 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
+    extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1777,7 +1884,9 @@ extension Platform {
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
       coverageRegionCounter: &coverageRegionCounter,
       clashAvoidanceCounter: &clashAvoidanceCounter,
+      anonymousCounter: &anonymousCounter,
       extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+      extractedAnonymousFunctions: &extractedAnonymousFunctions,
       cleanUpCode: &cleanUpCode,
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1795,7 +1904,9 @@ extension Platform {
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
+    extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
@@ -1830,7 +1941,9 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
             cleanUpCode: &cleanUpCode,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
@@ -1847,6 +1960,7 @@ extension Platform {
           let typeName = source(for: actualResult, referenceLookup: referenceLookup)
           let call = self.call(
             to: action,
+            expectedPassedActionParameters: nil,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
@@ -1855,9 +1969,11 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
             extractedArgumentsForReferenceCounting: &entriesInThisBranch.unused,
             isArgumentExtraction: true,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
             isThrough: action.passage == .through,
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
@@ -1893,6 +2009,8 @@ extension Platform {
     coverageRegionCounter: inout Int,
     followingStatements: Array<StatementIntermediate>.SubSequence,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
+    extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     existingReferences: inout Set<String>,
@@ -1915,7 +2033,9 @@ extension Platform {
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
           clashAvoidanceCounter: &clashAvoidanceCounter,
+          anonymousCounter: &anonymousCounter,
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+          extractedAnonymousFunctions: &extractedAnonymousFunctions,
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: false,
@@ -1930,6 +2050,7 @@ extension Platform {
             var extractedArgumentsForReferenceCounting: [String] = []
             return self.call(
               to: reference,
+              expectedPassedActionParameters: nil,
               context: context,
               localLookup: localLookup,
               referenceLookup: referenceLookup,
@@ -1938,8 +2059,10 @@ extension Platform {
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
               clashAvoidanceCounter: &clashAvoidanceCounter,
+              anonymousCounter: &anonymousCounter,
               extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
               extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+              extractedAnonymousFunctions: &extractedAnonymousFunctions,
               isThrough: false,
               isDetachment: true,
               isDirectReturn: false,
@@ -1979,7 +2102,9 @@ extension Platform {
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: false,
@@ -2021,6 +2146,7 @@ extension Platform {
         contentsOf: self.statement(
           expression: call(
             to: action,
+            expectedPassedActionParameters: nil,
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
@@ -2029,8 +2155,10 @@ extension Platform {
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
             extractedArgumentsForReferenceCounting: &remainingExtractedArgumentsForReferenceCounting,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
             isThrough: false,
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
@@ -2166,6 +2294,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
+    extractedAnonymousFunctions: inout [String],
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode,
@@ -2185,6 +2315,8 @@ extension Platform {
         coverageRegionCounter: &coverageRegionCounter,
         followingStatements: statements[entryIndex...].dropFirst(),
         clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
@@ -2218,7 +2350,8 @@ extension Platform {
     mode: CompilationMode,
     isAbsorbedMember: Bool,
     hasBeenRelocated: Bool,
-    alreadyHandledNativeRequirements: inout Set<String>
+    alreadyHandledNativeRequirements: inout Set<String>,
+    anonymousCounter: inout Int
   ) -> UniqueDeclaration? {
     if action.isMemberWrapper {
       return nil
@@ -2295,12 +2428,15 @@ extension Platform {
     }
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
+    var extractedAnonymousFunctions: [String] = []
     let implementation = source(
       for: actionImplementation.statements,
       context: action,
       localLookup: [],
       coverageRegionCounter: &coverageRegionCounter,
       clashAvoidanceCounter: &clashAvoidanceCounter,
+      anonymousCounter: &anonymousCounter,
+      extractedAnonymousFunctions: &extractedAnonymousFunctions,
       referenceLookup: externalReferenceLookup.appending(
         action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
       ),
@@ -2321,7 +2457,8 @@ extension Platform {
       isAbsorbedMember: isAbsorbedMember,
       isOverride: isOverride,
       propertyInstead: isProperty,
-      initializerInstead: isInitializer
+      initializerInstead: isInitializer,
+      extractedDeclarations: extractedAnonymousFunctions
     )
   }
 
@@ -2338,35 +2475,41 @@ extension Platform {
 
   static func source(
     of test: TestIntermediate,
+    anonymousCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
     identifierIndex: inout [String: [String: Int]]
   ) -> String {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
+    var extractedAnonymousFunctions: [String] = []
+    let implementation = source(
+      for: test.statements.statements,
+      context: nil,
+      localLookup: [],
+      coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
+      anonymousCounter: &anonymousCounter,
+      extractedAnonymousFunctions: &extractedAnonymousFunctions,
+      referenceLookup: referenceLookup,
+      inliningArguments: [:],
+      mode: .testing,
+      indentationLevel: 0
+    )
     return actionDeclaration(
       name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex),
       parameters: "",
       returnSection: emptyReturnType.flatMap({ self.returnSection(with: $0, isProperty: false) }),
       accessModifier: nil,
       coverageRegistration: nil,
-      implementation: source(
-        for: test.statements.statements,
-        context: nil,
-        localLookup: [],
-        coverageRegionCounter: &coverageRegionCounter,
-        clashAvoidanceCounter: &clashAvoidanceCounter,
-        referenceLookup: referenceLookup,
-        inliningArguments: [:],
-        mode: .testing,
-        indentationLevel: 0
-      ),
+      implementation: implementation,
       parentType: nil,
       isStatic: false,
       isMutating: false,
       isAbsorbedMember: false,
       isOverride: false,
       propertyInstead: false,
-      initializerInstead: false
+      initializerInstead: false,
+      extractedDeclarations: extractedAnonymousFunctions
     ).full
   }
 
@@ -2453,6 +2596,7 @@ extension Platform {
     relocatedActions: inout Set<String>,
     alreadyHandledDeclarations: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
+    anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String {
     var result: [String] = []
@@ -2465,6 +2609,7 @@ extension Platform {
         mode: mode,
         relocatedActions: &relocatedActions,
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        anonymousCounter: &anonymousCounter,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
         if alreadyHandledDeclarations.insert(declaration).inserted {
@@ -2483,6 +2628,7 @@ extension Platform {
     relocatedActions: Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
     alreadyHandledActionDeclarations: inout Set<String>,
+    anonymousCounter: inout Int,
     identifierIndex: inout [String: [String: Int]]
   ) -> String {
     var result: [String] = []
@@ -2505,7 +2651,8 @@ extension Platform {
         isAbsorbedMember: false,
         hasBeenRelocated: relocatedActions
           .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
-        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements
+        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        anonymousCounter: &anonymousCounter
       ) {
         if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
           result.appendSeparatorLine()
@@ -2517,7 +2664,14 @@ extension Platform {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
         result.appendSeparatorLine()
-        result.append(source(of: test, referenceLookup: referenceLookup, identifierIndex: &identifierIndex))
+        result.append(
+          source(
+            of: test,
+            anonymousCounter: &anonymousCounter,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
+        )
       }
     }
     return result.joined(separator: "\n")
@@ -2531,6 +2685,7 @@ extension Platform {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
     var alreadyHandledDeclarations: Set<String> = []
     var alreadyHandledNativeRequirements: Set<String> = preexistingNativeRequirements
+    var anonymousCounter: Int = 0
 
     var result: [String] = []
 
@@ -2578,6 +2733,7 @@ extension Platform {
           relocatedActions: &relocatedActions,
           alreadyHandledDeclarations: &alreadyHandledDeclarations,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          anonymousCounter: &anonymousCounter,
           modulesToSearchForMembers: modules
         )
       )
@@ -2599,6 +2755,7 @@ extension Platform {
           relocatedActions: relocatedActions,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
           alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations,
+          anonymousCounter: &anonymousCounter,
           identifierIndex: &identifierIndex
         )
       )

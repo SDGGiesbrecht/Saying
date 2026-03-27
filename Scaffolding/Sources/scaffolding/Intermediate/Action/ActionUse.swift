@@ -6,6 +6,7 @@ struct ActionUse {
   var passage: ParameterPassage
   var explicitResultType: ParsedTypeReference?
   var resolvedResultType: ParsedTypeReference??
+  var rearrangedParameters: [UnicodeText] = []
   var narrowedResultTypes: [ParsedTypeReference?]?
 }
 
@@ -72,8 +73,13 @@ extension ActionUse {
     return ActionUse.construct(use.action).map { action in
       var annotated = action
       let type = use.type.map({ ParsedTypeReference($0.type) })
-      if use.type?.yieldArrow != nil {
-        annotated.explicitResultType = .action(parameters: [], returnValue: type)
+      if let actionPrefix = use.type?.actionPrefix {
+        var parameters: [ParsedTypeReference] = []
+        for parameter in actionPrefix.parameters?.parameters.parameters ?? [] {
+          annotated.rearrangedParameters.append(parameter.name.name())
+          parameters.append(ParsedTypeReference(parameter.type))
+        }
+        annotated.explicitResultType = .action(parameters: parameters, returnValue: type)
       } else {
         annotated.explicitResultType = type
       }

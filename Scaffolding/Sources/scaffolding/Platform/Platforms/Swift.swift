@@ -177,6 +177,9 @@ enum Swift: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func numberedParameter(position: Int, type: String?) -> String {
+    return "$\(position - 1)"
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
@@ -454,7 +457,8 @@ enum Swift: Platform {
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
-    initializerInstead: Bool
+    initializerInstead: Bool,
+    extractedDeclarations: [String]
   ) -> UniqueDeclaration {
     var access = accessModifier.map({ "\($0) " }) ?? ""
 
@@ -531,6 +535,18 @@ enum Swift: Platform {
       full: result.joined(separator: "\n"),
       uniquenessDefinition: uniquenessDefinition.joined(separator: "\n")
     )
+  }
+  static var needsFunctionLiteralsExtracted: Bool {
+    return false
+  }
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String,
+    wrapperName: String?,
+    returnType: String?
+  ) -> String {
+    return "{ \(passedFunction)(\(forFurtherIn)) }"
   }
 
   static var fileSettings: String? {

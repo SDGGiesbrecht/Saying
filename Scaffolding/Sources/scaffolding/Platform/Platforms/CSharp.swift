@@ -143,6 +143,9 @@ enum CSharp: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func numberedParameter(position: Int, type: String?) -> String {
+    return "p\(position)"
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     switch access {
@@ -457,7 +460,8 @@ enum CSharp: Platform {
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
-    initializerInstead: Bool
+    initializerInstead: Bool,
+    extractedDeclarations: [String]
   ) -> UniqueDeclaration {
     let access = isOverride ? "public " : accessModifier.map({ "\($0) " }) ?? "internal "
     let override = isOverride ? "override " : ""
@@ -510,6 +514,18 @@ enum CSharp: Platform {
       full: result.joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
     )
+  }
+  static var needsFunctionLiteralsExtracted: Bool {
+    return false
+  }
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String,
+    wrapperName: String?,
+    returnType: String?
+  ) -> String {
+    return "(\(fromOutside)) => \(passedFunction)(\(forFurtherIn))"
   }
 
   static var fileSettings: String? {

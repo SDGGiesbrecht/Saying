@@ -149,6 +149,14 @@ enum C: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func numberedParameter(position: Int, type: String?) -> String {
+    let name = "p\(position)"
+    if let type = type {
+      return "\(type) \(name)"
+    } else {
+      return name
+    }
+  }
 
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
@@ -259,7 +267,8 @@ enum C: Platform {
       isAbsorbedMember: false,
       isOverride: false,
       propertyInstead: false,
-      initializerInstead: false
+      initializerInstead: false,
+      extractedDeclarations: []
     ).full
   }
   static func thingDeclaration(
@@ -306,7 +315,8 @@ enum C: Platform {
           isAbsorbedMember: false,
           isOverride: false,
           propertyInstead: false,
-          initializerInstead: false
+          initializerInstead: false,
+          extractedDeclarations: []
         ).full,
         "",
         actionDeclaration(
@@ -322,7 +332,8 @@ enum C: Platform {
           isAbsorbedMember: false,
           isOverride: false,
           propertyInstead: false,
-          initializerInstead: false
+          initializerInstead: false,
+          extractedDeclarations: []
         ).full,
         "",
         actionDeclaration(
@@ -340,7 +351,8 @@ enum C: Platform {
           isAbsorbedMember: false,
           isOverride: false,
           propertyInstead: false,
-          initializerInstead: false
+          initializerInstead: false,
+          extractedDeclarations: []
         ).full,
       ])
     }
@@ -556,7 +568,8 @@ enum C: Platform {
     isAbsorbedMember: Bool,
     isOverride: Bool,
     propertyInstead: Bool,
-    initializerInstead: Bool
+    initializerInstead: Bool,
+    extractedDeclarations: [String]
   ) -> UniqueDeclaration {
     var result: [String] = [
       actionDeclarationBase(name: name, parameters: parameters, returnSection: returnSection),
@@ -575,9 +588,27 @@ enum C: Platform {
       "}",
     ])
     return UniqueDeclaration(
-      full: result.joined(separator: "\n"),
+      full: (extractedDeclarations + result).joined(separator: "\n"),
       uniquenessDefinition: uniquenessDefinition.joined(separator: "\n")
     )
+  }
+  static var needsFunctionLiteralsExtracted: Bool {
+    return true
+  }
+  static func wrap(
+    passedFunction: String,
+    rearrangingParametersFrom fromOutside: String,
+    to forFurtherIn: String,
+    wrapperName: String?,
+    returnType: String?
+  ) -> String {
+    let returnValue = returnType ?? "void"
+    return [
+      "\(returnValue) \(wrapperName!)(\(fromOutside))",
+      "{",
+      "\(indent)return \(passedFunction)(\(forFurtherIn));",
+      "}",
+    ].joined(separator: "\n")
   }
 
   static var fileSettings: String? {
