@@ -562,10 +562,17 @@ extension Node {
             ])
           ),
           Node(
+            name: "ActionReferencedOrLiteral",
+            kind: .alternates([
+              Alternate(name: "literal", type: "BracedStatementList"),
+              Alternate(name: "referenced", type: "Action"),
+            ])
+          ),
+          Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
               Child(name: "passage", type: "Passage", kind: .optional),
-              Child(name: "action", type: "Action", kind: .required),
+              Child(name: "action", type: "ActionReferencedOrLiteral", kind: .required),
               Child(name: "type", type: "TypeAnnotation", kind: .optional),
             ])
           ),
