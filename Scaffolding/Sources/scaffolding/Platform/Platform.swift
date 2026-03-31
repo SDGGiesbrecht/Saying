@@ -148,6 +148,12 @@ protocol Platform {
     extractedDeclarations: [String]
   ) -> UniqueDeclaration
   static var needsFunctionLiteralsExtracted: Bool { get }
+  static func functionLiteral(
+    assignedName: String?,
+    parameters: String,
+    returnType: String?,
+    implementation: [String]
+  ) -> String
   static func wrap(
     passedFunction: String,
     rearrangingParametersFrom fromOutside: String,
@@ -1070,35 +1076,52 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode
   ) -> String {
-    let parameters = reference.rearrangedParameters.map({ String($0) }).joined(separator: ", ")
-    var closure = [
-      "{ \(parameters) in"
-    ]
-    closure.append(
-      contentsOf: source(
-        for: actionLiteral.implementation.statements,
-        context: context,
-        localLookup: localLookup.appending(
-          actionLiteral.parameterDictionary(
-            rearrangedParameters: reference.rearrangedParameters,
-            explicitSignature: reference.explicitResultType!,
-            referenceLookup: referenceLookup
-          )
-        ),
-        coverageRegionCounter: &coverageRegionCounter,
-        clashAvoidanceCounter: &clashAvoidanceCounter,
-        anonymousCounter: &anonymousCounter,
-        extractedAnonymousFunctions: &extractedAnonymousFunctions,
-        referenceLookup: referenceLookup,
-        inliningArguments: inliningArguments,
-        mode: mode,
-        indentationLevel: 1
-      )
+    guard case .action(let passedActionParameters, let passedActionReturn) = reference.resolvedResultType!! else { fatalError() }
+    let parameters = zip(reference.rearrangedParameters, passedActionParameters)
+      .map({ name, type in
+        let typeSource = source(for: type, referenceLookup: referenceLookup)
+        return parameterDeclaration(label: nil, name: String(name), type: typeSource, isThrough: false)
+      }).joined(separator: ", ")
+    let returnType = passedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
+    let implementation = source(
+      for: actionLiteral.implementation.statements,
+      context: context,
+      localLookup: localLookup.appending(
+        actionLiteral.parameterDictionary(
+          rearrangedParameters: reference.rearrangedParameters,
+          explicitSignature: reference.explicitResultType!,
+          referenceLookup: referenceLookup
+        )
+      ),
+      coverageRegionCounter: &coverageRegionCounter,
+      clashAvoidanceCounter: &clashAvoidanceCounter,
+      anonymousCounter: &anonymousCounter,
+      extractedAnonymousFunctions: &extractedAnonymousFunctions,
+      referenceLookup: referenceLookup,
+      inliningArguments: inliningArguments,
+      mode: mode,
+      indentationLevel: 0
     )
-    closure.append(contentsOf: [
-      "}"
-    ])
-    return closure.joined(separator: "\n")
+    if needsFunctionLiteralsExtracted {
+      anonymousCounter += 1
+      let extractedName = "anonymous_\(anonymousCounter)"
+      extractedAnonymousFunctions.append(
+        functionLiteral(
+          assignedName: extractedName,
+          parameters: parameters,
+          returnType: returnType,
+          implementation: implementation
+        )
+      )
+      return extractedName
+    } else {
+      return functionLiteral(
+        assignedName: nil,
+        parameters: parameters,
+        returnType: returnType,
+        implementation: implementation
+      )
+    }
   }
 
   static func call(

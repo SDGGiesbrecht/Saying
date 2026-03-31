@@ -539,6 +539,23 @@ enum Swift: Platform {
   static var needsFunctionLiteralsExtracted: Bool {
     return false
   }
+  static func functionLiteral(
+    assignedName: String?,
+    parameters: String,
+    returnType: String?,
+    implementation: [String]
+  ) -> String {
+    var closure = [
+      "{ (\(parameters)) -> \(returnType ?? emptyReturnTypeForActionType) in",
+    ]
+    for line in implementation {
+      closure.append("\(indent)\(line)")
+    }
+    closure.append(contentsOf: [
+      "}"
+    ])
+    return closure.joined(separator: "\n")
+  }
   static func wrap(
     passedFunction: String,
     rearrangingParametersFrom fromOutside: String,
