@@ -595,6 +595,29 @@ enum C: Platform {
   static var needsFunctionLiteralsExtracted: Bool {
     return true
   }
+  static func functionLiteral(
+    assignedName: String?,
+    parameters: String,
+    returnType: String?,
+    implementation: [String]
+  ) -> String {
+    return actionDeclaration(
+      name: assignedName!,
+      parameters: parameters,
+      returnSection: returnSection(with: returnType ?? emptyReturnType!, isProperty: false),
+      accessModifier: nil,
+      coverageRegistration: nil,
+      implementation: implementation,
+      parentType: nil,
+      isStatic: false,
+      isMutating: false,
+      isAbsorbedMember: false,
+      isOverride: false,
+      propertyInstead: false,
+      initializerInstead: false,
+      extractedDeclarations: []
+    ).full
+  }
   static func wrap(
     passedFunction: String,
     rearrangingParametersFrom fromOutside: String,
@@ -602,13 +625,24 @@ enum C: Platform {
     wrapperName: String?,
     returnType: String?
   ) -> String {
-    let returnValue = returnType ?? "void"
-    return [
-      "\(returnValue) \(wrapperName!)(\(fromOutside))",
-      "{",
-      "\(indent)return \(passedFunction)(\(forFurtherIn));",
-      "}",
-    ].joined(separator: "\n")
+    return actionDeclaration(
+      name: wrapperName!,
+      parameters: fromOutside,
+      returnSection: returnSection(with: returnType ?? emptyReturnType!, isProperty: false),
+      accessModifier: nil,
+      coverageRegistration: nil,
+      implementation: [
+        "\(indent)return \(passedFunction)(\(forFurtherIn));",
+      ],
+      parentType: nil,
+      isStatic: false,
+      isMutating: false,
+      isAbsorbedMember: false,
+      isOverride: false,
+      propertyInstead: false,
+      initializerInstead: false,
+      extractedDeclarations: []
+    ).full
   }
 
   static var fileSettings: String? {
