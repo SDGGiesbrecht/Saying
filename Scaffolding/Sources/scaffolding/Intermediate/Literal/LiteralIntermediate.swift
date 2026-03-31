@@ -140,9 +140,9 @@ extension LiteralIntermediate {
     } else if literal.unicodeScalars.count <= 4,
       literal.unicodeScalars.allSatisfy({ LiteralIntermediate.digits.contains($0) }),
       !LiteralIntermediate.zeros.contains(literal.unicodeScalars.first!) {
-      guard let limit = maximum,
+      if let limit = maximum,
         let value = Int(literal),
-        value <= limit else {
+        value > limit {
         return false
       }
       return true
