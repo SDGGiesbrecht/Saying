@@ -1,0 +1,400 @@
+thing (clients)
+ [
+  [
+   English: A natural number stored in 8 bits of memory.
+  ]
+  [
+   English: See {platform fixed‐width natural number} for the ramifications of fixed‐with representations.
+  ]
+ ]
+ (
+  English: 8‐bit natural number
+ )
+ C: “uint8¤(5F)t” (“stdint”)
+ C♯: “byte”
+ Kotlin: “UByte”
+ Swift: “UInt8”
+
+action (clients)
+ [
+  test {verify (((zero: natural number) as 8‐bit natural number, skipping overflow check) is (zero: 8‐bit natural number))}
+ ]
+ (
+  English: (number: natural number) as 8‐bit natural number, skipping overflow check
+ )
+ 8‐bit natural number
+ C: “(uint8¤(5F)t)” number “”
+ C♯: “(byte)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUByte()”
+ Swift: “UInt8(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: integer) as 8‐bit natural number, skipping overflow check) is (zero: 8‐bit natural number))}
+ ]
+ (
+  English: (number: integer) as 8‐bit natural number, skipping overflow check
+ )
+ 8‐bit natural number
+ C: “(uint8¤(5F)t)” number “”
+ C♯: “(byte)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUByte()”
+ Swift: “UInt8(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: platform fixed‐width natural number) as 8‐bit natural number, skipping underflow check) is (zero: 8‐bit natural number))}
+ ]
+ (
+  English: (number: platform fixed‐width natural number) as 8‐bit natural number, skipping underflow check
+ )
+ 8‐bit natural number
+ C: “(uint8¤(5F)t)” number “”
+ C♯: “(byte)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUByte()”
+ Swift: “UInt8(” number “)”
+
+action (clients)
+ [
+  test {verify (((zero: platform fixed‐width integer) as 8‐bit natural number, skipping underflow check) is (zero: 8‐bit natural number))}
+ ]
+ (
+  English: (number: platform fixed‐width integer) as 8‐bit natural number, skipping underflow check
+ )
+ 8‐bit natural number
+ C: “(uint8¤(5F)t)” number “”
+ C♯: “(byte)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUByte()”
+ Swift: “UInt8(” number “)”
+
+use (clients)
+ general containers of (8‐bit natural number)
+ {
+  action (clients)
+   example
+   8‐bit natural number
+   {
+    ← zero
+   }
+ }
+
+use (clients)
+ comparison of (8‐bit natural number) for equality
+ {
+  action (clients)
+   (first: 8‐bit natural number) is (second: 8‐bit natural number)
+   truth value
+   C: “” first “ == ” second “”
+   C♯: “” first “ == ” second “”
+   JavaScript: “” first “ == ” second “”
+   Kotlin: “” first “ == ” second “”
+   Swift: «» first “ == ” second „“
+
+  action (clients)
+   (first: 8‐bit natural number) is not (second: 8‐bit natural number)
+   truth value
+   C: “” first “ != ” second “”
+   C♯: “” first “ != ” second “”
+   JavaScript: “” first “ != ” second “”
+   Kotlin: “” first “ != ” second “”
+   Swift: «» first “ != ” second „“
+
+  action (clients)
+   hash key (key: 8‐bit natural number) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part (hashing proxy of (key)) with (↓ hasher)
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: 8‐bit natural number)
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to comparison for equality
+   }
+
+  action (clients)
+   differing example
+   8‐bit natural number
+   {
+    ← greater example
+   }
+ }
+
+action (file)
+ [
+  test {ignore (hashing proxy of (zero: 8‐bit natural number))}
+ ]
+ hashing proxy of (number: 8‐bit natural number)
+ platform fixed‐width integer
+ C: “(unsigned)” number “”
+ C♯: “” number “.GetHashCode()”
+ JavaScript: “” number “”
+ Kotlin: “” number “.hashCode()”
+ Swift: “Int(” number “)”
+
+use (clients)
+ comparison of (8‐bit natural number) for order
+ {
+  action (clients)
+   (first: 8‐bit natural number) is less than (second: 8‐bit natural number)
+   truth value
+   C: “” first “ < ” second “”
+   C♯: “” first “ < ” second “”
+   JavaScript: “” first “ < ” second “”
+   Kotlin: “” first “ < ” second “”
+   Swift: «» first “ < ” second „“
+
+  action (clients)
+   (first: 8‐bit natural number) is greater than (second: 8‐bit natural number)
+   truth value
+   C: “” first “ > ” second “”
+   C♯: “” first “ > ” second “”
+   JavaScript: “” first “ > ” second “”
+   Kotlin: “” first “ > ” second “”
+   Swift: «» first “ > ” second „“
+
+  action (clients)
+   (first: 8‐bit natural number) is less than or equal to (second: 8‐bit natural number)
+   truth value
+   C: “” first “ <= ” second “”
+   C♯: “” first “ <= ” second “”
+   JavaScript: “” first “ <= ” second “”
+   Kotlin: “” first “ <= ” second “”
+   Swift: «» first “ <= ” second „“
+
+  action (clients)
+   (first: 8‐bit natural number) is greater than or equal to (second: 8‐bit natural number)
+   truth value
+   C: “” first “ >= ” second “”
+   C♯: “” first “ >= ” second “”
+   JavaScript: “” first “ >= ” second “”
+   Kotlin: “” first “ >= ” second “”
+   Swift: «» first “ >= ” second „“
+
+  action (clients)
+   greater example
+   8‐bit natural number
+   {
+    ← one
+   }
+ }
+
+use (clients)
+ any addition of (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: example augend
+   )
+   8‐bit natural number
+   {
+    ← example augend according to natural arithmetic
+   }
+
+  action (clients)
+   (
+    English: example addend
+   )
+   8‐bit natural number
+   {
+    ← example addend according to natural arithmetic
+   }
+
+  action (clients)
+   (
+    English: example sum
+   )
+   8‐bit natural number
+   {
+    ← example sum according to natural arithmetic
+   }
+ }
+
+use (clients)
+ limited addition of (platform fixed‐width natural number)
+ {
+  action (clients)
+   (
+    English: add (addend: 8‐bit natural number) to (cumulative sum: ↓ 8‐bit natural number) skipping overflow check
+   )
+   C: “” cumulative sum “ += ” addend “”
+   C♯: “” cumulative sum “ += ” addend “”
+   JavaScript: “” cumulative sum “ += ” addend “”
+   Kotlin: “” cumulative sum “ += ” addend “”
+   Swift: “” cumulative sum “ += ” addend “”
+
+  action (clients)
+   (
+    English: (augend: 8‐bit natural number) plus (addend: 8‐bit natural number), skipping overflow check
+   )
+   platform fixed‐width natural number
+   C: “” augend “ + ” addend “”
+   C♯: “” augend “ + ” addend “”
+   JavaScript: “” augend “ + ” addend “”
+   Kotlin: “” augend “ + ” addend “”
+   Swift: “” augend “ ¤(26)+ ” addend “”
+
+  action (clients)
+   (
+    English: can add (addend: 8‐bit natural number) to (augend: 8‐bit natural number)
+   )
+   truth value
+   {
+    ← can add (addend) to (augend) according to limited natural arithmetic, skipping negative checks
+   }
+ }
+
+use (clients)
+ any additive arithmetic with (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: additive identity
+   )
+   8‐bit natural number
+   Swift: “UInt8.zero”
+   {
+    ← zero
+   }
+ }
+
+use (clients)
+ limited subtraction with (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: subtract (subtrahend: 8‐bit natural number) from (value: ↓ 8‐bit natural number) skipping overflow check
+   )
+   C: “” value “ ¤(2D)= ” subtrahend “”
+   C♯: “” value “ ¤(2D)= ” subtrahend “”
+   JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+   Swift: “” value “ ¤(2D)= ” subtrahend “”
+
+  action (clients)
+   (
+    English: (minuend: 8‐bit natural number) minus (subtrahend: 8‐bit natural number), skipping overflow check
+   )
+   platform fixed‐width natural number
+   C: “” minuend “ ¤(2D) ” subtrahend “”
+   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+   Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+  action (clients)
+   (
+    English: can subtract (subtrahend: 8‐bit natural number) from (minuend: 8‐bit natural number)
+   )
+   truth value
+   {
+    ← can subtract (subtrahend) from (minuend) according to limited natural arithmetic, skipping negative checks
+   }
+ }
+
+use (clients)
+ limited additive arithmetic with (8‐bit natural number)
+ {
+ }
+
+use (clients)
+ any one‐dimensional additive arithmetic with (8‐bit natural number)
+ {
+ }
+
+use (clients)
+ limited one‐dimensional additive arithmetic with (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: greatest representable
+   )
+   8‐bit natural number
+   C: “UINT8¤(5F)MAX” (“stdint”)
+   C♯: “byte.MaxValue” (“System”)
+   Kotlin: “UByte.MAX¤(5F)VALUE”
+   Swift: “UInt8.max”
+   {
+    ← “255”
+   }
+
+  action (clients)
+   (
+    English: least representable
+   )
+   8‐bit natural number
+   C♯: “byte.MinValue” (“System”)
+   Kotlin: “UByte.MIN¤(5F)VALUE”
+   Swift: “UInt8.min”
+   {
+    ← “0”
+   }
+ }
+
+use (clients)
+ any natural arithmetic with (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: zero
+   )
+   8‐bit natural number
+   {
+    ← “0”
+   }
+
+  action (clients)
+   (
+    English: one
+   )
+   8‐bit natural number
+   {
+    ← “1”
+   }
+ }
+
+use (clients)
+ limited incrementation of (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: increment (counter: ↓ 8‐bit natural number) skipping overflow check
+   )
+   C: “++” counter “”
+   C♯: “++” counter “”
+   JavaScript: “++” counter “”
+   Kotlin: “++” counter “”
+   {
+    ← increment (↓ counter) skipping overflow check according to limited natural arithmetic
+   }
+ }
+
+use (clients)
+ limited decrementation of (8‐bit natural number)
+ {
+  action (clients)
+   (
+    English: decrement (counter: ↓ 8‐bit natural number) skipping underflow check
+   )
+   C: “¤(2D)¤(2D)” counter “”
+   C♯: “¤(2D)¤(2D)” counter “”
+   JavaScript: “¤(2D)¤(2D)” counter “”
+   Kotlin: “¤(2D)¤(2D)” counter “”
+   {
+    ← decrement (↓ counter) skipping underflow check according to limited decrementation
+   }
+ }
+
+use (clients)
+ limited natural arithmetic with (8‐bit natural number)
+ {
+ }

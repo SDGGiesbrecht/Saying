@@ -55,6 +55,28 @@ ability (clients)
    limited decrementation of (number)
  }
 
+extension
+ limited natural arithmetic with (number)
+ {
+  action (clients)
+   (
+    English: can add (addend: number) to (augend: number) according to limited natural arithmetic, skipping negative checks
+   )
+   truth value
+   {
+    ← (augend) is less than or equal to ((greatest representable: number) minus (addend), skipping overflow check)
+   }
+
+  action (clients)
+   (
+    English: can subtract (subtrahend: number) from (minuend: number) according to limited natural arithmetic, skipping negative checks
+   )
+   truth value
+   {
+    ← (subtrahend) is less than or equal to (minuend)
+   }
+ }
+
 thing (file)
  (
   English: minimal limited natural arithmetic example

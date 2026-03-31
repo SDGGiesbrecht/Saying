@@ -99,15 +99,20 @@ extension LiteralIntermediate {
         errors.append(.multipleScalars(source))
       }
     } else if type.names.contains(LiteralIntermediate.naturalNumberName)
+      || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName) {
+      if !validateNaturalNumber(literal: string, maximum: nil) {
+        errors.append(.notANaturalNumber(source))
+      }
+    } else if type.names.contains(LiteralIntermediate.naturalNumberName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthNaturalNumberName)
       || type.names.contains(LiteralIntermediate.eightBitNaturalNumberName) {
-      if !validateNaturalNumber(literal: string) {
+      if !validateNaturalNumber(literal: string, maximum: Int(UInt8.max)) {
         errors.append(.notANaturalNumber(source))
       }
     } else if type.names.contains(LiteralIntermediate.integerName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
       || type.names.contains(LiteralIntermediate.memoryOffsetName) {
-      if !validateInteger(literal: string) {
+      if !validateInteger(literal: string, maximum: nil, minimum: nil) {
         errors.append(.notAnInteger(source))
       }
     } else if type.names.contains(LiteralIntermediate.byteName) {
@@ -127,7 +132,7 @@ extension LiteralIntermediate {
   private static let digits: Set<Unicode.Scalar> = zeros.union([
     "1", "2", "3", "4", "5", "6", "7", "8", "9",
   ])
-  func validateNaturalNumber(literal: String) -> Bool {
+  func validateNaturalNumber(literal: String, maximum: Int?) -> Bool {
     if literal.unicodeScalars.isEmpty {
       return false
     } else if literal.unicodeScalars.elementsEqual("0".unicodeScalars) {
@@ -135,19 +140,26 @@ extension LiteralIntermediate {
     } else if literal.unicodeScalars.count <= 4,
       literal.unicodeScalars.allSatisfy({ LiteralIntermediate.digits.contains($0) }),
       !LiteralIntermediate.zeros.contains(literal.unicodeScalars.first!) {
+      guard let limit = maximum,
+        let value = Int(literal),
+        value <= limit else {
+        return false
+      }
       return true
     } else {
       // Larger numbers and other languages not implemented yet.
       return false
     }
   }
-  func validateInteger(literal: String) -> Bool {
+  func validateInteger(literal: String, maximum: Int?, minimum: Int?) -> Bool {
     var natural = literal
+    var isNegative = false
     // Other languages not implemented yet.
     if natural.unicodeScalars.first == "−" {
       natural.unicodeScalars.removeFirst()
+      isNegative = true
     }
-    return validateNaturalNumber(literal: natural)
+    return validateNaturalNumber(literal: natural, maximum: isNegative ? minimum.map({ -$0 }) : maximum)
   }
 
   private static let binaryDigits: Set<Unicode.Scalar> = ["0", "1"]

@@ -84,6 +84,20 @@ action (clients)
  Kotlin: “” number “.toLong()”
  Swift: “Int64(” number “)”
 
+action (clients)
+ [
+  test {verify (((zero: 8‐bit natural number) as integer) is (zero: integer))}
+ ]
+ (
+  English: (number: 8‐bit natural number) as integer
+ )
+ integer
+ C: “(intmax¤(5F)t)” number “”
+ C♯: “(long)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toLong()”
+ Swift: “Int64(” number “)”
+
 use (clients)
  general containers of (integer)
  {

@@ -57,6 +57,20 @@ action (clients)
  Kotlin: “” number “.toInt()”
  Swift: “Int(” number “)”
 
+action (clients)
+ [
+  test {verify (((zero: 8‐bit natural number) as platform fixed‐width integer) is (zero: platform fixed‐width integer))}
+ ]
+ (
+  English: (number: 8‐bit natural number) as platform fixed‐width integer
+ )
+ platform fixed‐width integer
+ C: “(int)” number “”
+ C♯: “(int)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toInt()”
+ Swift: “Int(” number “)”
+
 use (clients)
  general containers of (platform fixed‐width integer)
  {
