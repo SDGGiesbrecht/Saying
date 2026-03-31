@@ -525,7 +525,7 @@ enum CSharp: Platform {
     implementation: [String]
   ) -> String {
     var closure = [
-      "\(returnType ?? emptyReturnTypeForActionType) (\(parameters)) =>",
+      "(\(parameters)) =>",
       "{",
     ]
     for line in implementation {
