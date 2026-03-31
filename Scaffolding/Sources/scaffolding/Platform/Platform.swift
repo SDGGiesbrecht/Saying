@@ -1123,6 +1123,72 @@ extension Platform {
       )
     }
   }
+  static func rearrangeParametersIfNecessary(
+    actionTypeParameters: [ParsedTypeReference],
+    actionTypeReturn: ParsedTypeReference?,
+    rearrangementList: [UnicodeText],
+    referenceLookup: [ReferenceDictionary],
+    lookupAction: () -> ActionIntermediate?,
+    lookupActionOutputName: (ActionIntermediate?) -> UnicodeText?,
+    lookupCallOrder: (ActionIntermediate?, UnicodeText?) -> [UnicodeText],
+    lookupCallParameterTypes: (ActionIntermediate?, UnicodeText?) -> [ParsedTypeReference],
+    expectedPassedActionParameters: [ParameterIntermediate],
+    anonymousCounter: inout Int,
+    extractedAnonymousFunctions: inout [String],
+    directPass: (inout Int, inout [String]) -> String,
+    wrappedNode: (inout Int, inout [String]) -> String
+  ) -> String {
+    if actionTypeParameters.count <= 1 {
+      return directPass(&anonymousCounter, &extractedAnonymousFunctions)
+    } else {
+      if !rearrangementList.isEmpty {
+        let action = lookupAction()
+        let actionOutputName = lookupActionOutputName(action)
+        let callOrder = lookupCallOrder(action, actionOutputName)
+        let reordering = expectedPassedActionParameters.map({ parameter in
+          return callOrder.firstIndex(where: { parameter.names.contains($0) })!
+        })
+        let sorted = reordering.sorted()
+        if reordering == sorted {
+          return directPass(&anonymousCounter, &extractedAnonymousFunctions)
+        } else {
+          let fromParameterTypes = lookupCallParameterTypes(action, actionOutputName)
+          let from = sorted.map({ index in
+            return numberedParameter(
+              position: index + 1,
+              type: source(for: fromParameterTypes[index], referenceLookup: referenceLookup)
+            )
+          }).joined(separator: ", ")
+          let to = reordering.map({ numberedParameter(position: $0 + 1, type: nil) }).joined(separator: ", ")
+          let returnType = actionTypeReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
+          if needsFunctionLiteralsExtracted {
+            anonymousCounter += 1
+            let wrapperName = "anonymous_\(anonymousCounter)"
+            extractedAnonymousFunctions.append(
+              wrap(
+                passedFunction: wrappedNode(&anonymousCounter, &extractedAnonymousFunctions),
+                rearrangingParametersFrom: from,
+                to: to,
+                wrapperName: wrapperName,
+                returnType: returnType
+              )
+            )
+            return wrapperName
+          } else {
+            return wrap(
+              passedFunction: wrappedNode(&anonymousCounter, &extractedAnonymousFunctions),
+              rearrangingParametersFrom: from,
+              to: to,
+              wrapperName: nil,
+              returnType: returnType
+            )
+          }
+        }
+      } else {
+        fatalError("Parameter rearrangement inference based on types has not been implemented yet.")
+      }
+    }
+  }
 
   static func call(
     to reference: ActionUse,
@@ -1180,18 +1246,49 @@ extension Platform {
       )
     }
     if let actionLiteral = reference.actionLiteral {
-      return pass(
-        actionLiteral: actionLiteral,
-        reference: reference,
-        localLookup: localLookup,
+      guard case .action(let assembledActionParameters, let assembledActionReturn) = reference.resolvedResultType!! else { fatalError() }
+      return rearrangeParametersIfNecessary(
+        actionTypeParameters: assembledActionParameters,
+        actionTypeReturn: assembledActionReturn,
+        rearrangementList: reference.rearrangedParameters,
         referenceLookup: referenceLookup,
-        context: context,
-        coverageRegionCounter: &coverageRegionCounter,
-        clashAvoidanceCounter: &clashAvoidanceCounter,
+        lookupAction: { nil },
+        lookupActionOutputName: { _ in nil },
+        lookupCallOrder: { _, _ in reference.rearrangedParameters },
+        lookupCallParameterTypes: { _, _ in assembledActionParameters },
+        expectedPassedActionParameters: expectedPassedActionParameters!,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
-        inliningArguments: inliningArguments,
-        mode: mode
+        directPass: { anonymousCounter, extractedAnonymousFunctions in
+          return pass(
+            actionLiteral: actionLiteral,
+            reference: reference,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            context: context,
+            coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
+            inliningArguments: inliningArguments,
+            mode: mode
+          )
+        },
+        wrappedNode: { anonymousCounter, extractedAnonymousFunctions in
+          return pass(
+            actionLiteral: actionLiteral,
+            reference: reference,
+            localLookup: localLookup,
+            referenceLookup: referenceLookup,
+            context: context,
+            coverageRegionCounter: &coverageRegionCounter,
+            clashAvoidanceCounter: &clashAvoidanceCounter,
+            anonymousCounter: &anonymousCounter,
+            extractedAnonymousFunctions: &extractedAnonymousFunctions,
+            inliningArguments: inliningArguments,
+            mode: mode
+          )
+        }
       )
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
@@ -1628,45 +1725,36 @@ extension Platform {
         )
       if action.isReferenceWrapper {
         guard case .action(let returnedActionParameters, let returnedActionReturn) = bareAction.returnValue! else { fatalError() }
-        if returnedActionParameters.count <= 1 {
-          let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
-          return "\(prefix)\(name)"
-        } else {
-          if !reference.rearrangedParameters.isEmpty {
+        return rearrangeParametersIfNecessary(
+          actionTypeParameters: returnedActionParameters,
+          actionTypeReturn: returnedActionReturn,
+          rearrangementList: reference.rearrangedParameters,
+          referenceLookup: referenceLookup,
+          lookupAction: {
             let bareIdentifier = bareAction.names.identifier()
-            let callAction = referenceLookup.lookupAction(bareIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
-            let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
-            let callOrder = order(reference.rearrangedParameters, for: callAction.parameters.reordering(from: reference.actionName, to: outputName))
-            let reordering = expectedPassedActionParameters!.map({ parameter in
-              return callOrder.firstIndex(where: { parameter.names.contains($0) })!
-            })
-            let sorted = reordering.sorted()
-            if reordering == sorted {
-              let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
-              return "\(prefix)\(name)"
-            } else {
-              let fromParameters = callAction.parameters.ordered(for: outputName)
-              let from = sorted.map({ index in
-                return numberedParameter(
-                  position: index + 1,
-                  type: source(for: fromParameters[index].type, referenceLookup: referenceLookup)
-                )
-              }).joined(separator: ", ")
-              let to = reordering.map({ numberedParameter(position: $0 + 1, type: nil) }).joined(separator: ", ")
-              let returnType = returnedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
-              if needsFunctionLiteralsExtracted {
-                anonymousCounter += 1
-                let wrapperName = "anonymous_\(anonymousCounter)"
-                extractedAnonymousFunctions.append(wrap(passedFunction: name, rearrangingParametersFrom: from, to: to, wrapperName: wrapperName, returnType: returnType))
-                return wrapperName
-              } else {
-                return wrap(passedFunction: name, rearrangingParametersFrom: from, to: to, wrapperName: nil, returnType: returnType)
-              }
-            }
-          } else {
-            fatalError("Parameter rearrangement inference based on types has not been implemented yet.")
-          }
-        }
+            return referenceLookup.lookupAction(bareIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
+          },
+          lookupActionOutputName: { referencedAction in
+            return nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
+          },
+          lookupCallOrder: { referencedAction, outputName in
+            return order(
+              reference.rearrangedParameters,
+              for: referencedAction!.parameters.reordering(from: reference.actionName, to: outputName!)
+            )
+          },
+          lookupCallParameterTypes: { referencedAction, outputName in
+            return referencedAction!.parameters.ordered(for: outputName!).map({ $0.type })
+          },
+          expectedPassedActionParameters: expectedPassedActionParameters!,
+          anonymousCounter: &anonymousCounter,
+          extractedAnonymousFunctions: &extractedAnonymousFunctions,
+          directPass: { _, _ in
+            let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
+            return "\(prefix)\(name)"
+          },
+          wrappedNode: { _, _ in name }
+        )
       } else {
         var argumentsArray: [String] = []
         let outputName = nativeNameDeclaration(of: action) ?? bareAction.names.identifier()

@@ -61,6 +61,9 @@ action
   test {verify ((exercise parameter matching by doing ({
    ← (minuend) − (subtrahend)
   }: (minuend: integer) (subtrahend: integer) → integer)) is (“1”: integer))}
+  test {verify ((exercise parameter matching by doing ({
+   ← (minuend) − (subtrahend)
+  }: (subtrahend: integer) (minuend: integer) → integer)) is (“1”: integer))}
  ]
  (
   English: exercise parameter matching by doing (somehow compute (minuend: integer) minus (subtrahend: integer): → integer)
