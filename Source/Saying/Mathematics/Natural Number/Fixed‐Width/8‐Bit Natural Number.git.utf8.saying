@@ -220,7 +220,7 @@ use (clients)
  }
 
 use (clients)
- limited addition of (platform fixed‐width natural number)
+ limited addition of (8‐bit natural number)
  {
   action (clients)
    (
@@ -236,7 +236,7 @@ use (clients)
    (
     English: (augend: 8‐bit natural number) plus (addend: 8‐bit natural number), skipping overflow check
    )
-   platform fixed‐width natural number
+       8‐bit natural number
    C: “” augend “ + ” addend “”
    C♯: “” augend “ + ” addend “”
    JavaScript: “” augend “ + ” addend “”
@@ -284,7 +284,7 @@ use (clients)
    (
     English: (minuend: 8‐bit natural number) minus (subtrahend: 8‐bit natural number), skipping overflow check
    )
-   platform fixed‐width natural number
+       8‐bit natural number
    C: “” minuend “ ¤(2D) ” subtrahend “”
    C♯: “” minuend “ ¤(2D) ” subtrahend “”
    JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
