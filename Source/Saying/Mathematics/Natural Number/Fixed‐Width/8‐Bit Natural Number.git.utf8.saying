@@ -243,8 +243,10 @@ use (clients)
    C: “” cumulative sum “ += ” addend “”
    C♯: “” cumulative sum “ += ” addend “”
    JavaScript: “” cumulative sum “ += ” addend “”
-   Kotlin: “” cumulative sum “ += ” addend “”
    Swift: “” cumulative sum “ += ” addend “”
+   {
+    change (↓ cumulative sum) to ((cumulative sum) plus (addend), skipping overflow check)
+   }
 
   action (clients)
    (
@@ -305,8 +307,10 @@ use (clients)
    C: “” value “ ¤(2D)= ” subtrahend “”
    C♯: “” value “ ¤(2D)= ” subtrahend “”
    JavaScript: “” value “ ¤(2D)= ” subtrahend “”
-   Kotlin: “” value “ ¤(2D)= ” subtrahend “”
    Swift: “” value “ ¤(2D)= ” subtrahend “”
+   {
+    change (↓ value) to ((value) minus (subtrahend), skipping overflow check)
+   }
 
   action (clients)
    (
