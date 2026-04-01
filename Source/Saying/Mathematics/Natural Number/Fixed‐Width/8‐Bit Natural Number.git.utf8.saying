@@ -45,10 +45,10 @@ action (clients)
 
 action (clients)
  [
-  test {verify (((zero: platform fixed‐width natural number) as 8‐bit natural number, skipping underflow check) is (zero: 8‐bit natural number))}
+  test {verify (((zero: platform fixed‐width natural number) as 8‐bit natural number, skipping overflow check) is (zero: 8‐bit natural number))}
  ]
  (
-  English: (number: platform fixed‐width natural number) as 8‐bit natural number, skipping underflow check
+  English: (number: platform fixed‐width natural number) as 8‐bit natural number, skipping overflow check
  )
  8‐bit natural number
  C: “(uint8¤(5F)t)” number “”
@@ -219,6 +219,20 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {verify ((if most efficient, (example augend: 8‐bit natural number) plus (example addend: 8‐bit natural number) by widening, skipping overflow check) is (example sum: platform fixed‐width natural number))}
+ ]
+ (
+  English: if most efficient, (augend: 8‐bit natural number) plus (addend: 8‐bit natural number) by widening, skipping overflow check
+ )
+ platform fixed‐width natural number
+ JavaScript: “” augend “ + ” addend “”
+ Kotlin: “” augend “ + ” addend “”
+ {
+  ← ((augend) as platform fixed‐width natural number) plus ((addend) as platform fixed‐width natural number), skipping overflow check
+ }
+
 use (clients)
  limited addition of (8‐bit natural number)
  {
@@ -236,12 +250,12 @@ use (clients)
    (
     English: (augend: 8‐bit natural number) plus (addend: 8‐bit natural number), skipping overflow check
    )
-       8‐bit natural number
-   C: “” augend “ + ” addend “”
-   C♯: “” augend “ + ” addend “”
+   8‐bit natural number
    JavaScript: “” augend “ + ” addend “”
-   Kotlin: “” augend “ + ” addend “”
    Swift: “” augend “ ¤(26)+ ” addend “”
+   {
+    ← (if most efficient, (augend) plus (addend) by widening, skipping overflow check) as 8‐bit natural number, skipping overflow check
+   }
 
   action (clients)
    (
@@ -267,6 +281,20 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {verify ((if most efficient, (example sum: 8‐bit natural number) minus (example addend: 8‐bit natural number) by widening, skipping overflow check) is (example augend: platform fixed‐width natural number))}
+ ]
+ (
+  English: if most efficient, (minuend: 8‐bit natural number) minus (subtrahend: 8‐bit natural number) by widening, skipping overflow check
+ )
+ platform fixed‐width natural number
+ JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+ Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+ {
+  ← ((minuend) as platform fixed‐width natural number) minus ((subtrahend) as platform fixed‐width natural number), skipping overflow check
+ }
+
 use (clients)
  limited subtraction with (8‐bit natural number)
  {
@@ -284,12 +312,12 @@ use (clients)
    (
     English: (minuend: 8‐bit natural number) minus (subtrahend: 8‐bit natural number), skipping overflow check
    )
-       8‐bit natural number
-   C: “” minuend “ ¤(2D) ” subtrahend “”
-   C♯: “” minuend “ ¤(2D) ” subtrahend “”
+   8‐bit natural number
    JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
-   Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
    Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+   {
+    ← (if most efficient, (minuend) minus (subtrahend) by widening, skipping overflow check) as 8‐bit natural number, skipping overflow check
+   }
 
   action (clients)
    (
