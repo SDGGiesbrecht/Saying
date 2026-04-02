@@ -452,7 +452,11 @@ enum Kotlin: Platform {
     wrapperName: String?,
     returnType: String?
   ) -> String {
-    return "{ \(fromOutside) -> \(passedFunction)(\(forFurtherIn)) }"
+    var pass = passedFunction
+    if pass.scalars.contains(where: { !allowedIdentifierContinuationCharacters.contains($0) }) {
+      pass = "(\(pass))"
+    }
+    return "{ \(fromOutside) -> \(pass)(\(forFurtherIn)) }"
   }
 
   static var fileSettings: String? {
