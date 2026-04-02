@@ -602,6 +602,7 @@ enum Swift: Platform {
     "extension UInt64: Comparable {}",
     "extension UInt64: Equatable {}",
     "extension UInt64: Hashable {}",
+    "extension UInt8: Comparable {}",
     "extension UInt8: Equatable {}",
     "extension UInt8: Hashable {}",
     "extension Unicode.Scalar: Equatable {}",
