@@ -435,13 +435,13 @@ enum Kotlin: Platform {
       returnSection = section
     }
     var closure = [
-      "fun(\(parameters))\(returnSection) {",
+      "(fun(\(parameters))\(returnSection) {",
     ]
     for line in implementation {
       closure.append("\(indent)\(line)")
     }
     closure.append(contentsOf: [
-      "}"
+      "})"
     ])
     return closure.joined(separator: "\n")
   }
@@ -452,11 +452,7 @@ enum Kotlin: Platform {
     wrapperName: String?,
     returnType: String?
   ) -> String {
-    var pass = passedFunction
-    if pass.scalars.contains(where: { !allowedIdentifierContinuationCharacters.contains($0) }) {
-      pass = "(\(pass))"
-    }
-    return "{ \(fromOutside) -> \(pass)(\(forFurtherIn)) }"
+    return "{ \(fromOutside) -> \(passedFunction)(\(forFurtherIn)) }"
   }
 
   static var fileSettings: String? {
