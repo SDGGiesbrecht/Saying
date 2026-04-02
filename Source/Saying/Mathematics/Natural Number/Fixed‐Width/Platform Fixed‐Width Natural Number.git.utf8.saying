@@ -63,6 +63,20 @@ action (clients)
  Kotlin: “” number “.toUInt()”
  Swift: “UInt(” number “)”
 
+action (clients)
+ [
+  test {verify (((zero: 8‐bit natural number) as platform fixed‐width natural number) is (zero: platform fixed‐width natural number))}
+ ]
+ (
+  English: (number: 8‐bit natural number) as platform fixed‐width natural number
+ )
+ platform fixed‐width natural number
+ C: “(unsigned)” number “”
+ C♯: “(uint)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toUInt()”
+ Swift: “UInt(” number “)”
+
 use (clients)
  general containers of (platform fixed‐width natural number)
  {
@@ -241,7 +255,7 @@ use (clients)
    )
    truth value
    {
-    ← (augend) is less than or equal to ((greatest representable: platform fixed‐width natural number) minus (addend), skipping overflow check)
+    ← can add (addend) to (augend) according to limited natural arithmetic, skipping negative checks
    }
  }
 
@@ -289,7 +303,7 @@ use (clients)
    )
    truth value
    {
-    ← (subtrahend) is less than or equal to (minuend)
+    ← can subtract (subtrahend) from (minuend) according to limited natural arithmetic, skipping negative checks
    }
  }
 

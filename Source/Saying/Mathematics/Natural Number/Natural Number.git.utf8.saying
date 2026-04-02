@@ -90,6 +90,20 @@ action (clients)
  Kotlin: “” number “.toULong()”
  Swift: “UInt64(” number “)”
 
+action (clients)
+ [
+  test {verify (((zero: 8‐bit natural number) as natural number) is (zero: natural number))}
+ ]
+ (
+  English: (number: 8‐bit natural number) as natural number
+ )
+ natural number
+ C: “(uintmax¤(5F)t)” number “”
+ C♯: “(ulong)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toULong()”
+ Swift: “UInt64(” number “)”
+
 use (clients)
  general containers of (natural number)
  {
