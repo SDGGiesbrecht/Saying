@@ -426,6 +426,7 @@ enum Kotlin: Platform {
   static func functionLiteral(
     assignedName: String?,
     parameters: String,
+    parameterTypes: String,
     returnType: String?,
     implementation: [String]
   ) -> String {
@@ -435,13 +436,13 @@ enum Kotlin: Platform {
       returnSection = section
     }
     var closure = [
-      "fun(\(parameters))\(returnSection) {",
+      "(fun(\(parameters))\(returnSection) {",
     ]
     for line in implementation {
       closure.append("\(indent)\(line)")
     }
     closure.append(contentsOf: [
-      "}"
+      "})"
     ])
     return closure.joined(separator: "\n")
   }
