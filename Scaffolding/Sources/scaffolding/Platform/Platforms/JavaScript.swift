@@ -371,13 +371,13 @@ enum JavaScript: Platform {
     implementation: [String]
   ) -> String {
     var closure = [
-      "(\(parameters)) => {",
+      "((\(parameters)) => {",
     ]
     for line in implementation {
       closure.append("\(indent)\(line)")
     }
     closure.append(contentsOf: [
-      "}"
+      "})"
     ])
     return closure.joined(separator: "\n")
   }
