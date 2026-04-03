@@ -606,6 +606,9 @@ enum Swift: Platform {
     "extension UInt8: Comparable {}",
     "extension UInt8: Equatable {}",
     "extension UInt8: Hashable {}",
+    "extension Unicode.CanonicalCombiningClass: Comparable {}",
+    "extension Unicode.CanonicalCombiningClass: Equatable {}",
+    "extension Unicode.CanonicalCombiningClass: Hashable {}",
     "extension Unicode.Scalar: Equatable {}",
     "extension Unicode.Scalar: Hashable {}",
   ]
