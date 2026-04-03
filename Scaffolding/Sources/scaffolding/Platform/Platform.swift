@@ -151,6 +151,7 @@ protocol Platform {
   static func functionLiteral(
     assignedName: String?,
     parameters: String,
+    parameterTypes: String,
     returnType: String?,
     implementation: [String]
   ) -> String
@@ -1077,10 +1078,11 @@ extension Platform {
     mode: CompilationMode
   ) -> String {
     guard case .action(let passedActionParameters, let passedActionReturn) = reference.resolvedResultType!! else { fatalError() }
-    let parameters = zip(reference.rearrangedParameters, passedActionParameters)
+    let parameterTypes = passedActionParameters.map({ source(for: $0, referenceLookup: referenceLookup) })
+    let parameterTypesList = parameterTypes.joined(separator: ", ")
+    let parameters = zip(reference.rearrangedParameters, parameterTypes)
       .map({ name, type in
-        let typeSource = source(for: type, referenceLookup: referenceLookup)
-        return parameterDeclaration(label: nil, name: String(name), type: typeSource, isThrough: false)
+        return parameterDeclaration(label: nil, name: String(name), type: type, isThrough: false)
       }).joined(separator: ", ")
     let returnType = passedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
     let implementation = source(
@@ -1109,6 +1111,7 @@ extension Platform {
         functionLiteral(
           assignedName: extractedName,
           parameters: parameters,
+          parameterTypes: parameterTypesList,
           returnType: returnType,
           implementation: implementation
         )
@@ -1118,6 +1121,7 @@ extension Platform {
       return functionLiteral(
         assignedName: nil,
         parameters: parameters,
+        parameterTypes: parameterTypesList,
         returnType: returnType,
         implementation: implementation
       )

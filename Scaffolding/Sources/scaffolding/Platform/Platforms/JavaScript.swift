@@ -366,6 +366,7 @@ enum JavaScript: Platform {
   static func functionLiteral(
     assignedName: String?,
     parameters: String,
+    parameterTypes: String,
     returnType: String?,
     implementation: [String]
   ) -> String {
