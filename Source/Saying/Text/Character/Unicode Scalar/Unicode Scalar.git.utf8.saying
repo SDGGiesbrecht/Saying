@@ -193,3 +193,13 @@ use (clients)
     ← wrap (differing example: Unicode scalar) into optional
    }
  }
+
+action (clients)
+ (
+  English: combining class of (scalar: Unicode scalar)
+  Swift: var (self: [scalar]).combiningClass
+ )
+ Unicode combining class
+ {
+  ← Unicode combining class with value (canonical combining class of ((numerical value) of (scalar)))
+ }

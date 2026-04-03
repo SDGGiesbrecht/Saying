@@ -1,0 +1,215 @@
+thing (clients)
+ (
+  English: Unicode combining class
+ )
+ Swift: “Unicode.CanonicalCombiningClass”
+ {
+  part (clients/nowhere)
+   [
+    test {verify (((numerical value) of (Unicode combining class with value (“0”: 8‐bit natural number))) is (“0”: 8‐bit natural number))}
+   ]
+   (
+    English: numerical value
+   )
+   8‐bit natural number
+   Swift: “” . “.rawValue”
+ }
+
+action (clients)
+ (
+  English: Unicode combining class with value (numerical value: 8‐bit natural number)
+ )
+ Unicode combining class
+ Swift: “Unicode.CanonicalCombiningClass(rawValue: ” numerical value “)”
+ create
+
+use (clients)
+ general containers of (Unicode combining class)
+ {
+  action (clients)
+   example
+   Unicode combining class
+   {
+    ← 0
+   }
+ }
+
+use (clients)
+ comparison of (Unicode combining class) for equality
+ {
+  action (clients)
+   (first: Unicode combining class) is (second: Unicode combining class)
+   truth value
+   Swift: “” first “ == ” second “”
+   {
+    ← ((numerical value) of (first)) is ((numerical value) of (second))
+   }
+
+  action (clients)
+   (first: Unicode combining class) is not (second: Unicode combining class)
+   truth value
+   Swift: “” first “ != ” second “”
+   {
+    ← (first) is not (second) according to comparison for equality
+   }
+
+  action (clients)
+   hash key (key: Unicode combining class) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash part ((numerical value) of (key)) with (↓ hasher)
+   }
+
+  action (clients)
+   differing example
+   Unicode combining class
+   {
+    ← greater example
+   }
+ }
+
+use (clients)
+ comparison of (Unicode combining class) for order
+ {
+  action (clients)
+   (first: Unicode combining class) is less than (second: Unicode combining class)
+   truth value
+   Swift: “” first “ < ” second “”
+   {
+    ← ((numerical value) of (first)) is less than ((numerical value) of (second))
+   }
+
+  action (clients)
+   (first: Unicode combining class) is greater than (second: Unicode combining class)
+   truth value
+   Swift: “” first “ > ” second “”
+   {
+    ← (first) is greater than (second) according to comparison for order
+   }
+
+  action (clients)
+   (first: Unicode combining class) is less than or equal to (second: Unicode combining class)
+   truth value
+   Swift: “” first “ <= ” second “”
+   {
+    ← (first) is less than or equal to (second) according to comparison for order
+   }
+
+  action (clients)
+   (first: Unicode combining class) is greater than or equal to (second: Unicode combining class)
+   truth value
+   Swift: “” first “ >= ” second “”
+   {
+    ← (first) is greater than or equal to (second) according to comparison for order
+   }
+
+  action (clients)
+   greater example
+   Unicode combining class
+   {
+    ← Unicode combining class with value (“1”: 8‐bit natural number)
+   }
+ }
+
+action (clients)
+ (
+  English: zero
+  English +: 0
+  हिन्दी: शून्य
+  हिन्दी +: ०
+  español: cero
+  español +: 0
+  العربية: صفر
+  العربية +: ٠
+  português: zero
+  português +: 0
+  русский: ноль
+  русский +: 0
+  français : zéro
+  français + : 0
+  Deutsch: null
+  Deutsch: 0
+  tiếng Việt: không
+  tiếng Việt +: 0
+  Türkçe: sıfır
+  Türkçe +: 0
+  italiano: zero
+  italiano +: 0
+  فارسی: صفر
+  فارسی +: ۰
+  polski: zero
+  polski +: 0
+  oʻzbekcha: nol
+  oʻzbekcha +: 0
+  українська: нуль
+  українська +: 0
+  Nederlands: nul
+  Nederlands +: 0
+  اردو: صفر
+  اردو +: ۰
+  română: zero
+  română +: 0
+  қазақша: нөл
+  қазақша +: 0
+  ελληνικά: μηδέν
+  ελληνικά +: 0
+  svenska: noll
+  svenska +: 0
+  azərbaycanca: sıfır
+  azərbaycanca +: 0
+  čeština: nula
+  čeština +: 0
+  Afrikaans: nul
+  Afrikaans +: 0
+  català: zero
+  català +: 0
+  magyar: nulla
+  magyar +: 0
+  тоҷикӣ: сифр
+  тоҷикӣ +: 0
+  српски: нула
+  српски +: 0
+  עברית: אפס
+  עברית +: 0
+  dansk: nul
+  dansk +: 0
+  norsk: null
+  norsk +: 0
+  suomi: nolla
+  suomi +: 0
+  български: нула
+  български +: 0
+  shqip: zero
+  shqip +: 0
+  кыргызча: нөл
+  кыргызча +: 0
+  slovenčina: nula
+  slovenčina +: 0
+  hrvatski: nula
+  hrvatski +: 0
+  беларуская: нуль
+  беларуская +: 0
+  հայերեն: զրո
+  հայերեն +: 0
+  ქართული: ნული
+  ქართული +: 0
+  lietuvių: nulis
+  lietuvių +: 0
+  slovenščina: nič
+  slovenščina +: 0
+  bosanski: nula
+  bosanski +: 0
+  македонски: нула
+  македонски +: 0
+  latviešu +: nulle
+  latviešu: 0
+  eesti +: null
+  eesti: 0
+  íslenska +: núll
+  íslenska: 0
+ )
+ Unicode combining class
+ Swift: “.notReordered”
+ {
+  ← Unicode combining class with value (“0”: 8‐bit natural number)
+ }

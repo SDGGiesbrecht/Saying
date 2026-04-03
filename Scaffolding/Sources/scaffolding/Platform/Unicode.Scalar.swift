@@ -1,7 +1,7 @@
 extension Unicode.Scalar {
   
   var isVulnerableToNormalization: Bool {
-    return properties.canonicalCombiningClass != .notReordered
+    return combiningClass != .notReordered
       || isDecomposableInNFKD
   }
 }
