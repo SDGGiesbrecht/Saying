@@ -164,8 +164,8 @@ extension ActionUseArgument {
   func coverageSubregions(counter: inout Int) -> [Int] {
     var list: [Int] = []
     switch self {
-    case .action:
-      break
+    case .action(let action):
+      return action.coverageSubregions(counter: &counter)
     case .flow(let statements):
       counter += 1
       if statements.statements.first?.isDeadEnd != true {

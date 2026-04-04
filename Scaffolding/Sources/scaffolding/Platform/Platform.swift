@@ -1070,6 +1070,7 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     context: ActionIntermediate?,
+    contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -1085,24 +1086,34 @@ extension Platform {
         return parameterDeclaration(label: nil, name: String(name), type: type, isThrough: false)
       }).joined(separator: ", ")
     let returnType = passedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
-    let implementation = source(
-      for: actionLiteral.implementation.statements,
-      context: context,
-      localLookup: localLookup.appending(
-        actionLiteral.parameterDictionary(
-          rearrangedParameters: reference.rearrangedParameters,
-          explicitSignature: reference.explicitResultType!,
-          referenceLookup: referenceLookup
-        )
-      ),
-      coverageRegionCounter: &coverageRegionCounter,
-      clashAvoidanceCounter: &clashAvoidanceCounter,
-      anonymousCounter: &anonymousCounter,
-      extractedAnonymousFunctions: &extractedAnonymousFunctions,
-      referenceLookup: referenceLookup,
-      inliningArguments: inliningArguments,
-      mode: mode,
-      indentationLevel: 0
+    var implementation: [String] = []
+    if let coverage = flowCoverageRegistration(
+        contextCoverageIdentifier: contextCoverageIdentifier,
+        coverageRegionCounter: &coverageRegionCounter,
+        statements: actionLiteral.implementation.statements[...]
+    ) {
+      implementation.append(coverage)
+    }
+    implementation.append(
+      contentsOf: source(
+        for: actionLiteral.implementation.statements,
+        context: context,
+        localLookup: localLookup.appending(
+          actionLiteral.parameterDictionary(
+            rearrangedParameters: reference.rearrangedParameters,
+            explicitSignature: reference.explicitResultType!,
+            referenceLookup: referenceLookup
+          )
+        ),
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
+        referenceLookup: referenceLookup,
+        inliningArguments: inliningArguments,
+        mode: mode,
+        indentationLevel: 0
+      )
     )
     if needsFunctionLiteralsExtracted {
       anonymousCounter += 1
@@ -1270,6 +1281,7 @@ extension Platform {
             localLookup: localLookup,
             referenceLookup: referenceLookup,
             context: context,
+            contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -1285,6 +1297,7 @@ extension Platform {
             localLookup: localLookup,
             referenceLookup: referenceLookup,
             context: context,
+            contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
