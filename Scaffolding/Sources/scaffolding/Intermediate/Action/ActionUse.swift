@@ -431,7 +431,8 @@ extension ActionUse {
 extension ActionUse {
   func coverageSubregions(counter: inout Int) -> [Int] {
     if let action = actionLiteral {
-      return action.implementation.coverageSubregions(counter: &counter)
+      counter += 1
+      return [counter] + action.implementation.coverageSubregions(counter: &counter)
     } else {
       return arguments.flatMap { $0.coverageSubregions(counter: &counter) }
     }
