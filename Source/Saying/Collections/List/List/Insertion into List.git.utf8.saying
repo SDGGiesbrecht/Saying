@@ -155,6 +155,7 @@ extension
    ]
    (
     English: (list: list) with (range: range of (boundary)) replaced with (replacement: insertion) according to list insertion
+    Swift: (self: [list]).replacingSubrangeAccordingToListInsertion (subrange: [range]) with (newElements: [replacement])
    )
    list
    {
@@ -167,39 +168,12 @@ extension
    [
     test {
      let (• list: list) start as (non‐empty example: list)
-     append (insertion example: insertion) to (↓ list) according to list insertion
-    }
-   ]
-   (
-    English: append (appendix: insertion) to (list: ↓ list) according to list insertion
-   )
-   {
-    replace (from (end of (list)) to (end of (list))) in (↓ list) with (appendix)
-   }
-
-  action (clients)
-   [
-    test {ignore ((non‐empty example: list) with (insertion example: insertion) appended according to list insertion)}
-   ]
-   (
-    English: (list: list) with (appendix: insertion) appended according to list insertion
-   )
-   list
-   {
-    let (• copy: list) start as (list)
-    append (appendix) to (↓ copy)
-    ← copy
-   }
-
-  action (clients)
-   [
-    test {
-     let (• list: list) start as (non‐empty example: list)
      insert (insertion example: insertion) at (beginning of (list)) in (↓ list) according to list insertion
     }
    ]
    (
     English: insert (insertion: insertion) at (boundary: boundary) in (list: ↓ list) according to list insertion
+    Swift: (self: [list]).insertAccordingToListInsertion contentsOf (newElements: [insertion]) at (i: [boundary])
    )
    {
     replace (from (boundary) to (boundary)) in (↓ list) with (insertion)
@@ -214,6 +188,7 @@ extension
    ]
    (
     English: (list: list) with (insertion: insertion) inserted at (boundary: boundary) according to list insertion
+    Swift: (self: [list]).insertingAccordingToListInsertion contentsOf (newElements: [insertion]) at (boundary: [boundary])
    )
    list
    {
@@ -226,11 +201,42 @@ extension
    [
     test {
      let (• list: list) start as (non‐empty example: list)
+     append (insertion example: insertion) to (↓ list) according to list insertion
+    }
+   ]
+   (
+    English: append (appendix: insertion) to (list: ↓ list) according to list insertion
+    Swift: (self: [list]).appendAccordingToListInsertion contentsOf (newElements: [appendix])
+   )
+   {
+    replace (from (end of (list)) to (end of (list))) in (↓ list) with (appendix)
+   }
+
+  action (clients)
+   [
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) appended according to list insertion)}
+   ]
+   (
+    English: (list: list) with (appendix: insertion) appended according to list insertion
+    Swift: (self: [list]).appendingAccordingToListInsertion contentsOf (newElements: [appendix])
+   )
+   list
+   {
+    let (• copy: list) start as (list)
+    append (appendix) to (↓ copy)
+    ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
      prepend (insertion example: insertion) to (↓ list) according to list insertion
     }
    ]
    (
     English: prepend (prefix: insertion) to (list: ↓ list) according to list insertion
+    Swift: (self: [list]).prependAccordingToListInsertion contentsOf (newElements: [prefix])
    )
    {
     replace (from (beginning of (list)) to (beginning of (list))) in (↓ list) with (prefix)
@@ -242,6 +248,7 @@ extension
    ]
    (
     English: (list: list) with (prefix: insertion) prepended according to list insertion
+    Swift: (self: [list]).prependingAccordingToListInsertion contentsOf (newElements: [prefix])
    )
    list
    {
@@ -253,6 +260,7 @@ extension
   action (clients)
    (
     English: remove (range: range of (boundary)) from (list: ↓ list) according to list insertion
+    Swift: (self: [list]).removeSubrangeAccordingToListInsertion (bounds: [range])
    )
    {
     replace (range) in (↓ list) with (empty: list)

@@ -321,20 +321,21 @@ use (clients)
       if (((next class) is (zero: Unicode combining class)) or ((combining class of (previous)) is less than or equal to (next class))), {
        append ((scalars) of (appendix)) to (↓ (scalars) of (list))
       }, otherwise {
-       let (• stable before: Unicode scalar boundary) start as (end of (list))
-       while (last in (list) is reordrant), {
-        backtrack (↓ stable before) to previous in (list) skipping bounds check
+       let (• seam start: Unicode scalar boundary) start as (end of (list))
+       while (scalar before (seam start) in (list) is reordrant), {
+        backtrack (↓ seam start) to previous in (list) skipping bounds check
        }
-       let (• seam: Unicode scalars) start as (convert ((from (beginning of (list)) to (stable before)) in ((scalars) of (list))) into list)
-       remove (from (stable before) to (end of (list))) from (↓ list)
-       let (• stable after: Unicode scalar boundary) start as (beginning of (appendix))
-       while (first in (appendix) is reordrant), {
-        advance (↓ stable after) to next in (list) skipping bounds check
+       let (• seam overlap: range of (Unicode scalar boundary)) be (from (seam start) to (end of (list)))
+       let (• seam: Unicode scalars) start as (convert ((seam overlap) in ((scalars) of (list))) into list)
+       remove (seam overlap) from (↓ list)
+       let (• seam end: Unicode scalar boundary) start as (beginning of (appendix))
+       while (scalar after (seam end) in (appendix) is reordrant), {
+        advance (↓ seam end) to next in (appendix) skipping bounds check
        }
-       append ((from (beginning of (appendix)) to (stable after)) in ((scalars) of (appendix))) to (↓ seam)
+       append ((from (beginning of (appendix)) to (seam end)) in ((scalars) of (appendix))) to (↓ seam)
        decompose (↓ seam) according to compatibility decomposition
        append (seam) to (↓ (scalars) of (list))
-       append ((from (stable after) to (end of (appendix))) in ((scalars) of (appendix))) to (↓ (scalars) of (list))
+       append ((from (seam end) to (end of (appendix))) in ((scalars) of (appendix))) to (↓ (scalars) of (list))
       }
       ←
      }
@@ -363,24 +364,24 @@ use (clients)
 
 action (file)
  (
-  English: first in (text: Unicode text) is reordrant
+  English: scalar after (cursor: Unicode scalar boundary) in (text: Unicode text) is reordrant
  )
  truth value
  {
-  if (first in (text)) exists, unwrap it as (• first: Unicode scalar), {
-   ← (combining class of (first)) is not (zero: Unicode combining class)
+  if (index after (cursor) in (text)) exists, unwrap it as (• index: Unicode scalar index), {
+   ← (combining class of (entry at (index) in (text))) is not (zero: Unicode combining class)
   }
   ← false
  }
 
 action (file)
  (
-  English: last in (text: Unicode text) is reordrant
+  English: scalar before (cursor: Unicode scalar boundary) in (text: Unicode text) is reordrant
  )
  truth value
  {
-  if (last in (text)) exists, unwrap it as (• last: Unicode scalar), {
-   ← (combining class of (last)) is not (zero: Unicode combining class)
+  if (index before (cursor) in (text)) exists, unwrap it as (• index: Unicode scalar index), {
+   ← (combining class of (entry at (index) in (text))) is not (zero: Unicode combining class)
   }
   ← false
  }

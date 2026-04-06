@@ -150,6 +150,7 @@ ability (clients)
    ]
    (
     English: remove (range: range of (boundary)) from (list: ↓ list)
+    Swift: (self: [list]).removeSubrange (bounds: [range])
    )
 
   choice (clients)
@@ -161,6 +162,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (range: range of (boundary)) removed
+    Swift: (self: [list]).removingSubrange (bounds: [range])
    )
    list
    {

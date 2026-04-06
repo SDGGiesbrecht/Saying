@@ -291,6 +291,7 @@ ability (clients)
     Deutsch: leer
     français : vide
     ελληνικά: άδειος
+    Swift: var Self.empty
    )
    list
 
