@@ -248,6 +248,23 @@ action (unit)
  }
 
 action (unit)
+ [
+  test {
+   let (• offset: memory offset) start as (“1”: memory offset)
+   decrement (↓ offset) skipping underflow check
+   verify ((offset) is (“0”: memory offset))
+  }
+ ]
+ (
+  English: decrement (value: ↓ memory offset) skipping underflow check
+ )
+ C: “¤(2D)¤(2D)” value “”
+ C♯: “¤(2D)¤(2D)” value “”
+ JavaScript: “¤(2D)¤(2D)” value “”
+ Kotlin: “¤(2D)¤(2D)” value “”
+ Swift: “” value “ ¤(2D)= 1”
+
+action (unit)
  (
   English: (minuend: memory offset) minus (subtrahend: memory offset) skipping overflow check
  )

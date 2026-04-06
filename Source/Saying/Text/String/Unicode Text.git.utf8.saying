@@ -161,6 +161,23 @@ use (clients)
 
   action (clients)
    (
+    English: backtrack (cursor: ↓ Unicode scalar boundary) to previous in (list: Unicode text) skipping bounds check
+   )
+   {
+    backtrack (↓ cursor) to previous in ((scalars) of (list)) skipping bounds check
+   }
+
+  action (clients)
+   (
+    English: boundary before (cursor: Unicode scalar boundary) in (list: Unicode text) skipping bounds check
+   )
+   Unicode scalar boundary
+   {
+    ← boundary before (cursor) in ((scalars) of (list)) skipping bounds check
+   }
+
+  action (clients)
+   (
     English: entry at (index: Unicode scalar index) in (list: Unicode text)
    )
    Unicode scalar
@@ -184,6 +201,15 @@ use (clients)
    optional (Unicode scalar)
    {
     ← first in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: last in (list: Unicode text)
+   )
+   optional (Unicode scalar)
+   {
+    ← last in ((scalars) of (list))
    }
 
   action (clients)
@@ -289,16 +315,30 @@ use (clients)
     English: append (appendix: Unicode text) to (list: ↓ Unicode text)
    )
    {
-    if ((list) is empty), {
-     change (↓ list) to (appendix)
-     ←
-    }
     if (first in (appendix)) exists, unwrap it as (• next: Unicode scalar), {
-     append ((scalars) of (appendix)) to (↓ (scalars) of (list))
-     if ((combining class of (next)) is (zero: Unicode combining class)), {
+     if (last in (list)) exists, unwrap it as (• previous: Unicode scalar), {
+      let (• next class: Unicode combining class) be (combining class of (next))
+      if (((next class) is (zero: Unicode combining class)) or ((combining class of (previous)) is less than or equal to (next class))), {
+       append ((scalars) of (appendix)) to (↓ (scalars) of (list))
+      }, otherwise {
+       let (• stable before: Unicode scalar boundary) start as (end of (list))
+       while (last in (list) is reordrant), {
+        backtrack (↓ stable before) to previous in (list) skipping bounds check
+       }
+       let (• seam: Unicode scalars) start as (convert ((from (beginning of (list)) to (stable before)) in ((scalars) of (list))) into list)
+       remove (from (stable before) to (end of (list))) from (↓ list)
+       let (• stable after: Unicode scalar boundary) start as (beginning of (appendix))
+       while (first in (appendix) is reordrant), {
+        advance (↓ stable after) to next in (list) skipping bounds check
+       }
+       append ((from (beginning of (appendix)) to (stable after)) in ((scalars) of (appendix))) to (↓ seam)
+       decompose (↓ seam) according to compatibility decomposition
+       append (seam) to (↓ (scalars) of (list))
+       append ((from (stable after) to (end of (appendix))) in ((scalars) of (appendix))) to (↓ (scalars) of (list))
+      }
       ←
      }
-     decompose (↓ (scalars) of (list)) according to compatibility decomposition
+     change (↓ list) to (appendix)
     }
    }
 
@@ -319,6 +359,30 @@ use (clients)
    {
     ← example
    }
+ }
+
+action (file)
+ (
+  English: first in (text: Unicode text) is reordrant
+ )
+ truth value
+ {
+  if (first in (text)) exists, unwrap it as (• first: Unicode scalar), {
+   ← (combining class of (first)) is not (zero: Unicode combining class)
+  }
+  ← false
+ }
+
+action (file)
+ (
+  English: last in (text: Unicode text) is reordrant
+ )
+ truth value
+ {
+  if (last in (text)) exists, unwrap it as (• last: Unicode scalar), {
+   ← (combining class of (last)) is not (zero: Unicode combining class)
+  }
+  ← false
  }
 
 use (clients)

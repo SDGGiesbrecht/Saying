@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGText
 import SDGPersistence
 
 extension GitStyleSayingSource {
@@ -10,7 +9,7 @@ extension GitStyleSayingSource {
   }
 
   func parsed() -> SayingSource {
-    let source = StrictString(self.code)
+    let source = self.code
     var segmentStart: GitStyleParsingCursor? = nil
     var segments: [UnicodeSegment] = []
     let lastIndex = source.indices.last

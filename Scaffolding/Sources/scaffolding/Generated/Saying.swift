@@ -19,6 +19,10 @@ struct UnicodeText {
     return self.scalars.index(after: i)
   }
 
+  func index(before i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+    return self.scalars.index(before: i)
+  }
+
   subscript(_ position: String.UnicodeScalarView.Index) -> Unicode.Scalar {
     return self.scalars[position]
   }
@@ -47,6 +51,13 @@ struct UnicodeText {
       }
       self.scalars.decomposeAccordingToCompatibilityDecomposition()
     }
+  }
+
+  func boundary(beforeBoundary cursor: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
+    if cursor > self.startIndex {
+      return self.index(before: cursor)
+    }
+    return nil
   }
 
   var endIndex: String.UnicodeScalarView.Index {
@@ -321,6 +332,19 @@ struct UnicodeSegments {
       return UnicodeSegments.Boundary(segment_0020cursor, next_0020scalar)
     }
     fatalError()
+  }
+
+  func index(before i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
+    let segment_0020cursor: Int = i.segment
+    if let scalar_0020cursor = i.scalar {
+      let segment_0020list: [Unicode_0020segment] = self.segments
+      let segment: UnicodeText = segment_0020list[segment_0020cursor].source
+      if scalar_0020cursor == segment.startIndex {
+        return before_0020end_0020of_0020segment_0020before_0020_0028_0029_0020in_0020_0028_0029_002C_0020skipping_0020bounds_0020check_003Alist_0020boundary_003AUnicodeSegments_003AUnicodeSegments_002EBoundary(segment_0020cursor, self)
+      }
+      return UnicodeSegments.Boundary(segment_0020cursor, segment.boundary(beforeBoundary: scalar_0020cursor))
+    }
+    return before_0020end_0020of_0020segment_0020before_0020_0028_0029_0020in_0020_0028_0029_002C_0020skipping_0020bounds_0020check_003Alist_0020boundary_003AUnicodeSegments_003AUnicodeSegments_002EBoundary(segment_0020cursor, self)
   }
 
   subscript(_ position: UnicodeSegments.Boundary) -> Unicode.Scalar {
@@ -2526,6 +2550,13 @@ func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool
   return false
 }
 
+fileprivate func before_0020end_0020of_0020segment_0020before_0020_0028_0029_0020in_0020_0028_0029_002C_0020skipping_0020bounds_0020check_003Alist_0020boundary_003AUnicodeSegments_003AUnicodeSegments_002EBoundary(_ segment_0020cursor: Int, _ list: UnicodeSegments) -> UnicodeSegments.Boundary {
+  let segment_0020list: [Unicode_0020segment] = list.segments
+  let beginning_0020of_0020previous_0020segment: Int = segment_0020list.index(before: segment_0020cursor)
+  let segment: UnicodeText = segment_0020list[beginning_0020of_0020previous_0020segment].source
+  return UnicodeSegments.Boundary(beginning_0020of_0020previous_0020segment, segment.boundary(beforeBoundary: segment.endIndex))
+}
+
 fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: Git_2010style_0020parsing_0020cursor, _ segments: inout [Unicode_0020segment]) {
   if let start = beginning {
     var adjusted_0020offset: UInt64 = start.offset
@@ -2571,9 +2602,6 @@ extension UnicodeSegment {
 }
 
 extension UnicodeSegments.Boundary {
-  init(segment: Int, scalar: String.UnicodeScalarView.Index?) {
-    self.init(segment, scalar)
-  }
   var segmentIndex: Int {
     return segment
   }

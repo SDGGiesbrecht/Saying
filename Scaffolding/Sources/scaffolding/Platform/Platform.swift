@@ -467,8 +467,8 @@ extension Platform {
 
   static func nativeDeclarationIsInitializer(declaration: UnicodeText) -> Bool {
     let parsableDeclaration = StrictString(declaration)
-    if let initializer = initializerSuffix.map({ StrictString($0) }),
-      (parsableDeclaration.prefix(upTo: " ")?.contents ?? parsableDeclaration[...]).hasSuffix(initializer.literal()) {
+    if let initializer = initializerSuffix,
+       (parsableDeclaration.prefix(upTo: " ")?.contents ?? parsableDeclaration[...]).hasSuffix(StrictString(initializer).literal()) {
       return true
     }
     return false
@@ -494,7 +494,7 @@ extension Platform {
         name.starts(with: member) {
         return true
       }
-      if nativeDeclarationIsInitializer(declaration: UnicodeText(name)) {
+      if nativeDeclarationIsInitializer(declaration: name) {
         return true
       }
     }

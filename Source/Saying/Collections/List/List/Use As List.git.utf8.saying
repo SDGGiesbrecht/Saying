@@ -22,6 +22,28 @@ ability (clients)
    )
    index
 
+  choice (clients)
+   [
+    [
+     English: Returns the index of the entry ending at the specified boundary, without checking whether an entry actually exists at that position.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {index before () in ()} instead.
+    ]
+    [
+     English: Skipping the bounds check can also be more efficient when the expected index is already known from context to be valid. However, the caller takes responsibility for the logical soundness of the call. There is no index before the start boundary; asking for it may cause a fatal error or overflow into invalid program state.
+    ]
+    test {ignore (index before (end of (non‐empty example: list)) in (non‐empty example: list) skipping bounds check)}
+   ]
+   (
+    English: index before (boundary: boundary) in (list: list) skipping bounds check
+    Swift: (self: [list]).indexSkippingBoundsCheck beforeBoundary (boundary: [boundary])
+   )
+   index
+   {
+    ← index after (boundary before (boundary) in (list) skipping bounds check) in (list) skipping bounds check
+   }
+
   requirement (clients)
    (
     English: beginning of (list: list)
@@ -69,7 +91,7 @@ ability (clients)
      English: Returns the next boundary, without checking whether it actually exists.
     ]
     [
-     English: It is generally advised to use the safer variant {index after () in ()} instead.
+     English: It is generally advised to use the safer variant {boundary after () in ()} instead.
     ]
     [
      English: Skipping the bounds check can be more efficient when the expected boundary is already known from context to exist. However, the caller takes responsibility for the logical soundness of the call. There is nothing after the end boundary; reaching there may cause a fatal error or overflow into invalid program state.
@@ -87,6 +109,47 @@ ability (clients)
    boundary
    {
     ← boundary after (cursor) in (list) skipping bounds check according to use as list
+   }
+
+  requirement (clients)
+   [
+    test {
+     let (• non‐empty: list) be (non‐empty example: list)
+     let (• end: boundary) be (end of (non‐empty))
+     let (• cursor: boundary) start as (end)
+     backtrack (↓ cursor) to previous in (non‐empty) skipping bounds check
+     verify ((cursor) is not (end))
+    }
+   ]
+   (
+    English: backtrack (cursor: ↓ boundary) to previous in (list: list) skipping bounds check
+    Swift: (self: [list]).formIndex before (i: [cursor])
+   )
+
+  choice (clients)
+   [
+    [
+     English: Returns the previous boundary, without checking whether it actually exists.
+    ]
+    [
+     English: It is generally advised to use the safer variant {boundary before () in ()} instead.
+    ]
+    [
+     English: Skipping the bounds check can be more efficient when the expected boundary is already known from context to exist. However, the caller takes responsibility for the logical soundness of the call. There is nothing before the start boundary; reaching there may cause a fatal error or overflow into invalid program state.
+    ]
+    test {
+     let (• non‐empty: list) be (non‐empty example: list)
+     let (• end: boundary) be (end of (non‐empty))
+     verify ((boundary before (end) in (non‐empty) skipping bounds check) is not (end))
+    }
+   ]
+   (
+    English: boundary before (cursor: boundary) in (list: list) skipping bounds check
+    Swift: (self: [list]).index before (i: [cursor])
+   )
+   boundary
+   {
+    ← boundary before (cursor) in (list) skipping bounds check according to use as list
    }
 
   requirement (clients)
@@ -145,6 +208,35 @@ ability (clients)
     }
    {
     ← first in (list) according to default use as list
+   }
+
+  choice (clients)
+   [
+    test {verify ((last in (non‐empty example: list)) exists)}
+   ]
+   (
+    English: last in (list: list)
+    Deutsch: letzter in (Liste: [list])
+    français : dernier dans (liste: [list])
+    ελληνικά: τελευταίος σε (κατάλογος: [list])
+    Swift: var (self: [list]).last
+   )
+   optional (element)
+   Swift: “” list “.last” [
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.isEmpty”
+     “” list “.index(after: ” boundary “)”
+     “” list “.index(before: ” boundary “)”
+    ] {
+     “extension ” list “: BidirectionalCollection {}”
+     “extension ” boundary “: Comparable {}”
+    }
+   {
+    ← last in (list) according to default use as list
    }
 
   choice (clients)
@@ -238,6 +330,26 @@ extension
    }
 
   action (clients)
+   [
+    [
+     English: Returns the index of the entry ending at the specified boundary, but only if an entry actually exists at that position.
+    ]
+    test {verify ((index before (end of (non‐empty example: list)) in (non‐empty example: list)) exists)}
+    test {verify ((index before (end of (empty: list)) in (empty: list)) does not exist)}
+   ]
+   (
+    English: index before (boundary: boundary) in (list: list)
+    Swift: (self: [list]).entryIndex beforeBoundary (boundary: [boundary])
+   )
+   optional (index)
+   {
+    if ((boundary) is greater than (beginning of (list))), {
+     ← wrap (index before (boundary) in (list) skipping bounds check) into optional
+    }
+    ← nothing
+   }
+
+  action (clients)
    (
     English: boundary after (cursor: boundary) in (list: list) skipping bounds check according to use as list
    )
@@ -245,6 +357,17 @@ extension
    {
     let (• copy: boundary) start as (cursor)
     advance (↓ copy) to next in (list) skipping bounds check
+    ← copy
+   }
+
+  action (clients)
+   (
+    English: boundary before (cursor: boundary) in (list: list) skipping bounds check according to use as list
+   )
+   boundary
+   {
+    let (• copy: boundary) start as (cursor)
+    backtrack (↓ copy) to previous in (list) skipping bounds check
     ← copy
    }
 
@@ -264,6 +387,26 @@ extension
    {
     if ((cursor) is less than (end of (list))), {
      ← wrap (boundary after (cursor) in (list) skipping bounds check) into optional
+    }
+    ← nothing
+   }
+
+  action (clients)
+   [
+    [
+     English: Returns the previous boundary, but only if there actually is one.
+    ]
+    test {verify ((boundary before (end of (non‐empty example: list)) in (non‐empty example: list)) exists)}
+    test {verify ((boundary before (beginning of (non‐empty example: list)) in (non‐empty example: list)) does not exist)}
+   ]
+   (
+    English: boundary before (cursor: boundary) in (list: list)
+    Swift: (self: [list]).boundary beforeBoundary (cursor: [cursor])
+   )
+   optional (boundary)
+   {
+    if ((cursor) is greater than (beginning of (list))), {
+     ← wrap (boundary before (cursor) in (list) skipping bounds check) into optional
     }
     ← nothing
    }
@@ -299,6 +442,25 @@ extension
    {
     if (index after (beginning of (list)) in (list)) exists, unwrap it as (• first: index), {
      ← wrap (entry at (first) in (list)) into optional
+    }
+    ← nothing
+   }
+
+  action (clients)
+   [
+    test {
+     verify ((last in (non‐empty example: list) according to default use as list) exists)
+     verify ((last in (empty: list) according to default use as list) does not exist)
+    }
+   ]
+   (
+    English: last in (list: list) according to default use as list
+    Swift: var (self: [list]).lastAccordingToDefaultUseAsList
+   )
+   optional (element)
+   {
+    if (index before (end of (list)) in (list)) exists, unwrap it as (• last: index), {
+     ← wrap (entry at (last) in (list)) into optional
     }
     ← nothing
    }
@@ -385,6 +547,14 @@ use (unit)
    )
    {
     advance (↓ cursor) to next in ((wrapped list) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: backtrack (cursor: ↓ list boundary) to previous in (list: minimal list example) skipping bounds check
+   )
+   {
+    backtrack (↓ cursor) to previous in ((wrapped list) of (list)) skipping bounds check
    }
 
   action (unit)

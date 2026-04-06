@@ -235,7 +235,7 @@ extension
      Kotlin: “++” cursor “”
      Swift: “” list “.formIndex(after: ¤(26)” cursor “)”
      {
-      ← advance (↓ cursor) to next in ((unmanaged) of (list)) skipping bounds check
+      advance (↓ cursor) to next in ((unmanaged) of (list)) skipping bounds check
      }
 
     action (clients)
@@ -243,12 +243,31 @@ extension
       English: boundary after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
      )
      list boundary
-     C♯: “” cursor “ + 1”
-     JavaScript: “” cursor “ + 1”
-     Kotlin: “” cursor “ + 1”
      Swift: “” list “.index(after: ” cursor “)”
      {
       ← boundary after (cursor) in ((unmanaged) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: backtrack (cursor: ↓ list boundary) to previous in (list: list of (thing)) skipping bounds check
+     )
+     C♯: “¤(2D)¤(2D)” cursor “”
+     JavaScript: “¤(2D)¤(2D)” cursor “”
+     Kotlin: “¤(2D)¤(2D)” cursor “”
+     Swift: “” list “.formIndex(before: ¤(26)” cursor “)”
+     {
+      decrement (↓ (offset) of (cursor)) skipping underflow check
+     }
+
+    action (clients)
+     (
+      English: boundary before (cursor: list boundary) in (list: list of (thing)) skipping bounds check
+     )
+     list boundary
+     Swift: “” list “.index(before: ” cursor “)”
+     {
+      ← boundary before (cursor) in (list) skipping bounds check according to use as list
      }
 
     action (clients)
@@ -286,6 +305,17 @@ extension
      Swift: “” list “.first”
      {
       ← first in (list) according to default use as list
+     }
+
+    action (clients)
+     (
+      English: last in (list: list of (thing))
+     )
+     optional (thing)
+     Kotlin: “” list “.lastOrNull()”
+     Swift: “” list “.last”
+     {
+      ← last in (list) according to default use as list
      }
 
     action (clients)
