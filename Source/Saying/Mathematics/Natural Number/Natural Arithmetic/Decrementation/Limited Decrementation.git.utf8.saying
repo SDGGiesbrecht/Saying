@@ -30,7 +30,7 @@ ability (clients)
     English: decrement (counter: ↓ number) skipping underflow check
    )
    {
-    decrement (↓ counter) skipping underflow check according to limited decrementation
+    decrement (↓ counter) skipping underflow check according to default limited decrementation
    }
 
   choice (clients)
@@ -60,7 +60,7 @@ extension
  {
   action (clients)
    (
-    English: decrement (number: ↓ number) skipping underflow check according to limited decrementation
+    English: decrement (number: ↓ number) skipping underflow check according to default limited decrementation
    )
    {
     subtract (one: number) from (↓ number) skipping overflow check

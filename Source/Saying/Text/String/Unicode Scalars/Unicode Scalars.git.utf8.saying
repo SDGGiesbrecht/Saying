@@ -159,7 +159,7 @@ use (clients)
    Kotlin: “” first “ != ” second “”
    Swift: “” first “ != ” second “” [“==(¤(5F): String.UnicodeScalarView, ¤(5F): String.UnicodeScalarView)”] {“extension String.UnicodeScalarView: Equatable {}”}
    {
-    ← (first) is not (second) according to comparison for equality
+    ← (first) is not (second) according to default comparison for equality
    }
 
   action (clients)
@@ -177,7 +177,7 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to comparison for equality
+    ← hash value of (key) according to default comparison for equality
    }
 
   action (clients)
@@ -350,7 +350,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, 1)”
    Swift: “” list “.index(after: ” cursor “)”
    {
-    ← boundary after (cursor) in (list) skipping bounds check according to use as list
+    ← boundary after (cursor) in (list) skipping bounds check according to default use as list
    }
 
   action (clients)
@@ -383,7 +383,7 @@ use (clients)
    Kotlin: “” list “.offsetByCodePoints(” cursor “, ¤(2D)1)”
    Swift: “” list “.index(before: ” cursor “)”
    {
-    ← boundary before (cursor) in (list) skipping bounds check according to use as list
+    ← boundary before (cursor) in (list) skipping bounds check according to default use as list
    }
 
   action (clients)
@@ -588,7 +588,7 @@ action (file)
  Kotlin: “”
  Swift: “”
  {
-  append (element) to (↓ list) according to use as changeable list
+  append (element) to (↓ list) according to default use as changeable list
  }
 
 action (file)
@@ -683,7 +683,7 @@ action (file)
  C♯: “” list “”
  Kotlin: “” list “”
  {
-  ← (list) with (range) removed according to use as changeable list
+  ← (list) with (range) removed according to default use as changeable list
  }
 
 use (clients)
@@ -864,7 +864,7 @@ action (file)
  JavaScript: “” list “”
  Kotlin: “” list “”
  {
-  ← (list) with (range) replaced with (replacement) according to list insertion
+  ← (list) with (range) replaced with (replacement) according to default list insertion
  }
 
 action (file)
@@ -916,7 +916,7 @@ use (clients)
    )
    Swift: “” list “.insert(contentsOf: ” insertion “, at: ” boundary “)”
    {
-    insert (insertion) at (boundary) in (↓ list) according to list insertion
+    insert (insertion) at (boundary) in (↓ list) according to default list insertion
    }
 
   action (clients)
@@ -927,7 +927,7 @@ use (clients)
    C♯: “” list “.Insert(” boundary “, ” insertion “)” (“System”)
    Kotlin: “StringBuilder(” list “).insert(” boundary “, ” insertion “).toString()”
    {
-    ← (list) with (insertion) inserted at (boundary) according to list insertion
+    ← (list) with (insertion) inserted at (boundary) according to default list insertion
    }
 
   action (clients)
@@ -939,7 +939,7 @@ use (clients)
    Kotlin: “” list “ += ” appendix “”
    Swift: “” list “ += ” appendix “”
    {
-    append (appendix) to (↓ list) according to list insertion
+    append (appendix) to (↓ list) according to default list insertion
    }
 
   action (clients)
@@ -952,7 +952,7 @@ use (clients)
    Kotlin: “” list “ + ” appendix “”
    Swift: “” list “ + ” appendix “”
    {
-    ← (list) with (appendix) appended according to list insertion
+    ← (list) with (appendix) appended according to default list insertion
    }
 
   action (clients)
@@ -965,7 +965,7 @@ use (clients)
    Kotlin: “” prefix “ + ” list “”
    Swift: “” prefix “ + ” list “”
    {
-    ← (list) with (prefix) prepended according to list insertion
+    ← (list) with (prefix) prepended according to default list insertion
    }
 
   action (clients)

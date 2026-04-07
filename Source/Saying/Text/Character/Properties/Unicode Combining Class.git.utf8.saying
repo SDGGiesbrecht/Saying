@@ -53,7 +53,7 @@ use (clients)
    truth value
    Swift: “” first “ != ” second “”
    {
-    ← (first) is not (second) according to comparison for equality
+    ← (first) is not (second) according to default comparison for equality
    }
 
   action (clients)
@@ -87,7 +87,7 @@ use (clients)
    truth value
    Swift: “” first “ > ” second “”
    {
-    ← (first) is greater than (second) according to comparison for order
+    ← (first) is greater than (second) according to default comparison for order
    }
 
   action (clients)
@@ -95,7 +95,7 @@ use (clients)
    truth value
    Swift: “” first “ <= ” second “”
    {
-    ← (first) is less than or equal to (second) according to comparison for order
+    ← (first) is less than or equal to (second) according to default comparison for order
    }
 
   action (clients)
@@ -103,7 +103,7 @@ use (clients)
    truth value
    Swift: “” first “ >= ” second “”
    {
-    ← (first) is greater than or equal to (second) according to comparison for order
+    ← (first) is greater than or equal to (second) according to default comparison for order
    }
 
   action (clients)
