@@ -27,7 +27,7 @@ ability (clients)
     English: increment (counter: ↓ number)
    )
    {
-    increment (↓ counter) according to unlimited incrementation
+    increment (↓ counter) according to default unlimited incrementation
    }
 
   choice (clients)
@@ -58,12 +58,12 @@ extension
    [
     test {
      let (• counter: number) start as (zero: number)
-     increment (↓ counter) according to unlimited incrementation
+     increment (↓ counter) according to default unlimited incrementation
      verify ((counter) is (one: number))
     }
    ]
    (
-    English: increment (number: ↓ number) according to unlimited incrementation
+    English: increment (number: ↓ number) according to default unlimited incrementation
    )
    {
     add (one: number) to (↓ number)

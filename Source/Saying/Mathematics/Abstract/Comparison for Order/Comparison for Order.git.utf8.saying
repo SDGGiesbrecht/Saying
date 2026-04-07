@@ -88,7 +88,7 @@ ability (clients)
      “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
     ] {“extension ” thing “: Comparable {}”}
    {
-    ← (first) is greater than (second) according to comparison for order
+    ← (first) is greater than (second) according to default comparison for order
    }
 
   choice (clients)
@@ -135,7 +135,7 @@ ability (clients)
      “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
     ] {“extension ” thing “: Comparable {}”}
    {
-    ← (first) is less than or equal to (second) according to comparison for order
+    ← (first) is less than or equal to (second) according to default comparison for order
    }
 
   choice (clients)
@@ -182,7 +182,7 @@ ability (clients)
      “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
     ] {“extension ” thing “: Comparable {}”}
    {
-    ← (first) is greater than or equal to (second) according to comparison for order
+    ← (first) is greater than or equal to (second) according to default comparison for order
    }
 
   requirement (clients)
@@ -200,10 +200,10 @@ extension
  {
   action (clients)
    [
-    test {verify ((greater example: thing) is greater than (example: thing) according to comparison for order)}
+    test {verify ((greater example: thing) is greater than (example: thing) according to default comparison for order)}
    ]
    (
-    English: (first: thing) is greater than (second: thing) according to comparison for order
+    English: (first: thing) is greater than (second: thing) according to default comparison for order
    )
    truth value
    {
@@ -212,10 +212,10 @@ extension
 
   action (clients)
    [
-    test {verify ((example: thing) is less than or equal to (greater example: thing) according to comparison for order)}
+    test {verify ((example: thing) is less than or equal to (greater example: thing) according to default comparison for order)}
    ]
    (
-    English: (first: thing) is less than or equal to (second: thing) according to comparison for order
+    English: (first: thing) is less than or equal to (second: thing) according to default comparison for order
    )
    truth value
    {
@@ -224,10 +224,10 @@ extension
 
   action (clients)
    [
-    test {verify ((greater example: thing) is greater than or equal to (example: thing) according to comparison for order)}
+    test {verify ((greater example: thing) is greater than or equal to (example: thing) according to default comparison for order)}
    ]
    (
-    English: (first: thing) is greater than or equal to (second: thing) according to comparison for order
+    English: (first: thing) is greater than or equal to (second: thing) according to default comparison for order
    )
    truth value
    {

@@ -145,7 +145,7 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to comparison for equality
+    ← hash value of (key) according to default comparison for equality
    }
 
   action (clients)
@@ -359,7 +359,7 @@ use (clients)
    JavaScript: “++” counter “”
    Kotlin: “++” counter “”
    {
-    increment (↓ counter) according to unlimited incrementation
+    increment (↓ counter) according to default unlimited incrementation
    }
  }
 
@@ -375,7 +375,7 @@ use (clients)
    JavaScript: “¤(2D)¤(2D)” counter “”
    Kotlin: “¤(2D)¤(2D)” counter “”
    {
-    decrement (↓ counter) according to unlimited decrementation
+    decrement (↓ counter) according to default unlimited decrementation
    }
  }
 

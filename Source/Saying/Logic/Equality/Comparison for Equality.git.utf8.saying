@@ -84,7 +84,7 @@ ability (clients)
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
    Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {
-    ← (first) is not (second) according to comparison for equality
+    ← (first) is not (second) according to default comparison for equality
    }
 
   requirement (clients)
@@ -113,7 +113,7 @@ ability (clients)
    )
    hash value
    {
-    ← hash value of (key) according to comparison for equality
+    ← hash value of (key) according to default comparison for equality
    }
 
   requirement (clients)
@@ -148,10 +148,10 @@ extension
 
   action (clients)
    [
-    test {verify ((example: thing) is not (differing example: thing) according to comparison for equality)}
+    test {verify ((example: thing) is not (differing example: thing) according to default comparison for equality)}
    ]
    (
-    English: (first: thing) is not (second: thing) according to comparison for equality
+    English: (first: thing) is not (second: thing) according to default comparison for equality
    )
    truth value
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
@@ -162,7 +162,7 @@ extension
 
   action (unit)
    (
-    English: hash value of (key: thing) according to comparison for equality
+    English: hash value of (key: thing) according to default comparison for equality
    )
    hash value
    {

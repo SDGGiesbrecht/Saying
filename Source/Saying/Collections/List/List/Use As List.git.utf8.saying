@@ -108,7 +108,7 @@ ability (clients)
    )
    boundary
    {
-    ← boundary after (cursor) in (list) skipping bounds check according to use as list
+    ← boundary after (cursor) in (list) skipping bounds check according to default use as list
    }
 
   requirement (clients)
@@ -149,7 +149,7 @@ ability (clients)
    )
    boundary
    {
-    ← boundary before (cursor) in (list) skipping bounds check according to use as list
+    ← boundary before (cursor) in (list) skipping bounds check according to default use as list
    }
 
   requirement (clients)
@@ -352,7 +352,7 @@ extension
 
   action (clients)
    (
-    English: boundary after (cursor: boundary) in (list: list) skipping bounds check according to use as list
+    English: boundary after (cursor: boundary) in (list: list) skipping bounds check according to default use as list
    )
    boundary
    {
@@ -363,7 +363,7 @@ extension
 
   action (clients)
    (
-    English: boundary before (cursor: boundary) in (list: list) skipping bounds check according to use as list
+    English: boundary before (cursor: boundary) in (list: list) skipping bounds check according to default use as list
    )
    boundary
    {

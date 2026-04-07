@@ -30,7 +30,7 @@ ability (clients)
     English: decrement (counter: ↓ number)
    )
    {
-    decrement (↓ counter) according to unlimited decrementation
+    decrement (↓ counter) according to default unlimited decrementation
    }
 
   choice (clients)
@@ -61,12 +61,12 @@ extension
    [
     test {
      let (• counter: number) start as (one: number)
-     decrement (↓ counter) according to unlimited decrementation
+     decrement (↓ counter) according to default unlimited decrementation
      verify ((counter) is (zero: number))
     }
    ]
    (
-    English: decrement (counter: ↓ number) according to unlimited decrementation
+    English: decrement (counter: ↓ number) according to default unlimited decrementation
    )
    {
     subtract (one: number) from (↓ counter)
