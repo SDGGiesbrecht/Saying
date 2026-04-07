@@ -6,6 +6,7 @@ thing (clients)
  ]
  (
   English: Unicode scalar index
+  C: Unicode‐scalar‐index
  )
  C♯: “int”
  Kotlin: “Int”

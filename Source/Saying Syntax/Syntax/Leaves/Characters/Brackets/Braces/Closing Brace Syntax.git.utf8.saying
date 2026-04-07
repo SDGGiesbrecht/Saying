@@ -3,6 +3,7 @@ thing (clients)
   English: closing brace syntax
   Deutsch: Schließschweifklammersyntax
   français : syntaxe de accolade fermante
+  C: closing‐brace‐syntax
   Swift: ClosingBraceSyntax
  )
  {

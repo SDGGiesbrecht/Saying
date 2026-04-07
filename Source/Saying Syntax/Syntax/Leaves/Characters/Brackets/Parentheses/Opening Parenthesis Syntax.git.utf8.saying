@@ -3,6 +3,7 @@ thing (clients)
   English: opening parenthesis syntax
   Deutsch: Offenrundklammersyntax
   français : syntaxe de parenthèse ouvrante
+  C: opening‐parenthesis‐syntax
   Swift: OpeningParenthesisSyntax
  )
  {

@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: right‐to‐left question mark syntax
+  C: right‐to‐left‐question‐mark‐syntax
   Swift: RightToLeftQuestionMarkSyntax
  )
  {

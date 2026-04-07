@@ -6,6 +6,7 @@ thing (clients)
  ]
  (
   English: Unicode scalar boundary
+  C: Unicode‐scalar‐boundary
  )
  C♯: “int”
  Kotlin: “Int”

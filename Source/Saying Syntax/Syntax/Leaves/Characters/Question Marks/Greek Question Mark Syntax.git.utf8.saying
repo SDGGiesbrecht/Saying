@@ -4,6 +4,7 @@ thing (clients)
   Deutsch: Griechischfragezeichensyntax
   français : syntaxe de point d’interrogation grec
   ελληνικά: σύνταξη ελληνικού ερωτηματικού
+  C: Greek‐question‐mark‐syntax
   Swift: GreekQuestionMarkSyntax
  )
  {

@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: Unicode segments index
+  C: Unicode‐segments‐index
   Swift: UnicodeSegments.EntryIndex
  )
  {

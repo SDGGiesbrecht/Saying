@@ -13,6 +13,9 @@ thing (clients)
  ]
  (
   English: Unicode text
+  C: Unicode‐text
+  C♯: UnicodeText
+  Kotlin: UnicodeText
   Swift: UnicodeText
  )
  {

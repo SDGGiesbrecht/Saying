@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: symobol insertion mark syntax
+  C: symbol‐insertion‐mark‐syntax
   Swift: SymbolInsertionMarkSyntax
  )
  {

@@ -1,6 +1,9 @@
 thing (clients)
  (
   English: Saying source
+  C: saying‐source
+  C♯: SayingSource
+  Kotlin: SayingSource
   Swift: SayingSource
  )
  {

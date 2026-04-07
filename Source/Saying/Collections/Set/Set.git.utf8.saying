@@ -8,6 +8,7 @@ extension
     français : ensemble de (chose: [thing])
     ελληνικά: σύνολο (πράγμα: [thing])
     עברית: קבוצה של (דבר: [thing])
+    C: set‐(thing: [thing])
    )
    C♯: “HashSet<” thing “>” (“System.Collections.Generic”) [
      “override ” thing “.Equals(” thing “)”

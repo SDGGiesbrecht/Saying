@@ -1,6 +1,9 @@
 thing (clients)
  (
   English: Git‐style Saying source
+  C: Git‐style‐saying‐source
+  C♯: GitStyleSayingSource
+  Kotlin: GitStyleSayingSource
   Swift: GitStyleSayingSource
  )
  {

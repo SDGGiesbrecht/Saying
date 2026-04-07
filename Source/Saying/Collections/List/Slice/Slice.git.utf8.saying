@@ -4,6 +4,7 @@ extension
   thing (clients)
    (
     English: slice of (list)
+    C: slice‐(list: [list])
    )
    Swift: “Slice<” list “>” [
      “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”

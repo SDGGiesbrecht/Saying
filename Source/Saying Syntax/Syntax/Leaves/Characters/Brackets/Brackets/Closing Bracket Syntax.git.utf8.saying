@@ -3,6 +3,7 @@ thing (clients)
   English: closing bracket syntax
   Deutsch: Schließeckklammersyntax
   français : syntaxe de crochet fermant
+  C: closing‐bracket‐syntax
   Swift: ClosingBracketSyntax
  )
  {
