@@ -270,7 +270,7 @@ extension
      list boundary
      Swift: “” list “.index(before: ” cursor “)”
      {
-      ← boundary before (cursor) in (list) skipping bounds check according to use as list
+      ← boundary before (cursor) in (list) skipping bounds check according to default use as list
      }
 
     action (clients)
@@ -477,7 +477,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    append (element) to (↓ list) according to use as changeable list
+    append (element) to (↓ list) according to default use as changeable list
    }
 
   action (file)
@@ -605,7 +605,7 @@ extension
      list of (thing)
      Kotlin: “” list “.toMutableList().apply { this[” index “] = ” element “ }.toList()”
      {
-      ← (list) with (index) replaced with (element) according to use as changeable list
+      ← (list) with (index) replaced with (element) according to default use as changeable list
      }
 
     action (clients)
@@ -627,7 +627,7 @@ extension
      list of (thing)
      Kotlin: “” list “.toMutableList().apply { add(” boundary “, ” element “) }.toList()”
      {
-      ← (list) with (element) inserted at (boundary) according to use as changeable list
+      ← (list) with (element) inserted at (boundary) according to default use as changeable list
      }
 
     action (clients)
@@ -649,7 +649,7 @@ extension
      list of (thing)
      Kotlin: “” list “.toMutableList().apply { add(” element “) }.toList()”
      {
-      ← (list) with (element) appended according to use as changeable list
+      ← (list) with (element) appended according to default use as changeable list
      }
 
     action (clients)
@@ -658,7 +658,7 @@ extension
      )
      JavaScript: “” list “.unshift(” element “)”
      {
-      prepend (element) to (↓ list) according to use as changeable list
+      prepend (element) to (↓ list) according to default use as changeable list
      }
 
     action (clients)
@@ -668,7 +668,7 @@ extension
      list of (thing)
      C♯: “” list “.Prepend(” element “).ToList()” (“System.Linq”)
      {
-      ← (list) with (element) prepended according to use as changeable list
+      ← (list) with (element) prepended according to default use as changeable list
      }
 
     action (clients)
@@ -690,7 +690,7 @@ extension
      list of (thing)
      Kotlin: “” list “.toMutableList().apply { removeAt(” index “) }.toList()”
      {
-      ← (list) with (index) removed according to use as changeable list
+      ← (list) with (index) removed according to default use as changeable list
      }
 
     action (clients)
@@ -840,7 +840,7 @@ extension
    JavaScript: “” list “”
    Kotlin: “” list “”
    {
-    ← (list) with (range) replaced with (insertion) according to list insertion
+    ← (list) with (range) replaced with (insertion) according to default list insertion
    }
 
   action (file)
@@ -875,7 +875,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    insert (insertion) at (boundary) in (↓ list) according to list insertion
+    insert (insertion) at (boundary) in (↓ list) according to default list insertion
    }
 
   action (file)
@@ -893,7 +893,7 @@ extension
    Kotlin: “”
    Swift: “”
    {
-    append (appendix) to (↓ list) according to list insertion
+    append (appendix) to (↓ list) according to default list insertion
    }
 
   action (file)
@@ -927,7 +927,7 @@ extension
    C: “”
    JavaScript: “”
    {
-    prepend (prefix) to (↓ list) according to list insertion
+    prepend (prefix) to (↓ list) according to default list insertion
    }
 
   action (file)
@@ -987,7 +987,7 @@ extension
      list of (thing)
      Kotlin: “” list “.toMutableList().apply { addAll(” boundary “, ” insertion “) }.toList()”
      {
-      ← (list) with (insertion) inserted at (boundary) according to list insertion
+      ← (list) with (insertion) inserted at (boundary) according to default list insertion
      }
 
     action (clients)
@@ -1011,7 +1011,7 @@ extension
      Kotlin: “” list “ + ” appendix “”
      Swift: “” list “ + ” appendix “”
      {
-      ← (list) with (appendix) appended according to list insertion
+      ← (list) with (appendix) appended according to default list insertion
      }
 
     action (clients)
@@ -1034,7 +1034,7 @@ extension
      Kotlin: “” prefix “ + ” list “”
      Swift: “” prefix “ + ” list “”
      {
-      ← (list) with (prefix) prepended according to list insertion
+      ← (list) with (prefix) prepended according to default list insertion
      }
 
     action (clients)

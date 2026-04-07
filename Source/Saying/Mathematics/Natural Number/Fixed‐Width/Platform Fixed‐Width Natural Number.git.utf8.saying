@@ -124,7 +124,7 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to comparison for equality
+    ← hash value of (key) according to default comparison for equality
    }
 
   action (clients)
@@ -394,7 +394,7 @@ use (clients)
    JavaScript: “¤(2D)¤(2D)” counter “”
    Kotlin: “¤(2D)¤(2D)” counter “”
    {
-    ← decrement (↓ counter) skipping underflow check according to limited decrementation
+    ← decrement (↓ counter) skipping underflow check according to default limited decrementation
    }
  }
 

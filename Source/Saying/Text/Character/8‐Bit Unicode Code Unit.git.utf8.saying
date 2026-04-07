@@ -116,7 +116,7 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to comparison for equality
+    ← hash value of (key) according to default comparison for equality
    }
 
   action (clients)
@@ -171,7 +171,7 @@ use (clients)
    C♯: “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
-    ← hash value of (key) according to comparison for equality
+    ← hash value of (key) according to default comparison for equality
    }
 
   action (clients)
