@@ -378,8 +378,8 @@ use (clients)
     English: boundary before (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
    )
    Unicode scalar boundary
-   C♯: “0xDC00 <= ” list “[” cursor “] ¤(26)¤(26) ” list “[” cursor “] < 0xE000 ? ” cursor “ ¤(2D) 2 : ” cursor “ ¤(2D) 1”
-   JavaScript: “0xDC00 <= ” list “.charCodeAt(” cursor “) ¤(26)¤(26) ” list “.charCodeAt(” cursor “) < 0xE000 ? ” cursor “ ¤(2D) 2 : ” cursor “ ¤(2D) 1”
+   C♯: “0xDC00 <= ” list “[” cursor “ ¤(2D) 1] ¤(26)¤(26) ” list “[” cursor “ ¤(2D) 1] < 0xE000 ? ” cursor “ ¤(2D) 2 : ” cursor “ ¤(2D) 1”
+   JavaScript: “0xDC00 <= ” list “.charCodeAt(” cursor “ ¤(2D) 1) ¤(26)¤(26) ” list “.charCodeAt(” cursor “ ¤(2D) 1) < 0xE000 ? ” cursor “ ¤(2D) 2 : ” cursor “ ¤(2D) 1”
    Kotlin: “” list “.offsetByCodePoints(” cursor “, ¤(2D)1)”
    Swift: “” list “.index(before: ” cursor “)”
    {
