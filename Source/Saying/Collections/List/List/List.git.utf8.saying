@@ -243,6 +243,9 @@ extension
       English: boundary after (cursor: list boundary) in (list: list of (thing)) skipping bounds check
      )
      list boundary
+     C♯: “” cursor “ + 1”
+     JavaScript: “” cursor “ + 1”
+     Kotlin: “” cursor “ + 1”
      Swift: “” list “.index(after: ” cursor “)”
      {
       ← boundary after (cursor) in ((unmanaged) of (list)) skipping bounds check
