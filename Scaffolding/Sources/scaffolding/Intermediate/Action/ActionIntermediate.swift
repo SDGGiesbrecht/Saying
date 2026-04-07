@@ -1088,7 +1088,7 @@ extension ActionIntermediate {
     guard let nameDeclaration = platform.nativeNameDeclaration(of: self) else {
       return nil
     }
-    var name = StrictString(nameDeclaration)
+    var name = nameDeclaration
     if let overridePrefix = platform.overridePrefix,
       name.starts(with: overridePrefix) {
       name.removeFirst(overridePrefix.count)
@@ -1105,7 +1105,7 @@ extension ActionIntermediate {
     }
     var disambiguatorParameters: [Int] = []
     if !platform.permitsOverloads {
-      while let typePrefix = name.prefix(upTo: " "),
+      while let typePrefix = StrictString(name).prefix(upTo: " "),
         typePrefix.contents.allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
         let parsedNumber = Int(String(UnicodeText(typePrefix.contents))) {
           disambiguatorParameters.append(parsedNumber)
@@ -1141,7 +1141,7 @@ extension ActionIntermediate {
     }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
-      if name.hasPrefix("()".scalars.literal()) {
+      if name.starts(with: "()".unicodeScalars) {
         parameterNames.append(platform.emptyParameterLabel)
         name.removeFirst(2)
       } else {
@@ -1151,17 +1151,17 @@ extension ActionIntermediate {
         guard platform.permitsParameterLabels else {
           fatalError("Illegal parameter label: \(platform.nativeNameDeclaration(of: self)!)")
         }
-        var parameterName = StrictString(name[..<next])
+        var parameterName = name[..<next]
         name.removeSubrange(..<next)
         if parameterName.last == " " {
           parameterName.removeLast()
         }
         parameterNames.append(UnicodeText(parameterName))
-        if name.hasPrefix("()") {
+        if name.starts(with: "()".unicodeScalars) {
           name.removeFirst(2)
         }
       }
-      if name.hasPrefix(" ") {
+      if name.first == " " {
         name.removeFirst()
       }
     }
@@ -1171,10 +1171,10 @@ extension ActionIntermediate {
   }
   func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
     guard let name = nativeNames.swift,
-      let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup).map({ StrictString($0) }) else {
+      let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup) else {
       return nil
     }
-    let components = identifier.components(separatedBy: ":")
+    let components = StrictString(identifier).components(separatedBy: ":")
     var parameters = self.parameters.ordered(for: name)
     var result: UnicodeText = ""
     if components.count == parameters.count {
@@ -1195,7 +1195,7 @@ extension ActionIntermediate {
       result.prepend(contentsOf: ".".scalars)
       result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).scalars)
     }
-    return UnicodeText(result)
+    return result
   }
 }
 

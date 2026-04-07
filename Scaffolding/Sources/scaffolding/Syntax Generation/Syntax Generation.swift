@@ -4,8 +4,8 @@ extension ModuleIntermediate {
   mutating func unfoldSyntax() throws {
     for nodePrototype in referenceDictionary.allThings() {
       let names = nodePrototype.declaration.name.namesDictionary
-      let englishName = StrictString(names["English"]!.name())
-      if englishName.hasSuffix(" syntax") {
+      let englishName = names["English"]!.name()
+      if StrictString(englishName).hasSuffix(" syntax") {
         let deutscherName = (names["Deutsch"]?.name())
         let nomFrançais = (names["français"]?.name())
         let ελληνικόΌνομα = (names["ελληνικά"]?.name())

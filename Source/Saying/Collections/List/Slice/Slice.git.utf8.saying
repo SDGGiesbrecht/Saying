@@ -111,6 +111,33 @@ extension
 
     action (clients)
      (
+      English: backtrack (cursor: ↓ boundary) to previous in (list: slice of (list)) skipping bounds check
+     )
+     Swift: “” list “.formIndex(before: ¤(26)” cursor “)” [
+       “” list “.index(before: ” boundary “)”
+      ] {
+       “extension ” list “: BidirectionalCollection {}”
+      }
+     {
+      backtrack (↓ cursor) to previous in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: boundary before (cursor: boundary) in (list: slice of (list)) skipping bounds check
+     )
+     boundary
+     Swift: “” list “.index(before: ” cursor “)” [
+       “” list “.index(before: ” boundary “)”
+      ] {
+       “extension ” list “: BidirectionalCollection {}”
+      }
+     {
+      ← boundary before (cursor) in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
       English: entry at (cursor: index) in (list: slice of (list))
      )
      element
@@ -136,6 +163,20 @@ extension
      Swift: “” list “.first”
      {
       ← first in (list) according to default use as list
+     }
+
+    action (clients)
+     (
+      English: last in (list: slice of (list))
+     )
+     optional (element)
+     Swift: “” list “.last” [
+       “” list “.index(before: ” boundary “)”
+      ] {
+       “extension ” list “: BidirectionalCollection {}”
+      }
+     {
+      ← last in (list) according to default use as list
      }
 
     action (clients)

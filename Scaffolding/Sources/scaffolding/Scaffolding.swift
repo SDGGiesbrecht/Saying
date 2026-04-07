@@ -90,6 +90,7 @@ import Foundation
         "UnicodeText.hash(into: Hasher)",
         "UnicodeText.replaceSubrange(_: Range<String.UnicodeScalarView.Index>, with: UnicodeText)",
 
+        "UnicodeSegments.index(before: UnicodeSegments.Boundary)",
         "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
         "shimAccessToGitStyleLineParsing()",
         "SayingSource.init(origin: UnicodeText, code: SayingSourceCode)",
@@ -170,9 +171,6 @@ import Foundation
       "}",
       "",
       "extension UnicodeSegments.Boundary {",
-      "  init(segment: Int, scalar: String.UnicodeScalarView.Index?) {",
-      "    self.init(segment, scalar)",
-      "  }",
       "  var segmentIndex: Int {",
       "    return segment",
       "  }",

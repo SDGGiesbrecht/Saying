@@ -1,5 +1,3 @@
-import SDGText
-
 extension UnicodeSegments {
 
   init(_ segments: [UnicodeSegment]) {
@@ -23,25 +21,4 @@ extension UnicodeSegments {
   }
 }
 
-extension UnicodeSegments: BidirectionalCollection {
-
-  func index(before i: Boundary) -> Boundary {
-    guard let scalar = i.scalarIndex else {
-      return lastOfSegment(before: i.segmentIndex)
-    }
-    let segment = StrictString(segment(at: i.segmentIndex).source)
-    if scalar == segment.startIndex {
-      return lastOfSegment(before: i.segmentIndex)
-    }
-    return Index(segment: i.segmentIndex, scalar: segment.index(before: scalar))
-  }
-
-  private func lastOfSegment(before segmentIndex: Int) -> Boundary {
-    let previousSegmentIndex = segmentIndices[..<segmentIndex].last!
-    let previousSegment = StrictString(segment(at: previousSegmentIndex).source)
-    return Index(
-      segment: previousSegmentIndex,
-      scalar: previousSegment.index(before: previousSegment.endIndex)
-    )
-  }
-}
+extension UnicodeSegments: BidirectionalCollection {}

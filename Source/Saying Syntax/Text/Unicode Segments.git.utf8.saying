@@ -109,6 +109,51 @@ use (clients)
    }
 
   action (clients)
+   [
+    test (hidden) {
+     let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+     append (example: Unicode segment) to (↓ segment list)
+     append (example: Unicode segment) to (↓ segment list)
+     let (• two segments: Unicode segments) be (Unicode segments (segment list))
+     let (• cursor: Unicode segments boundary) start as (end of (two segments))
+     backtrack (↓ cursor) to previous in (two segments) skipping bounds check
+     backtrack (↓ cursor) to previous in (two segments) skipping bounds check
+    }
+    test (hidden) {
+     let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+     append (Unicode segment at (zero: natural number) containing (“  ”)) to (↓ segment list)
+     let (• long segment: Unicode segments) be (Unicode segments (segment list))
+     let (• cursor: Unicode segments boundary) start as (end of (long segment))
+     backtrack (↓ cursor) to previous in (long segment) skipping bounds check
+     backtrack (↓ cursor) to previous in (long segment) skipping bounds check
+    }
+   ]
+   (
+    English: backtrack (cursor: ↓ Unicode segments boundary) to previous in (list: Unicode segments) skipping bounds check
+   )
+   {
+    change (↓ cursor) to (boundary before (cursor) in (list) skipping bounds check)
+   }
+
+  action (clients)
+   (
+    English: boundary before (cursor: Unicode segments boundary) in (list: Unicode segments) skipping bounds check
+   )
+   Unicode segments boundary
+   {
+    let (• segment cursor: list boundary) be ((segment) of (cursor))
+    if ((scalar) of (cursor)) exists, unwrap it as (• scalar cursor: Unicode scalar boundary), {
+     let (• segment list: list of (Unicode segment)) be ((segments) of (list))
+     let (• segment: Unicode text) be ((source) of (entry at (index after (segment cursor) in (segment list) skipping bounds check) in (segment list)))
+     if ((scalar cursor) is (beginning of (segment))), {
+      ← before end of segment before (segment cursor) in (list), skipping bounds check
+     }
+     ← Unicode segments boundary at segment (segment cursor), scalar (boundary before (scalar cursor) in (segment))
+    }
+    ← before end of segment before (segment cursor) in (list), skipping bounds check
+   }
+
+  action (clients)
    (
     English: entry at (index: Unicode segments index) in (list: Unicode segments)
    )
@@ -137,6 +182,18 @@ use (clients)
    {
     ← Unicode segments (non‐empty example: list of (Unicode segment))
    }
+ }
+
+action (file)
+ (
+  English: before end of segment before (segment cursor: list boundary) in (list: Unicode segments), skipping bounds check
+ )
+ Unicode segments boundary
+ {
+  let (• segment list: list of (Unicode segment)) be ((segments) of (list))
+  let (• beginning of previous segment: list boundary) be (boundary before (segment cursor) in (segment list) skipping bounds check)
+  let (• segment: Unicode text) be ((source) of (entry at (index after (beginning of previous segment) in (segment list) skipping bounds check) in (segment list)))
+  ← Unicode segments boundary at segment (beginning of previous segment), scalar (boundary before (end of (segment)) in (segment))
  }
 
 use (clients)

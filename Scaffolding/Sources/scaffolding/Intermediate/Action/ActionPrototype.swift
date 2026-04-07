@@ -77,27 +77,27 @@ extension ActionPrototype {
         parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.kotlin = $1 })
       case "Swift":
         nativeNames.swift = name
-        var remainder = StrictString(name)
+        var remainder = name
         if remainder.starts(with: "var ".unicodeScalars) {
           remainder.removeFirst(4)
         }
-        var labels: [StrictString] = []
+        var labels: [UnicodeText] = []
         if remainder.starts(with: "().".unicodeScalars) {
           remainder.removeFirst(3)
           labels.append("")
         }
-        let parameterList = remainder.dropping(through: " ")
+        let parameterList = StrictString(remainder).dropping(through: " ")
         labels.append(
           contentsOf: parameterList.components(separatedBy: "()").dropLast()
             .map({ component in
-              var label = StrictString(component.contents)
+              var label = component.contents
               if label.first == " " {
                 label.removeFirst()
               }
               if label.last == " " {
                 label.removeLast()
               }
-              return label
+              return UnicodeText(label)
             })
         )
         parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.swift = $1 })

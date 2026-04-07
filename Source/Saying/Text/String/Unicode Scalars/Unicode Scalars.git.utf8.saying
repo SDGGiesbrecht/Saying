@@ -233,6 +233,51 @@ action (file)
   }
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• cursor: Unicode scalar boundary) start as (end of (scalars))
+   if most efficient, backtrack (↓ cursor) to previous in (scalars) skipping bounds check by replacement
+  }
+ ]
+ (
+  English: if most efficient, backtrack (cursor: ↓ Unicode scalar boundary) to previous in (list: Unicode scalars) skipping bounds check by replacement
+ )
+ C: “”
+ Swift: “”
+ {
+  change (↓ cursor) to (boundary before (cursor) in (list) skipping bounds check)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• cursor: Unicode scalar boundary) start as (end of (scalars))
+   if most efficient, backtrack (↓ cursor) to previous in (scalars) skipping bounds check by 8‐bit encoded
+  }
+ ]
+ (
+  English: if most efficient, backtrack (cursor: ↓ Unicode scalar boundary) to previous in (list: Unicode scalars) skipping bounds check by 8‐bit encoded
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
+  backtrack (↓ (8‐bit boundary) of (cursor)) to previous in (8‐bit) skipping bounds check
+  let (• beginning: list boundary) be (beginning of (8‐bit))
+  while (((8‐bit boundary) of (cursor)) is greater than (beginning)), {
+   if ((entry after ((8‐bit boundary) of (cursor)) in (8‐bit) skipping bounds check) is continuation), {
+    backtrack (↓ (8‐bit boundary) of (cursor)) to previous in (8‐bit) skipping bounds check
+   }, otherwise {
+    ←
+   }
+  }
+ }
+
 use (clients)
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
@@ -309,6 +354,39 @@ use (clients)
    }
 
   action (clients)
+   (
+    English: backtrack (cursor: ↓ Unicode scalar boundary) to previous in (list: Unicode scalars) skipping bounds check
+   )
+   Swift: “” list “.formIndex(before: ¤(26)” cursor “)”
+   {
+    if most efficient, backtrack (↓ cursor) to previous in (list) skipping bounds check by replacement
+    if most efficient, backtrack (↓ cursor) to previous in (list) skipping bounds check by 8‐bit encoded
+   }
+
+  action (clients)
+   [
+    test (hidden) {
+     let (• ASCII: Unicode scalars) be (“ ”: Unicode scalars)
+     verify ((boundary before (end of (ASCII)) in (ASCII) skipping bounds check) is (beginning of (ASCII)))
+    }
+    test (hidden) {
+     let (• supplementary: Unicode scalars) be (“¤(10000)”: Unicode scalars)
+     verify ((boundary before (end of (supplementary)) in (supplementary) skipping bounds check) is (beginning of (supplementary)))
+    }
+   ]
+   (
+    English: boundary before (cursor: Unicode scalar boundary) in (list: Unicode scalars) skipping bounds check
+   )
+   Unicode scalar boundary
+   C♯: “0xDC00 <= ” list “[” cursor “ ¤(2D) 1] ¤(26)¤(26) ” list “[” cursor “ ¤(2D) 1] < 0xE000 ? ” cursor “ ¤(2D) 2 : ” cursor “ ¤(2D) 1”
+   JavaScript: “0xDC00 <= ” list “.charCodeAt(” cursor “ ¤(2D) 1) ¤(26)¤(26) ” list “.charCodeAt(” cursor “ ¤(2D) 1) < 0xE000 ? ” cursor “ ¤(2D) 2 : ” cursor “ ¤(2D) 1”
+   Kotlin: “” list “.offsetByCodePoints(” cursor “, ¤(2D)1)”
+   Swift: “” list “.index(before: ” cursor “)”
+   {
+    ← boundary before (cursor) in (list) skipping bounds check according to use as list
+   }
+
+  action (clients)
    [
     test (hidden) {
      let (• scalars: Unicode scalars) be (“¤(0)”: Unicode scalars)
@@ -380,6 +458,26 @@ use (clients)
    Swift: “” list “[” cursor “]”
    {
     ← entry after (cursor) in (list) skipping bounds check, according to default use as list
+   }
+
+  action (clients)
+   (
+    English: first in (list: Unicode scalars)
+   )
+   optional (Unicode scalar)
+   Swift: “” list “.first”
+   {
+    ← first in (list) according to default use as list
+   }
+
+  action (clients)
+   (
+    English: last in (list: Unicode scalars)
+   )
+   optional (Unicode scalar)
+   Swift: “” list “.last”
+   {
+    ← last in (list) according to default use as list
    }
 
   action (clients)
