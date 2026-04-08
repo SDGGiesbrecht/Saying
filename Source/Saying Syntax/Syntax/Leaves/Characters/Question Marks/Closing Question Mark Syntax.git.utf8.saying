@@ -3,6 +3,7 @@ thing (clients)
   English: closing question mark syntax
   Deutsch: Schließfragezeichensyntax
   français : syntaxe de point d’interrogation fermant
+  C: closing‐question‐mark‐syntax
   Swift: ClosingQuestionMarkSyntax
  )
  {

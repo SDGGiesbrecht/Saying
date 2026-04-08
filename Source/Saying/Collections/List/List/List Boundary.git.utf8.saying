@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: list boundary
+  C: list‐boundary
  )
  C♯: “int”
  Kotlin: “Int”

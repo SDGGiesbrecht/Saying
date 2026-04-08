@@ -4,6 +4,7 @@ thing (clients)
   Deutsch: Aufzählungszeichenzeichensyntax
   français : syntaxe de caractère de puce
   ελληνικά: σύνταξη χαρακτήρα βούλας
+  C: bullet‐character‐syntax
   Swift: BulletCharacterSyntax
  )
  {

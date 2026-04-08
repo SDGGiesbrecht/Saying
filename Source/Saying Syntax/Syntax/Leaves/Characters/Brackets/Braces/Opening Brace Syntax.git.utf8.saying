@@ -3,6 +3,7 @@ thing (clients)
   English: opening brace syntax
   Deutsch: Offenschweifklammersyntax
   français : syntaxe de accolade ouvrante
+  C: opening‐brace‐syntax
   Swift: OpeningBraceSyntax
  )
  {

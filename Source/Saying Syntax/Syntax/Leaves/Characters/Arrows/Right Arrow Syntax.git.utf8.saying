@@ -3,6 +3,7 @@ thing (clients)
   English: right arrow syntax
   Deutsch: Richtspfeilsyntax
   français : syntaxe de flèche vers droite
+  C: right‐arrow‐syntax
   Swift: RightArrowSyntax
  )
  {

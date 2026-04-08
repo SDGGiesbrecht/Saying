@@ -4,6 +4,7 @@ extension
   thing (clients)
    (
     English: range of (thing)
+    C: range‐(thing: [thing])
    )
    Swift: “Range<” thing “>” [
      “==(¤(5F): ” thing “, ¤(5F): ” thing “)”

@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: list index
+  C: list‐index
  )
  C♯: “int”
  Kotlin: “Int”

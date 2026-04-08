@@ -1,6 +1,9 @@
 thing (clients)
  (
   English: Unicode combining class
+  C: Unicode‐combining‐class
+  C♯: UnicodeCombiningClass
+  Kotlin: UnicodeCombiningClass
  )
  Swift: “Unicode.CanonicalCombiningClass”
  {

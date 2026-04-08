@@ -3,6 +3,7 @@ thing (clients)
   English: left chevron quotation mark syntax
   Deutsch: Linksspitzzeichensyntax
   français : syntaxe de chevrons à gauche
+  C: left‐chevron‐quotation‐mark‐syntax
   Swift: LeftChevronQuotationMarkSyntax
  )
  {

@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: Unicode segments boundary
+  C: Unicode‐segments‐boundary
   Swift: UnicodeSegments.Boundary
  )
  {

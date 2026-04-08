@@ -1,6 +1,7 @@
 thing (clients)
  (
   English: Unicode segments
+  C: Unicode‐segments
   Swift: UnicodeSegments
  )
  {

@@ -1,6 +1,9 @@
 thing (clients)
  (
   English: slice of Saying source
+  C: saying‐source‐slice
+  C♯: SayingSourceSlice
+  Kotlin: SayingSourceSlice
   Swift: SayingSourceSlice
  )
  {

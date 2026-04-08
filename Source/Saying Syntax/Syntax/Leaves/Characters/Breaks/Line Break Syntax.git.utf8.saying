@@ -3,6 +3,7 @@ thing (clients)
   English: line break syntax
   Deutsch: Zeilenwechselsyntax
   français : syntaxe de saut de ligne
+  C: line‐break‐syntax
   Swift: LineBreakSyntax
  )
  {

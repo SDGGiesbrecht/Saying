@@ -4,6 +4,7 @@ thing (clients)
   Deutsch: Leerzeichensyntax
   français : syntaxe d’espace
   ελληνικά: σύνταξη διαστήματος
+  C: space‐syntax
   Swift: SpaceSyntax
  )
  {

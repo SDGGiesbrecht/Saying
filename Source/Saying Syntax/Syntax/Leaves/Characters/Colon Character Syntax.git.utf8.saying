@@ -4,6 +4,7 @@ thing (clients)
   Deutsch: Doppelpunktzeichensyntax
   français : syntaxe de caractère de deux‐points
   ελληνικά: σύνταξη χαρακτήρα άνω και κάτω τελείας
+  C: colon‐character‐syntax
   Swift: ColonCharacterSyntax
  )
  {
