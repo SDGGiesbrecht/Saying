@@ -115,12 +115,12 @@ extension
     }
    {
     let (• resolved list: list) be (sequence)
-    let (• cursor: boundary) start as (beginning of (resolved list))
+    let (• loop cursor: boundary) start as (beginning of (resolved list))
     let (• end: boundary) be (end of (resolved list))
-    while ((cursor) < (end)), {
-     let (• entry: element) be (entry at (index after (cursor) in (resolved list) skipping bounds check) in (resolved list))
+    while ((loop cursor) < (end)), {
+     let (• entry: element) be (entry at (index after (loop cursor) in (resolved list) skipping bounds check) in (resolved list))
      repetition
-     advance (↓ cursor) to next in (resolved list) skipping bounds check
+     advance (↓ loop cursor) to next in (resolved list) skipping bounds check
     }
    }
  }
