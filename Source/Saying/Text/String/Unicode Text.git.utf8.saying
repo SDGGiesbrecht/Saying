@@ -336,7 +336,7 @@ use (clients)
         advance (↓ seam end) to next in (appendix) skipping bounds check
        }
        append ((from (beginning of (appendix)) to (seam end)) in ((scalars) of (appendix))) to (↓ seam)
-       decompose (↓ seam) according to compatibility decomposition
+       reorder (↓ seam) canonically
        append (seam) to (↓ (scalars) of (list))
        append ((from (seam end) to (end of (appendix))) in ((scalars) of (appendix))) to (↓ (scalars) of (list))
       }
