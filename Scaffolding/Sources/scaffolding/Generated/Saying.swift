@@ -70,7 +70,7 @@ struct UnicodeText {
             newElements.formIndex(after: &seam_0020end)
           }
           seam.append(contentsOf: Slice(base: newElements.scalars, bounds: newElements.startIndex ..< seam_0020end))
-          seam.decomposeAccordingToCompatibilityDecomposition()
+          seam.reorderCanonically()
           self.scalars += seam
           self.scalars.append(contentsOf: Slice(base: newElements.scalars, bounds: seam_0020end ..< newElements.endIndex))
         }
@@ -695,6 +695,23 @@ extension Slice<UnicodeText> {
   }
 }
 
+fileprivate func _0028_0029_0020reordered_0020canonically_002C_0020skipping_0020necessity_0020check_003AUnicode_0020scalars_003AUnicode_0020scalars(_ scalars: String.UnicodeScalarView) -> String.UnicodeScalarView {
+  var reordered: String.UnicodeScalarView = "".unicodeScalars
+  for scalar in scalars {
+    let clas_0073: Unicode.CanonicalCombiningClass = scalar.combiningClass
+    if clas_0073 == .notReordered {
+      reordered.append(scalar)
+    } else {
+      var cursor: String.UnicodeScalarView.Index = reordered.endIndex
+      while scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020belongs_0020after_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003AUnicodeCombiningClass_003Aערך_0020אמת(cursor, reordered, clas_0073) {
+        reordered.formIndex(before: &cursor)
+      }
+      reordered.insert(scalar, at: cursor)
+    }
+  }
+  return reordered
+}
+
 func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
@@ -712,14 +729,33 @@ extension String.UnicodeScalarView {
 }
 
 extension String.UnicodeScalarView {
-  mutating func decomposeAccordingToCompatibilityDecomposition() {
-    self = self.compatibilityDecomposition()
+  public func hash(into hasher: inout Hasher) {
+    if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_0020with_0020_0028_0029_0020by_0020iteration_003AUnicode_0020scalars_003Ahasher_003A(self, &hasher)
   }
 }
 
 extension String.UnicodeScalarView {
-  public func hash(into hasher: inout Hasher) {
-    if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_0020with_0020_0028_0029_0020by_0020iteration_003AUnicode_0020scalars_003Ahasher_003A(self, &hasher)
+  func isOrderedCanonically() -> Bool {
+    var previous: Unicode.CanonicalCombiningClass = .notReordered
+    for scalar in self {
+      let clas_0073: Unicode.CanonicalCombiningClass = scalar.combiningClass
+      if clas_0073 != .notReordered {
+        if clas_0073 < previous {
+          return false
+        }
+      }
+      previous = clas_0073
+    }
+    return true
+  }
+}
+
+extension String.UnicodeScalarView {
+  mutating func reorderCanonically() {
+    if self.isOrderedCanonically() {
+      return
+    }
+    self = _0028_0029_0020reordered_0020canonically_002C_0020skipping_0020necessity_0020check_003AUnicode_0020scalars_003AUnicode_0020scalars(self)
   }
 }
 
@@ -2580,6 +2616,21 @@ fileprivate func if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_
   }
 }
 
+extension String.UnicodeScalarView {
+  func indexSkippingBoundsCheck(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+    return self.index(before: boundary)
+  }
+}
+
+extension String.UnicodeScalarView {
+  func entryIndex(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
+    if boundary > self.startIndex {
+      return self.indexSkippingBoundsCheck(beforeBoundary: boundary)
+    }
+    return nil
+  }
+}
+
 extension UnicodeText {
   static var empty: UnicodeText {
     return UnicodeText(skippingNormalizationOf: "".unicodeScalars)
@@ -2589,6 +2640,13 @@ extension UnicodeText {
 fileprivate func scalar_0020after_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(_ cursor: String.UnicodeScalarView.Index, _ text: UnicodeText) -> Bool {
   if let index = text.entryIndex(afterBoundary: cursor) {
     return text[entryIndex: index].combiningClass != .notReordered
+  }
+  return false
+}
+
+fileprivate func scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020belongs_0020after_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003AUnicodeCombiningClass_003Aערך_0020אמת(_ cursor: String.UnicodeScalarView.Index, _ scalars: String.UnicodeScalarView, _ clas_0073: Unicode.CanonicalCombiningClass) -> Bool {
+  if let previous = scalars.entryIndex(beforeBoundary: cursor) {
+    return scalars[previous].combiningClass > clas_0073
   }
   return false
 }

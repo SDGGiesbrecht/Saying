@@ -1099,6 +1099,125 @@ use (clients)
 action (clients)
  [
   [
+   English: Checks whether the scalars are already ordered according to Unicode’s Canonical Ordering Algorithm.
+  ]
+  test {verify ((“¤(300)¤(315)”: Unicode scalars) are ordered canonically)}
+  test {verify (not ((“¤(315)¤(300)”: Unicode scalars) are ordered canonically))}
+  test {verify ((“¤(20)¤(300)”: Unicode scalars) are ordered canonically)}
+  test {verify ((“¤(300)¤(20)”: Unicode scalars) are ordered canonically)}
+ ]
+ (
+  English: (scalars: Unicode scalars) are ordered canonically
+  Swift: (self: [scalars]).isOrderedCanonically
+ )
+ truth value
+ {
+  let (• previous: Unicode combining class) start as (zero: Unicode combining class)
+  for each (• scalar: Unicode scalar) in (scalars), {
+   let (• class: Unicode combining class) be (combining class of (scalar))
+   if ((class) is not (zero: Unicode combining class)), {
+    if ((class) is less than (previous)), {
+     ← false
+    }
+   }
+   change (↓ previous) to (class)
+  }
+  ← true
+ }
+
+action (file)
+ (
+  English: scalar before (cursor: Unicode scalar boundary) in (scalars: Unicode scalars) belongs after (class: Unicode combining class)
+ )
+ truth value
+ {
+  if (index before (cursor) in (scalars)) exists, unwrap it as (• previous: Unicode scalar index), {
+   ← (combining class of (entry at (previous) in (scalars))) is greater than (class)
+  }
+  ← false
+ }
+
+action (file)
+ [
+  test (hidden) {verify (((“¤(20)”: Unicode scalars) reordered canonically, skipping necessity check) is (“¤(20)”: Unicode scalars))}
+ ]
+ (
+  English: (scalars: Unicode scalars) reordered canonically, skipping necessity check
+ )
+ Unicode scalars
+ {
+  let (• reordered: Unicode scalars) start as (“”: Unicode scalars)
+  for each (• scalar: Unicode scalar) in (scalars), {
+   let (• class: Unicode combining class) be (combining class of (scalar))
+   if ((class) is (zero: Unicode combining class)), {
+    append (scalar) to (↓ reordered)
+   }, otherwise {
+    let (• cursor: Unicode scalar boundary) start as (end of (reordered))
+    while (scalar before (cursor) in (reordered) belongs after (class)), {
+     backtrack (↓ cursor) to previous in (reordered) skipping bounds check
+    }
+    insert (scalar) at (cursor) in (↓ reordered)
+   }
+  }
+  ← reordered
+ }
+
+action (clients)
+ [
+  [
+   English: Reorders the scalars according to Unicode’s Canonical Ordering Algorithm.
+  ]
+  test {
+   let (• scalars: Unicode scalars) start as (“¤(315)¤(300)”: Unicode scalars)
+   reorder (↓ scalars) canonically
+   verify ((scalars) is (“¤(300)¤(315)”: Unicode scalars))
+  }
+  test {
+   let (• scalars: Unicode scalars) start as (“¤(300)¤(20)”: Unicode scalars)
+   reorder (↓ scalars) canonically
+   verify ((scalars) is (“¤(300)¤(20)”: Unicode scalars))
+  }
+  [
+   English: This action is optimized to do nothing if the scalars are already in canonical order; checking separately before calling it is redundant.
+  ]
+ ]
+ (
+  English: reorder (scalars: ↓ Unicode scalars) canonically
+  Swift: (self: [scalars]).reorderCanonically
+ )
+ {
+  if ((scalars) are ordered canonically), {
+   ←
+  }
+  change (↓ scalars) to ((scalars) reordered canonically, skipping necessity check)
+ }
+
+action (clients)
+ [
+  [
+   English: Returns a copy of the scalars reordered according to Unicode’s Canonical Ordering Algorithm.
+  ]
+  test {verify (((“¤(315)¤(300)”: Unicode scalars) reordered canonically) is (“¤(300)¤(315)”: Unicode scalars))}
+  test {verify (((“¤(300)¤(20)”: Unicode scalars) reordered canonically) is (“¤(300)¤(20)”: Unicode scalars))}
+  [
+   English: This action is optimized to simply return the scalars if they are already in canonical order; checking separately before calling it is redundant.
+  ]
+ ]
+ (
+  English: (scalars: Unicode scalars) reordered canonically
+  Swift: (self: [scalars]).reorderedCanonically
+ )
+ Unicode scalars
+ {
+  if ((scalars) are ordered canonically), {
+   ← scalars
+  }
+  ← (scalars) reordered canonically, skipping necessity check
+ }
+
+action (clients)
+ [
+  [
    English: Normalizes the scalars according to compatibility decomposition (NFKD).
   ]
   test {
