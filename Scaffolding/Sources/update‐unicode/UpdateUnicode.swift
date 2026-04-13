@@ -23,42 +23,93 @@ import SDGPersistence
 
   static func main() throws {
     var classes: [Unicode.Scalar: UInt8] = [:]
+    var decompositions: [Unicode.Scalar: [Unicode.Scalar]] = [:]
 
-    try populateFromDatabase(classes: &classes)
-    checkForDifferencesFromSystem(classes: classes)
+    try populateFromDatabase(classes: &classes, decompositions: &decompositions)
+    resolveRecursion(decompositions: &decompositions)
+    checkForDifferencesFromSystem(classes: classes, decompositions: &decompositions)
     try outputFiles(classes: classes)
   }
 
-  static func populateFromDatabase(classes: inout [Unicode.Scalar: UInt8]) throws {
-    for databaseEntry in try String(from: databaseURL).components(separatedBy: "\n")
-      where !databaseEntry.contents.isEmpty {
-      let entry = String(databaseEntry.contents)
-      let entryComponents = entry.components(separatedBy: ";")
+  static func populateFromDatabase(
+    classes: inout [Unicode.Scalar: UInt8],
+    decompositions: inout [Unicode.Scalar: [Unicode.Scalar]]
+  ) throws {
+    for entry in try String(from: databaseURL).components(separatedBy: "\n") as [String]
+      where !entry.isEmpty {
+      let entryComponents: [String] = entry.components(separatedBy: ";")
 
-      let scalarValueString = String(entryComponents[0].contents)
-      guard let scalarValue = Int(hexadecimal: scalarValueString),
-        let scalar = Unicode.Scalar(scalarValue) else {
+      let scalarValueString = entryComponents[0]
+      guard let scalar = Unicode.Scalar(hexadecimal: scalarValueString) else {
         if let generalCategory = entryComponents.prefix(3).last,
-          String(generalCategory.contents) == "Cs" /* surrogate */ {
+          String(generalCategory) == "Cs" /* surrogate */ {
           continue
         }
         fatalError("Unable to parse scalar: \(scalarValueString) (\(entry))")
       }
 
-      let classString = String(entryComponents[3].contents)
+      let classString = entryComponents[3]
       guard let combiningClass = UInt8(classString, radix: 10) else {
         fatalError("Unable to parse canonical combining class: \(classString) (\(entry))")
       }
       classes[scalar] = combiningClass
+
+      let decompositionString = entryComponents[5]
+      if !decompositionString.isEmpty {
+        var decomposition: [String] = decompositionString.components(separatedBy: " ")
+        if decomposition.first?.first == "<" {
+          decomposition.removeFirst()
+        }
+        let decomposedScalars: [Unicode.Scalar] = decomposition.map { hexadecimal in
+          guard let scalar = Unicode.Scalar(hexadecimal: hexadecimal) else {
+            fatalError("Unable to parse scalar: \(hexadecimal) (\(entry))")
+          }
+          return scalar
+        }
+        decompositions[scalar] = decomposedScalars
+      }
     }
   }
 
-  static func checkForDifferencesFromSystem(classes: [Unicode.Scalar: UInt8]) {
+  static func resolveRecursion(decompositions: inout [Unicode.Scalar: [Unicode.Scalar]]) {
+    for key in decompositions.keys {
+      var notFinished = true
+      var result = decompositions[key]!
+      while notFinished {
+        notFinished = false
+        let copy = result
+        result = []
+        for scalar in copy {
+          if let replacement = decompositions[scalar] {
+            notFinished = true
+            result.append(contentsOf: replacement)
+          } else {
+            result.append(scalar)
+          }
+        }
+      }
+      decompositions[key] = result
+    }
+  }
+
+  static func checkForDifferencesFromSystem(
+    classes: [Unicode.Scalar: UInt8],
+    decompositions: inout [Unicode.Scalar: [Unicode.Scalar]]
+  ) {
     for value in 0x0000...0x10FFFF {
       if let scalar = Unicode.Scalar(value),
         scalar.properties.generalCategory != .unassigned {
-        if classes[scalar] ?? 0 != scalar.properties.canonicalCombiningClass.rawValue {
-          print("Canonical combining class differs from system: \(String(hexadecimal: value)), \(classes[scalar] ?? 0) ≠ \(scalar.properties.canonicalCombiningClass.rawValue)")
+
+        let combiningClass = classes[scalar] ?? 0
+        let systemClass = scalar.properties.canonicalCombiningClass.rawValue
+        if combiningClass != systemClass {
+          print("Canonical combining class differs from system: \(String(hexadecimal: value)), \(combiningClass) ≠ \(systemClass)")
+        }
+
+        let decomposition = decompositions[scalar] ?? [scalar]
+        let systemDecomposition = String(scalar).decomposedStringWithCompatibilityMapping.unicodeScalars
+        if !decomposition.elementsEqual(systemDecomposition) {
+          print("Compatibility decomposition differs from system: \(String(hexadecimal: value)), \(decomposition.map({ String(hexadecimal: $0.value) })) ≠ \(systemDecomposition.map({ String(hexadecimal: $0.value) }))")
         }
       }
     }
