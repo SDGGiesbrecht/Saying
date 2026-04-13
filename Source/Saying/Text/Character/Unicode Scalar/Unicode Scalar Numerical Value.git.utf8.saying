@@ -393,7 +393,7 @@ action (file)
  )
  Unicode scalar numerical value
  {
-  ← (“21”: platform fixed‐width natural number) as Unicode scalar numerical value
+  ← “15”
  }
 
 action (file)
@@ -402,7 +402,7 @@ action (file)
  )
  Unicode scalar numerical value
  {
-  ← (“28”: platform fixed‐width natural number) as Unicode scalar numerical value
+  ← “1C”
  }
 
 action (file)
@@ -423,11 +423,11 @@ action (unit)
  )
  Unicode scalars
  {
-  let (• 글자 마디의 색인) be ((글자 마디) minus (첫 글자 마디) skipping overflow check)
-  let (• 종성의 색인: Unicode scalar numerical value) be ((글자 마디의 색인) modulo (종성의 개수 및 없음) skipping negativity check)
+  let (• 글자 마디의 색인: Unicode scalar numerical value) be ((글자 마디) minus (첫 글자 마디) skipping overflow check)
   let (• 자모: Unicode scalars) start as (“”: Unicode scalars)
-  append ((첫 초성) plus ((글자 마디의 색인) divided by (최종 쌍의 수) skipping zero and overflow checks) skipping overflow check) to (↓ 자모)
-  append ((첫 중성) plus (((글자 마디의 색인) modulo (최종 쌍의 수) skipping negativity check) divided by (종성의 개수 및 없음) skipping zero and overflow checks) skipping overflow check) to (↓ 자모)
+  append (Unicode scalar with value ((첫 초성) plus ((글자 마디의 색인) divided by (최종 쌍의 수) skipping zero and overflow checks) skipping overflow check) skipping validity check) to (↓ 자모)
+  append (Unicode scalar with value ((첫 중성) plus (((글자 마디의 색인) modulo (최종 쌍의 수) skipping negativity check) divided by (종성의 개수 및 없음) skipping zero and overflow checks) skipping overflow check) skipping validity check) to (↓ 자모)
+  let (• 종성의 색인: Unicode scalar numerical value) be ((글자 마디의 색인) modulo (종성의 개수 및 없음) skipping negativity check)
   if ((종성의 색인) > (“0”: Unicode scalar numerical value)), {
    append (Unicode scalar with value ((첫 종성 직전) plus (종성의 색인) skipping overflow check) skipping validity check) to (↓ 자모)
   }
