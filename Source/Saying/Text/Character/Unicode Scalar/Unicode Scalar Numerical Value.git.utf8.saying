@@ -166,7 +166,7 @@ use (clients)
    }
  }
 
-action (clients)
+action (unit)
  [
   test {
    let (• bits: Unicode scalar numerical value) start as (“3”: Unicode scalar numerical value)
@@ -297,3 +297,139 @@ action (file)
  JavaScript: “” bits “ >>> ” distance “”
  Kotlin: “” bits “ ushr ” distance “”
  Swift: “” bits “ >> ” distance “”
+
+action (file)
+ (
+  English: (augend: Unicode scalar numerical value) plus (addend: Unicode scalar numerical value) skipping overflow check
+ )
+ Unicode scalar numerical value
+ C: “” augend “ + ” addend “”
+ C♯: “” augend “ + ” addend “”
+ JavaScript: “” augend “ + ” addend “”
+ Kotlin: “” augend “ + ” addend “”
+ Swift: “” augend “ ¤(26)+ ” addend “”
+
+action (file)
+ (
+  English: (minuend: Unicode scalar numerical value) minus (subtrahend: Unicode scalar numerical value) skipping overflow check
+ )
+ Unicode scalar numerical value
+ C: “” minuend “ ¤(2D) ” subtrahend “”
+ C♯: “” minuend “ ¤(2D) ” subtrahend “”
+ JavaScript: “” minuend “ ¤(2D) ” subtrahend “”
+ Kotlin: “” minuend “ ¤(2D) ” subtrahend “”
+ Swift: “” minuend “ ¤(26)¤(2D) ” subtrahend “”
+
+action (file)
+ (first: Unicode scalar numerical value) times (second: Unicode scalar numerical value) skipping overflow check
+ Unicode scalar numerical value
+ C: “” first “ ¤(2A) ” second “”
+ C♯: “” first “ ¤(2A) ” second “”
+ JavaScript: “” first “ ¤(2A) ” second “”
+ Kotlin: “” first “ ¤(2A) ” second “”
+ Swift: «» first “ ¤(26)¤(2A) ” second „“
+
+action (file)
+ (
+  English: (dividend: Unicode scalar numerical value) divided by (divisor: Unicode scalar numerical value) skipping zero and overflow checks
+ )
+ Unicode scalar numerical value
+ C: “” dividend “ / ” divisor “”
+ C♯: “” dividend “ / ” divisor “”
+ JavaScript: “Math.floor(” dividend “ / ” divisor “)”
+ Kotlin: “” dividend “ / ” divisor “”
+ Swift: “” dividend “ / ” divisor “”
+
+action (file)
+ (
+  English: (dividend: Unicode scalar numerical value) modulo (divisor: Unicode scalar numerical value) skipping negativity check
+ )
+ Unicode scalar numerical value
+ C: “” dividend “ ¤(25) ” divisor “”
+ C♯: “” dividend “ ¤(25) ” divisor “”
+ JavaScript: “” dividend “ ¤(25) ” divisor “”
+ Kotlin: “” dividend “ ¤(25) ” divisor “”
+ Swift: “” dividend “ ¤(25) ” divisor “”
+
+action (file)
+ (
+  한국어: 첫 글자 마디
+ )
+ Unicode scalar numerical value
+ {
+  ← “AC00”
+ }
+
+action (file)
+ (
+  한국어: 첫 초성
+ )
+ Unicode scalar numerical value
+ {
+  ← “1100”
+ }
+
+action (file)
+ (
+  한국어: 첫 중성
+ )
+ Unicode scalar numerical value
+ {
+  ← “1161”
+ }
+
+action (file)
+ (
+  한국어: 첫 종성 직전
+ )
+ Unicode scalar numerical value
+ {
+  ← “11A7”
+ }
+
+action (file)
+ (
+  한국어: 중성의 개수
+ )
+ Unicode scalar numerical value
+ {
+  ← “15”
+ }
+
+action (file)
+ (
+  한국어: 종성의 개수 및 없음
+ )
+ Unicode scalar numerical value
+ {
+  ← “1C”
+ }
+
+action (file)
+ (
+  한국어: 최종 쌍의 수
+ )
+ Unicode scalar numerical value
+ {
+  ← (중성의 개수) times (종성의 개수 및 없음) skipping overflow check
+ }
+
+action (unit)
+ [
+  test {verify (((“D4DB”: Unicode scalar numerical value)의 자모) is (“¤(1111)¤(1171)¤(11B6)”: Unicode scalars))}
+ ]
+ (
+  한국어: (글자 마디: Unicode scalar numerical value)의 자모
+ )
+ Unicode scalars
+ {
+  let (• 글자 마디의 색인: Unicode scalar numerical value) be ((글자 마디) minus (첫 글자 마디) skipping overflow check)
+  let (• 자모: Unicode scalars) start as (“”: Unicode scalars)
+  append (Unicode scalar with value ((첫 초성) plus ((글자 마디의 색인) divided by (최종 쌍의 수) skipping zero and overflow checks) skipping overflow check) skipping validity check) to (↓ 자모)
+  append (Unicode scalar with value ((첫 중성) plus (((글자 마디의 색인) modulo (최종 쌍의 수) skipping negativity check) divided by (종성의 개수 및 없음) skipping zero and overflow checks) skipping overflow check) skipping validity check) to (↓ 자모)
+  let (• 종성의 색인: Unicode scalar numerical value) be ((글자 마디의 색인) modulo (종성의 개수 및 없음) skipping negativity check)
+  if ((종성의 색인) > (“0”: Unicode scalar numerical value)), {
+   append (Unicode scalar with value ((첫 종성 직전) plus (종성의 색인) skipping overflow check) skipping validity check) to (↓ 자모)
+  }
+  ← 자모
+ }
