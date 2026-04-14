@@ -6,7 +6,10 @@ import SDGPersistence
 
   static let version = "17.0.0"
   static let databaseURL = URL(string: "http://www.unicode.org/Public/\(version)/ucd/UnicodeData.txt")!
+  static let firstScalar = Unicode.Scalar(0x0000)!
   static let lastScalar = Unicode.Scalar(0x10FFFF)!
+  static let firstHangulSyllable: UInt32 = 0xAC00
+  static let lastHangulSyllable: UInt32 = firstHangulSyllable + 11172 - 1
 
   static let thisFile = URL(fileURLWithPath: #filePath)
   static let projectRoot = thisFile
@@ -28,7 +31,7 @@ import SDGPersistence
     try populateFromDatabase(classes: &classes, decompositions: &decompositions)
     resolveRecursion(decompositions: &decompositions)
     checkForDifferencesFromSystem(classes: classes, decompositions: &decompositions)
-    try outputFiles(classes: classes)
+    try outputFiles(classes: classes, decompositions: decompositions)
   }
 
   static func populateFromDatabase(
@@ -96,7 +99,7 @@ import SDGPersistence
     classes: [Unicode.Scalar: UInt8],
     decompositions: inout [Unicode.Scalar: [Unicode.Scalar]]
   ) {
-    for value in 0x0000...0x10FFFF {
+    for value in firstScalar.value ... lastScalar.value {
       if let scalar = Unicode.Scalar(value),
         scalar.properties.generalCategory != .unassigned {
 
@@ -108,15 +111,20 @@ import SDGPersistence
 
         let decomposition = decompositions[scalar] ?? [scalar]
         let systemDecomposition = String(scalar).decomposedStringWithCompatibilityMapping.unicodeScalars
-        if !decomposition.elementsEqual(systemDecomposition) {
+        if !decomposition.elementsEqual(systemDecomposition),
+           !(firstHangulSyllable ... lastHangulSyllable).contains(value) {
           print("Compatibility decomposition differs from system: \(String(hexadecimal: value)), \(decomposition.map({ String(hexadecimal: $0.value) })) ≠ \(systemDecomposition.map({ String(hexadecimal: $0.value) }))")
         }
       }
     }
   }
 
-  static func outputFiles(classes: [Unicode.Scalar: UInt8]) throws {
+  static func outputFiles(
+    classes: [Unicode.Scalar: UInt8],
+    decompositions: [Unicode.Scalar: [Unicode.Scalar]]
+  ) throws {
     try output(classes: classes)
+    try output(decompositions: decompositions)
   }
 
   static func output(classes: [Unicode.Scalar: UInt8]) throws {
@@ -127,16 +135,13 @@ import SDGPersistence
     ]
     var implementation: [String] = []
     var previous: UInt8?
-    for value in 0x0000...0x10FFFF {
+    for value in firstScalar.value ... lastScalar.value {
       if let scalar = Unicode.Scalar(value) {
         let combiningClass = classes[scalar] ?? 0
         defer { previous = combiningClass }
         if let previous = previous,
           combiningClass != previous {
-          var literalScalar = String(hexadecimal: scalar.value)
-          while literalScalar.scalars.count < 4 {
-            literalScalar = "0\(literalScalar)"
-          }
+          let literalScalar = scalar.sayingLiteral
           source.append(contentsOf: [
             "  test {ignore (canonical combining class of (“\(literalScalar)”: Unicode scalar numerical value))}",
           ])
@@ -166,5 +171,55 @@ import SDGPersistence
 
     try source.joined(separator: "\n").appending("\n")
       .overrwite(unicodeDirectory.appendingPathComponent("Canonical Combining Class.git.utf8.saying"))
+  }
+
+  static func output(decompositions: [Unicode.Scalar: [Unicode.Scalar]]) throws {
+    var source: [String] = [
+      "action (unit)",
+      " [",
+      "  test {ignore (full compatibility decomposition of (“0000”: Unicode scalar numerical value))}",
+    ]
+    var implementation: [String] = []
+    var previous: [Unicode.Scalar]?
+    let noChange = "(Unicode scalar with value (scalar) skipping validity check) as scalars"
+    for value in firstScalar.value ... lastScalar.value {
+      if let scalar = Unicode.Scalar(value) {
+        let decomposition = decompositions[scalar] ?? []
+        defer { previous = decomposition }
+        if let previous = previous,
+          decomposition != previous || value == firstHangulSyllable || value == lastHangulSyllable + 1 {
+          let literalScalar = scalar.sayingLiteral
+          source.append(contentsOf: [
+            "  test {ignore (full compatibility decomposition of (“\(literalScalar)”: Unicode scalar numerical value))}",
+          ])
+          let literalString = previous.isEmpty
+            ? (value == lastHangulSyllable + 1 ? "(scalar)의 자모" : noChange)
+            : "“\(previous.map({ "¤(\($0.sayingLiteral))" }).joined())”"
+          implementation.append(contentsOf: [
+            "  if ((scalar) is less than (“\(literalScalar)”: Unicode scalar numerical value)), {",
+            "   ← \(literalString)",
+            "  }",
+          ])
+        }
+      }
+    }
+    implementation.append(contentsOf: [
+      "  ← \(noChange)",
+    ])
+    source.append(contentsOf: [
+      " ]",
+      " (",
+      "  English: full compatibility decomposition of (scalar: Unicode scalar numerical value)",
+      " )",
+      " Unicode scalars",
+      " {",
+    ])
+    source.append(contentsOf: implementation)
+    source.append(contentsOf: [
+      " }",
+    ])
+
+    try source.joined(separator: "\n").appending("\n")
+      .overrwite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition.git.utf8.saying"))
   }
 }
