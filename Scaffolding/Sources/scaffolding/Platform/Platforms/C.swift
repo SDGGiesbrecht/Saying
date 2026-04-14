@@ -74,7 +74,7 @@ enum C: Platform {
     var values: [UInt32] = []
     values.append(0x0) // null (compiler warning)
     values.append(0x22) // "
-    values.append(0xC5) // \
+    values.append(0x5C) // \
     return values
   }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>?

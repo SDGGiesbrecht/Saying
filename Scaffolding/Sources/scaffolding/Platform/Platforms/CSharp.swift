@@ -28,7 +28,7 @@ enum CSharp: Platform {
   static var disallowedStringLiteralPoints: [UInt32] {
     var values: [UInt32] = []
     values.append(0x22) // "
-    values.append(0xC5) // \
+    values.append(0x5C) // \
     return values
   }
   static var _allowedIdentifierStartCharactersCache: Set<Unicode.Scalar>?
