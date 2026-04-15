@@ -219,7 +219,9 @@ import SDGPersistence
       " }",
     ])
 
+    /*
     try source.joined(separator: "\n").appending("\n")
       .overrwite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition.git.utf8.saying"))
+     */
   }
 }
