@@ -6,4 +6,12 @@ extension Unicode.Scalar {
     }
     self.init(value)
   }
+
+  var sayingLiteral: String {
+    var literal = String(hexadecimal: value)
+    while literal.scalars.count < 4 {
+      literal = "0\(literal)"
+    }
+    return literal
+  }
 }
