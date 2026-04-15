@@ -129,42 +129,60 @@ import SDGPersistence
 
   static func output(classes: [Unicode.Scalar: UInt8]) throws {
     var source: [String] = [
-      "action (unit)",
+      "flow (file)",
+      " (",
+      "  English: smuggle early return of (value: 8‐bit natural number) past Saying compiler",
+      " )",
+      " C: “return ” value “”",
+      " C♯: “return ” value “”",
+      " JavaScript: “return ” value “”",
+      " Kotlin: “return ” value “”",
+      " Swift: “return ” value “”",
+      "",
+      "flow (file)",
       " [",
-      "  test {ignore (canonical combining class of (“0000”: Unicode scalar numerical value))}",
-    ]
-    var implementation: [String] = []
-    var previous: UInt8?
-    for value in firstScalar.value ... lastScalar.value {
-      if let scalar = Unicode.Scalar(value) {
-        let combiningClass = classes[scalar] ?? 0
-        defer { previous = combiningClass }
-        if let previous = previous,
-          combiningClass != previous {
-          let literalScalar = scalar.sayingLiteral
-          source.append(contentsOf: [
-            "  test {ignore (canonical combining class of (“\(literalScalar)”: Unicode scalar numerical value))}",
-          ])
-          implementation.append(contentsOf: [
-            "  if ((scalar) is less than (“\(literalScalar)”: Unicode scalar numerical value)), {",
-            "   ← “\(previous)”",
-            "  }",
-          ])
-        }
-      }
-    }
-    implementation.append(contentsOf: [
-      "  ← “\(classes[lastScalar] ?? 0)”",
-    ])
-    source.append(contentsOf: [
+      "  [",
+      "   English: Conditionally returns early.",
+      "  ]",
+      "  [",
+      "   English: This flow groups the tabular repetion into one place, simplifying test coverage.",
+      "  ]",
       " ]",
+      " (",
+      "  English: if (condition: truth value), (result: 8‐bit natural number)",
+      " )",
+      " {",
+      "  if (condition), {",
+      "   smuggle early return of (result) past Saying compiler",
+      "  }",
+      " }",
+      "",
+      "action (unit)",
+    ]
+    source.append(contentsOf: [
       " (",
       "  English: canonical combining class of (scalar: Unicode scalar numerical value)",
       " )",
       " 8‐bit natural number",
       " {",
     ])
-    source.append(contentsOf: implementation)
+    var previous: (scalar: Unicode.Scalar, combiningClass: UInt8)?
+    for value in firstScalar.value ... lastScalar.value {
+      if let scalar = Unicode.Scalar(value) {
+        let combiningClass = classes[scalar] ?? 0
+        defer { previous = (scalar: scalar, combiningClass: combiningClass) }
+        if let previous = previous,
+          combiningClass != previous.combiningClass {
+          let literalScalar = previous.scalar.sayingLiteral
+          source.append(contentsOf: [
+            "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), (“\(previous.combiningClass)”: 8‐bit natural number)",
+          ])
+        }
+      }
+    }
+    source.append(contentsOf: [
+      "  ← “\(classes[lastScalar] ?? 0)”",
+    ])
     source.append(contentsOf: [
       " }",
     ])
