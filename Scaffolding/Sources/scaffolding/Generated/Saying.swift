@@ -772,1819 +772,1819 @@ extension UInt64 {
 }
 
 fileprivate func canonical_0020combining_0020class_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003A8_2010bit_0020natural_0020number(_ scalar: UInt32) -> UInt8 {
-  if scalar < 0x0300 {
+  if scalar <= 0x02FF {
     return 0
   }
-  if scalar < 0x0315 {
+  if scalar <= 0x0314 {
     return 230
   }
-  if scalar < 0x0316 {
+  if scalar <= 0x0315 {
     return 232
   }
-  if scalar < 0x031A {
+  if scalar <= 0x0319 {
     return 220
   }
-  if scalar < 0x031B {
+  if scalar <= 0x031A {
     return 232
   }
-  if scalar < 0x031C {
+  if scalar <= 0x031B {
     return 216
   }
-  if scalar < 0x0321 {
+  if scalar <= 0x0320 {
     return 220
   }
-  if scalar < 0x0323 {
+  if scalar <= 0x0322 {
     return 202
   }
-  if scalar < 0x0327 {
+  if scalar <= 0x0326 {
     return 220
   }
-  if scalar < 0x0329 {
+  if scalar <= 0x0328 {
     return 202
   }
-  if scalar < 0x0334 {
+  if scalar <= 0x0333 {
     return 220
   }
-  if scalar < 0x0339 {
+  if scalar <= 0x0338 {
     return 1
   }
-  if scalar < 0x033D {
+  if scalar <= 0x033C {
     return 220
   }
-  if scalar < 0x0345 {
+  if scalar <= 0x0344 {
     return 230
   }
-  if scalar < 0x0346 {
+  if scalar <= 0x0345 {
     return 240
   }
-  if scalar < 0x0347 {
+  if scalar <= 0x0346 {
     return 230
   }
-  if scalar < 0x034A {
+  if scalar <= 0x0349 {
     return 220
   }
-  if scalar < 0x034D {
+  if scalar <= 0x034C {
     return 230
   }
-  if scalar < 0x034F {
+  if scalar <= 0x034E {
     return 220
   }
-  if scalar < 0x0350 {
+  if scalar <= 0x034F {
     return 0
   }
-  if scalar < 0x0353 {
+  if scalar <= 0x0352 {
     return 230
   }
-  if scalar < 0x0357 {
+  if scalar <= 0x0356 {
     return 220
   }
-  if scalar < 0x0358 {
+  if scalar <= 0x0357 {
     return 230
   }
-  if scalar < 0x0359 {
+  if scalar <= 0x0358 {
     return 232
   }
-  if scalar < 0x035B {
+  if scalar <= 0x035A {
     return 220
   }
-  if scalar < 0x035C {
+  if scalar <= 0x035B {
     return 230
   }
-  if scalar < 0x035D {
+  if scalar <= 0x035C {
     return 233
   }
-  if scalar < 0x035F {
+  if scalar <= 0x035E {
     return 234
   }
-  if scalar < 0x0360 {
+  if scalar <= 0x035F {
     return 233
   }
-  if scalar < 0x0362 {
+  if scalar <= 0x0361 {
     return 234
   }
-  if scalar < 0x0363 {
+  if scalar <= 0x0362 {
     return 233
   }
-  if scalar < 0x0370 {
+  if scalar <= 0x036F {
     return 230
   }
-  if scalar < 0x0483 {
+  if scalar <= 0x0482 {
     return 0
   }
-  if scalar < 0x0488 {
+  if scalar <= 0x0487 {
     return 230
   }
-  if scalar < 0x0591 {
+  if scalar <= 0x0590 {
     return 0
   }
-  if scalar < 0x0592 {
+  if scalar <= 0x0591 {
     return 220
   }
-  if scalar < 0x0596 {
+  if scalar <= 0x0595 {
     return 230
   }
-  if scalar < 0x0597 {
+  if scalar <= 0x0596 {
     return 220
   }
-  if scalar < 0x059A {
+  if scalar <= 0x0599 {
     return 230
   }
-  if scalar < 0x059B {
+  if scalar <= 0x059A {
     return 222
   }
-  if scalar < 0x059C {
+  if scalar <= 0x059B {
     return 220
   }
-  if scalar < 0x05A2 {
+  if scalar <= 0x05A1 {
     return 230
   }
-  if scalar < 0x05A8 {
+  if scalar <= 0x05A7 {
     return 220
   }
-  if scalar < 0x05AA {
+  if scalar <= 0x05A9 {
     return 230
   }
-  if scalar < 0x05AB {
+  if scalar <= 0x05AA {
     return 220
   }
-  if scalar < 0x05AD {
+  if scalar <= 0x05AC {
     return 230
   }
-  if scalar < 0x05AE {
+  if scalar <= 0x05AD {
     return 222
   }
-  if scalar < 0x05AF {
+  if scalar <= 0x05AE {
     return 228
   }
-  if scalar < 0x05B0 {
+  if scalar <= 0x05AF {
     return 230
   }
-  if scalar < 0x05B1 {
+  if scalar <= 0x05B0 {
     return 10
   }
-  if scalar < 0x05B2 {
+  if scalar <= 0x05B1 {
     return 11
   }
-  if scalar < 0x05B3 {
+  if scalar <= 0x05B2 {
     return 12
   }
-  if scalar < 0x05B4 {
+  if scalar <= 0x05B3 {
     return 13
   }
-  if scalar < 0x05B5 {
+  if scalar <= 0x05B4 {
     return 14
   }
-  if scalar < 0x05B6 {
+  if scalar <= 0x05B5 {
     return 15
   }
-  if scalar < 0x05B7 {
+  if scalar <= 0x05B6 {
     return 16
   }
-  if scalar < 0x05B8 {
+  if scalar <= 0x05B7 {
     return 17
   }
-  if scalar < 0x05B9 {
+  if scalar <= 0x05B8 {
     return 18
   }
-  if scalar < 0x05BB {
+  if scalar <= 0x05BA {
     return 19
   }
-  if scalar < 0x05BC {
+  if scalar <= 0x05BB {
     return 20
   }
-  if scalar < 0x05BD {
+  if scalar <= 0x05BC {
     return 21
   }
-  if scalar < 0x05BE {
+  if scalar <= 0x05BD {
     return 22
   }
-  if scalar < 0x05BF {
+  if scalar <= 0x05BE {
     return 0
   }
-  if scalar < 0x05C0 {
+  if scalar <= 0x05BF {
     return 23
   }
-  if scalar < 0x05C1 {
+  if scalar <= 0x05C0 {
     return 0
   }
-  if scalar < 0x05C2 {
+  if scalar <= 0x05C1 {
     return 24
   }
-  if scalar < 0x05C3 {
+  if scalar <= 0x05C2 {
     return 25
   }
-  if scalar < 0x05C4 {
+  if scalar <= 0x05C3 {
     return 0
   }
-  if scalar < 0x05C5 {
+  if scalar <= 0x05C4 {
     return 230
   }
-  if scalar < 0x05C6 {
+  if scalar <= 0x05C5 {
     return 220
   }
-  if scalar < 0x05C7 {
+  if scalar <= 0x05C6 {
     return 0
   }
-  if scalar < 0x05C8 {
+  if scalar <= 0x05C7 {
     return 18
   }
-  if scalar < 0x0610 {
+  if scalar <= 0x060F {
     return 0
   }
-  if scalar < 0x0618 {
+  if scalar <= 0x0617 {
     return 230
   }
-  if scalar < 0x0619 {
+  if scalar <= 0x0618 {
     return 30
   }
-  if scalar < 0x061A {
+  if scalar <= 0x0619 {
     return 31
   }
-  if scalar < 0x061B {
+  if scalar <= 0x061A {
     return 32
   }
-  if scalar < 0x064B {
+  if scalar <= 0x064A {
     return 0
   }
-  if scalar < 0x064C {
+  if scalar <= 0x064B {
     return 27
   }
-  if scalar < 0x064D {
+  if scalar <= 0x064C {
     return 28
   }
-  if scalar < 0x064E {
+  if scalar <= 0x064D {
     return 29
   }
-  if scalar < 0x064F {
+  if scalar <= 0x064E {
     return 30
   }
-  if scalar < 0x0650 {
+  if scalar <= 0x064F {
     return 31
   }
-  if scalar < 0x0651 {
+  if scalar <= 0x0650 {
     return 32
   }
-  if scalar < 0x0652 {
+  if scalar <= 0x0651 {
     return 33
   }
-  if scalar < 0x0653 {
+  if scalar <= 0x0652 {
     return 34
   }
-  if scalar < 0x0655 {
+  if scalar <= 0x0654 {
     return 230
   }
-  if scalar < 0x0657 {
+  if scalar <= 0x0656 {
     return 220
   }
-  if scalar < 0x065C {
+  if scalar <= 0x065B {
     return 230
   }
-  if scalar < 0x065D {
+  if scalar <= 0x065C {
     return 220
   }
-  if scalar < 0x065F {
+  if scalar <= 0x065E {
     return 230
   }
-  if scalar < 0x0660 {
+  if scalar <= 0x065F {
     return 220
   }
-  if scalar < 0x0670 {
+  if scalar <= 0x066F {
     return 0
   }
-  if scalar < 0x0671 {
+  if scalar <= 0x0670 {
     return 35
   }
-  if scalar < 0x06D6 {
+  if scalar <= 0x06D5 {
     return 0
   }
-  if scalar < 0x06DD {
+  if scalar <= 0x06DC {
     return 230
   }
-  if scalar < 0x06DF {
+  if scalar <= 0x06DE {
     return 0
   }
-  if scalar < 0x06E3 {
+  if scalar <= 0x06E2 {
     return 230
   }
-  if scalar < 0x06E4 {
+  if scalar <= 0x06E3 {
     return 220
   }
-  if scalar < 0x06E5 {
+  if scalar <= 0x06E4 {
     return 230
   }
-  if scalar < 0x06E7 {
+  if scalar <= 0x06E6 {
     return 0
   }
-  if scalar < 0x06E9 {
+  if scalar <= 0x06E8 {
     return 230
   }
-  if scalar < 0x06EA {
+  if scalar <= 0x06E9 {
     return 0
   }
-  if scalar < 0x06EB {
+  if scalar <= 0x06EA {
     return 220
   }
-  if scalar < 0x06ED {
+  if scalar <= 0x06EC {
     return 230
   }
-  if scalar < 0x06EE {
+  if scalar <= 0x06ED {
     return 220
   }
-  if scalar < 0x0711 {
+  if scalar <= 0x0710 {
     return 0
   }
-  if scalar < 0x0712 {
+  if scalar <= 0x0711 {
     return 36
   }
-  if scalar < 0x0730 {
+  if scalar <= 0x072F {
     return 0
   }
-  if scalar < 0x0731 {
+  if scalar <= 0x0730 {
     return 230
   }
-  if scalar < 0x0732 {
+  if scalar <= 0x0731 {
     return 220
   }
-  if scalar < 0x0734 {
+  if scalar <= 0x0733 {
     return 230
   }
-  if scalar < 0x0735 {
+  if scalar <= 0x0734 {
     return 220
   }
-  if scalar < 0x0737 {
+  if scalar <= 0x0736 {
     return 230
   }
-  if scalar < 0x073A {
+  if scalar <= 0x0739 {
     return 220
   }
-  if scalar < 0x073B {
+  if scalar <= 0x073A {
     return 230
   }
-  if scalar < 0x073D {
+  if scalar <= 0x073C {
     return 220
   }
-  if scalar < 0x073E {
+  if scalar <= 0x073D {
     return 230
   }
-  if scalar < 0x073F {
+  if scalar <= 0x073E {
     return 220
   }
-  if scalar < 0x0742 {
+  if scalar <= 0x0741 {
     return 230
   }
-  if scalar < 0x0743 {
+  if scalar <= 0x0742 {
     return 220
   }
-  if scalar < 0x0744 {
+  if scalar <= 0x0743 {
     return 230
   }
-  if scalar < 0x0745 {
+  if scalar <= 0x0744 {
     return 220
   }
-  if scalar < 0x0746 {
+  if scalar <= 0x0745 {
     return 230
   }
-  if scalar < 0x0747 {
+  if scalar <= 0x0746 {
     return 220
   }
-  if scalar < 0x0748 {
+  if scalar <= 0x0747 {
     return 230
   }
-  if scalar < 0x0749 {
+  if scalar <= 0x0748 {
     return 220
   }
-  if scalar < 0x074B {
+  if scalar <= 0x074A {
     return 230
   }
-  if scalar < 0x07EB {
+  if scalar <= 0x07EA {
     return 0
   }
-  if scalar < 0x07F2 {
+  if scalar <= 0x07F1 {
     return 230
   }
-  if scalar < 0x07F3 {
+  if scalar <= 0x07F2 {
     return 220
   }
-  if scalar < 0x07F4 {
+  if scalar <= 0x07F3 {
     return 230
   }
-  if scalar < 0x07FD {
+  if scalar <= 0x07FC {
     return 0
   }
-  if scalar < 0x07FE {
+  if scalar <= 0x07FD {
     return 220
   }
-  if scalar < 0x0816 {
+  if scalar <= 0x0815 {
     return 0
   }
-  if scalar < 0x081A {
+  if scalar <= 0x0819 {
     return 230
   }
-  if scalar < 0x081B {
+  if scalar <= 0x081A {
     return 0
   }
-  if scalar < 0x0824 {
+  if scalar <= 0x0823 {
     return 230
   }
-  if scalar < 0x0825 {
+  if scalar <= 0x0824 {
     return 0
   }
-  if scalar < 0x0828 {
+  if scalar <= 0x0827 {
     return 230
   }
-  if scalar < 0x0829 {
+  if scalar <= 0x0828 {
     return 0
   }
-  if scalar < 0x082E {
+  if scalar <= 0x082D {
     return 230
   }
-  if scalar < 0x0859 {
+  if scalar <= 0x0858 {
     return 0
   }
-  if scalar < 0x085C {
+  if scalar <= 0x085B {
     return 220
   }
-  if scalar < 0x0897 {
+  if scalar <= 0x0896 {
     return 0
   }
-  if scalar < 0x0899 {
+  if scalar <= 0x0898 {
     return 230
   }
-  if scalar < 0x089C {
+  if scalar <= 0x089B {
     return 220
   }
-  if scalar < 0x08A0 {
+  if scalar <= 0x089F {
     return 230
   }
-  if scalar < 0x08CA {
+  if scalar <= 0x08C9 {
     return 0
   }
-  if scalar < 0x08CF {
+  if scalar <= 0x08CE {
     return 230
   }
-  if scalar < 0x08D4 {
+  if scalar <= 0x08D3 {
     return 220
   }
-  if scalar < 0x08E2 {
+  if scalar <= 0x08E1 {
     return 230
   }
-  if scalar < 0x08E3 {
+  if scalar <= 0x08E2 {
     return 0
   }
-  if scalar < 0x08E4 {
+  if scalar <= 0x08E3 {
     return 220
   }
-  if scalar < 0x08E6 {
+  if scalar <= 0x08E5 {
     return 230
   }
-  if scalar < 0x08E7 {
+  if scalar <= 0x08E6 {
     return 220
   }
-  if scalar < 0x08E9 {
+  if scalar <= 0x08E8 {
     return 230
   }
-  if scalar < 0x08EA {
+  if scalar <= 0x08E9 {
     return 220
   }
-  if scalar < 0x08ED {
+  if scalar <= 0x08EC {
     return 230
   }
-  if scalar < 0x08F0 {
+  if scalar <= 0x08EF {
     return 220
   }
-  if scalar < 0x08F1 {
+  if scalar <= 0x08F0 {
     return 27
   }
-  if scalar < 0x08F2 {
+  if scalar <= 0x08F1 {
     return 28
   }
-  if scalar < 0x08F3 {
+  if scalar <= 0x08F2 {
     return 29
   }
-  if scalar < 0x08F6 {
+  if scalar <= 0x08F5 {
     return 230
   }
-  if scalar < 0x08F7 {
+  if scalar <= 0x08F6 {
     return 220
   }
-  if scalar < 0x08F9 {
+  if scalar <= 0x08F8 {
     return 230
   }
-  if scalar < 0x08FB {
+  if scalar <= 0x08FA {
     return 220
   }
-  if scalar < 0x0900 {
+  if scalar <= 0x08FF {
     return 230
   }
-  if scalar < 0x093C {
+  if scalar <= 0x093B {
     return 0
   }
-  if scalar < 0x093D {
+  if scalar <= 0x093C {
     return 7
   }
-  if scalar < 0x094D {
+  if scalar <= 0x094C {
     return 0
   }
-  if scalar < 0x094E {
+  if scalar <= 0x094D {
     return 9
   }
-  if scalar < 0x0951 {
+  if scalar <= 0x0950 {
     return 0
   }
-  if scalar < 0x0952 {
+  if scalar <= 0x0951 {
     return 230
   }
-  if scalar < 0x0953 {
+  if scalar <= 0x0952 {
     return 220
   }
-  if scalar < 0x0955 {
+  if scalar <= 0x0954 {
     return 230
   }
-  if scalar < 0x09BC {
+  if scalar <= 0x09BB {
     return 0
   }
-  if scalar < 0x09BD {
+  if scalar <= 0x09BC {
     return 7
   }
-  if scalar < 0x09CD {
+  if scalar <= 0x09CC {
     return 0
   }
-  if scalar < 0x09CE {
+  if scalar <= 0x09CD {
     return 9
   }
-  if scalar < 0x09FE {
+  if scalar <= 0x09FD {
     return 0
   }
-  if scalar < 0x09FF {
+  if scalar <= 0x09FE {
     return 230
   }
-  if scalar < 0x0A3C {
+  if scalar <= 0x0A3B {
     return 0
   }
-  if scalar < 0x0A3D {
+  if scalar <= 0x0A3C {
     return 7
   }
-  if scalar < 0x0A4D {
+  if scalar <= 0x0A4C {
     return 0
   }
-  if scalar < 0x0A4E {
+  if scalar <= 0x0A4D {
     return 9
   }
-  if scalar < 0x0ABC {
+  if scalar <= 0x0ABB {
     return 0
   }
-  if scalar < 0x0ABD {
+  if scalar <= 0x0ABC {
     return 7
   }
-  if scalar < 0x0ACD {
+  if scalar <= 0x0ACC {
     return 0
   }
-  if scalar < 0x0ACE {
+  if scalar <= 0x0ACD {
     return 9
   }
-  if scalar < 0x0B3C {
+  if scalar <= 0x0B3B {
     return 0
   }
-  if scalar < 0x0B3D {
+  if scalar <= 0x0B3C {
     return 7
   }
-  if scalar < 0x0B4D {
+  if scalar <= 0x0B4C {
     return 0
   }
-  if scalar < 0x0B4E {
+  if scalar <= 0x0B4D {
     return 9
   }
-  if scalar < 0x0BCD {
+  if scalar <= 0x0BCC {
     return 0
   }
-  if scalar < 0x0BCE {
+  if scalar <= 0x0BCD {
     return 9
   }
-  if scalar < 0x0C3C {
+  if scalar <= 0x0C3B {
     return 0
   }
-  if scalar < 0x0C3D {
+  if scalar <= 0x0C3C {
     return 7
   }
-  if scalar < 0x0C4D {
+  if scalar <= 0x0C4C {
     return 0
   }
-  if scalar < 0x0C4E {
+  if scalar <= 0x0C4D {
     return 9
   }
-  if scalar < 0x0C55 {
+  if scalar <= 0x0C54 {
     return 0
   }
-  if scalar < 0x0C56 {
+  if scalar <= 0x0C55 {
     return 84
   }
-  if scalar < 0x0C57 {
+  if scalar <= 0x0C56 {
     return 91
   }
-  if scalar < 0x0CBC {
+  if scalar <= 0x0CBB {
     return 0
   }
-  if scalar < 0x0CBD {
+  if scalar <= 0x0CBC {
     return 7
   }
-  if scalar < 0x0CCD {
+  if scalar <= 0x0CCC {
     return 0
   }
-  if scalar < 0x0CCE {
+  if scalar <= 0x0CCD {
     return 9
   }
-  if scalar < 0x0D3B {
+  if scalar <= 0x0D3A {
     return 0
   }
-  if scalar < 0x0D3D {
+  if scalar <= 0x0D3C {
     return 9
   }
-  if scalar < 0x0D4D {
+  if scalar <= 0x0D4C {
     return 0
   }
-  if scalar < 0x0D4E {
+  if scalar <= 0x0D4D {
     return 9
   }
-  if scalar < 0x0DCA {
+  if scalar <= 0x0DC9 {
     return 0
   }
-  if scalar < 0x0DCB {
+  if scalar <= 0x0DCA {
     return 9
   }
-  if scalar < 0x0E38 {
+  if scalar <= 0x0E37 {
     return 0
   }
-  if scalar < 0x0E3A {
+  if scalar <= 0x0E39 {
     return 103
   }
-  if scalar < 0x0E3B {
+  if scalar <= 0x0E3A {
     return 9
   }
-  if scalar < 0x0E48 {
+  if scalar <= 0x0E47 {
     return 0
   }
-  if scalar < 0x0E4C {
+  if scalar <= 0x0E4B {
     return 107
   }
-  if scalar < 0x0EB8 {
+  if scalar <= 0x0EB7 {
     return 0
   }
-  if scalar < 0x0EBA {
+  if scalar <= 0x0EB9 {
     return 118
   }
-  if scalar < 0x0EBB {
+  if scalar <= 0x0EBA {
     return 9
   }
-  if scalar < 0x0EC8 {
+  if scalar <= 0x0EC7 {
     return 0
   }
-  if scalar < 0x0ECC {
+  if scalar <= 0x0ECB {
     return 122
   }
-  if scalar < 0x0F18 {
+  if scalar <= 0x0F17 {
     return 0
   }
-  if scalar < 0x0F1A {
+  if scalar <= 0x0F19 {
     return 220
   }
-  if scalar < 0x0F35 {
+  if scalar <= 0x0F34 {
     return 0
   }
-  if scalar < 0x0F36 {
+  if scalar <= 0x0F35 {
     return 220
   }
-  if scalar < 0x0F37 {
+  if scalar <= 0x0F36 {
     return 0
   }
-  if scalar < 0x0F38 {
+  if scalar <= 0x0F37 {
     return 220
   }
-  if scalar < 0x0F39 {
+  if scalar <= 0x0F38 {
     return 0
   }
-  if scalar < 0x0F3A {
+  if scalar <= 0x0F39 {
     return 216
   }
-  if scalar < 0x0F71 {
+  if scalar <= 0x0F70 {
     return 0
   }
-  if scalar < 0x0F72 {
+  if scalar <= 0x0F71 {
     return 129
   }
-  if scalar < 0x0F73 {
+  if scalar <= 0x0F72 {
     return 130
   }
-  if scalar < 0x0F74 {
+  if scalar <= 0x0F73 {
     return 0
   }
-  if scalar < 0x0F75 {
+  if scalar <= 0x0F74 {
     return 132
   }
-  if scalar < 0x0F7A {
+  if scalar <= 0x0F79 {
     return 0
   }
-  if scalar < 0x0F7E {
+  if scalar <= 0x0F7D {
     return 130
   }
-  if scalar < 0x0F80 {
+  if scalar <= 0x0F7F {
     return 0
   }
-  if scalar < 0x0F81 {
+  if scalar <= 0x0F80 {
     return 130
   }
-  if scalar < 0x0F82 {
+  if scalar <= 0x0F81 {
     return 0
   }
-  if scalar < 0x0F84 {
+  if scalar <= 0x0F83 {
     return 230
   }
-  if scalar < 0x0F85 {
+  if scalar <= 0x0F84 {
     return 9
   }
-  if scalar < 0x0F86 {
+  if scalar <= 0x0F85 {
     return 0
   }
-  if scalar < 0x0F88 {
+  if scalar <= 0x0F87 {
     return 230
   }
-  if scalar < 0x0FC6 {
+  if scalar <= 0x0FC5 {
     return 0
   }
-  if scalar < 0x0FC7 {
+  if scalar <= 0x0FC6 {
     return 220
   }
-  if scalar < 0x1037 {
+  if scalar <= 0x1036 {
     return 0
   }
-  if scalar < 0x1038 {
+  if scalar <= 0x1037 {
     return 7
   }
-  if scalar < 0x1039 {
+  if scalar <= 0x1038 {
     return 0
   }
-  if scalar < 0x103B {
+  if scalar <= 0x103A {
     return 9
   }
-  if scalar < 0x108D {
+  if scalar <= 0x108C {
     return 0
   }
-  if scalar < 0x108E {
+  if scalar <= 0x108D {
     return 220
   }
-  if scalar < 0x135D {
+  if scalar <= 0x135C {
     return 0
   }
-  if scalar < 0x1360 {
+  if scalar <= 0x135F {
     return 230
   }
-  if scalar < 0x1714 {
+  if scalar <= 0x1713 {
     return 0
   }
-  if scalar < 0x1716 {
+  if scalar <= 0x1715 {
     return 9
   }
-  if scalar < 0x1734 {
+  if scalar <= 0x1733 {
     return 0
   }
-  if scalar < 0x1735 {
+  if scalar <= 0x1734 {
     return 9
   }
-  if scalar < 0x17D2 {
+  if scalar <= 0x17D1 {
     return 0
   }
-  if scalar < 0x17D3 {
+  if scalar <= 0x17D2 {
     return 9
   }
-  if scalar < 0x17DD {
+  if scalar <= 0x17DC {
     return 0
   }
-  if scalar < 0x17DE {
+  if scalar <= 0x17DD {
     return 230
   }
-  if scalar < 0x18A9 {
+  if scalar <= 0x18A8 {
     return 0
   }
-  if scalar < 0x18AA {
+  if scalar <= 0x18A9 {
     return 228
   }
-  if scalar < 0x1939 {
+  if scalar <= 0x1938 {
     return 0
   }
-  if scalar < 0x193A {
+  if scalar <= 0x1939 {
     return 222
   }
-  if scalar < 0x193B {
+  if scalar <= 0x193A {
     return 230
   }
-  if scalar < 0x193C {
+  if scalar <= 0x193B {
     return 220
   }
-  if scalar < 0x1A17 {
+  if scalar <= 0x1A16 {
     return 0
   }
-  if scalar < 0x1A18 {
+  if scalar <= 0x1A17 {
     return 230
   }
-  if scalar < 0x1A19 {
+  if scalar <= 0x1A18 {
     return 220
   }
-  if scalar < 0x1A60 {
+  if scalar <= 0x1A5F {
     return 0
   }
-  if scalar < 0x1A61 {
+  if scalar <= 0x1A60 {
     return 9
   }
-  if scalar < 0x1A75 {
+  if scalar <= 0x1A74 {
     return 0
   }
-  if scalar < 0x1A7D {
+  if scalar <= 0x1A7C {
     return 230
   }
-  if scalar < 0x1A7F {
+  if scalar <= 0x1A7E {
     return 0
   }
-  if scalar < 0x1A80 {
+  if scalar <= 0x1A7F {
     return 220
   }
-  if scalar < 0x1AB0 {
+  if scalar <= 0x1AAF {
     return 0
   }
-  if scalar < 0x1AB5 {
+  if scalar <= 0x1AB4 {
     return 230
   }
-  if scalar < 0x1ABB {
+  if scalar <= 0x1ABA {
     return 220
   }
-  if scalar < 0x1ABD {
+  if scalar <= 0x1ABC {
     return 230
   }
-  if scalar < 0x1ABE {
+  if scalar <= 0x1ABD {
     return 220
   }
-  if scalar < 0x1ABF {
+  if scalar <= 0x1ABE {
     return 0
   }
-  if scalar < 0x1AC1 {
+  if scalar <= 0x1AC0 {
     return 220
   }
-  if scalar < 0x1AC3 {
+  if scalar <= 0x1AC2 {
     return 230
   }
-  if scalar < 0x1AC5 {
+  if scalar <= 0x1AC4 {
     return 220
   }
-  if scalar < 0x1ACA {
+  if scalar <= 0x1AC9 {
     return 230
   }
-  if scalar < 0x1ACB {
+  if scalar <= 0x1ACA {
     return 220
   }
-  if scalar < 0x1ADD {
+  if scalar <= 0x1ADC {
     return 230
   }
-  if scalar < 0x1ADE {
+  if scalar <= 0x1ADD {
     return 220
   }
-  if scalar < 0x1AE0 {
+  if scalar <= 0x1ADF {
     return 0
   }
-  if scalar < 0x1AE6 {
+  if scalar <= 0x1AE5 {
     return 230
   }
-  if scalar < 0x1AE7 {
+  if scalar <= 0x1AE6 {
     return 220
   }
-  if scalar < 0x1AEB {
+  if scalar <= 0x1AEA {
     return 230
   }
-  if scalar < 0x1AEC {
+  if scalar <= 0x1AEB {
     return 234
   }
-  if scalar < 0x1B34 {
+  if scalar <= 0x1B33 {
     return 0
   }
-  if scalar < 0x1B35 {
+  if scalar <= 0x1B34 {
     return 7
   }
-  if scalar < 0x1B44 {
+  if scalar <= 0x1B43 {
     return 0
   }
-  if scalar < 0x1B45 {
+  if scalar <= 0x1B44 {
     return 9
   }
-  if scalar < 0x1B6B {
+  if scalar <= 0x1B6A {
     return 0
   }
-  if scalar < 0x1B6C {
+  if scalar <= 0x1B6B {
     return 230
   }
-  if scalar < 0x1B6D {
+  if scalar <= 0x1B6C {
     return 220
   }
-  if scalar < 0x1B74 {
+  if scalar <= 0x1B73 {
     return 230
   }
-  if scalar < 0x1BAA {
+  if scalar <= 0x1BA9 {
     return 0
   }
-  if scalar < 0x1BAC {
+  if scalar <= 0x1BAB {
     return 9
   }
-  if scalar < 0x1BE6 {
+  if scalar <= 0x1BE5 {
     return 0
   }
-  if scalar < 0x1BE7 {
+  if scalar <= 0x1BE6 {
     return 7
   }
-  if scalar < 0x1BF2 {
+  if scalar <= 0x1BF1 {
     return 0
   }
-  if scalar < 0x1BF4 {
+  if scalar <= 0x1BF3 {
     return 9
   }
-  if scalar < 0x1C37 {
+  if scalar <= 0x1C36 {
     return 0
   }
-  if scalar < 0x1C38 {
+  if scalar <= 0x1C37 {
     return 7
   }
-  if scalar < 0x1CD0 {
+  if scalar <= 0x1CCF {
     return 0
   }
-  if scalar < 0x1CD3 {
+  if scalar <= 0x1CD2 {
     return 230
   }
-  if scalar < 0x1CD4 {
+  if scalar <= 0x1CD3 {
     return 0
   }
-  if scalar < 0x1CD5 {
+  if scalar <= 0x1CD4 {
     return 1
   }
-  if scalar < 0x1CDA {
+  if scalar <= 0x1CD9 {
     return 220
   }
-  if scalar < 0x1CDC {
+  if scalar <= 0x1CDB {
     return 230
   }
-  if scalar < 0x1CE0 {
+  if scalar <= 0x1CDF {
     return 220
   }
-  if scalar < 0x1CE1 {
+  if scalar <= 0x1CE0 {
     return 230
   }
-  if scalar < 0x1CE2 {
+  if scalar <= 0x1CE1 {
     return 0
   }
-  if scalar < 0x1CE9 {
+  if scalar <= 0x1CE8 {
     return 1
   }
-  if scalar < 0x1CED {
+  if scalar <= 0x1CEC {
     return 0
   }
-  if scalar < 0x1CEE {
+  if scalar <= 0x1CED {
     return 220
   }
-  if scalar < 0x1CF4 {
+  if scalar <= 0x1CF3 {
     return 0
   }
-  if scalar < 0x1CF5 {
+  if scalar <= 0x1CF4 {
     return 230
   }
-  if scalar < 0x1CF8 {
+  if scalar <= 0x1CF7 {
     return 0
   }
-  if scalar < 0x1CFA {
+  if scalar <= 0x1CF9 {
     return 230
   }
-  if scalar < 0x1DC0 {
+  if scalar <= 0x1DBF {
     return 0
   }
-  if scalar < 0x1DC2 {
+  if scalar <= 0x1DC1 {
     return 230
   }
-  if scalar < 0x1DC3 {
+  if scalar <= 0x1DC2 {
     return 220
   }
-  if scalar < 0x1DCA {
+  if scalar <= 0x1DC9 {
     return 230
   }
-  if scalar < 0x1DCB {
+  if scalar <= 0x1DCA {
     return 220
   }
-  if scalar < 0x1DCD {
+  if scalar <= 0x1DCC {
     return 230
   }
-  if scalar < 0x1DCE {
+  if scalar <= 0x1DCD {
     return 234
   }
-  if scalar < 0x1DCF {
+  if scalar <= 0x1DCE {
     return 214
   }
-  if scalar < 0x1DD0 {
+  if scalar <= 0x1DCF {
     return 220
   }
-  if scalar < 0x1DD1 {
+  if scalar <= 0x1DD0 {
     return 202
   }
-  if scalar < 0x1DF6 {
+  if scalar <= 0x1DF5 {
     return 230
   }
-  if scalar < 0x1DF7 {
+  if scalar <= 0x1DF6 {
     return 232
   }
-  if scalar < 0x1DF9 {
+  if scalar <= 0x1DF8 {
     return 228
   }
-  if scalar < 0x1DFA {
+  if scalar <= 0x1DF9 {
     return 220
   }
-  if scalar < 0x1DFB {
+  if scalar <= 0x1DFA {
     return 218
   }
-  if scalar < 0x1DFC {
+  if scalar <= 0x1DFB {
     return 230
   }
-  if scalar < 0x1DFD {
+  if scalar <= 0x1DFC {
     return 233
   }
-  if scalar < 0x1DFE {
+  if scalar <= 0x1DFD {
     return 220
   }
-  if scalar < 0x1DFF {
+  if scalar <= 0x1DFE {
     return 230
   }
-  if scalar < 0x1E00 {
+  if scalar <= 0x1DFF {
     return 220
   }
-  if scalar < 0x20D0 {
+  if scalar <= 0x20CF {
     return 0
   }
-  if scalar < 0x20D2 {
+  if scalar <= 0x20D1 {
     return 230
   }
-  if scalar < 0x20D4 {
+  if scalar <= 0x20D3 {
     return 1
   }
-  if scalar < 0x20D8 {
+  if scalar <= 0x20D7 {
     return 230
   }
-  if scalar < 0x20DB {
+  if scalar <= 0x20DA {
     return 1
   }
-  if scalar < 0x20DD {
+  if scalar <= 0x20DC {
     return 230
   }
-  if scalar < 0x20E1 {
+  if scalar <= 0x20E0 {
     return 0
   }
-  if scalar < 0x20E2 {
+  if scalar <= 0x20E1 {
     return 230
   }
-  if scalar < 0x20E5 {
+  if scalar <= 0x20E4 {
     return 0
   }
-  if scalar < 0x20E7 {
+  if scalar <= 0x20E6 {
     return 1
   }
-  if scalar < 0x20E8 {
+  if scalar <= 0x20E7 {
     return 230
   }
-  if scalar < 0x20E9 {
+  if scalar <= 0x20E8 {
     return 220
   }
-  if scalar < 0x20EA {
+  if scalar <= 0x20E9 {
     return 230
   }
-  if scalar < 0x20EC {
+  if scalar <= 0x20EB {
     return 1
   }
-  if scalar < 0x20F0 {
+  if scalar <= 0x20EF {
     return 220
   }
-  if scalar < 0x20F1 {
+  if scalar <= 0x20F0 {
     return 230
   }
-  if scalar < 0x2CEF {
+  if scalar <= 0x2CEE {
     return 0
   }
-  if scalar < 0x2CF2 {
+  if scalar <= 0x2CF1 {
     return 230
   }
-  if scalar < 0x2D7F {
+  if scalar <= 0x2D7E {
     return 0
   }
-  if scalar < 0x2D80 {
+  if scalar <= 0x2D7F {
     return 9
   }
-  if scalar < 0x2DE0 {
+  if scalar <= 0x2DDF {
     return 0
   }
-  if scalar < 0x2E00 {
+  if scalar <= 0x2DFF {
     return 230
   }
-  if scalar < 0x302A {
+  if scalar <= 0x3029 {
     return 0
   }
-  if scalar < 0x302B {
+  if scalar <= 0x302A {
     return 218
   }
-  if scalar < 0x302C {
+  if scalar <= 0x302B {
     return 228
   }
-  if scalar < 0x302D {
+  if scalar <= 0x302C {
     return 232
   }
-  if scalar < 0x302E {
+  if scalar <= 0x302D {
     return 222
   }
-  if scalar < 0x3030 {
+  if scalar <= 0x302F {
     return 224
   }
-  if scalar < 0x3099 {
+  if scalar <= 0x3098 {
     return 0
   }
-  if scalar < 0x309B {
+  if scalar <= 0x309A {
     return 8
   }
-  if scalar < 0xA66F {
+  if scalar <= 0xA66E {
     return 0
   }
-  if scalar < 0xA670 {
+  if scalar <= 0xA66F {
     return 230
   }
-  if scalar < 0xA674 {
+  if scalar <= 0xA673 {
     return 0
   }
-  if scalar < 0xA67E {
+  if scalar <= 0xA67D {
     return 230
   }
-  if scalar < 0xA69E {
+  if scalar <= 0xA69D {
     return 0
   }
-  if scalar < 0xA6A0 {
+  if scalar <= 0xA69F {
     return 230
   }
-  if scalar < 0xA6F0 {
+  if scalar <= 0xA6EF {
     return 0
   }
-  if scalar < 0xA6F2 {
+  if scalar <= 0xA6F1 {
     return 230
   }
-  if scalar < 0xA806 {
+  if scalar <= 0xA805 {
     return 0
   }
-  if scalar < 0xA807 {
+  if scalar <= 0xA806 {
     return 9
   }
-  if scalar < 0xA82C {
+  if scalar <= 0xA82B {
     return 0
   }
-  if scalar < 0xA82D {
+  if scalar <= 0xA82C {
     return 9
   }
-  if scalar < 0xA8C4 {
+  if scalar <= 0xA8C3 {
     return 0
   }
-  if scalar < 0xA8C5 {
+  if scalar <= 0xA8C4 {
     return 9
   }
-  if scalar < 0xA8E0 {
+  if scalar <= 0xA8DF {
     return 0
   }
-  if scalar < 0xA8F2 {
+  if scalar <= 0xA8F1 {
     return 230
   }
-  if scalar < 0xA92B {
+  if scalar <= 0xA92A {
     return 0
   }
-  if scalar < 0xA92E {
+  if scalar <= 0xA92D {
     return 220
   }
-  if scalar < 0xA953 {
+  if scalar <= 0xA952 {
     return 0
   }
-  if scalar < 0xA954 {
+  if scalar <= 0xA953 {
     return 9
   }
-  if scalar < 0xA9B3 {
+  if scalar <= 0xA9B2 {
     return 0
   }
-  if scalar < 0xA9B4 {
+  if scalar <= 0xA9B3 {
     return 7
   }
-  if scalar < 0xA9C0 {
+  if scalar <= 0xA9BF {
     return 0
   }
-  if scalar < 0xA9C1 {
+  if scalar <= 0xA9C0 {
     return 9
   }
-  if scalar < 0xAAB0 {
+  if scalar <= 0xAAAF {
     return 0
   }
-  if scalar < 0xAAB1 {
+  if scalar <= 0xAAB0 {
     return 230
   }
-  if scalar < 0xAAB2 {
+  if scalar <= 0xAAB1 {
     return 0
   }
-  if scalar < 0xAAB4 {
+  if scalar <= 0xAAB3 {
     return 230
   }
-  if scalar < 0xAAB5 {
+  if scalar <= 0xAAB4 {
     return 220
   }
-  if scalar < 0xAAB7 {
+  if scalar <= 0xAAB6 {
     return 0
   }
-  if scalar < 0xAAB9 {
+  if scalar <= 0xAAB8 {
     return 230
   }
-  if scalar < 0xAABE {
+  if scalar <= 0xAABD {
     return 0
   }
-  if scalar < 0xAAC0 {
+  if scalar <= 0xAABF {
     return 230
   }
-  if scalar < 0xAAC1 {
+  if scalar <= 0xAAC0 {
     return 0
   }
-  if scalar < 0xAAC2 {
+  if scalar <= 0xAAC1 {
     return 230
   }
-  if scalar < 0xAAF6 {
+  if scalar <= 0xAAF5 {
     return 0
   }
-  if scalar < 0xAAF7 {
+  if scalar <= 0xAAF6 {
     return 9
   }
-  if scalar < 0xABED {
+  if scalar <= 0xABEC {
     return 0
   }
-  if scalar < 0xABEE {
+  if scalar <= 0xABED {
     return 9
   }
-  if scalar < 0xFB1E {
+  if scalar <= 0xFB1D {
     return 0
   }
-  if scalar < 0xFB1F {
+  if scalar <= 0xFB1E {
     return 26
   }
-  if scalar < 0xFE20 {
+  if scalar <= 0xFE1F {
     return 0
   }
-  if scalar < 0xFE27 {
+  if scalar <= 0xFE26 {
     return 230
   }
-  if scalar < 0xFE2E {
+  if scalar <= 0xFE2D {
     return 220
   }
-  if scalar < 0xFE30 {
+  if scalar <= 0xFE2F {
     return 230
   }
-  if scalar < 0x101FD {
+  if scalar <= 0x101FC {
     return 0
   }
-  if scalar < 0x101FE {
+  if scalar <= 0x101FD {
     return 220
   }
-  if scalar < 0x102E0 {
+  if scalar <= 0x102DF {
     return 0
   }
-  if scalar < 0x102E1 {
+  if scalar <= 0x102E0 {
     return 220
   }
-  if scalar < 0x10376 {
+  if scalar <= 0x10375 {
     return 0
   }
-  if scalar < 0x1037B {
+  if scalar <= 0x1037A {
     return 230
   }
-  if scalar < 0x10A0D {
+  if scalar <= 0x10A0C {
     return 0
   }
-  if scalar < 0x10A0E {
+  if scalar <= 0x10A0D {
     return 220
   }
-  if scalar < 0x10A0F {
+  if scalar <= 0x10A0E {
     return 0
   }
-  if scalar < 0x10A10 {
+  if scalar <= 0x10A0F {
     return 230
   }
-  if scalar < 0x10A38 {
+  if scalar <= 0x10A37 {
     return 0
   }
-  if scalar < 0x10A39 {
+  if scalar <= 0x10A38 {
     return 230
   }
-  if scalar < 0x10A3A {
+  if scalar <= 0x10A39 {
     return 1
   }
-  if scalar < 0x10A3B {
+  if scalar <= 0x10A3A {
     return 220
   }
-  if scalar < 0x10A3F {
+  if scalar <= 0x10A3E {
     return 0
   }
-  if scalar < 0x10A40 {
+  if scalar <= 0x10A3F {
     return 9
   }
-  if scalar < 0x10AE5 {
+  if scalar <= 0x10AE4 {
     return 0
   }
-  if scalar < 0x10AE6 {
+  if scalar <= 0x10AE5 {
     return 230
   }
-  if scalar < 0x10AE7 {
+  if scalar <= 0x10AE6 {
     return 220
   }
-  if scalar < 0x10D24 {
+  if scalar <= 0x10D23 {
     return 0
   }
-  if scalar < 0x10D28 {
+  if scalar <= 0x10D27 {
     return 230
   }
-  if scalar < 0x10D69 {
+  if scalar <= 0x10D68 {
     return 0
   }
-  if scalar < 0x10D6E {
+  if scalar <= 0x10D6D {
     return 230
   }
-  if scalar < 0x10EAB {
+  if scalar <= 0x10EAA {
     return 0
   }
-  if scalar < 0x10EAD {
+  if scalar <= 0x10EAC {
     return 230
   }
-  if scalar < 0x10EFA {
+  if scalar <= 0x10EF9 {
     return 0
   }
-  if scalar < 0x10EFC {
+  if scalar <= 0x10EFB {
     return 220
   }
-  if scalar < 0x10EFD {
+  if scalar <= 0x10EFC {
     return 0
   }
-  if scalar < 0x10F00 {
+  if scalar <= 0x10EFF {
     return 220
   }
-  if scalar < 0x10F46 {
+  if scalar <= 0x10F45 {
     return 0
   }
-  if scalar < 0x10F48 {
+  if scalar <= 0x10F47 {
     return 220
   }
-  if scalar < 0x10F4B {
+  if scalar <= 0x10F4A {
     return 230
   }
-  if scalar < 0x10F4C {
+  if scalar <= 0x10F4B {
     return 220
   }
-  if scalar < 0x10F4D {
+  if scalar <= 0x10F4C {
     return 230
   }
-  if scalar < 0x10F51 {
+  if scalar <= 0x10F50 {
     return 220
   }
-  if scalar < 0x10F82 {
+  if scalar <= 0x10F81 {
     return 0
   }
-  if scalar < 0x10F83 {
+  if scalar <= 0x10F82 {
     return 230
   }
-  if scalar < 0x10F84 {
+  if scalar <= 0x10F83 {
     return 220
   }
-  if scalar < 0x10F85 {
+  if scalar <= 0x10F84 {
     return 230
   }
-  if scalar < 0x10F86 {
+  if scalar <= 0x10F85 {
     return 220
   }
-  if scalar < 0x11046 {
+  if scalar <= 0x11045 {
     return 0
   }
-  if scalar < 0x11047 {
+  if scalar <= 0x11046 {
     return 9
   }
-  if scalar < 0x11070 {
+  if scalar <= 0x1106F {
     return 0
   }
-  if scalar < 0x11071 {
+  if scalar <= 0x11070 {
     return 9
   }
-  if scalar < 0x1107F {
+  if scalar <= 0x1107E {
     return 0
   }
-  if scalar < 0x11080 {
+  if scalar <= 0x1107F {
     return 9
   }
-  if scalar < 0x110B9 {
+  if scalar <= 0x110B8 {
     return 0
   }
-  if scalar < 0x110BA {
+  if scalar <= 0x110B9 {
     return 9
   }
-  if scalar < 0x110BB {
+  if scalar <= 0x110BA {
     return 7
   }
-  if scalar < 0x11100 {
+  if scalar <= 0x110FF {
     return 0
   }
-  if scalar < 0x11103 {
+  if scalar <= 0x11102 {
     return 230
   }
-  if scalar < 0x11133 {
+  if scalar <= 0x11132 {
     return 0
   }
-  if scalar < 0x11135 {
+  if scalar <= 0x11134 {
     return 9
   }
-  if scalar < 0x11173 {
+  if scalar <= 0x11172 {
     return 0
   }
-  if scalar < 0x11174 {
+  if scalar <= 0x11173 {
     return 7
   }
-  if scalar < 0x111C0 {
+  if scalar <= 0x111BF {
     return 0
   }
-  if scalar < 0x111C1 {
+  if scalar <= 0x111C0 {
     return 9
   }
-  if scalar < 0x111CA {
+  if scalar <= 0x111C9 {
     return 0
   }
-  if scalar < 0x111CB {
+  if scalar <= 0x111CA {
     return 7
   }
-  if scalar < 0x11235 {
+  if scalar <= 0x11234 {
     return 0
   }
-  if scalar < 0x11236 {
+  if scalar <= 0x11235 {
     return 9
   }
-  if scalar < 0x11237 {
+  if scalar <= 0x11236 {
     return 7
   }
-  if scalar < 0x112E9 {
+  if scalar <= 0x112E8 {
     return 0
   }
-  if scalar < 0x112EA {
+  if scalar <= 0x112E9 {
     return 7
   }
-  if scalar < 0x112EB {
+  if scalar <= 0x112EA {
     return 9
   }
-  if scalar < 0x1133B {
+  if scalar <= 0x1133A {
     return 0
   }
-  if scalar < 0x1133D {
+  if scalar <= 0x1133C {
     return 7
   }
-  if scalar < 0x1134D {
+  if scalar <= 0x1134C {
     return 0
   }
-  if scalar < 0x1134E {
+  if scalar <= 0x1134D {
     return 9
   }
-  if scalar < 0x11366 {
+  if scalar <= 0x11365 {
     return 0
   }
-  if scalar < 0x1136D {
+  if scalar <= 0x1136C {
     return 230
   }
-  if scalar < 0x11370 {
+  if scalar <= 0x1136F {
     return 0
   }
-  if scalar < 0x11375 {
+  if scalar <= 0x11374 {
     return 230
   }
-  if scalar < 0x113CE {
+  if scalar <= 0x113CD {
     return 0
   }
-  if scalar < 0x113D1 {
+  if scalar <= 0x113D0 {
     return 9
   }
-  if scalar < 0x11442 {
+  if scalar <= 0x11441 {
     return 0
   }
-  if scalar < 0x11443 {
+  if scalar <= 0x11442 {
     return 9
   }
-  if scalar < 0x11446 {
+  if scalar <= 0x11445 {
     return 0
   }
-  if scalar < 0x11447 {
+  if scalar <= 0x11446 {
     return 7
   }
-  if scalar < 0x1145E {
+  if scalar <= 0x1145D {
     return 0
   }
-  if scalar < 0x1145F {
+  if scalar <= 0x1145E {
     return 230
   }
-  if scalar < 0x114C2 {
+  if scalar <= 0x114C1 {
     return 0
   }
-  if scalar < 0x114C3 {
+  if scalar <= 0x114C2 {
     return 9
   }
-  if scalar < 0x114C4 {
+  if scalar <= 0x114C3 {
     return 7
   }
-  if scalar < 0x115BF {
+  if scalar <= 0x115BE {
     return 0
   }
-  if scalar < 0x115C0 {
+  if scalar <= 0x115BF {
     return 9
   }
-  if scalar < 0x115C1 {
+  if scalar <= 0x115C0 {
     return 7
   }
-  if scalar < 0x1163F {
+  if scalar <= 0x1163E {
     return 0
   }
-  if scalar < 0x11640 {
+  if scalar <= 0x1163F {
     return 9
   }
-  if scalar < 0x116B6 {
+  if scalar <= 0x116B5 {
     return 0
   }
-  if scalar < 0x116B7 {
+  if scalar <= 0x116B6 {
     return 9
   }
-  if scalar < 0x116B8 {
+  if scalar <= 0x116B7 {
     return 7
   }
-  if scalar < 0x1172B {
+  if scalar <= 0x1172A {
     return 0
   }
-  if scalar < 0x1172C {
+  if scalar <= 0x1172B {
     return 9
   }
-  if scalar < 0x11839 {
+  if scalar <= 0x11838 {
     return 0
   }
-  if scalar < 0x1183A {
+  if scalar <= 0x11839 {
     return 9
   }
-  if scalar < 0x1183B {
+  if scalar <= 0x1183A {
     return 7
   }
-  if scalar < 0x1193D {
+  if scalar <= 0x1193C {
     return 0
   }
-  if scalar < 0x1193F {
+  if scalar <= 0x1193E {
     return 9
   }
-  if scalar < 0x11943 {
+  if scalar <= 0x11942 {
     return 0
   }
-  if scalar < 0x11944 {
+  if scalar <= 0x11943 {
     return 7
   }
-  if scalar < 0x119E0 {
+  if scalar <= 0x119DF {
     return 0
   }
-  if scalar < 0x119E1 {
+  if scalar <= 0x119E0 {
     return 9
   }
-  if scalar < 0x11A34 {
+  if scalar <= 0x11A33 {
     return 0
   }
-  if scalar < 0x11A35 {
+  if scalar <= 0x11A34 {
     return 9
   }
-  if scalar < 0x11A47 {
+  if scalar <= 0x11A46 {
     return 0
   }
-  if scalar < 0x11A48 {
+  if scalar <= 0x11A47 {
     return 9
   }
-  if scalar < 0x11A99 {
+  if scalar <= 0x11A98 {
     return 0
   }
-  if scalar < 0x11A9A {
+  if scalar <= 0x11A99 {
     return 9
   }
-  if scalar < 0x11C3F {
+  if scalar <= 0x11C3E {
     return 0
   }
-  if scalar < 0x11C40 {
+  if scalar <= 0x11C3F {
     return 9
   }
-  if scalar < 0x11D42 {
+  if scalar <= 0x11D41 {
     return 0
   }
-  if scalar < 0x11D43 {
+  if scalar <= 0x11D42 {
     return 7
   }
-  if scalar < 0x11D44 {
+  if scalar <= 0x11D43 {
     return 0
   }
-  if scalar < 0x11D46 {
+  if scalar <= 0x11D45 {
     return 9
   }
-  if scalar < 0x11D97 {
+  if scalar <= 0x11D96 {
     return 0
   }
-  if scalar < 0x11D98 {
+  if scalar <= 0x11D97 {
     return 9
   }
-  if scalar < 0x11F41 {
+  if scalar <= 0x11F40 {
     return 0
   }
-  if scalar < 0x11F43 {
+  if scalar <= 0x11F42 {
     return 9
   }
-  if scalar < 0x1612F {
+  if scalar <= 0x1612E {
     return 0
   }
-  if scalar < 0x16130 {
+  if scalar <= 0x1612F {
     return 9
   }
-  if scalar < 0x16AF0 {
+  if scalar <= 0x16AEF {
     return 0
   }
-  if scalar < 0x16AF5 {
+  if scalar <= 0x16AF4 {
     return 1
   }
-  if scalar < 0x16B30 {
+  if scalar <= 0x16B2F {
     return 0
   }
-  if scalar < 0x16B37 {
+  if scalar <= 0x16B36 {
     return 230
   }
-  if scalar < 0x16FF0 {
+  if scalar <= 0x16FEF {
     return 0
   }
-  if scalar < 0x16FF2 {
+  if scalar <= 0x16FF1 {
     return 6
   }
-  if scalar < 0x1BC9E {
+  if scalar <= 0x1BC9D {
     return 0
   }
-  if scalar < 0x1BC9F {
+  if scalar <= 0x1BC9E {
     return 1
   }
-  if scalar < 0x1D165 {
+  if scalar <= 0x1D164 {
     return 0
   }
-  if scalar < 0x1D167 {
+  if scalar <= 0x1D166 {
     return 216
   }
-  if scalar < 0x1D16A {
+  if scalar <= 0x1D169 {
     return 1
   }
-  if scalar < 0x1D16D {
+  if scalar <= 0x1D16C {
     return 0
   }
-  if scalar < 0x1D16E {
+  if scalar <= 0x1D16D {
     return 226
   }
-  if scalar < 0x1D173 {
+  if scalar <= 0x1D172 {
     return 216
   }
-  if scalar < 0x1D17B {
+  if scalar <= 0x1D17A {
     return 0
   }
-  if scalar < 0x1D183 {
+  if scalar <= 0x1D182 {
     return 220
   }
-  if scalar < 0x1D185 {
+  if scalar <= 0x1D184 {
     return 0
   }
-  if scalar < 0x1D18A {
+  if scalar <= 0x1D189 {
     return 230
   }
-  if scalar < 0x1D18C {
+  if scalar <= 0x1D18B {
     return 220
   }
-  if scalar < 0x1D1AA {
+  if scalar <= 0x1D1A9 {
     return 0
   }
-  if scalar < 0x1D1AE {
+  if scalar <= 0x1D1AD {
     return 230
   }
-  if scalar < 0x1D242 {
+  if scalar <= 0x1D241 {
     return 0
   }
-  if scalar < 0x1D245 {
+  if scalar <= 0x1D244 {
     return 230
   }
-  if scalar < 0x1E000 {
+  if scalar <= 0x1DFFF {
     return 0
   }
-  if scalar < 0x1E007 {
+  if scalar <= 0x1E006 {
     return 230
   }
-  if scalar < 0x1E008 {
+  if scalar <= 0x1E007 {
     return 0
   }
-  if scalar < 0x1E019 {
+  if scalar <= 0x1E018 {
     return 230
   }
-  if scalar < 0x1E01B {
+  if scalar <= 0x1E01A {
     return 0
   }
-  if scalar < 0x1E022 {
+  if scalar <= 0x1E021 {
     return 230
   }
-  if scalar < 0x1E023 {
+  if scalar <= 0x1E022 {
     return 0
   }
-  if scalar < 0x1E025 {
+  if scalar <= 0x1E024 {
     return 230
   }
-  if scalar < 0x1E026 {
+  if scalar <= 0x1E025 {
     return 0
   }
-  if scalar < 0x1E02B {
+  if scalar <= 0x1E02A {
     return 230
   }
-  if scalar < 0x1E08F {
+  if scalar <= 0x1E08E {
     return 0
   }
-  if scalar < 0x1E090 {
+  if scalar <= 0x1E08F {
     return 230
   }
-  if scalar < 0x1E130 {
+  if scalar <= 0x1E12F {
     return 0
   }
-  if scalar < 0x1E137 {
+  if scalar <= 0x1E136 {
     return 230
   }
-  if scalar < 0x1E2AE {
+  if scalar <= 0x1E2AD {
     return 0
   }
-  if scalar < 0x1E2AF {
+  if scalar <= 0x1E2AE {
     return 230
   }
-  if scalar < 0x1E2EC {
+  if scalar <= 0x1E2EB {
     return 0
   }
-  if scalar < 0x1E2F0 {
+  if scalar <= 0x1E2EF {
     return 230
   }
-  if scalar < 0x1E4EC {
+  if scalar <= 0x1E4EB {
     return 0
   }
-  if scalar < 0x1E4EE {
+  if scalar <= 0x1E4ED {
     return 232
   }
-  if scalar < 0x1E4EF {
+  if scalar <= 0x1E4EE {
     return 220
   }
-  if scalar < 0x1E4F0 {
+  if scalar <= 0x1E4EF {
     return 230
   }
-  if scalar < 0x1E5EE {
+  if scalar <= 0x1E5ED {
     return 0
   }
-  if scalar < 0x1E5EF {
+  if scalar <= 0x1E5EE {
     return 230
   }
-  if scalar < 0x1E5F0 {
+  if scalar <= 0x1E5EF {
     return 220
   }
-  if scalar < 0x1E6E3 {
+  if scalar <= 0x1E6E2 {
     return 0
   }
-  if scalar < 0x1E6E4 {
+  if scalar <= 0x1E6E3 {
     return 230
   }
-  if scalar < 0x1E6E6 {
+  if scalar <= 0x1E6E5 {
     return 0
   }
-  if scalar < 0x1E6E7 {
+  if scalar <= 0x1E6E6 {
     return 230
   }
-  if scalar < 0x1E6EE {
+  if scalar <= 0x1E6ED {
     return 0
   }
-  if scalar < 0x1E6F0 {
+  if scalar <= 0x1E6EF {
     return 230
   }
-  if scalar < 0x1E6F5 {
+  if scalar <= 0x1E6F4 {
     return 0
   }
-  if scalar < 0x1E6F6 {
+  if scalar <= 0x1E6F5 {
     return 230
   }
-  if scalar < 0x1E8D0 {
+  if scalar <= 0x1E8CF {
     return 0
   }
-  if scalar < 0x1E8D7 {
+  if scalar <= 0x1E8D6 {
     return 220
   }
-  if scalar < 0x1E944 {
+  if scalar <= 0x1E943 {
     return 0
   }
-  if scalar < 0x1E94A {
+  if scalar <= 0x1E949 {
     return 230
   }
-  if scalar < 0x1E94B {
+  if scalar <= 0x1E94A {
     return 7
   }
   return 0
