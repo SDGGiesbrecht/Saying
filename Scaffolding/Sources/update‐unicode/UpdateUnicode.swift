@@ -193,46 +193,64 @@ import SDGPersistence
 
   static func output(decompositions: [Unicode.Scalar: [Unicode.Scalar]]) throws {
     var source: [String] = [
-      "action (unit)",
+      "flow (file)",
+      " (",
+      "  English: smuggle early return of (value: Unicode scalars) past Saying compiler",
+      " )",
+      " C: “return ” value “”",
+      " C♯: “return ” value “”",
+      " JavaScript: “return ” value “”",
+      " Kotlin: “return ” value “”",
+      " Swift: “return ” value “”",
+      "",
+      "flow (file)",
       " [",
-      "  test {ignore (full compatibility decomposition of (“0000”: Unicode scalar numerical value))}",
+      "  [",
+      "   English: Conditionally returns early.",
+      "  ]",
+      "  [",
+      "   English: This flow groups the tabular repetion into one place, simplifying test coverage.",
+      "  ]",
+      " ]",
+      " (",
+      "  English: if (condition: truth value), (result: Unicode scalars)",
+      " )",
+      " {",
+      "  if (condition), {",
+      "   smuggle early return of (result) past Saying compiler",
+      "  }",
+      " }",
+      "",
+      "action (unit)",
+      " (",
+      "  English: full compatibility decomposition of (scalar: Unicode scalar)",
+      " )",
+      " Unicode scalars",
+      " {",
+      "  let (• value: Unicode scalar numerical value) be ((numerical value) of (scalar))",
     ]
-    var implementation: [String] = []
-    var previous: [Unicode.Scalar]?
-    let noChange = "(Unicode scalar with value (scalar) skipping validity check) as scalars"
+    var previous: (scalar: Unicode.Scalar, decomposition: [Unicode.Scalar])?
+    let noChange = "(scalar) as scalars"
     for value in firstScalar.value ... lastScalar.value {
       if let scalar = Unicode.Scalar(value) {
         let decomposition = decompositions[scalar] ?? []
-        defer { previous = decomposition }
+        defer { previous = (scalar: scalar, decomposition: decomposition) }
         if let previous = previous,
-          decomposition != previous || value == firstHangulSyllable || value == lastHangulSyllable + 1 {
-          let literalScalar = scalar.sayingLiteral
+          decomposition != previous.decomposition
+            || value == firstHangulSyllable || value == lastHangulSyllable + 1 {
+          let literalScalar = previous.scalar.sayingLiteral
+          let literalString = previous.decomposition.isEmpty
+            ? (previous.scalar.value == lastHangulSyllable ? "(value)의 자모" : noChange)
+            : "“\(previous.decomposition.map({ "¤(\($0.sayingLiteral))" }).joined())”"
           source.append(contentsOf: [
-            "  test {ignore (full compatibility decomposition of (“\(literalScalar)”: Unicode scalar numerical value))}",
-          ])
-          let literalString = previous.isEmpty
-            ? (value == lastHangulSyllable + 1 ? "(scalar)의 자모" : noChange)
-            : "“\(previous.map({ "¤(\($0.sayingLiteral))" }).joined())”"
-          implementation.append(contentsOf: [
-            "  if ((scalar) is less than (“\(literalScalar)”: Unicode scalar numerical value)), {",
-            "   ← \(literalString)",
-            "  }",
+            "  if ((value) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), (\(literalString): Unicode scalars)",
           ])
         }
       }
     }
-    implementation.append(contentsOf: [
+    source.append(contentsOf: [
       "  ← \(noChange)",
     ])
-    source.append(contentsOf: [
-      " ]",
-      " (",
-      "  English: full compatibility decomposition of (scalar: Unicode scalar numerical value)",
-      " )",
-      " Unicode scalars",
-      " {",
-    ])
-    source.append(contentsOf: implementation)
     source.append(contentsOf: [
       " }",
     ])
