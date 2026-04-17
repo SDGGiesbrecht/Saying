@@ -193,34 +193,6 @@ import SDGPersistence
 
   static func output(decompositions: [Unicode.Scalar: [Unicode.Scalar]]) throws {
     var source: [String] = [
-      "flow (file)",
-      " (",
-      "  English: smuggle early return of (value: Unicode scalars) past Saying compiler",
-      " )",
-      " C: “return ” value “”",
-      " C♯: “return ” value “”",
-      " JavaScript: “return ” value “”",
-      " Kotlin: “return ” value “”",
-      " Swift: “return ” value “”",
-      "",
-      "flow (file)",
-      " [",
-      "  [",
-      "   English: Conditionally returns early.",
-      "  ]",
-      "  [",
-      "   English: This flow groups the tabular repetion into one place, simplifying test coverage.",
-      "  ]",
-      " ]",
-      " (",
-      "  English: if (condition: truth value), (result: Unicode scalars)",
-      " )",
-      " {",
-      "  if (condition), {",
-      "   smuggle early return of (result) past Saying compiler",
-      "  }",
-      " }",
-      "",
       "action (unit)",
       " (",
       "  English: full compatibility decomposition of (scalar: Unicode scalar)",
@@ -243,7 +215,9 @@ import SDGPersistence
             ? (previous.scalar.value == lastHangulSyllable ? "(value)의 자모" : noChange)
             : "“\(previous.decomposition.map({ "¤(\($0.sayingLiteral))" }).joined())”"
           source.append(contentsOf: [
-            "  if ((value) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), (\(literalString): Unicode scalars)",
+            "  if ((value) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
+            "   ← \(literalString)",
+            "  }",
           ])
         }
       }
