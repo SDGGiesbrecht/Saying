@@ -129,34 +129,6 @@ import SDGPersistence
 
   static func output(classes: [Unicode.Scalar: UInt8]) throws {
     var source: [String] = [
-      "flow (file)",
-      " (",
-      "  English: smuggle early return of (value: 8‐bit natural number) past Saying compiler",
-      " )",
-      " C: “return ” value “”",
-      " C♯: “return ” value “”",
-      " JavaScript: “return ” value “”",
-      " Kotlin: “return ” value “”",
-      " Swift: “return ” value “”",
-      "",
-      "flow (file)",
-      " [",
-      "  [",
-      "   English: Conditionally returns early.",
-      "  ]",
-      "  [",
-      "   English: This flow groups the tabular repetion into one place, simplifying test coverage.",
-      "  ]",
-      " ]",
-      " (",
-      "  English: if (condition: truth value), (result: 8‐bit natural number)",
-      " )",
-      " {",
-      "  if (condition), {",
-      "   smuggle early return of (result) past Saying compiler",
-      "  }",
-      " }",
-      "",
       "action (unit)",
     ]
     source.append(contentsOf: [
@@ -175,7 +147,9 @@ import SDGPersistence
           combiningClass != previous.combiningClass {
           let literalScalar = previous.scalar.sayingLiteral
           source.append(contentsOf: [
-            "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), (“\(previous.combiningClass)”: 8‐bit natural number)",
+            "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
+            "   ← “\(previous.combiningClass)”",
+            "  }",
           ])
         }
       }
