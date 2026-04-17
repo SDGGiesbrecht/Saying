@@ -1,641 +1,1823 @@
-flow (file)
- (
-  English: smuggle early return of (value: 8‐bit natural number) past Saying compiler
- )
- C: “return ” value “”
- C♯: “return ” value “”
- JavaScript: “return ” value “”
- Kotlin: “return ” value “”
- Swift: “return ” value “”
-
-flow (file)
- [
-  [
-   English: Conditionally returns early.
-  ]
-  [
-   English: This flow groups the tabular repetion into one place, simplifying test coverage.
-  ]
- ]
- (
-  English: if (condition: truth value), (result: 8‐bit natural number)
- )
- {
-  if (condition), {
-   smuggle early return of (result) past Saying compiler
-  }
- }
-
 action (unit)
  (
   English: canonical combining class of (scalar: Unicode scalar numerical value)
  )
  8‐bit natural number
  {
-  if ((scalar) is less than or equal to (“02FF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0314”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0315”: Unicode scalar numerical value)), (“232”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0319”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“031A”: Unicode scalar numerical value)), (“232”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“031B”: Unicode scalar numerical value)), (“216”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0320”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0322”: Unicode scalar numerical value)), (“202”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0326”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0328”: Unicode scalar numerical value)), (“202”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0333”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0338”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“033C”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0344”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0345”: Unicode scalar numerical value)), (“240”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0346”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0349”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“034C”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“034E”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“034F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0352”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0356”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0357”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0358”: Unicode scalar numerical value)), (“232”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“035A”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“035B”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“035C”: Unicode scalar numerical value)), (“233”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“035E”: Unicode scalar numerical value)), (“234”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“035F”: Unicode scalar numerical value)), (“233”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0361”: Unicode scalar numerical value)), (“234”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0362”: Unicode scalar numerical value)), (“233”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“036F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0482”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0487”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0590”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0591”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0595”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0596”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0599”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“059A”: Unicode scalar numerical value)), (“222”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“059B”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05A1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05A7”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05A9”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05AA”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05AC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05AD”: Unicode scalar numerical value)), (“222”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05AE”: Unicode scalar numerical value)), (“228”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05AF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B0”: Unicode scalar numerical value)), (“10”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B1”: Unicode scalar numerical value)), (“11”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B2”: Unicode scalar numerical value)), (“12”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B3”: Unicode scalar numerical value)), (“13”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B4”: Unicode scalar numerical value)), (“14”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B5”: Unicode scalar numerical value)), (“15”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B6”: Unicode scalar numerical value)), (“16”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B7”: Unicode scalar numerical value)), (“17”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05B8”: Unicode scalar numerical value)), (“18”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05BA”: Unicode scalar numerical value)), (“19”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05BB”: Unicode scalar numerical value)), (“20”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05BC”: Unicode scalar numerical value)), (“21”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05BD”: Unicode scalar numerical value)), (“22”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05BE”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05BF”: Unicode scalar numerical value)), (“23”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C0”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C1”: Unicode scalar numerical value)), (“24”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C2”: Unicode scalar numerical value)), (“25”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C3”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C4”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C5”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C6”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“05C7”: Unicode scalar numerical value)), (“18”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“060F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0617”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0618”: Unicode scalar numerical value)), (“30”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0619”: Unicode scalar numerical value)), (“31”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“061A”: Unicode scalar numerical value)), (“32”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“064A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“064B”: Unicode scalar numerical value)), (“27”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“064C”: Unicode scalar numerical value)), (“28”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“064D”: Unicode scalar numerical value)), (“29”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“064E”: Unicode scalar numerical value)), (“30”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“064F”: Unicode scalar numerical value)), (“31”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0650”: Unicode scalar numerical value)), (“32”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0651”: Unicode scalar numerical value)), (“33”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0652”: Unicode scalar numerical value)), (“34”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0654”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0656”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“065B”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“065C”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“065E”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“065F”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“066F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0670”: Unicode scalar numerical value)), (“35”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06D5”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06DC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06DE”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06E2”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06E3”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06E4”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06E6”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06E8”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06E9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06EA”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06EC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“06ED”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0710”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0711”: Unicode scalar numerical value)), (“36”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“072F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0730”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0731”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0733”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0734”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0736”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0739”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“073A”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“073C”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“073D”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“073E”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0741”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0742”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0743”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0744”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0745”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0746”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0747”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0748”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“074A”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“07EA”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“07F1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“07F2”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“07F3”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“07FC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“07FD”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0815”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0819”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“081A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0823”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0824”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0827”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0828”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“082D”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0858”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“085B”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0896”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0898”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“089B”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“089F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08C9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08CE”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08D3”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E2”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E3”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E5”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E6”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E8”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08E9”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08EC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08EF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08F0”: Unicode scalar numerical value)), (“27”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08F1”: Unicode scalar numerical value)), (“28”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08F2”: Unicode scalar numerical value)), (“29”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08F5”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08F6”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08F8”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08FA”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“08FF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“093B”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“093C”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“094C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“094D”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0950”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0951”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0952”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0954”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“09BB”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“09BC”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“09CC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“09CD”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“09FD”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“09FE”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0A3B”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0A3C”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0A4C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0A4D”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0ABB”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0ABC”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0ACC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0ACD”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0B3B”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0B3C”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0B4C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0B4D”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0BCC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0BCD”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C3B”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C3C”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C4C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C4D”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C54”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C55”: Unicode scalar numerical value)), (“84”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0C56”: Unicode scalar numerical value)), (“91”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0CBB”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0CBC”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0CCC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0CCD”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0D3A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0D3C”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0D4C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0D4D”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0DC9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0DCA”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0E37”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0E39”: Unicode scalar numerical value)), (“103”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0E3A”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0E47”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0E4B”: Unicode scalar numerical value)), (“107”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0EB7”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0EB9”: Unicode scalar numerical value)), (“118”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0EBA”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0EC7”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0ECB”: Unicode scalar numerical value)), (“122”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F17”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F19”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F34”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F35”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F36”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F37”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F38”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F39”: Unicode scalar numerical value)), (“216”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F70”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F71”: Unicode scalar numerical value)), (“129”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F72”: Unicode scalar numerical value)), (“130”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F73”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F74”: Unicode scalar numerical value)), (“132”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F79”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F7D”: Unicode scalar numerical value)), (“130”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F7F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F80”: Unicode scalar numerical value)), (“130”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F81”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F83”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F84”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F85”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0F87”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0FC5”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“0FC6”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1036”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1037”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1038”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“103A”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“108C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“108D”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“135C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“135F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1713”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1715”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1733”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1734”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“17D1”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“17D2”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“17DC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“17DD”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“18A8”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“18A9”: Unicode scalar numerical value)), (“228”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1938”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1939”: Unicode scalar numerical value)), (“222”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“193A”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“193B”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A16”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A17”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A18”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A5F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A60”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A74”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A7C”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A7E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1A7F”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AAF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AB4”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ABA”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ABC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ABD”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ABE”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AC0”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AC2”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AC4”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AC9”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ACA”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ADC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ADD”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1ADF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AE5”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AE6”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AEA”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1AEB”: Unicode scalar numerical value)), (“234”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B33”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B34”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B43”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B44”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B6A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B6B”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B6C”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1B73”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BA9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BAB”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BE5”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BE6”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BF1”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BF3”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1C36”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1C37”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CCF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CD2”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CD3”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CD4”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CD9”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CDB”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CDF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CE0”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CE1”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CE8”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CEC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CED”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CF3”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CF4”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CF7”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1CF9”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DBF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DC1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DC2”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DC9”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DCA”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DCC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DCD”: Unicode scalar numerical value)), (“234”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DCE”: Unicode scalar numerical value)), (“214”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DCF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DD0”: Unicode scalar numerical value)), (“202”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DF5”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DF6”: Unicode scalar numerical value)), (“232”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DF8”: Unicode scalar numerical value)), (“228”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DF9”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFA”: Unicode scalar numerical value)), (“218”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFB”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFC”: Unicode scalar numerical value)), (“233”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFD”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFE”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20CF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20D1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20D3”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20D7”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20DA”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20DC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E0”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E4”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E6”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E7”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E8”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20E9”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20EB”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20EF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“20F0”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“2CEE”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“2CF1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“2D7E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“2D7F”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“2DDF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“2DFF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“3029”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“302A”: Unicode scalar numerical value)), (“218”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“302B”: Unicode scalar numerical value)), (“228”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“302C”: Unicode scalar numerical value)), (“232”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“302D”: Unicode scalar numerical value)), (“222”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“302F”: Unicode scalar numerical value)), (“224”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“3098”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“309A”: Unicode scalar numerical value)), (“8”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A66E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A66F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A673”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A67D”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A69D”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A69F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A6EF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A6F1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A805”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A806”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A82B”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A82C”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A8C3”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A8C4”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A8DF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A8F1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A92A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A92D”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A952”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A953”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A9B2”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A9B3”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A9BF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“A9C0”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAAF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAB0”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAB1”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAB3”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAB4”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAB6”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAB8”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AABD”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AABF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAC0”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAC1”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAF5”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“AAF6”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“ABEC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“ABED”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“FB1D”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“FB1E”: Unicode scalar numerical value)), (“26”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“FE1F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“FE26”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“FE2D”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“FE2F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“101FC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“101FD”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“102DF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“102E0”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10375”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1037A”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A0C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A0D”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A0E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A0F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A37”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A38”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A39”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A3A”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A3E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10A3F”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10AE4”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10AE5”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10AE6”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10D23”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10D27”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10D68”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10D6D”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10EAA”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10EAC”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10EF9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10EFB”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10EFC”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10EFF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F45”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F47”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F4A”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F4B”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F4C”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F50”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F81”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F82”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F83”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F84”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“10F85”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11045”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11046”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1106F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11070”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1107E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1107F”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“110B8”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“110B9”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“110BA”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“110FF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11102”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11132”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11134”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11172”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11173”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“111BF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“111C0”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“111C9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“111CA”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11234”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11235”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11236”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“112E8”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“112E9”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“112EA”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1133A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1133C”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1134C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1134D”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11365”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1136C”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1136F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11374”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“113CD”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“113D0”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11441”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11442”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11445”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11446”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1145D”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1145E”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“114C1”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“114C2”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“114C3”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“115BE”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“115BF”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“115C0”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1163E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1163F”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“116B5”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“116B6”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“116B7”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1172A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1172B”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11838”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11839”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1183A”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1193C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1193E”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11942”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11943”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“119DF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“119E0”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11A33”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11A34”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11A46”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11A47”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11A98”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11A99”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11C3E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11C3F”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11D41”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11D42”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11D43”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11D45”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11D96”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11D97”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11F40”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“11F42”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1612E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1612F”: Unicode scalar numerical value)), (“9”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“16AEF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“16AF4”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“16B2F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“16B36”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“16FEF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“16FF1”: Unicode scalar numerical value)), (“6”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BC9D”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1BC9E”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D164”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D166”: Unicode scalar numerical value)), (“216”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D169”: Unicode scalar numerical value)), (“1”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D16C”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D16D”: Unicode scalar numerical value)), (“226”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D172”: Unicode scalar numerical value)), (“216”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D17A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D182”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D184”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D189”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D18B”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D1A9”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D1AD”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D241”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1D244”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1DFFF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E006”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E007”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E018”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E01A”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E021”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E022”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E024”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E025”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E02A”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E08E”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E08F”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E12F”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E136”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E2AD”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E2AE”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E2EB”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E2EF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E4EB”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E4ED”: Unicode scalar numerical value)), (“232”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E4EE”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E4EF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E5ED”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E5EE”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E5EF”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6E2”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6E3”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6E5”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6E6”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6ED”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6EF”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6F4”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E6F5”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E8CF”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E8D6”: Unicode scalar numerical value)), (“220”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E943”: Unicode scalar numerical value)), (“0”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E949”: Unicode scalar numerical value)), (“230”: 8‐bit natural number)
-  if ((scalar) is less than or equal to (“1E94A”: Unicode scalar numerical value)), (“7”: 8‐bit natural number)
+  if ((scalar) is less than or equal to (“02FF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0314”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0315”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than or equal to (“0319”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“031A”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than or equal to (“031B”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than or equal to (“0320”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0322”: Unicode scalar numerical value)), {
+   ← “202”
+  }
+  if ((scalar) is less than or equal to (“0326”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0328”: Unicode scalar numerical value)), {
+   ← “202”
+  }
+  if ((scalar) is less than or equal to (“0333”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0338”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“033C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0344”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0345”: Unicode scalar numerical value)), {
+   ← “240”
+  }
+  if ((scalar) is less than or equal to (“0346”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0349”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“034C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“034E”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“034F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0352”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0356”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0357”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0358”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than or equal to (“035A”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“035B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“035C”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than or equal to (“035E”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than or equal to (“035F”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than or equal to (“0361”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than or equal to (“0362”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than or equal to (“036F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0482”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0487”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0590”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0591”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0595”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0596”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0599”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“059A”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than or equal to (“059B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“05A1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“05A7”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“05A9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“05AA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“05AC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“05AD”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than or equal to (“05AE”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than or equal to (“05AF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“05B0”: Unicode scalar numerical value)), {
+   ← “10”
+  }
+  if ((scalar) is less than or equal to (“05B1”: Unicode scalar numerical value)), {
+   ← “11”
+  }
+  if ((scalar) is less than or equal to (“05B2”: Unicode scalar numerical value)), {
+   ← “12”
+  }
+  if ((scalar) is less than or equal to (“05B3”: Unicode scalar numerical value)), {
+   ← “13”
+  }
+  if ((scalar) is less than or equal to (“05B4”: Unicode scalar numerical value)), {
+   ← “14”
+  }
+  if ((scalar) is less than or equal to (“05B5”: Unicode scalar numerical value)), {
+   ← “15”
+  }
+  if ((scalar) is less than or equal to (“05B6”: Unicode scalar numerical value)), {
+   ← “16”
+  }
+  if ((scalar) is less than or equal to (“05B7”: Unicode scalar numerical value)), {
+   ← “17”
+  }
+  if ((scalar) is less than or equal to (“05B8”: Unicode scalar numerical value)), {
+   ← “18”
+  }
+  if ((scalar) is less than or equal to (“05BA”: Unicode scalar numerical value)), {
+   ← “19”
+  }
+  if ((scalar) is less than or equal to (“05BB”: Unicode scalar numerical value)), {
+   ← “20”
+  }
+  if ((scalar) is less than or equal to (“05BC”: Unicode scalar numerical value)), {
+   ← “21”
+  }
+  if ((scalar) is less than or equal to (“05BD”: Unicode scalar numerical value)), {
+   ← “22”
+  }
+  if ((scalar) is less than or equal to (“05BE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“05BF”: Unicode scalar numerical value)), {
+   ← “23”
+  }
+  if ((scalar) is less than or equal to (“05C0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“05C1”: Unicode scalar numerical value)), {
+   ← “24”
+  }
+  if ((scalar) is less than or equal to (“05C2”: Unicode scalar numerical value)), {
+   ← “25”
+  }
+  if ((scalar) is less than or equal to (“05C3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“05C4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“05C5”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“05C6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“05C7”: Unicode scalar numerical value)), {
+   ← “18”
+  }
+  if ((scalar) is less than or equal to (“060F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0617”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0618”: Unicode scalar numerical value)), {
+   ← “30”
+  }
+  if ((scalar) is less than or equal to (“0619”: Unicode scalar numerical value)), {
+   ← “31”
+  }
+  if ((scalar) is less than or equal to (“061A”: Unicode scalar numerical value)), {
+   ← “32”
+  }
+  if ((scalar) is less than or equal to (“064A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“064B”: Unicode scalar numerical value)), {
+   ← “27”
+  }
+  if ((scalar) is less than or equal to (“064C”: Unicode scalar numerical value)), {
+   ← “28”
+  }
+  if ((scalar) is less than or equal to (“064D”: Unicode scalar numerical value)), {
+   ← “29”
+  }
+  if ((scalar) is less than or equal to (“064E”: Unicode scalar numerical value)), {
+   ← “30”
+  }
+  if ((scalar) is less than or equal to (“064F”: Unicode scalar numerical value)), {
+   ← “31”
+  }
+  if ((scalar) is less than or equal to (“0650”: Unicode scalar numerical value)), {
+   ← “32”
+  }
+  if ((scalar) is less than or equal to (“0651”: Unicode scalar numerical value)), {
+   ← “33”
+  }
+  if ((scalar) is less than or equal to (“0652”: Unicode scalar numerical value)), {
+   ← “34”
+  }
+  if ((scalar) is less than or equal to (“0654”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0656”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“065B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“065C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“065E”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“065F”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“066F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0670”: Unicode scalar numerical value)), {
+   ← “35”
+  }
+  if ((scalar) is less than or equal to (“06D5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“06DC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“06DE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“06E2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“06E3”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“06E4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“06E6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“06E8”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“06E9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“06EA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“06EC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“06ED”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0710”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0711”: Unicode scalar numerical value)), {
+   ← “36”
+  }
+  if ((scalar) is less than or equal to (“072F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0730”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0731”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0733”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0734”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0736”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0739”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“073A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“073C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“073D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“073E”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0741”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0742”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0743”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0744”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0745”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0746”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0747”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0748”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“074A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“07EA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“07F1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“07F2”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“07F3”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“07FC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“07FD”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0815”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0819”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“081A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0823”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0824”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0827”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0828”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“082D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0858”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“085B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0896”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0898”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“089B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“089F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08C9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“08CE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08D3”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08E1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08E2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“08E3”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08E5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08E6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08E8”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08E9”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08EC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08EF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08F0”: Unicode scalar numerical value)), {
+   ← “27”
+  }
+  if ((scalar) is less than or equal to (“08F1”: Unicode scalar numerical value)), {
+   ← “28”
+  }
+  if ((scalar) is less than or equal to (“08F2”: Unicode scalar numerical value)), {
+   ← “29”
+  }
+  if ((scalar) is less than or equal to (“08F5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08F6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08F8”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“08FA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“08FF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“093B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“093C”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“094C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“094D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0950”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0951”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0952”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0954”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“09BB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“09BC”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“09CC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“09CD”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“09FD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“09FE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0A3B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0A3C”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“0A4C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0A4D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0ABB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0ABC”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“0ACC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0ACD”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0B3B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0B3C”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“0B4C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0B4D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0BCC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0BCD”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0C3B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0C3C”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“0C4C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0C4D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0C54”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0C55”: Unicode scalar numerical value)), {
+   ← “84”
+  }
+  if ((scalar) is less than or equal to (“0C56”: Unicode scalar numerical value)), {
+   ← “91”
+  }
+  if ((scalar) is less than or equal to (“0CBB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0CBC”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“0CCC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0CCD”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0D3A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0D3C”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0D4C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0D4D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0DC9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0DCA”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0E37”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0E39”: Unicode scalar numerical value)), {
+   ← “103”
+  }
+  if ((scalar) is less than or equal to (“0E3A”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0E47”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0E4B”: Unicode scalar numerical value)), {
+   ← “107”
+  }
+  if ((scalar) is less than or equal to (“0EB7”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0EB9”: Unicode scalar numerical value)), {
+   ← “118”
+  }
+  if ((scalar) is less than or equal to (“0EBA”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0EC7”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0ECB”: Unicode scalar numerical value)), {
+   ← “122”
+  }
+  if ((scalar) is less than or equal to (“0F17”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F19”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0F34”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F35”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0F36”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F37”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“0F38”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F39”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than or equal to (“0F70”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F71”: Unicode scalar numerical value)), {
+   ← “129”
+  }
+  if ((scalar) is less than or equal to (“0F72”: Unicode scalar numerical value)), {
+   ← “130”
+  }
+  if ((scalar) is less than or equal to (“0F73”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F74”: Unicode scalar numerical value)), {
+   ← “132”
+  }
+  if ((scalar) is less than or equal to (“0F79”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F7D”: Unicode scalar numerical value)), {
+   ← “130”
+  }
+  if ((scalar) is less than or equal to (“0F7F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F80”: Unicode scalar numerical value)), {
+   ← “130”
+  }
+  if ((scalar) is less than or equal to (“0F81”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F83”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0F84”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“0F85”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0F87”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“0FC5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“0FC6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1036”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1037”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1038”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“103A”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“108C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“108D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“135C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“135F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1713”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1715”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1733”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1734”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“17D1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“17D2”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“17DC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“17DD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“18A8”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“18A9”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than or equal to (“1938”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1939”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than or equal to (“193A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“193B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1A16”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1A17”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1A18”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1A5F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1A60”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1A74”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1A7C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1A7E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1A7F”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1AAF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1AB4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1ABA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1ABC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1ABD”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1ABE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1AC0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1AC2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1AC4”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1AC9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1ACA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1ADC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1ADD”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1ADF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1AE5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1AE6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1AEA”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1AEB”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than or equal to (“1B33”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1B34”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1B43”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1B44”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1B6A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1B6B”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1B6C”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1B73”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1BA9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1BAB”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1BE5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1BE6”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1BF1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1BF3”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1C36”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1C37”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1CCF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1CD2”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1CD3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1CD4”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“1CD9”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1CDB”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1CDF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1CE0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1CE1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1CE8”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“1CEC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1CED”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1CF3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1CF4”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1CF7”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1CF9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DBF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1DC1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DC2”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1DC9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DCA”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1DCC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DCD”: Unicode scalar numerical value)), {
+   ← “234”
+  }
+  if ((scalar) is less than or equal to (“1DCE”: Unicode scalar numerical value)), {
+   ← “214”
+  }
+  if ((scalar) is less than or equal to (“1DCF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1DD0”: Unicode scalar numerical value)), {
+   ← “202”
+  }
+  if ((scalar) is less than or equal to (“1DF5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DF6”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than or equal to (“1DF8”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than or equal to (“1DF9”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1DFA”: Unicode scalar numerical value)), {
+   ← “218”
+  }
+  if ((scalar) is less than or equal to (“1DFB”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DFC”: Unicode scalar numerical value)), {
+   ← “233”
+  }
+  if ((scalar) is less than or equal to (“1DFD”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1DFE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DFF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“20CF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“20D1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“20D3”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“20D7”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“20DA”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“20DC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“20E0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“20E1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“20E4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“20E6”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“20E7”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“20E8”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“20E9”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“20EB”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“20EF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“20F0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“2CEE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“2CF1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“2D7E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“2D7F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“2DDF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“2DFF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“3029”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“302A”: Unicode scalar numerical value)), {
+   ← “218”
+  }
+  if ((scalar) is less than or equal to (“302B”: Unicode scalar numerical value)), {
+   ← “228”
+  }
+  if ((scalar) is less than or equal to (“302C”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than or equal to (“302D”: Unicode scalar numerical value)), {
+   ← “222”
+  }
+  if ((scalar) is less than or equal to (“302F”: Unicode scalar numerical value)), {
+   ← “224”
+  }
+  if ((scalar) is less than or equal to (“3098”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“309A”: Unicode scalar numerical value)), {
+   ← “8”
+  }
+  if ((scalar) is less than or equal to (“A66E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A66F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“A673”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A67D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“A69D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A69F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“A6EF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A6F1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“A805”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A806”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“A82B”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A82C”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“A8C3”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A8C4”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“A8DF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A8F1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“A92A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A92D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“A952”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A953”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“A9B2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A9B3”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“A9BF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“A9C0”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“AAAF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“AAB0”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“AAB1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“AAB3”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“AAB4”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“AAB6”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“AAB8”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“AABD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“AABF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“AAC0”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“AAC1”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“AAF5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“AAF6”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“ABEC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“ABED”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“FB1D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“FB1E”: Unicode scalar numerical value)), {
+   ← “26”
+  }
+  if ((scalar) is less than or equal to (“FE1F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“FE26”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“FE2D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“FE2F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“101FC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“101FD”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“102DF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“102E0”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10375”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1037A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10A0C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10A0D”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10A0E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10A0F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10A37”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10A38”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10A39”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“10A3A”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10A3E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10A3F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“10AE4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10AE5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10AE6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10D23”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10D27”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10D68”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10D6D”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10EAA”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10EAC”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10EF9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10EFB”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10EFC”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10EFF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10F45”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10F47”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10F4A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10F4B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10F4C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10F50”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10F81”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“10F82”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10F83”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“10F84”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“10F85”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“11045”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11046”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1106F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11070”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1107E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1107F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“110B8”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“110B9”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“110BA”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“110FF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11102”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“11132”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11134”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11172”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11173”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“111BF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“111C0”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“111C9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“111CA”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“11234”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11235”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11236”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“112E8”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“112E9”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“112EA”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1133A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1133C”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1134C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1134D”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11365”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1136C”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1136F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11374”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“113CD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“113D0”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11441”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11442”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11445”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11446”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1145D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1145E”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“114C1”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“114C2”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“114C3”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“115BE”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“115BF”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“115C0”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1163E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1163F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“116B5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“116B6”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“116B7”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1172A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1172B”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11838”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11839”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1183A”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“1193C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1193E”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11942”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11943”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“119DF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“119E0”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11A33”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11A34”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11A46”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11A47”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11A98”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11A99”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11C3E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11C3F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11D41”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11D42”: Unicode scalar numerical value)), {
+   ← “7”
+  }
+  if ((scalar) is less than or equal to (“11D43”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11D45”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11D96”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11D97”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“11F40”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“11F42”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“1612E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1612F”: Unicode scalar numerical value)), {
+   ← “9”
+  }
+  if ((scalar) is less than or equal to (“16AEF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“16AF4”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“16B2F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“16B36”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“16FEF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“16FF1”: Unicode scalar numerical value)), {
+   ← “6”
+  }
+  if ((scalar) is less than or equal to (“1BC9D”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1BC9E”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“1D164”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1D166”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than or equal to (“1D169”: Unicode scalar numerical value)), {
+   ← “1”
+  }
+  if ((scalar) is less than or equal to (“1D16C”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1D16D”: Unicode scalar numerical value)), {
+   ← “226”
+  }
+  if ((scalar) is less than or equal to (“1D172”: Unicode scalar numerical value)), {
+   ← “216”
+  }
+  if ((scalar) is less than or equal to (“1D17A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1D182”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1D184”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1D189”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1D18B”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1D1A9”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1D1AD”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1D241”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1D244”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1DFFF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E006”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E007”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E018”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E01A”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E021”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E022”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E024”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E025”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E02A”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E08E”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E08F”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E12F”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E136”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E2AD”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E2AE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E2EB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E2EF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E4EB”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E4ED”: Unicode scalar numerical value)), {
+   ← “232”
+  }
+  if ((scalar) is less than or equal to (“1E4EE”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1E4EF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E5ED”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E5EE”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E5EF”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1E6E2”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E6E3”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E6E5”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E6E6”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E6ED”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E6EF”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E6F4”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E6F5”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E8CF”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E8D6”: Unicode scalar numerical value)), {
+   ← “220”
+  }
+  if ((scalar) is less than or equal to (“1E943”: Unicode scalar numerical value)), {
+   ← “0”
+  }
+  if ((scalar) is less than or equal to (“1E949”: Unicode scalar numerical value)), {
+   ← “230”
+  }
+  if ((scalar) is less than or equal to (“1E94A”: Unicode scalar numerical value)), {
+   ← “7”
+  }
   ← “0”
  }

@@ -700,13 +700,17 @@ extension ActionIntermediate {
         declaration: declaration,
         isCreation: isCreation,
         isSpecialized: false,
-        deservesTesting: !isCreation || existsForAnyPlatform(
-          c: c,
-          cSharp: cSharp,
-          javaScript: javaScript,
-          kotlin: kotlin,
-          swift: swift
+        deservesTesting: (
+          !isCreation || existsForAnyPlatform(
+            c: c,
+            cSharp: cSharp,
+            javaScript: javaScript,
+            kotlin: kotlin,
+            swift: swift
+          )
         )
+        // Temporary hack while these files overload the primitive coverage tracking:
+        && !String(declaration.location.origin).contains("Saying/Generated")
       )
     )
   }
