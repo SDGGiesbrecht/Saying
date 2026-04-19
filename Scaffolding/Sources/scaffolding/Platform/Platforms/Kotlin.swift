@@ -13,7 +13,7 @@ enum Kotlin: Platform {
   static var functionImplementationSizeLimit: Int {
     // The actual limit applies to the resulting bytecode, not source code, and is thus unknowable.
     // This value was arrived at experimentally, and should be tightened if the limit ever trips again.
-    return fileSizeLimit! / 4
+    return min(1 << 19, fileSizeLimit! / 2)
   }
 
   static var allowsAllUnicodeIdentifiers: Bool {
