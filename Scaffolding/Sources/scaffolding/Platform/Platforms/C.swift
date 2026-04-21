@@ -555,6 +555,18 @@ enum C: Platform {
     return " return returnValue;"
   }
 
+  static var functionImplementationSizeLimit: Int? {
+    return nil
+  }
+  static var localConstantKeyword: String? {
+    return nil
+  }
+  static var actionContinuationKeyword: String? {
+    return nil
+  }
+  static func parameter(toContinueLocal local: String) -> String {
+    return local
+  }
   static func actionDeclaration(
     name: String,
     parameters: String,

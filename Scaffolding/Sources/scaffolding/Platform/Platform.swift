@@ -131,6 +131,10 @@ protocol Platform {
   static func deadEnd() -> String
   static func returnDelayStorage(type: String?) -> String
   static var delayedReturn: String { get }
+  static var functionImplementationSizeLimit: Int? { get }
+  static var localConstantKeyword: String? { get }
+  static var actionContinuationKeyword: String? { get }
+  static func parameter(toContinueLocal local: String) -> String
   static func actionDeclaration(
     name: String,
     parameters: String,
@@ -185,7 +189,7 @@ protocol Platform {
   // Package
   static func testEntryPoint() -> [String]?
   static var sourceFileName: String { get }
-  static func splitLongFile(_ file: String) -> [String]
+  static func postprocessFileSplit(_ file: String) -> String
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
 
   // Saying
@@ -952,13 +956,15 @@ extension Platform {
   static func flowCoverageRegistration(
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    indentationLevel: Int,
     statements: Array<StatementIntermediate>.SubSequence
   ) -> String? {
     coverageRegionCounter += 1
     if let coverage = contextCoverageIdentifier,
       statements.first?.isDeadEnd != true {
       let appendedIdentifier = "\(coverage):{\(coverageRegionCounter.inDigits())}"
-      return "\n\(self.coverageRegistration(identifier: sanitize(stringLiteral: UnicodeText(appendedIdentifier))))"
+      let indent = String(repeating: self.indent, count: indentationLevel)
+      return "\n\(indent)\(self.coverageRegistration(identifier: sanitize(stringLiteral: UnicodeText(appendedIdentifier))))"
     } else {
       return nil
     }
@@ -1090,6 +1096,7 @@ extension Platform {
     if let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter,
+        indentationLevel: 0,
         statements: actionLiteral.implementation.statements[...]
     ) {
       implementation.append(coverage)
@@ -1587,6 +1594,7 @@ extension Platform {
                    let coverage = flowCoverageRegistration(
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
+                    indentationLevel: 1,
                     statements: statements.statements[...]
                    ) {
                   accumulator.append(coverage)
@@ -1708,6 +1716,7 @@ extension Platform {
             let coverage = flowCoverageRegistration(
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
+            indentationLevel: 0,
             statements: flow.statements[...]
           ) {
             source.prepend(coverage)
@@ -2363,6 +2372,7 @@ extension Platform {
          let coverage = flowCoverageRegistration(
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
+          indentationLevel: 0,
           statements: followingStatements
          ) {
         entry.append(coverage)
@@ -2394,11 +2404,15 @@ extension Platform {
     return entry.prepending(contentsOf: presentIndent).components(separatedBy: "\n")
   }
 
+  static func name(of parameter: ParameterIntermediate) -> String {
+    return nativeName(of: parameter)
+      ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
+  }
   static func source(
     for parameter: ParameterIntermediate,
     referenceLookup: [ReferenceDictionary]
   ) -> String {
-    let name = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
+    let name = self.name(of: parameter)
     if !isTyped {
       return name
     } else {
@@ -2587,6 +2601,9 @@ extension Platform {
     let parameters: String = parameterEntries
       .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
       .joined(separator: ", ")
+    let parameterNames = parameterEntries
+      .lazy.map({ self.name(of: $0) })
+      .joined(separator: ", ")
 
     let returnValue: String?
     if !isInitializer,
@@ -2616,20 +2633,33 @@ extension Platform {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
     var extractedAnonymousFunctions: [String] = []
-    let implementation = source(
-      for: actionImplementation.statements,
-      context: action,
-      localLookup: [],
-      coverageRegionCounter: &coverageRegionCounter,
-      clashAvoidanceCounter: &clashAvoidanceCounter,
-      anonymousCounter: &anonymousCounter,
-      extractedAnonymousFunctions: &extractedAnonymousFunctions,
-      referenceLookup: externalReferenceLookup.appending(
-        action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
+    let implementation = splitFunctionImplementationIfTooLong(
+      implementation: source(
+        for: actionImplementation.statements,
+        context: action,
+        localLookup: [],
+        coverageRegionCounter: &coverageRegionCounter,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
+        referenceLookup: externalReferenceLookup.appending(
+          action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
+        ),
+        inliningArguments: [:],
+        mode: mode,
+        indentationLevel: 0
       ),
-      inliningArguments: [:],
-      mode: mode,
-      indentationLevel: 1
+      indent: self.indent,
+      subcall: { disambiguator, extraParameters in
+        let extra = extraParameters.map({ ", \($0)" }) ?? ""
+        return "\(name)\(disambiguator)(\(parameterNames)\(extra))"
+      },
+      subdeclaration: { disambiguator, extraParameters in
+        let access = self.accessModifier(for: .unit, memberScope: parentType != nil).map({ "\($0) " }) ?? ""
+        let extra = extraParameters.map({ ", \($0)" }) ?? ""
+        let returnValue = returnSection ?? ""
+        return "\(access)\(actionContinuationKeyword!) \(name)\(disambiguator)(\(parameters)\(extra))\(returnValue)"
+      }
     )
     return actionDeclaration(
       name: name,
@@ -2647,6 +2677,84 @@ extension Platform {
       initializerInstead: isInitializer,
       extractedDeclarations: extractedAnonymousFunctions
     )
+  }
+  static var actualFunctionImplementationSizeLimit: Int? {
+    var result = Int.max
+    if let file = fileSizeLimit {
+      result = min(result, file / 2)
+    }
+    if let implementation = functionImplementationSizeLimit {
+      result = min(result, implementation)
+    }
+    return result == Int.max ? nil : result
+  }
+  static func splitFunctionImplementationIfTooLong(
+    implementation: [String],
+    indent: String,
+    subcall: (String, String?) -> String,
+    subdeclaration: (String, String?) -> String
+  ) -> [String] {
+    guard let maximumGroupLength = actualFunctionImplementationSizeLimit else {
+      return implementation.map { "\(indent)\($0)" }
+    }
+    let indentLength = indent.utf8.count
+    let subcallLength = 1 + indentLength + subcall("0", nil).utf8.count + 1
+
+    var groups: [[String]] = []
+    var remainder = implementation[...]
+    var accumulatedBytes = 0
+    while !remainder.isEmpty {
+      var next: [String] = [remainder.removeFirst()]
+      while remainder.first?.first == " " || remainder.first?.first == "}" {
+        next.append(remainder.removeFirst())
+      }
+      let nextLength = next.reduce(0, { $0 + 1 + indentLength + $1.count })
+      if !groups.isEmpty,
+        accumulatedBytes + nextLength + subcallLength < maximumGroupLength {
+        groups[groups.indices.last!].append(contentsOf: next)
+        accumulatedBytes += nextLength
+      } else {
+        groups.append(next)
+        accumulatedBytes = nextLength
+      }
+    }
+
+    if groups.isEmpty {
+      return []
+    }
+    var locals: [String] = []
+    var result = groups.removeFirst().map { line in
+      if let keyword = localConstantKeyword {
+        if line.hasPrefix("\(keyword) ") {
+          locals.append(line)
+        }
+      }
+      return "\(indent)\(line)"
+    }
+    for (index, group) in groups.enumerated() {
+      var toPass: [String] = []
+      var toReceive: [String] = []
+      for local in locals {
+        var disecting = String(local.dropFirst(4))
+        disecting = disecting.components(separatedBy: " = ").first ?? disecting
+        toReceive.append(parameter(toContinueLocal: disecting))
+        toPass.append(disecting.components(separatedBy: ": ").first ?? disecting)
+      }
+      let passing = toPass.isEmpty ? nil : toPass.joined(separator: ", ")
+      let receiving = toReceive.isEmpty ? nil : toReceive.joined(separator: ", ")
+      result.append(contentsOf: [
+        "\(indent)return \(subcall(String(index), passing))",
+        "}",
+        "",
+        "\(subdeclaration(String(index), receiving)) {",
+      ])
+      for line in group {
+        result.append(contentsOf: [
+          "\(indent)\(line)",
+        ])
+      }
+    }
+    return result
   }
 
   static func sayingIdentifier(for test: TestIntermediate) -> String {
@@ -2953,7 +3061,13 @@ extension Platform {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
       result.appendSeparatorLine()
-      result.append(contentsOf: testSummary(testCalls: allTests.flatMap({ call(test: $0, identifierIndex: &identifierIndex) })))
+      let testCalls = splitFunctionImplementationIfTooLong(
+        implementation: allTests.flatMap({ call(test: $0, identifierIndex: &identifierIndex) }),
+        indent: self.indent,
+        subcall: { "test\($0)(\($1 ?? ""))" },
+        subdeclaration: { "\(actionContinuationKeyword!) test\($0)(\($1 ?? ""))" }
+      )
+      result.append(contentsOf: testSummary(testCalls: testCalls))
     }
     if let end = actionDeclarationsContainerEnd {
       result.append(contentsOf: end)
@@ -2963,7 +3077,46 @@ extension Platform {
   }
 
   static func splitLongFile(_ file: String) -> [String] {
-    return [file]
+    var lines = (file.components(separatedBy: "\n") as [String])[...]
+    let importLines = Array(lines.prefix(while: { $0.hasPrefix("import") }))
+    lines.removeFirst(importLines.count)
+    let imports = importLines.joined(separator: "\n")
+    let importsLength = imports.utf8.count
+
+    var files: [String] = []
+    var accumulatedBytes = importsLength
+    while !lines.isEmpty {
+      let sectionLines: [String]
+      if let nextBreak = lines.indices.dropFirst().first(where: { index in
+        if lines[index] == "",
+           let next = lines[index...].dropFirst().first,
+           let startingCharacter = next.first,
+           startingCharacter != " " {
+          return true
+        } else {
+          return false
+        }
+      }) {
+        sectionLines = Array(lines[..<nextBreak])
+      } else {
+        sectionLines = Array(lines)
+      }
+      lines.removeFirst(sectionLines.count)
+      let section = "\n" + sectionLines.joined(separator: "\n")
+      let sectionLength = section.utf8.count
+      if !files.isEmpty,
+        accumulatedBytes + sectionLength < fileSizeLimit! {
+        accumulatedBytes += sectionLength
+      } else {
+        files.append(imports)
+        accumulatedBytes = importsLength + sectionLength
+      }
+      files[files.indices.last!].append(contentsOf: section)
+    }
+    return files.map { postprocessFileSplit($0) }
+  }
+  static func postprocessFileSplit(_ file: String) -> String {
+    return file
   }
 
   static func preparedDirectory(for package: Package) -> URL {
@@ -3036,7 +3189,7 @@ extension Platform {
         let directory = withoutExtension.deletingLastPathComponent()
         for (index, part) in split.enumerated() {
           try part.save(
-            to: directory.appendingPathComponent("\(name)\(index)").appendingPathExtension(fileExtension)
+            to: directory.appendingPathComponent("\(name)\(index + 1)").appendingPathExtension(fileExtension)
           )
         }
       } else {
