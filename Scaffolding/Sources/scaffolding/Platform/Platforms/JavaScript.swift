@@ -325,6 +325,18 @@ enum JavaScript: Platform {
     return " return returnValue;"
   }
 
+  static var functionImplementationSizeLimit: Int? {
+    return nil
+  }
+  static var localConstantKeyword: String? {
+    return "const"
+  }
+  static var actionContinuationKeyword: String? {
+    return "function"
+  }
+  static func parameter(toContinueLocal local: String) -> String {
+    return local
+  }
   static func actionDeclaration(
     name: String,
     parameters: String,

@@ -10,11 +10,6 @@ enum Kotlin: Platform {
   static var fileSizeLimit: Int? {
     return 2500 * 1000 // idea.max.intellisense.filesize; exceeding it broke the build in the Android CI
   }
-  static var functionImplementationSizeLimit: Int {
-    // The actual limit applies to the resulting bytecode, not source code, and is thus unknowable.
-    // This value was arrived at experimentally, and should be tightened if the limit ever trips again.
-    return min(1 << 19, fileSizeLimit! / 2)
-  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -376,6 +371,20 @@ enum Kotlin: Platform {
     return "; return returnValue"
   }
 
+  static var functionImplementationSizeLimit: Int? {
+    // The actual limit applies to the resulting bytecode, not source code, and is thus unknowable.
+    // This value was arrived at experimentally, and should be tightened if the limit ever trips again.
+    return 1 << 19
+  }
+  static var localConstantKeyword: String? {
+    return "val"
+  }
+  static var actionContinuationKeyword: String? {
+    return "fun"
+  }
+  static func parameter(toContinueLocal local: String) -> String {
+    return local
+  }
   static func actionDeclaration(
     name: String,
     parameters: String,
@@ -406,45 +415,16 @@ enum Kotlin: Platform {
     var result: [String] = [
       "\(access)\(override)\(declarationUpToNameEnd)\(declarationAfterNameEndToEndOfParameters)\(declarationAfterParameters) {",
     ]
-    var implementationSource: [String] = []
     if isEqualsOperator {
-      implementationSource.append(contentsOf: [
+      result.append(contentsOf: [
         "\(indent)if (this === other) return true",
         "\(indent)if (other !is \(parentType!)) return false",
       ])
     }
     if let coverage = coverageRegistration {
-      implementationSource.append(coverage)
+      result.append(coverage)
     }
-    implementationSource.append(contentsOf: implementation)
-    let parameterNames: String = parameters
-      .components(separatedBy: ", ")
-      .map({ (parameter: String) -> String in
-        return (parameter.prefix(upTo: ": ")?.contents).map({ String($0) }) ?? parameter
-      })
-      .joined(separator: ", ")
-    result.append(
-      contentsOf: splitLongFunctionImplementation(
-        implementation: implementationSource.map({ line in
-          if line.starts(with: indent) {
-            var adjusted = line
-            adjusted.removeFirst(indent.count)
-            return adjusted
-          } else {
-            return line
-          }
-        }),
-        subcall: { disambiguator, extraParameters in
-          let extra = extraParameters.map({ ", \($0)" }) ?? ""
-          return "\(name)\(disambiguator)(\(parameterNames)\(extra))"
-        },
-        subdeclaration: { disambiguator, extraParameters in
-          let access = self.accessModifier(for: .unit, memberScope: parentType != nil).map({ "\($0) " }) ?? ""
-          let extra = extraParameters.map({ ", \($0)" }) ?? ""
-          return "\(access)\(override)\(declarationUpToNameEnd)\(disambiguator)\(declarationAfterNameEndToEndOfParameters)\(extra)\(declarationAfterParameters)"
-        }
-      )
-    )
+    result.append(contentsOf: implementation)
     result.append(contentsOf: [
       "}",
     ])
@@ -550,12 +530,8 @@ enum Kotlin: Platform {
       "fun test() {",
     ]
     result.append(
-      contentsOf: splitLongFunctionImplementation(
-        implementation: testCalls.appending(
-          "assert(coverageRegions.isEmpty()) { \u{22}$coverageRegions\u{22} }"
-        ),
-        subcall: { "test\($0)(\($1 ?? ""))" },
-        subdeclaration: { "fun test\($0)(\($1 ?? ""))" }
+      contentsOf: testCalls.appending(
+        "\(indent)assert(coverageRegions.isEmpty()) { \u{22}$coverageRegions\u{22} }"
       )
     )
     result.append(contentsOf: [
@@ -570,110 +546,6 @@ enum Kotlin: Platform {
       "\(indent)test()",
       "}",
     ]
-  }
-
-  static func splitLongFunctionImplementation(
-    implementation: [String],
-    subcall: (String, String?) -> String,
-    subdeclaration: (String, String?) -> String
-  ) -> [String] {
-    let maximumGroupLength = functionImplementationSizeLimit
-    let indentLength = indent.utf8.count
-    let subcallLength = 1 + indentLength + subcall("0", nil).utf8.count + 1
-
-    var groups: [[String]] = []
-    var remainder = implementation[...]
-    var accumulatedBytes = 0
-    while !remainder.isEmpty {
-      var next: [String] = [remainder.removeFirst()]
-      while remainder.first?.first == " " || remainder.first?.first == "}" {
-        next.append(remainder.removeFirst())
-      }
-      let nextLength = next.reduce(0, { $0 + 1 + indentLength + $1.count })
-      if !groups.isEmpty,
-        accumulatedBytes + nextLength + subcallLength < maximumGroupLength {
-        groups[groups.indices.last!].append(contentsOf: next)
-        accumulatedBytes += nextLength
-      } else {
-        groups.append(next)
-        accumulatedBytes = nextLength
-      }
-    }
-
-    if groups.isEmpty {
-      return []
-    }
-    var locals: [String] = []
-    var result = groups.removeFirst().map { line in
-      if line.hasPrefix("val ") {
-        locals.append(line)
-      }
-      return "\(indent)\(line)"
-    }
-    for (index, group) in groups.enumerated() {
-      var toPass: [String] = []
-      var toReceive: [String] = []
-      for local in locals {
-        var disecting = String(local.dropFirst(4))
-        disecting = disecting.components(separatedBy: " = ").first ?? disecting
-        toReceive.append(disecting)
-        toPass.append(disecting.components(separatedBy: ": ").first ?? disecting)
-      }
-      let passing = toPass.isEmpty ? nil : toPass.joined(separator: ", ")
-      let receiving = toReceive.isEmpty ? nil : toReceive.joined(separator: ", ")
-      result.append(contentsOf: [
-        "\(indent)return \(subcall(String(index), passing))",
-        "}",
-        "",
-        "\(subdeclaration(String(index), receiving)) {",
-      ])
-      for line in group {
-        result.append(contentsOf: [
-          "\(indent)\(line)",
-        ])
-      }
-    }
-    return result
-  }
-
-  static func splitLongFile(_ file: String) -> [String] {
-    var lines = (file.components(separatedBy: "\n") as [String])[...]
-    let importLines = Array(lines.prefix(while: { $0.hasPrefix("import") }))
-    lines.removeFirst(importLines.count)
-    let imports = importLines.joined(separator: "\n")
-    let importsLength = imports.utf8.count
-
-    var files: [String] = []
-    var accumulatedBytes = importsLength
-    while !lines.isEmpty {
-      let sectionLines: [String]
-      if let nextBreak = lines.indices.dropFirst().first(where: { index in
-        if lines[index] == "",
-           let next = lines[index...].dropFirst().first,
-           let startingCharacter = next.first,
-           startingCharacter != " " {
-          return true
-        } else {
-          return false
-        }
-      }) {
-        sectionLines = Array(lines[..<nextBreak])
-      } else {
-        sectionLines = Array(lines)
-      }
-      lines.removeFirst(sectionLines.count)
-      let section = "\n" + sectionLines.joined(separator: "\n")
-      let sectionLength = section.utf8.count
-      if !files.isEmpty,
-        accumulatedBytes + sectionLength < fileSizeLimit! {
-        accumulatedBytes += sectionLength
-      } else {
-        files.append(imports)
-        accumulatedBytes = importsLength + sectionLength
-      }
-      files[files.indices.last!].append(contentsOf: section)
-    }
-    return files
   }
 
   static var sourceFileName: String {

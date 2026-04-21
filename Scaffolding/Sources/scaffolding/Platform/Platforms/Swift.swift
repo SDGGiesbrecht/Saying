@@ -444,6 +444,20 @@ enum Swift: Platform {
     return "; return returnValue"
   }
 
+  static var functionImplementationSizeLimit: Int? {
+    // Compiling for arm64 simply hangs beyond a certain point, though the exact threshold is unknown.
+    // This value was arrived at experimentally, and should be tightened if the issue ever trips again.
+    return 1 << 19
+  }
+  static var localConstantKeyword: String? {
+    return "let"
+  }
+  static var actionContinuationKeyword: String? {
+    return "func"
+  }
+  static func parameter(toContinueLocal local: String) -> String {
+    return "_ \(local)"
+  }
   static func actionDeclaration(
     name: String,
     parameters: String,
@@ -668,7 +682,7 @@ enum Swift: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "\(indent)\(test)",
+        "\(test)",
       ])
     }
     result.append(contentsOf: [
@@ -684,6 +698,26 @@ enum Swift: Platform {
 
   static var sourceFileName: String {
     return "Sources/Products/Source.swift"
+  }
+
+  static func postprocessFileSplit(_ file: String) -> String {
+    return file
+      .components(separatedBy: "\n")
+      .map({ line in
+        var result = line
+        var indent = ""
+        while result.first == " " {
+          indent.append(result.removeFirst())
+        }
+        for keyword in ["fileprivate", "private"] {
+          let spaced = "\(keyword) "
+          if result.hasPrefix(spaced) {
+            result.removeFirst(spaced.count)
+          }
+        }
+        return indent + result
+      })
+      .joined(separator: "\n")
   }
 
   static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
