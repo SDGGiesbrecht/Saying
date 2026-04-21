@@ -54,7 +54,7 @@ action (clients)
   )
  JavaScript: “new TextDecoder().decode(Uint8Array.from(” 8‐bit encoded “))”
  Kotlin: “String(” 8‐bit encoded “.toByteArray(), Charsets.UTF¤(5F)8)”
- Swift: “String(bytes: ” 8‐bit encoded “, encoding: .utf8)!.unicodeScalars”
+ Swift: “String(bytes: ” 8‐bit encoded “, encoding: .utf8)!.unicodeScalars” (“Foundation”)
  create
 
 action (clients)
@@ -1197,11 +1197,11 @@ action (clients)
   [
    English: Returns a copy of the scalars reordered according to Unicode’s Canonical Ordering Algorithm.
   ]
+  [
+   English: This is the same as {reorder () canonically}, except that it returns a copy instead of altering the source scalars.
+  ]
   test {verify (((“¤(315)¤(300)”: Unicode scalars) reordered canonically) is (“¤(300)¤(315)”: Unicode scalars))}
   test {verify (((“¤(300)¤(20)”: Unicode scalars) reordered canonically) is (“¤(300)¤(20)”: Unicode scalars))}
-  [
-   English: This action is optimized to simply return the scalars if they are already in canonical order; checking separately before calling it is redundant.
-  ]
  ]
  (
   English: (scalars: Unicode scalars) reordered canonically
@@ -1218,6 +1218,129 @@ action (clients)
 action (clients)
  [
   [
+   English: Checks whether the scalars are already individually decomposed according to compatibility decomposition.
+  ]
+  [
+   English: This action checks whether {individually decompose () according to compatibility decomposition} will have any effect. See there for technical details.
+  ]
+  test {verify ((“¤(20)”: Unicode scalars) are individually decomposed according to compatibility decomposition)}
+  test {verify (not ((“¤(A0)”: Unicode scalars) are individually decomposed according to compatibility decomposition))}
+  test {verify ((“¤(315)¤(300)”: Unicode scalars) are individually decomposed according to compatibility decomposition)}
+ ]
+ (
+  English: (scalars: Unicode scalars) are individually decomposed according to compatibility decomposition
+  Swift: (self: [scalars]).scalarsAreIndividuallyDecomposedAccordingToCompatibilityDecomposition
+ )
+ truth value
+ {
+  for each (• scalar: Unicode scalar) in (scalars), {
+   if (not ((scalar) is decomposed according to compatibility decomposition)), {
+    ← false
+   }
+  }
+  ← true
+ }
+
+action (file)
+ (
+  English: (scalars: Unicode scalars) individually decomposed according to compatibility decomposition, skipping necessity check
+ )
+ Unicode scalars
+ {
+  let (• decomposed: Unicode scalars) start as (“”: Unicode scalars)
+  for each (• scalar: Unicode scalar) in (scalars), {
+   append (compatibility decomposition of (scalar)) to (↓ decomposed)
+  }
+  ← decomposed
+ }
+
+action (clients)
+ [
+  [
+   English: Individually decomposes the scalars according to compatibility decomposition.
+  ]
+  test {
+   let (• scalars: Unicode scalars) start as (“¤(A0)”: Unicode scalars)
+   individually decompose (↓ scalars) according to compatibility decomposition
+   verify ((scalars) is (“¤(20)”: Unicode scalars))
+  }
+  [
+   English: This does not canonically reorder the scalars.
+  ]
+  test {
+   let (• scalars: Unicode scalars) start as (“¤(315)¤(300)”: Unicode scalars)
+   individually decompose (↓ scalars) according to compatibility decomposition
+   verify ((scalars) is (“¤(315)¤(300)”: Unicode scalars))
+   decompose (↓ scalars) according to compatibility decomposition
+   verify ((scalars) is (“¤(300)¤(315)”: Unicode scalars))
+  }
+  [
+   English: This action is optimized to do nothing if the scalars are already decomposed; checking separately before calling it is redundant.
+  ]
+ ]
+ (
+  English: individually decompose (scalars: ↓ Unicode scalars) according to compatibility decomposition
+  Swift: (self: [scalars]).individuallyDecomposeAccordingToCompatibilityDecomposition
+ )
+ {
+  if ((scalars) are individually decomposed according to compatibility decomposition), {
+   ←
+  }
+  change (↓ scalars) to ((scalars) individually decomposed according to compatibility decomposition, skipping necessity check)
+ }
+
+action (clients)
+ [
+  [
+   English: Returns a copy of the scalars individually decomposed according to compatibility decomposition.
+  ]
+  [
+   English: This is the same as {individually decompose () according to compatibility decomposition}, except that it returns a copy instead of altering the source scalars.
+  ]
+  test {verify (((“¤(A0)”: Unicode scalars) individually decomposed according to compatibility decomposition) is (“¤(20)”: Unicode scalars))}
+  test {verify (((“¤(315)¤(300)”: Unicode scalars) individually decomposed according to compatibility decomposition) is (“¤(315)¤(300)”: Unicode scalars))}
+ ]
+ (
+  English: (scalars: Unicode scalars) individually decomposed according to compatibility decomposition
+  Swift: (self: [scalars]).individuallyDecomposedAccordingToCompatibilityDecomposition
+ )
+ Unicode scalars
+ {
+  if ((scalars) are individually decomposed according to compatibility decomposition), {
+   ← scalars
+  }
+  ← (scalars) individually decomposed according to compatibility decomposition, skipping necessity check
+ }
+
+action (clients)
+ [
+  [
+   English: Checks whether the scalars are already decomposed according to compatibility decomposition (NFKD).
+  ]
+  [
+   English: This action checks whether {decompose () according to compatibility decomposition} will have any effect. See there for technical details.
+  ]
+  test {verify ((“¤(20)”: Unicode scalars) are decomposed according to compatibility decomposition)}
+  test {verify (not ((“¤(A0)”: Unicode scalars) are decomposed according to compatibility decomposition))}
+  test {verify (not ((“¤(315)¤(300)”: Unicode scalars) are decomposed according to compatibility decomposition))}
+ ]
+ (
+  English: (scalars: Unicode scalars) are decomposed according to compatibility decomposition
+  Swift: (self: [scalars]).isDecomposedAccordingToCompatibilityDecomposition
+ )
+ truth value
+ {
+  if ((scalars) are individually decomposed according to compatibility decomposition), {
+   if ((scalars) are ordered canonically), {
+    ← true
+   }
+  }
+  ← false
+ }
+
+action (clients)
+ [
+  [
    English: Normalizes the scalars according to compatibility decomposition (NFKD).
   ]
   test {
@@ -1225,124 +1348,25 @@ action (clients)
    decompose (↓ scalars) according to compatibility decomposition
    verify ((scalars) is (“¤(20)”: Unicode scalars))
   }
+  [
+   English: This applies full normalization to the scalars as a group, including canonical order.
+  ]
+  test {
+   let (• scalars: Unicode scalars) start as (“¤(315)¤(300)”: Unicode scalars)
+   decompose (↓ scalars) according to compatibility decomposition
+   verify ((scalars) is (“¤(300)¤(315)”: Unicode scalars))
+  }
+  [
+   English: This action is optimized to do nothing if the scalars are already decomposed; checking separately before calling it is redundant.
+  ]
  ]
  (
   English: decompose (scalars: ↓ Unicode scalars) according to compatibility decomposition
   Swift: (self: [scalars]).decomposeAccordingToCompatibilityDecomposition
  )
  {
-  change (↓ scalars) to (compatibility decomposition of (scalars))
- }
-
-action (file)
- [
-  [
-   English: Ensures Unicode resources have been loaded.
-  ]
-  [
-   English: This action provides a workaround for a bug in Swift’s Foundation module on some platforms. Some of its methods silently fail to do anything if they are called before some internal initialization has been triggered. (As an example, the bug can be demonstrated by attempting decomposedStringWithCompatibilityMapping at the very beginning of an executable created with the Swift Package Manager and running on macOS 12.) This action triggers the initialization required for the relevant methods to work properly.
-  ]
- ]
- (
-  English: ensure Unicode resources have loaded
- )
- Swift: “ensureUnicodeResourcesHaveLoaded” (“Foundation”) {“private let ensureUnicodeResourcesHaveLoaded: Void = { ¤(5F) = Locale.current }()”}
- {}
-
-action (file)
- [
-  test {
-   let (• end: list boundary) be (boundary at (“1”: memory offset))
-   let (• list: unmanaged list of (8‐bit Unicode code unit) of unknown length) start as (allocate memory up to (end): unmanaged list of (8‐bit Unicode code unit) of unknown length)
-   let (• beginning: list boundary) be (beginning of (list))
-   initialize entry at (index after (beginning) in (list) skipping bounds check) in (↓ list) to (null control code)
-   clean (if most efficient, compute compatibility decomposition of (list) up to ((offset) of (end)) skipping null control check) up up to (end)
-   clean (list) up up to (end)
-  }
- ]
- (
-  English: if most efficient, compute compatibility decomposition of (8‐bit encoded: unmanaged list of (8‐bit Unicode code unit) of unknown length) up to (end: memory offset) skipping null control check
- )
- unmanaged list of (8‐bit Unicode code unit) of unknown length
- C: “g¤(5F)utf8¤(5F)normalize(” 8‐bit encoded “, ” end “, G¤(5F)NORMALIZE¤(5F)ALL)” (“glib¤(2D)2.0”)
- {
-  ← 8‐bit encoded
- }
-
-action (file)
- [
-  test {ignore (if most efficient, compute compatibility decomposition of (example: Unicode scalars) skipping null control check)}
- ]
- (
-  English: if most efficient, compute compatibility decomposition of (scalars: Unicode scalars) skipping null control check
- )
- Unicode scalars
- C♯: “” scalars “”
- JavaScript: “” scalars “”
- Kotlin: “” scalars “”
- Swift: “” scalars “”
- {
-  let (• normalized: unmanaged list of (8‐bit Unicode code unit) of unknown length) be (if most efficient, compute compatibility decomposition of ((uncounted) of ((unmanaged) of ((8‐bit encoded) of (scalars)))) up to ((offset) of (if possible, 8‐bit boundary at (end of (scalars)))) skipping null control check)
-  let (• end: list boundary) start as (boundary at (“0”: memory offset))
-  while ((entry at (index after (end) in (normalized) skipping bounds check) in (normalized)) is not (null control code)), {
-   advance (↓ end) to next in (normalized) skipping bounds check
-  }
-  ← Unicode scalars of (create list with unmanaged list (create unmanaged list with uncounted (normalized), end (end), limit (end) and references (one: platform fixed‐width natural number) where memory is read‐only (false))) skipping validity check
- }
-
-action (file)
- [
-  test {
-   let (• scalars: Unicode scalars) be (“ ¤(0)”: Unicode scalars)
-   let (• cursor: Unicode scalar boundary) start as (beginning of (scalars))
-   while ((cursor) is less than (end of (scalars))), {
-    ignore ((cursor) is not at end of null‐separated segment in (scalars))
-    advance (↓ cursor) to next in (scalars) skipping bounds check
-   }
-  }
- ]
- (
-  English: (cursor: Unicode scalar boundary) is not at end of null‐separated segment in (scalars: Unicode scalars)
- )
- truth value
- {
-  if ((cursor) is less than (end of (scalars))), {
-   if ((entry after (cursor) in (scalars) skipping bounds check) is not (“¤(0)”: Unicode scalar)), {
-    ← true
-   }
-  }
-  ← false
- }
-
-action (file)
- (
-  English: compute compatibility decomposition of (scalars: Unicode scalars)
- )
- Unicode scalars
- C♯: “” scalars “.Normalize(NormalizationForm.FormKD)” (
-   “System”
-   “System.Text”
-  )
- JavaScript: “” scalars “.normalize(¤(22)NFKD¤(22))”
- Kotlin: “Normalizer.normalize(” scalars “, Normalizer.Form.NFKD)” (“java.text”)
- Swift: “String(” scalars “).decomposedStringWithCompatibilityMapping.unicodeScalars” (“Foundation”)
- {
-  let (• normalized: Unicode scalars) start as (empty: Unicode scalars)
-  let (• beginning cursor: Unicode scalar boundary) start as (beginning of (scalars))
-  let (• end: Unicode scalar boundary) be (end of (scalars))
-  while ((beginning cursor) is less than (end)), {
-   let (• end cursor: Unicode scalar boundary) start as (beginning cursor)
-   while ((end cursor) is not at end of null‐separated segment in (scalars)), {
-    advance (↓ end cursor) to next in (scalars) skipping bounds check
-   }
-   append (if most efficient, compute compatibility decomposition of (convert ((from (beginning cursor) to (end cursor)) in (scalars)) into list) skipping null control check) to (↓ normalized)
-   change (↓ beginning cursor) to (end cursor)
-   if ((beginning cursor) is less than (end)), {
-    append (“¤(0)”: Unicode scalar) to (↓ normalized)
-    advance (↓ beginning cursor) to next in (scalars) skipping bounds check
-   }
-  }
-  ← normalized
+  individually decompose (↓ scalars) according to compatibility decomposition
+  reorder (↓ scalars) canonically
  }
 
 action (clients)
@@ -1350,8 +1374,11 @@ action (clients)
   [
    English: Returns a copy of the scalars normalized according to compatibility decomposition (NFKD).
   ]
+  [
+   English: This is the same as {decompose () according to compatibility decomposition}, except that it returns a copy instead of altering the source scalars.
+  ]
   test {verify ((compatibility decomposition of (“¤(A0)”: Unicode scalars)) is (“¤(20)”: Unicode scalars))}
-  test (hidden) {verify ((compatibility decomposition of (“¤(A0)¤(0)¤(A0)”: Unicode scalars)) is (“¤(20)¤(0)¤(20)”: Unicode scalars))}
+  test {verify ((compatibility decomposition of (“¤(315)¤(300)”: Unicode scalars)) is (“¤(300)¤(315)”: Unicode scalars))}
  ]
  (
   English: compatibility decomposition of (scalars: Unicode scalars)
@@ -1359,6 +1386,5 @@ action (clients)
  )
  Unicode scalars
  {
-  ensure Unicode resources have loaded
-  ← compute compatibility decomposition of (scalars)
+  ← ((scalars) individually decomposed according to compatibility decomposition) reordered canonically
  }
