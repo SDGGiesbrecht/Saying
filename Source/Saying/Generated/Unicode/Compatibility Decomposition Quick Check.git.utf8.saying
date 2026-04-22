@@ -1,0 +1,2456 @@
+action (unit)
+ (
+  English: compatibility decomposition quick check of (scalar: Unicode scalar numerical value)
+ )
+ truth value
+ {
+  if ((scalar) is less than or equal to (“009F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00A0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00A7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00A8”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00A9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00AA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00AE”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00AF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00B1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00B5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00B7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00BA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00BB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00BE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00BF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00C5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00C6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00CF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00D0”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00D6”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00D8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00DD”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00DF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00E5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00E6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00EF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00F0”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00F6”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00F8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“00FD”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“00FE”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“010F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0111”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0125”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0127”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0130”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0131”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0137”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0138”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0140”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0142”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0149”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“014B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0151”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0153”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0165”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0167”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“017F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“019F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“01A1”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“01AE”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“01B0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“01C3”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“01DC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“01DD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“01E3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“01E5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“01F5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“01F7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“021B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“021D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“021F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0225”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0233”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“02AF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“02B8”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“02D7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“02DD”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“02DF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“02E4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“033F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0341”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0342”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0344”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0373”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0374”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0379”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“037A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“037D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“037E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0383”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“038A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“038B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“038C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“038D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0390”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03A9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“03B0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03C9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“03CE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03CF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“03D6”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03EF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“03F2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03F3”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“03F5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03F8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“03F9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“03FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0401”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0402”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0403”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0406”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0407”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“040B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“040E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0418”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0419”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0438”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0439”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“044F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0451”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0452”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0453”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0456”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0457”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“045B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“045E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0475”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0477”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04C0”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04C2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04CF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04D3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04D5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04D7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04D9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04DF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04E1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04E7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04E9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04F5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“04F7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“04F9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0586”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0587”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0621”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0626”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0674”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0678”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“06BF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“06C0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“06C1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“06C2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“06D2”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“06D3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0928”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0929”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0930”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0931”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0933”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0934”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0957”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“095F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“09CA”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“09CC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“09DB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“09DD”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“09DE”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“09DF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0A32”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0A33”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0A35”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0A36”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0A58”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0A5B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0A5D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0A5E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0B47”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0B48”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0B4A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0B4C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0B5B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0B5D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0B93”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0B94”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0BC9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0BCC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0C47”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0C48”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0CBF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0CC0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0CC6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0CC8”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0CC9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0CCB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0D49”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0D4C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0DD9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0DDA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0DDB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0DDE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0E32”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0E33”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0EB2”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0EB3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0EDB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0EDD”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F0B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F0C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F42”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F43”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F4C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F4D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F51”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F52”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F56”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F57”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F5B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F5C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F68”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F69”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F72”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F73”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F74”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F79”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F80”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F81”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F92”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F93”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0F9C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0F9D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0FA1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0FA2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0FA6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0FA7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0FAB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0FAC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“0FB8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“0FB9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1025”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1026”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“10FB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“10FC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B05”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B06”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B07”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B08”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B09”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B0A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B0B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B0C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B0D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B0E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B11”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B12”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B3A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B3B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B3C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B3D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B3F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B41”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1B42”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1B43”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D2B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D2E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D2F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D3A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D3B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D6A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D77”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D78”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D9A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1DBF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1DFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1E9B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1E9F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EF9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F15”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F17”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F1D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F1F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F45”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F47”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F4D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F4F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F57”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F58”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F59”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F5A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F5B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F5C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F5D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F5E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F7D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F7F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FB4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FB5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FC4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FC5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FD3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FD5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FDB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FDC”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FEF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FF1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FF4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FF5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FFE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“200A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2010”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2011”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2016”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2017”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2023”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2026”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“202E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“202F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2032”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2034”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2035”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2037”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“203B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“203C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“203D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“203E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2046”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2049”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2056”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2057”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“205E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“205F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“206F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2071”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2073”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“208E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“208F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“209C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“20A7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“20A8”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“20FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2103”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2104”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2107”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2108”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2113”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2114”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2116”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2118”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“211D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“211F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2122”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2123”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2124”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2125”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2126”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2127”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2128”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2129”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“212D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“212E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2131”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2132”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2139”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“213A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2140”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2144”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2149”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“214F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“217F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2188”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2189”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2199”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“219B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“21AD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“21AE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“21CC”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“21CF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2203”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2204”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2208”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2209”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“220B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“220C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2223”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2224”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2225”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2226”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“222B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“222D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“222E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2230”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2240”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2241”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2243”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2244”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2246”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2247”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2248”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2249”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“225F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2260”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2261”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2262”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“226C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2271”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2273”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2275”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2277”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2279”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“227F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2281”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2283”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2285”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2287”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2289”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“22AB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“22AF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“22DF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“22E3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“22E9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“22ED”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2328”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“232A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“245F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“24EA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2A0B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2A0C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2A73”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2A76”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2ADB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2ADC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2C7B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2C7D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2D6E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2D6F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2E9E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2E9F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2EF2”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2EF3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2EFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2FD5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2FFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3000”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3035”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3036”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3037”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“303A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“304B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“304C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“304D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“304E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“304F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3050”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3051”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3052”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3053”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3054”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3055”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3056”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3057”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3058”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3059”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“305A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“305B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“305C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“305D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“305E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“305F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3060”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3061”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3062”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3064”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3065”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3066”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3067”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3068”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3069”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“306F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3071”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3072”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3074”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3075”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3077”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3078”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“307A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“307B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“307D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3093”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3094”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“309A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“309C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“309D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“309F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30AB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30AC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30AD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30AE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30AF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30B0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30B1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30B2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30B3”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30B4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30B5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30B6”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30B7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30B8”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30B9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30BA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30BB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30BC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30BD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30BE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30BF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30C0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30C1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30C2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30C4”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30C5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30C6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30C7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30C8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30C9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30CF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30D1”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30D2”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30D4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30D5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30D7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30D8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30DA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30DB”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30DD”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30F3”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30F4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30F6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30FA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“30FD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“30FF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3130”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“318E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“3191”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“319F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“31FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“321E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“321F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“3247”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“324F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“327E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“327F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“33FF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“A69B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“A69D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“A76F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“A770”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“A7F0”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“A7F4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“A7F7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“A7F9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“AB5B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“AB5F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“AB68”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“AB69”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“ABFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“D7A3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“F8FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA0D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA0F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA10”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA11”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA12”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA14”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA1E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA1F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA20”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA21”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA22”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA24”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA26”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA29”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FA6D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FA6F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FAD9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FAFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB06”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB12”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB17”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB1C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB1D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB1E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB36”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB37”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB3C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB3D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB3E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB3F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB41”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB42”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FB44”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FB45”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FBB1”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FBD2”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FD3D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FD4F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FD8F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FD91”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FDC7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FDEF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FDFC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE0F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE19”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE2F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE44”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE46”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE52”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE53”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE66”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE67”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE6B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE6F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE72”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE73”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FE74”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FE75”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FEFC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FF00”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFBE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FFC1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFC7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FFC9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFCF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FFD1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFD7”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FFD9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFDC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FFDF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFE6”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“FFE7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“FFEE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“105C8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“105C9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“105E3”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“105E4”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“10780”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“10785”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“10786”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“107B0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“107B1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“107BA”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“11099”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1109A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1109B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1109C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“110AA”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“110AB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1112D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1112F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1134A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1134C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“11382”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“11383”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“11384”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“11385”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1138D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1138E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“11390”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“11391”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“113C4”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“113C5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“113C6”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“113C8”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“114BA”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“114BC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“114BD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“114BE”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“115B9”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“115BB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“11937”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“11938”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“16120”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“16128”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“16D67”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“16D6A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1CCD5”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1CCF9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D15D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D164”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D1BA”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D1C0”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D3FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D454”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D455”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D49C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D49D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D49F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4A1”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4A2”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4A4”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4A6”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4A8”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4AC”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4AD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4B9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4BA”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4BB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4BC”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D4C3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D4C4”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D505”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D506”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D50A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D50C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D514”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D515”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D51C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D51D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D539”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D53A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D53E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D53F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D544”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D545”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D546”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D549”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D550”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D551”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D6A5”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D6A7”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D7CB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1D7CD”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1D7FF”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1E02F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1E06D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EDFF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE03”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE04”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE1F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE20”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE22”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE23”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE24”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE26”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE27”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE28”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE32”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE33”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE37”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE38”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE39”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE3A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE3B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE41”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE42”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE46”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE47”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE48”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE49”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE4A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE4B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE4C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE4F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE50”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE52”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE53”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE54”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE56”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE57”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE58”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE59”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE5A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE5B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE5C”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE5D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE5E”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE5F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE60”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE62”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE63”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE64”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE66”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE6A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE6B”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE72”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE73”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE77”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE78”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE7C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE7D”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE7E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE7F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE89”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EE8A”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EE9B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EEA0”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EEA3”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EEA4”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EEA9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1EEAA”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1EEBB”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F0FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F10A”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F10F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F12E”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F12F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F14F”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F169”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F16C”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F18F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F190”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F1FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F202”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F20F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F23B”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F23F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F248”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1F24F”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1F251”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“1FBEF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“1FBF9”: Unicode scalar numerical value)), {
+   ← false
+  }
+  if ((scalar) is less than or equal to (“2F7FF”: Unicode scalar numerical value)), {
+   ← true
+  }
+  if ((scalar) is less than or equal to (“2FA1D”: Unicode scalar numerical value)), {
+   ← false
+  }
+  ← true
+ }

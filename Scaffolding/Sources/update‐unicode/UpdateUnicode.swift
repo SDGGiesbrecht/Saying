@@ -125,6 +125,7 @@ import SDGPersistence
   ) throws {
     try output(classes: classes)
     try output(decompositions: decompositions)
+    try output(decompositionCheck: decompositions)
   }
 
   static func output(classes: [Unicode.Scalar: UInt8]) throws {
@@ -205,5 +206,43 @@ import SDGPersistence
 
     try source.joined(separator: "\n").appending("\n")
       .overrwite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition.git.utf8.saying"))
+  }
+
+  static func output(decompositionCheck: [Unicode.Scalar: [Unicode.Scalar]]) throws {
+    var source: [String] = [
+      "action (unit)",
+      " (",
+      "  English: compatibility decomposition quick check of (scalar: Unicode scalar numerical value)",
+      " )",
+      " truth value",
+      " {",
+    ]
+    var previous: (scalar: Unicode.Scalar, decompositionCheck: Bool)?
+    for value in firstScalar.value ... lastScalar.value {
+      if let scalar = Unicode.Scalar(value) {
+        let validity = decompositionCheck[scalar] == nil
+        defer { previous = (scalar: scalar, decompositionCheck: validity) }
+        if let previous = previous,
+           validity != previous.decompositionCheck
+            || value == firstHangulSyllable || value == lastHangulSyllable + 1 {
+          let literalScalar = previous.scalar.sayingLiteral
+          let literalValue = previous.scalar.value == lastHangulSyllable ? false : previous.decompositionCheck
+          source.append(contentsOf: [
+            "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
+            "   ← \(literalValue)",
+            "  }",
+          ])
+        }
+      }
+    }
+    source.append(contentsOf: [
+      "  ← true",
+    ])
+    source.append(contentsOf: [
+      " }",
+    ])
+
+    try source.joined(separator: "\n").appending("\n")
+      .overrwite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition Quick Check.git.utf8.saying"))
   }
 }
