@@ -228,7 +228,7 @@ import SDGPersistence
           let literalScalar = previous.scalar.sayingLiteral
           let literalValue = previous.scalar.value == lastHangulSyllable ? false : previous.decompositionCheck
           source.append(contentsOf: [
-            "  if ((value) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
+            "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
             "   ← \(literalValue)",
             "  }",
           ])
