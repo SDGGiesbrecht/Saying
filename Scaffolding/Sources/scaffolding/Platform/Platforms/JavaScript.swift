@@ -112,7 +112,7 @@ enum JavaScript: Platform {
   static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
     return nil
   }
-  
+
   static func partDeclaration(
     name: String,
     type: String,
@@ -304,8 +304,8 @@ enum JavaScript: Platform {
     return nil
   }
 
-  static func coverageRegistration(identifier: String) -> String {
-    return "registerCoverage(\u{22}\(identifier)\u{22});"
+  static func coverageRegistration(identifier: Int) -> String {
+    return "registerCoverage(\(identifier));"
   }
 
   static func statement(expression: String) -> String {
@@ -402,7 +402,7 @@ enum JavaScript: Platform {
   ) -> String {
     return "(\(fromOutside)) => \(passedFunction)(\(forFurtherIn))"
   }
-  
+
   static var fileSettings: String? {
     return nil
   }
@@ -426,23 +426,23 @@ enum JavaScript: Platform {
     return "let currentTest;"
   }
 
-  static func coverageRegionSet(regions: [String]) -> [String] {
+  static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
-      "let coverageRegions = new Set([",
+      "let coverageRegions = [",
     ]
     for region in regions {
       result.append("\(indent)\u{22}\(region)\u{22},")
     }
     result.append(contentsOf: [
-      "]);",
+      "];",
     ])
     return result
   }
 
   static var registerCoverageAction: [String] {
     return [
-      "function registerCoverage(identifier) {",
-      "\(indent)coverageRegions.delete(identifier);",
+      "function registerCoverage(index) {",
+      "\(indent)coverageRegions[index] = null;",
       "}",
     ]
   }
@@ -469,7 +469,14 @@ enum JavaScript: Platform {
       ])
     }
     result.append(contentsOf: [
-      "\(indent)console.assert(coverageRegions.size == 0, Array.from(coverageRegions));",
+      "\(indent)let anyRemaining = false;",
+      "\(indent)coverageRegions.forEach(region => {",
+      "\(indent)\(indent)if (region != null) {",
+      "\(indent)\(indent)\(indent)console.log(region);",
+      "\(indent)\(indent)\(indent)anyRemaining = true;",
+      "\(indent)\(indent)}",
+      "\(indent)}",
+      "\(indent)console.assert(!anyRemaining);",
       "}"
     ])
     return result

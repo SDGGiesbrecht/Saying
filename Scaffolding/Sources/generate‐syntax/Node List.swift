@@ -1546,7 +1546,7 @@ extension Node {
               Child(name: "use", type: "UseSignature", kind: .required),
             ])
           ),
-          
+
           Node(
             name: "RequirementsElement",
             kind: .alternates([

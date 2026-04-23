@@ -534,8 +534,8 @@ enum C: Platform {
     return "\(base);"
   }
 
-  static func coverageRegistration(identifier: String) -> String {
-    return "register_coverage_region(\u{22}\(identifier)\u{22});"
+  static func coverageRegistration(identifier: Int) -> String {
+    return "register_coverage_region(\(identifier));"
   }
 
   static func statement(expression: String) -> String {
@@ -683,8 +683,8 @@ enum C: Platform {
     return [
       "assert",
       "stdbool",
+      "stddef",
       "stdio",
-      "string",
     ]
   }
 
@@ -702,7 +702,7 @@ enum C: Platform {
     ].joined(separator: "\n")
   }
 
-  static func coverageRegionSet(regions: [String]) -> [String] {
+  static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = []
     result.append(contentsOf: [
       "#define REGION_IDENTIFIER_LENGTH \((regions.lazy.map({ String($0).utf8.count }).max() ?? 0) + 1)",
@@ -720,19 +720,13 @@ enum C: Platform {
 
   static var registerCoverageAction: [String] {
     return [
-    "void register_coverage_region(char identifier[REGION_IDENTIFIER_LENGTH])",
+    "void register_coverage_region(size_t index)",
     "{",
-    "\(indent)for(int index = 0; index < NUMBER_OF_REGIONS; index++)",
-    "\(indent){",
-    "\(indent)\(indent)if (!strcmp(coverage_regions[index], identifier))",
-    "\(indent)\(indent){",
-    "\(indent)\(indent)\(indent)memset(coverage_regions[index], 0, REGION_IDENTIFIER_LENGTH);",
-    "\(indent)\(indent)}",
-    "\(indent)}",
+    "\(indent)coverage_regions[index][0] = 0;",
     "}",
     ]
   }
-  
+
   static var actionDeclarationsContainerStart: [String]? {
     return nil
   }

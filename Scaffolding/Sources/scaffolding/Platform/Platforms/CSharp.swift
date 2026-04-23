@@ -11,7 +11,7 @@ enum CSharp: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
-  
+
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
   }
@@ -426,8 +426,8 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func coverageRegistration(identifier: String) -> String {
-    return "Coverage.Register(\u{22}\(identifier)\u{22});"
+  static func coverageRegistration(identifier: Int) -> String {
+    return "Coverage.Register(\(identifier));"
   }
 
   static func statement(expression: String) -> String {
@@ -594,11 +594,11 @@ enum CSharp: Platform {
     ].joined(separator: "\n")
   }
 
-  static func coverageRegionSet(regions: [String]) -> [String] {
+  static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
       "static class Coverage",
       "{",
-      "\(indent)internal static HashSet<string> Regions = new HashSet<string>",
+      "\(indent)internal static List<string> Regions = new List<string>",
       "\(indent){",
     ]
     for region in regions {
@@ -612,9 +612,9 @@ enum CSharp: Platform {
 
   static var registerCoverageAction: [String] {
     return [
-      "\(indent)internal static void Register(string identifier)",
+      "\(indent)internal static void Register(int index)",
       "\(indent){",
-      " \(indent)\(indent)Coverage.Regions.Remove(identifier);",
+      "\(indent)\(indent)Coverage.Regions[index] = \u{22}\u{22};",
       "\(indent)}",
       "}",
     ]
@@ -656,7 +656,16 @@ enum CSharp: Platform {
       ])
     }
     result.append(contentsOf: [
-      "\(indent)\(indent)Assert(!Coverage.Regions.Any(), String.Join(\u{22}, \u{22}, Coverage.Regions));",
+      "\(indent)\(indent)bool anyRemaining = false;",
+      "\(indent)\(indent)foreach (string region in Coverage.Regions)",
+      "\(indent)\(indent){",
+      "\(indent)\(indent)\(indent)if (region != \u{22}\u{22})",
+      "\(indent)\(indent)\(indent){",
+      "\(indent)\(indent)\(indent)\(indent)Console.WriteLine(region);",
+      "\(indent)\(indent)\(indent)\(indent)anyRemaining = true;",
+      "\(indent)\(indent)\(indent)}",
+      "\(indent)\(indent)}",
+      "\(indent)\(indent)Assert(!anyRemaining, \u{22}\u{22});",
       "\(indent)}",
     ])
     return result
