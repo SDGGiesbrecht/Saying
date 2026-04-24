@@ -8144,6 +8144,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1F23 {
     return "η\u{0314}\u{0300}".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars0(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars0(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1F24 {
     return "η\u{0313}\u{0301}".unicodeScalars
   }
@@ -11300,6 +11304,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x3180 {
     return "ᅇ".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars1(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars1(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x3181 {
     return "ᅌ".unicodeScalars
   }
@@ -14651,6 +14659,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0xFBAD {
     return "ھ".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars2(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars2(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0xFBAF {
     return "ے".unicodeScalars
   }
@@ -17972,6 +17984,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1D484 {
     return "c".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars3(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars3(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1D485 {
     return "d".unicodeScalars
   }
@@ -21323,6 +21339,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1EEB8 {
     return "ذ".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars4(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars4(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1EEB9 {
     return "ض".unicodeScalars
   }
