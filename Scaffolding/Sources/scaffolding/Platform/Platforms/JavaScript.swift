@@ -475,7 +475,7 @@ enum JavaScript: Platform {
       "\(indent)\(indent)\(indent)console.log(region);",
       "\(indent)\(indent)\(indent)anyRemaining = true;",
       "\(indent)\(indent)}",
-      "\(indent)}",
+      "\(indent)})",
       "\(indent)console.assert(!anyRemaining);",
       "}"
     ])
