@@ -645,7 +645,7 @@ enum Swift: Platform {
 
   static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
-      "var coverageRegions: [String] = [",
+      "var coverageRegions: [String?] = [",
     ]
     for region in regions {
       result.append("\(indent)\u{22}\(region)\u{22},")
@@ -659,7 +659,7 @@ enum Swift: Platform {
   static var registerCoverageAction: [String] {
     return [
       "func registerCoverage(_ index: Int) {",
-      "\(indent)coverageRegions[index] = \u{22}\u{22}",
+      "\(indent)coverageRegions[index] = nil",
       "}",
     ]
   }
@@ -688,8 +688,8 @@ enum Swift: Platform {
     result.append(contentsOf: [
       "\(indent)var anyRemaining = false",
       "\(indent)for region in coverageRegions {",
-      "\(indent)\(indent)if region != \u{22}\u{22} {",
-      "\(indent)\(indent)\(indent)print(region)",
+      "\(indent)\(indent)if let remaning = region {",
+      "\(indent)\(indent)\(indent)print(remaning)",
       "\(indent)\(indent)\(indent)anyRemaining = true",
       "\(indent)\(indent)}",
       "\(indent)}",
