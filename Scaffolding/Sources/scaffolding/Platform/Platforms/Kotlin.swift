@@ -350,8 +350,8 @@ enum Kotlin: Platform {
     return nil
   }
 
-  static func coverageRegistration(identifier: String) -> String {
-    return "registerCoverage(\u{22}\(identifier)\u{22})"
+  static func coverageRegistration(index: Int) -> String {
+    return "registerCoverage(\(index))"
   }
 
   static func statement(expression: String) -> String {
@@ -492,9 +492,9 @@ enum Kotlin: Platform {
     return "var currentTest: String = \u{22}\u{22}"
   }
 
-  static func coverageRegionSet(regions: [String]) -> [String] {
+  static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
-      "val coverageRegions: MutableSet<String> = mutableSetOf(",
+      "val coverageRegions: MutableList<String?> = mutableListOf(",
     ]
     for region in regions {
       result.append("\(indent)\u{22}\(region)\u{22},")
@@ -507,8 +507,8 @@ enum Kotlin: Platform {
 
   static var registerCoverageAction: [String] {
     return [
-      "fun registerCoverage(identifier: String) {",
-      "\(indent)coverageRegions.remove(identifier)",
+      "fun registerCoverage(index: Int) {",
+      "\(indent)coverageRegions[index] = null",
       "}",
     ]
   }
@@ -529,12 +529,16 @@ enum Kotlin: Platform {
       "",
       "fun test() {",
     ]
-    result.append(
-      contentsOf: testCalls.appending(
-        "\(indent)assert(coverageRegions.isEmpty()) { \u{22}$coverageRegions\u{22} }"
-      )
-    )
+    result.append(contentsOf: testCalls)
     result.append(contentsOf: [
+      "\(indent)var anyRemaining = false",
+      "\(indent)for (region in coverageRegions) {",
+      "\(indent)\(indent)if (region != null) {",
+      "\(indent)\(indent)\(indent)println(region)",
+      "\(indent)\(indent)\(indent)anyRemaining = true",
+      "\(indent)\(indent)}",
+      "\(indent)}",
+      "\(indent)assert(!anyRemaining)",
       "}"
     ])
     return result

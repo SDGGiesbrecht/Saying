@@ -1,5 +1,5 @@
 protocol ParsedThingReferenceProtocol: ParsedSyntaxNode {
-  
+
 }
 
 extension ParsedUninterruptedIdentifier: ParsedThingReferenceProtocol {}
