@@ -494,7 +494,7 @@ enum Kotlin: Platform {
 
   static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
-      "val coverageRegions: MutableList<String> = mutableListOf(",
+      "val coverageRegions: MutableList<String?> = mutableListOf(",
     ]
     for region in regions {
       result.append("\(indent)\u{22}\(region)\u{22},")
@@ -508,7 +508,7 @@ enum Kotlin: Platform {
   static var registerCoverageAction: [String] {
     return [
       "fun registerCoverage(index: Int) {",
-      "\(indent)coverageRegions[index] = \u{22}\u{22}",
+      "\(indent)coverageRegions[index] = null",
       "}",
     ]
   }
@@ -537,7 +537,7 @@ enum Kotlin: Platform {
     result.append(contentsOf: [
       "\(indent)var anyRemaining = false",
       "\(indent)for (region in coverageRegions) {",
-      "\(indent)\(indent)if (region != \u{22}\u{22}) {",
+      "\(indent)\(indent)if (region != null) {",
       "\(indent)\(indent)\(indent)println(region)",
       "\(indent)\(indent)\(indent)anyRemaining = true",
       "\(indent)\(indent)}",
