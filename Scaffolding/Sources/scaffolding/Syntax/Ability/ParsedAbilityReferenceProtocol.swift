@@ -1,5 +1,5 @@
 protocol ParsedAbilityReferenceProtocol: ParsedSyntaxNode {
-  
+
 }
 
 extension ParsedUseSignature: ParsedAbilityReferenceProtocol {}

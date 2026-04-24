@@ -1,5 +1,5 @@
 extension ParsedModifiedImplementationParameter {
-  
+
   func identifierSegments() -> [ParsedIdentifierSegment?] {
     var result: [ParsedIdentifierSegment?] = []
     result.append(initialModifierSegment)

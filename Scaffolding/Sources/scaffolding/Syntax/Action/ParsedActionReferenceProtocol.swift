@@ -1,5 +1,5 @@
 protocol ParsedActionReferenceProtocol: ParsedSyntaxNode {
-  
+
 }
 
 extension ParsedDocumentationReferenceIdentifier: ParsedActionReferenceProtocol {}

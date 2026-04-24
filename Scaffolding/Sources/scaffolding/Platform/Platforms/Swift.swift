@@ -423,8 +423,8 @@ enum Swift: Platform {
     return nil
   }
 
-  static func coverageRegistration(identifier: String) -> String {
-    return "registerCoverage(\u{22}\(identifier)\u{22})"
+  static func coverageRegistration(index: Int) -> String {
+    return "registerCoverage(\(index))"
   }
 
   static func statement(expression: String) -> String {
@@ -447,7 +447,7 @@ enum Swift: Platform {
   static var functionImplementationSizeLimit: Int? {
     // Compiling for arm64 simply hangs beyond a certain point, though the exact threshold is unknown.
     // This value was arrived at experimentally, and should be tightened if the issue ever trips again.
-    return 1 << 19
+    return 1 << 16
   }
   static var localConstantKeyword: String? {
     return "let"
@@ -643,9 +643,9 @@ enum Swift: Platform {
     return "var currentTest: String = \u{22}\u{22}"
   }
 
-  static func coverageRegionSet(regions: [String]) -> [String] {
+  static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
-      "var coverageRegions: Set<String> = [",
+      "var coverageRegions: [String?] = [",
     ]
     for region in regions {
       result.append("\(indent)\u{22}\(region)\u{22},")
@@ -658,8 +658,8 @@ enum Swift: Platform {
 
   static var registerCoverageAction: [String] {
     return [
-      "func registerCoverage(_ identifier: String) {",
-      "\(indent)coverageRegions.remove(identifier)",
+      "func registerCoverage(_ index: Int) {",
+      "\(indent)coverageRegions[index] = nil",
       "}",
     ]
   }
@@ -680,13 +680,16 @@ enum Swift: Platform {
       "",
       "func test() {",
     ]
-    for test in testCalls {
-      result.append(contentsOf: [
-        "\(test)",
-      ])
-    }
+    result.append(contentsOf: testCalls)
     result.append(contentsOf: [
-      "\(indent)assert(coverageRegions.isEmpty, \u{22}\u{5C}(coverageRegions)\u{22})",
+      "\(indent)var anyRemaining = false",
+      "\(indent)for region in coverageRegions {",
+      "\(indent)\(indent)if let remaning = region {",
+      "\(indent)\(indent)\(indent)print(remaning)",
+      "\(indent)\(indent)\(indent)anyRemaining = true",
+      "\(indent)\(indent)}",
+      "\(indent)}",
+      "\(indent)assert(!anyRemaining)",
       "}"
     ])
     return result

@@ -126,7 +126,7 @@ protocol Platform {
     parameters: String,
     returnSection: String?
   ) -> String?
-  static func coverageRegistration(identifier: String) -> String
+  static func coverageRegistration(index: Int) -> String
   static func statement(expression: String) -> String
   static func deadEnd() -> String
   static func returnDelayStorage(type: String?) -> String
@@ -179,7 +179,7 @@ protocol Platform {
   static var importsNeededByDeadEnd: Set<String> { get }
   static var importsNeededByTestScaffolding: Set<String> { get }
   static var currentTestVariable: String { get }
-  static func coverageRegionSet(regions: [String]) -> [String]
+  static func coverageRegionIndex(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
@@ -446,7 +446,7 @@ extension Platform {
       return nil
     }
   }
-  
+
   static func nativeIsOverride(action: ActionIntermediate) -> Bool {
     if let name = nativeNameDeclaration(of: action) {
       if let override = overridePrefix {
@@ -604,6 +604,7 @@ extension Platform {
     mode: CompilationMode,
     relocatedActions: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
+    coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String? {
@@ -685,6 +686,7 @@ extension Platform {
           isAbsorbedMember: true,
           hasBeenRelocated: false,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter
         ) {
           if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
@@ -956,6 +958,7 @@ extension Platform {
   static func flowCoverageRegistration(
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     indentationLevel: Int,
     statements: Array<StatementIntermediate>.SubSequence
   ) -> String? {
@@ -964,10 +967,11 @@ extension Platform {
       statements.first?.isDeadEnd != true {
       let appendedIdentifier = "\(coverage):{\(coverageRegionCounter.inDigits())}"
       let indent = String(repeating: self.indent, count: indentationLevel)
-      return "\n\(indent)\(self.coverageRegistration(identifier: sanitize(stringLiteral: UnicodeText(appendedIdentifier))))"
-    } else {
-      return nil
+      if let index = coverageIndex[UnicodeText(appendedIdentifier)] {
+        return "\n\(indent)\(self.coverageRegistration(index: index))"
+      }
     }
+    return nil
   }
 
   static func call(scalarLiteral: LiteralIntermediate, normalize: Bool) -> String {
@@ -988,6 +992,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
@@ -1011,6 +1016,7 @@ extension Platform {
         contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1078,6 +1084,7 @@ extension Platform {
     context: ActionIntermediate?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
@@ -1096,6 +1103,7 @@ extension Platform {
     if let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         indentationLevel: 0,
         statements: actionLiteral.implementation.statements[...]
     ) {
@@ -1113,6 +1121,7 @@ extension Platform {
           )
         ),
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -1222,6 +1231,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
@@ -1254,6 +1264,7 @@ extension Platform {
         contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1290,6 +1301,7 @@ extension Platform {
             context: context,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -1306,6 +1318,7 @@ extension Platform {
             context: context,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -1362,6 +1375,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
+          coverageIndex: coverageIndex,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           anonymousCounter: &anonymousCounter,
           extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1418,6 +1432,7 @@ extension Platform {
         contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1431,10 +1446,9 @@ extension Platform {
       if mode == .testing,
         bareAction.isFlow,
         bareAction.deservesTesting,
-        let coveredIdentifier = action.coveredIdentifier {
-        extractedCoverageRegistrations.append(
-          coverageRegistration(identifier: sanitize(stringLiteral: coveredIdentifier))
-        )
+        let coveredIdentifier = action.coveredIdentifier,
+        let index = coverageIndex[coveredIdentifier] {
+        extractedCoverageRegistrations.append(coverageRegistration(index: index))
       }
       if !isThrough,
         !isDetachment,
@@ -1463,6 +1477,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
@@ -1537,6 +1552,7 @@ extension Platform {
                   contextCoverageIdentifier: contextCoverageIdentifier,
                   extractedCoverageRegistrations: &extractedCoverageRegistrations,
                   coverageRegionCounter: &coverageRegionCounter,
+                  coverageIndex: coverageIndex,
                   clashAvoidanceCounter: &clashAvoidanceCounter,
                   anonymousCounter: &anonymousCounter,
                   extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1594,6 +1610,7 @@ extension Platform {
                    let coverage = flowCoverageRegistration(
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
+                    coverageIndex: coverageIndex,
                     indentationLevel: 1,
                     statements: statements.statements[...]
                    ) {
@@ -1606,6 +1623,7 @@ extension Platform {
                     context: context,
                     localLookup: localLookup.appending(local),
                     coverageRegionCounter: &coverageRegionCounter,
+                    coverageIndex: coverageIndex,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     anonymousCounter: &anonymousCounter,
                     extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -1676,6 +1694,7 @@ extension Platform {
               contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
+              coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
               extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1704,6 +1723,7 @@ extension Platform {
             context: context,
             localLookup: localLookup.appending(locals),
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -1716,6 +1736,7 @@ extension Platform {
             let coverage = flowCoverageRegistration(
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             indentationLevel: 0,
             statements: flow.statements[...]
           ) {
@@ -1733,6 +1754,7 @@ extension Platform {
         context: action,
         localLookup: localLookup,
         coverageRegionCounter: &newCoverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -1804,6 +1826,7 @@ extension Platform {
                 contextCoverageIdentifier: contextCoverageIdentifier,
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
                 coverageRegionCounter: &coverageRegionCounter,
+                coverageIndex: coverageIndex,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
                 anonymousCounter: &anonymousCounter,
                 extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1840,6 +1863,7 @@ extension Platform {
                 contextCoverageIdentifier: contextCoverageIdentifier,
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
                 coverageRegionCounter: &coverageRegionCounter,
+                coverageIndex: coverageIndex,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
                 anonymousCounter: &anonymousCounter,
                 extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -1926,6 +1950,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceCounting: inout [String],
@@ -1955,6 +1980,7 @@ extension Platform {
       contextCoverageIdentifier: contextCoverageIdentifier,
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
       coverageRegionCounter: &coverageRegionCounter,
+      coverageIndex: coverageIndex,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       anonymousCounter: &anonymousCounter,
       extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
@@ -1975,6 +2001,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceCounting: inout [String],
@@ -2000,6 +2027,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
+          coverageIndex: coverageIndex,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           anonymousCounter: &anonymousCounter,
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
@@ -2027,6 +2055,7 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &entriesInThisBranch.unused,
@@ -2061,6 +2090,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
@@ -2079,6 +2109,7 @@ extension Platform {
       contextCoverageIdentifier: contextCoverageIdentifier,
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
       coverageRegionCounter: &coverageRegionCounter,
+      coverageIndex: coverageIndex,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       anonymousCounter: &anonymousCounter,
       extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -2099,6 +2130,7 @@ extension Platform {
     contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedArgumentsForReferenceUnpacking: inout [String],
@@ -2136,6 +2168,7 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -2164,6 +2197,7 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -2203,6 +2237,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     followingStatements: Array<StatementIntermediate>.SubSequence,
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -2228,6 +2263,7 @@ extension Platform {
           contextCoverageIdentifier: contextCoverageIdentifier,
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
           coverageRegionCounter: &coverageRegionCounter,
+          coverageIndex: coverageIndex,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           anonymousCounter: &anonymousCounter,
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
@@ -2254,6 +2290,7 @@ extension Platform {
               contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
               coverageRegionCounter: &coverageRegionCounter,
+              coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
               extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
@@ -2297,6 +2334,7 @@ extension Platform {
         contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
@@ -2350,6 +2388,7 @@ extension Platform {
             contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
             coverageRegionCounter: &coverageRegionCounter,
+            coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
@@ -2372,6 +2411,7 @@ extension Platform {
          let coverage = flowCoverageRegistration(
           contextCoverageIdentifier: contextCoverageIdentifier,
           coverageRegionCounter: &coverageRegionCounter,
+          coverageIndex: coverageIndex,
           indentationLevel: 0,
           statements: followingStatements
          ) {
@@ -2494,6 +2534,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     coverageRegionCounter: inout Int,
+    coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
@@ -2514,6 +2555,7 @@ extension Platform {
         referenceLookup: referenceLookup.appending(locals),
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         followingStatements: statements[entryIndex...].dropFirst(),
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -2552,6 +2594,7 @@ extension Platform {
     isAbsorbedMember: Bool,
     hasBeenRelocated: Bool,
     alreadyHandledNativeRequirements: inout Set<String>,
+    coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int
   ) -> UniqueDeclaration? {
     if action.isMemberWrapper {
@@ -2578,11 +2621,11 @@ extension Platform {
     }
 
     var name = nativeName(of: action, referenceLookup: externalReferenceLookup)
-      ?? sanitize(
-        identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-        leading: true,
-        entire: true
-      )
+    ?? sanitize(
+      identifier: action.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
+      leading: true,
+      entire: true
+    )
     let isOverride = nativeIsOverride(action: action)
     let isProperty = nativeIsProperty(action: action)
     let isInitializer = nativeIsInitializer(action: action)
@@ -2593,7 +2636,7 @@ extension Platform {
     var parentType: String?
     var isMutating = false
     if nativeIsMember(action: action),
-      !isInitializer {
+       !isInitializer {
       let first = parameterEntries.removeFirst()
       isMutating = first.passage == .through
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
@@ -2607,7 +2650,7 @@ extension Platform {
 
     let returnValue: String?
     if !isInitializer,
-      let specified = action.returnValue {
+       let specified = action.returnValue {
       returnValue = source(for: specified, referenceLookup: externalReferenceLookup)
     } else {
       returnValue = emptyReturnType
@@ -2625,8 +2668,9 @@ extension Platform {
 
     let coverageRegistration: String?
     if mode == .testing,
-      let identifier = action.coveredIdentifier {
-      coverageRegistration = "\(indent)\(self.coverageRegistration(identifier: sanitize(stringLiteral: identifier)))"
+      let identifier = action.coveredIdentifier,
+      let index = coverageIndex[identifier] {
+      coverageRegistration = "\(indent)\(self.coverageRegistration(index: index))"
     } else {
       coverageRegistration = nil
     }
@@ -2639,6 +2683,7 @@ extension Platform {
         context: action,
         localLookup: [],
         coverageRegionCounter: &coverageRegionCounter,
+        coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -2770,6 +2815,7 @@ extension Platform {
 
   static func source(
     of test: TestIntermediate,
+    coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
     identifierIndex: inout [String: [String: Int]]
@@ -2782,6 +2828,7 @@ extension Platform {
       context: nil,
       localLookup: [],
       coverageRegionCounter: &coverageRegionCounter,
+      coverageIndex: coverageIndex,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       anonymousCounter: &anonymousCounter,
       extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -2891,6 +2938,7 @@ extension Platform {
     relocatedActions: inout Set<String>,
     alreadyHandledDeclarations: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
+    coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String {
@@ -2904,6 +2952,7 @@ extension Platform {
         mode: mode,
         relocatedActions: &relocatedActions,
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        coverageIndex: coverageIndex,
         anonymousCounter: &anonymousCounter,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
@@ -2923,6 +2972,7 @@ extension Platform {
     relocatedActions: Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
     alreadyHandledActionDeclarations: inout Set<String>,
+    coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     identifierIndex: inout [String: [String: Int]]
   ) -> String {
@@ -2947,6 +2997,7 @@ extension Platform {
         hasBeenRelocated: relocatedActions
           .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        coverageIndex: coverageIndex,
         anonymousCounter: &anonymousCounter
       ) {
         if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
@@ -2962,6 +3013,7 @@ extension Platform {
         result.append(
           source(
             of: test,
+            coverageIndex: coverageIndex,
             anonymousCounter: &anonymousCounter,
             referenceLookup: referenceLookup,
             identifierIndex: &identifierIndex
@@ -3002,6 +3054,7 @@ extension Platform {
       }
     }
 
+    var coverageIndex: [UnicodeText: Int] = [:]
     if mode == .testing {
       result.appendSeparatorLine()
       result.append(currentTestVariable)
@@ -3012,8 +3065,10 @@ extension Platform {
       }
       let regions = regionSet
         .sorted(by: { $0.lexicographicallyPrecedes($1) })
-        .map({ sanitize(stringLiteral: $0) })
-      result.append(contentsOf: coverageRegionSet(regions: regions))
+      for (index, region) in regions.enumerated() {
+        coverageIndex[region] = index
+      }
+      result.append(contentsOf: coverageRegionIndex(regions: regions.map({ sanitize(stringLiteral: $0) })))
       result.append(contentsOf: registerCoverageAction)
     }
 
@@ -3028,6 +3083,7 @@ extension Platform {
           relocatedActions: &relocatedActions,
           alreadyHandledDeclarations: &alreadyHandledDeclarations,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter,
           modulesToSearchForMembers: modules
         )
@@ -3050,6 +3106,7 @@ extension Platform {
           relocatedActions: relocatedActions,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
           alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations,
+          coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter,
           identifierIndex: &identifierIndex
         )

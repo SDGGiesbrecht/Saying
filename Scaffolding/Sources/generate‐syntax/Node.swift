@@ -287,7 +287,7 @@ struct Node {
       ]
     }
   }
-  
+
   func startIndexImplementation() -> [String] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
@@ -303,7 +303,7 @@ struct Node {
       ]
     }
   }
-  
+
   func endIndexImplementation() -> [String] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
@@ -328,7 +328,7 @@ struct Node {
       return "    return SayingSourceSlice(origin: firstChild.location.origin, code: .utf8(context[startIndex..<endIndex]))"
     }
   }
-  
+
   func parsableSyntaxNodeConformance() -> String {
     var result: [String] = [
       "extension Parsed\(name): ParsableSyntaxNode {",
@@ -656,7 +656,7 @@ struct Node {
       }
     }
   }
-  
+
   func parseDiagnosticMessageCases() -> [String] {
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf:
