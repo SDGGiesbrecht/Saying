@@ -447,7 +447,7 @@ enum Swift: Platform {
   static var functionImplementationSizeLimit: Int? {
     // Compiling for arm64 simply hangs beyond a certain point, though the exact threshold is unknown.
     // This value was arrived at experimentally, and should be tightened if the issue ever trips again.
-    return 1 << 19
+    return 1 << 16
   }
   static var localConstantKeyword: String? {
     return "let"
