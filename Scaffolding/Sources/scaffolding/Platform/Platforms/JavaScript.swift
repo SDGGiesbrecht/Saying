@@ -463,11 +463,7 @@ enum JavaScript: Platform {
       "",
       "function test() {",
     ]
-    for test in testCalls {
-      result.append(contentsOf: [
-        "\(indent)\(test)"
-      ])
-    }
+    result.append(contentsOf: testCalls)
     result.append(contentsOf: [
       "\(indent)let anyRemaining = false;",
       "\(indent)coverageRegions.forEach(region => {",

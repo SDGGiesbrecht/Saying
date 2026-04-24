@@ -742,11 +742,7 @@ enum C: Platform {
     var result = [
       "void test() {",
     ]
-    for test in testCalls {
-      result.append(contentsOf: [
-        "\(indent)\(test)",
-      ])
-    }
+    result.append(contentsOf: testCalls)
     result.append(contentsOf: [
       "",
       "\(indent)bool any_remaining = false;",

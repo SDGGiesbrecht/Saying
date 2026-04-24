@@ -529,11 +529,7 @@ enum Kotlin: Platform {
       "",
       "fun test() {",
     ]
-    for test in testCalls {
-      result.append(contentsOf: [
-        "\(indent)\(test)"
-      ])
-    }
+    result.append(contentsOf: testCalls)
     result.append(contentsOf: [
       "\(indent)var anyRemaining = false",
       "\(indent)for (region in coverageRegions) {",

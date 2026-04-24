@@ -652,7 +652,7 @@ enum CSharp: Platform {
     ]
     for test in testCalls {
       result.append(contentsOf: [
-        "\(indent)\(indent)\(test)"
+        "\(indent)\(test)"
       ])
     }
     result.append(contentsOf: [
