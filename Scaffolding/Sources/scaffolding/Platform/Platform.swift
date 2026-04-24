@@ -2649,9 +2649,14 @@ extension Platform {
       .joined(separator: ", ")
 
     let returnValue: String?
-    if !isInitializer,
-       let specified = action.returnValue {
-      returnValue = source(for: specified, referenceLookup: externalReferenceLookup)
+    if let specified = action.returnValue {
+      let resultType = source(for: specified, referenceLookup: externalReferenceLookup)
+      if isInitializer {
+        parentType = resultType
+        returnValue = nil
+      } else {
+        returnValue = resultType
+      }
     } else {
       returnValue = emptyReturnType
     }

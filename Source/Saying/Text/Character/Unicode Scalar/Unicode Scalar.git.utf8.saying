@@ -43,6 +43,7 @@ action (clients)
  ]
  (
   English: Unicode scalar with value (numerical value: Unicode scalar numerical value) skipping validity check
+  Swift: Unicode.Scalar.init skippingValidityCheck (value: [numerical value])
  )
  Unicode scalar
  C: “(char32¤(5F)t)” numerical value “”
@@ -202,4 +203,59 @@ action (clients)
  Unicode combining class
  {
   ← Unicode combining class with value (canonical combining class of ((numerical value) of (scalar)))
+ }
+
+action (clients)
+ [
+  [
+   English: Checks whether the scalar is already decomposed according to compatibility decomposition (NFKD).
+  ]
+  [
+   English: This action checks whether {compatibility decomposition of ()} is any different than the scalar itself. See there for technical details.
+  ]
+  test {verify (not ((“¤(A0)”: Unicode scalar) is decomposed according to compatibility decomposition))}
+  test {verify (not ((“¤(AC00)”: Unicode scalar) is decomposed according to compatibility decomposition))}
+  test {verify ((“¤(20)”: Unicode scalar) is decomposed according to compatibility decomposition)}
+  [
+   English: Note that even if all the scalars in a string are decomposed, the string itself may not be, since canonical order is also relevant. Compare {individually decompose () according to compatibility decomposition} with {decompose () according to compatibility decomposition}.
+  ]
+ ]
+ (
+  English: (scalar: Unicode scalar) is decomposed according to compatibility decomposition
+  Swift: var (self: [scalar]).isDecomposedAccordingtoCompatibilityDecomposition
+ )
+ truth value
+ {
+  ← compatibility decomposition quick check of ((numerical value) of (scalar))
+ }
+
+action (clients)
+ [
+  [
+   English: The full compatibility decomposition (NFKD) of the scalar.
+  ]
+  test {verify ((compatibility decomposition of (“¤(A0)”: Unicode scalar)) is (“¤(20)”: Unicode scalars))}
+  [
+   English: This is not merely the Decomposition Mapping property from the the Unicode Character Database; it is the final result of applying the entire compatibility decomposition algorithm.
+  ]
+  [
+   English: It applies the Hangul syllable decomposition algorithm.
+  ]
+  test {verify ((compatibility decomposition of (“¤(AC00)”: Unicode scalar)) is (“¤(1100)¤(1161)”: Unicode scalars))}
+  [
+   English: It is the full decomposition arrived at by recursive application of the decomposition mapping.
+  ]
+  test {verify ((compatibility decomposition of (“¤(1C4)”: Unicode scalar)) is (“¤(0044)¤(005A)¤(030C)”: Unicode scalars))}
+  [
+   English: Unaffected scalars are their own decomposed form.
+  ]
+  test {verify ((compatibility decomposition of (“¤(20)”: Unicode scalar)) is (“¤(20)”: Unicode scalars))}
+ ]
+ (
+  English: compatibility decomposition of (scalar: Unicode scalar)
+  Swift: (self: [scalar]).compatibilityDecomposition
+ )
+ Unicode scalars
+ {
+  ← full compatibility decomposition of (scalar)
  }
