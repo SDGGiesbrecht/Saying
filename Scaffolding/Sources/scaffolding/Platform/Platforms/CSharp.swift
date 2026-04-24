@@ -426,8 +426,8 @@ enum CSharp: Platform {
     return nil
   }
 
-  static func coverageRegistration(identifier: Int) -> String {
-    return "Coverage.Register(\(identifier));"
+  static func coverageRegistration(index: Int) -> String {
+    return "Coverage.Register(\(index));"
   }
 
   static func statement(expression: String) -> String {

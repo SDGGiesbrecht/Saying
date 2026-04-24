@@ -534,8 +534,8 @@ enum C: Platform {
     return "\(base);"
   }
 
-  static func coverageRegistration(identifier: Int) -> String {
-    return "register_coverage_region(\(identifier));"
+  static func coverageRegistration(index: Int) -> String {
+    return "register_coverage_region(\(index));"
   }
 
   static func statement(expression: String) -> String {

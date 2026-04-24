@@ -423,8 +423,8 @@ enum Swift: Platform {
     return nil
   }
 
-  static func coverageRegistration(identifier: Int) -> String {
-    return "registerCoverage(\(identifier))"
+  static func coverageRegistration(index: Int) -> String {
+    return "registerCoverage(\(index))"
   }
 
   static func statement(expression: String) -> String {

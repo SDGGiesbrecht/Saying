@@ -126,7 +126,7 @@ protocol Platform {
     parameters: String,
     returnSection: String?
   ) -> String?
-  static func coverageRegistration(identifier: Int) -> String
+  static func coverageRegistration(index: Int) -> String
   static func statement(expression: String) -> String
   static func deadEnd() -> String
   static func returnDelayStorage(type: String?) -> String
@@ -968,7 +968,7 @@ extension Platform {
       let appendedIdentifier = "\(coverage):{\(coverageRegionCounter.inDigits())}"
       let indent = String(repeating: self.indent, count: indentationLevel)
       if let index = coverageIndex[UnicodeText(appendedIdentifier)] {
-        return "\n\(indent)\(self.coverageRegistration(identifier: index))"
+        return "\n\(indent)\(self.coverageRegistration(index: index))"
       }
     }
     return nil
@@ -1448,7 +1448,7 @@ extension Platform {
         bareAction.deservesTesting,
         let coveredIdentifier = action.coveredIdentifier,
         let index = coverageIndex[coveredIdentifier] {
-        extractedCoverageRegistrations.append(coverageRegistration(identifier: index))
+        extractedCoverageRegistrations.append(coverageRegistration(index: index))
       }
       if !isThrough,
         !isDetachment,
@@ -2670,7 +2670,7 @@ extension Platform {
     if mode == .testing,
       let identifier = action.coveredIdentifier,
       let index = coverageIndex[identifier] {
-      coverageRegistration = "\(indent)\(self.coverageRegistration(identifier: index))"
+      coverageRegistration = "\(indent)\(self.coverageRegistration(index: index))"
     } else {
       coverageRegistration = nil
     }
