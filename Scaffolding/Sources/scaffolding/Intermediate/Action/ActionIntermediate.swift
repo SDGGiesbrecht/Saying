@@ -709,8 +709,6 @@ extension ActionIntermediate {
             swift: swift
           )
         )
-        // Temporary hack while these files overload the primitive coverage tracking:
-        && !String(declaration.location.origin).contains("Saying/Generated")
       )
     )
   }
