@@ -556,7 +556,7 @@ enum Kotlin: Platform {
     return "app/src/main/kotlin/Test.kt"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
     try ([
       "android.useAndroidX=true",
       "org.gradle.jvmargs=-Xmx2g", // 1G ran out in the Android CI.

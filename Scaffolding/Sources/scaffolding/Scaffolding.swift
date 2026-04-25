@@ -25,7 +25,7 @@ import Foundation
     // Web: HTML, JavaScript
     // (1991‐08‐06)
 
-    // Ubuntu: GNOME Builder (Meson), GNOME, GTK, GLib, C
+    // Ubuntu: build-essential (Make), C
     // (2004‐10‐20)
 
     // tvOS: from macOS, Xcode (Swift Package Manager), Swift
@@ -37,7 +37,7 @@ import Foundation
     // Android: from Linux, Android Studio (Gradle), Kotlin
     // (2008‐09‐23)
 
-    // Amazon Linux: MATE, Development Tools, GTK, GLib, C
+    // Amazon Linux: Development Tools (Make), C
     // (2011‐09‐26)
 
     // watchOS: from macOS, Xcode (Swift Package Manager), Swift
