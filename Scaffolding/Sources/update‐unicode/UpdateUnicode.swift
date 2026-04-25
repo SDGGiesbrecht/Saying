@@ -194,7 +194,7 @@ import SDGPersistence
             ? (previous.scalar.value == lastHangulSyllable ? "(value)의 자모" : noChange)
             : "“\(previous.decomposition.map({ "¤(\($0.sayingLiteral))" }).joined())”"
           source.append(
-            "  test {ignore (full compatibility decomposition of (“¤{\(literalScalar)}”: Unicode scalar))}"
+            "  test {ignore (full compatibility decomposition of (“¤(\(literalScalar))”: Unicode scalar))}"
           )
           implementation.append(contentsOf: [
             "  if ((value) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
@@ -205,7 +205,7 @@ import SDGPersistence
       }
     }
     source.append(contentsOf: [
-      "  test {ignore (full compatibility decomposition of (“¤{\(lastScalar.sayingLiteral)}”: Unicode scalar))}",
+      "  test {ignore (full compatibility decomposition of (“¤(\(lastScalar.sayingLiteral))”: Unicode scalar))}",
       " ]",
       " (",
       "  English: full compatibility decomposition of (scalar: Unicode scalar)",
