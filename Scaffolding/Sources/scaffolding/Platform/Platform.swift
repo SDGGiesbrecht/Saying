@@ -190,7 +190,7 @@ protocol Platform {
   static func testEntryPoint() -> [String]?
   static var sourceFileName: String { get }
   static func postprocessFileSplit(_ file: String) -> String
-  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws
 
   // Saying
   static var usesSnakeCase: Bool { get }
@@ -3227,12 +3227,6 @@ extension Platform {
       self.source(for: builtModules, mode: mode, moduleWideImports: builtSayingModule.map({ [$0] }) ?? [])
     ]
 
-    var dependencies: Set<String> = []
-    for module in builtModules {
-      dependencies.formUnion(nativeImports(for: module.referenceDictionary))
-    }
-    dependencies.formUnion(importsNeededByTestScaffolding)
-
     switch mode {
     case .testing, .debugging, .dependency:
       if let entryPoint = testEntryPoint() {
@@ -3257,7 +3251,7 @@ extension Platform {
       } else {
         try completedSource.save(to: sourceFileURL)
       }
-      try createOtherProjectContainerFiles(projectDirectory: constructionDirectory, dependencies: dependencies.sorted())
+      try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
     case .release:
       let productsDirectory = location ?? productsDirectory(for: package)
       var joined = source.joined(separator: "\n").appending("\n")

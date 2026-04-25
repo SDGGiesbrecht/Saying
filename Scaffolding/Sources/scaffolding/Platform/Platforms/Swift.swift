@@ -723,7 +723,7 @@ enum Swift: Platform {
       .joined(separator: "\n")
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
     try ([
       "// swift-tools-version: 5.7",
       "",

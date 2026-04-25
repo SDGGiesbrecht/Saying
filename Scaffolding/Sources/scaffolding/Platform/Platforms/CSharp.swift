@@ -687,7 +687,7 @@ enum CSharp: Platform {
     return "Test.cs"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL, dependencies: [String]) throws {
+  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
     try ([
       "<Project Sdk=\u{22}Microsoft.NET.Sdk\u{22}>",
       "  <PropertyGroup>",
