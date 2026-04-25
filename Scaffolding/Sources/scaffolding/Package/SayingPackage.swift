@@ -79,18 +79,11 @@ struct Package {
 
   func testC() throws {
     try C.prepare(package: self, mode: .testing)
-    let directory = C.preparedDirectory(for: self)
     _ = try Shell.default.run(
       command: [
-        "cc",
-        directory.appendingPathComponent("test.c").path,
-        "-o", directory.appendingPathComponent("test").path,
-      ],
-      reportProgress: { print($0) }
-    ).get()
-    _ = try Shell.default.run(
-      command: [
-        directory.appendingPathComponent("test").path
+        "make",
+        "--directory=\(C.preparedDirectory(for: self).path)",
+        "test",
       ],
       reportProgress: { print($0) }
     ).get()
