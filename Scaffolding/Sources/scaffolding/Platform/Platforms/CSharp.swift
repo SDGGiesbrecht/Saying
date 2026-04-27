@@ -595,14 +595,16 @@ enum CSharp: Platform {
   }
 
   static func coverageRegionIndex(regions: [String]) -> [String] {
+    // Due to compiler limits on string literals (and resourses not having been implemented yet),
+    // code is only aware of the indices and humans must look up legible identifiers by index in the source.
     var result: [String] = [
       "static class Coverage",
       "{",
-      "\(indent)internal static List<string> Regions = new List<string>",
+      "\(indent)internal static List<int> Regions = new List<int>",
       "\(indent){",
     ]
-    for region in regions {
-      result.append("\(indent)\(indent)\u{22}\(region)\u{22},")
+    for (index, region) in regions.enumerated() {
+      result.append("\(indent)\(indent)\(index), // \(region)")
     }
     result.append(contentsOf: [
       "\(indent)};",
@@ -614,7 +616,7 @@ enum CSharp: Platform {
     return [
       "\(indent)internal static void Register(int index)",
       "\(indent){",
-      "\(indent)\(indent)Coverage.Regions[index] = \u{22}\u{22};",
+      "\(indent)\(indent)Coverage.Regions[index] = -1;",
       "\(indent)}",
       "}",
     ]
@@ -657,9 +659,9 @@ enum CSharp: Platform {
     }
     result.append(contentsOf: [
       "\(indent)\(indent)bool anyRemaining = false;",
-      "\(indent)\(indent)foreach (string region in Coverage.Regions)",
+      "\(indent)\(indent)foreach (int region in Coverage.Regions)",
       "\(indent)\(indent){",
-      "\(indent)\(indent)\(indent)if (region != \u{22}\u{22})",
+      "\(indent)\(indent)\(indent)if (region != -1)",
       "\(indent)\(indent)\(indent){",
       "\(indent)\(indent)\(indent)\(indent)Console.WriteLine(region);",
       "\(indent)\(indent)\(indent)\(indent)anyRemaining = true;",
