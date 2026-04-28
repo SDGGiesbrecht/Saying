@@ -374,7 +374,7 @@ enum Kotlin: Platform {
   static var functionImplementationSizeLimit: Int? {
     // The actual limit applies to the resulting bytecode, not source code, and is thus unknowable.
     // This value was arrived at experimentally, and should be tightened if the limit ever trips again.
-    return 1 << 19
+    return 1 << 18
   }
   static var localConstantKeyword: String? {
     return "val"
@@ -494,13 +494,29 @@ enum Kotlin: Platform {
 
   static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
-      "val coverageRegions: MutableList<String?> = mutableListOf(",
+      "fun initializeCoverageRegions(): MutableList<String?> {",
+    ]
+    var implementation: [String] = [
+      "val coverageRegions: MutableList<String?> = mutableListOf()",
     ]
     for region in regions {
-      result.append("\(indent)\u{22}\(region)\u{22},")
+      implementation.append("coverageRegions += \u{22}\(region)\u{22}")
     }
+    implementation.append(contentsOf: [
+      "return coverageRegions",
+    ])
+    result.append(
+      contentsOf: splitFunctionImplementationIfTooLong(
+        implementation: implementation,
+        indent: indent,
+        subcall: { "initializeCoverageRegions\($0)(\($1 ?? ""))" },
+        subdeclaration: { "\(actionContinuationKeyword!) initializeCoverageRegions\($0)(\($1 ?? "")): MutableList<String?>" }
+      )
+    )
     result.append(contentsOf: [
-      ")",
+      "}",
+      "",
+      "val coverageRegions: MutableList<String?> = initializeCoverageRegions()",
     ])
     return result
   }

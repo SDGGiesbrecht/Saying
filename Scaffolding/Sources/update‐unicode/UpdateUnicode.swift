@@ -131,14 +131,9 @@ import SDGPersistence
   static func output(classes: [Unicode.Scalar: UInt8]) throws {
     var source: [String] = [
       "action (unit)",
+      " [",
     ]
-    source.append(contentsOf: [
-      " (",
-      "  English: canonical combining class of (scalar: Unicode scalar numerical value)",
-      " )",
-      " 8‐bit natural number",
-      " {",
-    ])
+    var implementation: [String] = []
     var previous: (scalar: Unicode.Scalar, combiningClass: UInt8)?
     for value in firstScalar.value ... lastScalar.value {
       if let scalar = Unicode.Scalar(value) {
@@ -147,7 +142,10 @@ import SDGPersistence
         if let previous = previous,
           combiningClass != previous.combiningClass {
           let literalScalar = previous.scalar.sayingLiteral
-          source.append(contentsOf: [
+          source.append(
+            "  test {ignore (canonical combining class of (“\(literalScalar)”: Unicode scalar numerical value))}"
+          )
+          implementation.append(contentsOf: [
             "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
             "   ← “\(previous.combiningClass)”",
             "  }",
@@ -155,6 +153,16 @@ import SDGPersistence
         }
       }
     }
+    source.append(contentsOf: [
+      "  test {ignore (canonical combining class of (“\(lastScalar.sayingLiteral)”: Unicode scalar numerical value))}",
+      " ]",
+      " (",
+      "  English: canonical combining class of (scalar: Unicode scalar numerical value)",
+      " )",
+      " 8‐bit natural number",
+      " {",
+    ])
+    source.append(contentsOf: implementation)
     source.append(contentsOf: [
       "  ← “\(classes[lastScalar] ?? 0)”",
     ])
@@ -169,13 +177,9 @@ import SDGPersistence
   static func output(decompositions: [Unicode.Scalar: [Unicode.Scalar]]) throws {
     var source: [String] = [
       "action (unit)",
-      " (",
-      "  English: full compatibility decomposition of (scalar: Unicode scalar)",
-      " )",
-      " Unicode scalars",
-      " {",
-      "  let (• value: Unicode scalar numerical value) be ((numerical value) of (scalar))",
+      " [",
     ]
+    var implementation: [String] = []
     var previous: (scalar: Unicode.Scalar, decomposition: [Unicode.Scalar])?
     let noChange = "(scalar) as scalars"
     for value in firstScalar.value ... lastScalar.value {
@@ -189,7 +193,10 @@ import SDGPersistence
           let literalString = previous.decomposition.isEmpty
             ? (previous.scalar.value == lastHangulSyllable ? "(value)의 자모" : noChange)
             : "“\(previous.decomposition.map({ "¤(\($0.sayingLiteral))" }).joined())”"
-          source.append(contentsOf: [
+          source.append(
+            "  test {ignore (full compatibility decomposition of (“¤(\(literalScalar))”: Unicode scalar))}"
+          )
+          implementation.append(contentsOf: [
             "  if ((value) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
             "   ← \(literalString)",
             "  }",
@@ -198,9 +205,18 @@ import SDGPersistence
       }
     }
     source.append(contentsOf: [
-      "  ← \(noChange)",
+      "  test {ignore (full compatibility decomposition of (“¤(\(lastScalar.sayingLiteral))”: Unicode scalar))}",
+      " ]",
+      " (",
+      "  English: full compatibility decomposition of (scalar: Unicode scalar)",
+      " )",
+      " Unicode scalars",
+      " {",
+      "  let (• value: Unicode scalar numerical value) be ((numerical value) of (scalar))",
     ])
+    source.append(contentsOf: implementation)
     source.append(contentsOf: [
+      "  ← \(noChange)",
       " }",
     ])
 
@@ -211,12 +227,9 @@ import SDGPersistence
   static func output(decompositionCheck: [Unicode.Scalar: [Unicode.Scalar]]) throws {
     var source: [String] = [
       "action (unit)",
-      " (",
-      "  English: compatibility decomposition quick check of (scalar: Unicode scalar numerical value)",
-      " )",
-      " truth value",
-      " {",
+      " [",
     ]
+    var implementation: [String] = []
     var previous: (scalar: Unicode.Scalar, decompositionCheck: Bool)?
     for value in firstScalar.value ... lastScalar.value {
       if let scalar = Unicode.Scalar(value) {
@@ -227,7 +240,10 @@ import SDGPersistence
             || value == firstHangulSyllable || value == lastHangulSyllable + 1 {
           let literalScalar = previous.scalar.sayingLiteral
           let literalValue = previous.scalar.value == lastHangulSyllable ? false : previous.decompositionCheck
-          source.append(contentsOf: [
+          source.append(
+            "  test {ignore (compatibility decomposition quick check of (“\(literalScalar)”: Unicode scalar numerical value))}"
+          )
+          implementation.append(contentsOf: [
             "  if ((scalar) is less than or equal to (“\(literalScalar)”: Unicode scalar numerical value)), {",
             "   ← \(literalValue)",
             "  }",
@@ -236,9 +252,17 @@ import SDGPersistence
       }
     }
     source.append(contentsOf: [
-      "  ← true",
+      "  test {ignore (compatibility decomposition quick check of (“\(lastScalar.sayingLiteral)”: Unicode scalar numerical value))}",
+      " ]",
+      " (",
+      "  English: compatibility decomposition quick check of (scalar: Unicode scalar numerical value)",
+      " )",
+      " truth value",
+      " {",
     ])
+    source.append(contentsOf: implementation)
     source.append(contentsOf: [
+      "  ← true",
       " }",
     ])
 
