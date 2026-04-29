@@ -219,6 +219,7 @@ enum JavaScript: Platform {
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
     componentReleases: [(String, String)],
+    componentReferenceCountingExhaustive: Bool,
     copyOld: String?,
     releaseOld: String?
   ) -> String {
