@@ -4,7 +4,7 @@ struct NativeThingImplementationIntermediate {
   var hold: NativeActionExpressionIntermediate?
   var release: NativeActionExpressionIntermediate?
   var copy: NativeActionExpressionIntermediate?
-  var requiredImports: [UnicodeText]
+  var requiredImports: [ImportIntermediate]
   var indirectRequirements: [NativeRequirementImplementationIntermediate]
   var requiredDeclarations: [NativeRequirementImplementationIntermediate]
 
@@ -14,7 +14,7 @@ struct NativeThingImplementationIntermediate {
     hold: NativeActionExpressionIntermediate?,
     release: NativeActionExpressionIntermediate?,
     copy: NativeActionExpressionIntermediate?,
-    requiredImports: [UnicodeText],
+    requiredImports: [ImportIntermediate],
     indirectRequirements: [NativeRequirementImplementationIntermediate],
     requiredDeclarations: [NativeRequirementImplementationIntermediate]) {
     self.textComponents = textComponents
@@ -96,13 +96,13 @@ extension NativeThingImplementationIntermediate {
         nativeCopy = success
       }
     }
-    var requiredImports: [UnicodeText] = []
-    for importLiteral in implementation.importNode?.imports.imports ?? [] {
-      switch LiteralIntermediate.construct(literal: importLiteral) {
+    var requiredImports: [ImportIntermediate] = []
+    for importNode in implementation.importNode?.imports.imports ?? [] {
+      switch ImportIntermediate.construct(importNode: importNode) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
-      case .success(let literal):
-        requiredImports.append(UnicodeText(literal.string))
+      case .success(let constructed):
+        requiredImports.append(constructed)
       }
     }
     var indirectRequirments: [NativeRequirementImplementationIntermediate] = []

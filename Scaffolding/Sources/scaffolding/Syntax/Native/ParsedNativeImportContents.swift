@@ -1,6 +1,6 @@
 extension ParsedNativeImportContents {
 
-  var imports: [ParsedLiteral] {
+  var imports: [ParsedImportSyntax] {
     switch self {
     case .list(let list):
       return list.imports.imports

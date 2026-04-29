@@ -1060,11 +1060,27 @@ extension Node {
               Alternate(name: "literal", type: "Literal"),
             ])
           ),
+          Node(
+            name: "ImportCondition",
+            kind: .compound(children: [
+              Child(name: "space", type: "SpaceSyntax", kind: .fixed),
+              Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
+              Child(name: "condition", type: "Literal", kind: .required),
+              Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "ImportSyntax",
+            kind: .compound(children: [
+              Child(name: "importNode", type: "Literal", kind: .required),
+              Child(name: "condition", type: "ImportCondition", kind: .optional),
+            ])
+          ),
         ],
         Node.separatedList(
           name: "NativeImportList",
           entryName: "importNode", entryNamePlural: "imports",
-          entryType: "Literal",
+          entryType: "ImportSyntax",
           separatorName: "lineBreak",
           separatorType: "LineBreakSyntax",
           fixedSeparator: true
@@ -1082,7 +1098,7 @@ extension Node {
             name: "NativeImportContents",
             kind: .alternates([
               Alternate(name: "list", type: "SpacedImportList"),
-              Alternate(name: "single", type: "Literal"),
+              Alternate(name: "single", type: "ImportSyntax"),
             ])
           ),
           Node(

@@ -20,6 +20,19 @@ extension CaseIntermediate {
     }
   }
 
+  static func disallowConditionalImports(
+    in implementation: ParsedNativeAction,
+    errors: inout [ConstructionError]
+  ) {
+    if let importNode = implementation.importNode {
+      for statement in importNode.imports.imports {
+        if statement.condition != nil {
+          errors.append(ConstructionError.invalidImportCondition(implementation))
+        }
+      }
+    }
+  }
+
   static func construct(
     _ declaration: ParsedCaseDeclaration,
     namespace: [Set<UnicodeText>],
@@ -90,6 +103,7 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expression, errors: &errors)
             case "Kotlin":
               kotlinStore = constructed
+              disallowConditionalImports(in: implementation.expression, errors: &errors)
             case "Swift":
               swiftStore = constructed
             default:
@@ -115,6 +129,7 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.store, errors: &errors)
             case "Kotlin":
               kotlinStore = constructed
+              disallowConditionalImports(in: implementation.expressions.store, errors: &errors)
             case "Swift":
               swiftStore = constructed
             default:
@@ -137,6 +152,7 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Kotlin":
               kotlinRetrieve = constructed
+              disallowConditionalImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Swift":
               swiftRetrieve = constructed
             default:
@@ -159,6 +175,7 @@ extension CaseIntermediate {
               disallowImports(in: implementation.expressions.check, errors: &errors)
             case "Kotlin":
               kotlinCheck = constructed
+              disallowConditionalImports(in: implementation.expressions.check, errors: &errors)
             case "Swift":
               swiftCheck = constructed
             default:

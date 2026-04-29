@@ -20,6 +20,19 @@ extension PartIntermediate {
       errors.append(ConstructionError.invalidImport(implementation))
     }
   }
+  
+  static func disallowConditionalImports(
+    in implementation: ParsedNativeAction,
+    errors: inout [ConstructionError]
+  ) {
+    if let importNode = implementation.importNode {
+      for statement in importNode.imports.imports {
+        if statement.condition != nil {
+          errors.append(ConstructionError.invalidImportCondition(implementation))
+        }
+      }
+    }
+  }
 
   static func construct(
     _ declaration: ParsedPartDeclaration,
@@ -81,6 +94,7 @@ extension PartIntermediate {
             disallowImports(in: implementation.expression, errors: &errors)
           case "Kotlin":
             kotlin = constructed
+            disallowConditionalImports(in: implementation.expression, errors: &errors)
           case "Swift":
             swift = constructed
           default:

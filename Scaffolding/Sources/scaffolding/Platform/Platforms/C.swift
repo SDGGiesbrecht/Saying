@@ -661,8 +661,17 @@ enum C: Platform {
   static var fileSettings: String? {
     return nil
   }
-  static func statementImporting(_ importTarget: String) -> String {
-    return "#include <\(importTarget).h>"
+  static func statementImporting(_ importTarget: String, condition: String?) -> String {
+    let include = "#include <\(importTarget).h>"
+    if let condition = condition {
+      return [
+        "#if \(condition)",
+        "\(indent)\(include)",
+        "#endif",
+      ].joined(separator: "\n")
+    } else {
+      return include
+    }
   }
 
   static let preexistingNativeRequirements: Set<String> = []
@@ -670,18 +679,18 @@ enum C: Platform {
     return false
   }
 
-  static var importsNeededByDeadEnd: Set<String> {
-    return [
+  static var importsNeededByDeadEnd: Set<ImportIntermediate> {
+    return Set([
       "stdlib",
-    ]
+    ].lazy.map({ ImportIntermediate(name: $0) }))
   }
-  static var importsNeededByTestScaffolding: Set<String> {
-    return [
+  static var importsNeededByTestScaffolding: Set<ImportIntermediate> {
+    return Set([
       "assert",
       "stdbool",
       "stddef",
       "stdio",
-    ]
+    ].lazy.map { ImportIntermediate(name: $0) })
   }
 
   static var currentTestVariable: String {

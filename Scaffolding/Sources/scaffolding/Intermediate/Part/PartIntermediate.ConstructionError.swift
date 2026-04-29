@@ -4,6 +4,7 @@ extension PartIntermediate {
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeCaseImplementation(NativeActionImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeAction)
+    case invalidImportCondition(ParsedNativeAction)
     case documentedParameterNotFound(ParsedParameterDocumentation)
 
     var message: String {
@@ -15,6 +16,8 @@ extension PartIntermediate {
       case .brokenNativeCaseImplementation(let error):
         return error.message
       case .invalidImport:
+        return defaultMessage
+      case .invalidImportCondition:
         return defaultMessage
       case .documentedParameterNotFound:
         return defaultMessage
@@ -30,6 +33,8 @@ extension PartIntermediate {
       case .brokenNativeCaseImplementation(let error):
         return error.range
       case .invalidImport(let node):
+        return node.location
+      case .invalidImportCondition(let node):
         return node.location
       case .documentedParameterNotFound(let documentation):
         return documentation.location

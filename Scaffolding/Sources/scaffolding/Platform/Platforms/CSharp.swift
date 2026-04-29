@@ -563,8 +563,17 @@ enum CSharp: Platform {
   static var fileSettings: String? {
     return "using static Tests;"
   }
-  static func statementImporting(_ importTarget: String) -> String {
-    return "using \(importTarget);"
+  static func statementImporting(_ importTarget: String, condition: String?) -> String {
+    let using = "using \(importTarget);"
+    if let condition = condition {
+      return [
+        "#if \(condition)",
+        "\(indent)\(using)",
+        "#endif",
+      ].joined(separator: "\n")
+    } else {
+      return using
+    }
   }
 
   static let preexistingNativeRequirements: Set<String> = []
@@ -572,17 +581,17 @@ enum CSharp: Platform {
     return false
   }
 
-  static var importsNeededByDeadEnd: Set<String> {
-    return [
+  static var importsNeededByDeadEnd: Set<ImportIntermediate> {
+    return Set([
       "System",
-    ]
+    ].lazy.map { ImportIntermediate(name: $0) })
   }
-  static var importsNeededByTestScaffolding: Set<String> {
-    return [
+  static var importsNeededByTestScaffolding: Set<ImportIntermediate> {
+    return Set([
       "System",
       "System.Collections.Generic",
       "System.Linq",
-    ]
+    ].lazy.map { ImportIntermediate(name: $0) })
   }
 
   static var currentTestVariable: String {

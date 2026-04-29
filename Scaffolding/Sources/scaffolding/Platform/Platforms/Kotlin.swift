@@ -472,7 +472,7 @@ enum Kotlin: Platform {
   static var fileSettings: String? {
     return nil
   }
-  static func statementImporting(_ importTarget: String) -> String {
+  static func statementImporting(_ importTarget: String, condition: String?) -> String {
     return "import \(importTarget).*"
   }
 
@@ -481,10 +481,10 @@ enum Kotlin: Platform {
     return false
   }
 
-  static var importsNeededByDeadEnd: Set<String> {
-    return ["kotlin.system"]
+  static var importsNeededByDeadEnd: Set<ImportIntermediate> {
+    return Set(["kotlin.system"].lazy.map { ImportIntermediate(name: $0) })
   }
-  static var importsNeededByTestScaffolding: Set<String> {
+  static var importsNeededByTestScaffolding: Set<ImportIntermediate> {
     return []
   }
 

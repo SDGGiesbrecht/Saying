@@ -4,6 +4,7 @@ extension ActionIntermediate {
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeActionImplementation(NativeActionImplementationIntermediate.ConstructionError)
     case invalidImport(ParsedNativeActionImplementation)
+    case invalidImportCondition(ParsedNativeActionImplementation)
     case missingImplementation(language: UnicodeText, action: ParsedActionName)
     case brokenLiteral(LiteralIntermediate.ConstructionError)
 
@@ -16,6 +17,8 @@ extension ActionIntermediate {
       case .brokenNativeActionImplementation(let error):
         return error.message
       case .invalidImport:
+        return defaultMessage
+      case .invalidImportCondition:
         return defaultMessage
       case .missingImplementation(let language, _):
         return "\(defaultMessage) (\(language))"
@@ -33,6 +36,8 @@ extension ActionIntermediate {
       case .brokenNativeActionImplementation(let error):
         return error.range
       case .invalidImport(let implementation):
+        return implementation.location
+      case .invalidImportCondition(let implementation):
         return implementation.location
       case .missingImplementation(_, action: let action):
         return action.location

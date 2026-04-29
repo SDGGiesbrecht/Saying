@@ -406,7 +406,7 @@ enum JavaScript: Platform {
   static var fileSettings: String? {
     return nil
   }
-  static func statementImporting(_ importTarget: String) -> String {
+  static func statementImporting(_ importTarget: String, condition: String?) -> String {
     return importTarget
   }
 
@@ -415,10 +415,10 @@ enum JavaScript: Platform {
     return false
   }
 
-  static var importsNeededByDeadEnd: Set<String> {
+  static var importsNeededByDeadEnd: Set<ImportIntermediate> {
     return []
   }
-  static var importsNeededByTestScaffolding: Set<String> {
+  static var importsNeededByTestScaffolding: Set<ImportIntermediate> {
     return []
   }
 
