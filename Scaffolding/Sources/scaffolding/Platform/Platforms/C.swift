@@ -375,6 +375,7 @@ enum C: Platform {
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
     componentReleases: [(String, String)],
+    componentReferenceCountingExhaustive: Bool,
     copyOld: String?,
     releaseOld: String?
   ) -> String {
@@ -403,6 +404,7 @@ enum C: Platform {
           synthesizeReferenceCounting: false,
           componentHolds: [],
           componentReleases: [],
+          componentReferenceCountingExhaustive: true,
           copyOld: nil,
           releaseOld: nil
         )
@@ -438,8 +440,16 @@ enum C: Platform {
           otherMembers: [],
           isReferenceCounted: isReferenceCounted,
           synthesizeReferenceCounting: synthesizeReferenceCounting,
-          componentHolds: switchCases(componentHolds, parentType: name),
-          componentReleases: switchCases(componentReleases, parentType: name),
+          componentHolds: switchCases(
+            componentHolds,
+            isExhaustive: componentReferenceCountingExhaustive,
+            parentType: name
+          ),
+          componentReleases: switchCases(
+            componentReleases,
+            isExhaustive: componentReferenceCountingExhaustive,
+            parentType: name
+          ),
           copyOld: copyOld,
           releaseOld: releaseOld
         )!
@@ -447,7 +457,11 @@ enum C: Platform {
       return result.joined(separator: "\n")
     }
   }
-  private static func switchCases(_ enumerationCases: [(String, String)], parentType: String) -> [String] {
+  private static func switchCases(
+    _ enumerationCases: [(String, String)],
+    isExhaustive: Bool,
+    parentType: String
+  ) -> [String] {
     var result: [String] = [
       "switch (target.enumeration_case)",
       "{"
@@ -456,6 +470,12 @@ enum C: Platform {
       result.append(contentsOf: [
         "case \(parentType)_case_\(entry.0):",
         "\(indent)\(entry.1);",
+        "\(indent)break;",
+      ])
+    }
+    if !isExhaustive {
+      result.append(contentsOf: [
+        "default:",
         "\(indent)break;",
       ])
     }

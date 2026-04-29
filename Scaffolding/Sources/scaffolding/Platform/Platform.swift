@@ -94,6 +94,7 @@ protocol Platform {
     synthesizeReferenceCounting: Bool,
     componentHolds: [(String, String)],
     componentReleases: [(String, String)],
+    componentReferenceCountingExhaustive: Bool,
     copyOld: String?,
     releaseOld: String?
   ) -> String
@@ -801,9 +802,11 @@ extension Platform {
           storageCases.append(storage)
         }
       }
+      var componentReferenceCountingExhaustive = true
       let componentHolds: [(String, String)] = thing.cases.compactMap { enumerationCase in
         guard let contents = enumerationCase.contents,
           let hold = nativeHold(on: contents, referenceLookup: externalReferenceLookup) else {
+          componentReferenceCountingExhaustive = false
           return nil
         }
         let caseName = sanitize(
@@ -862,6 +865,7 @@ extension Platform {
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
         componentReleases: componentReleases,
+        componentReferenceCountingExhaustive: componentReferenceCountingExhaustive,
         copyOld: copyOld,
         releaseOld: releaseOld
       )
