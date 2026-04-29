@@ -4,6 +4,7 @@ extension Thing {
     case brokenParameterInterpolation(Interpolation<ThingParameterIntermediate>.ConstructionError)
     case unknownLanguage(ParsedUninterruptedIdentifier)
     case brokenNativeImplementation(NativeThingImplementationIntermediate.ConstructionError)
+    case invalidCondition(ParsedAvailabilityCondition)
     case invalidImport(ParsedNativeThingImplementation)
     case documentedParameterNotFound(ParsedParameterDocumentation)
     case brokenPartImplementation(PartIntermediate.ConstructionError)
@@ -19,6 +20,8 @@ extension Thing {
         return defaultMessage
       case .brokenNativeImplementation(let error):
         return error.message
+      case .invalidCondition:
+        return defaultMessage
       case .invalidImport:
         return defaultMessage
       case .documentedParameterNotFound:
@@ -40,6 +43,8 @@ extension Thing {
         return identifier.location
       case .brokenNativeImplementation(let error):
         return error.range
+      case .invalidCondition(let implementation):
+        return implementation.location
       case .invalidImport(let implementation):
         return implementation.location
       case .documentedParameterNotFound(let documentation):

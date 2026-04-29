@@ -11,6 +11,23 @@ struct CaseIntermediate {
 
 extension CaseIntermediate {
 
+  static func disallowConditions(
+    in implementation: ParsedNativeActionImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if let condition = implementation.language.condition {
+      errors.append(ConstructionError.invalidCondition(condition))
+    }
+  }
+  static func disallowConditions(
+    in implementation: ParsedNativeStorageCaseImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if let condition = implementation.language.condition {
+      errors.append(ConstructionError.invalidCondition(condition))
+    }
+  }
+
   static func disallowImports(
     in implementation: ParsedNativeAction,
     errors: inout [ConstructionError]
@@ -26,8 +43,8 @@ extension CaseIntermediate {
   ) {
     if let importNode = implementation.importNode {
       for statement in importNode.imports.imports {
-        if statement.condition != nil {
-          errors.append(ConstructionError.invalidImportCondition(implementation))
+        if let condition = statement.condition {
+          errors.append(ConstructionError.invalidCondition(condition))
         }
       }
     }
@@ -88,98 +105,110 @@ extension CaseIntermediate {
       case .implementation(let implementations):
         for implementation in implementations.implementations.implementations {
           switch NativeActionImplementationIntermediate.construct(
-            implementation: implementation.expression
+            implementation: implementation.expression,
+            condition: implementation.language.condition
           ) {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch implementation.language.language.identifierText() {
             case "C":
               cStore = constructed
             case "C♯":
               cSharpStore = constructed
             case "JavaScript":
               javaScriptStore = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowImports(in: implementation.expression, errors: &errors)
             case "Kotlin":
               kotlinStore = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowConditionalImports(in: implementation.expression, errors: &errors)
             case "Swift":
               swiftStore = constructed
             default:
-              errors.append(ConstructionError.unknownLanguage(implementation.language))
+              errors.append(ConstructionError.unknownLanguage(implementation.language.language))
             }
           }
         }
       case .dual(let details):
         for implementation in details.implementation.implementations.implementations {
           switch NativeActionImplementationIntermediate.construct(
-            implementation: implementation.expressions.store
+            implementation: implementation.expressions.store,
+            condition: implementation.language.condition
           ) {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch implementation.language.language.identifierText() {
             case "C":
               cStore = constructed
             case "C♯":
               cSharpStore = constructed
             case "JavaScript":
               javaScriptStore = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowImports(in: implementation.expressions.store, errors: &errors)
             case "Kotlin":
               kotlinStore = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowConditionalImports(in: implementation.expressions.store, errors: &errors)
             case "Swift":
               swiftStore = constructed
             default:
-              errors.append(ConstructionError.unknownLanguage(implementation.language))
+              errors.append(ConstructionError.unknownLanguage(implementation.language.language))
             }
           }
           switch NativeActionImplementationIntermediate.construct(
-            implementation: implementation.expressions.retrieve
+            implementation: implementation.expressions.retrieve,
+            condition: implementation.language.condition
           ) {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch implementation.language.language.identifierText() {
             case "C":
               cRetrieve = constructed
             case "C♯":
               cSharpRetrieve = constructed
             case "JavaScript":
               javaScriptRetrieve = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Kotlin":
               kotlinRetrieve = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowConditionalImports(in: implementation.expressions.retrieve, errors: &errors)
             case "Swift":
               swiftRetrieve = constructed
             default:
-              errors.append(ConstructionError.unknownLanguage(implementation.language))
+              errors.append(ConstructionError.unknownLanguage(implementation.language.language))
             }
           }
           switch NativeActionImplementationIntermediate.construct(
-            implementation: implementation.expressions.check
+            implementation: implementation.expressions.check,
+            condition: implementation.language.condition
           ) {
           case .failure(let error):
             errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeCaseImplementation($0) }))
           case .success(let constructed):
-            switch implementation.language.identifierText() {
+            switch implementation.language.language.identifierText() {
             case "C":
               cCheck = constructed
             case "C♯":
               cSharpCheck = constructed
             case "JavaScript":
               javaScriptCheck = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowImports(in: implementation.expressions.check, errors: &errors)
             case "Kotlin":
               kotlinCheck = constructed
+              disallowConditions(in: implementation, errors: &errors)
               disallowConditionalImports(in: implementation.expressions.check, errors: &errors)
             case "Swift":
               swiftCheck = constructed
             default:
-              errors.append(ConstructionError.unknownLanguage(implementation.language))
+              errors.append(ConstructionError.unknownLanguage(implementation.language.language))
             }
           }
         }

@@ -1061,7 +1061,7 @@ extension Node {
             ])
           ),
           Node(
-            name: "ImportCondition",
+            name: "AvailabilityCondition",
             kind: .compound(children: [
               Child(name: "space", type: "SpaceSyntax", kind: .fixed),
               Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
@@ -1073,7 +1073,7 @@ extension Node {
             name: "ImportSyntax",
             kind: .compound(children: [
               Child(name: "importNode", type: "Literal", kind: .required),
-              Child(name: "condition", type: "ImportCondition", kind: .optional),
+              Child(name: "condition", type: "AvailabilityCondition", kind: .optional),
             ])
           ),
         ],
@@ -1219,9 +1219,16 @@ extension Node {
             ])
           ),
           Node(
-            name: "NativeThingImplementation",
+            name: "NativeEnvironment",
             kind: .compound(children: [
               Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "condition", type: "AvailabilityCondition", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "NativeThingImplementation",
+            kind: .compound(children: [
+              Child(name: "language", type: "NativeEnvironment", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "implementation", type: "NativeThing", kind: .required),
             ])
@@ -1229,7 +1236,7 @@ extension Node {
           Node(
             name: "NativeActionImplementation",
             kind: .compound(children: [
-              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "language", type: "NativeEnvironment", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "expression", type: "NativeAction", kind: .required),
             ])
@@ -1237,7 +1244,7 @@ extension Node {
           Node(
             name: "NativeStorageCaseImplementation",
             kind: .compound(children: [
-              Child(name: "language", type: "UninterruptedIdentifier", kind: .required),
+              Child(name: "language", type: "NativeEnvironment", kind: .required),
               Child(name: "colon", type: "Colon", kind: .required),
               Child(name: "expressions", type: "NativeStorageCase", kind: .required),
             ])
