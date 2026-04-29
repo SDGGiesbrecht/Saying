@@ -37,7 +37,7 @@ thing (unit)
    “stdlib”
   ) {
    “typedef struct reference¤(5F)tracker {¤(A)int tracked¤(5F)references;¤(A)int all¤(5F)references;¤(A)} reference¤(5F)tracker;”
-   “reference¤(5F)tracker¤(2A) hold¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references += 1;¤(A)tracker¤(2D)>all¤(5F)references += 1;¤(A)}”
+   “reference¤(5F)tracker¤(2A) hold¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references += 1;¤(A)tracker¤(2D)>all¤(5F)references += 1;¤(A)return tracker;¤(A)}”
    “void release¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)tracker¤(2D)>tracked¤(5F)references ¤(2D)= 1;¤(A)tracker¤(2D)>all¤(5F)references ¤(2D)= 1;¤(A)if (tracker¤(2D)>all¤(5F)references == 0)¤(A){¤(A)free(tracker);¤(A)}¤(A)}”
    “reference¤(5F)tracker¤(2A) copy¤(5F)reference¤(5F)tracker(reference¤(5F)tracker¤(2A) tracker)¤(A){¤(A)reference¤(5F)tracker¤(2A) copy = malloc(sizeof(reference¤(5F)tracker));¤(A)if (!copy)¤(A){¤(A)err(EXIT¤(5F)FAILURE, ¤(22)malloc¤(22));¤(A)}¤(A)¤(2A)copy = (reference¤(5F)tracker) {1, 1};¤(A)return copy;¤(A)}”
   }
@@ -91,7 +91,6 @@ action (unit)
 action (unit)
  (
   English: hold (tracker: reference tracker)
-  C: 1 hold (tracker: [tracker])
  )
  C: “hold¤(5F)reference¤(5F)tracker(” tracker “)”
  {}
@@ -99,7 +98,6 @@ action (unit)
 action (unit)
  (
   English: release (tracker: reference tracker)
-  C: 1 release (tracker: [tracker])
  )
  C: “release¤(5F)reference¤(5F)tracker(” tracker “)”
  {}
