@@ -169,15 +169,15 @@ protocol Platform {
 
   // Imports
   static var fileSettings: String? { get }
-  static func statementImporting(_ importTarget: String) -> String
+  static func statementImporting(_ importTarget: String, condition: String?) -> String
 
   // Native Requirements
   static var preexistingNativeRequirements: Set<String> { get }
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool
 
   // Module
-  static var importsNeededByDeadEnd: Set<String> { get }
-  static var importsNeededByTestScaffolding: Set<String> { get }
+  static var importsNeededByDeadEnd: Set<ImportIntermediate> { get }
+  static var importsNeededByTestScaffolding: Set<ImportIntermediate> { get }
   static var currentTestVariable: String { get }
   static func coverageRegionIndex(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
@@ -2868,16 +2868,16 @@ extension Platform {
     ]
   }
 
-  static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<String> {
-    var imports: Set<String> = []
+  static func nativeImports(for referenceDictionary: ReferenceDictionary) -> Set<ImportIntermediate> {
+    var imports: Set<ImportIntermediate> = []
     for thing in referenceDictionary.allThings() {
       for requiredImport in nativeType(of: thing)?.requiredImports ?? [] {
-        imports.insert(String(requiredImport))
+        imports.insert(requiredImport)
       }
     }
     for action in referenceDictionary.allActions() {
       for requiredImport in nativeImplementation(of: action)?.requiredImports ?? [] {
-        imports.insert(String(requiredImport))
+        imports.insert(requiredImport)
       }
     }
     return imports
@@ -3046,7 +3046,7 @@ extension Platform {
       result.append(settings)
     }
 
-    var imports: Set<String> = []
+    var imports: Set<ImportIntermediate> = []
     for module in modules {
       imports.formUnion(nativeImports(for: module.referenceDictionary))
     }
@@ -3055,7 +3055,7 @@ extension Platform {
     if !imports.isEmpty {
       result.appendSeparatorLine()
       for importTarget in imports.sorted() {
-        result.append(statementImporting(importTarget))
+        result.append(statementImporting(importTarget.name, condition: importTarget.condition))
       }
     }
 

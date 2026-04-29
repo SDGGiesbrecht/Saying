@@ -122,6 +122,19 @@ extension ActionIntermediate {
     }
   }
 
+  static func disallowConditionalImports(
+    in implementation: ParsedNativeActionImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if let importNode = implementation.expression.importNode {
+      for statement in importNode.imports.imports {
+        if statement.condition != nil {
+          errors.append(ConstructionError.invalidImportCondition(implementation))
+        }
+      }
+    }
+  }
+
   static func parameterAction(
     names: Set<UnicodeText>,
     parameters: Interpolation<ParameterIntermediate>,
@@ -645,6 +658,7 @@ extension ActionIntermediate {
             disallowImports(in: implementation, errors: &errors)
           case "Kotlin":
             kotlin = constructed
+            disallowConditionalImports(in: implementation, errors: &errors)
           case "Swift":
             swift = constructed
           default:

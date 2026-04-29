@@ -584,14 +584,23 @@ enum Swift: Platform {
   static var fileSettings: String? {
     return nil
   }
-  static func statementImporting(_ importTarget: String) -> String {
-    return "import \(importTarget)"
+  static func statementImporting(_ importTarget: String, condition: String?) -> String {
+    let statement = "import \(importTarget)"
+    if let condition = condition {
+      return [
+        "#if \(condition)",
+        "\(indent)\(statement)",
+        "#endif",
+      ].joined(separator: "\n")
+    } else {
+      return statement
+    }
   }
 
-  static var importsNeededByDeadEnd: Set<String> {
+  static var importsNeededByDeadEnd: Set<ImportIntermediate> {
     return []
   }
-  static var importsNeededByTestScaffolding: Set<String> {
+  static var importsNeededByTestScaffolding: Set<ImportIntermediate> {
     return []
   }
 
