@@ -112,6 +112,15 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
+  
+  static func disallowConditions(
+    in implementation: ParsedNativeActionImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if let condition = implementation.language.condition {
+      errors.append(ConstructionError.invalidCondition(condition))
+    }
+  }
 
   static func disallowImports(
     in implementation: ParsedNativeActionImplementation,
@@ -128,8 +137,8 @@ extension ActionIntermediate {
   ) {
     if let importNode = implementation.expression.importNode {
       for statement in importNode.imports.imports {
-        if statement.condition != nil {
-          errors.append(ConstructionError.invalidImportCondition(implementation))
+        if let condition = statement.condition {
+          errors.append(ConstructionError.invalidCondition(condition))
         }
       }
     }
@@ -643,26 +652,29 @@ extension ActionIntermediate {
     if let native = declaration.implementation.native {
       for implementation in native.implementations {
         switch NativeActionImplementationIntermediate.construct(
-          implementation: implementation.expression
+          implementation: implementation.expression,
+          condition: implementation.language.condition
         ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ ConstructionError.brokenNativeActionImplementation($0) }))
         case .success(let constructed):
-          switch implementation.language.identifierText() {
+          switch implementation.language.language.identifierText() {
           case "C":
             c = constructed
           case "C♯":
             cSharp = constructed
           case "JavaScript":
             javaScript = constructed
+            disallowConditions(in: implementation, errors: &errors)
             disallowImports(in: implementation, errors: &errors)
           case "Kotlin":
             kotlin = constructed
+            disallowConditions(in: implementation, errors: &errors)
             disallowConditionalImports(in: implementation, errors: &errors)
           case "Swift":
             swift = constructed
           default:
-            errors.append(ConstructionError.unknownLanguage(implementation.language))
+            errors.append(ConstructionError.unknownLanguage(implementation.language.language))
           }
         }
       }

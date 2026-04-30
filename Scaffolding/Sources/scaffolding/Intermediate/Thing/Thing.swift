@@ -77,6 +77,31 @@ extension Thing {
 }
 
 extension Thing {
+  
+  static func disallowConditions(
+    in implementation: ParsedNativeThingImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if let condition = implementation.language.condition {
+      errors.append(ConstructionError.invalidCondition(condition))
+    }
+  }
+
+  static func disallowConditionalImports(
+    in implementation: ParsedNativeThingImplementation,
+    errors: inout [ConstructionError]
+  ) {
+    if let importNode = implementation.implementation.importNode {
+      for statement in importNode.imports.imports {
+        if let condition = statement.condition {
+          errors.append(ConstructionError.invalidCondition(condition))
+        }
+      }
+    }
+  }
+}
+
+extension Thing {
 
   static func construct<ThingNode>(
     _ declaration: ThingNode,
@@ -163,24 +188,29 @@ extension Thing {
     var swift: NativeThingImplementationIntermediate?
     for implementation in declaration.nativeImplementations {
       let constructed: NativeThingImplementationIntermediate
-      switch NativeThingImplementationIntermediate.construct(implementation: implementation.implementation) {
+      switch NativeThingImplementationIntermediate.construct(
+        implementation: implementation.implementation,
+        condition: implementation.language.condition
+      ) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ .brokenNativeImplementation($0) }))
         continue
       case .success(let result):
         constructed = result
       }
-      switch implementation.language.identifierText() {
+      switch implementation.language.language.identifierText() {
       case "C":
         c = constructed
       case "C♯":
         cSharp = constructed
       case "Kotlin":
         kotlin = constructed
+        disallowConditions(in: implementation, errors: &errors)
+        disallowConditionalImports(in: implementation, errors: &errors)
       case "Swift":
         swift = constructed
       default:
-        errors.append(ConstructionError.unknownLanguage(implementation.language))
+        errors.append(ConstructionError.unknownLanguage(implementation.language.language))
       }
     }
     var attachedDocumentation: DocumentationIntermediate?

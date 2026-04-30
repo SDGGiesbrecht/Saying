@@ -343,9 +343,63 @@ extension Platform {
       .joined()
   }
 
+  static func reindent(_ source: String, by indentation: Int) -> String {
+    let insert = String(repeating: indent, count: indentation)
+    return source
+      .components(separatedBy: "\n")
+      .map({ "\(insert)\($0.contents)" })
+      .joined(separator: "\n")
+  }
+
+  static func branchedCompilation(
+    condition: String?,
+    nativeRequirements: String?,
+    declaration: String?
+  ) -> String? {
+    if let condition = condition {
+      let indentedNativeRequirements = nativeRequirements.map({ reindent($0, by: 1) })
+      let indentedDeclaration = declaration.map({ reindent($0, by: 1) })
+      var result: [String] = []
+      if let requirements = indentedNativeRequirements {
+        result.append(contentsOf: [
+          "#if \(condition)",
+          requirements,
+        ])
+        if let declarationToo = indentedDeclaration {
+          result.append(contentsOf: [
+            "#else",
+            declarationToo,
+          ])
+        }
+        result.append(contentsOf: [
+          "#endif",
+        ])
+      } else if let declarationOnly = indentedDeclaration {
+        if condition.first == "!" {
+          result.append(contentsOf: [
+            "#if \(condition.dropFirst())",
+          ])
+        } else {
+          result.append(contentsOf: [
+            "#if !\(condition)",
+          ])
+        }
+        result.append(contentsOf: [
+          declarationOnly,
+          "#endif",
+        ])
+      }
+      return result.isEmpty ? nil : result.joined(separator: "\n")
+    } else {
+      return declaration
+    }
+  }
+
   static func nativeName(of thing: Thing, referenceLookup: [ReferenceDictionary]) -> String? {
     if let identifier = thing.identifier(for: self, referenceLookup: referenceLookup) {
       return String(identifier)
+    } else if let native = nativeType(of: thing) {
+      return source(for: native, referenceLookup: referenceLookup)
     } else {
       return nil
     }
@@ -613,6 +667,8 @@ extension Platform {
       thing.cases.isEmpty {
       return nil
     }
+    var nativeRequirements: String?
+    var nativeCondition: String?
     if let native = nativeType(of: thing) {
       var result: [String] = []
       if let required = source(
@@ -640,7 +696,12 @@ extension Platform {
           }
         }
       }
-      return result.isEmpty ? nil : result.joined(separator: "\n\n")
+      nativeRequirements = result.isEmpty ? nil : result.joined(separator: "\n\n")
+      if let condition = native.condition {
+        nativeCondition = condition
+      } else {
+        return nativeRequirements
+      }
     }
     if !isTyped,
       thing.cases.allSatisfy({ enumerationCase in
@@ -697,6 +758,7 @@ extension Platform {
         }
       }
     }
+    let constructedDeclaration: String?
     if thing.cases.isEmpty {
       let components = thing.parts.map({ part in
         let name = sanitize(
@@ -770,7 +832,7 @@ extension Platform {
           referenceLookup: externalReferenceLookup
         )
       }
-      return thingDeclaration(
+      constructedDeclaration = thingDeclaration(
         name: name,
         components: components,
         accessModifier: access,
@@ -854,7 +916,7 @@ extension Platform {
             referenceLookup: externalReferenceLookup
           )
         }
-      return enumerationTypeDeclaration(
+      constructedDeclaration = enumerationTypeDeclaration(
         name: name,
         cases: cases,
         accessModifier: access,
@@ -870,6 +932,11 @@ extension Platform {
         releaseOld: releaseOld
       )
     }
+    return branchedCompilation(
+      condition: nativeCondition,
+      nativeRequirements: nativeRequirements,
+      declaration: constructedDeclaration
+    )
   }
 
   static func nativeHold(
@@ -2604,15 +2671,22 @@ extension Platform {
     if action.isMemberWrapper {
       return nil
     }
+    var nativeRequirements: UniqueDeclaration?
+    var nativeCondition: String?
     if let native = nativeImplementation(of: action) {
       if isAbsorbedMember {
         return nil
       } else {
-        return source(
+        nativeRequirements = source(
           for: native.requiredDeclarations,
           referenceLookup: externalReferenceLookup,
           alreadyHandled: &alreadyHandledNativeRequirements
         ).map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
+        if let condition = native.condition {
+          nativeCondition = condition
+        } else {
+          return nativeRequirements
+        }
       }
     }
     guard !hasBeenRelocated else {
@@ -2715,7 +2789,7 @@ extension Platform {
         return "\(access)\(actionContinuationKeyword!) \(name)\(disambiguator)(\(parameters)\(extra))\(returnValue)"
       }
     )
-    return actionDeclaration(
+    let constructedDeclaration = actionDeclaration(
       name: name,
       parameters: parameters,
       returnSection: returnSection,
@@ -2730,6 +2804,15 @@ extension Platform {
       propertyInstead: isProperty,
       initializerInstead: isInitializer,
       extractedDeclarations: extractedAnonymousFunctions
+    )
+    let branched = branchedCompilation(
+      condition: nativeCondition,
+      nativeRequirements: nativeRequirements?.full,
+      declaration: constructedDeclaration.full
+    )
+    return UniqueDeclaration(
+      full: branched ?? constructedDeclaration.full,
+      uniquenessDefinition: constructedDeclaration.uniquenessDefinition
     )
   }
   static var actualFunctionImplementationSizeLimit: Int? {

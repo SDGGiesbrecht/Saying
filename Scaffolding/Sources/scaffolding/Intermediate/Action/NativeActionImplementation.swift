@@ -3,12 +3,14 @@ struct NativeActionImplementationIntermediate {
   var requiredImports: [ImportIntermediate] = []
   var indirectRequirements: [NativeRequirementImplementationIntermediate] = []
   var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
+  var condition: String?
 }
 
 extension NativeActionImplementationIntermediate {
 
   static func construct(
-    implementation: ParsedNativeAction
+    implementation: ParsedNativeAction,
+    condition: ParsedAvailabilityCondition?
   ) -> Result<NativeActionImplementationIntermediate, ErrorList<ConstructionError>> {
     var errors: [ConstructionError] = []
     let expression: NativeActionExpressionIntermediate
@@ -48,6 +50,15 @@ extension NativeActionImplementationIntermediate {
         requiredDeclarations.append(constructed)
       }
     }
+    var conditionString: String?
+    if let parsed = condition?.condition {
+      switch LiteralIntermediate.construct(literal: parsed) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+      case .success(let success):
+        conditionString = success.string
+      }
+    }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -56,7 +67,8 @@ extension NativeActionImplementationIntermediate {
         expression: expression,
         requiredImports: requiredImports,
         indirectRequirements: indirectRequirments,
-        requiredDeclarations: requiredDeclarations
+        requiredDeclarations: requiredDeclarations,
+        condition: conditionString
       )
     )
   }
@@ -71,7 +83,8 @@ extension NativeActionImplementationIntermediate {
       expression: expression.specializing(typeLookup: implementationTypeLookup),
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) }),
-      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) })
+      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) }),
+      condition: condition
     )
   }
 }

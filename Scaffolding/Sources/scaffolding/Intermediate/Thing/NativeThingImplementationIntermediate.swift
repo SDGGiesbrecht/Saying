@@ -7,6 +7,7 @@ struct NativeThingImplementationIntermediate {
   var requiredImports: [ImportIntermediate]
   var indirectRequirements: [NativeRequirementImplementationIntermediate]
   var requiredDeclarations: [NativeRequirementImplementationIntermediate]
+  var condition: String?
 
   init(
     textComponents: [UnicodeText],
@@ -16,7 +17,9 @@ struct NativeThingImplementationIntermediate {
     copy: NativeActionExpressionIntermediate?,
     requiredImports: [ImportIntermediate],
     indirectRequirements: [NativeRequirementImplementationIntermediate],
-    requiredDeclarations: [NativeRequirementImplementationIntermediate]) {
+    requiredDeclarations: [NativeRequirementImplementationIntermediate],
+    condition: String?
+  ) {
     self.textComponents = textComponents
     self.parameters = parameters
     self.hold = hold
@@ -25,13 +28,15 @@ struct NativeThingImplementationIntermediate {
     self.requiredImports = requiredImports
     self.indirectRequirements = indirectRequirements
     self.requiredDeclarations = requiredDeclarations
+    self.condition = condition
   }
 }
 
 extension NativeThingImplementationIntermediate {
 
   static func construct(
-    implementation: ParsedNativeThing
+    implementation: ParsedNativeThing,
+    condition: ParsedAvailabilityCondition?
   ) -> Result<NativeThingImplementationIntermediate, ErrorList<ConstructionError>> {
     var errors: [ConstructionError] = []
     let type: ParsedNativeThingReference
@@ -123,6 +128,15 @@ extension NativeThingImplementationIntermediate {
         requiredDeclarations.append(constructed)
       }
     }
+    var conditionString: String?
+    if let parsed = condition?.condition {
+      switch LiteralIntermediate.construct(literal: parsed) {
+      case .failure(let error):
+        errors.append(contentsOf: error.errors.map({ ConstructionError.literalError($0) }))
+      case .success(let success):
+        conditionString = success.string
+      }
+    }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
@@ -134,7 +148,8 @@ extension NativeThingImplementationIntermediate {
       copy: nativeCopy,
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirments,
-      requiredDeclarations: requiredDeclarations
+      requiredDeclarations: requiredDeclarations,
+      condition: conditionString
     ))
   }
 }
@@ -159,7 +174,8 @@ extension NativeThingImplementationIntermediate {
       copy: copy,
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
-      requiredDeclarations: requiredDeclarations.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+      requiredDeclarations: requiredDeclarations.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      condition: condition
     )
   }
 
@@ -175,7 +191,8 @@ extension NativeThingImplementationIntermediate {
       copy: copy?.specializing(typeLookup: typeLookup),
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: typeLookup) }),
-      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) })
+      requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: typeLookup) }),
+      condition: condition
     )
   }
 }
