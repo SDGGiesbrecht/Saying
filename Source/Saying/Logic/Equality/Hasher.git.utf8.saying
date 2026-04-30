@@ -12,7 +12,7 @@ thing (clients)
  {
   part (file)
    (
-    English: value
+    English: hash
    )
    hash value
    C: “”
@@ -46,9 +46,10 @@ action (unit)
  ]
  (
   English: feed (hash: hash value) into (hasher: ↓ hasher)
+  C♯: (this: [hasher]).Add (value: [hash])
  )
  C: “” hasher “ ¤(5E)= ” hash “”
- C♯: “” hasher “.Add(” hash “)” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public static class HashCodeAdd¤(A){¤(A)public static void Add<T>(this HashCode code, T value)¤(A){¤(A)code.value ¤(5E)= unchecked((uint)(value?.GetHashCode() ?? 0));¤(A)}¤(A)}¤(A)¤(23)endif”}
+ C♯: “” hasher “.Add(” hash “)” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public void Add<T>(T value)¤(A){¤(A)hash ¤(5E)= unchecked((uint)(value?.GetHashCode() ?? 0));¤(A)}¤(A)¤(23)endif”}
  JavaScript: “” hasher “ ¤(5E)= ” hash “”
  Kotlin: “” hasher “ = Objects.hash(” hasher “, ” hash “)” (“java.util”)
  Swift: “” hasher “.combine(” hash “)”
@@ -56,10 +57,11 @@ action (unit)
 action (unit)
  (
   English: final hash value from (hasher: hasher)
+  C♯: (this: [hasher]).ToHashCode
  )
  hash value
  C: “” hasher “”
- C♯: “” hasher “.ToHashCode()” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public static class HashCodeToHashCode¤(A){¤(A)public static int ToHashCode(this code HashCode)¤(A){¤(A)return unchecked((int)(code.value));¤(A)}¤(A)}¤(A)¤(23)endif”}
+ C♯: “” hasher “.ToHashCode()” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public int ToHashCode()¤(A){¤(A)return unchecked((int)(hash));¤(A)}¤(A)¤(23)endif”}
  JavaScript: “” hasher “”
  Kotlin: “” hasher “”
  Swift: “” hasher “.finalize()”
