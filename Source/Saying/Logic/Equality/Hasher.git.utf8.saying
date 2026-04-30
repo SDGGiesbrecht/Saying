@@ -6,10 +6,19 @@ thing (clients)
   ελληνικά: κατακερματιστής
  )
  C: “unsigned”
- C♯: “HashCode” (“System”) {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public struct HashCode¤(A){¤(A)private uint ¤(5F)v1;¤(A)public void Add<T>(T value)¤(A){¤(A)¤(5F)v1 ¤(5E)= unchecked((uint)(value?.GetHashCode() ?? 0));¤(A)}¤(A)public int ToHashCode()¤(A){¤(A)return unchecked((int)¤(5F)v1);¤(A)}¤(A)}¤(A)¤(23)endif”}
+ C♯ (“NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER”): “HashCode” (“System”)
  Kotlin: “Int”
  Swift: “Hasher”
  {
+  part (file)
+   (
+    English: value
+   )
+   hash value
+   C: “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
  }
 
 action (clients)
@@ -39,7 +48,7 @@ action (unit)
   English: feed (hash: hash value) into (hasher: ↓ hasher)
  )
  C: “” hasher “ ¤(5E)= ” hash “”
- C♯: “” hasher “.Add(” hash “)”
+ C♯: “” hasher “.Add(” hash “)” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public static class HashCodeAdd¤(A){¤(A)public static void Add<T>(this HashCode code, T value)¤(A){¤(A)code.value ¤(5E)= unchecked((uint)(value?.GetHashCode() ?? 0));¤(A)}¤(A)}¤(A)¤(23)endif”}
  JavaScript: “” hasher “ ¤(5E)= ” hash “”
  Kotlin: “” hasher “ = Objects.hash(” hasher “, ” hash “)” (“java.util”)
  Swift: “” hasher “.combine(” hash “)”
@@ -50,7 +59,7 @@ action (unit)
  )
  hash value
  C: “” hasher “”
- C♯: “” hasher “.ToHashCode()”
+ C♯: “” hasher “.ToHashCode()” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public static class HashCodeToHashCode¤(A){¤(A)public static int ToHashCode(this code HashCode)¤(A){¤(A)return unchecked((int)(code.value));¤(A)}¤(A)}¤(A)¤(23)endif”}
  JavaScript: “” hasher “”
  Kotlin: “” hasher “”
  Swift: “” hasher “.finalize()”
