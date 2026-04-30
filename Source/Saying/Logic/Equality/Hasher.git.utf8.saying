@@ -61,7 +61,10 @@ action (unit)
  )
  hash value
  C: “” hasher “”
- C♯: “” hasher “.ToHashCode()” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public int ToHashCode()¤(A){¤(A)return unchecked((int)(hash));¤(A)}¤(A)¤(23)endif”}
+ C♯ (“NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER”): “” hasher “.ToHashCode()”
  JavaScript: “” hasher “”
  Kotlin: “” hasher “”
  Swift: “” hasher “.finalize()”
+ {
+  ← (hash) of (hasher)
+ }
