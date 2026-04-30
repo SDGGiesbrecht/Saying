@@ -2674,19 +2674,17 @@ extension Platform {
     var nativeRequirements: UniqueDeclaration?
     var nativeCondition: String?
     if let native = nativeImplementation(of: action) {
-      if isAbsorbedMember {
-        return nil
-      } else {
+      if !isAbsorbedMember || self == CSharp.self {
         nativeRequirements = source(
           for: native.requiredDeclarations,
           referenceLookup: externalReferenceLookup,
           alreadyHandled: &alreadyHandledNativeRequirements
         ).map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
-        if let condition = native.condition {
-          nativeCondition = condition
-        } else {
-          return nativeRequirements
-        }
+      }
+      if let condition = native.condition {
+        nativeCondition = condition
+      } else {
+        return nativeRequirements
       }
     }
     guard !hasBeenRelocated else {
