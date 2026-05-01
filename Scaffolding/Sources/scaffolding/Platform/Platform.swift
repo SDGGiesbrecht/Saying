@@ -1122,6 +1122,7 @@ extension Platform {
     nativeParameter parameter: inout String,
     accordingTo details: NativeActionImplementationParameter,
     condition: (NativeActionImplementationParameter) -> Bool,
+    skipEntirelyIfIrrelevant: Bool = false,
     argument: ActionUse,
     referenceLookup: [ReferenceDictionary],
     getImplementation: (ParsedTypeReference, [ReferenceDictionary]) -> NativeActionExpressionIntermediate?,
@@ -1130,13 +1131,16 @@ extension Platform {
   ) {
     if condition(details),
       let partiallyUnwrapped = argument.resolvedResultType,
-      let parameterType = partiallyUnwrapped,
-      let implementation = getImplementation(parameterType, referenceLookup) {
-      let wrapped = apply(nativeReferenceCountingAction: implementation, around: parameter, referenceLookup: referenceLookup)
-      if delayUntilCleanUp {
-        cleanUpCode.prepend(contentsOf: statement(expression: wrapped).appending(contentsOf: "\n"))
-      } else {
-        parameter = wrapped
+      let parameterType = partiallyUnwrapped {
+      if let implementation = getImplementation(parameterType, referenceLookup) {
+        let wrapped = apply(nativeReferenceCountingAction: implementation, around: parameter, referenceLookup: referenceLookup)
+        if delayUntilCleanUp {
+          cleanUpCode.prepend(contentsOf: statement(expression: wrapped).appending(contentsOf: "\n"))
+        } else {
+          parameter = wrapped
+        }
+      } else if skipEntirelyIfIrrelevant {
+        parameter = ""
       }
     }
   }
@@ -1649,6 +1653,7 @@ extension Platform {
                   nativeParameter: &result,
                   accordingTo: parameter,
                   condition: { $0.release },
+                  skipEntirelyIfIrrelevant: true,
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
                   getImplementation: nativeRelease,
