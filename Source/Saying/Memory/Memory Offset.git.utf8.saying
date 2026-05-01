@@ -83,7 +83,7 @@ action (unit)
  Kotlin: “” first “ != ” second “”
  Swift: «» first “ != ” second „“
 
-action (file)
+action (unit)
  [
   test {ignore (direct hash value of (“0”: memory offset))}
  ]

@@ -51,53 +51,6 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (hashing proxy of (example: Unicode scalar index))}
- ]
- hashing proxy of (index: Unicode scalar index)
- platform fixed‐width integer
- C♯: “” index “”
- JavaScript: “” index “”
- Kotlin: “” index “”
- {
-  ← zero
- }
-
-action (file)
- [
-  test {
-   let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: Unicode scalar index) with (↓ hasher) by integer
-  }
- ]
- (
-  English: if most efficient, hash key (key: Unicode scalar index) with (hasher: ↓ hasher) by integer
- )
- C: “”
- Swift: “”
- {
-  hash part (hashing proxy of (key)) with (↓ hasher)
- }
-
-action (file)
- [
-  test {
-   let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: Unicode scalar index) with (↓ hasher) by beginning
-  }
- ]
- (
-  English: if most efficient, hash key (key: Unicode scalar index) with (hasher: ↓ hasher) by beginning
- )
- C♯: “”
- JavaScript: “”
- Kotlin: “”
- Swift: “”
- {
-  hash part ((beginning) of (key)) with (↓ hasher)
- }
-
 use (clients)
  comparison of (Unicode scalar index) for equality
  {
@@ -127,8 +80,7 @@ use (clients)
    hash key (key: Unicode scalar index) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    if most efficient, hash key (key) with (↓ hasher) by integer
-    if most efficient, hash key (key) with (↓ hasher) by beginning
+    hash part ((beginning) of (key)) with (↓ hasher)
    }
 
   action (unit)

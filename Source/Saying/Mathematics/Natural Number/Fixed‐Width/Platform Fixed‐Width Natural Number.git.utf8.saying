@@ -113,7 +113,7 @@ use (clients)
    hash key (key: platform fixed‐width natural number) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash part (hashing proxy of (key)) with (↓ hasher)
+    feed (direct hash value of (key)) into (↓ hasher)
    }
 
   action (unit)
@@ -137,10 +137,10 @@ use (clients)
 
 action (file)
  [
-  test {ignore (hashing proxy of (zero: platform fixed‐width natural number))}
+  test {ignore (direct hash value of (zero: platform fixed‐width natural number))}
  ]
- hashing proxy of (number: platform fixed‐width natural number)
- platform fixed‐width integer
+ direct hash value of (number: platform fixed‐width natural number)
+ hash value
  C: “(unsigned)” number “”
  C♯: “” number “.GetHashCode()”
  JavaScript: “” number “”

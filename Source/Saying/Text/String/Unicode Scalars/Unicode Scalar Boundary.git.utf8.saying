@@ -66,31 +66,31 @@ use (clients)
 
 action (file)
  [
-  test {ignore (hashing proxy of (example: Unicode scalar boundary))}
+  test {ignore (direct hash value of (example: Unicode scalar boundary))}
  ]
- hashing proxy of (boundary: Unicode scalar boundary)
- platform fixed‐width integer
+ direct hash value of (boundary: Unicode scalar boundary)
+ hash value
  C♯: “” boundary “”
  JavaScript: “” boundary “”
  Kotlin: “” boundary “”
  {
-  ← zero
+  ← empty placeholder
  }
 
 action (file)
  [
   test {
    let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: Unicode scalar boundary) with (↓ hasher) by integer
+   if most efficient, hash key (example: Unicode scalar boundary) with (↓ hasher) directly
   }
  ]
  (
-  English: if most efficient, hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher) by integer
+  English: if most efficient, hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher) directly
  )
  C: “”
  Swift: “”
  {
-  hash part (hashing proxy of (key)) with (↓ hasher)
+  feed (direct hash value of (key)) into (↓ hasher)
  }
 
 action (file)
@@ -140,7 +140,7 @@ use (clients)
    hash key (key: Unicode scalar boundary) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    if most efficient, hash key (key) with (↓ hasher) by integer
+    if most efficient, hash key (key) with (↓ hasher) directly
     if most efficient, hash key (key) with (↓ hasher) by 8‐bit
    }
 

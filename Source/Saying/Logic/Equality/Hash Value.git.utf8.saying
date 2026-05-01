@@ -11,3 +11,16 @@ use (unit)
  general use of (hash value)
  {
  }
+
+action (unit)
+ [
+  test {ignore (empty placeholder: hash value)}
+ ]
+ (
+  English: empty placeholder
+ )
+ C: “0”
+ C♯: “0”
+ JavaScript: “0”
+ Kotlin: “0”
+ Swift: “0”

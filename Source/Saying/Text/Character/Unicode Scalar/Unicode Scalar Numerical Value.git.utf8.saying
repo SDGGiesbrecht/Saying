@@ -62,10 +62,10 @@ action (unit)
 
 action (file)
  [
-  test {ignore (hashing proxy of (example: Unicode scalar numerical value))}
+  test {ignore (direct hash value of (example: Unicode scalar numerical value))}
  ]
- hashing proxy of (number: Unicode scalar numerical value)
- platform fixed‐width integer
+ direct hash value of (number: Unicode scalar numerical value)
+ hash value
  C: “(unsigned)” number “”
  C♯: “” number “.GetHashCode()”
  JavaScript: “” number “”
@@ -97,7 +97,7 @@ use (clients)
    hash key (key: Unicode scalar numerical value) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash part (hashing proxy of (key)) with (↓ hasher)
+    feed (direct hash value of (key)) into (↓ hasher)
    }
 
   action (unit)

@@ -43,52 +43,6 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (direct hash value of (example: list index))}
- ]
- direct hash value of (index: list index)
- hash value
- C: “0”
- C♯: “” index “”
- JavaScript: “” index “”
- Kotlin: “” index “”
- Swift: “” index “”
-
-action (file)
- [
-  test {
-   let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: list index) with (↓ hasher) directly
-  }
- ]
- (
-  English: if most efficient, hash key (key: list index) with (hasher: ↓ hasher) directly
- )
- C: “”
- Swift: “”
- {
-  feed (direct hash value of (key)) into (↓ hasher)
- }
-
-action (file)
- [
-  test {
-   let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: list index) with (↓ hasher) by beginning
-  }
- ]
- (
-  English: if most efficient, hash key (key: list index) with (hasher: ↓ hasher) by beginning
- )
- C♯: “”
- JavaScript: “”
- Kotlin: “”
- Swift: “”
- {
-  hash part ((beginning) of (key)) with (↓ hasher)
- }
-
 use (clients)
  comparison of (list index) for equality
  {
@@ -118,8 +72,7 @@ use (clients)
    hash key (key: list index) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    if most efficient, hash key (key) with (↓ hasher) directly
-    if most efficient, hash key (key) with (↓ hasher) by beginning
+    hash part ((beginning) of (key)) with (↓ hasher)
    }
 
   action (unit)

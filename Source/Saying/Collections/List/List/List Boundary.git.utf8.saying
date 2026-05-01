@@ -43,52 +43,6 @@ use (clients)
    }
  }
 
-action (file)
- [
-  test {ignore (direct hash value of (example: list boundary))}
- ]
- direct hash value of (boundary: list boundary)
- hash value
- C: “0”
- C♯: “” boundary “”
- JavaScript: “” boundary “”
- Kotlin: “” boundary “”
- Swift: “” boundary “”
-
-action (file)
- [
-  test {
-   let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: list boundary) with (↓ hasher) directly
-  }
- ]
- (
-  English: if most efficient, hash key (key: list boundary) with (hasher: ↓ hasher) directly
- )
- C: “”
- Swift: “”
- {
-  feed (direct hash value of (key)) into (↓ hasher)
- }
-
-action (file)
- [
-  test {
-   let (• hasher: hasher) start as (create hasher)
-   if most efficient, hash key (example: list boundary) with (↓ hasher) by offset
-  }
- ]
- (
-  English: if most efficient, hash key (key: list boundary) with (hasher: ↓ hasher) by offset
- )
- C♯: “”
- JavaScript: “”
- Kotlin: “”
- Swift: “”
- {
-  feed (direct hash value of ((offset) of (key))) into (↓ hasher)
- }
-
 use (clients)
  comparison of (list boundary) for equality
  {
@@ -118,8 +72,7 @@ use (clients)
    hash key (key: list boundary) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    if most efficient, hash key (key) with (↓ hasher) directly
-    if most efficient, hash key (key) with (↓ hasher) by offset
+    feed (direct hash value of ((offset) of (key))) into (↓ hasher)
    }
 
   action (unit)
