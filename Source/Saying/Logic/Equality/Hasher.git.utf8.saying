@@ -45,14 +45,14 @@ action (unit)
   }
  ]
  (
-  English: feed (component: hash value) into (hasher: ↓ hasher)
-  C♯: (this: [hasher]).Add (value: [component])
+  English: feed (component: hash value) into (ongoing hash: ↓ hasher)
+  C♯: (this: [ongoing hash]).Add (value: [component])
  )
- C♯ (“NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER”): “” hasher “.Add(” component “)”
- Kotlin: “” hasher “ = Objects.hash(” hasher “, ” component “)” (“java.util”)
- Swift: “” hasher “.combine(” component “)”
+ C♯ (“NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER”): “” ongoing hash “.Add(” component “)”
+ Kotlin: “” ongoing hash “ = Objects.hash(” ongoing hash “, ” component “)” (“java.util”)
+ Swift: “” ongoing hash “.combine(” component “)”
  {
-  invert bits of (component) in (↓ (hash) of (hasher))
+  invert bits of (component) in (↓ (hash) of (ongoing hash))
  }
 
 action (unit)
