@@ -25,3 +25,34 @@ action (unit)
  JavaScript: “0”
  Kotlin: “0”
  Swift: “0”
+
+action (unit)
+  test {
+   let (• bits: hash value) start as (hash value of (true))
+   invert bits of (hash value of (false)) in (↓ bits)
+  }
+ ]
+ (
+  English: invert bits of (other: hash value) in (bits: ↓ hash value)
+ )
+ C: “” bits “ ¤(5E)= ” other “”
+ C♯: “” bits “ ¤(5E)= ” other “”
+ JavaScript: “” bits “ ¤(5E)= ” other “”
+ Swift: “” bits “ ¤(5E)= ” other “”
+ {
+  change (↓ bits) to (bitwise symmetric difference between (bits) and (other))
+ }
+
+action (file)
+ [
+  test {ignore (bitwise symmetric difference between (hash value of (true)) and (hash value of (false)))}
+ ]
+ (
+  English: bitwise symmetric difference between (first: hash value) and (second: hash value)
+ )
+ hash value
+ C: “” first “ ¤(5E) ” second “”
+ C♯: “” first “ ¤(5E) ” second “”
+ JavaScript: “” first “ ¤(5E) ” second “”
+ Kotlin: “” first “ xor ” second “”
+ Swift: “” first “ ¤(5E) ” second “”
