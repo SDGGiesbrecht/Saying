@@ -15,8 +15,8 @@ thing (clients)
     English: hash
    )
    hash value
-   C: “”
-   JavaScript: “”
+   C: “” . “”
+   JavaScript: “” . “”
    Kotlin: “”
    Swift: “”
  }
