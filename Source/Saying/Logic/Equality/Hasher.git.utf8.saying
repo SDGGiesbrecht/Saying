@@ -45,14 +45,15 @@ action (unit)
   }
  ]
  (
-  English: feed (hash: hash value) into (hasher: ↓ hasher)
-  C♯: (this: [hasher]).Add (value: [hash])
+  English: feed (hash value: hash value) into (hasher: ↓ hasher)
+  C♯: (this: [hasher]).Add (value: [hash value])
  )
- C: “” hasher “ ¤(5E)= ” hash “”
- C♯: “” hasher “.Add(” hash “)” {“¤(23)if !NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER¤(A)public void Add<T>(T value)¤(A){¤(A)hash ¤(5E)= unchecked(value?.GetHashCode() ?? 0);¤(A)}¤(A)¤(23)endif”}
- JavaScript: “” hasher “ ¤(5E)= ” hash “”
- Kotlin: “” hasher “ = Objects.hash(” hasher “, ” hash “)” (“java.util”)
- Swift: “” hasher “.combine(” hash “)”
+ C♯ (“NETCOREAPP2¤(5F)1¤(5F)OR¤(5F)GREATER”): “” hasher “.Add(” hash value “)”
+ Kotlin: “” hasher “ = Objects.hash(” hasher “, ” hash value “)” (“java.util”)
+ Swift: “” hasher “.combine(” hash value “)”
+ {
+  invert bits of (hash value) in (↓ (hash) of (hasher))
+ }
 
 action (unit)
  (
