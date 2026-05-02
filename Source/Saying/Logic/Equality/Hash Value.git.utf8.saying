@@ -14,6 +14,20 @@ use (unit)
 
 action (unit)
  [
+  test {ignore (empty placeholder: hash value)}
+ ]
+ (
+  English: empty placeholder
+ )
+ hash value
+ C: “0”
+ C♯: “0”
+ JavaScript: “0”
+ Kotlin: “0”
+ Swift: “0”
+
+action (unit)
+ [
   test {
    let (• bits: hash value) start as (hash value of (true))
    invert bits of (hash value of (false)) in (↓ bits)

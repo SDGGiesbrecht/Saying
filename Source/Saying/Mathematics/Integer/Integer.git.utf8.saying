@@ -134,7 +134,7 @@ use (clients)
    hash key (key: integer) with (hasher: ↓ hasher)
    Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
-    hash part (hashing proxy of (key)) with (↓ hasher)
+    feed (direct hash value of (key)) into (↓ hasher)
    }
 
   action (unit)
@@ -158,10 +158,10 @@ use (clients)
 
 action (file)
  [
-  test {ignore (hashing proxy of (zero: integer))}
+  test {ignore (direct hash value of (zero: integer))}
  ]
- hashing proxy of (integer: integer)
- platform fixed‐width integer
+ direct hash value of (integer: integer)
+ hash value
  C: “(unsigned)” integer “”
  C♯: “” integer “.GetHashCode()”
  JavaScript: “” integer “”
