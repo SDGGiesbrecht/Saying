@@ -409,7 +409,7 @@ use (clients)
     English: entry at (index: Unicode scalar index) in (list: Unicode scalars)
    )
    Unicode scalar
-   C♯: “Rune.GetRuneAt(” list “, ” index “)”
+   C♯: “Rune.GetRuneAt(” list “, ” index “)” {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public static Rune GetRuneAt(string input, int index)¤(A){¤(A)uint returnValue = input[index];¤(A)if (0xD800U <= returnValue ¤(26)¤(26) returnValue < 0xDC00U)¤(A){¤(A)uint lowSurrogate = input[index + 1];¤(A)returnValue = (returnValue << 10) + lowSurrogate ¤(2D) ((0xD800U << 10) + 0xDC00U ¤(2D) (1 << 16));¤(A)}¤(A)return UnsafeCreate(returnValue);¤(A)}¤(A)¤(23)endif”}
    JavaScript: “” list “.codePointAt(” index “)”
    Kotlin: “” list “.codePointAt(” index “)”
    Swift: “” list “[” index “]”
