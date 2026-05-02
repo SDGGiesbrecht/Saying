@@ -578,6 +578,15 @@ extension Platform {
     return false
   }
 
+  static func nativeName(of part: PartIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
+    if let native = nativeImplementation(of: part.accessor) {
+      let expression: String = native.expression.textComponents.lazy.map({ String($0) }).joined()
+      return String(expression.drop(while: { $0 == "." }))
+    } else {
+      return nil
+    }
+  }
+
   static func declaration(
     for enumerationCase: CaseIntermediate,
     index: Int,
@@ -761,7 +770,7 @@ extension Platform {
     let constructedDeclaration: String?
     if thing.cases.isEmpty {
       let components = thing.parts.map({ part in
-        let name = sanitize(
+        let name = nativeName(of: part, referenceLookup: externalReferenceLookup) ?? sanitize(
           identifier: part.names.identifier(),
           leading: true,
           entire: true
