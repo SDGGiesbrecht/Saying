@@ -500,11 +500,11 @@ enum CSharp: Platform {
     }
     if isVirtualEquals {
       result.append(contentsOf: [
-        "\(indent)\(indent)\(extraIndent)if (!(other is \(parentType!)))",
-        "\(indent)\(indent)\(extraIndent){",
-        "\(indent)\(indent)\(indent)\(extraIndent)return false;",
-        "\(indent)\(indent)\(extraIndent)}",
-        "\(indent)\(indent)\(extraIndent)\(parentType!) obj = (\(parentType!))other;",
+        "\(indent)\(indent)if (!(other is \(parentType!)))",
+        "\(indent)\(indent){",
+        "\(indent)\(indent)\(indent)return false;",
+        "\(indent)\(indent)}",
+        "\(indent)\(indent)\(parentType!) obj = (\(parentType!))other;",
         "\(indent)\(indent)return this.Equals(obj);",
         "\(indent)}",
         "",
@@ -528,15 +528,6 @@ enum CSharp: Platform {
     result.append(contentsOf: [
       "\(indent)}",
     ])
-    if isVirtualEquals {
-      result.append(contentsOf: [
-        "",
-        "\(indent)\(access)static \(returnSection!) operator ==(\(parentType!) first, \(parentType!) second)",
-        "\(indent){",
-        "\(indent)\(indent)return first.Equals(second);",
-        "\(indent)}",
-      ])
-    }
     return UniqueDeclaration(
       full: result.joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
