@@ -579,7 +579,8 @@ extension Platform {
   }
 
   static func nativeName(of part: PartIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
-    if let native = nativeImplementation(of: part.accessor) {
+    if let native = nativeImplementation(of: part.accessor),
+      native.specifiedInSource {
       let expression: String = native.expression.textComponents.lazy.map({ String($0) }).joined()
       return String(expression.drop(while: { $0 == "." }))
     } else {

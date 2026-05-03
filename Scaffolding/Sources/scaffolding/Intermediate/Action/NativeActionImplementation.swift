@@ -4,6 +4,7 @@ struct NativeActionImplementationIntermediate {
   var indirectRequirements: [NativeRequirementImplementationIntermediate] = []
   var requiredDeclarations: [NativeRequirementImplementationIntermediate] = []
   var condition: String?
+  var specifiedInSource: Bool
 }
 
 extension NativeActionImplementationIntermediate {
@@ -68,7 +69,8 @@ extension NativeActionImplementationIntermediate {
         requiredImports: requiredImports,
         indirectRequirements: indirectRequirments,
         requiredDeclarations: requiredDeclarations,
-        condition: conditionString
+        condition: conditionString,
+        specifiedInSource: true
       )
     )
   }
@@ -84,7 +86,8 @@ extension NativeActionImplementationIntermediate {
       requiredImports: requiredImports,
       indirectRequirements: indirectRequirements.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) }),
       requiredDeclarations: requiredDeclarations.map({ $0.specializing(typeLookup: requiredDeclarationTypeLookup) }),
-      condition: condition
+      condition: condition,
+      specifiedInSource: specifiedInSource
     )
   }
 }
