@@ -794,7 +794,7 @@ extension Platform {
         })
       } else {
         constructorParameters = thing.parts.map({ part in
-          let name = sanitize(
+          let name = nativeName(of: part, referenceLookup: externalReferenceLookup) ?? sanitize(
             identifier: part.names.identifier(),
             leading: true,
             entire: true
