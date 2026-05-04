@@ -752,7 +752,7 @@ enum CSharp: Platform {
     return "()."
   }
   static var staticMemberPrefix: UnicodeText? {
-    return "static "
+    return nil
   }
   static var overridePrefix: UnicodeText? {
     return "override "
