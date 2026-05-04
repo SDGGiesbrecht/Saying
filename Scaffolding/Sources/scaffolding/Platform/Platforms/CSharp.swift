@@ -533,12 +533,12 @@ enum CSharp: Platform {
         "",
         "\(indent)\(access)static \(returnSection!) operator ==(\(parentType!) first, \(parentType!) second)",
         "\(indent){",
-        "\(indent)\(indent)first.Equals(second);",
+        "\(indent)\(indent)return first.Equals(second);",
         "\(indent)}",
         "",
         "\(indent)\(access)static \(returnSection!) operator !=(\(parentType!) first, \(parentType!) second)",
         "\(indent){",
-        "\(indent)\(indent)!(first == second);",
+        "\(indent)\(indent)return !(first == second);",
         "\(indent)}",
       ])
     }
