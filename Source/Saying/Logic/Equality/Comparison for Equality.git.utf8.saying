@@ -81,6 +81,7 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
+   C♯: “” first “ != ” second “” [“override ” thing “.Equals(” thing “)”]
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
    Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
    {

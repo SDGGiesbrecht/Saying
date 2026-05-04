@@ -528,6 +528,20 @@ enum CSharp: Platform {
     result.append(contentsOf: [
       "\(indent)}",
     ])
+    if isVirtualEquals {
+      result.append(contentsOf: [
+        "",
+        "\(indent)\(access)static \(returnSection!) operator ==(\(parentType!) first, \(parentType!) second)",
+        "\(indent){",
+        "\(indent)\(indent)first.Equals(second);",
+        "\(indent)}",
+        "",
+        "\(indent)\(access)static \(returnSection!) operator !=(\(parentType!) first, \(parentType!) second)",
+        "\(indent){",
+        "\(indent)\(indent)!(first == second);",
+        "\(indent)}",
+      ])
+    }
     return UniqueDeclaration(
       full: result.joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
@@ -738,7 +752,7 @@ enum CSharp: Platform {
     return "()."
   }
   static var staticMemberPrefix: UnicodeText? {
-    return nil
+    return "static "
   }
   static var overridePrefix: UnicodeText? {
     return "override "
