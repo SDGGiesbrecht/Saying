@@ -1,0 +1,36 @@
+name: macOS (Swift)
+
+on: [push, pull_request]
+
+jobs:
+  macOS_Swift:
+    name: macOS (Swift)
+    runs-on: macos-14
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Set up Xcode
+      shell: bash
+      run: |
+        set -x
+        sudo xcode-select -switch /Applications/Xcode_15.0.app
+        defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+        xcodebuild -version
+        swift --version
+    - name: Test
+      shell: bash
+      run: |
+        set -x
+        swift run --package-path Scaffolding scaffolding test‐swift
+    - name: Check for warnings
+      shell: bash
+      run: |
+        set -x
+        swift build --package-path .Construction/Swift --build-tests -Xswiftc -warnings-as-errors
+    - name: Check repository for changes
+      shell: bash
+      run: |
+        set -x
+        git config --global --add safe.directory '*'
+        git add . --intent-to-add
+        git diff --exit-code
