@@ -122,7 +122,7 @@ use (clients)
    (first: Unicode scalar) is not (second: Unicode scalar)
    truth value
    C: “” first “ != ” second “”
-   C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “” first “ != ” second “”
+   C♯: “” first “ != ” second “” [“override ” thing “.Equals(” thing “)”]
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
