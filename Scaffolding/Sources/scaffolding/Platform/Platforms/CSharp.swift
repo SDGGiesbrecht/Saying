@@ -528,6 +528,20 @@ enum CSharp: Platform {
     result.append(contentsOf: [
       "\(indent)}",
     ])
+    if isVirtualEquals {
+      result.append(contentsOf: [
+        "",
+        "\(indent)\(access)static \(returnSection!) operator ==(\(parentType!) first, \(parentType!) second)",
+        "\(indent){",
+        "\(indent)\(indent)return first.Equals(second);",
+        "\(indent)}",
+        "",
+        "\(indent)\(access)static \(returnSection!) operator !=(\(parentType!) first, \(parentType!) second)",
+        "\(indent){",
+        "\(indent)\(indent)return !(first == second);",
+        "\(indent)}",
+      ])
+    }
     return UniqueDeclaration(
       full: result.joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
