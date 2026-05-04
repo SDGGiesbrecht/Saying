@@ -1,4 +1,4 @@
-name: macOS
+name: macOS (Swift)
 
 on: [push, pull_request]
 
