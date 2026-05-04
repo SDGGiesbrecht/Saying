@@ -122,7 +122,7 @@ use (clients)
    (first: Unicode scalar) is not (second: Unicode scalar)
    truth value
    C: “” first “ != ” second “”
-   C♯: “” first “ != ” second “” [“override ” thing “.Equals(” thing “)”]
+   C♯: “” first “ != ” second “” [“override Rune.Equals(object)”]
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
