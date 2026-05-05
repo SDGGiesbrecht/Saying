@@ -762,13 +762,13 @@ extension Platform {
               if nativeIsStaticMember(action: action) {
                 let parentType = parentTypeOfStaticMember(nameDeclaration: String(nameDeclaration))
                 if parentType == staticMemberInferredType.map({ String($0) }) {
+                  typeToCompare = action.returnValue!
+                } else {
                   if parentType == name {
                     return true
                   } else {
                     return false
                   }
-                } else {
-                  typeToCompare = action.returnValue!
                 }
               } else {
                 typeToCompare = action.parameters.ordered(for: nameDeclaration).first!.type
