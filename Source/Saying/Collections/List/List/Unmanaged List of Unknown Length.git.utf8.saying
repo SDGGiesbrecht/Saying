@@ -102,7 +102,7 @@ extension
    (
     English: hold entry (entry: thing)
    )
-   C: “” hold on (entry) “”
+   C: “(void)” hold on (entry) “”
    {}
 
   action (file)
