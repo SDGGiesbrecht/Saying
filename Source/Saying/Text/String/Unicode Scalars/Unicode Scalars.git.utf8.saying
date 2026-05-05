@@ -546,7 +546,7 @@ action (clients)
  ]
  (
   English: (scalar: Unicode scalar) as scalars
-  C♯: (this: [scalar]).ToString
+  C♯: override (this: [scalar]).ToString
  )
  Unicode scalars
  C♯: “” scalar “.ToString()” {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public override string ToString()¤(A){¤(A)if (IsBmp)¤(A){¤(A)return ((char)¤(5F)value).ToString();¤(A)}¤(A)else¤(A){¤(A)char[] chars = {(char)((¤(5F)value + ((0xD800u ¤(2D) 0x40u) << 10)) >> 10), (char)((¤(5F)value ¤(26) 0x3FFu) + 0xDC00u)};¤(A)return new string(chars);¤(A)}¤(A)¤(23)endif”}
