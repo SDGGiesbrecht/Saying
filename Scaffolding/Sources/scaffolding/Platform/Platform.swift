@@ -540,6 +540,17 @@ extension Platform {
     return false
   }
 
+  static func nativeDeclarationIsStaticMember(declaration: UnicodeText) -> Bool {
+    if let memberInfix = staticMemberInfix {
+      let nameString = String(declaration)
+      let upToFirstArgument = nameString.prefix(upTo: "(")?.contents ?? nameString[...]
+      if upToFirstArgument.contains(String(memberInfix)) {
+        return true
+      }
+    }
+    return false
+  }
+
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
     if var name = nativeNameDeclaration(of: action) {
       if let override = overridePrefix,
@@ -557,6 +568,9 @@ extension Platform {
       if nativeDeclarationIsInitializer(declaration: name) {
         return true
       }
+      if nativeDeclarationIsStaticMember(declaration: name) {
+        return true
+      }
     }
     return false
   }
@@ -571,12 +585,8 @@ extension Platform {
          name.starts(with: variable) {
         name.removeFirst(variable.count)
       }
-      if let memberInfix = staticMemberInfix {
-        let nameString = String(name)
-        let upToFirstArgument = nameString.prefix(upTo: "(")?.contents ?? nameString[...]
-        if upToFirstArgument.contains(String(memberInfix)) {
-          return true
-        }
+      if nativeDeclarationIsStaticMember(declaration: name) {
+        return true
       }
     }
     return false
