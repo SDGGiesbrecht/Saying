@@ -50,7 +50,7 @@ extension
     English: ignore (result: thing)
     Deutsch: (Ergebnis: [result]) nicht beachten
    )
-   C: “” result “”
+   C: “(void)” result “”
    C♯: “¤(5F) = ” result “”
    JavaScript: “” result “”
    Kotlin: “” result “”
