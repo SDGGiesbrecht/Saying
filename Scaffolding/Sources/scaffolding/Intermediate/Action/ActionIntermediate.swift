@@ -227,7 +227,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -236,7 +237,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -245,7 +247,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -254,7 +257,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -263,7 +267,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       isCreation: false,
       isAccessor: true,
@@ -341,7 +346,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!, hold: true)
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -350,7 +356,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!)
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -359,7 +366,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!)
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -368,7 +376,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!)
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -377,7 +386,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("value"), origin: compilerGeneratedOrigin())!)
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       isCreation: false,
       isEnumerationValueWrapper: true,
@@ -477,7 +487,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -491,7 +502,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration case"), origin: compilerGeneratedOrigin())!, unique: true),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -505,7 +517,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!, unique: true),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -517,7 +530,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -528,7 +542,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("consequence"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       isCreation: false,
       isSpecialized: false,
@@ -579,7 +594,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       cSharp: cSharp ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -588,7 +604,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       javaScript: javaScript ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -597,7 +614,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       kotlin: kotlin ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -606,7 +624,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       swift: swift ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
@@ -615,7 +634,8 @@ extension ActionIntermediate {
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("case"), origin: compilerGeneratedOrigin())!, caseInstead: caseInstead),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("enumeration"), origin: compilerGeneratedOrigin())!),
           ]
-        )
+        ),
+        specifiedInSource: false
       ),
       isCreation: false,
       isSpecialized: false,
