@@ -678,7 +678,10 @@ enum Kotlin: Platform {
   static var memberPrefix: UnicodeText? {
     return "()."
   }
-  static var staticMemberPrefix: UnicodeText? {
+  static var staticMemberInfix: UnicodeText? {
+    return "."
+  }
+  static var staticMemberInferredType: UnicodeText? {
     return nil
   }
   static var overridePrefix: UnicodeText? {
