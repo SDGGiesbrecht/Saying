@@ -2769,7 +2769,8 @@ extension Platform {
     var parentType: String?
     var isMutating = false
     if nativeIsMember(action: action),
-       !isInitializer {
+       !isInitializer,
+       !nativeIsStaticMember(action: action) {
       let first = parameterEntries.removeFirst()
       isMutating = first.passage == .through
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
