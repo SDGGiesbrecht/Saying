@@ -60,6 +60,20 @@ action (unit)
  Kotlin: “” value “.toByte()”
  Swift: “UInt8(” value “)”
 
+action (unit)
+ [
+  test {verify (((null control code) as Unicode scalar numerical value, skipping sign extension check) is (“0000”: Unicode scalar numerical value))}
+ ]
+ (
+  English: (unit: 16‐bit Unicode code unit) as Unicode scalar numerical value, skipping sign extension check
+ )
+ Unicode scalar numerical value
+ C: “(uint¤(5F)least32¤(5F)t)” unit “”
+ C♯: “(int)” unit “”
+ JavaScript: “” unit “”
+ Kotlin: “” unit “.toInt()”
+ Swift: “UInt32(” unit “)”
+
 action (file)
  [
   test {ignore (direct hash value of (example: Unicode scalar numerical value))}
@@ -298,6 +312,16 @@ action (file)
  Kotlin: “” bits “ ushr ” distance “”
  Swift: “” bits “ >> ” distance “”
 
+action (unit)
+ (
+  English: add (addend: Unicode scalar numerical value) to (cumulative sum: ↓ Unicode scalar numerical value) skipping overflow check
+ )
+ C: “” cumulative sum “ += ” addend “”
+ C♯: “” cumulative sum “ += ” addend “”
+ JavaScript: “” cumulative sum “ += ” addend “”
+ Kotlin: “” cumulative sum “ += ” addend “”
+ Swift: “” cumulative sum “ += ” addend “”
+
 action (file)
  (
   English: (augend: Unicode scalar numerical value) plus (addend: Unicode scalar numerical value) skipping overflow check
@@ -350,6 +374,50 @@ action (file)
  JavaScript: “” dividend “ ¤(25) ” divisor “”
  Kotlin: “” dividend “ ¤(25) ” divisor “”
  Swift: “” dividend “ ¤(25) ” divisor “”
+
+action (file)
+ (
+  English: first leading surrogate
+ )
+ Unicode scalar numerical value
+ {
+  ← “D800”
+ }
+
+action (file)
+ (
+  English: last leading surrogate
+ )
+ Unicode scalar numerical value
+ {
+  ← “DBFF”
+ }
+
+action (unit)
+ [
+  test {verify ((“D800”: Unicode scalar numerical value) is leading surrogate)}
+ ]
+ (
+  English: (value: Unicode scalar numerical value) is leading surrogate
+ )
+ truth value
+ {
+  if ((value) ≥ (first leading surrogate)), {
+   if ((value) ≤ (last leading surrogate)), {
+    ← true
+   }
+  }
+  ← false
+ }
+
+action (file)
+ (
+  English: last ten bits
+ )
+ Unicode scalar numerical value
+ {
+  ← “3FF”
+ }
 
 action (file)
  (
