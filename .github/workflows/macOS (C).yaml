@@ -24,10 +24,9 @@ jobs:
         swift run --package-path Scaffolding scaffolding test‐c
     - name: Check for warnings
       shell: bash
-      with:
-        run: |
-          set -x
-          make --directory=.Construction/C check‐for‐warnings
+      run: |
+        set -x
+        make --directory=.Construction/C check‐for‐warnings
     - name: Check repository for changes
       shell: bash
       run: |
