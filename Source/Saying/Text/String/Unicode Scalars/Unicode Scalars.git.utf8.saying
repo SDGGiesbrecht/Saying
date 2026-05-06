@@ -278,6 +278,118 @@ action (file)
   }
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• scalar: Unicode scalar) start as (“ ”: Unicode scalar)
+   if most efficient, entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars) by 8‐bit, storing in (↓ scalar)
+  }
+ ]
+ (
+  English: if most efficient, entry at (index: Unicode scalar index) in (list: Unicode scalars) by 8‐bit, storing in (result: ↓ Unicode scalar)
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• beginning: list boundary) be (if possible, 8‐bit boundary at ((beginning) of (index)))
+  let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
+  let (• first: 8‐bit Unicode code unit) be (entry after (beginning) in (8‐bit) skipping bounds check)
+  if ((first) is single‐byte scalar), {
+   change (↓ result) to (Unicode scalar with value ((first) as Unicode scalar numerical value, skipping sign extension check) skipping validity check)
+   ←
+  }
+  let (• mask: byte) start as (“0000 0000”: byte)
+  let (• pending: platform fixed‐width natural number) start as (“0”: platform fixed‐width natural number)
+  if ((first) starts two‐byte scalar), {
+   change (↓ mask) to (“0001 1111”: byte)
+   change (↓ pending) to (“1”: platform fixed‐width natural number)
+  }, otherwise {
+   if ((first) starts three‐byte scalar), {
+    change (↓ mask) to (“0000 1111”: byte)
+    change (↓ pending) to (“2”: platform fixed‐width natural number)
+   }, otherwise {
+    if ((first) starts four‐byte scalar), {
+     change (↓ mask) to (“0000 0111”: byte)
+     change (↓ pending) to (“3”: platform fixed‐width natural number)
+    }
+   }
+  }
+  let (• value: Unicode scalar numerical value) start as ((bitwise intersection of ((first) as byte) and (mask)) as Unicode scalar numerical value, skipping sign extension check)
+  let (• cursor: list boundary) start as (beginning)
+  while ((pending) > (“0”: platform fixed‐width natural number)), {
+   decrement (↓ pending) skipping underflow check
+   advance (↓ cursor) to next in (8‐bit) skipping bounds check
+   shift bits of (↓ value) left (“6”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+   engage bits of ((bitwise intersection of ((entry after (cursor) in (8‐bit) skipping bounds check) as byte) and (“0011 1111”: byte)) as Unicode scalar numerical value, skipping sign extension check) in (↓ value)
+  }
+  change (↓ result) to (Unicode scalar with value (value) skipping validity check)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   ignore (if possible, 16‐bit unit at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars))
+  }
+ ]
+ (
+  English: if possible, 16‐bit unit at (index: Unicode scalar index) in (scalars: Unicode scalars)
+ )
+ 16‐bit Unicode code unit
+ C♯: “” scalars “[” index “]”
+ JavaScript: “” scalars “[” index “]”
+ Kotlin: “” scalars “[” index “]”
+ {
+  ← (“0000”: Unicode scalar numerical value) as single 16‐bit Unicode code unit, skipping validity check
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“”: Unicode scalars)
+   ignore (if possible, (index after (beginning of (scalars)) in (scalars) skipping bounds check) offset by (“0”: platform fixed‐width integer) 16‐bit units, skipping bounds check)
+  }
+ ]
+ (
+  English: if possible, (index: Unicode scalar index) offset by (offset: platform fixed‐width integer) 16‐bit units, skipping bounds check
+ )
+ Unicode scalar index
+ C♯: “” index “ + ” offset “”
+ JavaScript: “” index “ + ” offset “”
+ Kotlin: “” index “ + ” offset “”
+ {
+  ← index
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• scalar: Unicode scalar) start as (“ ”: Unicode scalar)
+   if most efficient, entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars) by 16‐bit, storing in (↓ scalar)
+  }
+ ]
+ (
+  English: if most efficient, entry at (index: Unicode scalar index) in (list: Unicode scalars) by 16‐bit, storing in (result: ↓ Unicode scalar)
+ )
+ C: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “”
+ {
+  let (• value: Unicode scalar numerical value) start as ((if possible, 16‐bit unit at (index) in (list)) as Unicode scalar numerical value, skipping sign extension check)
+  if ((value) is leading surrogate), {
+   disable all but bits of (last ten bits) in (↓ value)
+   add (“40”: Unicode scalar numerical value) to (↓ value) skipping overflow check
+   shift bits of (↓ value) left (“A”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+   engage bits of (bitwise intersection of ((if possible, 16‐bit unit at (if possible, (index) offset by (“1”: platform fixed‐width integer) 16‐bit units, skipping bounds check) in (list)) as Unicode scalar numerical value, skipping sign extension check) and (last ten bits)) in (↓ value)
+  }
+  change (↓ result) to (Unicode scalar with value (value) skipping validity check)
+ }
+
 use (clients)
  use of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
@@ -410,42 +522,15 @@ use (clients)
     C♯: Rune.GetRuneAt (input: [list]) (index: [index])
    )
    Unicode scalar
-   C♯: “Rune.GetRuneAt(” list “, ” index “)” {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public static Rune GetRuneAt(string input, int index)¤(A){¤(A)uint returnValue = input[index];¤(A)if (0xD800U <= returnValue ¤(26)¤(26) returnValue < 0xDC00U)¤(A){¤(A)uint lowSurrogate = input[index + 1];¤(A)returnValue = (returnValue << 10) + lowSurrogate ¤(2D) ((0xD800U << 10) + 0xDC00U ¤(2D) (1 << 16));¤(A)}¤(A)return new Rune((int)returnValue);¤(A)}¤(A)¤(23)endif”}
+   C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “Rune.GetRuneAt(” list “, ” index “)”
    JavaScript: “” list “.codePointAt(” index “)”
    Kotlin: “” list “.codePointAt(” index “)”
    Swift: “” list “[” index “]”
    {
-    let (• beginning: list boundary) be (if possible, 8‐bit boundary at ((beginning) of (index)))
-    let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
-    let (• first: 8‐bit Unicode code unit) be (entry after (beginning) in (8‐bit) skipping bounds check)
-    if ((first) is single‐byte scalar), {
-     ← Unicode scalar with value ((first) as Unicode scalar numerical value, skipping sign extension check) skipping validity check
-    }
-    let (• mask: byte) start as (“0000 0000”: byte)
-    let (• pending: platform fixed‐width natural number) start as (“0”: platform fixed‐width natural number)
-    if ((first) starts two‐byte scalar), {
-     change (↓ mask) to (“0001 1111”: byte)
-     change (↓ pending) to (“1”: platform fixed‐width natural number)
-    }, otherwise {
-     if ((first) starts three‐byte scalar), {
-      change (↓ mask) to (“0000 1111”: byte)
-      change (↓ pending) to (“2”: platform fixed‐width natural number)
-     }, otherwise {
-      if ((first) starts four‐byte scalar), {
-       change (↓ mask) to (“0000 0111”: byte)
-       change (↓ pending) to (“3”: platform fixed‐width natural number)
-      }
-     }
-    }
-    let (• value: Unicode scalar numerical value) start as ((bitwise intersection of ((first) as byte) and (mask)) as Unicode scalar numerical value, skipping sign extension check)
-    let (• cursor: list boundary) start as (beginning)
-    while ((pending) > (“0”: platform fixed‐width natural number)), {
-     decrement (↓ pending) skipping underflow check
-     advance (↓ cursor) to next in (8‐bit) skipping bounds check
-     shift bits of (↓ value) left (“6”: Unicode scalar numerical value), skipping overflow and excessive distance checks
-     engage bits of ((bitwise intersection of ((entry after (cursor) in (8‐bit) skipping bounds check) as byte) and (“0011 1111”: byte)) as Unicode scalar numerical value, skipping sign extension check) in (↓ value)
-    }
-    ← Unicode scalar with value (value) skipping validity check
+    let (• result: Unicode scalar) start as (“¤(0)”: Unicode scalar)
+    if most efficient, entry at (index) in (list) by 8‐bit, storing in (↓ result)
+    if most efficient, entry at (index) in (list) by 16‐bit, storing in (↓ result)
+    ← result
    }
 
   action (clients)
