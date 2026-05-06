@@ -200,7 +200,8 @@ protocol Platform {
   static var emptyParameterLabel: UnicodeText { get }
   static var parameterLabelSuffix: UnicodeText { get }
   static var memberPrefix: UnicodeText? { get }
-  static var staticMemberPrefix: UnicodeText? { get }
+  static var staticMemberInfix: UnicodeText? { get }
+  static var staticMemberInferredType: UnicodeText? { get }
   static var overridePrefix: UnicodeText? { get }
   static var variablePrefix: UnicodeText? { get }
   static var initializerSuffix: UnicodeText? { get }
@@ -539,6 +540,17 @@ extension Platform {
     return false
   }
 
+  static func nativeDeclarationIsStaticMember(declaration: UnicodeText) -> Bool {
+    if let memberInfix = staticMemberInfix {
+      let nameString = String(declaration)
+      let upToFirstArgument = nameString.prefix(upTo: "(")?.contents ?? nameString[...]
+      if upToFirstArgument.contains(String(memberInfix)) {
+        return true
+      }
+    }
+    return false
+  }
+
   static func nativeIsMember(action: ActionIntermediate) -> Bool {
     if var name = nativeNameDeclaration(of: action) {
       if let override = overridePrefix,
@@ -556,6 +568,9 @@ extension Platform {
       if nativeDeclarationIsInitializer(declaration: name) {
         return true
       }
+      if nativeDeclarationIsStaticMember(declaration: name) {
+        return true
+      }
     }
     return false
   }
@@ -570,12 +585,17 @@ extension Platform {
          name.starts(with: variable) {
         name.removeFirst(variable.count)
       }
-      if let member = staticMemberPrefix,
-        name.starts(with: member) {
+      if nativeDeclarationIsStaticMember(declaration: name) {
         return true
       }
     }
     return false
+  }
+
+  static func parentTypeOfStaticMember(nameDeclaration: String) -> String {
+    let indicatedTypeSeparator = nameDeclaration.indices
+      .first(where: { nameDeclaration[$0...].starts(with: String(staticMemberInfix!)) })!
+    return String(nameDeclaration[..<indicatedTypeSeparator])
   }
 
   static func nativeName(of part: PartIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
@@ -738,7 +758,21 @@ extension Platform {
             if nativeIsInitializer(action: action) {
               typeToCompare = action.returnValue!
             } else {
-              typeToCompare = action.parameters.ordered(for: nativeNameDeclaration(of: action)!).first!.type
+              let nameDeclaration = nativeNameDeclaration(of: action)!
+              if nativeIsStaticMember(action: action) {
+                let parentType = parentTypeOfStaticMember(nameDeclaration: String(nameDeclaration))
+                if parentType == staticMemberInferredType.map({ String($0) }) {
+                  typeToCompare = action.returnValue!
+                } else {
+                  if parentType == name {
+                    return true
+                  } else {
+                    return false
+                  }
+                }
+              } else {
+                typeToCompare = action.parameters.ordered(for: nameDeclaration).first!.type
+              }
             }
             if name == source(
               for: typeToCompare,
@@ -2007,7 +2041,11 @@ extension Platform {
             if nativeIsInitializer(action: action) {
               modifiedName = source(for: action.returnValue!, referenceLookup: referenceLookup)
             } else if nativeIsStaticMember(action: action) {
-              modifiedName.unicodeScalars.removeFirst(staticMemberPrefix!.count - 1)
+              if let inference = staticMemberInferredType {
+                if modifiedName.unicodeScalars.starts(with: inference) {
+                  modifiedName.unicodeScalars.removeFirst(inference.count)
+                }
+              }
             } else if nativeIsMember(action: action) {
               let first = argumentsArray.removeFirst()
               result.append(contentsOf: first)
@@ -2731,7 +2769,8 @@ extension Platform {
     var parentType: String?
     var isMutating = false
     if nativeIsMember(action: action),
-       !isInitializer {
+       !isInitializer,
+       !nativeIsStaticMember(action: action) {
       let first = parameterEntries.removeFirst()
       isMutating = first.passage == .through
       parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
@@ -2757,8 +2796,14 @@ extension Platform {
     }
     var isStatic = false
     if nativeIsStaticMember(action: action) {
-      name.unicodeScalars.removeFirst(staticMemberPrefix!.count)
-      parentType = returnValue
+      let indicatedType = parentTypeOfStaticMember(nameDeclaration: name)
+      name.unicodeScalars.removeFirst(indicatedType.count)
+      name.unicodeScalars.removeFirst(staticMemberInfix!.count)
+      if indicatedType == staticMemberInferredType.map({ String($0) }) {
+        parentType = returnValue
+      } else {
+        parentType = indicatedType
+      }
       isStatic = true
     }
 

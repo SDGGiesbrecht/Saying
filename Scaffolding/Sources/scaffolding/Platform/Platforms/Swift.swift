@@ -810,8 +810,11 @@ enum Swift: Platform {
   static var memberPrefix: UnicodeText? {
     return "()."
   }
-  static var staticMemberPrefix: UnicodeText? {
-    return "Self."
+  static var staticMemberInfix: UnicodeText? {
+    return "."
+  }
+  static var staticMemberInferredType: UnicodeText? {
+    return "Self"
   }
   static var overridePrefix: UnicodeText? {
     return nil
