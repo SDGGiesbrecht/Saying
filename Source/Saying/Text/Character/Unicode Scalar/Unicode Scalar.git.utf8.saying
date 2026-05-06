@@ -15,7 +15,7 @@ thing (clients)
    “uchar” (“!¤(5F)¤(5F)APPLE¤(5F)¤(5F)”)
    “stdint”
   ) {“¤(23)if ¤(5F)¤(5F)APPLE¤(5F)¤(5F)¤(A)typedef uint¤(5F)least32¤(5F)t char32¤(5F)t;¤(A)¤(23)endif”}
- C♯: “Rune” (“System.Text”) {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public readonly struct Rune¤(A){¤(A)internal const int MaxUtf16CharsPerRune = 2;¤(A)private readonly uint ¤(5F)value;¤(A)public Rune(int value)¤(A): this((uint)value)¤(A){¤(A)}¤(A)public Rune(uint value)¤(A){¤(A)¤(5F)value = value;¤(A)}¤(A)private Rune(uint scalarValue, bool ¤(5F))¤(A){¤(A)¤(5F)value = scalarValue;¤(A)}¤(A)public static bool operator ==(Rune left, Rune right) => left.¤(5F)value == right.¤(5F)value;¤(A)public static bool operator !=(Rune left, Rune right) => left.¤(5F)value != right.¤(5F)value;¤(A)public bool IsBmp => ¤(5F)value <= 0xFFFFu;¤(A)public int Value => (int)¤(5F)value;¤(A)public override bool Equals(object obj) => (obj is Rune other) ¤(26)¤(26) Equals(other);¤(A)public override int GetHashCode() => Value;¤(A)internal static Rune UnsafeCreate(uint scalarValue) => new Rune(scalarValue, false);¤(A)public static Rune GetRuneAt(string input, int index)¤(A){¤(A)uint returnValue = input[index];¤(A)if (0xD800U <= returnValue ¤(26)¤(26) returnValue < 0xDC00U)¤(A){¤(A)uint lowSurrogate = input[index + 1];¤(A)returnValue = (returnValue << 10) + lowSurrogate ¤(2D) ((0xD800U << 10) + 0xDC00U ¤(2D) (1 << 16));¤(A)}¤(A)return UnsafeCreate(returnValue);¤(A)}¤(A)public override string ToString()¤(A){¤(A)if (IsBmp)¤(A){¤(A)return ((char)¤(5F)value).ToString();¤(A)}¤(A)else¤(A){¤(A)char[] chars = {(char)((¤(5F)value + ((0xD800u ¤(2D) 0x40u) << 10)) >> 10), (char)((¤(5F)value ¤(26) 0x3FFu) + 0xDC00u)};¤(A)return new string(chars);¤(A)}¤(A)}¤(A)}¤(A)¤(23)endif”}
+ C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “Rune” (“System.Text”)
  Kotlin: “Int”
  Swift: “Unicode.Scalar”
  {
@@ -25,7 +25,7 @@ thing (clients)
    )
    Unicode scalar numerical value
    C: “(uint¤(5F)least32¤(5F)t)” . “” (“stdint”)
-   C♯: “” . “.Value”
+   C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “” . “.Value”
    JavaScript: “” . “”
    Kotlin: “” . “”
    Swift: “(” . “).value”
@@ -110,19 +110,25 @@ use (clients)
    (first: Unicode scalar) is (second: Unicode scalar)
    truth value
    C: “” first “ == ” second “”
-   C♯: “” first “ == ” second “”
+   C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “” first “ == ” second “”
    JavaScript: “” first “ == ” second “”
    Kotlin: “” first “ == ” second “”
    Swift: «» first “ == ” second „“
+   {
+    ← ((numerical value) of (first)) is ((numerical value) of (second))
+   }
 
   action (clients)
    (first: Unicode scalar) is not (second: Unicode scalar)
    truth value
    C: “” first “ != ” second “”
-   C♯: “” first “ != ” second “”
+   C♯: “” first “ != ” second “” [“override Rune.Equals(object)”]
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
    Swift: «» first “ != ” second „“
+   {
+    ← (first) is not (second) according to default comparison for equality
+   }
 
   action (clients)
    hash key (key: Unicode scalar) with (hasher: ↓ hasher)
@@ -136,7 +142,7 @@ use (clients)
     English: hash value of (key: Unicode scalar)
    )
    hash value
-   C♯: “” key “.GetHashCode()”
+   C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “” key “.GetHashCode()”
    Kotlin: “” key “.hashCode()”
    {
     ← hash value of (key) according to default comparison for equality

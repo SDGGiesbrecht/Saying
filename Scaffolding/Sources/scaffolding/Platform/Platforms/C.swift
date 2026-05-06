@@ -844,7 +844,10 @@ enum C: Platform {
   static var memberPrefix: UnicodeText? {
     return nil
   }
-  static var staticMemberPrefix: UnicodeText? {
+  static var staticMemberInfix: UnicodeText? {
+    return nil
+  }
+  static var staticMemberInferredType: UnicodeText? {
     return nil
   }
   static var overridePrefix: UnicodeText? {
