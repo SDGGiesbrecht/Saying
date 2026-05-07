@@ -640,7 +640,6 @@ action (file)
  (
   English: if most efficient, append (scalar: Unicode scalar) to (scalars: ↓ Unicode scalars) directly
  )
- C: “”
  C♯: “”
  JavaScript: “”
  Swift: “”
