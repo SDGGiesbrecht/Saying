@@ -339,6 +339,22 @@ action (file)
  Kotlin: “” augend “ + ” addend “”
  Swift: “” augend “ ¤(26)+ ” addend “”
 
+action (unit)
+ [
+  test {
+   let (• value: Unicode scalar numerical value) start as (“0000”: Unicode scalar numerical value)
+   add (“0000”: Unicode scalar numerical value) to (↓ value) skipping overflow check
+  }
+ ]
+ (
+  English: subtract (subtrahend: Unicode scalar numerical value) from (value: ↓ Unicode scalar numerical value) skipping overflow check
+ )
+ C: “” value “ ¤(2D)= ” subtrahend “”
+ C♯: “” value “ ¤(2D)= ” subtrahend “”
+ JavaScript: “” value “ ¤(2D)= ” subtrahend “”
+ Kotlin: “” value “ ¤(2D)= ” subtrahend “”
+ Swift: “” value “ ¤(2D)= ” subtrahend “”
+
 action (file)
  (
   English: (minuend: Unicode scalar numerical value) minus (subtrahend: Unicode scalar numerical value) skipping overflow check
@@ -381,7 +397,16 @@ action (file)
  Kotlin: “” dividend “ ¤(25) ” divisor “”
  Swift: “” dividend “ ¤(25) ” divisor “”
 
-action (file)
+action (unit)
+ (
+  English: (value: Unicode scalar numerical value) is on Basic Multilingual Plane
+ )
+ truth value
+ {
+  ← (value) < (“10000”: Unicode scalar numerical value)
+ }
+
+action (unit)
  (
   English: first leading surrogate
  )
@@ -397,6 +422,18 @@ action (file)
  Unicode scalar numerical value
  {
   ← “DBFF”
+ }
+
+action (unit)
+ [
+  test {ignore (first trailing surrogate)}
+ ]
+ (
+  English: first trailing surrogate
+ )
+ Unicode scalar numerical value
+ {
+  ← “DC00”
  }
 
 action (unit)
@@ -417,6 +454,18 @@ action (unit)
   ← false
  }
 
+action (unit)
+ [
+  test {ignore (ten)}
+ ]
+ (
+  English: ten
+ )
+ Unicode scalar numerical value
+ {
+  ← “A”
+ }
+
 action (file)
  [
   test {ignore (last ten bits)}
@@ -427,6 +476,18 @@ action (file)
  Unicode scalar numerical value
  {
   ← “3FF”
+ }
+
+action (unit)
+ [
+  test {ignore (seventh bit)}
+ ]
+ (
+  English: seventh bit
+ )
+ Unicode scalar numerical value
+ {
+  ← “40”
  }
 
 action (file)

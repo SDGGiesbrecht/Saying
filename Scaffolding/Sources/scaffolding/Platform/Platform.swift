@@ -2731,7 +2731,7 @@ extension Platform {
     var nativeRequirements: UniqueDeclaration?
     var nativeCondition: String?
     if let native = nativeImplementation(of: action) {
-      if !isAbsorbedMember || self == CSharp.self {
+      if !isAbsorbedMember {
         nativeRequirements = source(
           for: native.requiredDeclarations,
           referenceLookup: externalReferenceLookup,
