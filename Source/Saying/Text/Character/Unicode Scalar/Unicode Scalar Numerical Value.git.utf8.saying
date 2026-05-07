@@ -343,7 +343,7 @@ action (unit)
  [
   test {
    let (• value: Unicode scalar numerical value) start as (“0000”: Unicode scalar numerical value)
-   add (“0000”: Unicode scalar numerical value) to (↓ value) skipping overflow check
+   subtract (“0000”: Unicode scalar numerical value) from (↓ value) skipping overflow check
   }
  ]
  (
@@ -398,6 +398,10 @@ action (file)
  Swift: “” dividend “ ¤(25) ” divisor “”
 
 action (unit)
+ [
+  test {verify ((“FFFF”: Unicode scalar numerical value) is on Basic Multilingual Plane)}
+  test {verify (not ((“10000”: Unicode scalar numerical value) is on Basic Multilingual Plane))}
+ ]
  (
   English: (value: Unicode scalar numerical value) is on Basic Multilingual Plane
  )
