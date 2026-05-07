@@ -1,0 +1,32 @@
+thing (clients)
+ (
+  English: 16‐bit Unicode code unit
+ )
+ C: “char16¤(5F)t” (
+   “uchar” (“!¤(5F)¤(5F)APPLE¤(5F)¤(5F)”)
+   “stdint”
+  ) {“¤(23)if ¤(5F)¤(5F)APPLE¤(5F)¤(5F)¤(A)typedef uint¤(5F)least16¤(5F)t char16¤(5F)t;¤(A)¤(23)endif”}
+ C♯: “char”
+ Kotlin: “Char”
+ Swift: “UInt16”
+ {
+ }
+
+action (unit)
+ [
+  test {ignore ((“0000”: Unicode scalar numerical value) as single 16‐bit Unicode code unit, skipping validity check)}
+ ]
+ (
+  English: (value: Unicode scalar numerical value) as single 16‐bit Unicode code unit, skipping validity check
+ )
+ 16‐bit Unicode code unit
+ C: “(char16¤(5F)t)” value “”
+ C♯: “(char)” value “”
+ JavaScript: “” value “”
+ Kotlin: “” value “.toChar()”
+ Swift: “UInt16(” value “)”
+
+use (clients)
+ general use of (16‐bit Unicode code unit)
+ {
+ }

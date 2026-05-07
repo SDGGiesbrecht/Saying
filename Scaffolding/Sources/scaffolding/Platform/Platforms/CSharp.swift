@@ -484,7 +484,7 @@ enum CSharp: Platform {
       isVirtualEquals = true
       adjustedParameters = "object other"
     }
-    let staticKeyword = isAbsorbedMember ? "" : "static "
+    let staticKeyword = isAbsorbedMember && !isStatic ? "" : "static "
     let parametersSection = propertyInstead ? "" : "(\(adjustedParameters))"
     var result: [String] = [
       "\(indent)\(access)\(override)\(staticKeyword)\(returnSection!) \(name)\(parametersSection)",
