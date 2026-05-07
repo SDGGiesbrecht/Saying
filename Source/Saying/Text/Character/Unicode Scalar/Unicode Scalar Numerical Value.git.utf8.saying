@@ -62,7 +62,7 @@ action (unit)
 
 action (unit)
  [
-  test {verify (((null control code) as Unicode scalar numerical value, skipping sign extension check) is (“0000”: Unicode scalar numerical value))}
+  test {verify ((((“0000”: Unicode scalar numerical value) as single 16‐bit Unicode code unit, skipping validity check) as Unicode scalar numerical value, skipping sign extension check) is (“0000”: Unicode scalar numerical value))}
  ]
  (
   English: (unit: 16‐bit Unicode code unit) as Unicode scalar numerical value, skipping sign extension check
@@ -313,6 +313,12 @@ action (file)
  Swift: “” bits “ >> ” distance “”
 
 action (unit)
+ [
+  test {
+   let (• value: Unicode scalar numerical value) start as (“0000”: Unicode scalar numerical value)
+   add (“0000”: Unicode scalar numerical value) to (↓ value) skipping overflow check
+  }
+ ]
  (
   English: add (addend: Unicode scalar numerical value) to (cumulative sum: ↓ Unicode scalar numerical value) skipping overflow check
  )
@@ -396,6 +402,7 @@ action (file)
 action (unit)
  [
   test {verify ((“D800”: Unicode scalar numerical value) is leading surrogate)}
+  test {verify (not ((“DC00”: Unicode scalar numerical value) is leading surrogate))}
  ]
  (
   English: (value: Unicode scalar numerical value) is leading surrogate
@@ -411,6 +418,9 @@ action (unit)
  }
 
 action (file)
+ [
+  test {ignore (last ten bits)}
+ ]
  (
   English: last ten bits
  )
