@@ -71,7 +71,7 @@ action (unit)
  C: “(uint¤(5F)least32¤(5F)t)” unit “”
  C♯: “(int)” unit “”
  JavaScript: “” unit “”
- Kotlin: “” unit “.toInt()”
+ Kotlin: “” unit “.code”
  Swift: “UInt32(” unit “)”
 
 action (file)
