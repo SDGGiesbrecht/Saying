@@ -694,8 +694,8 @@ enum Swift: Platform {
     result.append(contentsOf: [
       "\(indent)var anyRemaining = false",
       "\(indent)for region in coverageRegions {",
-      "\(indent)\(indent)if let remaning = region {",
-      "\(indent)\(indent)\(indent)print(remaning)",
+      "\(indent)\(indent)if let remaining = region {",
+      "\(indent)\(indent)\(indent)print(remaining)",
       "\(indent)\(indent)\(indent)anyRemaining = true",
       "\(indent)\(indent)}",
       "\(indent)}",
