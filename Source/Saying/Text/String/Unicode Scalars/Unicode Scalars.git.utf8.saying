@@ -371,6 +371,11 @@ action (file)
    let (• scalar: Unicode scalar) start as (“ ”: Unicode scalar)
    if most efficient, entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars) by 16‐bit, storing in (↓ scalar)
   }
+  test {
+   let (• scalars: Unicode scalars) be (“¤(10000)”: Unicode scalars)
+   let (• scalar: Unicode scalar) start as (“ ”: Unicode scalar)
+   if most efficient, entry at (index after (beginning of (scalars)) in (scalars) skipping bounds check) in (scalars) by 16‐bit, storing in (↓ scalar)
+  }
  ]
  (
   English: if most efficient, entry at (index: Unicode scalar index) in (list: Unicode scalars) by 16‐bit, storing in (result: ↓ Unicode scalar)
