@@ -388,8 +388,8 @@ action (file)
   let (• value: Unicode scalar numerical value) start as ((if possible, 16‐bit unit at (index) in (list)) as Unicode scalar numerical value, skipping sign extension check)
   if ((value) is leading surrogate), {
    disable all but bits of (last ten bits) in (↓ value)
-   add (“40”: Unicode scalar numerical value) to (↓ value) skipping overflow check
-   shift bits of (↓ value) left (“A”: Unicode scalar numerical value), skipping overflow and excessive distance checks
+   add (seventh bit) to (↓ value) skipping overflow check
+   shift bits of (↓ value) left (ten), skipping overflow and excessive distance checks
    engage bits of (bitwise intersection of ((if possible, 16‐bit unit at (if possible, (index) offset by (“1”: platform fixed‐width integer) 16‐bit units, skipping bounds check) in (list)) as Unicode scalar numerical value, skipping sign extension check) and (last ten bits)) in (↓ value)
   }
   change (↓ result) to (Unicode scalar with value (value) skipping validity check)
@@ -630,6 +630,70 @@ action (clients)
   ← (beginning) of (index)
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (“ ”: Unicode scalar) to (↓ scalars) directly
+  }
+ ]
+ (
+  English: if most efficient, append (scalar: Unicode scalar) to (scalars: ↓ Unicode scalars) directly
+ )
+ C♯: “”
+ JavaScript: “”
+ Swift: “”
+ {
+  append (scalar) to (↓ scalars)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if possible, append ((“0000”: Unicode scalar numerical value) as single 16‐bit Unicode code unit, skipping validity check) to (↓ scalars)
+  }
+ ]
+ (
+  English: if possible, append (unit: 16‐bit Unicode code unit) to (scalars: ↓ Unicode scalars)
+ )
+ C♯: “” scalars “ += ” unit “”
+ Kotlin: “” scalars “ += ” unit “”
+ {}
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (“ ”: Unicode scalar) to (↓ scalars) by 16‐bit
+  }
+  test {
+   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, append (“¤(10000)”: Unicode scalar) to (↓ scalars) by 16‐bit
+  }
+ ]
+ (
+  English: if most efficient, append (scalar: Unicode scalar) to (scalars: ↓ Unicode scalars) by 16‐bit
+ )
+ C: “”
+ Kotlin: “”
+ JavaScript: “”
+ Swift: “”
+ {
+  let (• value: Unicode scalar numerical value) start as ((numerical value) of (scalar))
+  if ((value) is on Basic Multilingual Plane), {
+   if possible, append ((value) as single 16‐bit Unicode code unit, skipping validity check) to (↓ scalars)
+   ←
+  }
+  let (• trailing surrogate: Unicode scalar numerical value) start as (bitwise intersection of (value) and (last ten bits))
+  shift bits of (↓ value) right (ten), skipping sign and excessive distance checks
+  subtract (seventh bit) from (↓ value) skipping overflow check
+  engage bits of (first leading surrogate) in (↓ value)
+  if possible, append ((value) as single 16‐bit Unicode code unit, skipping validity check) to (↓ scalars)
+  engage bits of (first trailing surrogate) in (↓ trailing surrogate)
+  if possible, append ((trailing surrogate) as single 16‐bit Unicode code unit, skipping validity check) to (↓ scalars)
+ }
+
 action (clients)
  [
   test {verify (((“ ”: Unicode scalar) as scalars) is (“ ”: Unicode scalars))}
@@ -639,12 +703,13 @@ action (clients)
   C♯: override (this: [scalar]).ToString
  )
  Unicode scalars
- C♯: “” scalar “.ToString()” {“¤(23)if !NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER¤(A)public override string ToString()¤(A){¤(A)if (Value <= 0xFFFFu)¤(A){¤(A)return ((char)Value).ToString();¤(A)}¤(A)else¤(A){¤(A)char[] chars = {(char)((Value + ((0xD800u ¤(2D) 0x40u) << 10)) >> 10), (char)((Value ¤(26) 0x3FFu) + 0xDC00u)};¤(A)return new string(chars);¤(A)}¤(A)}¤(A)¤(23)endif”}
+ C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “” scalar “.ToString()”
  JavaScript: “String.fromCodePoint(” scalar “)”
  Swift: “String(” scalar “).unicodeScalars”
  {
   let (• scalars: Unicode scalars) start as (empty: Unicode scalars)
-  append (scalar) to (↓ scalars)
+  if most efficient, append (scalar) to (↓ scalars) directly
+  if most efficient, append (scalar) to (↓ scalars) by 16‐bit
   ← scalars
  }
 
