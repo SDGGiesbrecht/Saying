@@ -26,6 +26,29 @@ flow (clients)
  [
   test {
    let (• value: truth value) start as (true)
+   while ({
+     ← value
+   }: → truth value), {
+    change (↓ value) to (false)
+   }
+  }
+ ]
+ (
+  English: while (condition: → truth value), (consequence: {})
+  Deutsch: solange (Bedingung: [condition]), (Folge: [consequence])
+  français : tant que (condition: [condition]), (conséquence: [consequence])
+  ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
+ )
+ C: “while (” condition “()) {” consequence “}”
+ C♯: “while (” condition “()) {” consequence “}”
+ JavaScript: “while (” condition “()) {” consequence “}”
+ Kotlin: “while (” condition “()) {” consequence “}”
+ Swift: “while (” condition “()) {” consequence “}”
+
+flow (clients)
+ [
+  test {
+   let (• value: truth value) start as (true)
    while (value), {
     change (↓ value) to (false)
    }
