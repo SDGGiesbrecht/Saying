@@ -559,7 +559,8 @@ enum Swift: Platform {
     parameters: String,
     parameterTypes: String,
     returnType: String?,
-    implementation: [String]
+    implementation: [String],
+    inlined: Bool
   ) -> String {
     var closure = [
       "{ (\(parameters)) -> \(returnType ?? emptyReturnTypeForActionType) in",

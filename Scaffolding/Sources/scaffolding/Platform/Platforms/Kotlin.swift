@@ -442,7 +442,8 @@ enum Kotlin: Platform {
     parameters: String,
     parameterTypes: String,
     returnType: String?,
-    implementation: [String]
+    implementation: [String],
+    inlined: Bool
   ) -> String {
     var returnSection = ""
     if let type = returnType,

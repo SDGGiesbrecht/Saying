@@ -632,7 +632,8 @@ enum C: Platform {
     parameters: String,
     parameterTypes: String,
     returnType: String?,
-    implementation: [String]
+    implementation: [String],
+    inlined: Bool
   ) -> String {
     return actionDeclaration(
       name: assignedName!,

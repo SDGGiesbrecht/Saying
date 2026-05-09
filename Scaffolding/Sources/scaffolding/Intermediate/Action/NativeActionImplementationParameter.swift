@@ -8,6 +8,7 @@ struct NativeActionImplementationParameter {
   var release: Bool
   var copy: Bool
   var held: Bool
+  var inlined: Bool
   var sanitizedForIdentifier: Bool
   var remainderOfScope: Bool
 }
@@ -30,6 +31,7 @@ extension NativeActionImplementationParameter {
     self.release = false
     self.copy = false
     self.held = false
+    self.inlined = false
     self.sanitizedForIdentifier = false
     self.remainderOfScope = false
   }
@@ -48,6 +50,7 @@ extension NativeActionImplementationParameter {
     var release = false
     var copy = false
     var held = false
+    var inlined = false
     var sanitizedForIdentifier = false
     var remainderOfScope = false
     switch parameter {
@@ -68,6 +71,8 @@ extension NativeActionImplementationParameter {
         copy = true
       case "held ()":
         held = true
+      case "() inlined":
+        inlined = true
       case "() sanitized for identifier":
         sanitizedForIdentifier = true
       case "remainder of ()":
@@ -91,6 +96,7 @@ extension NativeActionImplementationParameter {
         release: release,
         copy: copy,
         held: held,
+        inlined: inlined,
         sanitizedForIdentifier: sanitizedForIdentifier,
         remainderOfScope: remainderOfScope
       )
@@ -112,6 +118,7 @@ extension NativeActionImplementationParameter {
       release: release,
       copy: copy,
       held: held,
+      inlined: inlined,
       sanitizedForIdentifier: sanitizedForIdentifier,
       remainderOfScope: remainderOfScope
     )

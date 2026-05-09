@@ -555,7 +555,8 @@ enum CSharp: Platform {
     parameters: String,
     parameterTypes: String,
     returnType: String?,
-    implementation: [String]
+    implementation: [String],
+    inlined: Bool
   ) -> String {
     let type = actionType(parameters: parameterTypes, returnValue: returnType ?? emptyReturnTypeForActionType)
     var closure = [
