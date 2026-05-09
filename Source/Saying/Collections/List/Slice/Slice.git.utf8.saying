@@ -223,7 +223,9 @@ extension
     test {
      let (• text: Unicode text) be (“...”)
      let (• slice: slice of (Unicode text)) start as (entirety of (text))
-     while ((first in (slice)) is (“.”: Unicode scalar)), {
+     while ({
+      ← (first in (slice)) is (“.”: Unicode scalar)
+     }: → truth value), {
       remove first from (↓ slice) skipping bounds check
      }
      verify ((slice) is empty)

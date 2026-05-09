@@ -224,7 +224,9 @@ action (file)
   let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
   advance (↓ (8‐bit boundary) of (cursor)) to next in (8‐bit) skipping bounds check
   let (• end: list boundary) be (end of (8‐bit))
-  while (((8‐bit boundary) of (cursor)) is less than (end)), {
+  while ({
+   ← ((8‐bit boundary) of (cursor)) is less than (end)
+  }: → truth value), {
    if ((entry after ((8‐bit boundary) of (cursor)) in (8‐bit) skipping bounds check) is continuation), {
     advance (↓ (8‐bit boundary) of (cursor)) to next in (8‐bit) skipping bounds check
    }, otherwise {
@@ -269,7 +271,9 @@ action (file)
   let (• 8‐bit: list of (8‐bit Unicode code unit)) be ((8‐bit encoded) of (list))
   backtrack (↓ (8‐bit boundary) of (cursor)) to previous in (8‐bit) skipping bounds check
   let (• beginning: list boundary) be (beginning of (8‐bit))
-  while (((8‐bit boundary) of (cursor)) is greater than (beginning)), {
+  while ({
+   ← ((8‐bit boundary) of (cursor)) is greater than (beginning)
+  }: → truth value), {
    if ((entry after ((8‐bit boundary) of (cursor)) in (8‐bit) skipping bounds check) is continuation), {
     backtrack (↓ (8‐bit boundary) of (cursor)) to previous in (8‐bit) skipping bounds check
    }, otherwise {
@@ -319,7 +323,9 @@ action (file)
   }
   let (• value: Unicode scalar numerical value) start as ((bitwise intersection of ((first) as byte) and (mask)) as Unicode scalar numerical value, skipping sign extension check)
   let (• cursor: list boundary) start as (beginning)
-  while ((pending) > (“0”: platform fixed‐width natural number)), {
+  while ({
+   ← (pending) > (“0”: platform fixed‐width natural number)
+  }: → truth value), {
    decrement (↓ pending) skipping underflow check
    advance (↓ cursor) to next in (8‐bit) skipping bounds check
    shift bits of (↓ value) left (“6”: Unicode scalar numerical value), skipping overflow and excessive distance checks
@@ -782,7 +788,9 @@ action (file)
      change (↓ pending) to (“3”: platform fixed‐width natural number)
     }
    }
-   while ((pending) > (“0”: platform fixed‐width natural number)), {
+   while ({
+    ← (pending) > (“0”: platform fixed‐width natural number)
+   }: → truth value), {
     decrement (↓ pending) skipping underflow check
     insert ((bitwise union of ((bitwise intersection of (value) and (“3F”: Unicode scalar numerical value)) as byte, skipping overflow check) and (“1000 0000”: byte)) as Unicode code unit) at (cursor) in (↓ (8‐bit encoded) of (list))
     shift bits of (↓ value) right (“6”: Unicode scalar numerical value), skipping sign and excessive distance checks
@@ -1310,7 +1318,9 @@ action (file)
     append (scalar) to (↓ reordered)
    }, otherwise {
     let (• cursor: Unicode scalar boundary) start as (end of (reordered))
-    while (scalar before (cursor) in (reordered) belongs after (class)), {
+    while ({
+     ← scalar before (cursor) in (reordered) belongs after (class)
+    }: → truth value), {
      backtrack (↓ cursor) to previous in (reordered) skipping bounds check
     }
     insert (scalar) at (cursor) in (↓ reordered)

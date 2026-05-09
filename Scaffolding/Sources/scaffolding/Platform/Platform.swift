@@ -1261,7 +1261,12 @@ extension Platform {
     captures?.removeAll(where: { parameterNames.contains($0.name) })
     if captures?.isEmpty == false {
       for capture in captures! {
-        let parameter = parameterDeclaration(label: nil, name: capture.name, type: capture.type, isThrough: false)
+        let parameter = parameterDeclaration(
+          label: nil,
+          name: capture.name,
+          type: capture.type,
+          isThrough: capture.isThroughParameter
+        )
         if parameters.isEmpty {
           parameters = parameter
         } else {
@@ -1495,12 +1500,25 @@ extension Platform {
       let name = String(sanitize(identifier: local.names.identifier(), leading: true, entire: true))
       if captures != nil {
         captures?.append(
-          Capture(name: name, type: source(for: reference.resolvedResultType!!, referenceLookup: referenceLookup))
+          Capture(
+            name: name,
+            type: source(for: reference.resolvedResultType!!,referenceLookup: referenceLookup),
+            isThroughParameter: false
+          )
         )
       }
       return name
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
+      if captures != nil {
+        captures?.append(
+          Capture(
+            name: parameterName,
+            type: source(for: reference.resolvedResultType!!,referenceLookup: referenceLookup),
+            isThroughParameter: parameter.passage == .through
+          )
+        )
+      }
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
         == reference.resolvedResultType!?.key.resolving(fromReferenceLookup: referenceLookup) {
         var returnValue: String
