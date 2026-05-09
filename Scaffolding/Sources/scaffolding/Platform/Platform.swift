@@ -158,7 +158,8 @@ protocol Platform {
     parameters: String,
     parameterTypes: String,
     returnType: String?,
-    implementation: [String]
+    implementation: [String],
+    inlined: Bool
   ) -> String
   static func wrap(
     passedFunction: String,
@@ -1118,7 +1119,8 @@ extension Platform {
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
-    mode: CompilationMode
+    mode: CompilationMode,
+    captures: inout [Capture]?
   ) -> String {
     if let loading = literal.loadingAction(type: type) {
       return call(
@@ -1140,9 +1142,11 @@ extension Platform {
         isThrough: false,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
+        inlineClosure: false,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
-        mode: mode
+        mode: mode,
+        captures: &captures
       )
     } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
       return self.literal(scalar: literal.string.unicodeScalars.first!)
@@ -1207,15 +1211,17 @@ extension Platform {
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
+    inlined: Bool,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode
   ) -> String {
     guard case .action(let passedActionParameters, let passedActionReturn) = reference.resolvedResultType!! else { fatalError() }
     let parameterTypes = passedActionParameters.map({ source(for: $0, referenceLookup: referenceLookup) })
     let parameterTypesList = parameterTypes.joined(separator: ", ")
-    let parameters = zip(reference.rearrangedParameters, parameterTypes)
+    var parameterNames = reference.rearrangedParameters.map({ String($0) })
+    var parameters = zip(parameterNames, parameterTypes)
       .map({ name, type in
-        return parameterDeclaration(label: nil, name: String(name), type: type, isThrough: false)
+        return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
       }).joined(separator: ", ")
     let returnType = passedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
     var implementation: [String] = []
@@ -1228,6 +1234,7 @@ extension Platform {
     ) {
       implementation.append(coverage)
     }
+    var captures: [Capture]? = needsFunctionLiteralsExtracted ? [] : nil
     implementation.append(
       contentsOf: source(
         for: actionLiteral.implementation.statements,
@@ -1247,9 +1254,22 @@ extension Platform {
         referenceLookup: referenceLookup,
         inliningArguments: inliningArguments,
         mode: mode,
-        indentationLevel: 0
+        indentationLevel: 0,
+        captures: &captures
       )
     )
+    captures?.removeAll(where: { parameterNames.contains($0.name) })
+    if captures?.isEmpty == false {
+      for capture in captures! {
+        let parameter = parameterDeclaration(label: nil, name: capture.name, type: capture.type, isThrough: false)
+        if parameters.isEmpty {
+          parameters = parameter
+        } else {
+          parameters.append(contentsOf: ", \(parameter)")
+        }
+        parameterNames.append(capture.name)
+      }
+    }
     if needsFunctionLiteralsExtracted {
       anonymousCounter += 1
       let extractedName = "anonymous_\(anonymousCounter)"
@@ -1259,17 +1279,23 @@ extension Platform {
           parameters: parameters,
           parameterTypes: parameterTypesList,
           returnType: returnType,
-          implementation: implementation
+          implementation: implementation,
+          inlined: inlined
         )
       )
-      return extractedName
+      var result = extractedName
+      if inlined {
+        result.append("(\(parameterNames.joined(separator: ", ")))")
+      }
+      return result
     } else {
       return functionLiteral(
         assignedName: nil,
         parameters: parameters,
         parameterTypes: parameterTypesList,
         returnType: returnType,
-        implementation: implementation
+        implementation: implementation,
+        inlined: inlined
       )
     }
   }
@@ -1361,9 +1387,11 @@ extension Platform {
     isDetachment: Bool = false,
     isDirectReturn: Bool,
     cleanUpCode: inout String,
+    inlineClosure: Bool,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
-    mode: CompilationMode
+    mode: CompilationMode,
+    captures: inout [Capture]?
   ) -> String {
     if let literal = reference.literal {
       let resolvedReference = reference.resolvedResultType!!
@@ -1394,7 +1422,8 @@ extension Platform {
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-        mode: mode
+        mode: mode,
+        captures: &captures
       )
     }
     if let actionLiteral = reference.actionLiteral {
@@ -1424,6 +1453,7 @@ extension Platform {
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
+            inlined: inlineClosure,
             inliningArguments: inliningArguments,
             mode: mode
           )
@@ -1441,6 +1471,7 @@ extension Platform {
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
+            inlined: inlineClosure,
             inliningArguments: inliningArguments,
             mode: mode
           )
@@ -1461,7 +1492,13 @@ extension Platform {
       specifiedReturnValue: reference.resolvedResultType,
       externalLookup: referenceLookup
     ) {
-      return String(sanitize(identifier: local.names.identifier(), leading: true, entire: true))
+      let name = String(sanitize(identifier: local.names.identifier(), leading: true, entire: true))
+      if captures != nil {
+        captures?.append(
+          Capture(name: name, type: source(for: reference.resolvedResultType!!, referenceLookup: referenceLookup))
+        )
+      }
+      return name
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
       if parameter.passAction.returnValue?.key.resolving(fromReferenceLookup: referenceLookup)
@@ -1503,7 +1540,8 @@ extension Platform {
           cleanUpCode: &cleanUpCode,
           inliningArguments: [:],
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-          mode: mode
+          mode: mode,
+          captures: &captures
         )
       }
     } else {
@@ -1560,7 +1598,8 @@ extension Platform {
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-        mode: mode
+        mode: mode,
+        captures: &captures
       )
       if mode == .testing,
         bareAction.isFlow,
@@ -1605,7 +1644,8 @@ extension Platform {
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
-    mode: CompilationMode
+    mode: CompilationMode,
+    captures: inout [Capture]?
   ) -> String {
     var didUseClashAvoidance = false
     defer {
@@ -1680,9 +1720,11 @@ extension Platform {
                   isThrough: actionArgument.passage == .through,
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
+                  inlineClosure: parameter.inlined,
                   inliningArguments: inliningArguments,
                   normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                  mode: mode
+                  mode: mode,
+                  captures: &captures
                 )
                 modify(
                   nativeParameter: &result,
@@ -1750,7 +1792,8 @@ extension Platform {
                     referenceLookup: referenceLookup,
                     inliningArguments: inliningArguments,
                     mode: mode,
-                    indentationLevel: 1
+                    indentationLevel: 1,
+                    captures: &captures
                   ).joined(separator: "\n")
                 )
                 accumulator.append("\n")
@@ -1823,9 +1866,11 @@ extension Platform {
               isThrough: action.passage == .through,
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
+              inlineClosure: false,
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-              mode: mode
+              mode: mode,
+              captures: &captures
             ),
             stillNeedsDereferencingIfNativeArgument: parameter.passage == .through
               && action.passage == .through
@@ -1850,7 +1895,8 @@ extension Platform {
             referenceLookup: referenceLookup,
             inliningArguments: inliningArguments,
             mode: mode,
-            indentationLevel: 0
+            indentationLevel: 0,
+            captures: &captures
           )
           if mode == .testing,
             let coverage = flowCoverageRegistration(
@@ -1881,7 +1927,8 @@ extension Platform {
         referenceLookup: referenceLookup,
         inliningArguments: newInliningArguments,
         mode: mode,
-        indentationLevel: 0
+        indentationLevel: 0,
+        captures: &captures
       ).joined(separator: "\n")
     } else {
       let name = nativeName(of: action, referenceLookup: referenceLookup)
@@ -1891,10 +1938,6 @@ extension Platform {
           leading: true,
           entire: true
         )
-      if name == "_0028_0029_002EAdd_0020_0028_0029_003Athis_003Ahash_0020value_003A" {
-        print(name)
-        fatalError()
-      }
       if action.isReferenceWrapper {
         guard case .action(let returnedActionParameters, let returnedActionReturn) = bareAction.returnValue! else { fatalError() }
         return rearrangeParametersIfNecessary(
@@ -1959,9 +2002,11 @@ extension Platform {
                 isThrough: actionArgument.passage == .through,
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
+                inlineClosure: false,
                 inliningArguments: inliningArguments,
                 normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                mode: mode
+                mode: mode,
+                captures: &captures
               )
               var reference = passReference(
                 to: nestedCall,
@@ -1996,9 +2041,11 @@ extension Platform {
                 isThrough: actionArgument.passage == .through,
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
+                inlineClosure: false,
                 inliningArguments: inliningArguments,
                 normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                mode: mode
+                mode: mode,
+                captures: &captures
               )
               let wrappedCall: String
               if action.isCreation,
@@ -2086,7 +2133,8 @@ extension Platform {
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
-    mode: CompilationMode
+    mode: CompilationMode,
+    captures: inout [Capture]?
   ) -> ReferencePassingExtractions {
     var entries = ReferencePassingExtractions()
 
@@ -2117,7 +2165,8 @@ extension Platform {
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
-      entries: &entries
+      entries: &entries,
+      captures: &captures
     )
     return entries
   }
@@ -2138,7 +2187,8 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
-    entries: inout ReferencePassingExtractions
+    entries: inout ReferencePassingExtractions,
+    captures: inout [Capture]?
   ) {
     for argument in action.arguments {
       var entriesInThisBranch = ReferencePassingExtractions()
@@ -2164,7 +2214,8 @@ extension Platform {
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode,
-          entries: &entriesInThisBranch
+          entries: &entriesInThisBranch,
+          captures: &captures
         )
 
         if action.arguments.contains(where: { $0.passage == .through }),
@@ -2193,9 +2244,11 @@ extension Platform {
             isThrough: action.passage == .through,
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
+            inlineClosure: false,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-            mode: mode
+            mode: mode,
+            captures: &captures
           )
           entriesInThisBranch.append(
             ReferencePassingExtraction(
@@ -2226,7 +2279,8 @@ extension Platform {
     cleanUpCode: inout String,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
-    mode: CompilationMode
+    mode: CompilationMode,
+    captures: inout [Capture]?
   ) -> ReferenceCountedReturns {
     var entries = ReferenceCountedReturns()
     extractArgumentsForReferenceCounting(
@@ -2246,7 +2300,8 @@ extension Platform {
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
-      entries: &entries
+      entries: &entries,
+      captures: &captures
     )
     return entries
   }
@@ -2267,7 +2322,8 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
-    entries: inout ReferenceCountedReturns
+    entries: inout ReferenceCountedReturns,
+    captures: inout [Capture]?
   ) {
     for argument in action.arguments {
       var entriesInThisBranch = ReferenceCountedReturns()
@@ -2305,7 +2361,8 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
-            entries: &entriesInThisBranch
+            entries: &entriesInThisBranch,
+            captures: &captures
           )
         }
 
@@ -2335,9 +2392,11 @@ extension Platform {
             isThrough: action.passage == .through,
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
+            inlineClosure: false,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-            mode: mode
+            mode: mode,
+            captures: &captures
           )
           let releaseExpression = apply(
             nativeReferenceCountingAction: release,
@@ -2374,7 +2433,8 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
-    indentationLevel: Int
+    indentationLevel: Int,
+    captures: inout [Capture]?
   ) -> [String] {
     var entry = ""
     if let action = statement.action {
@@ -2399,7 +2459,8 @@ extension Platform {
           cleanUpCode: &cleanUpCode,
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: false,
-          mode: mode
+          mode: mode,
+          captures: &captures
         )
         referenceList = statement.passedReferences(platform: self, referenceLookup: referenceLookup)
           .filter({ reference in
@@ -2428,9 +2489,11 @@ extension Platform {
               isDetachment: true,
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
+              inlineClosure: false,
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: false,
-              mode: mode
+              mode: mode,
+              captures: &captures
             )
           })
         for reference in referenceList {
@@ -2470,7 +2533,8 @@ extension Platform {
         cleanUpCode: &cleanUpCode,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: false,
-        mode: mode
+        mode: mode,
+        captures: &captures
       )
       if !extractedForReferenceCounting.all.isEmpty {
         for argument in extractedForReferenceCounting.all {
@@ -2525,9 +2589,11 @@ extension Platform {
             isThrough: false,
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
+            inlineClosure: false,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: false,
-            mode: mode
+            mode: mode,
+            captures: &captures
           ).appending(contentsOf: closingParenthesis)
         )
       )
@@ -2669,7 +2735,8 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode,
-    indentationLevel: Int
+    indentationLevel: Int,
+    captures: inout [Capture]?
   ) -> [String] {
     var locals = ReferenceDictionary()
     var cleanUpCode = ""
@@ -2692,7 +2759,8 @@ extension Platform {
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
         mode: mode,
-        indentationLevel: indentationLevel
+        indentationLevel: indentationLevel,
+        captures: &captures
       )
       let newActions = entry.localActions()
       for local in newActions {
@@ -2822,6 +2890,7 @@ extension Platform {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
     var extractedAnonymousFunctions: [String] = []
+    var captures: [Capture]? = nil
     let implementation = splitFunctionImplementationIfTooLong(
       implementation: source(
         for: actionImplementation.statements,
@@ -2837,7 +2906,8 @@ extension Platform {
         ),
         inliningArguments: [:],
         mode: mode,
-        indentationLevel: 0
+        indentationLevel: 0,
+        captures: &captures
       ),
       indent: self.indent,
       subcall: { disambiguator, extraParameters in
@@ -2977,6 +3047,7 @@ extension Platform {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
     var extractedAnonymousFunctions: [String] = []
+    var captures: [Capture]? = nil
     let implementation = source(
       for: test.statements.statements,
       context: nil,
@@ -2989,7 +3060,8 @@ extension Platform {
       referenceLookup: referenceLookup,
       inliningArguments: [:],
       mode: .testing,
-      indentationLevel: 0
+      indentationLevel: 0,
+      captures: &captures
     )
     return actionDeclaration(
       name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex),

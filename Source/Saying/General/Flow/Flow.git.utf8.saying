@@ -27,7 +27,7 @@ flow (clients)
   test {
    let (• value: truth value) start as (true)
    while ({
-     ← value
+    ← value
    }: → truth value), {
     change (↓ value) to (false)
    }
@@ -39,7 +39,7 @@ flow (clients)
   français : tant que (condition: [condition]), (conséquence: [consequence])
   ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
  )
- C: “while (” condition “()) {” consequence “}”
+ C: “while (” (condition) inlined “) {” consequence “}”
  C♯: “while (” condition “()) {” consequence “}”
  JavaScript: “while (” condition “()) {” consequence “}”
  Kotlin: “while (” condition “()) {” consequence “}”
