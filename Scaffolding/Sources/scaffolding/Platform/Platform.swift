@@ -1294,14 +1294,25 @@ extension Platform {
       }
       return result
     } else {
-      return functionLiteral(
-        assignedName: nil,
-        parameters: parameters,
-        parameterTypes: parameterTypesList,
-        returnType: returnType,
-        implementation: implementation,
-        inlined: inlined
-      )
+      if inlined,
+        implementation.dropFirst().isEmpty,
+        let line = implementation.first,
+        line.starts(with: "return ") {
+        return String(line.dropFirst(7))
+      } else {
+        var literal = functionLiteral(
+          assignedName: nil,
+          parameters: parameters,
+          parameterTypes: parameterTypesList,
+          returnType: returnType,
+          implementation: implementation,
+          inlined: inlined
+        )
+        if inlined {
+          literal.append("()")
+        }
+        return literal
+      }
     }
   }
   static func rearrangeParametersIfNecessary(

@@ -40,10 +40,10 @@ flow (clients)
   ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
  )
  C: “while (” (condition) inlined “) {” consequence “}”
- C♯: “while (” condition “()) {” consequence “}”
- JavaScript: “while (” condition “()) {” consequence “}”
- Kotlin: “while (” condition “()) {” consequence “}”
- Swift: “while (” condition “()) {” consequence “}”
+ C♯: “while (” (condition) inlined “) {” consequence “}”
+ JavaScript: “while (” (condition) inlined “) {” consequence “}”
+ Kotlin: “while (” (condition) inlined “) {” consequence “}”
+ Swift: “while (” (condition) inlined “) {” consequence “}”
 
 extension
  general containers of (thing)
