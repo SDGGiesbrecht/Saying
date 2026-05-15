@@ -1285,14 +1285,22 @@ extension Platform {
       anonymousCounter += 1
       let extractedName = "anonymous_\(anonymousCounter)"
       extractedAnonymousFunctions.append(
-        functionLiteral(
-          assignedName: extractedName,
+        actionDeclaration(
+          name: extractedName,
           parameters: parameters,
-          parameterTypes: parameterTypesList,
-          returnType: returnType,
+          returnSection: returnSection(with: returnType ?? emptyReturnType!, isProperty: false),
+          accessModifier: nil,
+          coverageRegistration: nil,
           implementation: implementation,
-          inlined: inlined
-        )
+          parentType: nil,
+          isStatic: false,
+          isMutating: false,
+          isAbsorbedMember: false,
+          isOverride: false,
+          propertyInstead: false,
+          initializerInstead: false,
+          extractedDeclarations: []
+        ).full
       )
       var result = extractedName
       if inlined {
