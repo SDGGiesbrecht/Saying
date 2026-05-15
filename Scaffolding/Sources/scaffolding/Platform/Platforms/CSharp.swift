@@ -543,7 +543,7 @@ enum CSharp: Platform {
       ])
     }
     return UniqueDeclaration(
-      full: result.joined(separator: "\n"),
+      full: (extractedDeclarations + result).joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
     )
   }
