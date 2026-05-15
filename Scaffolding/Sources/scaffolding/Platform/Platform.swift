@@ -1279,7 +1279,13 @@ extension Platform {
         } else {
           parameters.append(contentsOf: ", \(parameter)")
         }
-        parameterNames.append(capture.name)
+        if capture.isThroughParameter {
+          parameterNames.append(
+            passReference(to: capture.name, forwarding: true, isAddressee: false)
+          )
+        } else {
+          parameterNames.append(capture.name)
+        }
       }
       anonymousCounter += 1
       let extractedName = "anonymous_\(anonymousCounter)"
