@@ -43,7 +43,9 @@ action (file)
   if (beginning) exists, unwrap it as (• start: Git‐style parsing cursor), {
    let (• adjusted offset: natural number) start as ((offset) of (start))
    let (• segment: slice of (Unicode text)) start as ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
-   while ((first in (segment)) is (“ ”: Unicode scalar)), {
+   while ({
+    ← (first in (segment)) is (“ ”: Unicode scalar)
+   }: → truth value), {
     remove first from (↓ segment) skipping bounds check
     add (one: natural number) to (↓ adjusted offset)
    }

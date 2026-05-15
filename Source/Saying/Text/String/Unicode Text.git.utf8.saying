@@ -325,14 +325,18 @@ use (clients)
        append ((scalars) of (appendix)) to (↓ (scalars) of (list))
       }, otherwise {
        let (• seam start: Unicode scalar boundary) start as (end of (list))
-       while (scalar before (seam start) in (list) is reordrant), {
+       while ({
+        ← scalar before (seam start) in (list) is reordrant
+       }: → truth value), {
         backtrack (↓ seam start) to previous in (list) skipping bounds check
        }
        let (• seam overlap: range of (Unicode scalar boundary)) be (from (seam start) to (end of (list)))
        let (• seam: Unicode scalars) start as (convert ((seam overlap) in ((scalars) of (list))) into list)
        remove (seam overlap) from (↓ list)
        let (• seam end: Unicode scalar boundary) start as (beginning of (appendix))
-       while (scalar after (seam end) in (appendix) is reordrant), {
+       while ({
+        ← scalar after (seam end) in (appendix) is reordrant
+       }: → truth value), {
         advance (↓ seam end) to next in (appendix) skipping bounds check
        }
        append ((from (beginning of (appendix)) to (seam end)) in ((scalars) of (appendix))) to (↓ seam)

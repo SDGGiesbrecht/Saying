@@ -543,12 +543,15 @@ enum CSharp: Platform {
       ])
     }
     return UniqueDeclaration(
-      full: result.joined(separator: "\n"),
+      full: (extractedDeclarations + result).joined(separator: "\n"),
       uniquenessDefinition: result.joined(separator: "\n")
     )
   }
   static var needsFunctionLiteralsExtracted: Bool {
     return false
+  }
+  static var needsFunctionLiteralsWithThroughParametersExtracted: Bool {
+    return true
   }
   static func functionLiteral(
     assignedName: String?,

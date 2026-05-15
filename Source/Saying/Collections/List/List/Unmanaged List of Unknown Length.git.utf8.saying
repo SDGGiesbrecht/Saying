@@ -126,7 +126,9 @@ extension
    )
    {
     let (• cursor: list boundary) start as (beginning of (list))
-    while ((cursor) is less than (end)), {
+    while ({
+     ← (cursor) is less than (end)
+    }: → truth value), {
      release entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
      advance (↓ cursor) to next in (list) skipping bounds check
     }
@@ -205,7 +207,9 @@ extension
     copy memory of (range) from (origin) to (destination) in (↓ list)
     let (• cursor: list boundary) start as (destination)
     let (• end: list boundary) be (distance (length of (range)) after (destination) skipping overflow check)
-    while ((cursor) is less than (end)), {
+    while ({
+     ← (cursor) is less than (end)
+    }: → truth value), {
      hold entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
      advance (↓ cursor) to next in (list) skipping bounds check
     }
@@ -300,7 +304,9 @@ extension
    {
     let (• cursor: list boundary) start as ((lower bound) of (range))
     let (• end: list boundary) be ((upper bound) of (range))
-    while ((cursor) is less than (end)), {
+    while ({
+     ← (cursor) is less than (end)
+    }: → truth value), {
      release entry (entry at (index after (cursor) in (list) skipping bounds check) in (list))
      advance (↓ cursor) to next in (list) skipping bounds check
     }

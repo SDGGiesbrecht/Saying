@@ -57,14 +57,14 @@ struct UnicodeText {
           self.scalars += newElements.scalars
         } else {
           var seam_0020start: String.UnicodeScalarView.Index = self.endIndex
-          while scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020start, self) {
+          while (scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020start, self)) {
             self.formIndex(before: &seam_0020start)
           }
           let seam_0020overlap: Range<String.UnicodeScalarView.Index> = seam_0020start ..< self.endIndex
           var seam: String.UnicodeScalarView = String.UnicodeScalarView(Slice(base: self.scalars, bounds: seam_0020overlap))
           self.removeSubrange(seam_0020overlap)
           var seam_0020end: String.UnicodeScalarView.Index = newElements.startIndex
-          while scalar_0020after_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020end, newElements) {
+          while (scalar_0020after_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020end, newElements)) {
             newElements.formIndex(after: &seam_0020end)
           }
           seam.append(contentsOf: Slice(base: newElements.scalars, bounds: newElements.startIndex ..< seam_0020end))
@@ -720,7 +720,7 @@ fileprivate func _0028_0029_0020reordered_0020canonically_002C_0020skipping_0020
       reordered.append(scalar)
     } else {
       var cursor: String.UnicodeScalarView.Index = reordered.endIndex
-      while scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020belongs_0020after_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003AUnicodeCombiningClass_003Aערך_0020אמת(cursor, reordered, clas_0073) {
+      while (scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020belongs_0020after_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003AUnicodeCombiningClass_003Aערך_0020אמת(cursor, reordered, clas_0073)) {
         reordered.formIndex(before: &cursor)
       }
       reordered.insert(scalar, at: cursor)
@@ -23540,7 +23540,7 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
   if let start = beginning {
     var adjusted_0020offset: UInt64 = start.offset
     var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
-    while segment.first == " " as Unicode.Scalar {
+    while (segment.first == " " as Unicode.Scalar) {
       segment.removeFirst()
       adjusted_0020offset += .one
     }

@@ -29,7 +29,9 @@ extension
      ← false
     }
     let (• cursor: list boundary) start as (beginning of (first))
-    while ((cursor) is less than (end of first)), {
+    while ({
+     ← (cursor) is less than (end of first)
+    }: → truth value), {
      let (• index: list index) be (index after (cursor) in (first) skipping bounds check)
      if ((entry at (index) in (first)) is not (entry at (index) in (second))), {
       ← false

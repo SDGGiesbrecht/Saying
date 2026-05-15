@@ -627,6 +627,9 @@ enum C: Platform {
   static var needsFunctionLiteralsExtracted: Bool {
     return true
   }
+  static var needsFunctionLiteralsWithThroughParametersExtracted: Bool {
+    return true
+  }
   static func functionLiteral(
     assignedName: String?,
     parameters: String,
@@ -635,22 +638,7 @@ enum C: Platform {
     implementation: [String],
     inlined: Bool
   ) -> String {
-    return actionDeclaration(
-      name: assignedName!,
-      parameters: parameters,
-      returnSection: returnSection(with: returnType ?? emptyReturnType!, isProperty: false),
-      accessModifier: nil,
-      coverageRegistration: nil,
-      implementation: implementation,
-      parentType: nil,
-      isStatic: false,
-      isMutating: false,
-      isAbsorbedMember: false,
-      isOverride: false,
-      propertyInstead: false,
-      initializerInstead: false,
-      extractedDeclarations: []
-    ).full
+    return ""
   }
   static func wrap(
     passedFunction: String,

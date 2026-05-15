@@ -40,31 +40,10 @@ flow (clients)
   ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
  )
  C: “while (” (condition) inlined “) {” consequence “}”
- C♯: “while (” condition “()) {” consequence “}”
- JavaScript: “while (” condition “()) {” consequence “}”
- Kotlin: “while (” condition “()) {” consequence “}”
- Swift: “while (” condition “()) {” consequence “}”
-
-flow (clients)
- [
-  test {
-   let (• value: truth value) start as (true)
-   while (value), {
-    change (↓ value) to (false)
-   }
-  }
- ]
- (
-  English: while (condition: truth value), (consequence: {})
-  Deutsch: solange (Bedingung: [condition]), (Folge: [consequence])
-  français : tant que (condition: [condition]), (conséquence: [consequence])
-  ελληνικά: ενώ (όρος: [condition]), (επακόλουθο: [consequence])
- )
- C: “while (” condition “) {” consequence “}”
- C♯: “while (” condition “) {” consequence “}”
- JavaScript: “while (” condition “) {” consequence “}”
- Kotlin: “while (” condition “) {” consequence “}”
- Swift: “while ” condition “ {” consequence “}”
+ C♯: “while (” (condition) inlined “) {” consequence “}”
+ JavaScript: “while (” (condition) inlined “) {” consequence “}”
+ Kotlin: “while (” (condition) inlined “) {” consequence “}”
+ Swift: “while (” (condition) inlined “) {” consequence “}”
 
 extension
  general containers of (thing)
@@ -140,7 +119,9 @@ extension
     let (• resolved list: list) be (sequence)
     let (• loop cursor: boundary) start as (beginning of (resolved list))
     let (• end: boundary) be (end of (resolved list))
-    while ((loop cursor) < (end)), {
+    while ({
+     ← (loop cursor) < (end)
+    }: → truth value), {
      let (• entry: element) be (entry at (index after (loop cursor) in (resolved list) skipping bounds check) in (resolved list))
      repetition
      advance (↓ loop cursor) to next in (resolved list) skipping bounds check
