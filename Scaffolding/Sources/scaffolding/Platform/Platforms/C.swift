@@ -627,6 +627,9 @@ enum C: Platform {
   static var needsFunctionLiteralsExtracted: Bool {
     return true
   }
+  static var needsFunctionLiteralsWithThroughParametersExtracted: Bool {
+    return true
+  }
   static func functionLiteral(
     assignedName: String?,
     parameters: String,

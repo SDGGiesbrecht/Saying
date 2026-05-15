@@ -376,6 +376,9 @@ enum JavaScript: Platform {
   static var needsFunctionLiteralsExtracted: Bool {
     return false
   }
+  static var needsFunctionLiteralsWithThroughParametersExtracted: Bool {
+    return false
+  }
   static func functionLiteral(
     assignedName: String?,
     parameters: String,

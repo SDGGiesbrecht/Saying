@@ -153,6 +153,7 @@ protocol Platform {
     extractedDeclarations: [String]
   ) -> UniqueDeclaration
   static var needsFunctionLiteralsExtracted: Bool { get }
+  static var needsFunctionLiteralsWithThroughParametersExtracted: Bool { get }
   static func functionLiteral(
     assignedName: String?,
     parameters: String,
@@ -1234,7 +1235,9 @@ extension Platform {
     ) {
       implementation.append(coverage)
     }
-    var captures: [Capture]? = needsFunctionLiteralsExtracted ? [] : nil
+    var captures: [Capture]? = needsFunctionLiteralsExtracted
+        || needsFunctionLiteralsWithThroughParametersExtracted
+      ? [] : nil
     implementation.append(
       contentsOf: source(
         for: actionLiteral.implementation.statements,
@@ -1275,7 +1278,10 @@ extension Platform {
         parameterNames.append(capture.name)
       }
     }
-    if needsFunctionLiteralsExtracted {
+    if needsFunctionLiteralsExtracted
+        || (
+          needsFunctionLiteralsWithThroughParametersExtracted && parameters.count != passedActionParameters.count
+        ) {
       anonymousCounter += 1
       let extractedName = "anonymous_\(anonymousCounter)"
       extractedAnonymousFunctions.append(
@@ -1525,7 +1531,9 @@ extension Platform {
       return name
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
-      if captures != nil {
+      if captures != nil,
+        needsFunctionLiteralsExtracted
+          || (needsFunctionLiteralsWithThroughParametersExtracted && parameter.passage == .through) {
         captures?.append(
           Capture(
             name: parameterName,

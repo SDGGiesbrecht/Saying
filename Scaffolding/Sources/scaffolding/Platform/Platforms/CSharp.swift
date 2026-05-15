@@ -550,6 +550,9 @@ enum CSharp: Platform {
   static var needsFunctionLiteralsExtracted: Bool {
     return false
   }
+  static var needsFunctionLiteralsWithThroughParametersExtracted: Bool {
+    return true
+  }
   static func functionLiteral(
     assignedName: String?,
     parameters: String,
