@@ -1262,7 +1262,11 @@ extension Platform {
       )
     )
     captures?.removeAll(where: { parameterNames.contains($0.name) })
-    if captures?.isEmpty == false {
+    if (needsFunctionLiteralsExtracted && captures?.isEmpty == false)
+      || (
+        needsFunctionLiteralsWithThroughParametersExtracted
+          && (captures ?? []).contains(where: { $0.isThroughParameter })
+      ) {
       for capture in captures! {
         let parameter = parameterDeclaration(
           label: nil,
@@ -1277,11 +1281,6 @@ extension Platform {
         }
         parameterNames.append(capture.name)
       }
-    }
-    if needsFunctionLiteralsExtracted
-        || (
-          needsFunctionLiteralsWithThroughParametersExtracted && parameters.count != passedActionParameters.count
-        ) {
       anonymousCounter += 1
       let extractedName = "anonymous_\(anonymousCounter)"
       extractedAnonymousFunctions.append(
@@ -1539,9 +1538,7 @@ extension Platform {
       return name
     } else if let parameter = context?.lookupParameter(reference.actionName) {
       let parameterName = nativeName(of: parameter) ?? sanitize(identifier: parameter.names.identifier(), leading: true, entire: true)
-      if captures != nil,
-        needsFunctionLiteralsExtracted
-          || (needsFunctionLiteralsWithThroughParametersExtracted && parameter.passage == .through) {
+      if captures != nil {
         captures?.append(
           Capture(
             name: parameterName,
