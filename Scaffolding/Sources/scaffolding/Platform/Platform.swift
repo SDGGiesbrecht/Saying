@@ -1296,9 +1296,13 @@ extension Platform {
     } else {
       if inlined,
         implementation.dropFirst().isEmpty,
-        let line = implementation.first,
+        var line = implementation.first,
         line.starts(with: "return ") {
-        return String(line.dropFirst(7))
+        line.removeFirst(7)
+        if line.last == ";" {
+          line.removeLast()
+        }
+        return line
       } else {
         var literal = functionLiteral(
           assignedName: nil,
