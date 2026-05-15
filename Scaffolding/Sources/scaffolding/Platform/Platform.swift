@@ -1262,12 +1262,12 @@ extension Platform {
       )
     )
     captures?.removeAll(where: { parameterNames.contains($0.name) })
-    if (needsFunctionLiteralsExtracted && captures?.isEmpty == false)
+    if needsFunctionLiteralsExtracted
       || (
         needsFunctionLiteralsWithThroughParametersExtracted
           && (captures ?? []).contains(where: { $0.isThroughParameter })
       ) {
-      for capture in captures! {
+      for capture in captures ?? [] {
         let parameter = parameterDeclaration(
           label: nil,
           name: capture.name,
