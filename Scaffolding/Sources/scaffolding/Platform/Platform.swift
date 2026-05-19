@@ -1118,6 +1118,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     isDirectReturn: Bool,
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -1144,6 +1145,7 @@ extension Platform {
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
         inlineClosure: false,
+        inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
         mode: mode,
@@ -1213,6 +1215,7 @@ extension Platform {
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
     inlined: Bool,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode
   ) -> String {
@@ -1255,6 +1258,7 @@ extension Platform {
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         referenceLookup: referenceLookup,
+        inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         mode: mode,
         indentationLevel: 0,
@@ -1427,6 +1431,7 @@ extension Platform {
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inlineClosure: Bool,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -1459,6 +1464,7 @@ extension Platform {
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         isDirectReturn: isDirectReturn,
         cleanUpCode: &cleanUpCode,
+        inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
         mode: mode,
@@ -1493,6 +1499,7 @@ extension Platform {
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
             inlined: inlineClosure,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             mode: mode
           )
@@ -1511,6 +1518,7 @@ extension Platform {
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
             inlined: inlineClosure,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             mode: mode
           )
@@ -1524,14 +1532,21 @@ extension Platform {
         forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument)
       )
     } else if reference.passage == .out {
-      return String(sanitize(identifier: reference.actionName, leading: true, entire: true))
+      var result = sanitize(identifier: reference.actionName, leading: true, entire: true)
+      if inliningLevel != 0 {
+        result.append("\(inliningLevel)")
+      }
+      return result
     } else if let local = localLookup.lookupAction(
       reference.actionName,
       signature: signature,
       specifiedReturnValue: reference.resolvedResultType,
       externalLookup: referenceLookup
     ) {
-      let name = String(sanitize(identifier: local.names.identifier(), leading: true, entire: true))
+      var name = String(sanitize(identifier: local.names.identifier(), leading: true, entire: true))
+      if inliningLevel != 0 {
+        name.append("\(inliningLevel)")
+      }
       if captures != nil {
         captures?.append(
           Capture(
@@ -1590,6 +1605,7 @@ extension Platform {
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
           extractedAnonymousFunctions: &extractedAnonymousFunctions,
           cleanUpCode: &cleanUpCode,
+          inliningLevel: inliningLevel,
           inliningArguments: [:],
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode,
@@ -1648,6 +1664,7 @@ extension Platform {
         extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
+        inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
         mode: mode,
@@ -1694,6 +1711,7 @@ extension Platform {
     extractedArgumentsForReferenceCounting: inout [String],
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -1773,6 +1791,7 @@ extension Platform {
                   isDirectReturn: false,
                   cleanUpCode: &cleanUpCode,
                   inlineClosure: parameter.inlined,
+                  inliningLevel: inliningLevel,
                   inliningArguments: inliningArguments,
                   normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                   mode: mode,
@@ -1842,6 +1861,7 @@ extension Platform {
                     anonymousCounter: &anonymousCounter,
                     extractedAnonymousFunctions: &extractedAnonymousFunctions,
                     referenceLookup: referenceLookup,
+                    inliningLevel: inliningLevel,
                     inliningArguments: inliningArguments,
                     mode: mode,
                     indentationLevel: 1,
@@ -1919,6 +1939,7 @@ extension Platform {
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inlineClosure: false,
+              inliningLevel: inliningLevel,
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: normalizeNextNestedLiteral,
               mode: mode,
@@ -1945,6 +1966,7 @@ extension Platform {
             anonymousCounter: &anonymousCounter,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
             referenceLookup: referenceLookup,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             mode: mode,
             indentationLevel: 0,
@@ -1977,6 +1999,7 @@ extension Platform {
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         referenceLookup: referenceLookup,
+        inliningLevel: inliningLevel + 1,
         inliningArguments: newInliningArguments,
         mode: mode,
         indentationLevel: 0,
@@ -2055,6 +2078,7 @@ extension Platform {
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
                 inlineClosure: false,
+                inliningLevel: inliningLevel,
                 inliningArguments: inliningArguments,
                 normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                 mode: mode,
@@ -2094,6 +2118,7 @@ extension Platform {
                 isDirectReturn: false,
                 cleanUpCode: &cleanUpCode,
                 inlineClosure: false,
+                inliningLevel: inliningLevel,
                 inliningArguments: inliningArguments,
                 normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                 mode: mode,
@@ -2183,6 +2208,7 @@ extension Platform {
     extractedArgumentsForReferenceCounting: inout [String],
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -2214,6 +2240,7 @@ extension Platform {
       extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
       extractedAnonymousFunctions: &extractedAnonymousFunctions,
       cleanUpCode: &cleanUpCode,
+      inliningLevel: inliningLevel,
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
@@ -2236,6 +2263,7 @@ extension Platform {
     extractedArgumentsForReferenceCounting: inout [String],
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -2263,6 +2291,7 @@ extension Platform {
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
           extractedAnonymousFunctions: &extractedAnonymousFunctions,
           cleanUpCode: &cleanUpCode,
+          inliningLevel: inliningLevel,
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode,
@@ -2297,6 +2326,7 @@ extension Platform {
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inlineClosure: false,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
@@ -2329,6 +2359,7 @@ extension Platform {
     extractedArgumentsForReferenceUnpacking: inout [String],
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -2349,6 +2380,7 @@ extension Platform {
       extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
       extractedAnonymousFunctions: &extractedAnonymousFunctions,
       cleanUpCode: &cleanUpCode,
+      inliningLevel: inliningLevel,
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
@@ -2371,6 +2403,7 @@ extension Platform {
     extractedArgumentsForReferenceUnpacking: inout [String],
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
@@ -2410,6 +2443,7 @@ extension Platform {
             extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
             extractedAnonymousFunctions: &extractedAnonymousFunctions,
             cleanUpCode: &cleanUpCode,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
@@ -2445,6 +2479,7 @@ extension Platform {
             isDirectReturn: false,
             cleanUpCode: &cleanUpCode,
             inlineClosure: false,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
@@ -2482,6 +2517,7 @@ extension Platform {
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
@@ -2509,6 +2545,7 @@ extension Platform {
           extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
           extractedAnonymousFunctions: &extractedAnonymousFunctions,
           cleanUpCode: &cleanUpCode,
+          inliningLevel: inliningLevel,
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: false,
           mode: mode,
@@ -2542,6 +2579,7 @@ extension Platform {
               isDirectReturn: false,
               cleanUpCode: &cleanUpCode,
               inlineClosure: false,
+              inliningLevel: inliningLevel,
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: false,
               mode: mode,
@@ -2583,6 +2621,7 @@ extension Platform {
         extractedArgumentsForReferenceUnpacking: &remainingExtractedArgumentsForReferenceUnpacking,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
+        inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: false,
         mode: mode,
@@ -2642,6 +2681,7 @@ extension Platform {
             isDirectReturn: statement.isReturn,
             cleanUpCode: &cleanUpCode,
             inlineClosure: false,
+            inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: false,
             mode: mode,
@@ -2785,6 +2825,7 @@ extension Platform {
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
     referenceLookup: [ReferenceDictionary],
+    inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
     mode: CompilationMode,
     indentationLevel: Int,
@@ -2808,6 +2849,7 @@ extension Platform {
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
+        inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
         mode: mode,
@@ -2956,6 +2998,7 @@ extension Platform {
         referenceLookup: externalReferenceLookup.appending(
           action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
         ),
+        inliningLevel: 0,
         inliningArguments: [:],
         mode: mode,
         indentationLevel: 0,
@@ -3110,6 +3153,7 @@ extension Platform {
       anonymousCounter: &anonymousCounter,
       extractedAnonymousFunctions: &extractedAnonymousFunctions,
       referenceLookup: referenceLookup,
+      inliningLevel: 0,
       inliningArguments: [:],
       mode: .testing,
       indentationLevel: 0,
