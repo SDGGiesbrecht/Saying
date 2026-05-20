@@ -29,7 +29,7 @@ extension StatementListIntermediate {
     referenceLookup: [ReferenceDictionary],
     finalReturnValue: ParsedTypeReference?
   ) {
-    var locals = ReferenceDictionary()
+    var locals = ReferenceDictionary(scope: .local)
     for index in statements.indices {
       statements[index].resolveTypes(
         context: context,
@@ -52,7 +52,7 @@ extension StatementListIntermediate {
     allowTestOnly: Bool,
     errors: inout [ReferenceError]
   ) {
-    var local = ReferenceDictionary()
+    var local = ReferenceDictionary(scope: .local)
     for statement in statements {
       statement.validateReferences(
         context: context.appending(local),

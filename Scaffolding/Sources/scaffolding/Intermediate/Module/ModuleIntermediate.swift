@@ -1,7 +1,7 @@
 import SDGText
 
 struct ModuleIntermediate {
-  var referenceDictionary = ReferenceDictionary()
+  var referenceDictionary = ReferenceDictionary(scope: .unit)
   var uses: [UseIntermediate] = []
   var useTests: [TestIntermediate] = []
   var distantUseRequirements: [DistantRequiredUse] = []

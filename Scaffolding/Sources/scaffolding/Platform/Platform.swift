@@ -1728,7 +1728,7 @@ extension Platform {
       var accumulator = ""
       var nativeWrap: NativeActionExpressionIntermediate?
       var beforeCleanUp: String? = nil
-      var local = ReferenceDictionary()
+      var local = ReferenceDictionary(scope: .local)
       let nativeExpression = native.expression
       for index in nativeExpression.textComponents.indices {
         accumulator.append(contentsOf: String(nativeExpression.textComponents[index]))
@@ -1912,7 +1912,7 @@ extension Platform {
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
       var newInliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)] = [:]
-      var locals = ReferenceDictionary()
+      var locals = ReferenceDictionary(scope: .local)
       for index in parameters.indices {
         let parameter = parameters[index]
         let argument = reference.arguments[index]
@@ -2831,7 +2831,7 @@ extension Platform {
     indentationLevel: Int,
     captures: inout [Capture]?
   ) -> [String] {
-    var locals = ReferenceDictionary()
+    var locals = ReferenceDictionary(scope: .local)
     var cleanUpCode = ""
     var existingReferences: Set<String> = []
     var inOrder = statements.indices.flatMap({ entryIndex in

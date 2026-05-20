@@ -235,7 +235,7 @@ extension ActionUse {
     specifiedReturnValue: ParsedTypeReference??,
     finalReturnValue: ParsedTypeReference?
   ) {
-    var local = ReferenceDictionary()
+    var local = ReferenceDictionary(scope: .local)
     for index in arguments.indices {
       let explicitArgumentReturnValue: ParsedTypeReference??
       switch arguments[index].explicitResultType {
@@ -312,7 +312,7 @@ extension ActionUse {
     allowTestOnly: Bool,
     errors: inout [ReferenceError]
   ) {
-    var local = ReferenceDictionary()
+    var local = ReferenceDictionary(scope: .local)
     for argument in arguments {
       argument.validateReferences(
         context: context.appending(local),
