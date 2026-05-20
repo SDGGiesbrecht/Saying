@@ -1,4 +1,5 @@
 struct ReferenceDictionary {
+  internal let scope: ScopeType
   private var languages: Set<UnicodeText>
   private var identifierMapping: [UnicodeText: MappedIdentifier]
   private var things: [UnicodeText: [[TypeReference]: Thing]]
@@ -7,8 +8,9 @@ struct ReferenceDictionary {
 }
 
 extension ReferenceDictionary {
-  init() {
+  init(scope: ScopeType) {
     self.init(
+      scope: scope,
       languages: [],
       identifierMapping: [:],
       things: [:],
@@ -604,7 +606,7 @@ extension ReferenceDictionary {
     externalReferenceLookup: [ReferenceDictionary]
   ) {
     let referenceLookup = externalReferenceLookup.appending(self)
-    var optimized = ReferenceDictionary()
+    var optimized = ReferenceDictionary(scope: self.scope)
     optimized.languages = self.languages // For temporary simplicity; not output anyway.
     var found: Set<UnicodeText> = []
     var stillRequired: Set<UnicodeText> = entryPoints

@@ -96,9 +96,17 @@ extension ActionIntermediate {
     globallyUniqueIdentifierComponents: [UnicodeText],
     referenceLookup: [ReferenceDictionary]
   ) -> UnicodeText {
+    let filteredLookup = referenceLookup.filter({ scope in
+      switch scope.scope {
+      case .unit:
+        return true
+      case .parameters, .local:
+        return false
+      }
+    })
     return UnicodeText(
       globallyUniqueIdentifierComponents
-        .lazy.map({ referenceLookup.resolve(identifier: $0) })
+        .lazy.map({ filteredLookup.resolve(identifier: $0) })
         .joined(separator: ":".unicodeScalars)
     )
   }

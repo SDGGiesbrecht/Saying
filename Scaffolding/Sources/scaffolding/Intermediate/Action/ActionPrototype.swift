@@ -175,7 +175,7 @@ extension ActionPrototype {
   }
 
   func parameterReferenceDictionary(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
-    var result = ReferenceDictionary()
+    var result = ReferenceDictionary(scope: .parameters)
     for parameter in parameters.inAnyOrder {
       if let execute = parameter.executeAction {
         _ = result.add(action: execute)

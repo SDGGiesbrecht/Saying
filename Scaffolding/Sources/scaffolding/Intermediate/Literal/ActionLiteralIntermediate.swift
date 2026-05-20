@@ -57,7 +57,7 @@ extension ActionLiteralIntermediate {
     explicitSignature: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary]
   ) -> ReferenceDictionary {
-    var result = ReferenceDictionary()
+    var result = ReferenceDictionary(scope: .parameters)
     guard case .action(let parameters, _) = explicitSignature else {
       fatalError()
     }
