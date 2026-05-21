@@ -21,4 +21,14 @@ extension Array where Element == String {
       append("")
     }
   }
+
+  func appendingToFileName(_ appendix: String) -> [String] {
+    var copy = self
+    if copy.isEmpty {
+      copy.append("")
+    }
+    let lastIndex = copy.indices.last!
+    copy[lastIndex].append(contentsOf: appendix)
+    return copy
+  }
 }

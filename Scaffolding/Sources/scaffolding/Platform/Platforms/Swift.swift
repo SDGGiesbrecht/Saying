@@ -5,6 +5,10 @@ enum Swift: Platform {
   static var directoryName: String {
     "Swift"
   }
+  static let ignoredDirectories: Set<[String]> = [
+    [".build"],
+    [".swiftpm"],
+  ]
   static var indent: String {
     return "  "
   }
@@ -713,8 +717,11 @@ enum Swift: Platform {
     return nil
   }
 
-  static var sourceFileName: String {
-    return "Sources/Products/Source.swift"
+  static var sourceFileUpToName: [String] {
+    return ["Sources", "Products", "Source"]
+  }
+  static var sourceFileExtension: String {
+    return "swift"
   }
 
   static func postprocessFileSplit(_ file: String) -> String {
@@ -737,63 +744,57 @@ enum Swift: Platform {
       .joined(separator: "\n")
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    try ([
-      "// swift-tools-version: 5.7",
-      "",
-      "import PackageDescription",
-      "",
-      "let package = Package(",
-      "\(indent)name: \u{22}Package\u{22},",
-      "\(indent)targets: [",
-      "\(indent)\(indent).target(name: \u{22}Products\u{22}),",
-      "\(indent)\(indent).executableTarget(",
-      "\(indent)\(indent)\(indent)name: \u{22}test\u{22},",
-      "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
-      "\(indent)\(indent)),",
-      "\(indent)\(indent).testTarget(",
-      "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
-      "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
-      "\(indent)\(indent))",
-      "\(indent)]",
-      ")",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("Package.swift"))
-    try ([
-      "@testable import Products",
-      "",
-      "@main struct Test {",
-      "",
-      "\(indent)static func main() {",
-      "\(indent)\(indent)Products.test()",
-      "\(indent)}",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(
-        to:
-          projectDirectory
-          .appendingPathComponent("Sources")
-          .appendingPathComponent("test")
-          .appendingPathComponent("Test.swift")
-      )
-    try ([
-      "import XCTest",
-      "@testable import Products",
-      "",
-      "class WrappedTests: XCTestCase {",
-      "",
-      "\(indent)func testProject() {",
-      "\(indent)\(indent)Products.test()",
-      "\(indent)}",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(
-        to:
-          projectDirectory
-          .appendingPathComponent("Tests")
-          .appendingPathComponent("WrappedTests")
-          .appendingPathComponent("WrappedTests.swift")
-      )
+  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+    try projectDirectory.update(
+      ["Package.swift"],
+      to: ([
+        "// swift-tools-version: 5.7",
+        "",
+        "import PackageDescription",
+        "",
+        "let package = Package(",
+        "\(indent)name: \u{22}Package\u{22},",
+        "\(indent)targets: [",
+        "\(indent)\(indent).target(name: \u{22}Products\u{22}),",
+        "\(indent)\(indent).executableTarget(",
+        "\(indent)\(indent)\(indent)name: \u{22}test\u{22},",
+        "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+        "\(indent)\(indent)),",
+        "\(indent)\(indent).testTarget(",
+        "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
+        "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+        "\(indent)\(indent))",
+        "\(indent)]",
+        ")",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["Sources", "test", "Test.swift"],
+      to: ([
+        "@testable import Products",
+        "",
+        "@main struct Test {",
+        "",
+        "\(indent)static func main() {",
+        "\(indent)\(indent)Products.test()",
+        "\(indent)}",
+        "}",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["Tests", "WrappedTests", "WrappedTests.swift"],
+      to: ([
+        "import XCTest",
+        "@testable import Products",
+        "",
+        "class WrappedTests: XCTestCase {",
+        "",
+        "\(indent)func testProject() {",
+        "\(indent)\(indent)Products.test()",
+        "\(indent)}",
+        "}",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
   }
 
   static var usesSnakeCase: Bool {
