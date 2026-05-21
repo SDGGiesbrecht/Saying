@@ -5,6 +5,10 @@ enum CSharp: Platform {
   static var directoryName: String {
     return "C♯"
   }
+  static let ignoredDirectories: Set<[String]> = [
+    ["obj"],
+    ["bin"],
+  ]
   static var indent: String {
     return "    "
   }
@@ -718,23 +722,28 @@ enum CSharp: Platform {
     ]
   }
 
-  static var sourceFileName: String {
-    return "Test.cs"
+  static var sourceFileUpToName: [String] {
+    return ["Test"]
+  }
+  static var sourceFileExtension: String {
+    return "cs"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    try ([
-      "<Project Sdk=\u{22}Microsoft.NET.Sdk\u{22}>",
-      "  <PropertyGroup>",
-      "    <OutputType>Exe</OutputType>",
-      "    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>",
-      "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
-      "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
-      "    <SelfContained>true</SelfContained>",
-      "  </PropertyGroup>",
-      "</Project>",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("Project.csproj"))
+  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+    try projectDirectory.update(
+      ["Project.csproj"],
+      to: ([
+        "<Project Sdk=\u{22}Microsoft.NET.Sdk\u{22}>",
+        "  <PropertyGroup>",
+        "    <OutputType>Exe</OutputType>",
+        "    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>",
+        "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
+        "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
+        "    <SelfContained>true</SelfContained>",
+        "  </PropertyGroup>",
+        "</Project>",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
   }
 
   static var usesSnakeCase: Bool {

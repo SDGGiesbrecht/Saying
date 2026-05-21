@@ -46,6 +46,9 @@ enum C: Platform {
   static var directoryName: String {
     return "C"
   }
+  static let ignoredDirectories: Set<[String]> = [
+    [".Construction"]
+  ]
   static var indent: String {
     return "        "
   }
@@ -783,36 +786,41 @@ enum C: Platform {
     ]
   }
 
-  static var sourceFileName: String {
-    return "test.c"
+  static var sourceFileUpToName: [String] {
+    return ["test"]
+  }
+  static var sourceFileExtension: String {
+    return "c"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    try ([
-      ".PHONY: test",
-      "test: test‐target",
-      "check‐for‐warnings: check‐for‐warnings‐target",
-      "clean: clean‐target",
-      "",
-      "ensure‐directory = mkdir -p $(@D)",
-      "",
-      "build‐arguments = test.c -o .Construction/test",
-      "",
-      "test‐target: .Construction/test",
-      "\u{9}.Construction/test",
-      "",
-      "check‐for‐warnings‐target: test.c",
-      "\u{9}$(ensure‐directory)",
-      "\u{9}cc -Werror $(build‐arguments)",
-      "",
-      "clean‐target:",
-      "\u{9}rm -rf .Construction",
-      "",
-      ".Construction/test: test.c",
-      "\u{9}$(ensure‐directory)",
-      "\u{9}cc $(build‐arguments)",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("Makefile"))
+  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+    try projectDirectory.update(
+      ["Makefile"],
+      to: ([
+        ".PHONY: test",
+        "test: test‐target",
+        "check‐for‐warnings: check‐for‐warnings‐target",
+        "clean: clean‐target",
+        "",
+        "ensure‐directory = mkdir -p $(@D)",
+        "",
+        "build‐arguments = test.c -o .Construction/test",
+        "",
+        "test‐target: .Construction/test",
+        "\u{9}.Construction/test",
+        "",
+        "check‐for‐warnings‐target: test.c",
+        "\u{9}$(ensure‐directory)",
+        "\u{9}cc -Werror $(build‐arguments)",
+        "",
+        "clean‐target:",
+        "\u{9}rm -rf .Construction",
+        "",
+        ".Construction/test: test.c",
+        "\u{9}$(ensure‐directory)",
+        "\u{9}cc $(build‐arguments)",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
   }
 
   static var usesSnakeCase: Bool {

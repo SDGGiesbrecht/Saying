@@ -5,6 +5,7 @@ import SDGText
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
+  static var ignoredDirectories: Set<[String]> { get }
   static var indent: String { get }
   static var fileSizeLimit: Int? { get }
 
@@ -191,9 +192,10 @@ protocol Platform {
 
   // Package
   static func testEntryPoint() -> [String]?
-  static var sourceFileName: String { get }
+  static var sourceFileUpToName: [String] { get }
+  static var sourceFileExtension: String { get }
   static func postprocessFileSplit(_ file: String) -> String
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws
+  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws
 
   // Saying
   static var usesSnakeCase: Bool { get }
@@ -3511,7 +3513,8 @@ extension Platform {
     package: Package,
     mode: CompilationMode,
     entryPoints: Set<UnicodeText>? = nil,
-    location: URL? = nil
+    location: URL? = nil,
+    reportProgress: @escaping (String) -> Void
   ) throws {
     let sourceModules = try package.modules()
     var noEntryPoints: Set<UnicodeText>? = nil
@@ -3550,25 +3553,30 @@ extension Platform {
         source.appendSeparatorLine()
         source.append(contentsOf: entryPoint)
       }
-      let constructionDirectory = location ?? preparedDirectory(for: package)
+      var constructionDirectory = Cache(
+        location: location ?? preparedDirectory(for: package),
+        reportProgress: reportProgress,
+        ignoredSubdirectories: self.ignoredDirectories
+      )
       let completedSource = source.joined(separator: "\n").appending("\n")
-      let sourceFileURL = constructionDirectory.appendingPathComponent(sourceFileName)
       if let limit = fileSizeLimit,
         completedSource.utf8.count > limit {
         let split = splitLongFile(completedSource)
-        let fileExtension = sourceFileURL.pathExtension
-        let withoutExtension = sourceFileURL.deletingPathExtension()
-        let name = withoutExtension.lastPathComponent
-        let directory = withoutExtension.deletingLastPathComponent()
+        let baseName = sourceFileUpToName
         for (index, part) in split.enumerated() {
-          try part.save(
-            to: directory.appendingPathComponent("\(name)\(index + 1)").appendingPathExtension(fileExtension)
+          try constructionDirectory.update(
+            baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
+            to: part
           )
         }
       } else {
-        try completedSource.save(to: sourceFileURL)
+        try constructionDirectory.update(
+          sourceFileUpToName.appendingToFileName(".\(sourceFileExtension)"),
+          to: completedSource
+        )
       }
-      try createOtherProjectContainerFiles(projectDirectory: constructionDirectory)
+      try createOtherProjectContainerFiles(projectDirectory: &constructionDirectory)
+      try constructionDirectory.removeStale()
     case .release:
       let productsDirectory = location ?? productsDirectory(for: package)
       var joined = source.joined(separator: "\n").appending("\n")
@@ -3579,7 +3587,7 @@ extension Platform {
         joined.removeLast()
       }
       try joined
-        .save(to: productsDirectory)
+        .overwriteIfDifferentThan(productsDirectory, baseURL: package.location, reportProgress: reportProgress)
     }
   }
 }

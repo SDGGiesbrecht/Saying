@@ -43,36 +43,43 @@ import Foundation
     // watchOS: from macOS, Xcode (Swift Package Manager), Swift
     // (2015‐04‐24)
 
+    let reportProgress: (String) -> Void = { print($0) }
+    
     let arguments = ProcessInfo.processInfo.arguments.dropFirst()
     switch arguments.first {
     case "rescaffold":
-      try rescaffold(from: package, packageRoot: packageRoot)
+      try rescaffold(from: package, packageRoot: packageRoot, reportProgress: reportProgress)
     case "format":
-      try package.format(reportProgress: { print($0) })
+      try package.format(reportProgress: reportProgress)
     case "prepare‐c":
-      try C.prepare(package: package, mode: .testing)
+      try C.prepare(package: package, mode: .testing, reportProgress: reportProgress)
     case "prepare‐c‐sharp":
-      try CSharp.prepare(package: package, mode: .testing)
+      try CSharp.prepare(package: package, mode: .testing, reportProgress: reportProgress)
     case "prepare‐kotlin":
-      try Kotlin.prepare(package: package, mode: .testing)
+      try Kotlin.prepare(package: package, mode: .testing, reportProgress: reportProgress)
     case "build‐javascript":
-      try JavaScript.prepare(package: package, mode: .testing)
+      try JavaScript.prepare(package: package, mode: .testing, reportProgress: reportProgress)
     case "test‐c":
-      try package.testC()
+      try package.testC(reportProgress: reportProgress)
     case "test‐swift":
-      try package.testSwift()
+      try package.testSwift(reportProgress: reportProgress)
     case "test‐tvos":
-      try package.testTVOS()
+      try package.testTVOS(reportProgress: reportProgress)
     case "test‐ios":
-      try package.testIOS()
+      try package.testIOS(reportProgress: reportProgress)
     case "test‐watchos":
-      try package.testWatchOS()
+      try package.testWatchOS(reportProgress: reportProgress)
     default:
-      try package.testSwift()
+      try package.testSwift(reportProgress: reportProgress)
     }
   }
 
-  static func rescaffold(from package: Package, packageRoot: URL) throws {
+  static func rescaffold(
+    from package: Package,
+    packageRoot: URL,
+    reportProgress: @escaping (String) -> Void
+  ) throws {
+    let intermediate = package.productsDirectory.appendingPathComponent("Saying.swift")
     let file = packageRoot
       .appendingPathComponent("Scaffolding")
       .appendingPathComponent("Sources")
@@ -149,9 +156,10 @@ import Foundation
         "ParsedSpaceSyntax",
         "ParsedSymbolInsertionMarkSyntax",
       ],
-      location: file
+      location: intermediate,
+      reportProgress: reportProgress
     )
-    var source = try String(from: file)
+    var source = try String(from: intermediate)
     var appendix: [String] = [
       "",
       "struct UnicodeSegment {",
@@ -271,6 +279,6 @@ import Foundation
       "",
     ])
     source.append(contentsOf: appendix.joined(separator: "\n"))
-    try source.save(to: file)
+    try source.overwriteIfDifferentThan(file, baseURL: packageRoot, reportProgress: reportProgress)
   }
 }

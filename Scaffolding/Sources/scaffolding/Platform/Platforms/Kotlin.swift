@@ -1,9 +1,16 @@
 import Foundation
 
 enum Kotlin: Platform {
+
   static var directoryName: String {
     "Kotlin"
   }
+  static let ignoredDirectories: Set<[String]> = [
+    ["gradlew"],
+    ["gradlew.bat"],
+    ["gradle"],
+    ["app", "build"],
+  ]
   static var indent: String {
     return "    "
   }
@@ -573,95 +580,112 @@ enum Kotlin: Platform {
     ]
   }
 
-  static var sourceFileName: String {
-    return "app/src/main/kotlin/Test.kt"
+  static var sourceFileUpToName: [String] {
+    return ["app", "src", "main", "kotlin", "Test"]
+  }
+  static var sourceFileExtension: String {
+    return "kt"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    try ([
-      "android.useAndroidX=true",
-      "org.gradle.jvmargs=-Xmx2g", // 1G ran out in the Android CI.
-      "kotlin.daemon.jvmargs=-Xmx4g", // 2G ran out in the Android CI.
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("gradle.properties"))
-    try ([
-      "pluginManagement {",
-      "\(indent)repositories {",
-      "\(indent)\(indent)gradlePluginPortal()",
-      "\(indent)\(indent)google()",
-      "\(indent)\(indent)mavenCentral()",
-      "\(indent)}",
-      "}",
-      "",
-      "dependencyResolutionManagement {",
-      "\(indent)repositories {",
-      "\(indent)\(indent)google()",
-      "\(indent)\(indent)mavenCentral()",
-      "\(indent)}",
-      "}",
-      "",
-      "rootProject.name = \u{22}Test\u{22}",
-      "include(\u{22}:app\u{22})",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("settings.gradle.kts"))
-    try ([
-      "<?xml version=\u{22}1.0\u{22} encoding=\u{22}UTF-8\u{22}?>",
-      "<lint>",
-      "\(indent)<issue id=\u{22}GradleDependency\u{22} severity=\u{22}ignore\u{22} />",
-      "</lint>",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("lint.xml"))
-    try ([
-      "plugins {",
-      "\(indent)id(\u{22}com.android.application\u{22}) version \u{22}8.6.0\u{22} apply false",
-      "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22}) version \u{22}2.0.20\u{22} apply false",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("build.gradle.kts"))
-    try ([
-      "plugins {",
-      "\(indent)id(\u{22}com.android.application\u{22})",
-      "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22})",
-      "}",
-      "",
-      "kotlin {",
-      "\(indent)jvmToolchain(11)",
-      "\(indent)compilerOptions {",
-      "\(indent)\(indent)allWarningsAsErrors = providers.gradleProperty(\u{22}checkForWarnings\u{22}).isPresent",
-      "\(indent)}",
-      "}",
-      "",
-      "android {",
-      "\(indent)namespace = \u{22}com.example.test\u{22}",
-      "\(indent)compileSdk = 34",
-      "\(indent)defaultConfig {",
-      "\(indent)\(indent)minSdk = 21",
-      "\(indent)\(indent)testInstrumentationRunner = \u{22}androidx.test.runner.AndroidJUnitRunner\u{22}",
-      "\(indent)}",
-      "}",
-      "",
-      "dependencies {",
-      "\(indent)androidTestImplementation(\u{22}androidx.test:runner:1.6.1\u{22})",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("app/build.gradle.kts"))
-    try ([
-      "<?xml version=\u{22}1.0\u{22} encoding=\u{22}utf-8\u{22}?>",
-      "<manifest xmlns:android=\u{22}http://schemas.android.com/apk/res/android\u{22}",
-      "\(indent)xmlns:tools=\u{22}http://schemas.android.com/tools\u{22}>",
-      "</manifest>",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("app/src/main/AndroidManifest.xml"))
-    try ([
-      "import org.junit.Test",
-      "",
-      "class WrappedTests {",
-      "\(indent)@Test fun testProject() {",
-      "\(indent)\(indent)test()",
-      "\(indent)}",
-      "}",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("app/src/androidTest/kotlin/WrappedTests.kt"))
+  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+    try projectDirectory.update(
+      ["gradle.properties"],
+      to: ([
+        "android.useAndroidX=true",
+        "org.gradle.jvmargs=-Xmx2g", // 1G ran out in the Android CI.
+        "kotlin.daemon.jvmargs=-Xmx4g", // 2G ran out in the Android CI.
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["settings.gradle.kts"],
+      to: ([
+        "pluginManagement {",
+        "\(indent)repositories {",
+        "\(indent)\(indent)gradlePluginPortal()",
+        "\(indent)\(indent)google()",
+        "\(indent)\(indent)mavenCentral()",
+        "\(indent)}",
+        "}",
+        "",
+        "dependencyResolutionManagement {",
+        "\(indent)repositories {",
+        "\(indent)\(indent)google()",
+        "\(indent)\(indent)mavenCentral()",
+        "\(indent)}",
+        "}",
+        "",
+        "rootProject.name = \u{22}Test\u{22}",
+        "include(\u{22}:app\u{22})",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["lint.xml"],
+      to: ([
+        "<?xml version=\u{22}1.0\u{22} encoding=\u{22}UTF-8\u{22}?>",
+        "<lint>",
+        "\(indent)<issue id=\u{22}GradleDependency\u{22} severity=\u{22}ignore\u{22} />",
+        "</lint>",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["build.gradle.kts"],
+      to: ([
+        "plugins {",
+        "\(indent)id(\u{22}com.android.application\u{22}) version \u{22}8.6.0\u{22} apply false",
+        "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22}) version \u{22}2.0.20\u{22} apply false",
+        "}",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["app", "build.gradle.kts"],
+      to: ([
+        "plugins {",
+        "\(indent)id(\u{22}com.android.application\u{22})",
+        "\(indent)id(\u{22}org.jetbrains.kotlin.android\u{22})",
+        "}",
+        "",
+        "kotlin {",
+        "\(indent)jvmToolchain(11)",
+        "\(indent)compilerOptions {",
+        "\(indent)\(indent)allWarningsAsErrors = providers.gradleProperty(\u{22}checkForWarnings\u{22}).isPresent",
+        "\(indent)}",
+        "}",
+        "",
+        "android {",
+        "\(indent)namespace = \u{22}com.example.test\u{22}",
+        "\(indent)compileSdk = 34",
+        "\(indent)defaultConfig {",
+        "\(indent)\(indent)minSdk = 21",
+        "\(indent)\(indent)testInstrumentationRunner = \u{22}androidx.test.runner.AndroidJUnitRunner\u{22}",
+        "\(indent)}",
+        "}",
+        "",
+        "dependencies {",
+        "\(indent)androidTestImplementation(\u{22}androidx.test:runner:1.6.1\u{22})",
+        "}",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["app", "src", "main", "AndroidManifest.xml"],
+      to: ([
+        "<?xml version=\u{22}1.0\u{22} encoding=\u{22}utf-8\u{22}?>",
+        "<manifest xmlns:android=\u{22}http://schemas.android.com/apk/res/android\u{22}",
+        "\(indent)xmlns:tools=\u{22}http://schemas.android.com/tools\u{22}>",
+        "</manifest>",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
+    try projectDirectory.update(
+      ["app", "src", "androidTest", "kotlin", "WrappedTests.kt"],
+      to: ([
+        "import org.junit.Test",
+        "",
+        "class WrappedTests {",
+        "\(indent)@Test fun testProject() {",
+        "\(indent)\(indent)test()",
+        "\(indent)}",
+        "}",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
   }
 
   static var usesSnakeCase: Bool {

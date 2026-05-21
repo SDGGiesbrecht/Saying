@@ -5,6 +5,7 @@ enum JavaScript: Platform {
   static var directoryName: String {
     return "JavaScript"
   }
+  static let ignoredDirectories: Set<[String]> = []
   static var indent: String {
     return "  "
   }
@@ -489,24 +490,29 @@ enum JavaScript: Platform {
     ]
   }
 
-  static var sourceFileName: String {
-    "Package.js"
+  static var sourceFileUpToName: [String] {
+    return ["Package"]
+  }
+  static var sourceFileExtension: String {
+    return "js"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: URL) throws {
-    try ([
-      "<html>",
-      "  <head>",
-      "    <script src=\u{22}Package.js\u{22}></script>",
-      "  </head>",
-      "  <body>",
-      "    <script>",
-      "      test();",
-      "    </script>",
-      "  </body>",
-      "</html>",
-    ] as [String]).joined(separator: "\n").appending("\n")
-      .save(to: projectDirectory.appendingPathComponent("Test.html"))
+  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+    try projectDirectory.update(
+      ["Test.html"],
+      to: ([
+        "<html>",
+        "  <head>",
+        "    <script src=\u{22}Package.js\u{22}></script>",
+        "  </head>",
+        "  <body>",
+        "    <script>",
+        "      test();",
+        "    </script>",
+        "  </body>",
+        "</html>",
+      ] as [String]).joined(separator: "\n").appending("\n")
+    )
   }
 
   static var usesSnakeCase: Bool {
