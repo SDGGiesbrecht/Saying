@@ -17,7 +17,7 @@ extension ModuleIntermediate {
     } else {
       var dictionary: [UnicodeText: TestIntermediate] = [:]
       for entry in tests {
-        dictionary[UnicodeText(entry.location.map({ $0.identifier() }).joined(separator: ":".unicodeScalars))] = entry
+        dictionary[entry.location.map({ $0.identifier() }).joined(separator: ":")] = entry
       }
       return dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
     }

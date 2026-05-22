@@ -104,11 +104,9 @@ extension ActionIntermediate {
         return false
       }
     })
-    return UnicodeText(
-      globallyUniqueIdentifierComponents
-        .lazy.map({ filteredLookup.resolve(identifier: $0) })
-        .joined(separator: ":".unicodeScalars)
-    )
+    return globallyUniqueIdentifierComponents
+      .map({ filteredLookup.resolve(identifier: $0) })
+      .joined(separator: ":")
   }
 
   func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
@@ -1100,21 +1098,17 @@ extension ActionIntermediate {
   }
 
   func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
-    let namespace = UnicodeText(
-      prototype.namespace
-        .lazy.map({ $0.identifier() })
-        .joined(separator: ":".unicodeScalars)
-      )
+    let namespace = prototype.namespace
+      .map({ $0.identifier() })
+      .joined(separator: ":")
     let identifier: UnicodeText
     if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
       identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceLookup: referenceLookup)
     } else {
       identifier = globallyUniqueIdentifier(referenceLookup: referenceLookup)
     }
-    return UnicodeText(
-      [namespace, identifier]
-        .joined(separator: ":".unicodeScalars)
-    )
+    return [namespace, identifier]
+      .joined(separator: ":")
   }
 
   func allCoverageRegionIdentifiers(

@@ -1261,6 +1261,69 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {
+   let (• list: list of (Unicode scalars)) be (non‐empty example: list of (Unicode scalars))
+   let (• result: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, (list) strung together by empty link, storing in (↓ result)
+  }
+ ]
+ (
+  English: if most efficient, (list of lists: list of (Unicode scalars)) strung together by empty link, storing in (result: ↓ Unicode scalars)
+ )
+ C: “”
+ Swift: “”
+ {
+  change (↓ result) to ((list of lists) linked together with (empty: Unicode scalars))
+ }
+
+action (file)
+ [
+  test {
+   let (• list: list of (Unicode scalars)) be (non‐empty example: list of (Unicode scalars))
+   let (• result: Unicode scalars) start as (empty: Unicode scalars)
+   if most efficient, (list) strung together by default method, storing in (↓ result)
+  }
+ ]
+ (
+  English: if most efficient, (list of lists: list of (Unicode scalars)) strung together by default method, storing in (result: ↓ Unicode scalars)
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ {
+  change (↓ result) to ((list of lists) strung together according to default use as stringable list)
+ }
+
+use (clients)
+ use of (Unicode scalars) as stringable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: (list of lists: list of (Unicode scalars)) strung together
+   )
+   Unicode scalars
+   {
+    let (• result: Unicode scalars) start as (empty: Unicode scalars)
+    if most efficient, (list of lists) strung together by empty link, storing in (↓ result)
+    if most efficient, (list of lists) strung together by default method, storing in (↓ result)
+    ← result
+   }
+
+  action (clients)
+   (
+    English: (list of lists: list of (Unicode scalars)) linked together with (link: Unicode scalars)
+   )
+   Unicode scalars
+   C♯: “Join(” link “, ” list of lists “)” (“System”)
+   JavaScript: “” list of lists “.join(” link “)”
+   Kotlin: “” list of lists “.joinToString(” link “)”
+   {
+    ← (list of lists) linked together with (link) according to default use as stringable list
+   }
+ }
+
 action (clients)
  [
   [

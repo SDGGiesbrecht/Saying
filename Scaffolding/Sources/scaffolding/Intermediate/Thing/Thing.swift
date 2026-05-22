@@ -61,11 +61,9 @@ extension Thing {
     globallyUniqueIdentifierComponents: [UnicodeText],
     referenceLookup: [ReferenceDictionary]
   ) -> UnicodeText {
-    return UnicodeText(
-      globallyUniqueIdentifierComponents
-        .lazy.map({ referenceLookup.resolve(identifier: $0) })
-        .joined(separator: ":".unicodeScalars)
-      )
+    return globallyUniqueIdentifierComponents
+      .map({ referenceLookup.resolve(identifier: $0) })
+      .joined(separator: ":")
   }
 
   func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {

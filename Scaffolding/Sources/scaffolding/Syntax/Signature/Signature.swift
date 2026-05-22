@@ -16,8 +16,6 @@ extension Signature {
   }
 
   func name() -> UnicodeText {
-    return UnicodeText(
-      identifierSegments().lazy.map({ $0?.identifierText() ?? "" }).joined(separator: "()".unicodeScalars)
-    )
+    return identifierSegments().map({ $0?.identifierText() ?? "" }).joined(separator: "()")
   }
 }

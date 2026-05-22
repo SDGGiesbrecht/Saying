@@ -451,7 +451,7 @@ extension Platform {
     case .simple(let simple):
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
-        return String(UnicodeText(native.textComponents.joined()))
+        return native.textComponents.lazy.map({ String($0) }).joined()
       } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
         return native
       } else {
