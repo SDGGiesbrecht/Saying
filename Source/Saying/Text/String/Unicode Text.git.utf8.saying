@@ -422,3 +422,8 @@ use (clients)
     ← non‐empty example
    }
  }
+
+use (clients)
+ use of (Unicode text) as stringable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+ }

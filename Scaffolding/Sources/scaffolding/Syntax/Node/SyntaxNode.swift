@@ -9,7 +9,7 @@ protocol SyntaxNode {
 extension SyntaxNode {
 
   func source() -> UnicodeText {
-    return UnicodeText(children.lazy.map({ $0.source() }).joined())
+    return children.map({ $0.source() }).joined()
   }
 
   func formattedGitStyleSource() -> UnicodeText {

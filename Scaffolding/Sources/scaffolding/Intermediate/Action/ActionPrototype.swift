@@ -114,8 +114,14 @@ extension ActionPrototype {
         documentation.documentation,
         namespace: namespace
           .appending(names)
-          .appending(contentsOf: parameters.ordered(for: names.identifier()).map({ parameter in return [UnicodeText(parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",".unicodeScalars))] as Set<UnicodeText>
-          })),
+          .appending(
+            contentsOf: parameters.ordered(for: names.identifier())
+              .map({ parameter in
+                return [
+                  parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
+                ] as Set<UnicodeText>
+              })
+          ),
         inheritedVisibility: access
       ) {
       case .failure(let nested):

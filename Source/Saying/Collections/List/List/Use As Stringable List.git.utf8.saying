@@ -1,0 +1,85 @@
+ability (clients)
+ (
+  English: use of (list) as stringable list of (element) indexed by (index) separated by (boundary)
+ )
+ {
+  ability (clients)
+   general containers of (list)
+
+  ability (clients)
+   insertion from (list) into (list) as list of (element) indexed by (index) separated by (boundary)
+
+  choice (clients)
+   [
+    test {ignore ((non‐empty example: list of (list)) strung together)}
+   ]
+   (
+    English: (list of lists: list of (list)) strung together
+    Swift: (self: [list of lists]).joined
+   )
+   list
+   {
+    ← (list of lists) strung together according to default use as stringable list
+   }
+
+  choice (clients)
+   [
+    test {ignore ((non‐empty example: list of (list)) linked together with (non‐empty example: list))}
+   ]
+   (
+    English: (list of lists: list of (list)) linked together with (link: list)
+    Swift: (self: [list of lists]).joined separator (separator: [link])
+   )
+   list
+   {
+    ← (list of lists) linked together with (link) according to default use as stringable list
+   }
+ }
+
+extension
+ use of (list) as stringable list of (element) indexed by (index) separated by (boundary)
+ {
+  action (clients)
+   [
+    test {ignore ((non‐empty example: list of (list)) strung together according to default use as stringable list)}
+   ]
+   (
+    English: (list of lists: list of (list)) strung together according to default use as stringable list
+    Swift: (self: [list of lists]).joinedAccordingToDefaultUseAsStringableList
+   )
+   list
+   {
+    let (• string: list) start as (empty: list)
+    for each (• segment: list) in (list of lists), {
+     append (segment) to (↓ string)
+    }
+    ← string
+   }
+
+  action (clients)
+   [
+    test {ignore ((non‐empty example: list of (list)) linked together with (non‐empty example: list) according to default use as stringable list)}
+    test (hidden) {
+     let (• list: list of (list)) start as (non‐empty example: list of (list))
+     append (non‐empty example: list) to (↓ list)
+     ignore ((list) linked together with (non‐empty example: list) according to default use as stringable list)
+    }
+   ]
+   (
+    English: (list of lists: list of (list)) linked together with (link: list) according to default use as stringable list
+    Swift: (self: [list of lists]).joinedAccordingToDefaultUseAsStringableList separator (separator: [link])
+   )
+   list
+   {
+    let (• string: list) start as (empty: list)
+    let (• first: truth value) start as (true)
+    for each (• segment: list) in (list of lists), {
+     if (not (first)), {
+      append (link) to (↓ string)
+     }
+     append (segment) to (↓ string)
+     change (↓ first) to (false)
+    }
+    ← string
+   }
+ }
