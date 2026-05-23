@@ -1316,7 +1316,7 @@ use (clients)
     English: (list of lists: list of (Unicode scalars)) linked together with (link: Unicode scalars)
    )
    Unicode scalars
-   C♯: “Join(” link “, ” list of lists “)” (“System”)
+   C♯: “String.Join(” link “, ” list of lists “)” (“System”)
    JavaScript: “” list of lists “.join(” link “)”
    Kotlin: “” list of lists “.joinToString(” link “)”
    {
