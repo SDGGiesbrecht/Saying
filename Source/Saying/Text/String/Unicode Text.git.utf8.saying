@@ -258,6 +258,17 @@ use (clients)
  }
 
 use (clients)
+ general containers of (slice of (Unicode text))
+ {
+  action (clients)
+   example
+   slice of (Unicode text)
+   {
+    ← entirety of (example: Unicode text)
+   }
+ }
+
+use (clients)
  use of (Unicode text) as changeable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
@@ -426,4 +437,17 @@ use (clients)
 use (clients)
  use of (Unicode text) as stringable list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+ }
+
+use (clients)
+ use of (slice of (Unicode text)) as match in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: contents of (match: slice of (Unicode text))
+   )
+   slice of (Unicode text)
+   {
+    ← match
+   }
  }
