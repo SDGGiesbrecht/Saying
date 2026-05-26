@@ -623,6 +623,17 @@ use (clients)
  {
  }
 
+use (clients)
+ general containers of (slice of (Unicode scalars))
+ {
+  action (clients)
+   example
+   slice of (Unicode scalars)
+   {
+    ← entirety of (example: Unicode scalars)
+   }
+ }
+
 action (clients)
  (
   English: boundary before (index: Unicode scalar index) in (scalars: Unicode scalars)
@@ -1321,6 +1332,19 @@ use (clients)
    Kotlin: “” list of lists “.joinToString(” link “)”
    {
     ← (list of lists) linked together with (link) according to default use as stringable list
+   }
+ }
+
+use (clients)
+ use of (slice of (Unicode scalars)) as match in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: contents of (match: slice of (Unicode scalars))
+   )
+   slice of (Unicode scalars)
+   {
+    ← match
    }
  }
 

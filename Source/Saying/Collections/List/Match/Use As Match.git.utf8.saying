@@ -1,0 +1,20 @@
+ability (clients)
+ (
+  English: use of (match) as match in (haystack) as list of (element) indexed by (index) separated by (boundary)
+ )
+ {
+  ability (clients)
+   general containers of (match)
+
+  ability (clients)
+   slicing (haystack) as list of (element) indexed by (index) separated by (boundary)
+
+  requirement (clients)
+   [
+    test {ignore (contents of (example: match))}
+   ]
+   (
+    English: contents of (match: match)
+   )
+   slice of (haystack)
+ }
