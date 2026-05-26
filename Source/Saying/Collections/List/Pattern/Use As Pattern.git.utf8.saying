@@ -1,0 +1,202 @@
+ability (clients)
+ (
+  English: use of (pattern) as pattern matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+ )
+ {
+  ability (clients)
+   use of (match) as match in (haystack) as list of (element) indexed by (index) separated by (boundary)
+
+  requirement (clients)
+   [
+    [
+     English: Returns a list of possible matches beginning at the specified boundary in the collection.
+    ]
+    [
+     English: The matches are sorted in order of preference. They can be considered one after another down through the list in the event that some should be disqualified for some external reason, such as being part of a larger composite pattern.
+    ]
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     let (• haystack: haystack) be (example haystack for use with (pattern))
+     let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
+     let (• matches: list of (match)) be (matches for (pattern) in (haystack) beginning at (beginning of (expected)))
+     verify ((matches) is not empty)
+     if (first in (matches)) exists, unwrap it as (• primary: match), {
+      verify ((end of (contents of (primary))) is (end of (expected)))
+     }
+    }
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     let (• haystack: haystack) be (example haystack for use with (pattern))
+     verify ((matches for (pattern) in (haystack) beginning at (example location without match from searching for (pattern) in (haystack))) is empty)
+    }
+   ]
+   (
+    English: matches for (pattern: pattern) in (haystack: haystack) beginning at (beginning: boundary)
+   )
+   list of (match)
+
+  choice (clients)
+   [
+    [
+     English: Returns the primary match beginning at the specified boundary in the collection.
+    ]
+    [
+     English: This action may be optimized, but its result must be the same as the first entry returned by {matches for () in () beginning at ()}.
+    ]
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     let (• haystack: haystack) be (example haystack for use with (pattern))
+     let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
+     let (• match: optional (match)) be (primary match for (pattern) in (haystack) beginning at (beginning of (expected)))
+     verify ((match) exists)
+     if (match) exists, unwrap it as (• primary: match), {
+      verify ((end of (contents of (primary))) is (end of (expected)))
+     }
+    }
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     let (• haystack: haystack) be (example haystack for use with (pattern))
+     verify ((primary match for (pattern) in (haystack) beginning at (example location without match from searching for (pattern) in (haystack))) does not exist)
+    }
+   ]
+   (
+    English: primary match for (pattern: pattern) in (haystack: haystack) beginning at (beginning: boundary)
+   )
+   optional (match)
+   {
+    ← first in (matches for (pattern) in (haystack) beginning at (beginning))
+   }
+
+  requirement (clients)
+   [
+    [
+     English: An example pattern.
+    ]
+    [
+     English: {example pattern}, {example haystack for use with ()}, {example match from searching for () in ()} and {example location without match from searching for () in ()} exist to facilitate testing and their definitions must support each other. Their parameters are only intended enable disambiguation so that one pattern can support multiple types of haystack, such as a letter pattern to use in either a list or in text. The parameters should be ignored by the implementation and nothing besides the expected example should ever be passed in as a parameter. Doing otherwise would defeat the purpose of the test.
+    ]
+   ]
+   (
+    English: example pattern
+   )
+   pattern
+
+  requirement (clients)
+   [
+    [
+     English: An example haystack containing the example pattern.
+    ]
+    [
+     English: See {example pattern}.
+    ]
+   ]
+   (
+    English: example haystack for use with (pattern: pattern)
+   )
+   haystack
+
+  requirement (clients)
+   [
+    [
+     English: An expected match for the example pattern in the example haystack.
+    ]
+    [
+     English: See {example pattern}.
+    ]
+   ]
+   (
+    English: example match from searching for (pattern: pattern) in (haystack: haystack)
+   )
+   match
+
+  requirement (clients)
+   [
+    [
+     English: A boundary which is not the beginning of any match in the example haystack.
+    ]
+    [
+     English: See {example pattern}.
+    ]
+   ]
+   (
+    English: example location without match from searching for (pattern: pattern) in (haystack: haystack)
+   )
+   boundary
+ }
+
+extension
+ use of (pattern) as pattern matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+ {
+  use (clients)
+   general use of (pattern)
+   {
+   }
+ }
+
+thing (file)
+ (
+  English: minimal pattern example
+ )
+ {
+  part (file)
+   (
+    English: literal
+   )
+   Unicode text
+ }
+
+action (file)
+ (
+  English: minimal pattern example wrapping (literal: Unicode text)
+ )
+ minimal pattern example
+ create
+
+use (file)
+ use of (minimal pattern example) as pattern matching as (slice of (Unicode text)) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (file)
+   (
+    English: matches for (pattern: minimal pattern example) in (haystack: Unicode text) beginning at (beginning: Unicode scalar boundary)
+   )
+   list of (slice of (Unicode text))
+   {
+    ← matches for ((literal) of (pattern)) in (haystack) beginning at (beginning)
+   }
+
+  action (file)
+   (
+    English: example pattern
+   )
+   minimal pattern example
+   {
+    ← minimal pattern example wrapping (example pattern: Unicode text)
+   }
+
+  action (file)
+   (
+    English: example haystack for use with (pattern: minimal pattern example)
+   )
+   Unicode text
+   {
+    ← example haystack for use with ((literal) of (pattern))
+   }
+
+  action (file)
+   (
+    English: example match from searching for (pattern: minimal pattern example) in (haystack: Unicode text)
+   )
+   slice of (Unicode text)
+   {
+    ← example match from searching for ((literal) of (pattern)) in (haystack)
+   }
+
+  action (file)
+   (
+    English: example location without match from searching for (pattern: minimal pattern example) in (haystack: Unicode text)
+   )
+   Unicode scalar boundary
+   {
+    ← example location without match from searching for ((literal) of (pattern)) in (haystack)
+   }
+ }

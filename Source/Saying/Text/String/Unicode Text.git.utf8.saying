@@ -451,3 +451,66 @@ use (clients)
     ← match
    }
  }
+
+use (clients)
+ use of (Unicode text) as pattern matching as (slice of (Unicode text)) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: matches for (pattern: Unicode text) in (haystack: Unicode text) beginning at (beginning: Unicode scalar boundary)
+   )
+   list of (slice of (Unicode text))
+   {
+    ← matches for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: primary match for (pattern: Unicode text) in (haystack: Unicode text) beginning at (beginning: Unicode scalar boundary)
+   )
+   optional (slice of (Unicode text))
+   {
+    ← primary match for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: example pattern
+   )
+   Unicode text
+   {
+    ← “ ”
+   }
+
+  action (clients)
+   (
+    English: example haystack for use with (pattern: Unicode text)
+   )
+   Unicode text
+   {
+    ← “ ”
+   }
+
+  action (clients)
+   (
+    English: example match from searching for (pattern: Unicode text) in (haystack: Unicode text)
+   )
+   slice of (Unicode text)
+   {
+    ← entirety of (haystack)
+   }
+
+  action (clients)
+   (
+    English: example location without match from searching for (pattern: Unicode text) in (haystack: Unicode text)
+   )
+   Unicode scalar boundary
+   {
+    ← end of (haystack)
+   }
+ }
+
+use (unit)
+ use of (Unicode text) as literal pattern indexed by (Unicode scalar index) separated by (Unicode scalar boundary) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+ }
