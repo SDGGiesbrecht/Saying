@@ -1,0 +1,65 @@
+ability (clients)
+ (
+  English: use of (pattern) as literal pattern indexed by (pattern index) separated by (pattern boundary) in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
+ )
+ {
+  ability (clients)
+   use of (slice of (haystack)) as match in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
+
+  ability (clients)
+   use of (pattern) as pattern matching as (slice of (haystack)) in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
+
+  ability (clients)
+   use of (pattern) as list of (element) indexed by (pattern index) separated by (pattern boundary)
+
+  ability (clients)
+   comparison of (element) for equality
+ }
+
+extension
+ use of (pattern) as literal pattern indexed by (pattern index) separated by (pattern boundary) in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
+ {
+  action (clients)
+   (
+    English: matches for (pattern: pattern) in (haystack: haystack) beginning at (beginning: haystack boundary) according to use as literal pattern
+   )
+   list of (slice of (haystack))
+   {
+    let (• list: list of (slice of (haystack))) start as (empty: list of (slice of (haystack)))
+    if (primary match for (pattern) in (haystack) beginning at (beginning)) exists, unwrap it as (• match: slice of (haystack)), {
+     append (match) to (↓ list)
+    }
+    ← list
+   }
+
+  action (clients)
+   [
+    test (hidden) {
+     let (• haystack: Unicode text) be (“ ”)
+     verify ((primary match for (“!”) in (haystack) beginning at (beginning of (haystack))) does not exist)
+    }
+   ]
+   (
+    English: primary match for (pattern: pattern) in (haystack: haystack) beginning at (beginning: haystack boundary) according to use as literal pattern
+   )
+   optional (slice of (haystack))
+   {
+    let (• cursor in pattern: pattern boundary) start as (beginning of (pattern))
+    let (• end of pattern: pattern boundary) be (end of (pattern))
+    let (• cursor in haystack: haystack boundary) start as (beginning)
+    let (• end of haystack: haystack boundary) be (end of (haystack))
+    while ({
+     ← (cursor in pattern) is less than (end of pattern)
+    }: → truth value), {
+     if ((cursor in haystack) is greater than or equal to (end of haystack)), {
+      ← nothing
+     }
+     if ((entry at (index after (cursor in pattern) in (pattern) skipping bounds check) in (pattern)) is not (entry at (index after (cursor in haystack) in (haystack) skipping bounds check) in (haystack))), {
+      ← nothing
+     }
+     advance (↓ cursor in pattern) to next in (pattern) skipping bounds check
+     advance (↓ cursor in haystack) to next in (haystack) skipping bounds check
+    }
+    ← wrap ((from (beginning) to (cursor in haystack)) in (haystack)) into optional
+   }
+ }

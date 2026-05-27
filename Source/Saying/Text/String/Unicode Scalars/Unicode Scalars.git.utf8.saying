@@ -1348,6 +1348,69 @@ use (clients)
    }
  }
 
+use (clients)
+ use of (Unicode scalars) as pattern matching as (slice of (Unicode scalars)) in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: matches for (pattern: Unicode scalars) in (haystack: Unicode scalars) beginning at (beginning: Unicode scalar boundary)
+   )
+   list of (slice of (Unicode scalars))
+   {
+    ← matches for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: primary match for (pattern: Unicode scalars) in (haystack: Unicode scalars) beginning at (beginning: Unicode scalar boundary)
+   )
+   optional (slice of (Unicode scalars))
+   {
+    ← primary match for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: example pattern
+   )
+   Unicode scalars
+   {
+    ← “ ”
+   }
+
+  action (clients)
+   (
+    English: example haystack for use with (pattern: Unicode scalars)
+   )
+   Unicode scalars
+   {
+    ← “ ”
+   }
+
+  action (clients)
+   (
+    English: example match from searching for (pattern: Unicode scalars) in (haystack: Unicode scalars)
+   )
+   slice of (Unicode scalars)
+   {
+    ← entirety of (haystack)
+   }
+
+  action (clients)
+   (
+    English: example location without match from searching for (pattern: Unicode scalars) in (haystack: Unicode scalars)
+   )
+   Unicode scalar boundary
+   {
+    ← end of (haystack)
+   }
+ }
+
+use (unit)
+ use of (Unicode scalars) as literal pattern indexed by (Unicode scalar index) separated by (Unicode scalar boundary) in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+ }
+
 action (clients)
  [
   [
