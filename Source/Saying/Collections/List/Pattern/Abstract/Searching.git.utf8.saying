@@ -1,6 +1,6 @@
 ability (clients)
  (
-  English: use of (pattern) as pattern matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+  English: searching for (pattern) matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
  )
  {
   ability (clients)
@@ -67,6 +67,21 @@ ability (clients)
     ← first in (matches for (pattern) in (haystack) beginning at (beginning))
    }
 
+  choice (clients)
+   [
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     verify ((first match for (pattern) in (example haystack for use with (pattern))) exists)
+    }
+   ]
+   (
+    English: first match for (pattern: pattern) in (haystack: haystack)
+   )
+   optional (match)
+   {
+    ← first match for (pattern) in (haystack) according to default searching
+   }
+
   requirement (clients)
    [
     [
@@ -125,11 +140,31 @@ ability (clients)
  }
 
 extension
- use of (pattern) as pattern matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+ searching for (pattern) matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
  {
   use (clients)
    general use of (pattern)
    {
+   }
+
+  action (clients)
+   (
+    English: first match for (pattern: pattern) in (haystack: haystack) according to default searching
+   )
+   optional (match)
+   {
+    let (• cursor: boundary) start as (beginning of (haystack))
+    let (• end: boundary) be (end of (haystack))
+    while ({
+     ← (cursor) is less than (end)
+    }: → truth value), {
+     let (• result: optional (match)) be (primary match for (pattern) in (haystack) beginning at (cursor))
+     if ((result) exists), {
+      ← result
+     }
+     advance (↓ cursor) to next in (haystack) skipping bounds check
+    }
+    ← nothing
    }
  }
 
@@ -153,7 +188,7 @@ action (file)
  create
 
 use (file)
- use of (minimal pattern example) as pattern matching as (slice of (Unicode text)) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ searching for (minimal pattern example) matching as (slice of (Unicode text)) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (file)
    (

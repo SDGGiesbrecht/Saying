@@ -1,0 +1,15 @@
+thing (unit)
+ (
+  English: text comparison definition
+ )
+ C♯: “StringComparison” (“System”)
+ {
+ }
+
+action (unit)
+ (
+  English: scalarwise comparison
+ )
+ text comparison definition
+ C♯: “StringComparison.Ordinal”
+ create

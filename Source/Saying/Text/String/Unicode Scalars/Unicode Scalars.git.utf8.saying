@@ -1348,8 +1348,124 @@ use (clients)
    }
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   ignore (if possible, starting point of first match for (scalars) in (scalars) by (scalarwise comparison))
+  }
+ ]
+ (
+  English: if possible, starting point of first match for (pattern: Unicode scalars) in (haystack: Unicode scalars) by (comparison: text comparison definition)
+ )
+ Unicode scalar boundary
+ C♯: “” haystack “.IndexOf(” pattern “, ” comparison “)”
+ {
+  ← beginning of (haystack)
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   ignore (if possible, starting point of first match for (scalars) in (scalars))
+  }
+ ]
+ (
+  English: if possible, starting point of first match for (pattern: Unicode scalars) in (haystack: Unicode scalars)
+ )
+ Unicode scalar boundary
+ JavaScript: “” haystack “.indexOf(” pattern “)”
+ Kotlin: “” haystack “.indexOf(” pattern “)”
+ {
+  ← if possible, starting point of first match for (pattern) in (haystack) by (scalarwise comparison)
+ }
+
+action (file)
+ (
+  English: if possible, one
+ )
+ Unicode scalar boundary
+ C♯: “1”
+ JavaScript: “1”
+ Kotlin: “1”
+ {
+  ← beginning of (“”)
+ }
+
+action (file)
+ [
+  test {ignore (if possible, negative (if possible, one))}
+ ]
+ (
+  English: if possible, negative (boundary: Unicode scalar boundary)
+ )
+ Unicode scalar boundary
+ C♯: “¤(2D)” boundary “”
+ JavaScript: “¤(2D)” boundary “”
+ Kotlin: “¤(2D)” boundary “”
+ {
+  ← boundary
+ }
+
+action (file)
+ [
+  test {
+   let (• boundary: Unicode scalar boundary) be (beginning of (empty: Unicode scalars))
+   ignore (if possible, distance (boundary) after (boundary) skipping bounds check)
+  }
+ ]
+ (
+  English: if possible, distance (distance: Unicode scalar boundary) after (anchor: Unicode scalar boundary) skipping bounds check
+ )
+ Unicode scalar boundary
+ C♯: “” anchor “ + ” distance “”
+ JavaScript: “” anchor “ + ” distance “”
+ Kotlin: “” anchor “ + ” distance “”
+ {
+  ← anchor
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• result: optional (slice of (Unicode scalars))) start as (nothing: optional (slice of (Unicode scalars)))
+   if most efficient, first match for (scalars) in (scalars) by starting point, storing in (↓ result)
+  }
+ ]
+ (
+  English: if most efficient, first match for (pattern: Unicode scalars) in (haystack: Unicode scalars) by starting point, storing in (result: ↓ optional (slice of (Unicode scalars)))
+ )
+ C: “”
+ Swift: “”
+ {
+  let (• starting point: Unicode scalar boundary) be (if possible, starting point of first match for (pattern) in (haystack))
+  if ((starting point) is not (if possible, negative (if possible, one))), {
+   change (↓ result) to (wrap ((from (starting point) to (if possible, distance (end of (pattern)) after (starting point) skipping bounds check)) in (haystack)) into optional)
+  }
+ }
+
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (“ ”: Unicode scalars)
+   let (• result: optional (slice of (Unicode scalars))) start as (nothing: optional (slice of (Unicode scalars)))
+   if most efficient, first match for (scalars) in (scalars) by default method, storing in (↓ result)
+  }
+ ]
+ (
+  English: if most efficient, first match for (pattern: Unicode scalars) in (haystack: Unicode scalars) by default method, storing in (result: ↓ optional (slice of (Unicode scalars)))
+ )
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ {
+  change (↓ result) to (first match for (pattern) in (haystack) according to default searching)
+ }
+
 use (clients)
- use of (Unicode scalars) as pattern matching as (slice of (Unicode scalars)) in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ searching for (Unicode scalars) matching as (slice of (Unicode scalars)) in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
    (
@@ -1367,6 +1483,24 @@ use (clients)
    optional (slice of (Unicode scalars))
    {
     ← primary match for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+   }
+
+  action (clients)
+   [
+    test {verify ((first match for (“a”: Unicode scalars) in (“A”: Unicode scalars)) does not exist)}
+    test {verify ((first match for (“¤(C0)”: Unicode scalars) in (“A¤(300)”: Unicode scalars)) does not exist)}
+    test {verify ((first match for (“A¤(300)”: Unicode scalars) in (“¤(C0)”: Unicode scalars)) does not exist)}
+    test (hidden) {verify ((first match for (“ ”: Unicode scalars) in (“¤(0) ”: Unicode scalars)) exists)}
+   ]
+   (
+    English: first match for (pattern: Unicode scalars) in (haystack: Unicode scalars)
+   )
+   optional (slice of (Unicode scalars))
+   {
+    let (• result: optional (slice of (Unicode scalars))) start as (nothing: optional (slice of (Unicode scalars)))
+    if most efficient, first match for (pattern) in (haystack) by starting point, storing in (↓ result)
+    if most efficient, first match for (pattern) in (haystack) by default method, storing in (↓ result)
+    ← result
    }
 
   action (clients)

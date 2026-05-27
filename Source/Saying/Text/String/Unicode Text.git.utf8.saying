@@ -453,7 +453,7 @@ use (clients)
  }
 
 use (clients)
- use of (Unicode text) as pattern matching as (slice of (Unicode text)) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ searching for (Unicode text) matching as (slice of (Unicode text)) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
   action (clients)
    (
