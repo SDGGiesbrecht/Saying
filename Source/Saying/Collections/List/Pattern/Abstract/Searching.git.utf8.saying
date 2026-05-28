@@ -148,6 +148,9 @@ extension
    }
 
   action (clients)
+   [
+    test (hidden) {verify ((first match for (“(”) in (“ !”) according to default searching) does not exist)}
+   ]
    (
     English: first match for (pattern: pattern) in (haystack: haystack) according to default searching
    )
