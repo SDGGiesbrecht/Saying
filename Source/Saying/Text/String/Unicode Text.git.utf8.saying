@@ -457,7 +457,7 @@ use (clients)
  {
   action (clients)
    (
-    English: matches for (pattern: Unicode text) in (haystack: Unicode text) beginning at (beginning: Unicode scalar boundary)
+    English: matches for (pattern: Unicode text) in (haystack: slice of (Unicode text)) beginning at (beginning: Unicode scalar boundary)
    )
    list of (slice of (Unicode text))
    {
@@ -466,7 +466,7 @@ use (clients)
 
   action (clients)
    (
-    English: primary match for (pattern: Unicode text) in (haystack: Unicode text) beginning at (beginning: Unicode scalar boundary)
+    English: primary match for (pattern: Unicode text) in (haystack: slice of (Unicode text)) beginning at (beginning: Unicode scalar boundary)
    )
    optional (slice of (Unicode text))
    {

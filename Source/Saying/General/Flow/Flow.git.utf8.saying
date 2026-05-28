@@ -45,6 +45,26 @@ flow (clients)
  Kotlin: “while (” (condition) inlined “) {” consequence “}”
  Swift: “while (” (condition) inlined “) {” consequence “}”
 
+flow (clients)
+ (
+  English: skip to next loop
+ )
+ C: “continue”
+ C♯: “continue”
+ JavaScript: “continue”
+ Kotlin: “continue”
+ Swift: “continue”
+
+flow (clients)
+ (
+  English: stop looping
+ )
+ C: “break”
+ C♯: “break”
+ JavaScript: “break”
+ Kotlin: “break”
+ Swift: “break”
+
 extension
  general containers of (thing)
  {

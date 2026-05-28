@@ -115,4 +115,21 @@ extension
    {
     change (↓ storage) to (wrap (value) into optional)
    }
+
+  flow (clients)
+   (
+    English: while (optional: → optional (thing)) exists, unwrap it as (unwrapped: • thing), (consequence: {})
+   )
+   Swift: “while let ” unwrapped “ = (” (optional) inlined “) {” consequence “}”
+   {
+    while ({
+     ← true
+    }: → truth value), {
+     if (optional: optional (thing)) is (something), unwrap it as (• unwrapped), {
+      consequence
+      skip to next loop
+     }
+     stop looping
+    }
+   }
  }
