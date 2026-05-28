@@ -7,7 +7,7 @@ ability (clients)
    use of (slice of (haystack)) as match in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
 
   ability (clients)
-   use of (pattern) as pattern matching as (slice of (haystack)) in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
+   searching for (pattern) matching as (slice of (haystack)) in (haystack) as list of (element) indexed by (haystack index) separated by (haystack boundary)
 
   ability (clients)
    use of (pattern) as list of (element) indexed by (pattern index) separated by (pattern boundary)
