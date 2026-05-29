@@ -178,8 +178,6 @@ extension
     [
      English: The result is the same as {matches for () in () beginning at ()} for a slice encompassing the entire list.
     ]
-   ]
-   [
     test {
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
