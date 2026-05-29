@@ -46,6 +46,15 @@ flow (clients)
  Swift: “while (” (condition) inlined “) {” consequence “}”
 
 flow (clients)
+ [
+  test {
+   for each (• entry: truth value) in (non‐empty example: list of (truth value)), {
+    ignore (entry)
+    skip to next loop
+    !
+   }
+  }
+ ]
  (
   English: skip to next loop
  )
@@ -56,6 +65,15 @@ flow (clients)
  Swift: “continue”
 
 flow (clients)
+ [
+  test {
+   while ({
+    ← true
+   }: → truth value), {
+    stop looping
+   }
+  }
+ ]
  (
   English: stop looping
  )
