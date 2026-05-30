@@ -51,7 +51,6 @@ flow (clients)
    for each (• entry: truth value) in (non‐empty example: list of (truth value)), {
     ignore (entry)
     skip to next loop
-    !
    }
   }
  ]
