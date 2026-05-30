@@ -1897,9 +1897,6 @@ extension Platform {
           referenceLookup: referenceLookup
         )
       }
-      if accumulator == "break" || accumulator == "continue" {
-        accumulator.prepend(contentsOf: "\n" + cleanUpCode)
-      }
       if let before = beforeCleanUp {
         cleanUpCode.prepend(contentsOf: accumulator)
         return before
