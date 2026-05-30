@@ -125,7 +125,7 @@ extension
     while ({
      ← true
     }: → truth value), {
-     if (optional: optional (thing)) is (something), unwrap it as (• unwrapped), {
+     if (optional: optional (thing)) exists, unwrap it as (• unwrapped), {
       consequence
       skip to next loop
      }
