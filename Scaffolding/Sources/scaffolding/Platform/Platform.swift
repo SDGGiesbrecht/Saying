@@ -1121,7 +1121,7 @@ extension Platform {
     isDirectReturn: Bool,
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     captures: inout [Capture]?
@@ -1218,7 +1218,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     inlined: Bool,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     mode: CompilationMode
   ) -> String {
     guard case .action(let passedActionParameters, let passedActionReturn) = reference.resolvedResultType!! else { fatalError() }
@@ -1434,7 +1434,7 @@ extension Platform {
     cleanUpCode: inout String,
     inlineClosure: Bool,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     captures: inout [Capture]?
@@ -1529,10 +1529,15 @@ extension Platform {
     }
     let signature = reference.arguments.map({ $0.resolvedResultType!! })
     if let inlined = inliningArguments[reference.actionName] {
-      return dereference(
-        throughParameter: inlined.argument,
-        forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument)
-      )
+      if let executionType = inlined.executionType,
+         reference.resolvedResultType??.key.resolving(fromReferenceLookup: referenceLookup) == executionType {
+        return inlined.executionArgument!
+      } else {
+        return dereference(
+          throughParameter: inlined.argument,
+          forwarding: !(inlined.stillNeedsDereferencingIfNativeArgument && isNativeArgument)
+        )
+      }
     } else if reference.passage == .out {
       var result = sanitize(identifier: reference.actionName, leading: true, entire: true)
       if inliningLevel != 0 {
@@ -1714,7 +1719,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     captures: inout [Capture]?
@@ -1913,7 +1918,7 @@ extension Platform {
       }
     } else if action.isFlow {
       let parameters = action.parameters.ordered(for: reference.actionName)
-      var newInliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)] = [:]
+      var newInliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)] = [:]
       var locals = ReferenceDictionary(scope: .local)
       for index in parameters.indices {
         let parameter = parameters[index]
@@ -1948,7 +1953,34 @@ extension Platform {
               captures: &captures
             ),
             stillNeedsDereferencingIfNativeArgument: parameter.passage == .through
-              && action.passage == .through
+              && action.passage == .through,
+            executionType: parameter.executeAction?.returnValue?.key.resolving(fromReferenceLookup: referenceLookup),
+            executionArgument: parameter.executeAction == nil ? nil : call(
+              to: action,
+              expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
+              context: context,
+              localLookup: localLookup.appending(locals),
+              referenceLookup: referenceLookup,
+              isNativeArgument: false,
+              contextCoverageIdentifier: contextCoverageIdentifier,
+              extractedCoverageRegistrations: &extractedCoverageRegistrations,
+              coverageRegionCounter: &coverageRegionCounter,
+              coverageIndex: coverageIndex,
+              clashAvoidanceCounter: &clashAvoidanceCounter,
+              anonymousCounter: &anonymousCounter,
+              extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+              extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+              extractedAnonymousFunctions: &extractedAnonymousFunctions,
+              isThrough: action.passage == .through,
+              isDirectReturn: false,
+              cleanUpCode: &cleanUpCode,
+              inlineClosure: true,
+              inliningLevel: inliningLevel,
+              inliningArguments: inliningArguments,
+              normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+              mode: mode,
+              captures: &captures
+            )
           )
           let newActions = action.localActions()
           for local in newActions {
@@ -1986,7 +2018,9 @@ extension Platform {
           }
           newInliningArguments[parameter.names.identifier()] = (
             argument: source.joined(separator: "\n"),
-            stillNeedsDereferencingIfNativeArgument: false
+            stillNeedsDereferencingIfNativeArgument: false,
+            executionType: nil,
+            executionArgument: nil
           )
         }
       }
@@ -2211,7 +2245,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     captures: inout [Capture]?
@@ -2266,7 +2300,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     entries: inout ReferencePassingExtractions,
@@ -2362,7 +2396,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     captures: inout [Capture]?
@@ -2406,7 +2440,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
     entries: inout ReferenceCountedReturns,
@@ -2520,7 +2554,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     cleanUpCode: inout String,
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
     indentationLevel: Int,
@@ -2828,7 +2862,7 @@ extension Platform {
     extractedAnonymousFunctions: inout [String],
     referenceLookup: [ReferenceDictionary],
     inliningLevel: Int,
-    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool)],
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     mode: CompilationMode,
     indentationLevel: Int,
     captures: inout [Capture]?
