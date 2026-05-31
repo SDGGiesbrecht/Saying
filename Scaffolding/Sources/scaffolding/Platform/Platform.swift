@@ -1925,6 +1925,8 @@ extension Platform {
         let argument = reference.arguments[index]
         switch argument {
         case .action(let action):
+          var coverageRegionCounterPass = coverageRegionCounter
+          var coverageRegionCounterExecute = coverageRegionCounter
           newInliningArguments[parameter.names.identifier()] = (
             argument: call(
               to: action,
@@ -1935,7 +1937,7 @@ extension Platform {
               isNativeArgument: false,
               contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
-              coverageRegionCounter: &coverageRegionCounter,
+              coverageRegionCounter: &coverageRegionCounterPass,
               coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
@@ -1964,7 +1966,7 @@ extension Platform {
               isNativeArgument: false,
               contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
-              coverageRegionCounter: &coverageRegionCounter,
+              coverageRegionCounter: &coverageRegionCounterExecute,
               coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
@@ -1982,6 +1984,7 @@ extension Platform {
               captures: &captures
             )
           )
+          coverageRegionCounter = max(coverageRegionCounterPass, coverageRegionCounterExecute)
           let newActions = action.localActions()
           for local in newActions {
             _ = locals.add(action: local)
