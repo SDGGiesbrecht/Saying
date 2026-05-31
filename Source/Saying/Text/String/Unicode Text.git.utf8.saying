@@ -457,20 +457,20 @@ use (clients)
  {
   action (clients)
    (
-    English: matches for (pattern: Unicode text) in (haystack: slice of (Unicode text)) beginning at (beginning: Unicode scalar boundary)
+    English: matches for (pattern: Unicode text) beginning at (beginning: Unicode scalar boundary) in (haystack: slice of (Unicode text))
    )
    list of (slice of (Unicode text))
    {
-    ← matches for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+    ← matches for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
    }
 
   action (clients)
    (
-    English: primary match for (pattern: Unicode text) in (haystack: slice of (Unicode text)) beginning at (beginning: Unicode scalar boundary)
+    English: primary match for (pattern: Unicode text) beginning at (beginning: Unicode scalar boundary) in (haystack: slice of (Unicode text))
    )
    optional (slice of (Unicode text))
    {
-    ← primary match for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+    ← primary match for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
    }
 
   action (clients)
@@ -512,5 +512,10 @@ use (clients)
 
 use (unit)
  use of (Unicode text) as literal pattern indexed by (Unicode scalar index) separated by (Unicode scalar boundary) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+ }
+
+use (clients)
+ searching for (Unicode text) matching as (slice of (Unicode text)) and replacing with (Unicode text) in (Unicode text) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
  }

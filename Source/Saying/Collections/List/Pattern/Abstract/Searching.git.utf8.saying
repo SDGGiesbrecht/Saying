@@ -18,7 +18,7 @@ ability (clients)
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
      let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
-     let (• matches: list of (match)) be (matches for (pattern) in (entirety of (haystack)) beginning at (beginning of (expected)))
+     let (• matches: list of (match)) be (matches for (pattern) beginning at (beginning of (expected)) in (entirety of (haystack)))
      verify ((matches) is not empty)
      if (first in (matches)) exists, unwrap it as (• primary: match), {
       verify ((end of (contents of (primary))) is (end of (expected)))
@@ -27,11 +27,12 @@ ability (clients)
     test {
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
-     verify ((matches for (pattern) in (entirety of (haystack)) beginning at (example location without match from searching for (pattern) in (haystack))) is empty)
+     verify ((matches for (pattern) beginning at (example location without match from searching for (pattern) in (haystack)) in (entirety of (haystack))) is empty)
     }
    ]
    (
-    English: matches for (pattern: pattern) in (haystack: slice of (haystack)) beginning at (beginning: boundary)
+    English: matches for (pattern: pattern) beginning at (beginning: boundary) in (haystack: slice of (haystack))
+    Swift: (self: [pattern]).matches beginningAt (beginning: [beginning]) in (haystack: [haystack])
    )
    list of (match)
 
@@ -41,13 +42,13 @@ ability (clients)
      English: Returns the primary match beginning at the specified boundary in the slice.
     ]
     [
-     English: This action may be optimized, but its result must be the same as the first entry returned by {matches for () in () beginning at ()}.
+     English: This action may be optimized, but its result must be the same as the first entry returned by {matches for () beginning at () in ()}.
     ]
     test {
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
      let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
-     let (• match: optional (match)) be (primary match for (pattern) in (entirety of (haystack)) beginning at (beginning of (expected)))
+     let (• match: optional (match)) be (primary match for (pattern) beginning at (beginning of (expected)) in (entirety of (haystack)))
      verify ((match) exists)
      if (match) exists, unwrap it as (• primary: match), {
       verify ((end of (contents of (primary))) is (end of (expected)))
@@ -56,15 +57,16 @@ ability (clients)
     test {
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
-     verify ((primary match for (pattern) in (entirety of (haystack)) beginning at (example location without match from searching for (pattern) in (haystack))) does not exist)
+     verify ((primary match for (pattern) beginning at (example location without match from searching for (pattern) in (haystack)) in (entirety of (haystack))) does not exist)
     }
    ]
    (
-    English: primary match for (pattern: pattern) in (haystack: slice of (haystack)) beginning at (beginning: boundary)
+    English: primary match for (pattern: pattern) beginning at (beginning: boundary) in (haystack: slice of (haystack))
+    Swift: (self: [pattern]).primaryMatch beginningAt (beginning: [beginning]) in (haystack: [haystack])
    )
    optional (match)
    {
-    ← first in (matches for (pattern) in (haystack) beginning at (beginning))
+    ← first in (matches for (pattern) beginning at (beginning) in (haystack))
    }
 
   choice (clients)
@@ -76,6 +78,7 @@ ability (clients)
    ]
    (
     English: first match for (pattern: pattern) in (haystack: haystack)
+    Swift: (self: [haystack]).firstMatch of (pattern: [pattern])
    )
    optional (match)
    {
@@ -88,6 +91,7 @@ ability (clients)
    ]
    (
     English: first match for (pattern: pattern) in (haystack: slice of (haystack))
+    Swift: (self: [haystack]).firstMatch of (pattern: [pattern])
    )
    optional (match)
    {
@@ -96,7 +100,7 @@ ability (clients)
     while ({
      ← (cursor) is less than (end)
     }: → truth value), {
-     let (• result: optional (match)) be (primary match for (pattern) in (haystack) beginning at (cursor))
+     let (• result: optional (match)) be (primary match for (pattern) beginning at (cursor) in (haystack))
      if ((result) exists), {
       ← result
      }
@@ -176,13 +180,13 @@ extension
      English: Returns a list of possible matches beginning at the specified boundary in the list.
     ]
     [
-     English: The result is the same as {matches for () in () beginning at ()} for a slice encompassing the entire list.
+     English: The result is the same as {matches for () beginning at () in ()} for a slice encompassing the entire list.
     ]
     test {
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
      let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
-     let (• matches: list of (match)) be (matches for (pattern) in (haystack) beginning at (beginning of (expected)))
+     let (• matches: list of (match)) be (matches for (pattern) beginning at (beginning of (expected)) in (haystack))
      verify ((matches) is not empty)
      if (first in (matches)) exists, unwrap it as (• primary: match), {
       verify ((end of (contents of (primary))) is (end of (expected)))
@@ -191,15 +195,16 @@ extension
     test {
      let (• pattern: pattern) be (example pattern: pattern)
      let (• haystack: haystack) be (example haystack for use with (pattern))
-     verify ((matches for (pattern) in (haystack) beginning at (example location without match from searching for (pattern) in (haystack))) is empty)
+     verify ((matches for (pattern) beginning at (example location without match from searching for (pattern) in (haystack)) in (haystack)) is empty)
     }
    ]
    (
-    English: matches for (pattern: pattern) in (haystack: haystack) beginning at (beginning: boundary)
+    English: matches for (pattern: pattern) beginning at (beginning: boundary) in (haystack: haystack)
+    Swift: (self: [pattern]).matches beginningAt (beginning: [beginning]) in (haystack: [haystack])
    )
    list of (match)
    {
-    ← matches for (pattern) in (entirety of (haystack)) beginning at (beginning)
+    ← matches for (pattern) beginning at (beginning) in (entirety of (haystack))
    }
 
   action (clients)
@@ -208,20 +213,22 @@ extension
      English: Returns the primary match beginning at the specified boundary in the list.
     ]
     [
-     English: The result is the same as {primary match for () in () beginning at ()} for a slice encompassing the entire list.
+     English: The result is the same as {primary match for () beginning at () in ()} for a slice encompassing the entire list.
     ]
    ]
    (
-    English: primary match for (pattern: pattern) in (haystack: haystack) beginning at (beginning: boundary)
+    English: primary match for (pattern: pattern) beginning at (beginning: boundary) in (haystack: haystack)
+    Swift: (self: [pattern]).primaryMatch beginningAt (beginning: [beginning]) in (haystack: [haystack])
    )
    optional (match)
    {
-    ← primary match for (pattern) in (entirety of (haystack)) beginning at (beginning)
+    ← primary match for (pattern) beginning at (beginning) in (entirety of (haystack))
    }
 
   action (clients)
    (
     English: first match for (pattern: pattern) in (haystack: haystack) according to default searching
+    Swift: (self: [haystack]).firstMatchAccordingToDefaultSearching of (pattern: [pattern])
    )
    optional (match)
    {
@@ -237,6 +244,7 @@ extension
    ]
    (
     English: matches for (pattern: pattern) in (haystack: haystack)
+    Swift: (self: [haystack]).matches of (pattern: [pattern])
    )
    list of (match)
    {
@@ -277,11 +285,11 @@ use (file)
  {
   action (file)
    (
-    English: matches for (pattern: minimal pattern example) in (haystack: slice of (Unicode text)) beginning at (beginning: Unicode scalar boundary)
+    English: matches for (pattern: minimal pattern example) beginning at (beginning: Unicode scalar boundary) in (haystack: slice of (Unicode text))
    )
    list of (slice of (Unicode text))
    {
-    ← matches for ((literal) of (pattern)) in (haystack) beginning at (beginning)
+    ← matches for ((literal) of (pattern)) beginning at (beginning) in (haystack)
    }
 
   action (file)

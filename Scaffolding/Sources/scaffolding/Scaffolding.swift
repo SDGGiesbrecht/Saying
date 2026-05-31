@@ -95,9 +95,9 @@ import Foundation
         "UnicodeText.init(_: UnicodeText)",
         "==(_: UnicodeText, _: UnicodeText)",
         "UnicodeText.hash(into: Hasher)",
-        "UnicodeText.replaceSubrange(_: Range<String.UnicodeScalarView.Index>, with: UnicodeText)",
         "[UnicodeText].joined()",
         "[UnicodeText].joined(separator: UnicodeText)",
+        "UnicodeText.replace(_: UnicodeText, with: UnicodeText)",
 
         "UnicodeSegments.index(before: UnicodeSegments.Boundary)",
         "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",

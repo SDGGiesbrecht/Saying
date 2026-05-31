@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGText
 import SDGPersistence
 import SDGExternalProcess
 
@@ -59,7 +58,7 @@ struct Package {
         case true:
           let file = try SayingSource(from: fileURL)
           let formatted = try file.formattedGitStyleSource()
-          try StrictString(formatted).appending("\n")
+          try String(formatted).appending("\n")
             .overwriteIfDifferentThan(fileURL, baseURL: location, reportProgress: reportProgress)
         }
       }

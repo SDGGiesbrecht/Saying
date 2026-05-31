@@ -1,5 +1,3 @@
-import SDGText
-
 struct ActionIntermediate {
   fileprivate var prototype: ActionPrototype
   var c: NativeActionImplementationIntermediate?
@@ -1155,23 +1153,24 @@ extension ActionIntermediate {
     }
     var disambiguatorParameters: [Int] = []
     if !platform.permitsOverloads {
-      while let typePrefix = StrictString(name).prefix(upTo: " "),
-        typePrefix.contents.allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
-        let parsedNumber = Int(String(UnicodeText(typePrefix.contents))) {
+      while let typePrefix = String(name).prefix(upTo: " "),
+        typePrefix.contents.unicodeScalars
+          .allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
+        let parsedNumber = Int(String(typePrefix.contents)) {
           disambiguatorParameters.append(parsedNumber)
           name.removeFirst(typePrefix.contents.count)
           name.removeFirst()
       }
     }
     let firstSpace = name.firstIndex(of: " ")
-    var functionName = StrictString(name[..<(firstSpace ?? name.endIndex)])
+    var functionName = UnicodeText(name[..<(firstSpace ?? name.endIndex)])
     if let space = firstSpace {
       name.removeSubrange(...space)
     } else {
       name.removeSubrange(..<name.endIndex)
     }
     if platform.usesSnakeCase {
-      functionName.replaceMatches(for: "‐", with: "_")
+      functionName.replace("‐", with: "_")
     }
     for parameterIndex in disambiguatorParameters.reversed() {
       let zeroBased = parameterIndex - 1
@@ -1186,8 +1185,8 @@ extension ActionIntermediate {
       functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_".scalars)
     }
     if let initializerSuffix = platform.initializerSuffix,
-      functionName.hasSuffix(StrictString(initializerSuffix)) {
-      functionName = StrictString(platform.initializerName)
+      String(functionName).hasSuffix(String(initializerSuffix)) {
+      functionName = platform.initializerName
     }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
@@ -1224,7 +1223,7 @@ extension ActionIntermediate {
       let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup) else {
       return nil
     }
-    let components = StrictString(identifier).components(separatedBy: ":")
+    let components = String(identifier).components(separatedBy: ":")
     var parameters = self.parameters.ordered(for: name)
     var result: UnicodeText = ""
     if components.count == parameters.count {
@@ -1236,11 +1235,11 @@ extension ActionIntermediate {
       if index != parameters.startIndex {
         result.append(contentsOf: ", ")
       }
-      result.append(contentsOf: components[index].contents)
+      result.append(contentsOf: components[index].contents.unicodeScalars)
       result.append(contentsOf: ": ".scalars)
       result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
     }
-    result.append(contentsOf: components.last!.contents)
+    result.append(contentsOf: components.last!.contents.unicodeScalars)
     if result.starts(with: "init(".unicodeScalars) {
       result.prepend(contentsOf: ".".scalars)
       result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).scalars)

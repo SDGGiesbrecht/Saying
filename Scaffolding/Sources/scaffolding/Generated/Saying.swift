@@ -29,8 +29,48 @@ struct UnicodeText {
     return self.scalars.index(before: i)
   }
 
+  func matches(of pattern: UnicodeText) -> [Slice<UnicodeText>] {
+    var cursor: String.UnicodeScalarView.Index = self.startIndex
+    let end: String.UnicodeScalarView.Index = self.endIndex
+    var matches: [Slice<UnicodeText>] = []
+    while let match = (Slice(base: self, bounds: cursor ..< end).firstMatch(of: pattern)) {
+      cursor = match.contents.endIndex
+      matches.append(match)
+    }
+    return matches
+  }
+
+  func primaryMatch(beginningAt beginning: String.UnicodeScalarView.Index, in haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
+    return primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_0029_0020in_0020_0028_0029_0020according_0020to_0020use_0020as_0020literal_0020pattern_003AUnicodeText_003AUnicode_0020scalar_0020boundary_003A_0028_003Aslice_2010_0028_0029_003AUnicodeText_003A_0029_003A_0028_003Aoptional_0020_0028_0029_003A_0028_003Aslice_2010_0028_0029_003AUnicodeText_003A_0029_003A_0029(self, beginning, haystack)
+  }
+
   mutating func removeSubrangeAccordingToListInsertion(_ bounds: Range<String.UnicodeScalarView.Index>) {
     self.replaceSubrange(bounds, with: .empty)
+  }
+
+  mutating func replace(_ pattern: UnicodeText, with replacement: UnicodeText) {
+    self.replaceAccordingToDefaultSearchingAndReplacing(pattern, with: replacement)
+  }
+
+  mutating func replaceAccordingToDefaultSearchingAndReplacing(_ pattern: UnicodeText, with replacement: UnicodeText) {
+    self = self.replacing(pattern, with: replacement)
+  }
+
+  func replacing(_ pattern: UnicodeText, with replacement: UnicodeText) -> UnicodeText {
+    return self.replacingAccordingToDefaultSearchingAndReplacing(pattern, with: replacement)
+  }
+
+  func replacingAccordingToDefaultSearchingAndReplacing(_ pattern: UnicodeText, with replacement: UnicodeText) -> UnicodeText {
+    var cursor: String.UnicodeScalarView.Index = self.startIndex
+    var changed: UnicodeText = .empty
+    for hit in self.matches(of: pattern) {
+      let match: Slice<UnicodeText> = hit.contents
+      changed.append(contentsOf: Slice(base: self, bounds: cursor ..< match.startIndex))
+      changed.append(contentsOf: replacement)
+      cursor = match.endIndex
+    }
+    changed.append(contentsOf: Slice(base: self, bounds: cursor ..< self.endIndex))
+    return changed
   }
 
   subscript(_ position: String.UnicodeScalarView.Index) -> Unicode.Scalar {
@@ -47,6 +87,14 @@ struct UnicodeText {
 
   init(_ scalars: String.UnicodeScalarView) {
     self = UnicodeText(skippingNormalizationOf: scalars.compatibilityDecomposition())
+  }
+
+  mutating func appendAccordingToDefaultListInsertion(contentsOf newElements: Slice<UnicodeText>) {
+    self.replaceSubrange(self.endIndex ..< self.endIndex, with: newElements)
+  }
+
+  mutating func append(contentsOf newElements: Slice<UnicodeText>) {
+    self.appendAccordingToDefaultListInsertion(contentsOf: newElements)
   }
 
   mutating func append(contentsOf newElements: UnicodeText) {
@@ -125,6 +173,10 @@ struct UnicodeText {
 
   mutating func removeSubrange(_ bounds: Range<String.UnicodeScalarView.Index>) {
     self.removeSubrangeAccordingToListInsertion(bounds)
+  }
+
+  mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: Slice<UnicodeText>) {
+    self.replaceSubrange(subrange, with: UnicodeText(newElements))
   }
 
   mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: UnicodeText) {
@@ -747,6 +799,21 @@ extension Unicode.Scalar {
 extension String.UnicodeScalarView {
   func compatibilityDecomposition() -> String.UnicodeScalarView {
     return self.individuallyDecomposedAccordingToCompatibilityDecomposition().reorderedCanonically()
+  }
+}
+
+extension Slice<UnicodeText> {
+  func firstMatch(of pattern: UnicodeText) -> Slice<UnicodeText>? {
+    var cursor: String.UnicodeScalarView.Index = self.startIndex
+    let end: String.UnicodeScalarView.Index = self.endIndex
+    while (cursor < end) {
+      let result: Slice<UnicodeText>? = pattern.primaryMatch(beginningAt: cursor, in: self)
+      if result != nil {
+        return result
+      }
+      self.formIndex(after: &cursor)
+    }
+    return nil
   }
 }
 
@@ -5156,6 +5223,18 @@ fileprivate func compatibility_0020decomposition_0020quick_0020check_0020of_0020
     return false
   }
   return true
+}
+
+extension Slice<UnicodeText> {
+  var contents: Slice<UnicodeText> {
+    return self
+  }
+}
+
+extension Slice<UnicodeText> {
+  subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+    return self.base[entryIndex: index]
+  }
 }
 
 fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars(_ scalar: Unicode.Scalar) -> String.UnicodeScalarView {
@@ -23467,6 +23546,12 @@ fileprivate func if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_
   }
 }
 
+extension Slice<UnicodeText> {
+  func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+    return self.base.indexSkippingBoundsCheck(afterBoundary: boundary)
+  }
+}
+
 extension String.UnicodeScalarView {
   func indexSkippingBoundsCheck(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.index(before: boundary)
@@ -23486,6 +23571,24 @@ extension UnicodeText {
   static var empty: UnicodeText {
     return UnicodeText(skippingNormalizationOf: "".unicodeScalars)
   }
+}
+
+fileprivate func primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_0029_0020in_0020_0028_0029_0020according_0020to_0020use_0020as_0020literal_0020pattern_003AUnicodeText_003AUnicode_0020scalar_0020boundary_003A_0028_003Aslice_2010_0028_0029_003AUnicodeText_003A_0029_003A_0028_003Aoptional_0020_0028_0029_003A_0028_003Aslice_2010_0028_0029_003AUnicodeText_003A_0029_003A_0029(_ pattern: UnicodeText, _ beginning: String.UnicodeScalarView.Index, _ haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
+  var cursor_0020in_0020pattern: String.UnicodeScalarView.Index = pattern.startIndex
+  let end_0020of_0020pattern: String.UnicodeScalarView.Index = pattern.endIndex
+  var cursor_0020in_0020haystack: String.UnicodeScalarView.Index = beginning
+  let end_0020of_0020haystack: String.UnicodeScalarView.Index = haystack.endIndex
+  while (cursor_0020in_0020pattern < end_0020of_0020pattern) {
+    if cursor_0020in_0020haystack >= end_0020of_0020haystack {
+      return nil
+    }
+    if pattern[entryIndex: pattern.indexSkippingBoundsCheck(afterBoundary: cursor_0020in_0020pattern)] != haystack[entryIndex: haystack.indexSkippingBoundsCheck(afterBoundary: cursor_0020in_0020haystack)] {
+      return nil
+    }
+    pattern.formIndex(after: &cursor_0020in_0020pattern)
+    haystack.formIndex(after: &cursor_0020in_0020haystack)
+  }
+  return Slice(base: haystack.base, bounds: beginning ..< cursor_0020in_0020haystack)
 }
 
 fileprivate func scalar_0020after_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(_ cursor: String.UnicodeScalarView.Index, _ text: UnicodeText) -> Bool {

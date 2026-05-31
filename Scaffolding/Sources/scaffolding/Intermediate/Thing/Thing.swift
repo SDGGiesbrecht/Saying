@@ -1,5 +1,3 @@
-import SDGText
-
 struct Thing {
   var names: Set<UnicodeText>
   var parameters: Interpolation<ThingParameterIntermediate>
@@ -386,9 +384,9 @@ extension Thing {
     guard let nameDeclaration = platform.nativeNameDeclaration(of: self) else {
       return nil
     }
-    var declaration = StrictString(nameDeclaration)
+    var declaration = nameDeclaration
     if platform.usesSnakeCase {
-      declaration.replaceMatches(for: "‐", with: "_")
+      declaration.replace("‐", with: "_")
     }
     var parameters = self.parameters.ordered(for: nameDeclaration)
     var name: UnicodeText = ""
@@ -401,7 +399,7 @@ extension Thing {
       let precedingSegment = UnicodeText(declaration[..<next])
       declaration.removeSubrange(..<next)
       name.append(contentsOf: precedingSegment)
-      if declaration.hasPrefix("()") {
+      if declaration.starts(with: "()".unicodeScalars) {
         declaration.removeFirst(2)
       }
       let parameter = parameters.removeFirst()
