@@ -45,6 +45,43 @@ flow (clients)
  Kotlin: “while (” (condition) inlined “) {” consequence “}”
  Swift: “while (” (condition) inlined “) {” consequence “}”
 
+flow (clients)
+ [
+  test {
+   for each (• entry: truth value) in (non‐empty example: list of (truth value)), {
+    ignore (entry)
+    skip to next loop
+   }
+  }
+ ]
+ (
+  English: skip to next loop
+ )
+ C: “continue”
+ C♯: “continue”
+ JavaScript: “continue”
+ Kotlin: “continue”
+ Swift: “continue”
+
+flow (clients)
+ [
+  test {
+   while ({
+    ← true
+   }: → truth value), {
+    stop looping
+   }
+  }
+ ]
+ (
+  English: stop looping
+ )
+ C: “break”
+ C♯: “break”
+ JavaScript: “break”
+ Kotlin: “break”
+ Swift: “break”
+
 extension
  general containers of (thing)
  {
@@ -123,8 +160,8 @@ extension
      ← (cursor) < (end)
     }: → truth value), {
      let (• entry: element) be (entry at (index after (cursor) in (resolved list) skipping bounds check) in (resolved list))
-     repetition
      advance (↓ cursor) to next in (resolved list) skipping bounds check
+     repetition
     }
    }
  }

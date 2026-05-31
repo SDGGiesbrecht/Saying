@@ -1469,7 +1469,7 @@ use (clients)
  {
   action (clients)
    (
-    English: matches for (pattern: Unicode scalars) in (haystack: Unicode scalars) beginning at (beginning: Unicode scalar boundary)
+    English: matches for (pattern: Unicode scalars) in (haystack: slice of (Unicode scalars)) beginning at (beginning: Unicode scalar boundary)
    )
    list of (slice of (Unicode scalars))
    {
@@ -1478,7 +1478,7 @@ use (clients)
 
   action (clients)
    (
-    English: primary match for (pattern: Unicode scalars) in (haystack: Unicode scalars) beginning at (beginning: Unicode scalar boundary)
+    English: primary match for (pattern: Unicode scalars) in (haystack: slice of (Unicode scalars)) beginning at (beginning: Unicode scalar boundary)
    )
    optional (slice of (Unicode scalars))
    {

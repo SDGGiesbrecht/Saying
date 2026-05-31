@@ -21,7 +21,7 @@ extension
  {
   action (clients)
    (
-    English: matches for (pattern: pattern) in (haystack: haystack) beginning at (beginning: haystack boundary) according to use as literal pattern
+    English: matches for (pattern: pattern) in (haystack: slice of (haystack)) beginning at (beginning: haystack boundary) according to use as literal pattern
    )
    list of (slice of (haystack))
    {
@@ -40,7 +40,7 @@ extension
     }
    ]
    (
-    English: primary match for (pattern: pattern) in (haystack: haystack) beginning at (beginning: haystack boundary) according to use as literal pattern
+    English: primary match for (pattern: pattern) in (haystack: slice of (haystack)) beginning at (beginning: haystack boundary) according to use as literal pattern
    )
    optional (slice of (haystack))
    {
@@ -60,6 +60,6 @@ extension
      advance (↓ cursor in pattern) to next in (pattern) skipping bounds check
      advance (↓ cursor in haystack) to next in (haystack) skipping bounds check
     }
-    ← wrap ((from (beginning) to (cursor in haystack)) in (haystack)) into optional
+    ← wrap ((from (beginning) to (cursor in haystack)) in ((whole) of (haystack))) into optional
    }
  }
