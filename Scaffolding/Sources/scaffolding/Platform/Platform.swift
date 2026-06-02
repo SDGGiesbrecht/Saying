@@ -2447,7 +2447,19 @@ extension Platform {
     entries: inout ReferenceCountedReturns,
     captures: inout [Capture]?
   ) {
-    for argument in action.arguments {
+    var arguments = action.arguments
+    if let referee = referenceLookup.lookupAction(
+      action.actionName,
+      signature: action.arguments.map({ $0.resolvedResultType!! }),
+      specifiedReturnValue: action.resolvedResultType) {
+      arguments = order(
+        arguments,
+        for: referee.parameters.reordering(
+          from: action.actionName,
+          to: nativeNameDeclaration(of: referee) ?? referee.names.identifier())
+      )
+    }
+    for argument in arguments {
       var entriesInThisBranch = ReferenceCountedReturns()
       defer {
         entries.append(contentsOf: entriesInThisBranch)
