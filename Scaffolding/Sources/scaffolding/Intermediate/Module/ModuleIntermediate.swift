@@ -1,5 +1,3 @@
-import SDGText
-
 struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary(scope: .unit)
   var uses: [UseIntermediate] = []
@@ -350,15 +348,15 @@ extension ModuleIntermediate {
       )
     }
     for language in languageNodes {
-      var identifier = StrictString(language.identifierText())
+      var identifier = language.identifierText()
       if identifier == "C" || identifier == "C♯" || identifier == "Kotlin" || identifier == "Swift" {
         continue
       }
-      if identifier.hasSuffix(" +") {
+      if String(identifier).hasSuffix(" +") {
         identifier.removeLast(2)
       }
       if !moduleWideImports.contains(where: { $0.referenceDictionary.languageIsKnown(UnicodeText(identifier)) }),
-        !referenceDictionary.languageIsKnown(UnicodeText(identifier)) {
+        !referenceDictionary.languageIsKnown(identifier) {
         errors.append(.noSuchLanguage(language))
       }
     }

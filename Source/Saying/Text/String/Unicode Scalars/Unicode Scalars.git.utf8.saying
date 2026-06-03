@@ -1469,20 +1469,20 @@ use (clients)
  {
   action (clients)
    (
-    English: matches for (pattern: Unicode scalars) in (haystack: slice of (Unicode scalars)) beginning at (beginning: Unicode scalar boundary)
+    English: matches for (pattern: Unicode scalars) beginning at (beginning: Unicode scalar boundary) in (haystack: slice of (Unicode scalars))
    )
    list of (slice of (Unicode scalars))
    {
-    ← matches for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+    ← matches for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
    }
 
   action (clients)
    (
-    English: primary match for (pattern: Unicode scalars) in (haystack: slice of (Unicode scalars)) beginning at (beginning: Unicode scalar boundary)
+    English: primary match for (pattern: Unicode scalars) beginning at (beginning: Unicode scalar boundary) in (haystack: slice of (Unicode scalars))
    )
    optional (slice of (Unicode scalars))
    {
-    ← primary match for (pattern) in (haystack) beginning at (beginning) according to use as literal pattern
+    ← primary match for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
    }
 
   action (clients)
@@ -1543,6 +1543,22 @@ use (clients)
 use (unit)
  use of (Unicode scalars) as literal pattern indexed by (Unicode scalar index) separated by (Unicode scalar boundary) in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
+ }
+
+use (clients)
+ searching for (Unicode scalars) matching as (slice of (Unicode scalars)) and replacing with (Unicode scalars) in (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+  action (clients)
+   (
+    English: (haystack: Unicode scalars) with matches for (pattern: Unicode scalars) replaced with (replacement: Unicode scalars)
+   )
+   Unicode scalars
+   C♯: “” haystack “.Replace(” pattern “, ” replacement “)” (“System”)
+   JavaScript: “” haystack “.replaceAll(” pattern “, ” replacement “)”
+   Kotlin: “” haystack “.replace(” pattern “, ” replacement “)”
+   {
+    ← (haystack) with matches for (pattern) replaced with (replacement) according to default searching and replacing
+   }
  }
 
 action (clients)

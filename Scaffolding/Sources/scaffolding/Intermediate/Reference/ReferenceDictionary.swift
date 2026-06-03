@@ -682,3 +682,13 @@ extension ReferenceDictionary {
     entryPoints = stillRequired
   }
 }
+
+extension ReferenceDictionary: CustomStringConvertible {
+
+  var description: String {
+    return String(describing: [
+      scope,
+      identifierMapping.keys.sorted(by: { $0.lexicographicallyPrecedes($1) })
+    ])
+  }
+}

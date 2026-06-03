@@ -21,12 +21,12 @@ extension
  {
   action (clients)
    (
-    English: matches for (pattern: pattern) in (haystack: slice of (haystack)) beginning at (beginning: haystack boundary) according to use as literal pattern
+    English: matches for (pattern: pattern) beginning at (beginning: haystack boundary) in (haystack: slice of (haystack)) according to use as literal pattern
    )
    list of (slice of (haystack))
    {
     let (• list: list of (slice of (haystack))) start as (empty: list of (slice of (haystack)))
-    if (primary match for (pattern) in (haystack) beginning at (beginning)) exists, unwrap it as (• match: slice of (haystack)), {
+    if (primary match for (pattern) beginning at (beginning) in (haystack)) exists, unwrap it as (• match: slice of (haystack)), {
      append (match) to (↓ list)
     }
     ← list
@@ -36,11 +36,11 @@ extension
    [
     test (hidden) {
      let (• haystack: Unicode text) be (“ ”)
-     verify ((primary match for (“!”) in (haystack) beginning at (beginning of (haystack))) does not exist)
+     verify ((primary match for (“!”) beginning at (beginning of (haystack)) in (haystack)) does not exist)
     }
    ]
    (
-    English: primary match for (pattern: pattern) in (haystack: slice of (haystack)) beginning at (beginning: haystack boundary) according to use as literal pattern
+    English: primary match for (pattern: pattern) beginning at (beginning: haystack boundary) in (haystack: slice of (haystack)) according to use as literal pattern
    )
    optional (slice of (haystack))
    {

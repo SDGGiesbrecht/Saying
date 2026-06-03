@@ -15,6 +15,7 @@ ability (clients)
    ]
    (
     English: contents of (match: match)
+    Swift: var (self: [match]).contents
    )
    slice of (haystack)
  }

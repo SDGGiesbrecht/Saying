@@ -1,0 +1,126 @@
+ability (clients)
+ (
+  English: searching for (pattern) matching as (match) and replacing with (replacement) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+ )
+ {
+  ability (clients)
+   searching for (pattern) matching as (match) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+
+  ability (clients)
+   insertion from (slice of (haystack)) into (haystack) as list of (element) indexed by (index) separated by (boundary)
+
+  ability (clients)
+   insertion from (replacement) into (haystack) as list of (element) indexed by (index) separated by (boundary)
+
+  choice (clients)
+   [
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     let (• haystack: haystack) start as (example haystack for use with (pattern))
+     replace matches for (pattern) in (↓ haystack) with (non‐empty example: haystack)
+    }
+   ]
+   (
+    English: replace matches for (pattern: pattern) in (haystack: ↓ haystack) with (replacement: replacement)
+    Swift: (self: [haystack]).replace (pattern: [pattern]) with (replacement: [replacement])
+   )
+   {
+    replace matches for (pattern) in (↓ haystack) with (replacement) according to default searching and replacing
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     ignore ((example haystack for use with (pattern)) with matches for (pattern) replaced with (non‐empty example: haystack))
+    }
+   ]
+   (
+    English: (haystack: haystack) with matches for (pattern: pattern) replaced with (replacement: replacement)
+    Swift: (self: [haystack]).replacing (pattern: [pattern]) with (replacement: [replacement])
+   )
+   haystack
+   {
+    ← (haystack) with matches for (pattern) replaced with (replacement) according to default searching and replacing
+   }
+ }
+
+extension
+ searching for (pattern) matching as (match) and replacing with (replacement) in (haystack) as list of (element) indexed by (index) separated by (boundary)
+ {
+  action (clients)
+   [
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     let (• haystack: haystack) start as (example haystack for use with (pattern))
+     replace matches for (pattern) in (↓ haystack) with (non‐empty example: haystack) according to default searching and replacing
+    }
+   ]
+   (
+    English: replace matches for (pattern: pattern) in (haystack: ↓ haystack) with (replacement: replacement) according to default searching and replacing
+    Swift: (self: [haystack]).replaceAccordingToDefaultSearchingAndReplacing (pattern: [pattern]) with (replacement: [replacement])
+   )
+   {
+    change (↓ haystack) to ((haystack) with matches for (pattern) replaced with (replacement))
+   }
+
+  action (clients)
+   [
+    test {
+     let (• pattern: pattern) be (example pattern: pattern)
+     ignore ((example haystack for use with (pattern)) with matches for (pattern) replaced with (non‐empty example: haystack) according to default searching and replacing)
+    }
+   ]
+   (
+    English: (haystack: haystack) with matches for (pattern: pattern) replaced with (replacement: replacement) according to default searching and replacing
+    Swift: (self: [haystack]).replacingAccordingToDefaultSearchingAndReplacing (pattern: [pattern]) with (replacement: [replacement])
+   )
+   haystack
+   {
+    let (• cursor: boundary) start as (beginning of (haystack))
+    let (• changed: haystack) start as (empty: haystack)
+    for each (• hit: match) in (matches for (pattern) in (haystack)), {
+     let (• match: slice of (haystack)) be (contents of (hit))
+     append ((from (cursor) to (beginning of (match))) in (haystack)) to (↓ changed)
+     append (replacement) to (↓ changed)
+     change (↓ cursor) to (end of (match))
+    }
+    append ((from (cursor) to (end of (haystack))) in (haystack)) to (↓ changed)
+    ← changed
+   }
+
+  action (clients)
+   [
+    test {
+     let (• text: Unicode text) start as (“121”)
+     change matches for (“1”) in (↓ text) according to ({
+      ← (convert (match) into list) with (“3”) appended
+     }: (match: slice of (Unicode text)) → Unicode text)
+     verify ((text) is (“13213”))
+    }
+   ]
+   (
+    English: change matches for (pattern: pattern) in (haystack: ↓ haystack) according to (change (match: match): → replacement)
+   )
+   {
+    change (↓ haystack) to ((haystack) with matches for (pattern) changed according to (change ()))
+   }
+
+  action (clients)
+   (
+    English: (haystack: haystack) with matches for (pattern: pattern) changed according to (change (match: match): → replacement)
+   )
+   haystack
+   {
+    let (• cursor: boundary) start as (beginning of (haystack))
+    let (• changed: haystack) start as (empty: haystack)
+    for each (• hit: match) in (matches for (pattern) in (haystack)), {
+     let (• match: slice of (haystack)) be (contents of (hit))
+     append ((from (cursor) to (beginning of (match))) in (haystack)) to (↓ changed)
+     append (change (hit): replacement) to (↓ changed)
+     change (↓ cursor) to (end of (match))
+    }
+    append ((from (cursor) to (end of (haystack))) in (haystack)) to (↓ changed)
+    ← changed
+   }
+ }

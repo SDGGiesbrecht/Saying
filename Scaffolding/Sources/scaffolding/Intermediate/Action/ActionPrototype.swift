@@ -1,5 +1,3 @@
-import SDGText
-
 struct ActionPrototype {
   var isFlow: Bool
   var names: Set<UnicodeText>
@@ -86,7 +84,7 @@ extension ActionPrototype {
           remainder.removeFirst(3)
           labels.append("")
         }
-        let parameterList = StrictString(remainder).dropping(through: " ")
+        let parameterList = String(remainder).dropping(through: " ")
         labels.append(
           contentsOf: parameterList.components(separatedBy: "()").dropLast()
             .map({ component in
@@ -97,7 +95,7 @@ extension ActionPrototype {
               if label.last == " " {
                 label.removeLast()
               }
-              return UnicodeText(label)
+              return UnicodeText(String(label))
             })
         )
         parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.swift = $1 })

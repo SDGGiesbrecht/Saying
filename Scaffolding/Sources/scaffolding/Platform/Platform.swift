@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGText
-
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
@@ -497,8 +495,8 @@ extension Platform {
 
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
     if let identifier = action.identifier(for: self, referenceLookup: referenceLookup) {
-      if let functionName = StrictString(identifier).prefix(upTo: "(".scalars.literal()) {
-        return String(UnicodeText(functionName.contents))
+      if let functionName = String(identifier).prefix(upTo: "(") {
+        return String(functionName.contents)
       } else {
         return String(identifier)
       }
@@ -530,9 +528,9 @@ extension Platform {
   }
 
   static func nativeDeclarationIsInitializer(declaration: UnicodeText) -> Bool {
-    let parsableDeclaration = StrictString(declaration)
+    let parsableDeclaration = String(declaration)
     if let initializer = initializerSuffix,
-       (parsableDeclaration.prefix(upTo: " ")?.contents ?? parsableDeclaration[...]).hasSuffix(StrictString(initializer).literal()) {
+       (parsableDeclaration.prefix(upTo: " ")?.contents ?? parsableDeclaration[...]).hasSuffix(String(initializer)) {
       return true
     }
     return false
@@ -2449,7 +2447,19 @@ extension Platform {
     entries: inout ReferenceCountedReturns,
     captures: inout [Capture]?
   ) {
-    for argument in action.arguments {
+    var arguments = action.arguments
+    if let referee = referenceLookup.lookupAction(
+      action.actionName,
+      signature: action.arguments.map({ $0.resolvedResultType!! }),
+      specifiedReturnValue: action.resolvedResultType) {
+      arguments = order(
+        arguments,
+        for: referee.parameters.reordering(
+          from: action.actionName,
+          to: nativeNameDeclaration(of: referee) ?? referee.names.identifier())
+      )
+    }
+    for argument in arguments {
       var entriesInThisBranch = ReferenceCountedReturns()
       defer {
         entries.append(contentsOf: entriesInThisBranch)
