@@ -96,6 +96,21 @@ extension
     }
    }
 
+  flow (clients)
+   (
+    English: if (optional: optional (thing)) exists, unwrap it as (unwrapped: • thing), (consequence: {}), otherwise (alternative: {})
+   )
+   JavaScript: “let ” unique (resolved optional) “ = ” optional “; if (” unique (resolved optional) “ !== null) { const ” unwrapped “ = ” unique (resolved optional) “; {” consequence “}} else {” alternative “}”
+   Kotlin: “val ” unique (resolved optional) “ = ” optional “; if (” unique (resolved optional) “ != null) { val ” unwrapped “ = ” unique (resolved optional) “” consequence “} else {” alternative “}”
+   Swift: “if let ” unwrapped “ = ” optional “ {” consequence “} else {” alternative “}”
+   {
+    if (optional) is (something), unwrap it as (• unwrapped), {
+     consequence
+    }, otherwise {
+     alternative
+    }
+   }
+
   action (clients)
    (
     English: wrap (value: thing) into optional

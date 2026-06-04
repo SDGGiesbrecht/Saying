@@ -12,7 +12,7 @@ extension ModuleIntermediate {
         var newSource: [String] = []
         newSource.append(
           contentsOf: syntaxNodeParsedDeclaration(
-            englishName: UnicodeText(englishName),
+            englishName: englishName,
             deutscherName: deutscherName,
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,

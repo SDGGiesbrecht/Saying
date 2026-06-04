@@ -355,7 +355,7 @@ extension ModuleIntermediate {
       if String(identifier).hasSuffix(" +") {
         identifier.removeLast(2)
       }
-      if !moduleWideImports.contains(where: { $0.referenceDictionary.languageIsKnown(UnicodeText(identifier)) }),
+      if !moduleWideImports.contains(where: { $0.referenceDictionary.languageIsKnown(identifier) }),
         !referenceDictionary.languageIsKnown(identifier) {
         errors.append(.noSuchLanguage(language))
       }

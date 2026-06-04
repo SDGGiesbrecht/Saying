@@ -4,6 +4,7 @@ struct CaseIntermediate {
   var referenceAction: ActionIntermediate?
   var wrapAction: ActionIntermediate
   var unwrapAction: ActionIntermediate?
+  var unwrapOtherwiseAction: ActionIntermediate?
   var checkAction: ActionIntermediate
   var documentation: DocumentationIntermediate?
   var declaration: ParsedCaseDeclaration
@@ -263,6 +264,20 @@ extension CaseIntermediate {
         swift: swiftRetrieve
       )
     })
+    let unwrapOtherwiseAction: ActionIntermediate? = contents.map({ valueType in
+      ActionIntermediate.enumerationUnwrapOtherwise(
+        enumerationType: type,
+        caseIdentifier: names.identifier(),
+        valueType: valueType,
+        access: access,
+        testOnlyAccess: testOnlyAccess,
+        c: nil,
+        cSharp: nil,
+        javaScript: nil,
+        kotlin: nil,
+        swift: nil
+      )
+    })
     let checkAction = ActionIntermediate.enumerationCheck(
       enumerationType: type,
       caseIdentifier: names.identifier(),
@@ -286,6 +301,7 @@ extension CaseIntermediate {
         referenceAction: referenceAction,
         wrapAction: wrapAction,
         unwrapAction: unwrapAction,
+        unwrapOtherwiseAction: unwrapOtherwiseAction,
         checkAction: checkAction,
         documentation: attachedDocumentation,
         declaration: declaration
@@ -305,6 +321,7 @@ extension CaseIntermediate {
       referenceAction: referenceAction?.resolvingExtensionContext(typeLookup: typeLookup),
       wrapAction: wrapAction.resolvingExtensionContext(typeLookup: typeLookup),
       unwrapAction: unwrapAction?.resolvingExtensionContext(typeLookup: typeLookup),
+      unwrapOtherwiseAction: unwrapOtherwiseAction?.resolvingExtensionContext(typeLookup: typeLookup),
       checkAction: checkAction.resolvingExtensionContext(typeLookup: typeLookup),
       documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration
@@ -331,6 +348,11 @@ extension CaseIntermediate {
         specializationNamespace: specializationNamespace
       ),
       unwrapAction: unwrapAction?.specializing(
+        for: use,
+        typeLookup: typeLookup,
+        specializationNamespace: specializationNamespace
+      ),
+      unwrapOtherwiseAction: unwrapOtherwiseAction?.specializing(
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace

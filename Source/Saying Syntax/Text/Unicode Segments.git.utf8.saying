@@ -14,6 +14,15 @@ thing (clients)
 
 action (unit)
  (
+  English: segments of (instance: Unicode segments)
+ )
+ list of (Unicode segment)
+ {
+  ← (segments) of (instance)
+ }
+
+action (unit)
+ (
   English: Unicode segments (segments: list of (Unicode segment))
  )
  Unicode segments
