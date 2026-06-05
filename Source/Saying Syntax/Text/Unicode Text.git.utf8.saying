@@ -29,7 +29,7 @@ action (clients)
    append (Unicode segment at (“2”: natural number) containing (“(”)) to (↓ segment list)
    append (Unicode segment at (“4”: natural number) containing (“)”)) to (↓ segment list)
    let (• segments: Unicode segments) be (Unicode segments (segment list))
-   let (• cursor: Unicode segments boundary) be (beginning of (segments))
+   let (• cursor: Unicode segments boundary) start as (beginning of (segments))
    advance (↓ cursor) to next in (segments) skipping bounds check
    verify ((Unicode text of ((from (cursor) to (end of (segments))) in (segments))) is (“()”))
   }
@@ -38,7 +38,7 @@ action (clients)
    append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
    append (Unicode segment at (“2”: natural number) containing (“()”)) to (↓ segment list)
    let (• segments: Unicode segments) be (Unicode segments (segment list))
-   let (• cursor: Unicode segments boundary) be (end of (segments))
+   let (• cursor: Unicode segments boundary) start as (end of (segments))
    backtrack (↓ cursor) to previous in (segments) skipping bounds check
    verify ((Unicode text of ((from (beginning of (segments)) to (cursor)) in (segments))) is (“!(”))
   }
