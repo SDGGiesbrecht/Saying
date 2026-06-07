@@ -68,8 +68,8 @@ action (clients)
      }
     }
     let (• next segment: list boundary) be (boundary after (segment of cursor) in (segments of whole) skipping bounds check)
-    if (index after (next segment) in (segments of whole)) exists, unwrap it as (• next segment: list index), {
-     change (↓ cursor) to (Unicode segments boundary at segment (next segment), scalar (wrap (beginning of ((source) of (entry at (next segment) in (segments of whole)))) into optional))
+    if (index after (next segment) in (segments of whole)) exists, unwrap it as (• next index: list index), {
+     change (↓ cursor) to (Unicode segments boundary at segment (next segment), scalar (wrap (beginning of ((source) of (entry at (next index) in (segments of whole)))) into optional))
     }, otherwise {
      change (↓ cursor) to (Unicode segments boundary at segment (next segment), scalar (nothing: optional (Unicode scalar boundary)))
     }
