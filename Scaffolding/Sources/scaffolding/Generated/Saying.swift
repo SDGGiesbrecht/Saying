@@ -209,8 +209,8 @@ struct UnicodeText {
           }
         }
         let next_0020segment: Int = segments_0020of_0020whole.index(after: segment_0020of_0020cursor)
-        if let next_0020segment = segments_0020of_0020whole.entryIndex(afterBoundary: next_0020segment) {
-          cursor = UnicodeSegments.Boundary(next_0020segment, segments_0020of_0020whole[next_0020segment].source.startIndex)
+        if let next_0020index = segments_0020of_0020whole.entryIndex(afterBoundary: next_0020segment) {
+          cursor = UnicodeSegments.Boundary(next_0020segment, segments_0020of_0020whole[next_0020index].source.startIndex)
         } else {
           cursor = UnicodeSegments.Boundary(next_0020segment, nil)
         }
