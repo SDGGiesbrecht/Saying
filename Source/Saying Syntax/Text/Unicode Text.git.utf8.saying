@@ -1,0 +1,79 @@
+action (clients)
+ [
+  test (hidden) {
+   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+   append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
+   append (Unicode segment at (“2”: natural number) containing (“(”)) to (↓ segment list)
+   append (Unicode segment at (“4”: natural number) containing (“)”)) to (↓ segment list)
+   verify ((Unicode text of (Unicode segments (segment list))) is (“!()”))
+  }
+ ]
+ (
+  English: Unicode text of (segments: Unicode segments)
+  Swift: UnicodeText.init (segments: [segments])
+ )
+ Unicode text
+ {
+  let (• text: Unicode text) start as (empty: Unicode text)
+  for each (• entry: Unicode segment) in (segments of (segments: Unicode segments)), {
+   append ((source) of (entry)) to (↓ text)
+  }
+  ← text
+ }
+
+action (clients)
+ [
+  test (hidden) {
+   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+   append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
+   append (Unicode segment at (“2”: natural number) containing (“(”)) to (↓ segment list)
+   append (Unicode segment at (“4”: natural number) containing (“)”)) to (↓ segment list)
+   let (• segments: Unicode segments) be (Unicode segments (segment list))
+   let (• cursor: Unicode segments boundary) start as (beginning of (segments))
+   advance (↓ cursor) to next in (segments) skipping bounds check
+   verify ((Unicode text of ((from (cursor) to (end of (segments))) in (segments))) is (“()”))
+  }
+  test (hidden) {
+   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+   append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
+   append (Unicode segment at (“2”: natural number) containing (“()”)) to (↓ segment list)
+   let (• segments: Unicode segments) be (Unicode segments (segment list))
+   let (• cursor: Unicode segments boundary) start as (end of (segments))
+   backtrack (↓ cursor) to previous in (segments) skipping bounds check
+   verify ((Unicode text of ((from (beginning of (segments)) to (cursor)) in (segments))) is (“!(”))
+  }
+ ]
+ (
+  English: Unicode text of (slice: slice of (Unicode segments))
+  Swift: UnicodeText.init (slice: [slice])
+ )
+ Unicode text
+ {
+  let (• segments of whole: list of (Unicode segment)) be ((segments) of ((whole) of (slice)))
+  let (• cursor: Unicode segments boundary) start as (beginning of (slice))
+  let (• end: Unicode segments boundary) be (end of (slice))
+  let (• segment of end: list boundary) be ((segment) of (end))
+  let (• text: Unicode text) start as (empty: Unicode text)
+  while ({
+   ← (cursor) is less than (end)
+  }: → truth value), {
+   let (• segment of cursor: list boundary) be ((segment) of (cursor))
+   let (• segment: Unicode text) be ((source) of (entry after (segment of cursor) in (segments of whole) skipping bounds check))
+   if ((scalar) of (cursor)) exists, unwrap it as (• beginning: Unicode scalar boundary), {
+    if ((segment of cursor) is less than (segment of end)), {
+     append ((from (beginning) to (end of (segment))) in (segment)) to (↓ text)
+    }, otherwise {
+     if ((scalar) of (end)) exists, unwrap it as (• scalar of end: Unicode scalar boundary), {
+      append ((from (beginning) to (scalar of end)) in (segment)) to (↓ text)
+     }
+    }
+    let (• next segment: list boundary) be (boundary after (segment of cursor) in (segments of whole) skipping bounds check)
+    if (index after (next segment) in (segments of whole)) exists, unwrap it as (• next index: list index), {
+     change (↓ cursor) to (Unicode segments boundary at segment (next segment), scalar (wrap (beginning of ((source) of (entry at (next index) in (segments of whole)))) into optional))
+    }, otherwise {
+     change (↓ cursor) to (Unicode segments boundary at segment (next segment), scalar (nothing: optional (Unicode scalar boundary)))
+    }
+   }
+  }
+  ← text
+ }

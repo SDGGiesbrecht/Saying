@@ -100,6 +100,7 @@ import Foundation
         "UnicodeText.replace(_: UnicodeText, with: UnicodeText)",
 
         "UnicodeSegments.index(before: UnicodeSegments.Boundary)",
+        "UnicodeText.init(_: Slice<UnicodeSegments>)",
         "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
         "shimAccessToGitStyleLineParsing()",
         "SayingSource.init(origin: UnicodeText, code: SayingSourceCode)",

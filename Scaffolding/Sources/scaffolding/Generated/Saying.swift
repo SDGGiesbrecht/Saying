@@ -190,6 +190,34 @@ struct UnicodeText {
   var startIndex: String.UnicodeScalarView.Index {
     return self.scalars.startIndex
   }
+
+  init(_ slice: Slice<UnicodeSegments>) {
+    let segments_0020of_0020whole: [Unicode_0020segment] = slice.base.segments
+    var cursor: UnicodeSegments.Boundary = slice.startIndex
+    let end: UnicodeSegments.Boundary = slice.endIndex
+    let segment_0020of_0020end: Int = end.segment
+    var text: UnicodeText = .empty
+    while (cursor < end) {
+      let segment_0020of_0020cursor: Int = cursor.segment
+      let segment: UnicodeText = segments_0020of_0020whole[segment_0020of_0020cursor].source
+      if let beginning = cursor.scalar {
+        if segment_0020of_0020cursor < segment_0020of_0020end {
+          text.append(contentsOf: Slice(base: segment, bounds: beginning ..< segment.endIndex))
+        } else {
+          if let scalar_0020of_0020end = end.scalar {
+            text.append(contentsOf: Slice(base: segment, bounds: beginning ..< scalar_0020of_0020end))
+          }
+        }
+        let next_0020segment: Int = segments_0020of_0020whole.index(after: segment_0020of_0020cursor)
+        if let next_0020index = segments_0020of_0020whole.entryIndex(afterBoundary: next_0020segment) {
+          cursor = UnicodeSegments.Boundary(next_0020segment, segments_0020of_0020whole[next_0020index].source.startIndex)
+        } else {
+          cursor = UnicodeSegments.Boundary(next_0020segment, nil)
+        }
+      }
+    }
+    self = text
+  }
 }
 
 extension UnicodeText: Collection {}
@@ -23674,6 +23702,15 @@ fileprivate func before_0020end_0020of_0020segment_0020before_0020_0028_0029_002
   let beginning_0020of_0020previous_0020segment: Int = segment_0020list.index(before: segment_0020cursor)
   let segment: UnicodeText = segment_0020list[beginning_0020of_0020previous_0020segment].source
   return UnicodeSegments.Boundary(beginning_0020of_0020previous_0020segment, segment.boundary(beforeBoundary: segment.endIndex))
+}
+
+extension [Unicode_0020segment] {
+  fileprivate func entryIndex(afterBoundary boundary: Int) -> Int? {
+    if boundary < self.endIndex {
+      return boundary
+    }
+    return nil
+  }
 }
 
 fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: Git_2010style_0020parsing_0020cursor, _ segments: inout [Unicode_0020segment]) {

@@ -5,6 +5,8 @@ extension UnicodeText {
       self.init(text)
     } else if let slice = scalars as? Slice<UnicodeText> {
       self.init(slice)
+    } else if let sliceOfSegments = scalars as? Slice<UnicodeSegments> {
+      self.init(sliceOfSegments)
     } else {
       self.init(String.UnicodeScalarView(scalars))
     }

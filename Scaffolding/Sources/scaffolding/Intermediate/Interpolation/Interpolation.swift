@@ -328,6 +328,24 @@ extension Interpolation where InterpolationParameter == ParameterIntermediate {
       ]
     )
   }
+  static func enumerationUnwrapOtherwise(
+    enumerationType: ParsedTypeReference,
+    caseIdentifier: UnicodeText,
+    valueType: ParsedTypeReference
+  ) -> Interpolation {
+    return Interpolation(
+      parameters: [
+        .nativeParameterStub(names: ["enumeration"], type: enumerationType),
+        .nativeParameterStub(names: ["case"], type: .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier)),
+        .nativeParameterStub(names: ["value"], type: valueType, passage: .out),
+        .nativeParameterStub(names: ["consequence"], type: .statements),
+        .nativeParameterStub(names: ["alternative"], type: .statements),
+      ],
+      reorderings: [
+        "if () is (), unwrap it as (), (), otherwise ()": [0, 1, 2, 3, 4]
+      ]
+    )
+  }
   static func enumerationCheck(
     enumerationType: ParsedTypeReference,
     caseIdentifier: UnicodeText,
