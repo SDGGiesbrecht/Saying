@@ -619,6 +619,11 @@ use (clients)
  }
 
 use (clients)
+ listing of indices of (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
+ {
+ }
+
+use (clients)
  slicing (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
  }
