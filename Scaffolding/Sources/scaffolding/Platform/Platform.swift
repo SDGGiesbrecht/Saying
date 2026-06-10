@@ -752,6 +752,7 @@ extension Platform {
     var handledActionDeclarations: Set<String> = []
     for module in modulesToSearchForMembers {
       let referenceLookup = externalReferenceLookup.appending(module.referenceDictionary)
+      var typeNameCache: [TypeReference: String] = [:]
       for action in module.referenceDictionary.allActions(
         filter: { action in
           if !action.isCreation,
@@ -776,9 +777,9 @@ extension Platform {
                 typeToCompare = action.parameters.ordered(for: nameDeclaration).first!.type
               }
             }
-            if name == source(
-              for: typeToCompare,
-              referenceLookup: referenceLookup
+            if name == compute(
+              { source(for: typeToCompare, referenceLookup: referenceLookup) },
+              cachingIn: &typeNameCache[typeToCompare.key]
             ) {
               return true
             }
