@@ -16,6 +16,7 @@ extension
     ] {
      “extension ” list “: Collection {}”
      “extension ” boundary “: Comparable {}”
+     “extension ” list “ {¤(A)typealias Indices = DefaultIndices<” list “>¤(A)}”
     }
    {
     part (clients/nowhere)
