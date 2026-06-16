@@ -164,6 +164,30 @@ extension
      repetition
     }
    }
+
+  flow (clients)
+   [
+    test {
+     let (• offsets: list of (natural number)) start as (empty: list of (natural number))
+     append (“0”: natural number) to (↓ offsets)
+     append (“1”: natural number) to (↓ offsets)
+     append (“2”: natural number) to (↓ offsets)
+     for each (• entry: natural number) and its (• offset: natural number) in (offsets), {
+      verify ((entry) is (offset))
+     }
+    }
+   ]
+   (
+    English: for each (entry: • element) and its (offset: • natural number) in (sequence: list), (repetition: {})
+   )
+   {
+    let (• offset cursor: natural number) start as (zero: natural number)
+    for each (• entry: element) in (sequence), {
+     let (• offset: natural number) be (offset cursor)
+     increment (↓ offset cursor)
+     repetition
+    }
+   }
  }
 
 flow (clients)
