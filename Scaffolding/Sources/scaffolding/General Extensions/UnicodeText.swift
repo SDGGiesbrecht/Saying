@@ -35,8 +35,6 @@ extension UnicodeText: ExpressibleByStringLiteral {
 
 extension UnicodeText: Hashable {}
 
-extension UnicodeText: BidirectionalCollection {}
-
 extension UnicodeText: RangeReplaceableCollection {
 
   init() {

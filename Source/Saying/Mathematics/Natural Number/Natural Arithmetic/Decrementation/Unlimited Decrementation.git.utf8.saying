@@ -28,6 +28,7 @@ ability (clients)
    ]
    (
     English: decrement (counter: ↓ number)
+    Swift: (self: [counter]).decrement
    )
    {
     decrement (↓ counter) according to default unlimited decrementation
@@ -45,6 +46,7 @@ ability (clients)
    ]
    (
     English: predecessor to (number: number)
+    Swift: var (self: [number]).predecessor
    )
    number
    {
@@ -67,6 +69,7 @@ extension
    ]
    (
     English: decrement (counter: ↓ number) according to default unlimited decrementation
+    Swift: (self: [counter]).decrementAccordingToDefaultUnlimitedDecrementation
    )
    {
     subtract (one: number) from (↓ counter)

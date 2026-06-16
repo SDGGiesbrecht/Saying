@@ -28,6 +28,7 @@ ability (clients)
    ]
    (
     English: decrement (counter: ↓ number) skipping underflow check
+    Swift: (self: [counter]).decrementSkippingUnderflowCheck
    )
    {
     decrement (↓ counter) skipping underflow check according to default limited decrementation
@@ -48,6 +49,7 @@ ability (clients)
    ]
    (
     English: predecessor to (number: number) skipping underflow check
+    Swift: var (self: [number]).predecessorSkippingUnderflowCheck
    )
    number
    {
@@ -61,6 +63,7 @@ extension
   action (clients)
    (
     English: decrement (number: ↓ number) skipping underflow check according to default limited decrementation
+    Swift: (self: [number]).decrementSkippingUnderflowCheckAccordingToDefaultLimitedDecrementation
    )
    {
     subtract (one: number) from (↓ number) skipping overflow check
@@ -78,6 +81,7 @@ extension
    ]
    (
     English: decrement (counter: ↓ number)
+    Swift: (self: [counter]).decrement
    )
    truth value
    {
@@ -104,6 +108,7 @@ extension
    ]
    (
     English: predecessor to (number: number)
+    Swift: var (self: [number]).predecessor
    )
    optional (number)
    {
