@@ -7,7 +7,7 @@ thing (clients)
  {
   part (unit/nowhere)
    (
-    English: segment
+    English: beginning of segment
    )
    list boundary
 
@@ -20,7 +20,7 @@ thing (clients)
 
 action (unit)
  (
-  English: Unicode segments boundary at segment (segment: list boundary), scalar (scalar: optional (Unicode scalar boundary))
+  English: Unicode segments boundary at segment (beginning of segment: list boundary), scalar (scalar: optional (Unicode scalar boundary))
  )
  Unicode segments boundary
  create
@@ -43,13 +43,13 @@ use (clients)
    (first: Unicode segments boundary) is (second: Unicode segments boundary)
    truth value
    {
-    ← (((segment) of (first)) is ((segment) of (second))) and (((scalar) of (first)) is ((scalar) of (second)))
+    ← (((beginning of segment) of (first)) is ((beginning of segment) of (second))) and (((scalar) of (first)) is ((scalar) of (second)))
    }
 
   action (clients)
    hash key (key: Unicode segments boundary) with (hasher: ↓ hasher)
    {
-    hash key ((segment) of (key)) with (↓ hasher)
+    hash key ((beginning of segment) of (key)) with (↓ hasher)
     hash key ((scalar) of (key)) with (↓ hasher)
    }
 
@@ -72,7 +72,7 @@ use (clients)
    (first: Unicode segments boundary) is less than (second: Unicode segments boundary)
    truth value
    {
-    if (compare ((segment) of (first)) to ((segment) of (second))) exists, unwrap it as (• result: truth value), {
+    if (compare ((beginning of segment) of (first)) to ((beginning of segment) of (second))) exists, unwrap it as (• result: truth value), {
      ← result
     }
     if ((scalar) of (first)) exists, unwrap it as (• first scalar: Unicode scalar boundary), {

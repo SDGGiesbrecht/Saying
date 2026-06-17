@@ -44,6 +44,35 @@ ability (clients)
     ← index after (boundary before (boundary) in (list) skipping bounds check) in (list) skipping bounds check
    }
 
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((boundary after (index after (beginning of (list)) in (list) skipping bounds check) in (list)) is (boundary after (beginning of (list)) in (list) skipping bounds check))
+    }
+   ]
+   (
+    English: boundary after (index: index) in (list: list)
+    Swift: (self: [list]).boundary afterIndex (index: [index])
+   )
+   boundary
+   {
+    ← boundary after (boundary before (index) in (list)) in (list) skipping bounds check
+   }
+
+  requirement (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((boundary before (index before (end of (list)) in (list) skipping bounds check) in (list)) is (boundary before (end of (list)) in (list) skipping bounds check))
+    }
+   ]
+   (
+    English: boundary before (index: index) in (list: list)
+    Swift: (self: [list]).boundary beforeIndex (index: [index])
+   )
+   boundary
+
   requirement (clients)
    (
     English: beginning of (list: list)
@@ -522,6 +551,15 @@ use (unit)
    list index
    {
     ← index after (boundary) in ((wrapped list) of (list)) skipping bounds check
+   }
+
+  action (unit)
+   (
+    English: boundary before (index: list index) in (list: minimal list example)
+   )
+   list boundary
+   {
+    ← boundary before (index) in ((wrapped list) of (list))
    }
 
   action (unit)

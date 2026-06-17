@@ -129,6 +129,15 @@ use (clients)
 
   action (clients)
    (
+    English: boundary before (index: Unicode scalar index) in (list: Unicode text)
+   )
+   Unicode scalar boundary
+   {
+    ← boundary before (index) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
     English: beginning of (list: Unicode text)
    )
    Unicode scalar boundary

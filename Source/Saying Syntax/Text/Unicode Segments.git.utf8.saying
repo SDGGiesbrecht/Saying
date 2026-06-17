@@ -39,10 +39,20 @@ use (clients)
    {
     if ((scalar) of (boundary)) exists, unwrap it as (• scalar boundary: Unicode scalar boundary), {
      let (• segment list: list of (Unicode segment)) be ((segments) of (list))
-     let (• segment index: list index) be (index after ((segment) of (boundary)) in (segment list) skipping bounds check)
+     let (• segment index: list index) be (index after ((beginning of segment) of (boundary)) in (segment list) skipping bounds check)
      ← Unicode segments index at segment (segment index), scalar (index after (scalar boundary) in ((source) of (entry at (segment index) in (segment list))) skipping bounds check)
     }
     !
+   }
+
+  action (clients)
+   (
+    English: boundary before (index: Unicode segments index) in (list: Unicode segments)
+   )
+   Unicode segments boundary
+   {
+    let (• segments list: list of (Unicode segment)) be ((segments) of (list))
+    ← Unicode segments boundary at segment (boundary before ((segment) of (index)) in (segments list)), scalar (wrap (boundary before ((scalar) of (index)) in ((source) of (entry at ((segment) of (index)) in (segments list)))) into optional)
    }
 
   action (clients)
@@ -102,7 +112,7 @@ use (clients)
    Unicode segments boundary
    {
     let (• segment list: list of (Unicode segment)) be ((segments) of (list))
-    let (• segment cursor: list boundary) be ((segment) of (cursor))
+    let (• segment cursor: list boundary) be ((beginning of segment) of (cursor))
     let (• segment: Unicode text) be ((source) of (entry at (index after (segment cursor) in (segment list) skipping bounds check) in (segment list)))
     if ((scalar) of (cursor)) exists, unwrap it as (• scalar cursor: Unicode scalar boundary), {
      let (• next scalar: Unicode scalar boundary) be (boundary after (scalar cursor) in (segment) skipping bounds check)
@@ -151,7 +161,7 @@ use (clients)
    )
    Unicode segments boundary
    {
-    let (• segment cursor: list boundary) be ((segment) of (cursor))
+    let (• segment cursor: list boundary) be ((beginning of segment) of (cursor))
     if ((scalar) of (cursor)) exists, unwrap it as (• scalar cursor: Unicode scalar boundary), {
      let (• segment list: list of (Unicode segment)) be ((segments) of (list))
      let (• segment: Unicode text) be ((source) of (entry at (index after (segment cursor) in (segment list) skipping bounds check) in (segment list)))

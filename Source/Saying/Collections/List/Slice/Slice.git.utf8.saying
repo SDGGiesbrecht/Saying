@@ -73,6 +73,15 @@ extension
 
     action (clients)
      (
+      English: boundary before (index: index) in (list: slice of (list))
+     )
+     boundary
+     {
+      ← boundary before (index) in ((whole) of (list))
+     }
+
+    action (clients)
+     (
       English: beginning of (list: slice of (list))
      )
      boundary

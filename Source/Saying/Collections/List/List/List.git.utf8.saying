@@ -202,6 +202,19 @@ extension
 
     action (clients)
      (
+      English: boundary before (index: list index) in (list: list of (thing))
+     )
+     list boundary
+     C♯: “” index “”
+     JavaScript: “” index “”
+     Kotlin: “” index “”
+     Swift: “” index “”
+     {
+      ← boundary before (index) in ((unmanaged) of (list))
+     }
+
+    action (clients)
+     (
       English: beginning of (list: list of (thing))
      )
      list boundary
