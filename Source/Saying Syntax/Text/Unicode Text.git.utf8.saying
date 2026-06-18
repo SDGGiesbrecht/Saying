@@ -52,12 +52,12 @@ action (clients)
   let (• segments of whole: list of (Unicode segment)) be ((segments) of ((whole) of (slice)))
   let (• cursor: Unicode segments boundary) start as (beginning of (slice))
   let (• end: Unicode segments boundary) be (end of (slice))
-  let (• segment of end: list boundary) be ((segment) of (end))
+  let (• segment of end: list boundary) be ((beginning of segment) of (end))
   let (• text: Unicode text) start as (empty: Unicode text)
   while ({
    ← (cursor) is less than (end)
   }: → truth value), {
-   let (• segment of cursor: list boundary) be ((segment) of (cursor))
+   let (• segment of cursor: list boundary) be ((beginning of segment) of (cursor))
    let (• segment: Unicode text) be ((source) of (entry after (segment of cursor) in (segments of whole) skipping bounds check))
    if ((scalar) of (cursor)) exists, unwrap it as (• beginning: Unicode scalar boundary), {
     if ((segment of cursor) is less than (segment of end)), {

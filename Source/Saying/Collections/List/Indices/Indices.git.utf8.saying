@@ -55,6 +55,16 @@ extension
 
     action (clients)
      (
+      English: boundary before (index: index) in (list: indices of (list))
+     )
+     boundary
+     Swift: “” index “”
+     {
+      ← boundary before (index) in ((indexed) of (list))
+     }
+
+    action (clients)
+     (
       English: beginning of (list: indices of (list))
      )
      boundary

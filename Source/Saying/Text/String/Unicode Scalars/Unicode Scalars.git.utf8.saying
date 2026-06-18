@@ -419,6 +419,19 @@ use (clients)
 
   action (clients)
    (
+    English: boundary before (index: Unicode scalar index) in (list: Unicode scalars)
+   )
+   Unicode scalar boundary
+   C♯: “” index “”
+   JavaScript: “” index “”
+   Kotlin: “” index “”
+   Swift: “” index “”
+   {
+    ← (beginning) of (index)
+   }
+
+  action (clients)
+   (
     English: beginning of (list: Unicode scalars)
    )
    Unicode scalar boundary

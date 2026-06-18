@@ -9,7 +9,7 @@ extension UnicodeSegments {
   }
 
   func underlyingScalarOffset(of index: Boundary) -> Int {
-    let segmentIndex = index.segmentIndex
+    let segmentIndex = index.beginningOfSegment
     if let scalar = index.scalarIndex {
       let segment = segment(at: segmentIndex)
       return Int(segment.scalarOffset) + segment.source[..<scalar].count
