@@ -141,6 +141,98 @@ ability (clients)
     ← (list) with (index) removed according to default use as changeable list
    }
 
+  choice (clients)
+   [
+    [
+     English: Removes the first entry in the list if one exists.
+    ]
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     remove first from (↓ list)
+    }
+    [
+     English: This safely does nothing if the list is already empty.
+    ]
+    test {
+     let (• list: list) start as (empty: list)
+     remove first from (↓ list)
+     verify ((list) is empty)
+    }
+   ]
+   (
+    English: remove first from (list: ↓ list)
+   )
+   {
+    ← remove first from (↓ list) according to default use as changeable list
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the list with the first entry removed.
+    ]
+    test {ignore ((non‐empty example: list) with first removed)}
+    [
+     English: This safely does nothing if the list is already empty.
+    ]
+    test {verify (((empty: list) with first removed) is empty)}
+   ]
+   (
+    English: (list: list) with first removed
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    remove first from (↓ copy)
+    ← copy
+   }
+
+  choice (clients)
+   [
+    [
+     English: Removes the last entry in the list if one exists.
+    ]
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     remove last from (↓ list)
+    }
+    [
+     English: This safely does nothing if the list is already empty.
+    ]
+    test {
+     let (• list: list) start as (empty: list)
+     remove last from (↓ list)
+     verify ((list) is empty)
+    }
+   ]
+   (
+    English: remove last from (list: ↓ list)
+   )
+   {
+    ← remove last from (↓ list) according to default use as changeable list
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the list with the first entry removed.
+    ]
+    test {ignore ((non‐empty example: list) with last removed)}
+    [
+     English: This safely does nothing if the list is already empty.
+    ]
+    test {verify (((empty: list) with last removed) is empty)}
+   ]
+   (
+    English: (list: list) with last removed
+   )
+   list
+   {
+    let (• copy: list) start as (list: list)
+    remove last from (↓ copy)
+    ← copy
+   }
+
   requirement (clients)
    [
     test {
@@ -291,6 +383,48 @@ extension
     let (• copy: list) start as (list: list)
     remove (index) from (↓ copy)
     ← copy
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     remove first from (↓ list) according to default use as changeable list
+    }
+    test {
+     let (• list: list) start as (empty: list)
+     remove first from (↓ list) according to default use as changeable list
+     verify ((list) is empty)
+    }
+   ]
+   (
+    English: remove first from (list: ↓ list) according to default use as changeable list
+   )
+   {
+    if (index after (beginning of (list)) in (list)) exists, unwrap it as (• first: index), {
+     ← remove (first) from (↓ list)
+    }
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) start as (non‐empty example: list)
+     remove last from (↓ list) according to default use as changeable list
+    }
+    test {
+     let (• list: list) start as (empty: list)
+     remove last from (↓ list) according to default use as changeable list
+     verify ((list) is empty)
+    }
+   ]
+   (
+    English: remove last from (list: ↓ list) according to default use as changeable list
+   )
+   {
+    if (index before (end of (list)) in (list)) exists, unwrap it as (• last: index), {
+     ← remove (last) from (↓ list)
+    }
    }
 
   action (clients)
