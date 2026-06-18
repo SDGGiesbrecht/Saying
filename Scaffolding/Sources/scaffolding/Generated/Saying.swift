@@ -23758,8 +23758,8 @@ extension UnicodeSegment {
 }
 
 extension UnicodeSegments.Boundary {
-  var segmentIndex: Int {
-    return segment
+  var beginningOfSegment: Int {
+    return beginning_0020of_0020segment
   }
   var scalarIndex: String.UnicodeScalarView.Index? {
     return scalar
