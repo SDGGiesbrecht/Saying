@@ -195,10 +195,10 @@ struct UnicodeText {
     let segments_0020of_0020whole: [Unicode_0020segment] = slice.base.segments
     var cursor: UnicodeSegments.Boundary = slice.startIndex
     let end: UnicodeSegments.Boundary = slice.endIndex
-    let segment_0020of_0020end: Int = end.segment
+    let segment_0020of_0020end: Int = end.beginning_0020of_0020segment
     var text: UnicodeText = .empty
     while (cursor < end) {
-      let segment_0020of_0020cursor: Int = cursor.segment
+      let segment_0020of_0020cursor: Int = cursor.beginning_0020of_0020segment
       let segment: UnicodeText = segments_0020of_0020whole[segment_0020of_0020cursor].source
       if let beginning = cursor.scalar {
         if segment_0020of_0020cursor < segment_0020of_0020end {
@@ -428,11 +428,11 @@ extension UnicodeSegments {
 
 extension UnicodeSegments {
   struct Boundary {
-    fileprivate let segment: Int
+    fileprivate let beginning_0020of_0020segment: Int
     fileprivate let scalar: String.UnicodeScalarView.Index?
 
-    fileprivate init(_ segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
-      self.segment = segment
+    fileprivate init(_ beginning_0020of_0020segment: Int, _ scalar: String.UnicodeScalarView.Index?) {
+      self.beginning_0020of_0020segment = beginning_0020of_0020segment
       self.scalar = scalar
     }
   }
@@ -449,7 +449,7 @@ struct UnicodeSegments {
 
   func index(after i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
     let segment_0020list: [Unicode_0020segment] = self.segments
-    let segment_0020cursor: Int = i.segment
+    let segment_0020cursor: Int = i.beginning_0020of_0020segment
     let segment: UnicodeText = segment_0020list[segment_0020cursor].source
     if let scalar_0020cursor = i.scalar {
       let next_0020scalar: String.UnicodeScalarView.Index = segment.index(after: scalar_0020cursor)
@@ -466,7 +466,7 @@ struct UnicodeSegments {
   }
 
   func index(before i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
-    let segment_0020cursor: Int = i.segment
+    let segment_0020cursor: Int = i.beginning_0020of_0020segment
     if let scalar_0020cursor = i.scalar {
       let segment_0020list: [Unicode_0020segment] = self.segments
       let segment: UnicodeText = segment_0020list[segment_0020cursor].source
@@ -497,7 +497,7 @@ struct UnicodeSegments {
   func indexSkippingBoundsCheck(afterBoundary boundary: UnicodeSegments.Boundary) -> UnicodeSegments.EntryIndex {
     if let scalar_0020boundary = boundary.scalar {
       let segment_0020list: [Unicode_0020segment] = self.segments
-      let segment_0020index: Int = boundary.segment
+      let segment_0020index: Int = boundary.beginning_0020of_0020segment
       return UnicodeSegments.EntryIndex(segment_0020index, segment_0020list[segment_0020index].source.indexSkippingBoundsCheck(afterBoundary: scalar_0020boundary))
     }
     fatalError()
@@ -23681,11 +23681,11 @@ fileprivate func 최종_0020쌍의_0020수_003AUnicode_0020
 }
 
 func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
-  return lhs.segment == rhs.segment && lhs.scalar == rhs.scalar
+  return lhs.beginning_0020of_0020segment == rhs.beginning_0020of_0020segment && lhs.scalar == rhs.scalar
 }
 
 func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
-  if let result = compare(lhs.segment, to: rhs.segment) {
+  if let result = compare(lhs.beginning_0020of_0020segment, to: rhs.beginning_0020of_0020segment) {
     return result
   }
   if let first_0020scalar = lhs.scalar {
