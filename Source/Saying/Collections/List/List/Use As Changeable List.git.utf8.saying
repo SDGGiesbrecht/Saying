@@ -163,7 +163,7 @@ ability (clients)
     English: remove first from (list: ↓ list)
    )
    {
-    ← remove first from (↓ list) according to default use as changeable list
+    remove first from (↓ list) according to default use as changeable list
    }
 
   choice (clients)
@@ -209,7 +209,7 @@ ability (clients)
     English: remove last from (list: ↓ list)
    )
    {
-    ← remove last from (↓ list) according to default use as changeable list
+    remove last from (↓ list) according to default use as changeable list
    }
 
   choice (clients)
@@ -402,7 +402,7 @@ extension
    )
    {
     if (index after (beginning of (list)) in (list)) exists, unwrap it as (• first: index), {
-     ← remove (first) from (↓ list)
+     remove (first) from (↓ list)
     }
    }
 
@@ -423,7 +423,7 @@ extension
    )
    {
     if (index before (end of (list)) in (list)) exists, unwrap it as (• last: index), {
-     ← remove (last) from (↓ list)
+     remove (last) from (↓ list)
     }
    }
 
