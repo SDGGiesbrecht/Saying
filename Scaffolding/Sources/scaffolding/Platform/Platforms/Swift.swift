@@ -689,7 +689,7 @@ enum Swift: Platform {
     return nil
   }
 
-  static func register(test: String) -> String {
+  static func register(test: String, ordinal: Int) -> String {
     return "currentTest = \u{22}\(sanitize(stringLiteral: test))\u{22}"
   }
 

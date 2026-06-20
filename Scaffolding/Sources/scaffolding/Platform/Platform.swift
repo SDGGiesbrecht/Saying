@@ -185,7 +185,7 @@ protocol Platform {
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
-  static func register(test: String) -> String
+  static func register(test: String, ordinal: Int) -> String
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
@@ -3227,10 +3227,14 @@ extension Platform {
     ).full
   }
 
-  static func call(test: TestIntermediate, identifierIndex: inout [String: [String: Int]]) -> [String] {
+  static func call(
+    test: TestIntermediate,
+    identifierIndex: inout [String: [String: Int]],
+    ordinal: Int
+  ) -> [String] {
     let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex)
     return [
-      register(test: "\(sayingIdentifier(for: test)) (\(name))"),
+      register(test: "\(sayingIdentifier(for: test)) (\(name))", ordinal: ordinal),
       statement(expression: "\(name)()")
     ]
   }
@@ -3491,7 +3495,9 @@ extension Platform {
       }
       result.appendSeparatorLine()
       let testCalls = splitFunctionImplementationIfTooLong(
-        implementation: allTests.flatMap({ call(test: $0, identifierIndex: &identifierIndex) }),
+        implementation: allTests.enumerated().flatMap({ (index, test) in
+          return call(test: test, identifierIndex: &identifierIndex, ordinal: index + 1)
+        }),
         indent: self.indent,
         subcall: { "test\($0)(\($1 ?? ""))" },
         subdeclaration: { "\(actionContinuationKeyword!) test\($0)(\($1 ?? ""))" }
