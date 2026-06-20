@@ -708,6 +708,24 @@ extension
 
     action (clients)
      (
+      English: remove first from (list: ↓ list of (thing))
+     )
+     JavaScript: “” list “.shift()”
+     {
+      remove first from (↓ list) according to default use as changeable list
+     }
+
+    action (clients)
+     (
+      English: remove last from (list: ↓ list of (thing))
+     )
+     JavaScript: “” list “.pop()”
+     {
+      remove last from (↓ list) according to default use as changeable list
+     }
+
+    action (clients)
+     (
       English: remove (range: range of (list boundary)) from (list: ↓ list of (thing))
      )
      Swift: “” list “.removeSubrange(” range “)”
