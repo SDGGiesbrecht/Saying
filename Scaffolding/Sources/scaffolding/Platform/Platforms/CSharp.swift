@@ -626,7 +626,7 @@ enum CSharp: Platform {
     return [
       "static class CurrentTest",
       "{",
-      "\(indent)internal static string Test;",
+      "\(indent)internal static int Test;",
       "}",
     ].joined(separator: "\n")
   }
@@ -680,8 +680,10 @@ enum CSharp: Platform {
     ]
   }
 
-  static func register(test: String) -> String {
-    return "CurrentTest.Test = \u{22}\(sanitize(stringLiteral: test))\u{22};"
+  static func register(test: String, ordinal: Int) -> String {
+    // Due to compiler limits on string literals (and resourses not having been implemented yet),
+    // code is only aware of the line numbers and humans must look up legible identifiers in the source.
+    return "CurrentTest.Test = \(ordinal); // \(test)"
   }
 
   static func testSummary(testCalls: [String]) -> [String] {
