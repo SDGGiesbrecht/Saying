@@ -1953,7 +1953,7 @@ extension Platform {
               mode: mode,
               captures: &captures
             ),
-            stillNeedsDereferencingIfNativeArgument: parameter.passage == .through
+            stillNeedsDereferencingIfNativeArgument: context?.lookupParameter(action.actionName) != nil
               && action.passage == .through,
             executionType: parameter.executeAction?.returnValue?.key.resolving(fromReferenceLookup: referenceLookup),
             executionArgument: parameter.executeAction == nil ? nil : call(

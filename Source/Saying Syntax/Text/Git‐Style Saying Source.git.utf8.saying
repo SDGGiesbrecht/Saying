@@ -37,12 +37,12 @@ use (clients)
 
 action (file)
  (
-  English: parse line in (source: Git‐style Saying source) from (beginning: ↓ optional (Git‐style parsing cursor)) to (end: Git‐style parsing cursor) into (segments: ↓ list of (Unicode segment))
+  English: parse line in (source: Git‐style Saying source) from (beginning: ↓ optional (Git‐style parsing cursor)) to (end: Unicode scalar boundary) into (segments: ↓ list of (Unicode segment))
  )
  {
   if (beginning) exists, unwrap it as (• start: Git‐style parsing cursor), {
    let (• adjusted offset: natural number) start as ((offset) of (start))
-   let (• segment: slice of (Unicode text)) start as ((from ((cursor) of (start)) to ((cursor) of (end))) in ((code) of (source)))
+   let (• segment: slice of (Unicode text)) start as ((from ((cursor) of (start)) to (end)) in ((code) of (source)))
    while ({
     ← (first in (segment)) is (“ ”: Unicode scalar)
    }: → truth value), {
@@ -56,15 +56,50 @@ action (file)
   change (↓ beginning) to (nothing)
  }
 
-action (unit)
+action (clients)
+ [
+  test {verify ((Unicode text of (parse (Git‐style Saying source from (“...”) containing (“...”)))) is (“...”))}
+  test {verify ((Unicode text of (parse (Git‐style Saying source from (“...”) containing (“...¤(A)...”)))) is (“...¤(2028)...”))}
+  test {verify ((Unicode text of (parse (Git‐style Saying source from (“...”) containing (“...¤(A)¤(A)...”)))) is (“...¤(2029)...”))}
+  test {verify ((Unicode text of (parse (Git‐style Saying source from (“...”) containing (“...¤(A)”)))) is (“...”))}
+  test {verify ((Unicode text of (parse (Git‐style Saying source from (“...”) containing (“ ...”)))) is (“...”))}
+ ]
  (
-  English: shim unit access to Git‐style line parsing
+  English: parse (source: Git‐style Saying source)
+  Swift: (self: [source]).parsed
  )
+ Saying source
  {
-  let (• source text: Unicode text) be (“ ...”)
-  let (• source: Git‐style Saying source) be (Git‐style Saying source from (“”) containing (source text))
-  let (• beginning: optional (Git‐style parsing cursor)) start as (wrap (Git‐style parsing cursor at (beginning of (source text)) and (0: natural number)) as (something))
-  let (• end: Git‐style parsing cursor) be (Git‐style parsing cursor at (end of (source text)) and (1: natural number))
+  let (• code: Unicode text) be ((code) of (source))
+  let (• beginning of segment: optional (Git‐style parsing cursor)) start as (nothing: optional (Git‐style parsing cursor))
   let (• segments: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-  parse line in (source) from (↓ beginning) to (end) into (↓ segments)
+  let (• indices: indices of (Unicode text)) be (indices of (code))
+  let (• last index: optional (Unicode scalar index)) be (last in (indices))
+  for each (• index: Unicode scalar index) and its (• offset: natural number) in (indices), {
+   let (• scalar: Unicode scalar) be (entry at (index) in (code))
+   if ((scalar) is (“¤(A)”: Unicode scalar)), {
+    parse line in (source) from (↓ beginning of segment) to (boundary before (index) in (indices)) into (↓ segments)
+    if ((index) is not (last index)), {
+     let (• combined: truth value) start as (false)
+     if (last in (segments)) exists, unwrap it as (• preceding segment: Unicode segment), {
+      if ((source of (preceding segment)) is (“¤(2028)”)), {
+       remove last from (↓ segments)
+       append (Unicode segment at ((scalar offset) of (preceding segment)) containing (“¤(2029)”)) to (↓ segments)
+       change (↓ combined) to (true)
+      }
+     }
+     if (not (combined)), {
+      append (Unicode segment at (offset) containing (“¤(2028)”)) to (↓ segments)
+     }
+    }
+   }, otherwise {
+    if ((beginning of segment) does not exist), {
+     change (↓ beginning of segment) to (Git‐style parsing cursor at (boundary before (index) in (indices)) and (offset))
+    }
+    if ((index) is (last index)), {
+     parse line in (source) from (↓ beginning of segment) to (end of (code)) into (↓ segments)
+    }
+   }
+  }
+  ← Saying source from ((origin) of (source)) containing (wrap (Unicode segments (segments)) as (8‐bit encoded Unicode))
  }

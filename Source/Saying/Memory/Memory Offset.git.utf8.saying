@@ -198,6 +198,7 @@ action (unit)
  ]
  (
   English: increment (value: ↓ memory offset) skipping overflow check
+  Swift: (self: [value]).incrementSkippingOverflowCheck
  )
  C: “++” value “”
  C♯: “++” value “”
@@ -257,6 +258,7 @@ action (unit)
  ]
  (
   English: decrement (value: ↓ memory offset) skipping underflow check
+  Swift: (self: [value]).decrementSkippingUnderflowCheck
  )
  C: “¤(2D)¤(2D)” value “”
  C♯: “¤(2D)¤(2D)” value “”

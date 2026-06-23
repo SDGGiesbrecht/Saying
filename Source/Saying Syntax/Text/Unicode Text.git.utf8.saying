@@ -77,3 +77,15 @@ action (clients)
   }
   ← text
  }
+
+action (clients)
+ (
+  English: Unicode text of (source: Saying source)
+ )
+ optional (Unicode text)
+ {
+  if ((code) of (source)) is (8‐bit encoded Unicode), unwrap it as (• segments: Unicode segments), {
+   ← wrap (Unicode text of (segments)) into optional
+  }
+  !
+ }

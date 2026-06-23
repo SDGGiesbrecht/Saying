@@ -25,6 +25,7 @@ ability (clients)
    ]
    (
     English: increment (counter: ↓ number)
+    Swift: (self: [counter]).increment
    )
    {
     increment (↓ counter) according to default unlimited incrementation
@@ -42,6 +43,7 @@ ability (clients)
    ]
    (
     English: successor to (number: number)
+    Swift: var (self: [number]).successor
    )
    number
    {
@@ -64,6 +66,7 @@ extension
    ]
    (
     English: increment (number: ↓ number) according to default unlimited incrementation
+    Swift: (self: [number]).incrementAccordingToDefaultUnlimitedIncrementation
    )
    {
     add (one: number) to (↓ number)

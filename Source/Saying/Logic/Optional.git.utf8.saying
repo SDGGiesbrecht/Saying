@@ -16,6 +16,7 @@ extension
         ignore (unwrapped)
        }
       }
+      test (hidden) {verify ((wrap (true) as (something)) exists)}
      ]
      (
       English: something

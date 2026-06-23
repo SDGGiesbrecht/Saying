@@ -28,6 +28,7 @@ ability (clients)
    ]
    (
     English: increment (counter: ↓ number) skipping overflow check
+    Swift: (self: [counter]).incrementSkippingOverflowCheck
    )
    {
     increment (↓ counter) skipping overflow check according to limited natural arithmetic
@@ -48,6 +49,7 @@ ability (clients)
    ]
    (
     English: successor to (number: number) skipping overflow check
+    Swift: var (self: [number]).successorSkippingOverflowCheck
    )
    number
    {
@@ -61,6 +63,7 @@ extension
   action (clients)
    (
     English: increment (number: ↓ number) skipping overflow check according to limited natural arithmetic
+    Swift: (self: [number]).incrementSkippingOverflowCheckAccordingToLimitedNaturalArithmetic
    )
    {
     add (one: number) to (↓ number) skipping overflow check
@@ -78,6 +81,7 @@ extension
    ]
    (
     English: increment (counter: ↓ number)
+    Swift: (self: [counter]).increment
    )
    truth value
    {
@@ -98,6 +102,7 @@ extension
    ]
    (
     English: successor to (number: number)
+    Swift: var (self: [number]).successor
    )
    optional (number)
    {

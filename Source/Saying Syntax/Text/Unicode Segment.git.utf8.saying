@@ -18,6 +18,15 @@ thing (unit)
 
 action (unit)
  (
+  English: source of (segment: Unicode segment)
+ )
+ Unicode text
+ {
+  ← (source) of (segment)
+ }
+
+action (unit)
+ (
   English: Unicode segment at (scalar offset: natural number) containing (source: Unicode text)
  )
  Unicode segment

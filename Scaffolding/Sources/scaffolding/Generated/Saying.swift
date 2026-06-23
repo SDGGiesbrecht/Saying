@@ -221,6 +221,9 @@ struct UnicodeText {
 }
 
 extension UnicodeText: Collection {}
+extension UnicodeText {
+typealias Indices = DefaultIndices<UnicodeText>
+}
 
 struct ParagraphBreakSyntax {
 
@@ -277,6 +280,44 @@ struct GitStyleSayingSource {
   init(origin: UnicodeText, code: UnicodeText) {
     self.origin = origin
     self.code = code
+  }
+
+  func parsed() -> SayingSource {
+    let code: UnicodeText = self.code
+    var beginning_0020of_0020segment: Git_2010style_0020parsing_0020cursor? = nil
+    var segments: [Unicode_0020segment] = []
+    let indices: UnicodeText.Indices = code.indices
+    let last_0020index: String.UnicodeScalarView.Index? = indices.last
+    var offset_0020cursor1: UInt64 = .arithmeticZero
+    for index in indices {
+      let offset: UInt64 = offset_0020cursor1
+      offset_0020cursor1.increment()
+      let scalar: Unicode.Scalar = code[entryIndex: index]
+      if scalar == "\u{000A}" as Unicode.Scalar {
+        parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AUnicode_0020scalar_0020boundary_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(self, &beginning_0020of_0020segment, index, &segments)
+        if index != last_0020index {
+          var combined: Bool = false
+          if let preceding_0020segment = segments.last {
+            if source_0020of_0020_0028_0029_003AUnicode_0020segment_003AUnicodeText(preceding_0020segment) == UnicodeText(skippingNormalizationOf: "\u{2028}".unicodeScalars) {
+              remove_0020last_0020from_0020_0028_0029_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(&segments)
+              segments.append(Unicode_0020segment(preceding_0020segment.scalar_0020offset, UnicodeText(skippingNormalizationOf: "\u{2029}".unicodeScalars)))
+              combined = true
+            }
+          }
+          if !combined {
+            segments.append(Unicode_0020segment(offset, UnicodeText(skippingNormalizationOf: "\u{2028}".unicodeScalars)))
+          }
+        }
+      } else {
+        if beginning_0020of_0020segment == nil {
+          beginning_0020of_0020segment = Git_2010style_0020parsing_0020cursor(index, offset)
+        }
+        if index == last_0020index {
+          parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AUnicode_0020scalar_0020boundary_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(self, &beginning_0020of_0020segment, code.endIndex, &segments)
+        }
+      }
+    }
+    return SayingSource(origin: self.origin, code: SayingSourceCode.utf8(UnicodeSegments(segments)))
   }
 }
 
@@ -848,6 +889,18 @@ extension Slice<UnicodeText> {
 extension String.UnicodeScalarView {
   public func hash(into hasher: inout Hasher) {
     if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_0020with_0020_0028_0029_0020by_0020iteration_003AUnicode_0020scalars_003Ahasher_003A(self, &hasher)
+  }
+}
+
+extension UInt64 {
+  mutating func increment() {
+    self.incrementAccordingToDefaultUnlimitedIncrementation()
+  }
+}
+
+extension UInt64 {
+  mutating func incrementAccordingToDefaultUnlimitedIncrementation() {
+    self += .one
   }
 }
 
@@ -23595,6 +23648,8 @@ extension String.UnicodeScalarView {
   }
 }
 
+extension UnicodeText: BidirectionalCollection {}
+
 extension UnicodeText {
   static var empty: UnicodeText {
     return UnicodeText(skippingNormalizationOf: "".unicodeScalars)
@@ -23713,10 +23768,25 @@ extension [Unicode_0020segment] {
   }
 }
 
-fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: Git_2010style_0020parsing_0020cursor, _ segments: inout [Unicode_0020segment]) {
+extension [Unicode_0020segment] {
+  fileprivate func indexSkippingBoundsCheck(beforeBoundary boundary: Int) -> Int {
+    return self.index(before: boundary)
+  }
+}
+
+extension [Unicode_0020segment] {
+  fileprivate func entryIndex(beforeBoundary boundary: Int) -> Int? {
+    if boundary > self.startIndex {
+      return self.indexSkippingBoundsCheck(beforeBoundary: boundary)
+    }
+    return nil
+  }
+}
+
+fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AUnicode_0020scalar_0020boundary_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: String.UnicodeScalarView.Index, _ segments: inout [Unicode_0020segment]) {
   if let start = beginning {
     var adjusted_0020offset: UInt64 = start.offset
-    var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end.cursor)
+    var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end)
     while (segment.first == " " as Unicode.Scalar) {
       segment.removeFirst()
       adjusted_0020offset += .one
@@ -23728,17 +23798,18 @@ fileprivate func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_00
   beginning = nil
 }
 
-fileprivate func shim_0020unit_0020access_0020to_0020Git_2010style_0020line_0020parsing_003A() {
-  let source_0020text: UnicodeText = UnicodeText(skippingNormalizationOf: " ...".unicodeScalars)
-  let source: GitStyleSayingSource = GitStyleSayingSource(origin: UnicodeText(skippingNormalizationOf: "".unicodeScalars), code: source_0020text)
-  var beginning: Git_2010style_0020parsing_0020cursor? = Git_2010style_0020parsing_0020cursor(source_0020text.startIndex, .arithmeticZero) as Git_2010style_0020parsing_0020cursor?
-  let end: Git_2010style_0020parsing_0020cursor = Git_2010style_0020parsing_0020cursor(source_0020text.endIndex, .one)
-  var segments: [Unicode_0020segment] = []
-  parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(source, &beginning, end, &segments)
+fileprivate func remove_0020last_0020from_0020_0028_0029_0020according_0020to_0020default_0020use_0020as_0020changeable_0020list_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ list: inout [Unicode_0020segment]) {
+  if let last = list.entryIndex(beforeBoundary: list.endIndex) {
+    list.remove(at: last)
+  }
 }
 
-func shimAccessToGitStyleLineParsing() {
-  shim_0020unit_0020access_0020to_0020Git_2010style_0020line_0020parsing_003A()
+fileprivate func remove_0020last_0020from_0020_0028_0029_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ list: inout [Unicode_0020segment]) {
+  remove_0020last_0020from_0020_0028_0029_0020according_0020to_0020default_0020use_0020as_0020changeable_0020list_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(&list)
+}
+
+fileprivate func source_0020of_0020_0028_0029_003AUnicode_0020segment_003AUnicodeText(_ segment: Unicode_0020segment) -> UnicodeText {
+  return segment.source
 }
 
 struct UnicodeSegment {
@@ -23776,38 +23847,6 @@ extension UnicodeSegments {
   func segment(at index: Int) -> UnicodeSegment {
     return UnicodeSegment(segment: segments[index])
   }
-}
-
-struct GitStyleParsingCursor {
-  fileprivate var value: Git_2010style_0020parsing_0020cursor
-}
-
-extension GitStyleParsingCursor {
-  init(index: String.UnicodeScalarView.Index, offset: UInt64) {
-    self.init(value: Git_2010style_0020parsing_0020cursor(index, offset))
-  }
-}
-
-func parseLine(
-  in source: GitStyleSayingSource,
-  from beginning: inout GitStyleParsingCursor?,
-  to end: GitStyleParsingCursor,
-  into segments: inout [UnicodeSegment]
-) {
-  var mappedBeginning = beginning?.value
-  defer {
-    beginning = mappedBeginning.map { GitStyleParsingCursor(value: $0) }
-  }
-  var mappedSegments = segments.map { $0.segment }
-  defer {
-    segments = mappedSegments.map { UnicodeSegment(segment: $0) }
-  }
-  parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AGit_2010style_0020parsing_0020cursor_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(
-    source,
-    &mappedBeginning,
-    end.value,
-    &mappedSegments
-  )
 }
 
 extension SayingSourceSlice {

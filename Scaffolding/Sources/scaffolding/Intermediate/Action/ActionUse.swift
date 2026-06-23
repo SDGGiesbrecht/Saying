@@ -144,7 +144,6 @@ extension ActionUse {
           signature: signature,
           specifiedReturnValue: resolvedResultType
         ),
-        platform.nativeImplementation(of: action) != nil,
         action.isFlow {
         skipNextLayer = true
       }
