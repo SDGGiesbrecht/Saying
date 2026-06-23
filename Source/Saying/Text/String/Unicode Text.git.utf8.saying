@@ -190,6 +190,15 @@ use (clients)
 
   action (clients)
    (
+    English: distance from (earlier: Unicode scalar boundary) to (later: Unicode scalar boundary) in (list: Unicode text)
+   )
+   list offset
+   {
+    ← distance from (earlier) to (later) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
     English: entry at (index: Unicode scalar index) in (list: Unicode text)
    )
    Unicode scalar
@@ -222,6 +231,15 @@ use (clients)
    optional (Unicode scalar)
    {
     ← last in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: number of entries in (list: Unicode text)
+   )
+   list offset
+   {
+    ← number of entries in ((scalars) of (list))
    }
 
   action (clients)

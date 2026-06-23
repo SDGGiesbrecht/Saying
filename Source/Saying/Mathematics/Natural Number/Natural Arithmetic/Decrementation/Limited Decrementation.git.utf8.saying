@@ -81,7 +81,7 @@ extension
    ]
    (
     English: decrement (counter: ↓ number)
-    Swift: (self: [counter]).decrement
+    Swift: (self: [counter]).decrementReportingSuccess
    )
    truth value
    {
@@ -108,7 +108,7 @@ extension
    ]
    (
     English: predecessor to (number: number)
-    Swift: var (self: [number]).predecessor
+    Swift: var (self: [number]).predecessorIfRepresentable
    )
    optional (number)
    {

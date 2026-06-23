@@ -134,9 +134,8 @@ extension Thing {
       case "Swift":
         swiftName = name
       default:
-        break
+        names.insert(name)
       }
-      names.insert(name)
     }
 
     let thingNamespace = namespace.appending(names)

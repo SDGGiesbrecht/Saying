@@ -75,6 +75,9 @@ extension LiteralIntermediate {
   static var eightBitNaturalNumberName: UnicodeText {
     return "8‐bit natural number"
   }
+  static var listOffsetName: UnicodeText {
+    return "list offset"
+  }
   static var memoryOffsetName: UnicodeText {
     return "memory offset"
   }
@@ -111,6 +114,7 @@ extension LiteralIntermediate {
       }
     } else if type.names.contains(LiteralIntermediate.integerName)
       || type.names.contains(LiteralIntermediate.platformFixedWidthIntegerName)
+      || type.names.contains(LiteralIntermediate.listOffsetName)
       || type.names.contains(LiteralIntermediate.memoryOffsetName) {
       if !validateInteger(literal: string, maximum: nil, minimum: nil) {
         errors.append(.notAnInteger(source))

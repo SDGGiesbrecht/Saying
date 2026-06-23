@@ -523,6 +523,16 @@ use (clients)
    }
 
   action (clients)
+   (
+    English: distance from (earlier: Unicode scalar boundary) to (later: Unicode scalar boundary) in (list: Unicode scalars)
+   )
+   list offset
+   Swift: “” list “.distance(from: ” earlier “, to: ” later “)”
+   {
+    ← distance from (earlier) to (later) in (list) according to default use as list
+   }
+
+  action (clients)
    [
     test (hidden) {
      let (• scalars: Unicode scalars) be (“¤(0)”: Unicode scalars)
@@ -588,6 +598,16 @@ use (clients)
    Swift: “” list “.last”
    {
     ← last in (list) according to default use as list
+   }
+
+  action (clients)
+   (
+    English: number of entries in (list: Unicode scalars)
+   )
+   list offset
+   Swift: “” list “.count”
+   {
+    ← number of entries in (list) according to default use as list
    }
 
   action (clients)

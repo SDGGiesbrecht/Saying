@@ -288,6 +288,19 @@ extension
 
     action (clients)
      (
+      English: distance from (earlier: list boundary) to (later: list boundary) in (list: list of (thing))
+     )
+     list offset
+     C♯: “” later “ ¤(2D) ” earlier “”
+     JavaScript: “” later “ ¤(2D) ” earlier “”
+     Kotlin: “” later “ ¤(2D) ” earlier “”
+     Swift: “” list “.distance(from: ” earlier “, to: ” later “)”
+     {
+      ← (distance from (earlier) to (later)) as list offset
+     }
+
+    action (clients)
+     (
       English: entry at (cursor: list index) in (list: list of (thing))
      )
      thing
@@ -332,6 +345,19 @@ extension
      Swift: “” list “.last”
      {
       ← last in (list) according to default use as list
+     }
+
+    action (clients)
+     (
+      English: number of entries in (list: list of (thing))
+     )
+     list offset
+     C♯: “” list “.Count”
+     JavaScript: “” list “.length”
+     Kotlin: “” list “.size”
+     Swift: “” list “.count”
+     {
+      ← ((offset) of ((end) of ((unmanaged) of (list)))) as list offset
      }
 
     action (clients)

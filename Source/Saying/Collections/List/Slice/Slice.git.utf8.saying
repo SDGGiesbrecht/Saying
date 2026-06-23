@@ -12,8 +12,12 @@ extension
      “” list “.startIndex”
      “” list “.endIndex”
      “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
      “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
      “extension ” boundary “: Comparable {}”
@@ -148,6 +152,16 @@ extension
 
     action (clients)
      (
+      English: distance from (earlier: boundary) to (later: boundary) in (list: slice of (list))
+     )
+     list offset
+     Swift: “” list “.distance(from: ” earlier “, to: ” later “)”
+     {
+      ← distance from (earlier) to (later) in ((whole) of (list))
+     }
+
+    action (clients)
+     (
       English: entry at (cursor: index) in (list: slice of (list))
      )
      element
@@ -187,6 +201,16 @@ extension
       }
      {
       ← last in (list) according to default use as list
+     }
+
+    action (clients)
+     (
+      English: number of entries in (list: slice of (list))
+     )
+     list offset
+     Swift: “” list “.count”
+     {
+      ← number of entries in (list) according to default use as list
      }
 
     action (clients)

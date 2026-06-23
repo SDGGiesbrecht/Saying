@@ -146,8 +146,12 @@ extension
      “” list “.startIndex”
      “” list “.endIndex”
      “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
      “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
      “extension ” boundary “: Comparable {}”
