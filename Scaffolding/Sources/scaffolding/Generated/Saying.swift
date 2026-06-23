@@ -44,6 +44,14 @@ struct UnicodeText {
     return matches
   }
 
+  func numberOfEntries() -> UInt64 {
+    return self.scalars.numberOfEntries()
+  }
+
+  func offset(from origin: String.UnicodeScalarView.Index, to destination: String.UnicodeScalarView.Index) -> Int64 {
+    return self.scalars.offset(from: origin, to: destination)
+  }
+
   func primaryMatch(beginningAt beginning: String.UnicodeScalarView.Index, in haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
     return primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_0029_0020in_0020_0028_0029_0020according_0020to_0020use_0020as_0020literal_0020pattern_003AUnicodeText_003AUnicode_0020scalar_0020boundary_003A_0028_003Aslice_2010_0028_0029_003AUnicodeText_003A_0029_003A_0028_003Aoptional_0020_0028_0029_003A_0028_003Aslice_2010_0028_0029_003AUnicodeText_003A_0029_003A_0029(self, beginning, haystack)
   }
@@ -539,6 +547,18 @@ struct UnicodeSegments {
     return self[entryIndex: self.indexSkippingBoundsCheck(afterBoundary: position)]
   }
 
+  func underlyingScalarOffset(of boundary: UnicodeSegments.Boundary) -> UInt64 {
+    if let scalar_0020boundary = boundary.scalar {
+      let segment: Unicode_0020segment = segments_0020of_0020_0028_0029_003AUnicodeSegments_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029(self)[boundary.beginning_0020of_0020segment]
+      let segment_0020source: UnicodeText = segment.source
+      return segment.scalar_0020offset + UInt64(segment_0020source.offset(from: segment_0020source.startIndex, to: scalar_0020boundary))
+    }
+    if let last_0020segment = segments_0020of_0020_0028_0029_003AUnicodeSegments_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029(self).last {
+      return last_0020segment.scalar_0020offset + last_0020segment.source.numberOfEntries()
+    }
+    return .arithmeticZero
+  }
+
   var endIndex: UnicodeSegments.Boundary {
     return UnicodeSegments.Boundary(self.segments.endIndex, nil)
   }
@@ -979,6 +999,22 @@ extension [UnicodeText] {
 }
 
 extension String.UnicodeScalarView {
+  func numberOfEntries() -> UInt64 {
+    var result: UInt64 = .arithmeticZero
+    if_0020most_0020efficient_002C_0020number_0020of_0020entries_0020in_0020_0028_0029_0020by_0020platform_0020offset_002C_0020storing_0020in_0020_0028_0029_003AUnicode_0020scalars_003A자연수_003A(self, &result)
+    return result
+  }
+}
+
+extension String.UnicodeScalarView {
+  func offset(from origin: String.UnicodeScalarView.Index, to destination: String.UnicodeScalarView.Index) -> Int64 {
+    var result: Int64 = .arithmeticZero
+    if_0020most_0020efficient_002C_0020offset_0020from_0020_0028_0029_0020to_0020_0028_0029_0020in_0020_0028_0029_0020by_0020platform_0020offset_002C_0020storing_0020in_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003A정수_003A(origin, destination, self, &result)
+    return result
+  }
+}
+
+extension String.UnicodeScalarView {
   mutating func reorderCanonically() {
     if self.isOrderedCanonically() {
       return
@@ -1010,6 +1046,12 @@ fileprivate func _0028_0029의_0020자모_003AUnicode_0020scalar_0020nu
 
 extension UInt64 {
   static var arithmeticZero: UInt64 {
+    return 0
+  }
+}
+
+extension Int64 {
+  static var arithmeticZero: Int64 {
     return 0
   }
 }
@@ -23639,6 +23681,14 @@ fileprivate func if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_
   }
 }
 
+fileprivate func if_0020most_0020efficient_002C_0020number_0020of_0020entries_0020in_0020_0028_0029_0020by_0020platform_0020offset_002C_0020storing_0020in_0020_0028_0029_003AUnicode_0020scalars_003A자연수_003A(_ list: String.UnicodeScalarView, _ result: inout UInt64) {
+  result = UInt64(list.count)
+}
+
+fileprivate func if_0020most_0020efficient_002C_0020offset_0020from_0020_0028_0029_0020to_0020_0028_0029_0020in_0020_0028_0029_0020by_0020platform_0020offset_002C_0020storing_0020in_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003A정수_003A(_ origin: String.UnicodeScalarView.Index, _ destination: String.UnicodeScalarView.Index, _ list: String.UnicodeScalarView, _ result: inout Int64) {
+  result = Int64(list.distance(from: origin, to: destination))
+}
+
 extension Slice<UnicodeText> {
   func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.base.indexSkippingBoundsCheck(afterBoundary: boundary)
@@ -23820,6 +23870,10 @@ fileprivate func remove_0020last_0020from_0020_0028_0029_003A_0028_003Alist_0020
   remove_0020last_0020from_0020_0028_0029_0020according_0020to_0020default_0020use_0020as_0020changeable_0020list_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(&list)
 }
 
+fileprivate func segments_0020of_0020_0028_0029_003AUnicodeSegments_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029(_ instance: UnicodeSegments) -> [Unicode_0020segment] {
+  return instance.segments
+}
+
 fileprivate func source_0020of_0020_0028_0029_003AUnicode_0020segment_003AUnicodeText(_ segment: Unicode_0020segment) -> UnicodeText {
   return segment.source
 }
@@ -23832,32 +23886,11 @@ extension UnicodeSegment {
   init(scalarOffset: UInt64, source: UnicodeText) {
     self.init(segment: Unicode_0020segment(scalarOffset, source))
   }
-  var scalarOffset: UInt64 {
-    return segment.scalar_0020offset
-  }
-  var source: UnicodeText {
-    return segment.source
-  }
-}
-
-extension UnicodeSegments.Boundary {
-  var beginningOfSegment: Int {
-    return beginning_0020of_0020segment
-  }
-  var scalarIndex: String.UnicodeScalarView.Index? {
-    return scalar
-  }
 }
 
 extension UnicodeSegments {
   init(segments: [UnicodeSegment]) {
     self.init(segments.map({ $0.segment }))
-  }
-  var segmentIndices: Range<Int> {
-    return segments.indices
-  }
-  func segment(at index: Int) -> UnicodeSegment {
-    return UnicodeSegment(segment: segments[index])
   }
 }
 

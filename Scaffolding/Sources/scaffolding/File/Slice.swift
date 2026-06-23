@@ -1,6 +1,6 @@
 extension Slice where Base == UnicodeSegments {
 
-  func underlyingScalarOffsetOfStart() -> Int {
+  func underlyingScalarOffsetOfStart() -> UInt64 {
     return base.underlyingScalarOffset(of: startIndex)
   }
 }

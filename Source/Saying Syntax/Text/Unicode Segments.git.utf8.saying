@@ -220,3 +220,51 @@ use (clients)
  slicing (Unicode segments) as list of (Unicode scalar) indexed by (Unicode segments index) separated by (Unicode segments boundary)
  {
  }
+
+action (clients)
+ [
+  test {
+   let (• source: Saying source) be (parse (Git‐style Saying source from (“...”) containing (“...¤(A)¤(A)...”)))
+   if ((code) of (source)) is (8‐bit encoded Unicode), unwrap it as (• segments: Unicode segments), {
+    let (• cursor: Unicode segments boundary) start as (end of (segments))
+    backtrack (↓ cursor) to previous in (segments) skipping bounds check
+    verify ((underlying scalar offset of (cursor) in (segments)) is (“7”: natural number))
+   }, otherwise {
+    verify (false)
+   }
+  }
+  test (hidden) {
+   let (• source: Saying source) be (parse (Git‐style Saying source from (“...”) containing (“...¤(A)¤(A)...”)))
+   if ((code) of (source)) is (8‐bit encoded Unicode), unwrap it as (• segments: Unicode segments), {
+    let (• cursor: Unicode segments boundary) be (end of (segments))
+    verify ((underlying scalar offset of (cursor) in (segments)) is (“8”: natural number))
+   }, otherwise {
+    verify (false)
+   }
+  }
+  test (hidden) {
+   let (• source: Saying source) be (parse (Git‐style Saying source from (“...”) containing (“”)))
+   if ((code) of (source)) is (8‐bit encoded Unicode), unwrap it as (• segments: Unicode segments), {
+    let (• cursor: Unicode segments boundary) be (end of (segments))
+    verify ((underlying scalar offset of (cursor) in (segments)) is (“0”: natural number))
+   }, otherwise {
+    verify (false)
+   }
+  }
+ ]
+ (
+  English: underlying scalar offset of (boundary: Unicode segments boundary) in (segments: Unicode segments)
+  Swift: (self: [segments]).underlyingScalarOffset of (boundary: [boundary])
+ )
+ natural number
+ {
+  if ((scalar) of (boundary)) exists, unwrap it as (• scalar boundary: Unicode scalar boundary), {
+   let (• segment: Unicode segment) be (entry after ((beginning of segment) of (boundary)) in (segments of (segments)) skipping bounds check)
+   let (• segment source: Unicode text) be ((source) of (segment))
+   ← ((scalar offset) of (segment)) + ((offset from (beginning of (segment source)) to (scalar boundary) in (segment source)) as natural number, skipping underflow check)
+  }
+  if (last in (segments of (segments))) exists, unwrap it as (• last segment: Unicode segment), {
+   ← ((scalar offset) of (last segment)) + (number of entries in ((source) of (last segment)))
+  }
+  ← zero
+ }
