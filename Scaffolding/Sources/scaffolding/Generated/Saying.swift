@@ -488,6 +488,10 @@ struct UnicodeSegments {
     self.segments = segments
   }
 
+  func formIndex(after i: inout UnicodeSegments.Boundary) {
+    i = self.index(after: i)
+  }
+
   func index(after i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
     let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020cursor: Int = i.beginning_0020of_0020segment
