@@ -495,11 +495,11 @@ extension
    )
    list offset
    {
-    let (• end: boundary) be (end of (list))
+    let (• end of list: boundary) be (end of (list))
     let (• cursor: boundary) start as (beginning of (list))
     let (• counter: list offset) start as (“0”: list offset)
     while ({
-     ← (cursor) is less than (end)
+     ← (cursor) is less than (end of list)
     }: → truth value), {
      advance (↓ cursor) to next in (list) skipping bounds check
      increment (↓ counter)
