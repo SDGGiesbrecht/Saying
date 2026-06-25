@@ -30,6 +30,9 @@ action (unit)
  create
 
 action (unit)
+ [
+  test {verify ((offset to (beginning of (empty: list))) is (“0”: natural number))}
+ ]
  (
   English: offset to (boundary: list boundary)
  )
