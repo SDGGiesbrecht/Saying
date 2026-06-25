@@ -101,8 +101,9 @@ extension ActionPrototype {
         parameters.apply(nativeNames: parameterNames, accordingTo: name, apply: { $0.swift = $1 })
         parameters.apply(swiftLabels: labels.map({ $0.isEmpty ? nil : $0 }), accordingTo: name)
       default:
-        names.insert(name)
+        break
       }
+      names.insert(name)
     }
     let access = AccessIntermediate(declaration.access)
     var attachedDocumentation: DocumentationIntermediate?

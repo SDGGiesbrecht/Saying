@@ -81,7 +81,7 @@ extension
    ]
    (
     English: increment (counter: ↓ number)
-    Swift: (self: [counter]).incrementReportingSuccess
+    Swift: (self: [counter]).increment
    )
    truth value
    {
@@ -102,7 +102,7 @@ extension
    ]
    (
     English: successor to (number: number)
-    Swift: var (self: [number]).successorIfRepresentable
+    Swift: var (self: [number]).successor
    )
    optional (number)
    {

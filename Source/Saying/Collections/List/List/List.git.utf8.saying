@@ -288,15 +288,12 @@ extension
 
     action (clients)
      (
-      English: distance from (earlier: list boundary) to (later: list boundary) in (list: list of (thing))
+      English: offset from (origin: list boundary) to (destination: list boundary) in (list: list of (thing))
      )
-     list offset
-     C♯: “” later “ ¤(2D) ” earlier “”
-     JavaScript: “” later “ ¤(2D) ” earlier “”
-     Kotlin: “” later “ ¤(2D) ” earlier “”
-     Swift: “” list “.distance(from: ” earlier “, to: ” later “)”
+     integer
+     JavaScript: “” destination “ ¤(2D) ” origin “”
      {
-      ← (distance from (earlier) to (later)) as list offset
+      ← (offset from (origin) to (destination)) as integer
      }
 
     action (clients)
@@ -351,13 +348,10 @@ extension
      (
       English: number of entries in (list: list of (thing))
      )
-     list offset
-     C♯: “” list “.Count”
+     natural number
      JavaScript: “” list “.length”
-     Kotlin: “” list “.size”
-     Swift: “” list “.count”
      {
-      ← ((offset) of ((end) of ((unmanaged) of (list)))) as list offset
+      ← offset to (end of (list))
      }
 
     action (clients)
@@ -402,26 +396,6 @@ extension
      {
       ← non‐empty example according to use as changeable list
      }
-   }
-
-  action (clients)
-   [
-    test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     let (• beginning: list boundary) be (beginning of (list))
-     verify ((boundary before (index after (beginning) in (list) skipping bounds check) in (list)) is (beginning))
-    }
-   ]
-   (
-    English: boundary before (index: list index) in (list: list of (thing))
-   )
-   list boundary
-   C♯: “” index “”
-   JavaScript: “” index “”
-   Kotlin: “” index “”
-   Swift: “” index “”
-   {
-    ← boundary before (index) in ((unmanaged) of (list))
    }
 
   use (clients)

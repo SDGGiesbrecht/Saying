@@ -98,6 +98,20 @@ action (clients)
  Kotlin: “” number “.toLong()”
  Swift: “Int64(” number “)”
 
+action (unit)
+ [
+  test {verify (((“0”: memory offset) as integer) is (zero: integer))}
+ ]
+ (
+  English: (offset: memory offset) as integer
+ )
+ integer
+ C: “(intmax¤(5F)t)” offset “”
+ C♯: “(long)” offset “”
+ JavaScript: “” offset “”
+ Kotlin: “” offset “.toLong()”
+ Swift: “Int64(” offset “)”
+
 use (clients)
  general containers of (integer)
  {

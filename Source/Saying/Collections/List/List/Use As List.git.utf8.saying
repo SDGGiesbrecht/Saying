@@ -185,36 +185,20 @@ ability (clients)
    [
     test {
      let (• list: list) be (empty: list)
-     verify ((distance from (beginning of (list)) to (end of (list)) in (list)) is (“0”: list offset))
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list)) is (“0”: integer))
     }
     test {
      let (• list: list) be (non‐empty example: list)
-     verify ((distance from (beginning of (list)) to (end of (list)) in (list)) is not (“0”: list offset))
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list)) is not (“0”: integer))
     }
    ]
    (
-    English: distance from (earlier: boundary) to (later: boundary) in (list: list)
-    Swift: (self: [list]).distance from (start: [earlier]) to (end: [later])
+    English: offset from (origin: boundary) to (destination: boundary) in (list: list)
+    Swift: (self: [list]).offset from (origin: [origin]) to (destination: [destination])
    )
-   list offset
-   Swift: “” list “.distance(from: ” earlier “, to: ” later “)” [
-     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “” list “.startIndex”
-     “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” boundary “)”
-     “” list “.indices”
-     “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
-     “” list “.index(after: ” boundary “)”
-     “” list “.formIndex(after: ” boundary “)”
-    ] {
-     “extension ” list “: Collection {}”
-     “extension ” boundary “: Comparable {}”
-    }
+   integer
    {
-    ← distance from (earlier: boundary) to (later: boundary) in (list: list) according to default use as list
+    ← offset from (origin) to (destination) in (list) according to default use as list
    }
 
   requirement (clients)
@@ -267,8 +251,6 @@ ability (clients)
      “” list “.subscript(¤(5F): ” boundary “)”
      “” list “.indices”
      “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
      “” list “.formIndex(after: ” boundary “)”
     ] {
@@ -312,32 +294,16 @@ ability (clients)
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     verify ((number of entries in (list)) is (distance from (beginning of (list)) to (end of (list)) in (list)))
+     verify (((number of entries in (list)) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
     }
    ]
    (
     English: number of entries in (list: list)
-    Swift: (self: [list]).count
+    Swift: (self: [list]).numberOfEntries
    )
-   list offset
-   Swift: “” list “.count” [
-     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “” list “.startIndex”
-     “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” boundary “)”
-     “” list “.indices”
-     “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
-     “” list “.index(after: ” boundary “)”
-     “” list “.formIndex(after: ” boundary “)”
-    ] {
-     “extension ” list “: Collection {}”
-     “extension ” boundary “: Comparable {}”
-    }
+   natural number
    {
-    ← number of entries in (list: list) according to default use as list
+    ← number of entries in (list) according to default use as list
    }
 
   choice (clients)
@@ -360,8 +326,6 @@ ability (clients)
      “” list “.subscript(¤(5F): ” boundary “)”
      “” list “.indices”
      “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
      “” list “.formIndex(after: ” boundary “)”
     ] {
@@ -478,26 +442,15 @@ extension
     ← copy
    }
 
-  action (clients)
-   [
-    test {
-     let (• list: list) be (empty: list)
-     verify ((distance from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“0”: list offset))
-    }
-    test {
-     let (• list: list) be (non‐empty example: list)
-     verify ((distance from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is not (“0”: list offset))
-    }
-   ]
+  action (file)
    (
-    English: distance from (earlier: boundary) to (later: boundary) in (list: list) according to default use as list
-    Swift: (self: [list]).distanceAccordingToDefaultUseAsList from (start: [earlier]) to (end: [later])
+    English: distance from (origin: boundary) to (destination: boundary) in (list: list) skipping direction check
    )
-   list offset
+   natural number
    {
     let (• end of list: boundary) be (end of (list))
     let (• cursor: boundary) start as (beginning of (list))
-    let (• counter: list offset) start as (“0”: list offset)
+    let (• counter: natural number) start as (“0”: natural number)
     while ({
      ← (cursor) is less than (end of list)
     }: → truth value), {
@@ -505,6 +458,30 @@ extension
      increment (↓ counter)
     }
     ← counter
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (empty: list)
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“0”: integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is not (“0”: integer))
+    }
+   ]
+   (
+    English: offset from (origin: boundary) to (destination: boundary) in (list: list) according to default use as list
+    Swift: (self: [list]).offsetAccordingToDefaultUseAsList from (origin: [origin]) to (destination: [destination])
+   )
+   integer
+   {
+    if ((origin) is less than or equal to (destination)), {
+     ← (distance from (origin) to (destination) in (list) skipping direction check) as integer
+    }, otherwise {
+     ← (0: integer) − ((distance from (destination) to (origin) in (list) skipping direction check) as integer)
+    }
    }
 
   action (clients)
@@ -605,16 +582,16 @@ extension
    [
     test {
      let (• list: list) be (non‐empty example: list)
-     verify ((number of entries in (list) according to default use as list) is (distance from (beginning of (list)) to (end of (list)) in (list)))
+     verify (((number of entries in (list) according to default use as list) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
     }
    ]
    (
     English: number of entries in (list: list) according to default use as list
-    Swift: var (self: [list]).countAccordingToDefaultUseAsList
+    Swift: var (self: [list]).numberOfEntriesAccordingToDefaultUseAsList
    )
-   list offset
+   natural number
    {
-    ← distance from (beginning of (list)) to (end of (list)) in (list)
+    ← distance from (beginning of (list)) to (end of (list)) in (list) skipping direction check
    }
 
   action (clients)

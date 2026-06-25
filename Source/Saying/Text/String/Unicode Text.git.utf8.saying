@@ -190,11 +190,11 @@ use (clients)
 
   action (clients)
    (
-    English: distance from (earlier: Unicode scalar boundary) to (later: Unicode scalar boundary) in (list: Unicode text)
+    English: offset from (origin: Unicode scalar boundary) to (destination: Unicode scalar boundary) in (list: Unicode text)
    )
-   list offset
+   integer
    {
-    ← distance from (earlier) to (later) in ((scalars) of (list))
+    ← offset from (origin) to (destination) in ((scalars) of (list))
    }
 
   action (clients)
@@ -237,7 +237,7 @@ use (clients)
    (
     English: number of entries in (list: Unicode text)
    )
-   list offset
+   natural number
    {
     ← number of entries in ((scalars) of (list))
    }

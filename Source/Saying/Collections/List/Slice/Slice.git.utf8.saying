@@ -14,8 +14,6 @@ extension
      “” list “.subscript(¤(5F): ” boundary “)”
      “” list “.indices”
      “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
      “” list “.formIndex(after: ” boundary “)”
     ] {
@@ -152,12 +150,11 @@ extension
 
     action (clients)
      (
-      English: distance from (earlier: boundary) to (later: boundary) in (list: slice of (list))
+      English: offset from (origin: boundary) to (destination: boundary) in (list: slice of (list))
      )
-     list offset
-     Swift: “” list “.distance(from: ” earlier “, to: ” later “)”
+     integer
      {
-      ← distance from (earlier) to (later) in ((whole) of (list))
+      ← offset from (origin) to (destination) in ((whole) of (list))
      }
 
     action (clients)
@@ -201,16 +198,6 @@ extension
       }
      {
       ← last in (list) according to default use as list
-     }
-
-    action (clients)
-     (
-      English: number of entries in (list: slice of (list))
-     )
-     list offset
-     Swift: “” list “.count”
-     {
-      ← number of entries in (list) according to default use as list
      }
 
     action (clients)
