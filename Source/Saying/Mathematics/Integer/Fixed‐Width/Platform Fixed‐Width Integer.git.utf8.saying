@@ -79,7 +79,7 @@ action (unit)
   English: (offset: memory offset) as platform fixed‐width integer, skipping overflow check
  )
  platform fixed‐width integer
- C: “int” offset “”
+ C: “(int)” offset “”
  C♯: “(int)” offset “”
  JavaScript: “” offset “”
  Kotlin: “” offset “.toInt()”
