@@ -592,7 +592,7 @@ enum Kotlin: Platform {
       ["gradle.properties"],
       to: ([
         "android.useAndroidX=true",
-        "org.gradle.jvmargs=-Xmx2g", // 1G ran out in the Android CI.
+        "org.gradle.jvmargs=-Xmx4g", // 2G ran out in the Android CI.
         "kotlin.daemon.jvmargs=-Xmx8g", // 4G ran out in the Android CI.
       ] as [String]).joined(separator: "\n").appending("\n")
     )
