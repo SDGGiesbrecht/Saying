@@ -298,6 +298,19 @@ extension
 
     action (clients)
      (
+      English: platform fixed‐width offset from (origin: list boundary) to (destination: list boundary) in (list: list of (thing)), skipping overflow check
+     )
+     platform fixed‐width integer
+     C♯: “” destination “ ¤(2D) ” origin “”
+     JavaScript: “” destination “ ¤(2D) ” origin “”
+     Kotlin: “” destination “ ¤(2D) ” origin “”
+     Swift: “” list “.distance(from: ” origin “, to: ” destination “)”
+     {
+      ← (offset from (origin) to (destination)) as platform fixed‐width integer, skipping overflow check
+     }
+
+    action (clients)
+     (
       English: entry at (cursor: list index) in (list: list of (thing))
      )
      thing
@@ -352,6 +365,19 @@ extension
      JavaScript: “” list “.length”
      {
       ← offset to (end of (list))
+     }
+
+    action (clients)
+     (
+      English: platform fixed‐width number of entries in (list: list of (thing)), skipping overflow check
+     )
+     platform fixed‐width integer
+     C♯: “” list “.Count”
+     JavaScript: “” list “.length”
+     Kotlin: “” list “.size”
+     Swift: “” list “.count”
+     {
+      ← platform fixed‐width offset to (end of (list)), skipping overflow check
      }
 
     action (clients)

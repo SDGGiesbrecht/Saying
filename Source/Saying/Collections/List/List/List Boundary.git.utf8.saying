@@ -45,6 +45,22 @@ action (unit)
   ← ((offset) of (boundary)) as natural number, skipping underflow check
  }
 
+action (unit)
+ [
+  test {verify ((platform fixed‐width offset to (beginning of (empty: list of (truth value))), skipping overflow check) is (“0”: platform fixed‐width integer))}
+ ]
+ (
+  English: platform fixed‐width offset to (boundary: list boundary), skipping overflow check
+ )
+ platform fixed‐width integer
+ C♯: “(int)” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “.toInt()”
+ Swift: “Int(” boundary “)”
+ {
+  ← ((offset) of (boundary)) as platform fixed‐width integer, skipping overflow check
+ }
+
 use (clients)
  general containers of (list boundary)
  {

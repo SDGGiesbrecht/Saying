@@ -199,6 +199,15 @@ use (clients)
 
   action (clients)
    (
+    English: platform fixed‐width offset from (origin: Unicode scalar boundary) to (destination: Unicode scalar boundary) in (list: Unicode text), skipping overflow check
+   )
+   platform fixed‐width integer
+   {
+    ← platform fixed‐width offset from (origin) to (destination) in ((scalars) of (list)), skipping overflow check
+   }
+
+  action (clients)
+   (
     English: entry at (index: Unicode scalar index) in (list: Unicode text)
    )
    Unicode scalar
@@ -240,6 +249,15 @@ use (clients)
    natural number
    {
     ← number of entries in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: platform fixed‐width number of entries in (list: Unicode text), skipping overflow check
+   )
+   platform fixed‐width integer
+   {
+    ← platform fixed‐width number of entries in ((scalars) of (list)), skipping overflow check
    }
 
   action (clients)
