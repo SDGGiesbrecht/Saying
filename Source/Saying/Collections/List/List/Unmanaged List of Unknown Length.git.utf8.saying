@@ -322,9 +322,9 @@ extension
    }
  }
 
-action (file)
+action (unit)
  (
-  English: distance from (lower bound: list boundary) to (upper bound: list boundary)
+  English: offset from (lower bound: list boundary) to (upper bound: list boundary)
  )
  memory offset
  {
@@ -361,5 +361,5 @@ action (unit)
  )
  memory offset
  {
-  ← distance from ((lower bound) of (range)) to ((upper bound) of (range))
+  ← offset from ((lower bound) of (range)) to ((upper bound) of (range))
  }

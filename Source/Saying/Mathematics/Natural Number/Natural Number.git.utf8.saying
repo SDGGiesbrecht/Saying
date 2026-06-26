@@ -104,6 +104,20 @@ action (clients)
  Kotlin: “” number “.toULong()”
  Swift: “UInt64(” number “)”
 
+action (unit)
+ [
+  test {verify (((“0”: memory offset) as natural number, skipping underflow check) is (zero: natural number))}
+ ]
+ (
+  English: (offset: memory offset) as natural number, skipping underflow check
+ )
+ natural number
+ C: “(uintmax¤(5F)t)” offset “”
+ C♯: “(ulong)” offset “”
+ JavaScript: “” offset “”
+ Kotlin: “” offset “.toULong()”
+ Swift: “UInt64(” offset “)”
+
 use (clients)
  general containers of (natural number)
  {

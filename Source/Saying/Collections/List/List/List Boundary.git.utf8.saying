@@ -19,9 +19,6 @@ thing (clients)
  }
 
 action (unit)
- [
-  test {ignore (if possible, scalar boundary at 8‐bit boundary (example: list boundary))}
- ]
  (
   English: boundary at (offset: memory offset)
  )
@@ -31,6 +28,38 @@ action (unit)
  Kotlin: “” offset “”
  Swift: “” offset “”
  create
+
+action (unit)
+ [
+  test {verify ((offset to (beginning of (empty: list of (truth value)))) is (“0”: natural number))}
+ ]
+ (
+  English: offset to (boundary: list boundary)
+ )
+ natural number
+ C♯: “(ulong)” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “.toULong()”
+ Swift: “UInt64(” boundary “)”
+ {
+  ← ((offset) of (boundary)) as natural number, skipping underflow check
+ }
+
+action (unit)
+ [
+  test {verify ((platform fixed‐width offset to (beginning of (empty: list of (truth value))), skipping overflow check) is (“0”: platform fixed‐width integer))}
+ ]
+ (
+  English: platform fixed‐width offset to (boundary: list boundary), skipping overflow check
+ )
+ platform fixed‐width integer
+ C♯: “(int)” boundary “”
+ JavaScript: “” boundary “”
+ Kotlin: “” boundary “.toInt()”
+ Swift: “Int(” boundary “)”
+ {
+  ← ((offset) of (boundary)) as platform fixed‐width integer, skipping overflow check
+ }
 
 use (clients)
  general containers of (list boundary)

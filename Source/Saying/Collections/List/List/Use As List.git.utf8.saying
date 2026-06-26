@@ -181,6 +181,82 @@ ability (clients)
     ← boundary before (cursor) in (list) skipping bounds check according to default use as list
    }
 
+  choice (clients)
+   [
+    [
+     English: Returns the offset of one boundary relative to another.
+    ]
+    test {
+     let (• list: list) be (empty: list)
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list)) is (“0”: integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list)) is greater than (“0”: integer))
+    }
+    [
+     English: Negative offsets are valid.
+    ]
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((offset from (end of (list)) to (beginning of (list)) in (list)) is less than (“0”: integer))
+    }
+   ]
+   (
+    English: offset from (origin: boundary) to (destination: boundary) in (list: list)
+    Swift: (self: [list]).offset from (origin: [origin]) to (destination: [destination])
+   )
+   integer
+   {
+    ← offset from (origin) to (destination) in (list) according to default use as list
+   }
+
+  choice (clients)
+   [
+    [
+     English: Returns the offset of one boundary relative to another.
+    ]
+    test {
+     let (• list: list) be (empty: list)
+     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check) is (“0”: platform fixed‐width integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check) is greater than (“0”: platform fixed‐width integer))
+    }
+    [
+     English: Negative offsets are valid.
+    ]
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((platform fixed‐width offset from (end of (list)) to (beginning of (list)) in (list), skipping overflow check) is less than (“0”: platform fixed‐width integer))
+    }
+   ]
+   (
+    English: platform fixed‐width offset from (origin: boundary) to (destination: boundary) in (list: list), skipping overflow check
+    Swift: (self: [list]).distance from (start: [origin]) to (end: [destination])
+   )
+   platform fixed‐width integer
+   Swift: “” list “.distance(from: ” origin “, to: ” destination “)” [
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
+     “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
+     “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” boundary “: Comparable {}”
+    }
+   {
+    ← platform fixed‐width offset from (origin) to (destination) in (list), skipping overflow check, according to default use as list
+   }
+
   requirement (clients)
    [
     test {
@@ -229,8 +305,12 @@ ability (clients)
      “” list “.startIndex”
      “” list “.endIndex”
      “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
      “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
      “extension ” boundary “: Comparable {}”
@@ -257,15 +337,68 @@ ability (clients)
      “” list “.startIndex”
      “” list “.endIndex”
      “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
      “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
      “” list “.index(before: ” boundary “)”
+     “” list “.formIndex(before: ” boundary “)”
     ] {
      “extension ” list “: BidirectionalCollection {}”
      “extension ” boundary “: Comparable {}”
     }
    {
     ← last in (list) according to default use as list
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify (((number of entries in (list)) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
+    }
+   ]
+   (
+    English: number of entries in (list: list)
+    Swift: (self: [list]).numberOfEntries
+   )
+   natural number
+   {
+    ← number of entries in (list) according to default use as list
+   }
+
+  choice (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify (((platform fixed‐width number of entries in (list), skipping overflow check) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
+    }
+   ]
+   (
+    English: platform fixed‐width number of entries in (list: list), skipping overflow check
+    Swift: var (self: [list]).count
+   )
+   platform fixed‐width integer
+   Swift: “” list “.count” [
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
+     “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
+     “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” boundary “: Comparable {}”
+    }
+   {
+    ← platform fixed‐width number of entries in (list), skipping overflow check, according to default use as list
    }
 
   choice (clients)
@@ -286,7 +419,12 @@ ability (clients)
      “” list “.startIndex”
      “” list “.endIndex”
      “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
+     “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
      “extension ” boundary “: Comparable {}”
@@ -401,6 +539,75 @@ extension
     ← copy
    }
 
+  action (file)
+   (
+    English: distance from (origin: boundary) to (destination: boundary) in (list: list) skipping direction check
+   )
+   natural number
+   {
+    let (• end of list: boundary) be (end of (list))
+    let (• cursor: boundary) start as (beginning of (list))
+    let (• counter: natural number) start as (“0”: natural number)
+    while ({
+     ← (cursor) is less than (end of list)
+    }: → truth value), {
+     advance (↓ cursor) to next in (list) skipping bounds check
+     increment (↓ counter)
+    }
+    ← counter
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (empty: list)
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“0”: integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is greater than (“0”: integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((offset from (end of (list)) to (beginning of (list)) in (list) according to default use as list) is less than (“0”: integer))
+    }
+   ]
+   (
+    English: offset from (origin: boundary) to (destination: boundary) in (list: list) according to default use as list
+    Swift: (self: [list]).offsetAccordingToDefaultUseAsList from (origin: [origin]) to (destination: [destination])
+   )
+   integer
+   {
+    if ((origin) is greater than (destination)), {
+     ← (0: integer) − ((distance from (destination) to (origin) in (list) skipping direction check) as integer)
+    }
+    ← (distance from (origin) to (destination) in (list) skipping direction check) as integer
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (empty: list)
+     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check, according to default use as list) is (“0”: platform fixed‐width integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check, according to default use as list) is greater than (“0”: platform fixed‐width integer))
+    }
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify ((platform fixed‐width offset from (end of (list)) to (beginning of (list)) in (list), skipping overflow check, according to default use as list) is less than (“0”: platform fixed‐width integer))
+    }
+   ]
+   (
+    English: platform fixed‐width offset from (origin: boundary) to (destination: boundary) in (list: list), skipping overflow check, according to default use as list
+    Swift: (self: [list]).distanceAccordingToDefaultUseAsList from (start: [origin]) to (end: [destination])
+   )
+   platform fixed‐width integer
+   {
+    ← (offset from (origin) to (destination) in (list)) as platform fixed‐width integer, skipping overflow check
+   }
+
   action (clients)
    [
     [
@@ -493,6 +700,38 @@ extension
      ← wrap (entry at (last) in (list)) into optional
     }
     ← nothing
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify (((number of entries in (list) according to default use as list) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
+    }
+   ]
+   (
+    English: number of entries in (list: list) according to default use as list
+    Swift: var (self: [list]).numberOfEntriesAccordingToDefaultUseAsList
+   )
+   natural number
+   {
+    ← (offset from (beginning of (list)) to (end of (list)) in (list)) as natural number, skipping underflow check
+   }
+
+  action (clients)
+   [
+    test {
+     let (• list: list) be (non‐empty example: list)
+     verify (((platform fixed‐width number of entries in (list), skipping overflow check, according to default use as list) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
+    }
+   ]
+   (
+    English: platform fixed‐width number of entries in (list: list), skipping overflow check, according to default use as list
+    Swift: var (self: [list]).countAccordingToDefaultUseAsList
+   )
+   platform fixed‐width integer
+   {
+    ← (number of entries in (list)) as platform fixed‐width integer, skipping overflow check
    }
 
   action (clients)

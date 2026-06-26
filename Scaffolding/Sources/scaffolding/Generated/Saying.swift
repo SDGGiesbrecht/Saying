@@ -9,6 +9,10 @@ struct UnicodeText {
     return self.scalars.isEmpty
   }
 
+  func distance(from start: String.UnicodeScalarView.Index, to end: String.UnicodeScalarView.Index) -> Int {
+    return self.scalars.distance(from: start, to: end)
+  }
+
   func formIndex(after i: inout String.UnicodeScalarView.Index) {
     self.scalars.formIndex(after: &i)
   }
@@ -185,6 +189,10 @@ struct UnicodeText {
     self.scalars.removeSubrange(subrange.lowerBound ..< end)
     self.append(contentsOf: newElements)
     self.append(contentsOf: after)
+  }
+
+  var count: Int {
+    return self.scalars.count
   }
 
   var startIndex: String.UnicodeScalarView.Index {
@@ -486,6 +494,10 @@ struct UnicodeSegments {
 
   fileprivate init(_ segments: [Unicode_0020segment]) {
     self.segments = segments
+  }
+
+  func formIndex(after i: inout UnicodeSegments.Boundary) {
+    i = self.index(after: i)
   }
 
   func index(after i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {

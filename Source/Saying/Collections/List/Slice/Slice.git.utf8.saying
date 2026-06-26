@@ -12,8 +12,12 @@ extension
      “” list “.startIndex”
      “” list “.endIndex”
      “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
      “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
      “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
      “extension ” boundary “: Comparable {}”
@@ -125,6 +129,7 @@ extension
      )
      Swift: “” list “.formIndex(before: ¤(26)” cursor “)” [
        “” list “.index(before: ” boundary “)”
+       “” list “.formIndex(before: ” boundary “)”
       ] {
        “extension ” list “: BidirectionalCollection {}”
       }
@@ -139,11 +144,31 @@ extension
      boundary
      Swift: “” list “.index(before: ” cursor “)” [
        “” list “.index(before: ” boundary “)”
+       “” list “.formIndex(before: ” boundary “)”
       ] {
        “extension ” list “: BidirectionalCollection {}”
       }
      {
       ← boundary before (cursor) in ((whole) of (list)) skipping bounds check
+     }
+
+    action (clients)
+     (
+      English: offset from (origin: boundary) to (destination: boundary) in (list: slice of (list))
+     )
+     integer
+     {
+      ← offset from (origin) to (destination) in ((whole) of (list))
+     }
+
+    action (clients)
+     (
+      English: platform fixed‐width offset from (origin: boundary) to (destination: boundary) in (list: slice of (list)), skipping overflow check
+     )
+     platform fixed‐width integer
+     Swift: “” list “.distance(from: ” origin “, to: ” destination “)”
+     {
+      ← platform fixed‐width offset from (origin) to (destination) in ((whole) of (list)), skipping overflow check
      }
 
     action (clients)
@@ -182,11 +207,22 @@ extension
      optional (element)
      Swift: “” list “.last” [
        “” list “.index(before: ” boundary “)”
+       “” list “.formIndex(before: ” boundary “)”
       ] {
        “extension ” list “: BidirectionalCollection {}”
       }
      {
       ← last in (list) according to default use as list
+     }
+
+    action (clients)
+     (
+      English: platform fixed‐width number of entries in (list: slice of (list)), skipping overflow check
+     )
+     platform fixed‐width integer
+     Swift: “” list “.count”
+     {
+      ← platform fixed‐width number of entries in (list), skipping overflow check, according to default use as list
      }
 
     action (clients)

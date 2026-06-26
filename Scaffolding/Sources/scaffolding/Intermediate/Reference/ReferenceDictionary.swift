@@ -621,6 +621,7 @@ extension ReferenceDictionary {
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true
+          found.insert(swift)
           found.insert(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup))
           _ = optimized.add(thing: thing)
           for child in thing.requiredIdentifiers(
@@ -653,6 +654,7 @@ extension ReferenceDictionary {
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
           foundSomething = true
+          found.insert(swift)
           found.insert(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))
           _ = optimized.add(action: action)
           for identifer in action.requiredIdentifiers(

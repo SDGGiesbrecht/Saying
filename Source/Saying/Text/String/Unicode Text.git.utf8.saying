@@ -190,6 +190,24 @@ use (clients)
 
   action (clients)
    (
+    English: offset from (origin: Unicode scalar boundary) to (destination: Unicode scalar boundary) in (list: Unicode text)
+   )
+   integer
+   {
+    ← offset from (origin) to (destination) in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: platform fixed‐width offset from (origin: Unicode scalar boundary) to (destination: Unicode scalar boundary) in (list: Unicode text), skipping overflow check
+   )
+   platform fixed‐width integer
+   {
+    ← platform fixed‐width offset from (origin) to (destination) in ((scalars) of (list)), skipping overflow check
+   }
+
+  action (clients)
+   (
     English: entry at (index: Unicode scalar index) in (list: Unicode text)
    )
    Unicode scalar
@@ -222,6 +240,24 @@ use (clients)
    optional (Unicode scalar)
    {
     ← last in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: number of entries in (list: Unicode text)
+   )
+   natural number
+   {
+    ← number of entries in ((scalars) of (list))
+   }
+
+  action (clients)
+   (
+    English: platform fixed‐width number of entries in (list: Unicode text), skipping overflow check
+   )
+   platform fixed‐width integer
+   {
+    ← platform fixed‐width number of entries in ((scalars) of (list)), skipping overflow check
    }
 
   action (clients)

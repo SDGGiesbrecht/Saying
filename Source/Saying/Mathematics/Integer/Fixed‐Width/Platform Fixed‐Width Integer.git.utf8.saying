@@ -71,6 +71,20 @@ action (clients)
  Kotlin: “” number “.toInt()”
  Swift: “Int(” number “)”
 
+action (unit)
+ [
+  test {verify (((“0”: memory offset) as platform fixed‐width integer, skipping overflow check) is (zero: platform fixed‐width integer))}
+ ]
+ (
+  English: (offset: memory offset) as platform fixed‐width integer, skipping overflow check
+ )
+ platform fixed‐width integer
+ C: “(int)” offset “”
+ C♯: “(int)” offset “”
+ JavaScript: “” offset “”
+ Kotlin: “” offset “.toInt()”
+ Swift: “Int(” offset “)”
+
 use (clients)
  general containers of (platform fixed‐width integer)
  {
