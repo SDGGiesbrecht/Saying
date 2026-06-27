@@ -7,18 +7,6 @@ extension UnicodeSegments {
   init(_ segment: UnicodeText) {
     self.init(segments: [UnicodeSegment(scalarOffset: 0, source: segment)])
   }
-
-  func underlyingScalarOffset(of index: Boundary) -> Int {
-    let segmentIndex = index.beginningOfSegment
-    if let scalar = index.scalarIndex {
-      let segment = segment(at: segmentIndex)
-      return Int(segment.scalarOffset) + segment.source[..<scalar].count
-    } else if let lastSegment = segmentIndices.last.map({ segment(at: $0) }) {
-      return Int(lastSegment.scalarOffset) + lastSegment.source.count
-    } else {
-      return 0
-    }
-  }
 }
 
 extension UnicodeSegments: BidirectionalCollection {}

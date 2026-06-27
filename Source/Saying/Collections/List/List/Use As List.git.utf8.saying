@@ -545,11 +545,10 @@ extension
    )
    natural number
    {
-    let (• end of list: boundary) be (end of (list))
-    let (• cursor: boundary) start as (beginning of (list))
+    let (• cursor: boundary) start as (origin)
     let (• counter: natural number) start as (“0”: natural number)
     while ({
-     ← (cursor) is less than (end of list)
+     ← (cursor) is less than (destination)
     }: → truth value), {
      advance (↓ cursor) to next in (list) skipping bounds check
      increment (↓ counter)
