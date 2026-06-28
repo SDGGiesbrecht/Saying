@@ -230,7 +230,7 @@ action (clients)
     backtrack (↓ cursor) to previous in (segments) skipping bounds check
     verify ((underlying scalar offset of (cursor) in (segments)) is (“7”: natural number))
    }, otherwise {
-    verify (false)
+    fail
    }
   }
   test (hidden) {
@@ -239,7 +239,7 @@ action (clients)
     let (• cursor: Unicode segments boundary) be (end of (segments))
     verify ((underlying scalar offset of (cursor) in (segments)) is (“8”: natural number))
    }, otherwise {
-    verify (false)
+    fail
    }
   }
   test (hidden) {
@@ -248,7 +248,7 @@ action (clients)
     let (• cursor: Unicode segments boundary) be (end of (segments))
     verify ((underlying scalar offset of (cursor) in (segments)) is (“0”: natural number))
    }, otherwise {
-    verify (false)
+    fail
    }
   }
  ]

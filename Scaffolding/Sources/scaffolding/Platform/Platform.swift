@@ -3439,6 +3439,7 @@ extension Platform {
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
       }
+      regionSet.remove(":fail:") // ← No general solution for testing deliberate failures yet.
       let regions = regionSet
         .sorted(by: { $0.lexicographicallyPrecedes($1) })
       for (index, region) in regions.enumerated() {
