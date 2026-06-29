@@ -12,3 +12,16 @@ action (clients) (tests)
  JavaScript: “console.assert(” condition “, currentTest)”
  Kotlin: “assert(” condition “) { currentTest }”
  Swift: “assert(” condition “, currentTest)”
+
+action (clients) (tests)
+ [
+  [
+   English: Causes a test failure.
+  ]
+ ]
+ (
+  English: fail
+ )
+ {
+  verify (false)
+ }
