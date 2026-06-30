@@ -1,0 +1,38 @@
+ability (clients)
+ (
+  English: unlimited negation of (value)
+ )
+ {
+  ability (clients)
+   any negation of (value)
+
+  ability (clients)
+   unlimited additive arithmetic with (value)
+
+  requirement (clients)
+   [
+    test {
+     let (• value: value) start as (positive example: value)
+     negate (↓ value)
+     verify ((value) is (negative example: value))
+    }
+   ]
+   (
+    English: negate (value: ↓ value)
+   )
+
+  choice (clients)
+   [
+    test {verify ((negative (positive example: value)) is (negative example: value))}
+   ]
+   (
+    English: negative (value: value)
+    English +: −(value: [value])
+   )
+   value
+   {
+    let (• copy: value) start as (value)
+    negate (↓ copy)
+    ← copy
+   }
+ }

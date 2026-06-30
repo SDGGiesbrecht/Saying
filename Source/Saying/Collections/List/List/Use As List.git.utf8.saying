@@ -578,7 +578,7 @@ extension
    integer
    {
     if ((origin) is greater than (destination)), {
-     ← (0: integer) − ((distance from (destination) to (origin) in (list) skipping direction check) as integer)
+     ← −((distance from (destination) to (origin) in (list) skipping direction check) as integer)
     }
     ← (distance from (origin) to (destination) in (list) skipping direction check) as integer
    }

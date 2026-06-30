@@ -431,6 +431,61 @@ use (clients)
  }
 
 use (clients)
+ any negation of (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: positive example
+   )
+   platform fixed‐width integer
+   {
+    ← “1”
+   }
+
+  action (clients)
+   (
+    English: negative example
+   )
+   platform fixed‐width integer
+   {
+    ← “−1”
+   }
+ }
+
+use (clients)
+ limited negation of (platform fixed‐width integer)
+ {
+  action (clients)
+   (
+    English: negate (value: ↓ platform fixed‐width integer) skipping overflow check
+   )
+   Swift: “” value “.negate()”
+   {
+    change (↓ value) to (negative (value), skipping overflow check)
+   }
+
+  action (clients)
+   (
+    English: negative (value: platform fixed‐width integer), skipping overflow check
+   )
+   platform fixed‐width integer
+   C: “¤(2D)” value “”
+   C♯: “¤(2D)” value “”
+   JavaScript: “¤(2D)” value “”
+   Kotlin: “¤(2D)” value “”
+   Swift: “¤(2D)” value “”
+
+  action (clients)
+   (
+    English: can negate (value: platform fixed‐width integer)
+   )
+   truth value
+   {
+    ← (value) is not (least representable: platform fixed‐width integer)
+   }
+ }
+
+use (clients)
  limited integral arithmetic with (platform fixed‐width integer)
  {
  }

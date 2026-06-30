@@ -10,6 +10,9 @@ ability (clients)
  {
   ability (clients)
    unlimited natural arithmetic with (number)
+
+  ability (clients)
+   unlimited negation of (number)
  }
 
 thing (file)
@@ -207,6 +210,40 @@ use (file)
 use (file)
  unlimited natural arithmetic with (minimal integral arithmetic example)
  {
+ }
+
+use (file)
+ any negation of (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: positive example
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (positive example: integer)
+   }
+
+  action (file)
+   (
+    English: negative example
+   )
+   minimal integral arithmetic example
+   {
+    ← minimal integral arithmetic example wrapping (negative example: integer)
+   }
+ }
+
+use (file)
+ unlimited negation of (minimal integral arithmetic example)
+ {
+  action (file)
+   (
+    English: negate (value: ↓ minimal integral arithmetic example)
+   )
+   {
+    negate (↓ (number) of (value))
+   }
  }
 
 use (file)

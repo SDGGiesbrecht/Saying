@@ -111,3 +111,67 @@ use (file)
     add ((in days) of (addend)) to (↓ (in days) of (cumulative sum))
    }
  }
+
+use (file)
+ unlimited subtraction with (minimal measurement example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal measurement example) from (value: ↓ minimal measurement example)
+   )
+   {
+    subtract ((in days) of (subtrahend)) from (↓ (in days) of (value))
+   }
+ }
+
+use (file)
+ any additive arithmetic with (minimal measurement example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal measurement example
+   {
+    ← minimal measurement example in days (additive identity: integer)
+   }
+ }
+
+use (file)
+ unlimited additive arithmetic with (minimal measurement example)
+ {
+ }
+
+use (file)
+ any negation of (minimal measurement example)
+ {
+  action (file)
+   (
+    English: positive example
+   )
+   minimal measurement example
+   {
+    ← minimal measurement example in days (positive example: integer)
+   }
+
+  action (file)
+   (
+    English: negative example
+   )
+   minimal measurement example
+   {
+    ← minimal measurement example in days (negative example: integer)
+   }
+ }
+
+use (file)
+ unlimited negation of (minimal measurement example)
+ {
+  action (file)
+   (
+    English: negate (value: ↓ minimal measurement example)
+   )
+   {
+    negate (↓ (in days) of (value))
+   }
+ }
