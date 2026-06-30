@@ -3,6 +3,13 @@ ability (clients)
   [
    English: Integral arithmetic with an upper and lower limit.
   ]
+  test {
+   let (• number: number) start as (least representable: number)
+   ignore (negate (↓ number))
+  }
+  test {
+   ignore (negative (least representable: number))
+  }
  ]
  (
   English: limited integral arithmetic with (number)
@@ -10,4 +17,282 @@ ability (clients)
  {
   ability (clients)
    limited natural arithmetic with (number)
+
+  ability (clients)
+   limited negation of (number)
+ }
+
+thing (file)
+ (
+  English: minimal limited integral arithmetic example
+ )
+ {
+  part (file)
+   (
+    English: number
+   )
+   platform fixed‐width integer
+ }
+
+action (file)
+ (
+  English: minimal limited integral arithmetic example wrapping (number: platform fixed‐width integer)
+ )
+ minimal limited integral arithmetic example
+ create
+
+use (file)
+ general containers of (minimal limited integral arithmetic example)
+ {
+  action (file)
+   example
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (example: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal limited integral arithmetic example) for equality
+ {
+  action (file)
+   (first: minimal limited integral arithmetic example) is (second: minimal limited integral arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is ((number) of (second))
+   }
+
+  action (file)
+   hash key (key: minimal limited integral arithmetic example) with (hasher: ↓ hasher)
+   {
+    hash part ((number) of (key)) with (↓ hasher)
+   }
+
+  action (file)
+   differing example
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (differing example: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ comparison of (minimal limited integral arithmetic example) for order
+ {
+  action (file)
+   (first: minimal limited integral arithmetic example) is less than (second: minimal limited integral arithmetic example)
+   truth value
+   {
+    ← ((number) of (first)) is less than ((number) of (second))
+   }
+
+  action (file)
+   greater example
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (greater example: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ any addition of (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: example augend
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (example augend: platform fixed‐width integer)
+   }
+
+  action (file)
+   (
+    English: example addend
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (example addend: platform fixed‐width integer)
+   }
+
+  action (file)
+   (
+    English: example sum
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (example sum: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ limited addition of (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: add (addend: minimal limited integral arithmetic example) to (cumulative sum: ↓ minimal limited integral arithmetic example) skipping overflow check
+   )
+   {
+    add ((number) of (addend)) to (↓ (number) of (cumulative sum)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can add (addend: minimal limited integral arithmetic example) to (augend: minimal limited integral arithmetic example)
+   )
+   truth value
+   {
+    ← can add ((number) of (addend)) to ((number) of (augend))
+   }
+ }
+
+use (file)
+ limited subtraction with (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: subtract (subtrahend: minimal limited integral arithmetic example) from (value: ↓ minimal limited integral arithmetic example) skipping overflow check
+   )
+   {
+    subtract ((number) of (subtrahend)) from (↓ (number) of (value)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can subtract (subtrahend: minimal limited integral arithmetic example) from (minuend: minimal limited integral arithmetic example)
+   )
+   truth value
+   {
+    ← can subtract ((number) of (subtrahend)) from ((number) of (minuend))
+   }
+ }
+
+use (file)
+ any additive arithmetic with (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: additive identity
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (additive identity: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ limited additive arithmetic with (minimal limited integral arithmetic example)
+ {
+ }
+
+use (file)
+ any one‐dimensional additive arithmetic with (minimal limited integral arithmetic example)
+ {
+ }
+
+use (file)
+ limited one‐dimensional additive arithmetic with (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: greatest representable
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (greatest representable: platform fixed‐width integer)
+   }
+
+  action (file)
+   (
+    English: least representable
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (least representable: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ any natural arithmetic with (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: zero
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (zero: platform fixed‐width integer)
+   }
+
+  action (file)
+   (
+    English: one
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (one: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ limited incrementation of (minimal limited integral arithmetic example)
+ {
+ }
+
+use (file)
+ limited decrementation of (minimal limited integral arithmetic example)
+ {
+ }
+
+use (file)
+ limited natural arithmetic with (minimal limited integral arithmetic example)
+ {
+ }
+
+use (file)
+ any negation of (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: positive example
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (positive example: platform fixed‐width integer)
+   }
+
+  action (file)
+   (
+    English: negative example
+   )
+   minimal limited integral arithmetic example
+   {
+    ← minimal limited integral arithmetic example wrapping (negative example: platform fixed‐width integer)
+   }
+ }
+
+use (file)
+ limited negation of (minimal limited integral arithmetic example)
+ {
+  action (file)
+   (
+    English: negate (value: ↓ minimal limited integral arithmetic example) skipping overflow check
+   )
+   {
+    negate (↓ (number) of (value)) skipping overflow check
+   }
+
+  action (file)
+   (
+    English: can negate (value: minimal limited integral arithmetic example)
+   )
+   truth value
+   {
+    ← can negate ((number) of (value))
+   }
+ }
+
+use (file)
+ limited integral arithmetic with (minimal limited integral arithmetic example)
+ {
  }

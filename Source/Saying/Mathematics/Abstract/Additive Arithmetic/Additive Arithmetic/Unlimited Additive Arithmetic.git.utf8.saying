@@ -281,3 +281,38 @@ use (file)
  unlimited additive arithmetic with (minimal two‐dimensional vector example)
  {
  }
+
+use (file)
+ any negation of (minimal two‐dimensional vector example)
+ {
+  action (file)
+   (
+    English: positive example
+   )
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (positive example: integer), (positive example: integer)
+   }
+
+  action (file)
+   (
+    English: negative example
+   )
+   minimal two‐dimensional vector example
+   {
+    ← minimal two‐dimensional vector example of (negative example: integer), (negative example: integer)
+   }
+ }
+
+use (file)
+ unlimited negation of (minimal two‐dimensional vector example)
+ {
+  action (file)
+   (
+    English: negate (value: ↓ minimal two‐dimensional vector example)
+   )
+   {
+    negate (↓ (x) of (value))
+    negate (↓ (y) of (value))
+   }
+ }

@@ -1,0 +1,38 @@
+ability (clients)
+ [
+  [
+   English: Capability common to both limited and unlimited negation.
+  ]
+  [
+   English: Besides numbers, negation intentionally supports things that have no comparison order, such as vectors with more than one dimension and things that have no inherent scale, such as measurements of length or mass.
+  ]
+ ]
+ (
+  English: any negation of (value)
+ )
+ {
+  ability (clients)
+   any additive arithmetic with (value)
+
+  requirement (clients)
+   [
+    [
+     English: A positive example.
+    ]
+   ]
+   (
+    English: positive example
+   )
+   value
+
+  requirement (clients)
+   [
+    [
+     English: The negative conterpart to the positive example.
+    ]
+   ]
+   (
+    English: negative example
+   )
+   value
+ }

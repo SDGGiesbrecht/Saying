@@ -399,6 +399,52 @@ use (clients)
  }
 
 use (clients)
+ any negation of (integer)
+ {
+  action (clients)
+   (
+    English: positive example
+   )
+   integer
+   {
+    ← “1”
+   }
+
+  action (clients)
+   (
+    English: negative example
+   )
+   integer
+   {
+    ← “−1”
+   }
+ }
+
+use (clients)
+ unlimited negation of (integer)
+ {
+  action (clients)
+   (
+    English: negate (value: ↓ integer)
+   )
+   Swift: “” value “.negate()”
+   {
+    change (↓ value) to (negative (value))
+   }
+
+  action (clients)
+   (
+    English: negative (value: integer)
+   )
+   integer
+   C: “¤(2D)” value “”
+   C♯: “¤(2D)” value “”
+   JavaScript: “¤(2D)” value “”
+   Kotlin: “¤(2D)” value “”
+   Swift: “¤(2D)” value “”
+ }
+
+use (clients)
  unlimited integral arithmetic with (integer)
  {
  }

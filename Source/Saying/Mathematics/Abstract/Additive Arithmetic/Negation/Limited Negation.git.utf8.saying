@@ -1,0 +1,111 @@
+ability (clients)
+ (
+  English: limited negation of (value)
+ )
+ {
+  ability (clients)
+   any negation of (value)
+
+  ability (clients)
+   limited additive arithmetic with (value)
+
+  requirement (clients)
+   [
+    [
+     English: Negates the value without checking whether the result is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {negate ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the resulting value is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {
+     let (• value: value) start as (positive example: value)
+     negate (↓ value) skipping overflow check
+     verify ((value) is (negative example: value))
+    }
+   ]
+   (
+    English: negate (value: ↓ value) skipping overflow check
+   )
+
+  choice (clients)
+   [
+    [
+     English: Returns the negated value without checking whether the result is representable.
+    ]
+    [
+     English: This action is simpler to implement as an ability requirement, but callers are generally advised to use its safer variant {negative ()} instead.
+    ]
+    [
+     English: Skipping the overflow check can also be more efficient when the resulting value is already known from context to be representable. However, the caller takes responsibility for the logical soundness of the call.
+    ]
+    test {verify ((negative (positive example: value), skipping overflow check) is (negative example: value))}
+   ]
+   (
+    English: negative (value: value), skipping overflow check
+   )
+   value
+   {
+    let (• copy: value) start as (value)
+    negate (↓ copy) skipping overflow check
+    ← copy
+   }
+
+  requirement (clients)
+   [
+    [
+     English: Returns a truth value indicating whether the negated value will be representable.
+    ]
+    test {verify (can negate (positive example: value))}
+   ]
+   (
+    English: can negate (value: value)
+   )
+   truth value
+ }
+
+extension
+ limited negation of (value)
+ {
+  action (clients)
+   [
+    [
+     English: Negates the value if possible and then returns whether or not the negation succeeded.
+    ]
+    test {
+     let (• value: value) start as (positive example: value)
+     verify (negate (↓ value))
+     verify ((value) is (negative example: value))
+    }
+   ]
+   (
+    English: negate (value: ↓ value)
+   )
+   truth value
+   {
+    if (can negate (value)), {
+     negate (↓ value) skipping overflow check
+     ← true
+    }
+    ← false
+   }
+
+  action (clients)
+   [
+    test {verify ((negative (positive example: value)) is (negative example: value))}
+   ]
+   (
+    English: negative (value: value)
+    English +: −(value: [value])
+   )
+   optional (value)
+   {
+    let (• copy: value) start as (value)
+    if (negate (↓ copy)), {
+     ← wrap (copy) into optional
+    }
+    ← nothing
+   }
+ }
