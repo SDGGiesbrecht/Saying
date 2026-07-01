@@ -1,6 +1,5 @@
 import Foundation
 
-import SDGPersistence
 import SDGExternalProcess
 
 struct Package {

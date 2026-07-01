@@ -10,8 +10,7 @@ struct Node {
   var lowercasedName: String {
     var result = name
     let first = result.unicodeScalars.removeFirst()
-    result.unicodeScalars.prepend(contentsOf: first.properties.lowercaseMapping.scalars)
-    return result
+    return "\(first.properties.lowercaseMapping)\(result)"
   }
 
   static func source() -> String {
@@ -364,7 +363,7 @@ struct Node {
     case .fixedLeaf(let scalar):
       return [
         "    guard let first = remainder.first,",
-        "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
+        "      first == \u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22} else {",
         "        return .failure([.notA\(name)(SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))])",
         "    }",
         "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1)))), reasonNotContinued: nil))",
@@ -512,7 +511,7 @@ struct Node {
     case .fixedLeaf(let scalar):
       return [
         "    guard let first = remainder.first,",
-        "      first == \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22} else {",
+        "      first == \u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22} else {",
         "        return nil",
         "    }",
         "    return Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))",
@@ -733,7 +732,7 @@ struct Node {
         "  static let allowed: Set<Unicode.Scalar> = [",
       ]
       for scalar in allowed.sorted() {
-        result.append("    \u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22},")
+        result.append("    \u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22},")
       }
       result.append(contentsOf: [
         "  ]",
@@ -772,7 +771,7 @@ struct Node {
       case .fixedLeaf(let scalar):
         return [
           "  var text: UnicodeText {",
-          "    return UnicodeText(\u{22}\u{5C}u{\(scalar.hexadecimalCode)}\u{22})",
+          "    return UnicodeText(\u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22})",
           "  }",
         ].joined(separator: "\n")
       case .keyword, .variableLeaf, .compound, .alternates:

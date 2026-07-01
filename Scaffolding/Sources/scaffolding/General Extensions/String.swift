@@ -1,3 +1,5 @@
+import Foundation
+
 extension String {
 
   init(_ text: UnicodeText) {
@@ -12,4 +14,19 @@ func compute(_ compute: () -> String, cachingIn cache: inout String?) -> String 
   let result: String = compute()
   cache = result
   return result
+}
+
+extension String {
+
+  func overwriteIfDifferentThan(_ url: URL, baseURL: URL?, reportProgress: (String) -> Void) throws {
+    let fileData = file
+    let path = baseURL.map({ url.path(relativeTo: $0) }) ?? url.path
+    if let existing = try? Data(contentsOf: url),
+       existing == fileData {
+      reportProgress("= \(path)")
+    } else {
+      try fileData.save(to: url)
+      reportProgress("↺ \(path)")
+    }
+  }
 }

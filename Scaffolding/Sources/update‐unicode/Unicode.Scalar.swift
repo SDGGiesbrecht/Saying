@@ -9,7 +9,7 @@ extension Unicode.Scalar {
 
   var sayingLiteral: String {
     var literal = String(hexadecimal: value)
-    while literal.scalars.count < 4 {
+    while literal.unicodeScalars.count < 4 {
       literal = "0\(literal)"
     }
     return literal

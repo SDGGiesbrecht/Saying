@@ -1,5 +1,4 @@
 import Foundation
-import SDGPersistence
 
 struct Cache {
   fileprivate let location: URL
@@ -37,7 +36,7 @@ extension Cache {
 
 extension Cache {
 
-  mutating func update<T>(_ relativePath: [String], to file: T) throws where T: FileConvertible {
+  mutating func update(_ relativePath: [String], to file: String) throws {
     let location = url(of: relativePath)
     if !updated.insert(relativePath).inserted {
       print("Inefficient double write: \(location.path)")
