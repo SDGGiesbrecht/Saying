@@ -8,7 +8,7 @@ extension SayingSource {
     case .utf8(let gitStyle):
       switch gitStyle {
       case false:
-        self.init(origin: origin, code: .utf8(UnicodeSegments(UnicodeText(try String(from: url)))))
+        self.init(origin: origin, code: .utf8(UnicodeSegments(allOf: UnicodeText(try String(from: url)))))
       case true:
         self = try GitStyleSayingSource(from: url).parsed()
       }

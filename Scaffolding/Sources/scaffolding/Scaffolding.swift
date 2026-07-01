@@ -99,6 +99,7 @@ import Foundation
         "[UnicodeText].joined(separator: UnicodeText)",
         "UnicodeText.replace(_: UnicodeText, with: UnicodeText)",
 
+        "UnicodeSegments.init(allOf: UnicodeText)",
         "UnicodeSegments.index(before: UnicodeSegments.Boundary)",
         "UnicodeText.init(_: Slice<UnicodeSegments>)",
         "UnicodeSegments.underlyingScalarOffset(of: UnicodeSegments.Boundary)",
@@ -164,22 +165,6 @@ import Foundation
     )
     var source = try String(from: intermediate)
     var appendix: [String] = [
-      "",
-      "struct UnicodeSegment {",
-      "  fileprivate var segment: Unicode_0020segment",
-      "}",
-      "",
-      "extension UnicodeSegment {",
-      "  init(scalarOffset: UInt64, source: UnicodeText) {",
-      "    self.init(segment: Unicode_0020segment(scalarOffset, source))",
-      "  }",
-      "}",
-      "",
-      "extension UnicodeSegments {",
-      "  init(segments: [UnicodeSegment]) {",
-      "    self.init(segments.map({ $0.segment }))",
-      "  }",
-      "}",
       "",
       "extension SayingSourceSlice {",
       "  init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
