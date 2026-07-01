@@ -277,6 +277,8 @@ struct Node {
     case .fixedLeaf, .keyword, .variableLeaf:
       return [
         "    switch location.code {",
+        "    case .writing:",
+        "      fatalError(\u{22}Writing not implemented yet.\u{22})",
         "    case .utf8(let unicode):",
         "      return unicode.base",
         "    }",
@@ -293,6 +295,8 @@ struct Node {
     case .fixedLeaf, .keyword, .variableLeaf:
       return [
         "    switch location.code {",
+        "    case .writing:",
+        "      fatalError(\u{22}Writing not implemented yet.\u{22})",
         "    case .utf8(let unicode):",
         "      return unicode.startIndex",
         "    }",
@@ -309,6 +313,8 @@ struct Node {
     case .fixedLeaf, .keyword, .variableLeaf:
       return [
         "    switch location.code {",
+        "    case .writing:",
+        "      fatalError(\u{22}Writing not implemented yet.\u{22})",
         "    case .utf8(let unicode):",
         "      return unicode.endIndex",
         "    }",

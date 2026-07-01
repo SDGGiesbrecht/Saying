@@ -589,10 +589,12 @@ struct UnicodeSegments {
 extension UnicodeSegments: Collection {}
 
 enum SayingSourceCode {
+  case writing
   case utf8(UnicodeSegments)
 }
 
 enum SayingSourceCodeSlice {
+  case writing
   case utf8(Slice<UnicodeSegments>)
 }
 

@@ -49,6 +49,8 @@ extension ModuleIntermediate {
           origin: compilerGeneratedOrigin(),
           code: UnicodeText(newSource.joined(separator: "\n"))
         ).parsed().code {
+        case .writing:
+          fatalError("Writing not implemented yet.")
         case .utf8(let file):
           try self.add(
             file: ParsedDeclarationList.fastParse(source: file, origin: compilerGeneratedOrigin())

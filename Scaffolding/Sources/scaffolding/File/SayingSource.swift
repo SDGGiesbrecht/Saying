@@ -17,6 +17,8 @@ extension SayingSource {
 
   func parse() throws -> ParsedDeclarationList {
     switch code {
+    case .writing:
+      fatalError("Writing not implemented yet.")
     case .utf8(let source):
       return try ParsedDeclarationList.fastParse(source: source, origin: origin)
         ?? ParsedDeclarationList.diagnosticParse(source: source, origin: origin).get()

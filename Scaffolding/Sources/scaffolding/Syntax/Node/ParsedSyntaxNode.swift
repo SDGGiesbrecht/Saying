@@ -14,6 +14,8 @@ extension ParsedSyntaxNode {
 
   func source() -> UnicodeText {
     switch location.code {
+    case .writing:
+      fatalError("Writing not implemented yet.")
     case .utf8(let unicode):
       return UnicodeText(unicode)
     }

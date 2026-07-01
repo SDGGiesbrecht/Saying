@@ -16,6 +16,8 @@ extension DiagnosticError {
 
   var diagnostic: String {
     switch range.code {
+    case .writing:
+      fatalError("Writing not implemented yet.")
     case .utf8(let unicode):
       let preceding = String(String.UnicodeScalarView(unicode.base[..<unicode.startIndex]))
       let line = preceding.lines

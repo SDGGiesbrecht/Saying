@@ -6,6 +6,12 @@ enumeration (clients)
  {
   case
    (
+    English: writing
+    Swift: writing
+   )
+
+  case
+   (
     English: 8‐bit encoded Unicode
     Swift: utf8
    )
