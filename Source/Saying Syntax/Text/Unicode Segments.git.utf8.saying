@@ -28,6 +28,21 @@ action (unit)
  Unicode segments
  create
 
+action (clients)
+ [
+  test {verify ((Unicode text of (Unicode segments containing all of (“...¤(A)¤(A)...”))) is (“...¤(A)¤(A)...”))}
+ ]
+ (
+  English: Unicode segments containing all of (text: Unicode text)
+  Swift: UnicodeSegments.init allOf (text: [text])
+ )
+ Unicode segments
+ {
+  let (• segments: list of (Unicode segment)) start as (empty: list of (Unicode segment))
+  append (Unicode segment at (zero: natural number) containing (text)) to (↓ segments)
+  ← Unicode segments (segments)
+ }
+
 use (clients)
  use of (Unicode segments) as list of (Unicode scalar) indexed by (Unicode segments index) separated by (Unicode segments boundary)
  {

@@ -27,7 +27,7 @@ extension ParsableSyntaxNode {
     }
   }
   static func diagnosticParse(source: UnicodeText, origin: UnicodeText) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
-    return diagnosticParse(source: UnicodeSegments(source), origin: origin)
+    return diagnosticParse(source: UnicodeSegments(allOf: source), origin: origin)
   }
 
   static func fastParse(source: UnicodeSegments, origin: UnicodeText) -> Self? {
@@ -42,7 +42,7 @@ extension ParsableSyntaxNode {
     return parsed
   }
   static func fastParse(source: UnicodeText, origin: UnicodeText) -> Self? {
-    return fastParse(source: UnicodeSegments(source), origin: origin)
+    return fastParse(source: UnicodeSegments(allOf: source), origin: origin)
   }
 
   init?(source: UnicodeSegments, origin: UnicodeText) {
@@ -52,6 +52,6 @@ extension ParsableSyntaxNode {
     self = parsed
   }
   init?(source: UnicodeText, origin: UnicodeText) {
-    self.init(source: UnicodeSegments(source), origin: origin)
+    self.init(source: UnicodeSegments(allOf: source), origin: origin)
   }
 }
