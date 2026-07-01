@@ -79,6 +79,9 @@ action (clients)
  }
 
 action (clients)
+ [
+  test {verify ((Unicode text of (Saying source from (“...”) containing (writing))) does not exist)}
+ ]
  (
   English: Unicode text of (source: Saying source)
  )
@@ -87,5 +90,5 @@ action (clients)
   if ((code) of (source)) is (8‐bit encoded Unicode), unwrap it as (• segments: Unicode segments), {
    ← wrap (Unicode text of (segments)) into optional
   }
-  !
+  ← nothing
  }
