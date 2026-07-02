@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGPersistence
-
 extension GitStyleSayingSource {
 
   init(from url: URL) throws {

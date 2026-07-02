@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGPersistence
-
 @main struct UpdateUnicode {
 
   static let version = "17.0.0"
@@ -38,7 +36,7 @@ import SDGPersistence
     classes: inout [Unicode.Scalar: UInt8],
     decompositions: inout [Unicode.Scalar: [Unicode.Scalar]]
   ) throws {
-    for entry in try String(from: databaseURL).components(separatedBy: "\n") as [String]
+    for entry in try String(contentsOf: databaseURL, encoding: .utf8).components(separatedBy: "\n") as [String]
       where !entry.isEmpty {
       let entryComponents: [String] = entry.components(separatedBy: ";")
 
@@ -171,7 +169,7 @@ import SDGPersistence
     ])
 
     try source.joined(separator: "\n").appending("\n")
-      .overrwite(unicodeDirectory.appendingPathComponent("Canonical Combining Class.git.utf8.saying"))
+      .overwrite(unicodeDirectory.appendingPathComponent("Canonical Combining Class.git.utf8.saying"))
   }
 
   static func output(decompositions: [Unicode.Scalar: [Unicode.Scalar]]) throws {
@@ -221,7 +219,7 @@ import SDGPersistence
     ])
 
     try source.joined(separator: "\n").appending("\n")
-      .overrwite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition.git.utf8.saying"))
+      .overwrite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition.git.utf8.saying"))
   }
 
   static func output(decompositionCheck: [Unicode.Scalar: [Unicode.Scalar]]) throws {
@@ -267,6 +265,6 @@ import SDGPersistence
     ])
 
     try source.joined(separator: "\n").appending("\n")
-      .overrwite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition Quick Check.git.utf8.saying"))
+      .overwrite(unicodeDirectory.appendingPathComponent("Compatibility Decomposition Quick Check.git.utf8.saying"))
   }
 }

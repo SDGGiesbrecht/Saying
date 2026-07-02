@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGPersistence
-
 struct Module {
 
   var directory: URL

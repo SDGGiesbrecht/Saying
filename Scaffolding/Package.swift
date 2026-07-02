@@ -13,7 +13,6 @@ let package = Package(
       name: "scaffolding",
       dependencies: [
         .product(name: "Source", package: "Source"), // Just so that IDEs show the files.
-        .product(name: "SDGPersistence", package: "SDGCornerstone"),
         .product(name: "SDGExternalProcess", package: "SDGCornerstone"),
       ],
       plugins: [
@@ -28,16 +27,10 @@ let package = Package(
       ]
     ),
     .executableTarget(
-      name: "generate‐syntax",
-      dependencies: [
-        .product(name: "SDGPersistence", package: "SDGCornerstone"),
-      ]
+      name: "generate‐syntax"
     ),
     .executableTarget(
-      name: "update‐unicode",
-      dependencies: [
-        .product(name: "SDGPersistence", package: "SDGCornerstone"),
-      ]
+      name: "update‐unicode"
     )
   ]
 )
