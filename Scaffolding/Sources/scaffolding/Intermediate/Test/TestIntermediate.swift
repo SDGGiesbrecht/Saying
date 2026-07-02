@@ -14,7 +14,7 @@ extension TestIntermediate {
     inheritedVisibility: AccessIntermediate
   ) -> Result<TestIntermediate, ErrorList<LiteralIntermediate.ConstructionError>> {
     var errors: [LiteralIntermediate.ConstructionError] = []
-    let nestedLocation = location.appending([UnicodeText(index.inDigits())])
+    let nestedLocation = location.appending([UnicodeText(String(index))])
     let isHidden = test.visibility != nil
     let statements: [StatementIntermediate]
     switch test.implementation {

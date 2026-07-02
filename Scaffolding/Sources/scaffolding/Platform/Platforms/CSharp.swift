@@ -124,7 +124,7 @@ enum CSharp: Platform {
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
-    digits.scalars.fill(to: 8, with: "0", from: .start)
+    digits.unicodeScalars.fill(to: 8, with: "0", from: .start)
     return "\u{5C}U\(digits)"
   }
 

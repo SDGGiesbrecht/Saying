@@ -10,8 +10,11 @@ extension DiagnosticError {
   }
 
   var defaultMessage: String {
-    let full = "\(self)"
-    return full.prefix(upTo: "(").map({ String($0.contents) }) ?? full
+    var result = "\(self)"
+    if let parenthesis = result.firstIndex(of: "(") {
+      result.removeSubrange(parenthesis...)
+    }
+    return result
   }
 
   var diagnostic: String {
@@ -20,8 +23,17 @@ extension DiagnosticError {
       fatalError("Writing not implemented yet.")
     case .utf8(let unicode):
       let preceding = String(String.UnicodeScalarView(unicode.base[..<unicode.startIndex]))
-      let line = preceding.lines
-        .lazy.map({ $0.newline.elementsEqual("\u{2029}".scalars) ? 2 : 1 })
+      let line = preceding.unicodeScalars
+        .lazy.map({ scalar in
+          switch scalar {
+          case "\u{2028}":
+            return 1
+          case "\u{2029}":
+            return 2
+          default:
+            return 0
+          }
+        })
         .reduce(0, +)
       let source = String.UnicodeScalarView(unicode)
       return "\(range.origin)\n\(line): \(message) “\(source)”"

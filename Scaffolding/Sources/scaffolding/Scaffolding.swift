@@ -163,7 +163,7 @@ import Foundation
       location: intermediate,
       reportProgress: reportProgress
     )
-    var source = try String(from: intermediate)
+    var source = try String(contentsOf: intermediate, encoding: .utf8)
     var appendix: [String] = [
       "",
       "extension SayingSourceSlice {",

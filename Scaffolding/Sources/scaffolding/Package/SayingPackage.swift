@@ -1,7 +1,5 @@
 import Foundation
 
-import SDGExternalProcess
-
 struct Package {
 
   var location: URL
@@ -28,7 +26,7 @@ struct Package {
   ]
 
   func modules() throws -> [Module] {
-    return try FileManager.default.contents(ofDirectory: sourceDirectory)
+    return try FileManager.default.contentsOfDirectory(at: sourceDirectory, includingPropertiesForKeys: nil)
       .lazy.filter({ !Package.ignoredFiles.contains($0.lastPathComponent) })
       .lazy.filter({ $0.hasDirectoryPath == true })
       .lazy.filter({ url in
@@ -70,42 +68,42 @@ struct Package {
 
   func buildSwift(reportProgress: @escaping (String) -> Void) throws {
     try Swift.prepare(package: self, mode: .testing, reportProgress: reportProgress)
-    _ = try Shell.default.run(
+    try run(
       command: [
         "swift", "build",
         "--package-path", Swift.preparedDirectory(for: self).path,
       ],
       reportProgress: reportProgress
-    ).get()
+    )
   }
 
   func testC(reportProgress: @escaping (String) -> Void) throws {
     try C.prepare(package: self, mode: .testing, reportProgress: reportProgress)
-    _ = try Shell.default.run(
+    try run(
       command: [
         "make",
         "--directory=\(C.preparedDirectory(for: self).path)",
         "test",
       ],
       reportProgress: reportProgress
-    ).get()
+    )
   }
 
   func testSwift(reportProgress: @escaping (String) -> Void) throws {
     try Swift.prepare(package: self, mode: .testing, reportProgress: reportProgress)
-    _ = try Shell.default.run(
+    try run(
       command: [
         "swift", "run",
         "--package-path", Swift.preparedDirectory(for: self).path,
         "test"
       ],
       reportProgress: reportProgress
-    ).get()
+    )
   }
 
   func buildXcode(platform: String, reportProgress: @escaping (String) -> Void) throws {
     try Swift.prepare(package: self, mode: .testing, reportProgress: reportProgress)
-    _ = try Shell.default.run(
+    try run(
       command: [
         "xcrun", "xcodebuild", "build",
         "-scheme", "Package",
@@ -113,12 +111,12 @@ struct Package {
       ],
       in: Swift.preparedDirectory(for: self),
       reportProgress: reportProgress
-    ).get()
+    )
   }
 
   func testXcode(platform: String, simulator: String, reportProgress: @escaping (String) -> Void) throws {
     try buildXcode(platform: platform, reportProgress: reportProgress)
-    _ = try Shell.default.run(
+    try run(
       command: [
         "xcrun", "xcodebuild", "test",
         "-scheme", "Package",
@@ -126,7 +124,7 @@ struct Package {
       ],
       in: Swift.preparedDirectory(for: self),
       reportProgress: reportProgress
-    ).get()
+    )
   }
 
   func testIOS(reportProgress: @escaping (String) -> Void) throws {

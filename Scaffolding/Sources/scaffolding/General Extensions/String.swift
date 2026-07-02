@@ -19,13 +19,13 @@ func compute(_ compute: () -> String, cachingIn cache: inout String?) -> String 
 extension String {
 
   func overwriteIfDifferentThan(_ url: URL, baseURL: URL?, reportProgress: (String) -> Void) throws {
-    let fileData = file
+    let fileData = data(using: .utf8)!
     let path = baseURL.map({ url.path(relativeTo: $0) }) ?? url.path
     if let existing = try? Data(contentsOf: url),
        existing == fileData {
       reportProgress("= \(path)")
     } else {
-      try fileData.save(to: url)
+      try fileData.write(to: url, options: [.atomic])
       reportProgress("↺ \(path)")
     }
   }
