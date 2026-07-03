@@ -26,7 +26,7 @@ extension String {
       reportProgress("= \(path)")
     } else {
       let directory = url.deletingLastPathComponent()
-      try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
       try fileData.write(to: url, options: [.atomic])
       reportProgress("↺ \(path)")
     }

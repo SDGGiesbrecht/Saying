@@ -309,7 +309,7 @@ struct GitStyleSayingSource {
       let offset: UInt64 = offset_0020cursor1
       offset_0020cursor1.increment()
       let scalar: Unicode.Scalar = code[entryIndex: index]
-      if scalar == "\u{000A}" as Unicode.Scalar {
+      if scalar == "\u{A}" as Unicode.Scalar {
         parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AUnicode_0020scalar_0020boundary_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(self, &beginning_0020of_0020segment, index, &segments)
         if index != last_0020index {
           var combined: Bool = false
@@ -5392,7 +5392,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x00A8 {
-    return " \u{0308}".unicodeScalars
+    return " \u{308}".unicodeScalars
   }
   if value <= 0x00A9 {
     return String(scalar).unicodeScalars
@@ -5404,7 +5404,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x00AF {
-    return " \u{0304}".unicodeScalars
+    return " \u{304}".unicodeScalars
   }
   if value <= 0x00B1 {
     return String(scalar).unicodeScalars
@@ -5416,7 +5416,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "3".unicodeScalars
   }
   if value <= 0x00B4 {
-    return " \u{0301}".unicodeScalars
+    return " \u{301}".unicodeScalars
   }
   if value <= 0x00B5 {
     return "μ".unicodeScalars
@@ -5425,7 +5425,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x00B8 {
-    return " \u{0327}".unicodeScalars
+    return " \u{327}".unicodeScalars
   }
   if value <= 0x00B9 {
     return "1".unicodeScalars
@@ -5449,328 +5449,328 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x00C0 {
-    return "A\u{0300}".unicodeScalars
+    return "A\u{300}".unicodeScalars
   }
   if value <= 0x00C1 {
-    return "A\u{0301}".unicodeScalars
+    return "A\u{301}".unicodeScalars
   }
   if value <= 0x00C2 {
-    return "A\u{0302}".unicodeScalars
+    return "A\u{302}".unicodeScalars
   }
   if value <= 0x00C3 {
-    return "A\u{0303}".unicodeScalars
+    return "A\u{303}".unicodeScalars
   }
   if value <= 0x00C4 {
-    return "A\u{0308}".unicodeScalars
+    return "A\u{308}".unicodeScalars
   }
   if value <= 0x00C5 {
-    return "A\u{030A}".unicodeScalars
+    return "A\u{30A}".unicodeScalars
   }
   if value <= 0x00C6 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00C7 {
-    return "C\u{0327}".unicodeScalars
+    return "C\u{327}".unicodeScalars
   }
   if value <= 0x00C8 {
-    return "E\u{0300}".unicodeScalars
+    return "E\u{300}".unicodeScalars
   }
   if value <= 0x00C9 {
-    return "E\u{0301}".unicodeScalars
+    return "E\u{301}".unicodeScalars
   }
   if value <= 0x00CA {
-    return "E\u{0302}".unicodeScalars
+    return "E\u{302}".unicodeScalars
   }
   if value <= 0x00CB {
-    return "E\u{0308}".unicodeScalars
+    return "E\u{308}".unicodeScalars
   }
   if value <= 0x00CC {
-    return "I\u{0300}".unicodeScalars
+    return "I\u{300}".unicodeScalars
   }
   if value <= 0x00CD {
-    return "I\u{0301}".unicodeScalars
+    return "I\u{301}".unicodeScalars
   }
   if value <= 0x00CE {
-    return "I\u{0302}".unicodeScalars
+    return "I\u{302}".unicodeScalars
   }
   if value <= 0x00CF {
-    return "I\u{0308}".unicodeScalars
+    return "I\u{308}".unicodeScalars
   }
   if value <= 0x00D0 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00D1 {
-    return "N\u{0303}".unicodeScalars
+    return "N\u{303}".unicodeScalars
   }
   if value <= 0x00D2 {
-    return "O\u{0300}".unicodeScalars
+    return "O\u{300}".unicodeScalars
   }
   if value <= 0x00D3 {
-    return "O\u{0301}".unicodeScalars
+    return "O\u{301}".unicodeScalars
   }
   if value <= 0x00D4 {
-    return "O\u{0302}".unicodeScalars
+    return "O\u{302}".unicodeScalars
   }
   if value <= 0x00D5 {
-    return "O\u{0303}".unicodeScalars
+    return "O\u{303}".unicodeScalars
   }
   if value <= 0x00D6 {
-    return "O\u{0308}".unicodeScalars
+    return "O\u{308}".unicodeScalars
   }
   if value <= 0x00D8 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00D9 {
-    return "U\u{0300}".unicodeScalars
+    return "U\u{300}".unicodeScalars
   }
   if value <= 0x00DA {
-    return "U\u{0301}".unicodeScalars
+    return "U\u{301}".unicodeScalars
   }
   if value <= 0x00DB {
-    return "U\u{0302}".unicodeScalars
+    return "U\u{302}".unicodeScalars
   }
   if value <= 0x00DC {
-    return "U\u{0308}".unicodeScalars
+    return "U\u{308}".unicodeScalars
   }
   if value <= 0x00DD {
-    return "Y\u{0301}".unicodeScalars
+    return "Y\u{301}".unicodeScalars
   }
   if value <= 0x00DF {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00E0 {
-    return "a\u{0300}".unicodeScalars
+    return "a\u{300}".unicodeScalars
   }
   if value <= 0x00E1 {
-    return "a\u{0301}".unicodeScalars
+    return "a\u{301}".unicodeScalars
   }
   if value <= 0x00E2 {
-    return "a\u{0302}".unicodeScalars
+    return "a\u{302}".unicodeScalars
   }
   if value <= 0x00E3 {
-    return "a\u{0303}".unicodeScalars
+    return "a\u{303}".unicodeScalars
   }
   if value <= 0x00E4 {
-    return "a\u{0308}".unicodeScalars
+    return "a\u{308}".unicodeScalars
   }
   if value <= 0x00E5 {
-    return "a\u{030A}".unicodeScalars
+    return "a\u{30A}".unicodeScalars
   }
   if value <= 0x00E6 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00E7 {
-    return "c\u{0327}".unicodeScalars
+    return "c\u{327}".unicodeScalars
   }
   if value <= 0x00E8 {
-    return "e\u{0300}".unicodeScalars
+    return "e\u{300}".unicodeScalars
   }
   if value <= 0x00E9 {
-    return "e\u{0301}".unicodeScalars
+    return "e\u{301}".unicodeScalars
   }
   if value <= 0x00EA {
-    return "e\u{0302}".unicodeScalars
+    return "e\u{302}".unicodeScalars
   }
   if value <= 0x00EB {
-    return "e\u{0308}".unicodeScalars
+    return "e\u{308}".unicodeScalars
   }
   if value <= 0x00EC {
-    return "i\u{0300}".unicodeScalars
+    return "i\u{300}".unicodeScalars
   }
   if value <= 0x00ED {
-    return "i\u{0301}".unicodeScalars
+    return "i\u{301}".unicodeScalars
   }
   if value <= 0x00EE {
-    return "i\u{0302}".unicodeScalars
+    return "i\u{302}".unicodeScalars
   }
   if value <= 0x00EF {
-    return "i\u{0308}".unicodeScalars
+    return "i\u{308}".unicodeScalars
   }
   if value <= 0x00F0 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00F1 {
-    return "n\u{0303}".unicodeScalars
+    return "n\u{303}".unicodeScalars
   }
   if value <= 0x00F2 {
-    return "o\u{0300}".unicodeScalars
+    return "o\u{300}".unicodeScalars
   }
   if value <= 0x00F3 {
-    return "o\u{0301}".unicodeScalars
+    return "o\u{301}".unicodeScalars
   }
   if value <= 0x00F4 {
-    return "o\u{0302}".unicodeScalars
+    return "o\u{302}".unicodeScalars
   }
   if value <= 0x00F5 {
-    return "o\u{0303}".unicodeScalars
+    return "o\u{303}".unicodeScalars
   }
   if value <= 0x00F6 {
-    return "o\u{0308}".unicodeScalars
+    return "o\u{308}".unicodeScalars
   }
   if value <= 0x00F8 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00F9 {
-    return "u\u{0300}".unicodeScalars
+    return "u\u{300}".unicodeScalars
   }
   if value <= 0x00FA {
-    return "u\u{0301}".unicodeScalars
+    return "u\u{301}".unicodeScalars
   }
   if value <= 0x00FB {
-    return "u\u{0302}".unicodeScalars
+    return "u\u{302}".unicodeScalars
   }
   if value <= 0x00FC {
-    return "u\u{0308}".unicodeScalars
+    return "u\u{308}".unicodeScalars
   }
   if value <= 0x00FD {
-    return "y\u{0301}".unicodeScalars
+    return "y\u{301}".unicodeScalars
   }
   if value <= 0x00FE {
     return String(scalar).unicodeScalars
   }
   if value <= 0x00FF {
-    return "y\u{0308}".unicodeScalars
+    return "y\u{308}".unicodeScalars
   }
   if value <= 0x0100 {
-    return "A\u{0304}".unicodeScalars
+    return "A\u{304}".unicodeScalars
   }
   if value <= 0x0101 {
-    return "a\u{0304}".unicodeScalars
+    return "a\u{304}".unicodeScalars
   }
   if value <= 0x0102 {
-    return "A\u{0306}".unicodeScalars
+    return "A\u{306}".unicodeScalars
   }
   if value <= 0x0103 {
-    return "a\u{0306}".unicodeScalars
+    return "a\u{306}".unicodeScalars
   }
   if value <= 0x0104 {
-    return "A\u{0328}".unicodeScalars
+    return "A\u{328}".unicodeScalars
   }
   if value <= 0x0105 {
-    return "a\u{0328}".unicodeScalars
+    return "a\u{328}".unicodeScalars
   }
   if value <= 0x0106 {
-    return "C\u{0301}".unicodeScalars
+    return "C\u{301}".unicodeScalars
   }
   if value <= 0x0107 {
-    return "c\u{0301}".unicodeScalars
+    return "c\u{301}".unicodeScalars
   }
   if value <= 0x0108 {
-    return "C\u{0302}".unicodeScalars
+    return "C\u{302}".unicodeScalars
   }
   if value <= 0x0109 {
-    return "c\u{0302}".unicodeScalars
+    return "c\u{302}".unicodeScalars
   }
   if value <= 0x010A {
-    return "C\u{0307}".unicodeScalars
+    return "C\u{307}".unicodeScalars
   }
   if value <= 0x010B {
-    return "c\u{0307}".unicodeScalars
+    return "c\u{307}".unicodeScalars
   }
   if value <= 0x010C {
-    return "C\u{030C}".unicodeScalars
+    return "C\u{30C}".unicodeScalars
   }
   if value <= 0x010D {
-    return "c\u{030C}".unicodeScalars
+    return "c\u{30C}".unicodeScalars
   }
   if value <= 0x010E {
-    return "D\u{030C}".unicodeScalars
+    return "D\u{30C}".unicodeScalars
   }
   if value <= 0x010F {
-    return "d\u{030C}".unicodeScalars
+    return "d\u{30C}".unicodeScalars
   }
   if value <= 0x0111 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0112 {
-    return "E\u{0304}".unicodeScalars
+    return "E\u{304}".unicodeScalars
   }
   if value <= 0x0113 {
-    return "e\u{0304}".unicodeScalars
+    return "e\u{304}".unicodeScalars
   }
   if value <= 0x0114 {
-    return "E\u{0306}".unicodeScalars
+    return "E\u{306}".unicodeScalars
   }
   if value <= 0x0115 {
-    return "e\u{0306}".unicodeScalars
+    return "e\u{306}".unicodeScalars
   }
   if value <= 0x0116 {
-    return "E\u{0307}".unicodeScalars
+    return "E\u{307}".unicodeScalars
   }
   if value <= 0x0117 {
-    return "e\u{0307}".unicodeScalars
+    return "e\u{307}".unicodeScalars
   }
   if value <= 0x0118 {
-    return "E\u{0328}".unicodeScalars
+    return "E\u{328}".unicodeScalars
   }
   if value <= 0x0119 {
-    return "e\u{0328}".unicodeScalars
+    return "e\u{328}".unicodeScalars
   }
   if value <= 0x011A {
-    return "E\u{030C}".unicodeScalars
+    return "E\u{30C}".unicodeScalars
   }
   if value <= 0x011B {
-    return "e\u{030C}".unicodeScalars
+    return "e\u{30C}".unicodeScalars
   }
   if value <= 0x011C {
-    return "G\u{0302}".unicodeScalars
+    return "G\u{302}".unicodeScalars
   }
   if value <= 0x011D {
-    return "g\u{0302}".unicodeScalars
+    return "g\u{302}".unicodeScalars
   }
   if value <= 0x011E {
-    return "G\u{0306}".unicodeScalars
+    return "G\u{306}".unicodeScalars
   }
   if value <= 0x011F {
-    return "g\u{0306}".unicodeScalars
+    return "g\u{306}".unicodeScalars
   }
   if value <= 0x0120 {
-    return "G\u{0307}".unicodeScalars
+    return "G\u{307}".unicodeScalars
   }
   if value <= 0x0121 {
-    return "g\u{0307}".unicodeScalars
+    return "g\u{307}".unicodeScalars
   }
   if value <= 0x0122 {
-    return "G\u{0327}".unicodeScalars
+    return "G\u{327}".unicodeScalars
   }
   if value <= 0x0123 {
-    return "g\u{0327}".unicodeScalars
+    return "g\u{327}".unicodeScalars
   }
   if value <= 0x0124 {
-    return "H\u{0302}".unicodeScalars
+    return "H\u{302}".unicodeScalars
   }
   if value <= 0x0125 {
-    return "h\u{0302}".unicodeScalars
+    return "h\u{302}".unicodeScalars
   }
   if value <= 0x0127 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0128 {
-    return "I\u{0303}".unicodeScalars
+    return "I\u{303}".unicodeScalars
   }
   if value <= 0x0129 {
-    return "i\u{0303}".unicodeScalars
+    return "i\u{303}".unicodeScalars
   }
   if value <= 0x012A {
-    return "I\u{0304}".unicodeScalars
+    return "I\u{304}".unicodeScalars
   }
   if value <= 0x012B {
-    return "i\u{0304}".unicodeScalars
+    return "i\u{304}".unicodeScalars
   }
   if value <= 0x012C {
-    return "I\u{0306}".unicodeScalars
+    return "I\u{306}".unicodeScalars
   }
   if value <= 0x012D {
-    return "i\u{0306}".unicodeScalars
+    return "i\u{306}".unicodeScalars
   }
   if value <= 0x012E {
-    return "I\u{0328}".unicodeScalars
+    return "I\u{328}".unicodeScalars
   }
   if value <= 0x012F {
-    return "i\u{0328}".unicodeScalars
+    return "i\u{328}".unicodeScalars
   }
   if value <= 0x0130 {
-    return "I\u{0307}".unicodeScalars
+    return "I\u{307}".unicodeScalars
   }
   if value <= 0x0131 {
     return String(scalar).unicodeScalars
@@ -5782,37 +5782,37 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ij".unicodeScalars
   }
   if value <= 0x0134 {
-    return "J\u{0302}".unicodeScalars
+    return "J\u{302}".unicodeScalars
   }
   if value <= 0x0135 {
-    return "j\u{0302}".unicodeScalars
+    return "j\u{302}".unicodeScalars
   }
   if value <= 0x0136 {
-    return "K\u{0327}".unicodeScalars
+    return "K\u{327}".unicodeScalars
   }
   if value <= 0x0137 {
-    return "k\u{0327}".unicodeScalars
+    return "k\u{327}".unicodeScalars
   }
   if value <= 0x0138 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0139 {
-    return "L\u{0301}".unicodeScalars
+    return "L\u{301}".unicodeScalars
   }
   if value <= 0x013A {
-    return "l\u{0301}".unicodeScalars
+    return "l\u{301}".unicodeScalars
   }
   if value <= 0x013B {
-    return "L\u{0327}".unicodeScalars
+    return "L\u{327}".unicodeScalars
   }
   if value <= 0x013C {
-    return "l\u{0327}".unicodeScalars
+    return "l\u{327}".unicodeScalars
   }
   if value <= 0x013D {
-    return "L\u{030C}".unicodeScalars
+    return "L\u{30C}".unicodeScalars
   }
   if value <= 0x013E {
-    return "l\u{030C}".unicodeScalars
+    return "l\u{30C}".unicodeScalars
   }
   if value <= 0x013F {
     return "L·".unicodeScalars
@@ -5824,22 +5824,22 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0143 {
-    return "N\u{0301}".unicodeScalars
+    return "N\u{301}".unicodeScalars
   }
   if value <= 0x0144 {
-    return "n\u{0301}".unicodeScalars
+    return "n\u{301}".unicodeScalars
   }
   if value <= 0x0145 {
-    return "N\u{0327}".unicodeScalars
+    return "N\u{327}".unicodeScalars
   }
   if value <= 0x0146 {
-    return "n\u{0327}".unicodeScalars
+    return "n\u{327}".unicodeScalars
   }
   if value <= 0x0147 {
-    return "N\u{030C}".unicodeScalars
+    return "N\u{30C}".unicodeScalars
   }
   if value <= 0x0148 {
-    return "n\u{030C}".unicodeScalars
+    return "n\u{30C}".unicodeScalars
   }
   if value <= 0x0149 {
     return "ʼn".unicodeScalars
@@ -5848,151 +5848,151 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x014C {
-    return "O\u{0304}".unicodeScalars
+    return "O\u{304}".unicodeScalars
   }
   if value <= 0x014D {
-    return "o\u{0304}".unicodeScalars
+    return "o\u{304}".unicodeScalars
   }
   if value <= 0x014E {
-    return "O\u{0306}".unicodeScalars
+    return "O\u{306}".unicodeScalars
   }
   if value <= 0x014F {
-    return "o\u{0306}".unicodeScalars
+    return "o\u{306}".unicodeScalars
   }
   if value <= 0x0150 {
-    return "O\u{030B}".unicodeScalars
+    return "O\u{30B}".unicodeScalars
   }
   if value <= 0x0151 {
-    return "o\u{030B}".unicodeScalars
+    return "o\u{30B}".unicodeScalars
   }
   if value <= 0x0153 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0154 {
-    return "R\u{0301}".unicodeScalars
+    return "R\u{301}".unicodeScalars
   }
   if value <= 0x0155 {
-    return "r\u{0301}".unicodeScalars
+    return "r\u{301}".unicodeScalars
   }
   if value <= 0x0156 {
-    return "R\u{0327}".unicodeScalars
+    return "R\u{327}".unicodeScalars
   }
   if value <= 0x0157 {
-    return "r\u{0327}".unicodeScalars
+    return "r\u{327}".unicodeScalars
   }
   if value <= 0x0158 {
-    return "R\u{030C}".unicodeScalars
+    return "R\u{30C}".unicodeScalars
   }
   if value <= 0x0159 {
-    return "r\u{030C}".unicodeScalars
+    return "r\u{30C}".unicodeScalars
   }
   if value <= 0x015A {
-    return "S\u{0301}".unicodeScalars
+    return "S\u{301}".unicodeScalars
   }
   if value <= 0x015B {
-    return "s\u{0301}".unicodeScalars
+    return "s\u{301}".unicodeScalars
   }
   if value <= 0x015C {
-    return "S\u{0302}".unicodeScalars
+    return "S\u{302}".unicodeScalars
   }
   if value <= 0x015D {
-    return "s\u{0302}".unicodeScalars
+    return "s\u{302}".unicodeScalars
   }
   if value <= 0x015E {
-    return "S\u{0327}".unicodeScalars
+    return "S\u{327}".unicodeScalars
   }
   if value <= 0x015F {
-    return "s\u{0327}".unicodeScalars
+    return "s\u{327}".unicodeScalars
   }
   if value <= 0x0160 {
-    return "S\u{030C}".unicodeScalars
+    return "S\u{30C}".unicodeScalars
   }
   if value <= 0x0161 {
-    return "s\u{030C}".unicodeScalars
+    return "s\u{30C}".unicodeScalars
   }
   if value <= 0x0162 {
-    return "T\u{0327}".unicodeScalars
+    return "T\u{327}".unicodeScalars
   }
   if value <= 0x0163 {
-    return "t\u{0327}".unicodeScalars
+    return "t\u{327}".unicodeScalars
   }
   if value <= 0x0164 {
-    return "T\u{030C}".unicodeScalars
+    return "T\u{30C}".unicodeScalars
   }
   if value <= 0x0165 {
-    return "t\u{030C}".unicodeScalars
+    return "t\u{30C}".unicodeScalars
   }
   if value <= 0x0167 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0168 {
-    return "U\u{0303}".unicodeScalars
+    return "U\u{303}".unicodeScalars
   }
   if value <= 0x0169 {
-    return "u\u{0303}".unicodeScalars
+    return "u\u{303}".unicodeScalars
   }
   if value <= 0x016A {
-    return "U\u{0304}".unicodeScalars
+    return "U\u{304}".unicodeScalars
   }
   if value <= 0x016B {
-    return "u\u{0304}".unicodeScalars
+    return "u\u{304}".unicodeScalars
   }
   if value <= 0x016C {
-    return "U\u{0306}".unicodeScalars
+    return "U\u{306}".unicodeScalars
   }
   if value <= 0x016D {
-    return "u\u{0306}".unicodeScalars
+    return "u\u{306}".unicodeScalars
   }
   if value <= 0x016E {
-    return "U\u{030A}".unicodeScalars
+    return "U\u{30A}".unicodeScalars
   }
   if value <= 0x016F {
-    return "u\u{030A}".unicodeScalars
+    return "u\u{30A}".unicodeScalars
   }
   if value <= 0x0170 {
-    return "U\u{030B}".unicodeScalars
+    return "U\u{30B}".unicodeScalars
   }
   if value <= 0x0171 {
-    return "u\u{030B}".unicodeScalars
+    return "u\u{30B}".unicodeScalars
   }
   if value <= 0x0172 {
-    return "U\u{0328}".unicodeScalars
+    return "U\u{328}".unicodeScalars
   }
   if value <= 0x0173 {
-    return "u\u{0328}".unicodeScalars
+    return "u\u{328}".unicodeScalars
   }
   if value <= 0x0174 {
-    return "W\u{0302}".unicodeScalars
+    return "W\u{302}".unicodeScalars
   }
   if value <= 0x0175 {
-    return "w\u{0302}".unicodeScalars
+    return "w\u{302}".unicodeScalars
   }
   if value <= 0x0176 {
-    return "Y\u{0302}".unicodeScalars
+    return "Y\u{302}".unicodeScalars
   }
   if value <= 0x0177 {
-    return "y\u{0302}".unicodeScalars
+    return "y\u{302}".unicodeScalars
   }
   if value <= 0x0178 {
-    return "Y\u{0308}".unicodeScalars
+    return "Y\u{308}".unicodeScalars
   }
   if value <= 0x0179 {
-    return "Z\u{0301}".unicodeScalars
+    return "Z\u{301}".unicodeScalars
   }
   if value <= 0x017A {
-    return "z\u{0301}".unicodeScalars
+    return "z\u{301}".unicodeScalars
   }
   if value <= 0x017B {
-    return "Z\u{0307}".unicodeScalars
+    return "Z\u{307}".unicodeScalars
   }
   if value <= 0x017C {
-    return "z\u{0307}".unicodeScalars
+    return "z\u{307}".unicodeScalars
   }
   if value <= 0x017D {
-    return "Z\u{030C}".unicodeScalars
+    return "Z\u{30C}".unicodeScalars
   }
   if value <= 0x017E {
-    return "z\u{030C}".unicodeScalars
+    return "z\u{30C}".unicodeScalars
   }
   if value <= 0x017F {
     return "s".unicodeScalars
@@ -6001,31 +6001,31 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x01A0 {
-    return "O\u{031B}".unicodeScalars
+    return "O\u{31B}".unicodeScalars
   }
   if value <= 0x01A1 {
-    return "o\u{031B}".unicodeScalars
+    return "o\u{31B}".unicodeScalars
   }
   if value <= 0x01AE {
     return String(scalar).unicodeScalars
   }
   if value <= 0x01AF {
-    return "U\u{031B}".unicodeScalars
+    return "U\u{31B}".unicodeScalars
   }
   if value <= 0x01B0 {
-    return "u\u{031B}".unicodeScalars
+    return "u\u{31B}".unicodeScalars
   }
   if value <= 0x01C3 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x01C4 {
-    return "DZ\u{030C}".unicodeScalars
+    return "DZ\u{30C}".unicodeScalars
   }
   if value <= 0x01C5 {
-    return "Dz\u{030C}".unicodeScalars
+    return "Dz\u{30C}".unicodeScalars
   }
   if value <= 0x01C6 {
-    return "dz\u{030C}".unicodeScalars
+    return "dz\u{30C}".unicodeScalars
   }
   if value <= 0x01C7 {
     return "LJ".unicodeScalars
@@ -6046,109 +6046,109 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "nj".unicodeScalars
   }
   if value <= 0x01CD {
-    return "A\u{030C}".unicodeScalars
+    return "A\u{30C}".unicodeScalars
   }
   if value <= 0x01CE {
-    return "a\u{030C}".unicodeScalars
+    return "a\u{30C}".unicodeScalars
   }
   if value <= 0x01CF {
-    return "I\u{030C}".unicodeScalars
+    return "I\u{30C}".unicodeScalars
   }
   if value <= 0x01D0 {
-    return "i\u{030C}".unicodeScalars
+    return "i\u{30C}".unicodeScalars
   }
   if value <= 0x01D1 {
-    return "O\u{030C}".unicodeScalars
+    return "O\u{30C}".unicodeScalars
   }
   if value <= 0x01D2 {
-    return "o\u{030C}".unicodeScalars
+    return "o\u{30C}".unicodeScalars
   }
   if value <= 0x01D3 {
-    return "U\u{030C}".unicodeScalars
+    return "U\u{30C}".unicodeScalars
   }
   if value <= 0x01D4 {
-    return "u\u{030C}".unicodeScalars
+    return "u\u{30C}".unicodeScalars
   }
   if value <= 0x01D5 {
-    return "U\u{0308}\u{0304}".unicodeScalars
+    return "U\u{308}\u{304}".unicodeScalars
   }
   if value <= 0x01D6 {
-    return "u\u{0308}\u{0304}".unicodeScalars
+    return "u\u{308}\u{304}".unicodeScalars
   }
   if value <= 0x01D7 {
-    return "U\u{0308}\u{0301}".unicodeScalars
+    return "U\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x01D8 {
-    return "u\u{0308}\u{0301}".unicodeScalars
+    return "u\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x01D9 {
-    return "U\u{0308}\u{030C}".unicodeScalars
+    return "U\u{308}\u{30C}".unicodeScalars
   }
   if value <= 0x01DA {
-    return "u\u{0308}\u{030C}".unicodeScalars
+    return "u\u{308}\u{30C}".unicodeScalars
   }
   if value <= 0x01DB {
-    return "U\u{0308}\u{0300}".unicodeScalars
+    return "U\u{308}\u{300}".unicodeScalars
   }
   if value <= 0x01DC {
-    return "u\u{0308}\u{0300}".unicodeScalars
+    return "u\u{308}\u{300}".unicodeScalars
   }
   if value <= 0x01DD {
     return String(scalar).unicodeScalars
   }
   if value <= 0x01DE {
-    return "A\u{0308}\u{0304}".unicodeScalars
+    return "A\u{308}\u{304}".unicodeScalars
   }
   if value <= 0x01DF {
-    return "a\u{0308}\u{0304}".unicodeScalars
+    return "a\u{308}\u{304}".unicodeScalars
   }
   if value <= 0x01E0 {
-    return "A\u{0307}\u{0304}".unicodeScalars
+    return "A\u{307}\u{304}".unicodeScalars
   }
   if value <= 0x01E1 {
-    return "a\u{0307}\u{0304}".unicodeScalars
+    return "a\u{307}\u{304}".unicodeScalars
   }
   if value <= 0x01E2 {
-    return "Æ\u{0304}".unicodeScalars
+    return "Æ\u{304}".unicodeScalars
   }
   if value <= 0x01E3 {
-    return "æ\u{0304}".unicodeScalars
+    return "æ\u{304}".unicodeScalars
   }
   if value <= 0x01E5 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x01E6 {
-    return "G\u{030C}".unicodeScalars
+    return "G\u{30C}".unicodeScalars
   }
   if value <= 0x01E7 {
-    return "g\u{030C}".unicodeScalars
+    return "g\u{30C}".unicodeScalars
   }
   if value <= 0x01E8 {
-    return "K\u{030C}".unicodeScalars
+    return "K\u{30C}".unicodeScalars
   }
   if value <= 0x01E9 {
-    return "k\u{030C}".unicodeScalars
+    return "k\u{30C}".unicodeScalars
   }
   if value <= 0x01EA {
-    return "O\u{0328}".unicodeScalars
+    return "O\u{328}".unicodeScalars
   }
   if value <= 0x01EB {
-    return "o\u{0328}".unicodeScalars
+    return "o\u{328}".unicodeScalars
   }
   if value <= 0x01EC {
-    return "O\u{0328}\u{0304}".unicodeScalars
+    return "O\u{328}\u{304}".unicodeScalars
   }
   if value <= 0x01ED {
-    return "o\u{0328}\u{0304}".unicodeScalars
+    return "o\u{328}\u{304}".unicodeScalars
   }
   if value <= 0x01EE {
-    return "Ʒ\u{030C}".unicodeScalars
+    return "Ʒ\u{30C}".unicodeScalars
   }
   if value <= 0x01EF {
-    return "ʒ\u{030C}".unicodeScalars
+    return "ʒ\u{30C}".unicodeScalars
   }
   if value <= 0x01F0 {
-    return "j\u{030C}".unicodeScalars
+    return "j\u{30C}".unicodeScalars
   }
   if value <= 0x01F1 {
     return "DZ".unicodeScalars
@@ -6160,175 +6160,175 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "dz".unicodeScalars
   }
   if value <= 0x01F4 {
-    return "G\u{0301}".unicodeScalars
+    return "G\u{301}".unicodeScalars
   }
   if value <= 0x01F5 {
-    return "g\u{0301}".unicodeScalars
+    return "g\u{301}".unicodeScalars
   }
   if value <= 0x01F7 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x01F8 {
-    return "N\u{0300}".unicodeScalars
+    return "N\u{300}".unicodeScalars
   }
   if value <= 0x01F9 {
-    return "n\u{0300}".unicodeScalars
+    return "n\u{300}".unicodeScalars
   }
   if value <= 0x01FA {
-    return "A\u{030A}\u{0301}".unicodeScalars
+    return "A\u{30A}\u{301}".unicodeScalars
   }
   if value <= 0x01FB {
-    return "a\u{030A}\u{0301}".unicodeScalars
+    return "a\u{30A}\u{301}".unicodeScalars
   }
   if value <= 0x01FC {
-    return "Æ\u{0301}".unicodeScalars
+    return "Æ\u{301}".unicodeScalars
   }
   if value <= 0x01FD {
-    return "æ\u{0301}".unicodeScalars
+    return "æ\u{301}".unicodeScalars
   }
   if value <= 0x01FE {
-    return "Ø\u{0301}".unicodeScalars
+    return "Ø\u{301}".unicodeScalars
   }
   if value <= 0x01FF {
-    return "ø\u{0301}".unicodeScalars
+    return "ø\u{301}".unicodeScalars
   }
   if value <= 0x0200 {
-    return "A\u{030F}".unicodeScalars
+    return "A\u{30F}".unicodeScalars
   }
   if value <= 0x0201 {
-    return "a\u{030F}".unicodeScalars
+    return "a\u{30F}".unicodeScalars
   }
   if value <= 0x0202 {
-    return "A\u{0311}".unicodeScalars
+    return "A\u{311}".unicodeScalars
   }
   if value <= 0x0203 {
-    return "a\u{0311}".unicodeScalars
+    return "a\u{311}".unicodeScalars
   }
   if value <= 0x0204 {
-    return "E\u{030F}".unicodeScalars
+    return "E\u{30F}".unicodeScalars
   }
   if value <= 0x0205 {
-    return "e\u{030F}".unicodeScalars
+    return "e\u{30F}".unicodeScalars
   }
   if value <= 0x0206 {
-    return "E\u{0311}".unicodeScalars
+    return "E\u{311}".unicodeScalars
   }
   if value <= 0x0207 {
-    return "e\u{0311}".unicodeScalars
+    return "e\u{311}".unicodeScalars
   }
   if value <= 0x0208 {
-    return "I\u{030F}".unicodeScalars
+    return "I\u{30F}".unicodeScalars
   }
   if value <= 0x0209 {
-    return "i\u{030F}".unicodeScalars
+    return "i\u{30F}".unicodeScalars
   }
   if value <= 0x020A {
-    return "I\u{0311}".unicodeScalars
+    return "I\u{311}".unicodeScalars
   }
   if value <= 0x020B {
-    return "i\u{0311}".unicodeScalars
+    return "i\u{311}".unicodeScalars
   }
   if value <= 0x020C {
-    return "O\u{030F}".unicodeScalars
+    return "O\u{30F}".unicodeScalars
   }
   if value <= 0x020D {
-    return "o\u{030F}".unicodeScalars
+    return "o\u{30F}".unicodeScalars
   }
   if value <= 0x020E {
-    return "O\u{0311}".unicodeScalars
+    return "O\u{311}".unicodeScalars
   }
   if value <= 0x020F {
-    return "o\u{0311}".unicodeScalars
+    return "o\u{311}".unicodeScalars
   }
   if value <= 0x0210 {
-    return "R\u{030F}".unicodeScalars
+    return "R\u{30F}".unicodeScalars
   }
   if value <= 0x0211 {
-    return "r\u{030F}".unicodeScalars
+    return "r\u{30F}".unicodeScalars
   }
   if value <= 0x0212 {
-    return "R\u{0311}".unicodeScalars
+    return "R\u{311}".unicodeScalars
   }
   if value <= 0x0213 {
-    return "r\u{0311}".unicodeScalars
+    return "r\u{311}".unicodeScalars
   }
   if value <= 0x0214 {
-    return "U\u{030F}".unicodeScalars
+    return "U\u{30F}".unicodeScalars
   }
   if value <= 0x0215 {
-    return "u\u{030F}".unicodeScalars
+    return "u\u{30F}".unicodeScalars
   }
   if value <= 0x0216 {
-    return "U\u{0311}".unicodeScalars
+    return "U\u{311}".unicodeScalars
   }
   if value <= 0x0217 {
-    return "u\u{0311}".unicodeScalars
+    return "u\u{311}".unicodeScalars
   }
   if value <= 0x0218 {
-    return "S\u{0326}".unicodeScalars
+    return "S\u{326}".unicodeScalars
   }
   if value <= 0x0219 {
-    return "s\u{0326}".unicodeScalars
+    return "s\u{326}".unicodeScalars
   }
   if value <= 0x021A {
-    return "T\u{0326}".unicodeScalars
+    return "T\u{326}".unicodeScalars
   }
   if value <= 0x021B {
-    return "t\u{0326}".unicodeScalars
+    return "t\u{326}".unicodeScalars
   }
   if value <= 0x021D {
     return String(scalar).unicodeScalars
   }
   if value <= 0x021E {
-    return "H\u{030C}".unicodeScalars
+    return "H\u{30C}".unicodeScalars
   }
   if value <= 0x021F {
-    return "h\u{030C}".unicodeScalars
+    return "h\u{30C}".unicodeScalars
   }
   if value <= 0x0225 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0226 {
-    return "A\u{0307}".unicodeScalars
+    return "A\u{307}".unicodeScalars
   }
   if value <= 0x0227 {
-    return "a\u{0307}".unicodeScalars
+    return "a\u{307}".unicodeScalars
   }
   if value <= 0x0228 {
-    return "E\u{0327}".unicodeScalars
+    return "E\u{327}".unicodeScalars
   }
   if value <= 0x0229 {
-    return "e\u{0327}".unicodeScalars
+    return "e\u{327}".unicodeScalars
   }
   if value <= 0x022A {
-    return "O\u{0308}\u{0304}".unicodeScalars
+    return "O\u{308}\u{304}".unicodeScalars
   }
   if value <= 0x022B {
-    return "o\u{0308}\u{0304}".unicodeScalars
+    return "o\u{308}\u{304}".unicodeScalars
   }
   if value <= 0x022C {
-    return "O\u{0303}\u{0304}".unicodeScalars
+    return "O\u{303}\u{304}".unicodeScalars
   }
   if value <= 0x022D {
-    return "o\u{0303}\u{0304}".unicodeScalars
+    return "o\u{303}\u{304}".unicodeScalars
   }
   if value <= 0x022E {
-    return "O\u{0307}".unicodeScalars
+    return "O\u{307}".unicodeScalars
   }
   if value <= 0x022F {
-    return "o\u{0307}".unicodeScalars
+    return "o\u{307}".unicodeScalars
   }
   if value <= 0x0230 {
-    return "O\u{0307}\u{0304}".unicodeScalars
+    return "O\u{307}\u{304}".unicodeScalars
   }
   if value <= 0x0231 {
-    return "o\u{0307}\u{0304}".unicodeScalars
+    return "o\u{307}\u{304}".unicodeScalars
   }
   if value <= 0x0232 {
-    return "Y\u{0304}".unicodeScalars
+    return "Y\u{304}".unicodeScalars
   }
   if value <= 0x0233 {
-    return "y\u{0304}".unicodeScalars
+    return "y\u{304}".unicodeScalars
   }
   if value <= 0x02AF {
     return String(scalar).unicodeScalars
@@ -6364,22 +6364,22 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x02D8 {
-    return " \u{0306}".unicodeScalars
+    return " \u{306}".unicodeScalars
   }
   if value <= 0x02D9 {
-    return " \u{0307}".unicodeScalars
+    return " \u{307}".unicodeScalars
   }
   if value <= 0x02DA {
-    return " \u{030A}".unicodeScalars
+    return " \u{30A}".unicodeScalars
   }
   if value <= 0x02DB {
-    return " \u{0328}".unicodeScalars
+    return " \u{328}".unicodeScalars
   }
   if value <= 0x02DC {
-    return " \u{0303}".unicodeScalars
+    return " \u{303}".unicodeScalars
   }
   if value <= 0x02DD {
-    return " \u{030B}".unicodeScalars
+    return " \u{30B}".unicodeScalars
   }
   if value <= 0x02DF {
     return String(scalar).unicodeScalars
@@ -6403,19 +6403,19 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0340 {
-    return "\u{0300}".unicodeScalars
+    return "\u{300}".unicodeScalars
   }
   if value <= 0x0341 {
-    return "\u{0301}".unicodeScalars
+    return "\u{301}".unicodeScalars
   }
   if value <= 0x0342 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0343 {
-    return "\u{0313}".unicodeScalars
+    return "\u{313}".unicodeScalars
   }
   if value <= 0x0344 {
-    return "\u{0308}\u{0301}".unicodeScalars
+    return "\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x0373 {
     return String(scalar).unicodeScalars
@@ -6427,7 +6427,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x037A {
-    return " \u{0345}".unicodeScalars
+    return " \u{345}".unicodeScalars
   }
   if value <= 0x037D {
     return String(scalar).unicodeScalars
@@ -6439,85 +6439,85 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0384 {
-    return " \u{0301}".unicodeScalars
+    return " \u{301}".unicodeScalars
   }
   if value <= 0x0385 {
-    return " \u{0308}\u{0301}".unicodeScalars
+    return " \u{308}\u{301}".unicodeScalars
   }
   if value <= 0x0386 {
-    return "Α\u{0301}".unicodeScalars
+    return "Α\u{301}".unicodeScalars
   }
   if value <= 0x0387 {
     return "·".unicodeScalars
   }
   if value <= 0x0388 {
-    return "Ε\u{0301}".unicodeScalars
+    return "Ε\u{301}".unicodeScalars
   }
   if value <= 0x0389 {
-    return "Η\u{0301}".unicodeScalars
+    return "Η\u{301}".unicodeScalars
   }
   if value <= 0x038A {
-    return "Ι\u{0301}".unicodeScalars
+    return "Ι\u{301}".unicodeScalars
   }
   if value <= 0x038B {
     return String(scalar).unicodeScalars
   }
   if value <= 0x038C {
-    return "Ο\u{0301}".unicodeScalars
+    return "Ο\u{301}".unicodeScalars
   }
   if value <= 0x038D {
     return String(scalar).unicodeScalars
   }
   if value <= 0x038E {
-    return "Υ\u{0301}".unicodeScalars
+    return "Υ\u{301}".unicodeScalars
   }
   if value <= 0x038F {
-    return "Ω\u{0301}".unicodeScalars
+    return "Ω\u{301}".unicodeScalars
   }
   if value <= 0x0390 {
-    return "ι\u{0308}\u{0301}".unicodeScalars
+    return "ι\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x03A9 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x03AA {
-    return "Ι\u{0308}".unicodeScalars
+    return "Ι\u{308}".unicodeScalars
   }
   if value <= 0x03AB {
-    return "Υ\u{0308}".unicodeScalars
+    return "Υ\u{308}".unicodeScalars
   }
   if value <= 0x03AC {
-    return "α\u{0301}".unicodeScalars
+    return "α\u{301}".unicodeScalars
   }
   if value <= 0x03AD {
-    return "ε\u{0301}".unicodeScalars
+    return "ε\u{301}".unicodeScalars
   }
   if value <= 0x03AE {
-    return "η\u{0301}".unicodeScalars
+    return "η\u{301}".unicodeScalars
   }
   if value <= 0x03AF {
-    return "ι\u{0301}".unicodeScalars
+    return "ι\u{301}".unicodeScalars
   }
   if value <= 0x03B0 {
-    return "υ\u{0308}\u{0301}".unicodeScalars
+    return "υ\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x03C9 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x03CA {
-    return "ι\u{0308}".unicodeScalars
+    return "ι\u{308}".unicodeScalars
   }
   if value <= 0x03CB {
-    return "υ\u{0308}".unicodeScalars
+    return "υ\u{308}".unicodeScalars
   }
   if value <= 0x03CC {
-    return "ο\u{0301}".unicodeScalars
+    return "ο\u{301}".unicodeScalars
   }
   if value <= 0x03CD {
-    return "υ\u{0301}".unicodeScalars
+    return "υ\u{301}".unicodeScalars
   }
   if value <= 0x03CE {
-    return "ω\u{0301}".unicodeScalars
+    return "ω\u{301}".unicodeScalars
   }
   if value <= 0x03CF {
     return String(scalar).unicodeScalars
@@ -6532,10 +6532,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "Υ".unicodeScalars
   }
   if value <= 0x03D3 {
-    return "Υ\u{0301}".unicodeScalars
+    return "Υ\u{301}".unicodeScalars
   }
   if value <= 0x03D4 {
-    return "Υ\u{0308}".unicodeScalars
+    return "Υ\u{308}".unicodeScalars
   }
   if value <= 0x03D5 {
     return "φ".unicodeScalars
@@ -6574,211 +6574,211 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0400 {
-    return "Е\u{0300}".unicodeScalars
+    return "Е\u{300}".unicodeScalars
   }
   if value <= 0x0401 {
-    return "Е\u{0308}".unicodeScalars
+    return "Е\u{308}".unicodeScalars
   }
   if value <= 0x0402 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0403 {
-    return "Г\u{0301}".unicodeScalars
+    return "Г\u{301}".unicodeScalars
   }
   if value <= 0x0406 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0407 {
-    return "І\u{0308}".unicodeScalars
+    return "І\u{308}".unicodeScalars
   }
   if value <= 0x040B {
     return String(scalar).unicodeScalars
   }
   if value <= 0x040C {
-    return "К\u{0301}".unicodeScalars
+    return "К\u{301}".unicodeScalars
   }
   if value <= 0x040D {
-    return "И\u{0300}".unicodeScalars
+    return "И\u{300}".unicodeScalars
   }
   if value <= 0x040E {
-    return "У\u{0306}".unicodeScalars
+    return "У\u{306}".unicodeScalars
   }
   if value <= 0x0418 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0419 {
-    return "И\u{0306}".unicodeScalars
+    return "И\u{306}".unicodeScalars
   }
   if value <= 0x0438 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0439 {
-    return "и\u{0306}".unicodeScalars
+    return "и\u{306}".unicodeScalars
   }
   if value <= 0x044F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0450 {
-    return "е\u{0300}".unicodeScalars
+    return "е\u{300}".unicodeScalars
   }
   if value <= 0x0451 {
-    return "е\u{0308}".unicodeScalars
+    return "е\u{308}".unicodeScalars
   }
   if value <= 0x0452 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0453 {
-    return "г\u{0301}".unicodeScalars
+    return "г\u{301}".unicodeScalars
   }
   if value <= 0x0456 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0457 {
-    return "і\u{0308}".unicodeScalars
+    return "і\u{308}".unicodeScalars
   }
   if value <= 0x045B {
     return String(scalar).unicodeScalars
   }
   if value <= 0x045C {
-    return "к\u{0301}".unicodeScalars
+    return "к\u{301}".unicodeScalars
   }
   if value <= 0x045D {
-    return "и\u{0300}".unicodeScalars
+    return "и\u{300}".unicodeScalars
   }
   if value <= 0x045E {
-    return "у\u{0306}".unicodeScalars
+    return "у\u{306}".unicodeScalars
   }
   if value <= 0x0475 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0476 {
-    return "Ѵ\u{030F}".unicodeScalars
+    return "Ѵ\u{30F}".unicodeScalars
   }
   if value <= 0x0477 {
-    return "ѵ\u{030F}".unicodeScalars
+    return "ѵ\u{30F}".unicodeScalars
   }
   if value <= 0x04C0 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04C1 {
-    return "Ж\u{0306}".unicodeScalars
+    return "Ж\u{306}".unicodeScalars
   }
   if value <= 0x04C2 {
-    return "ж\u{0306}".unicodeScalars
+    return "ж\u{306}".unicodeScalars
   }
   if value <= 0x04CF {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04D0 {
-    return "А\u{0306}".unicodeScalars
+    return "А\u{306}".unicodeScalars
   }
   if value <= 0x04D1 {
-    return "а\u{0306}".unicodeScalars
+    return "а\u{306}".unicodeScalars
   }
   if value <= 0x04D2 {
-    return "А\u{0308}".unicodeScalars
+    return "А\u{308}".unicodeScalars
   }
   if value <= 0x04D3 {
-    return "а\u{0308}".unicodeScalars
+    return "а\u{308}".unicodeScalars
   }
   if value <= 0x04D5 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04D6 {
-    return "Е\u{0306}".unicodeScalars
+    return "Е\u{306}".unicodeScalars
   }
   if value <= 0x04D7 {
-    return "е\u{0306}".unicodeScalars
+    return "е\u{306}".unicodeScalars
   }
   if value <= 0x04D9 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04DA {
-    return "Ә\u{0308}".unicodeScalars
+    return "Ә\u{308}".unicodeScalars
   }
   if value <= 0x04DB {
-    return "ә\u{0308}".unicodeScalars
+    return "ә\u{308}".unicodeScalars
   }
   if value <= 0x04DC {
-    return "Ж\u{0308}".unicodeScalars
+    return "Ж\u{308}".unicodeScalars
   }
   if value <= 0x04DD {
-    return "ж\u{0308}".unicodeScalars
+    return "ж\u{308}".unicodeScalars
   }
   if value <= 0x04DE {
-    return "З\u{0308}".unicodeScalars
+    return "З\u{308}".unicodeScalars
   }
   if value <= 0x04DF {
-    return "з\u{0308}".unicodeScalars
+    return "з\u{308}".unicodeScalars
   }
   if value <= 0x04E1 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04E2 {
-    return "И\u{0304}".unicodeScalars
+    return "И\u{304}".unicodeScalars
   }
   if value <= 0x04E3 {
-    return "и\u{0304}".unicodeScalars
+    return "и\u{304}".unicodeScalars
   }
   if value <= 0x04E4 {
-    return "И\u{0308}".unicodeScalars
+    return "И\u{308}".unicodeScalars
   }
   if value <= 0x04E5 {
-    return "и\u{0308}".unicodeScalars
+    return "и\u{308}".unicodeScalars
   }
   if value <= 0x04E6 {
-    return "О\u{0308}".unicodeScalars
+    return "О\u{308}".unicodeScalars
   }
   if value <= 0x04E7 {
-    return "о\u{0308}".unicodeScalars
+    return "о\u{308}".unicodeScalars
   }
   if value <= 0x04E9 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04EA {
-    return "Ө\u{0308}".unicodeScalars
+    return "Ө\u{308}".unicodeScalars
   }
   if value <= 0x04EB {
-    return "ө\u{0308}".unicodeScalars
+    return "ө\u{308}".unicodeScalars
   }
   if value <= 0x04EC {
-    return "Э\u{0308}".unicodeScalars
+    return "Э\u{308}".unicodeScalars
   }
   if value <= 0x04ED {
-    return "э\u{0308}".unicodeScalars
+    return "э\u{308}".unicodeScalars
   }
   if value <= 0x04EE {
-    return "У\u{0304}".unicodeScalars
+    return "У\u{304}".unicodeScalars
   }
   if value <= 0x04EF {
-    return "у\u{0304}".unicodeScalars
+    return "у\u{304}".unicodeScalars
   }
   if value <= 0x04F0 {
-    return "У\u{0308}".unicodeScalars
+    return "У\u{308}".unicodeScalars
   }
   if value <= 0x04F1 {
-    return "у\u{0308}".unicodeScalars
+    return "у\u{308}".unicodeScalars
   }
   if value <= 0x04F2 {
-    return "У\u{030B}".unicodeScalars
+    return "У\u{30B}".unicodeScalars
   }
   if value <= 0x04F3 {
-    return "у\u{030B}".unicodeScalars
+    return "у\u{30B}".unicodeScalars
   }
   if value <= 0x04F4 {
-    return "Ч\u{0308}".unicodeScalars
+    return "Ч\u{308}".unicodeScalars
   }
   if value <= 0x04F5 {
-    return "ч\u{0308}".unicodeScalars
+    return "ч\u{308}".unicodeScalars
   }
   if value <= 0x04F7 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x04F8 {
-    return "Ы\u{0308}".unicodeScalars
+    return "Ы\u{308}".unicodeScalars
   }
   if value <= 0x04F9 {
-    return "ы\u{0308}".unicodeScalars
+    return "ы\u{308}".unicodeScalars
   }
   if value <= 0x0586 {
     return String(scalar).unicodeScalars
@@ -6790,19 +6790,19 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0622 {
-    return "ا\u{0653}".unicodeScalars
+    return "ا\u{653}".unicodeScalars
   }
   if value <= 0x0623 {
-    return "ا\u{0654}".unicodeScalars
+    return "ا\u{654}".unicodeScalars
   }
   if value <= 0x0624 {
-    return "و\u{0654}".unicodeScalars
+    return "و\u{654}".unicodeScalars
   }
   if value <= 0x0625 {
-    return "ا\u{0655}".unicodeScalars
+    return "ا\u{655}".unicodeScalars
   }
   if value <= 0x0626 {
-    return "ي\u{0654}".unicodeScalars
+    return "ي\u{654}".unicodeScalars
   }
   if value <= 0x0674 {
     return String(scalar).unicodeScalars
@@ -6823,64 +6823,64 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x06C0 {
-    return "ە\u{0654}".unicodeScalars
+    return "ە\u{654}".unicodeScalars
   }
   if value <= 0x06C1 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x06C2 {
-    return "ہ\u{0654}".unicodeScalars
+    return "ہ\u{654}".unicodeScalars
   }
   if value <= 0x06D2 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x06D3 {
-    return "ے\u{0654}".unicodeScalars
+    return "ے\u{654}".unicodeScalars
   }
   if value <= 0x0928 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0929 {
-    return "न\u{093C}".unicodeScalars
+    return "न\u{93C}".unicodeScalars
   }
   if value <= 0x0930 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0931 {
-    return "र\u{093C}".unicodeScalars
+    return "र\u{93C}".unicodeScalars
   }
   if value <= 0x0933 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0934 {
-    return "ळ\u{093C}".unicodeScalars
+    return "ळ\u{93C}".unicodeScalars
   }
   if value <= 0x0957 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0958 {
-    return "क\u{093C}".unicodeScalars
+    return "क\u{93C}".unicodeScalars
   }
   if value <= 0x0959 {
-    return "ख\u{093C}".unicodeScalars
+    return "ख\u{93C}".unicodeScalars
   }
   if value <= 0x095A {
-    return "ग\u{093C}".unicodeScalars
+    return "ग\u{93C}".unicodeScalars
   }
   if value <= 0x095B {
-    return "ज\u{093C}".unicodeScalars
+    return "ज\u{93C}".unicodeScalars
   }
   if value <= 0x095C {
-    return "ड\u{093C}".unicodeScalars
+    return "ड\u{93C}".unicodeScalars
   }
   if value <= 0x095D {
-    return "ढ\u{093C}".unicodeScalars
+    return "ढ\u{93C}".unicodeScalars
   }
   if value <= 0x095E {
-    return "फ\u{093C}".unicodeScalars
+    return "फ\u{93C}".unicodeScalars
   }
   if value <= 0x095F {
-    return "य\u{093C}".unicodeScalars
+    return "य\u{93C}".unicodeScalars
   }
   if value <= 0x09CA {
     return String(scalar).unicodeScalars
@@ -6895,46 +6895,46 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x09DC {
-    return "ড\u{09BC}".unicodeScalars
+    return "ড\u{9BC}".unicodeScalars
   }
   if value <= 0x09DD {
-    return "ঢ\u{09BC}".unicodeScalars
+    return "ঢ\u{9BC}".unicodeScalars
   }
   if value <= 0x09DE {
     return String(scalar).unicodeScalars
   }
   if value <= 0x09DF {
-    return "য\u{09BC}".unicodeScalars
+    return "য\u{9BC}".unicodeScalars
   }
   if value <= 0x0A32 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0A33 {
-    return "ਲ\u{0A3C}".unicodeScalars
+    return "ਲ\u{A3C}".unicodeScalars
   }
   if value <= 0x0A35 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0A36 {
-    return "ਸ\u{0A3C}".unicodeScalars
+    return "ਸ\u{A3C}".unicodeScalars
   }
   if value <= 0x0A58 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0A59 {
-    return "ਖ\u{0A3C}".unicodeScalars
+    return "ਖ\u{A3C}".unicodeScalars
   }
   if value <= 0x0A5A {
-    return "ਗ\u{0A3C}".unicodeScalars
+    return "ਗ\u{A3C}".unicodeScalars
   }
   if value <= 0x0A5B {
-    return "ਜ\u{0A3C}".unicodeScalars
+    return "ਜ\u{A3C}".unicodeScalars
   }
   if value <= 0x0A5D {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0A5E {
-    return "ਫ\u{0A3C}".unicodeScalars
+    return "ਫ\u{A3C}".unicodeScalars
   }
   if value <= 0x0B47 {
     return String(scalar).unicodeScalars
@@ -6955,10 +6955,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0B5C {
-    return "ଡ\u{0B3C}".unicodeScalars
+    return "ଡ\u{B3C}".unicodeScalars
   }
   if value <= 0x0B5D {
-    return "ଢ\u{0B3C}".unicodeScalars
+    return "ଢ\u{B3C}".unicodeScalars
   }
   if value <= 0x0B93 {
     return String(scalar).unicodeScalars
@@ -6982,7 +6982,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0C48 {
-    return "ె\u{0C56}".unicodeScalars
+    return "ె\u{C56}".unicodeScalars
   }
   if value <= 0x0CBF {
     return String(scalar).unicodeScalars
@@ -7024,7 +7024,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0DDA {
-    return "ෙ\u{0DCA}".unicodeScalars
+    return "ෙ\u{DCA}".unicodeScalars
   }
   if value <= 0x0DDB {
     return String(scalar).unicodeScalars
@@ -7033,7 +7033,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ො".unicodeScalars
   }
   if value <= 0x0DDD {
-    return "ො\u{0DCA}".unicodeScalars
+    return "ො\u{DCA}".unicodeScalars
   }
   if value <= 0x0DDE {
     return "ෞ".unicodeScalars
@@ -7105,31 +7105,31 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x0F73 {
-    return "\u{0F71}\u{0F72}".unicodeScalars
+    return "\u{F71}\u{F72}".unicodeScalars
   }
   if value <= 0x0F74 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0F75 {
-    return "\u{0F71}\u{0F74}".unicodeScalars
+    return "\u{F71}\u{F74}".unicodeScalars
   }
   if value <= 0x0F76 {
-    return "ྲ\u{0F80}".unicodeScalars
+    return "ྲ\u{F80}".unicodeScalars
   }
   if value <= 0x0F77 {
-    return "ྲ\u{0F71}\u{0F80}".unicodeScalars
+    return "ྲ\u{F71}\u{F80}".unicodeScalars
   }
   if value <= 0x0F78 {
-    return "ླ\u{0F80}".unicodeScalars
+    return "ླ\u{F80}".unicodeScalars
   }
   if value <= 0x0F79 {
-    return "ླ\u{0F71}\u{0F80}".unicodeScalars
+    return "ླ\u{F71}\u{F80}".unicodeScalars
   }
   if value <= 0x0F80 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x0F81 {
-    return "\u{0F71}\u{0F80}".unicodeScalars
+    return "\u{F71}\u{F80}".unicodeScalars
   }
   if value <= 0x0F92 {
     return String(scalar).unicodeScalars
@@ -7558,1451 +7558,1451 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x1E00 {
-    return "A\u{0325}".unicodeScalars
+    return "A\u{325}".unicodeScalars
   }
   if value <= 0x1E01 {
-    return "a\u{0325}".unicodeScalars
+    return "a\u{325}".unicodeScalars
   }
   if value <= 0x1E02 {
-    return "B\u{0307}".unicodeScalars
+    return "B\u{307}".unicodeScalars
   }
   if value <= 0x1E03 {
-    return "b\u{0307}".unicodeScalars
+    return "b\u{307}".unicodeScalars
   }
   if value <= 0x1E04 {
-    return "B\u{0323}".unicodeScalars
+    return "B\u{323}".unicodeScalars
   }
   if value <= 0x1E05 {
-    return "b\u{0323}".unicodeScalars
+    return "b\u{323}".unicodeScalars
   }
   if value <= 0x1E06 {
-    return "B\u{0331}".unicodeScalars
+    return "B\u{331}".unicodeScalars
   }
   if value <= 0x1E07 {
-    return "b\u{0331}".unicodeScalars
+    return "b\u{331}".unicodeScalars
   }
   if value <= 0x1E08 {
-    return "C\u{0327}\u{0301}".unicodeScalars
+    return "C\u{327}\u{301}".unicodeScalars
   }
   if value <= 0x1E09 {
-    return "c\u{0327}\u{0301}".unicodeScalars
+    return "c\u{327}\u{301}".unicodeScalars
   }
   if value <= 0x1E0A {
-    return "D\u{0307}".unicodeScalars
+    return "D\u{307}".unicodeScalars
   }
   if value <= 0x1E0B {
-    return "d\u{0307}".unicodeScalars
+    return "d\u{307}".unicodeScalars
   }
   if value <= 0x1E0C {
-    return "D\u{0323}".unicodeScalars
+    return "D\u{323}".unicodeScalars
   }
   if value <= 0x1E0D {
-    return "d\u{0323}".unicodeScalars
+    return "d\u{323}".unicodeScalars
   }
   if value <= 0x1E0E {
-    return "D\u{0331}".unicodeScalars
+    return "D\u{331}".unicodeScalars
   }
   if value <= 0x1E0F {
-    return "d\u{0331}".unicodeScalars
+    return "d\u{331}".unicodeScalars
   }
   if value <= 0x1E10 {
-    return "D\u{0327}".unicodeScalars
+    return "D\u{327}".unicodeScalars
   }
   if value <= 0x1E11 {
-    return "d\u{0327}".unicodeScalars
+    return "d\u{327}".unicodeScalars
   }
   if value <= 0x1E12 {
-    return "D\u{032D}".unicodeScalars
+    return "D\u{32D}".unicodeScalars
   }
   if value <= 0x1E13 {
-    return "d\u{032D}".unicodeScalars
+    return "d\u{32D}".unicodeScalars
   }
   if value <= 0x1E14 {
-    return "E\u{0304}\u{0300}".unicodeScalars
+    return "E\u{304}\u{300}".unicodeScalars
   }
   if value <= 0x1E15 {
-    return "e\u{0304}\u{0300}".unicodeScalars
+    return "e\u{304}\u{300}".unicodeScalars
   }
   if value <= 0x1E16 {
-    return "E\u{0304}\u{0301}".unicodeScalars
+    return "E\u{304}\u{301}".unicodeScalars
   }
   if value <= 0x1E17 {
-    return "e\u{0304}\u{0301}".unicodeScalars
+    return "e\u{304}\u{301}".unicodeScalars
   }
   if value <= 0x1E18 {
-    return "E\u{032D}".unicodeScalars
+    return "E\u{32D}".unicodeScalars
   }
   if value <= 0x1E19 {
-    return "e\u{032D}".unicodeScalars
+    return "e\u{32D}".unicodeScalars
   }
   if value <= 0x1E1A {
-    return "E\u{0330}".unicodeScalars
+    return "E\u{330}".unicodeScalars
   }
   if value <= 0x1E1B {
-    return "e\u{0330}".unicodeScalars
+    return "e\u{330}".unicodeScalars
   }
   if value <= 0x1E1C {
-    return "E\u{0327}\u{0306}".unicodeScalars
+    return "E\u{327}\u{306}".unicodeScalars
   }
   if value <= 0x1E1D {
-    return "e\u{0327}\u{0306}".unicodeScalars
+    return "e\u{327}\u{306}".unicodeScalars
   }
   if value <= 0x1E1E {
-    return "F\u{0307}".unicodeScalars
+    return "F\u{307}".unicodeScalars
   }
   if value <= 0x1E1F {
-    return "f\u{0307}".unicodeScalars
+    return "f\u{307}".unicodeScalars
   }
   if value <= 0x1E20 {
-    return "G\u{0304}".unicodeScalars
+    return "G\u{304}".unicodeScalars
   }
   if value <= 0x1E21 {
-    return "g\u{0304}".unicodeScalars
+    return "g\u{304}".unicodeScalars
   }
   if value <= 0x1E22 {
-    return "H\u{0307}".unicodeScalars
+    return "H\u{307}".unicodeScalars
   }
   if value <= 0x1E23 {
-    return "h\u{0307}".unicodeScalars
+    return "h\u{307}".unicodeScalars
   }
   if value <= 0x1E24 {
-    return "H\u{0323}".unicodeScalars
+    return "H\u{323}".unicodeScalars
   }
   if value <= 0x1E25 {
-    return "h\u{0323}".unicodeScalars
+    return "h\u{323}".unicodeScalars
   }
   if value <= 0x1E26 {
-    return "H\u{0308}".unicodeScalars
+    return "H\u{308}".unicodeScalars
   }
   if value <= 0x1E27 {
-    return "h\u{0308}".unicodeScalars
+    return "h\u{308}".unicodeScalars
   }
   if value <= 0x1E28 {
-    return "H\u{0327}".unicodeScalars
+    return "H\u{327}".unicodeScalars
   }
   if value <= 0x1E29 {
-    return "h\u{0327}".unicodeScalars
+    return "h\u{327}".unicodeScalars
   }
   if value <= 0x1E2A {
-    return "H\u{032E}".unicodeScalars
+    return "H\u{32E}".unicodeScalars
   }
   if value <= 0x1E2B {
-    return "h\u{032E}".unicodeScalars
+    return "h\u{32E}".unicodeScalars
   }
   if value <= 0x1E2C {
-    return "I\u{0330}".unicodeScalars
+    return "I\u{330}".unicodeScalars
   }
   if value <= 0x1E2D {
-    return "i\u{0330}".unicodeScalars
+    return "i\u{330}".unicodeScalars
   }
   if value <= 0x1E2E {
-    return "I\u{0308}\u{0301}".unicodeScalars
+    return "I\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x1E2F {
-    return "i\u{0308}\u{0301}".unicodeScalars
+    return "i\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x1E30 {
-    return "K\u{0301}".unicodeScalars
+    return "K\u{301}".unicodeScalars
   }
   if value <= 0x1E31 {
-    return "k\u{0301}".unicodeScalars
+    return "k\u{301}".unicodeScalars
   }
   if value <= 0x1E32 {
-    return "K\u{0323}".unicodeScalars
+    return "K\u{323}".unicodeScalars
   }
   if value <= 0x1E33 {
-    return "k\u{0323}".unicodeScalars
+    return "k\u{323}".unicodeScalars
   }
   if value <= 0x1E34 {
-    return "K\u{0331}".unicodeScalars
+    return "K\u{331}".unicodeScalars
   }
   if value <= 0x1E35 {
-    return "k\u{0331}".unicodeScalars
+    return "k\u{331}".unicodeScalars
   }
   if value <= 0x1E36 {
-    return "L\u{0323}".unicodeScalars
+    return "L\u{323}".unicodeScalars
   }
   if value <= 0x1E37 {
-    return "l\u{0323}".unicodeScalars
+    return "l\u{323}".unicodeScalars
   }
   if value <= 0x1E38 {
-    return "L\u{0323}\u{0304}".unicodeScalars
+    return "L\u{323}\u{304}".unicodeScalars
   }
   if value <= 0x1E39 {
-    return "l\u{0323}\u{0304}".unicodeScalars
+    return "l\u{323}\u{304}".unicodeScalars
   }
   if value <= 0x1E3A {
-    return "L\u{0331}".unicodeScalars
+    return "L\u{331}".unicodeScalars
   }
   if value <= 0x1E3B {
-    return "l\u{0331}".unicodeScalars
+    return "l\u{331}".unicodeScalars
   }
   if value <= 0x1E3C {
-    return "L\u{032D}".unicodeScalars
+    return "L\u{32D}".unicodeScalars
   }
   if value <= 0x1E3D {
-    return "l\u{032D}".unicodeScalars
+    return "l\u{32D}".unicodeScalars
   }
   if value <= 0x1E3E {
-    return "M\u{0301}".unicodeScalars
+    return "M\u{301}".unicodeScalars
   }
   if value <= 0x1E3F {
-    return "m\u{0301}".unicodeScalars
+    return "m\u{301}".unicodeScalars
   }
   if value <= 0x1E40 {
-    return "M\u{0307}".unicodeScalars
+    return "M\u{307}".unicodeScalars
   }
   if value <= 0x1E41 {
-    return "m\u{0307}".unicodeScalars
+    return "m\u{307}".unicodeScalars
   }
   if value <= 0x1E42 {
-    return "M\u{0323}".unicodeScalars
+    return "M\u{323}".unicodeScalars
   }
   if value <= 0x1E43 {
-    return "m\u{0323}".unicodeScalars
+    return "m\u{323}".unicodeScalars
   }
   if value <= 0x1E44 {
-    return "N\u{0307}".unicodeScalars
+    return "N\u{307}".unicodeScalars
   }
   if value <= 0x1E45 {
-    return "n\u{0307}".unicodeScalars
+    return "n\u{307}".unicodeScalars
   }
   if value <= 0x1E46 {
-    return "N\u{0323}".unicodeScalars
+    return "N\u{323}".unicodeScalars
   }
   if value <= 0x1E47 {
-    return "n\u{0323}".unicodeScalars
+    return "n\u{323}".unicodeScalars
   }
   if value <= 0x1E48 {
-    return "N\u{0331}".unicodeScalars
+    return "N\u{331}".unicodeScalars
   }
   if value <= 0x1E49 {
-    return "n\u{0331}".unicodeScalars
+    return "n\u{331}".unicodeScalars
   }
   if value <= 0x1E4A {
-    return "N\u{032D}".unicodeScalars
+    return "N\u{32D}".unicodeScalars
   }
   if value <= 0x1E4B {
-    return "n\u{032D}".unicodeScalars
+    return "n\u{32D}".unicodeScalars
   }
   if value <= 0x1E4C {
-    return "O\u{0303}\u{0301}".unicodeScalars
+    return "O\u{303}\u{301}".unicodeScalars
   }
   if value <= 0x1E4D {
-    return "o\u{0303}\u{0301}".unicodeScalars
+    return "o\u{303}\u{301}".unicodeScalars
   }
   if value <= 0x1E4E {
-    return "O\u{0303}\u{0308}".unicodeScalars
+    return "O\u{303}\u{308}".unicodeScalars
   }
   if value <= 0x1E4F {
-    return "o\u{0303}\u{0308}".unicodeScalars
+    return "o\u{303}\u{308}".unicodeScalars
   }
   if value <= 0x1E50 {
-    return "O\u{0304}\u{0300}".unicodeScalars
+    return "O\u{304}\u{300}".unicodeScalars
   }
   if value <= 0x1E51 {
-    return "o\u{0304}\u{0300}".unicodeScalars
+    return "o\u{304}\u{300}".unicodeScalars
   }
   if value <= 0x1E52 {
-    return "O\u{0304}\u{0301}".unicodeScalars
+    return "O\u{304}\u{301}".unicodeScalars
   }
   if value <= 0x1E53 {
-    return "o\u{0304}\u{0301}".unicodeScalars
+    return "o\u{304}\u{301}".unicodeScalars
   }
   if value <= 0x1E54 {
-    return "P\u{0301}".unicodeScalars
+    return "P\u{301}".unicodeScalars
   }
   if value <= 0x1E55 {
-    return "p\u{0301}".unicodeScalars
+    return "p\u{301}".unicodeScalars
   }
   if value <= 0x1E56 {
-    return "P\u{0307}".unicodeScalars
+    return "P\u{307}".unicodeScalars
   }
   if value <= 0x1E57 {
-    return "p\u{0307}".unicodeScalars
+    return "p\u{307}".unicodeScalars
   }
   if value <= 0x1E58 {
-    return "R\u{0307}".unicodeScalars
+    return "R\u{307}".unicodeScalars
   }
   if value <= 0x1E59 {
-    return "r\u{0307}".unicodeScalars
+    return "r\u{307}".unicodeScalars
   }
   if value <= 0x1E5A {
-    return "R\u{0323}".unicodeScalars
+    return "R\u{323}".unicodeScalars
   }
   if value <= 0x1E5B {
-    return "r\u{0323}".unicodeScalars
+    return "r\u{323}".unicodeScalars
   }
   if value <= 0x1E5C {
-    return "R\u{0323}\u{0304}".unicodeScalars
+    return "R\u{323}\u{304}".unicodeScalars
   }
   if value <= 0x1E5D {
-    return "r\u{0323}\u{0304}".unicodeScalars
+    return "r\u{323}\u{304}".unicodeScalars
   }
   if value <= 0x1E5E {
-    return "R\u{0331}".unicodeScalars
+    return "R\u{331}".unicodeScalars
   }
   if value <= 0x1E5F {
-    return "r\u{0331}".unicodeScalars
+    return "r\u{331}".unicodeScalars
   }
   if value <= 0x1E60 {
-    return "S\u{0307}".unicodeScalars
+    return "S\u{307}".unicodeScalars
   }
   if value <= 0x1E61 {
-    return "s\u{0307}".unicodeScalars
+    return "s\u{307}".unicodeScalars
   }
   if value <= 0x1E62 {
-    return "S\u{0323}".unicodeScalars
+    return "S\u{323}".unicodeScalars
   }
   if value <= 0x1E63 {
-    return "s\u{0323}".unicodeScalars
+    return "s\u{323}".unicodeScalars
   }
   if value <= 0x1E64 {
-    return "S\u{0301}\u{0307}".unicodeScalars
+    return "S\u{301}\u{307}".unicodeScalars
   }
   if value <= 0x1E65 {
-    return "s\u{0301}\u{0307}".unicodeScalars
+    return "s\u{301}\u{307}".unicodeScalars
   }
   if value <= 0x1E66 {
-    return "S\u{030C}\u{0307}".unicodeScalars
+    return "S\u{30C}\u{307}".unicodeScalars
   }
   if value <= 0x1E67 {
-    return "s\u{030C}\u{0307}".unicodeScalars
+    return "s\u{30C}\u{307}".unicodeScalars
   }
   if value <= 0x1E68 {
-    return "S\u{0323}\u{0307}".unicodeScalars
+    return "S\u{323}\u{307}".unicodeScalars
   }
   if value <= 0x1E69 {
-    return "s\u{0323}\u{0307}".unicodeScalars
+    return "s\u{323}\u{307}".unicodeScalars
   }
   if value <= 0x1E6A {
-    return "T\u{0307}".unicodeScalars
+    return "T\u{307}".unicodeScalars
   }
   if value <= 0x1E6B {
-    return "t\u{0307}".unicodeScalars
+    return "t\u{307}".unicodeScalars
   }
   if value <= 0x1E6C {
-    return "T\u{0323}".unicodeScalars
+    return "T\u{323}".unicodeScalars
   }
   if value <= 0x1E6D {
-    return "t\u{0323}".unicodeScalars
+    return "t\u{323}".unicodeScalars
   }
   if value <= 0x1E6E {
-    return "T\u{0331}".unicodeScalars
+    return "T\u{331}".unicodeScalars
   }
   if value <= 0x1E6F {
-    return "t\u{0331}".unicodeScalars
+    return "t\u{331}".unicodeScalars
   }
   if value <= 0x1E70 {
-    return "T\u{032D}".unicodeScalars
+    return "T\u{32D}".unicodeScalars
   }
   if value <= 0x1E71 {
-    return "t\u{032D}".unicodeScalars
+    return "t\u{32D}".unicodeScalars
   }
   if value <= 0x1E72 {
-    return "U\u{0324}".unicodeScalars
+    return "U\u{324}".unicodeScalars
   }
   if value <= 0x1E73 {
-    return "u\u{0324}".unicodeScalars
+    return "u\u{324}".unicodeScalars
   }
   if value <= 0x1E74 {
-    return "U\u{0330}".unicodeScalars
+    return "U\u{330}".unicodeScalars
   }
   if value <= 0x1E75 {
-    return "u\u{0330}".unicodeScalars
+    return "u\u{330}".unicodeScalars
   }
   if value <= 0x1E76 {
-    return "U\u{032D}".unicodeScalars
+    return "U\u{32D}".unicodeScalars
   }
   if value <= 0x1E77 {
-    return "u\u{032D}".unicodeScalars
+    return "u\u{32D}".unicodeScalars
   }
   if value <= 0x1E78 {
-    return "U\u{0303}\u{0301}".unicodeScalars
+    return "U\u{303}\u{301}".unicodeScalars
   }
   if value <= 0x1E79 {
-    return "u\u{0303}\u{0301}".unicodeScalars
+    return "u\u{303}\u{301}".unicodeScalars
   }
   if value <= 0x1E7A {
-    return "U\u{0304}\u{0308}".unicodeScalars
+    return "U\u{304}\u{308}".unicodeScalars
   }
   if value <= 0x1E7B {
-    return "u\u{0304}\u{0308}".unicodeScalars
+    return "u\u{304}\u{308}".unicodeScalars
   }
   if value <= 0x1E7C {
-    return "V\u{0303}".unicodeScalars
+    return "V\u{303}".unicodeScalars
   }
   if value <= 0x1E7D {
-    return "v\u{0303}".unicodeScalars
+    return "v\u{303}".unicodeScalars
   }
   if value <= 0x1E7E {
-    return "V\u{0323}".unicodeScalars
+    return "V\u{323}".unicodeScalars
   }
   if value <= 0x1E7F {
-    return "v\u{0323}".unicodeScalars
+    return "v\u{323}".unicodeScalars
   }
   if value <= 0x1E80 {
-    return "W\u{0300}".unicodeScalars
+    return "W\u{300}".unicodeScalars
   }
   if value <= 0x1E81 {
-    return "w\u{0300}".unicodeScalars
+    return "w\u{300}".unicodeScalars
   }
   if value <= 0x1E82 {
-    return "W\u{0301}".unicodeScalars
+    return "W\u{301}".unicodeScalars
   }
   if value <= 0x1E83 {
-    return "w\u{0301}".unicodeScalars
+    return "w\u{301}".unicodeScalars
   }
   if value <= 0x1E84 {
-    return "W\u{0308}".unicodeScalars
+    return "W\u{308}".unicodeScalars
   }
   if value <= 0x1E85 {
-    return "w\u{0308}".unicodeScalars
+    return "w\u{308}".unicodeScalars
   }
   if value <= 0x1E86 {
-    return "W\u{0307}".unicodeScalars
+    return "W\u{307}".unicodeScalars
   }
   if value <= 0x1E87 {
-    return "w\u{0307}".unicodeScalars
+    return "w\u{307}".unicodeScalars
   }
   if value <= 0x1E88 {
-    return "W\u{0323}".unicodeScalars
+    return "W\u{323}".unicodeScalars
   }
   if value <= 0x1E89 {
-    return "w\u{0323}".unicodeScalars
+    return "w\u{323}".unicodeScalars
   }
   if value <= 0x1E8A {
-    return "X\u{0307}".unicodeScalars
+    return "X\u{307}".unicodeScalars
   }
   if value <= 0x1E8B {
-    return "x\u{0307}".unicodeScalars
+    return "x\u{307}".unicodeScalars
   }
   if value <= 0x1E8C {
-    return "X\u{0308}".unicodeScalars
+    return "X\u{308}".unicodeScalars
   }
   if value <= 0x1E8D {
-    return "x\u{0308}".unicodeScalars
+    return "x\u{308}".unicodeScalars
   }
   if value <= 0x1E8E {
-    return "Y\u{0307}".unicodeScalars
+    return "Y\u{307}".unicodeScalars
   }
   if value <= 0x1E8F {
-    return "y\u{0307}".unicodeScalars
+    return "y\u{307}".unicodeScalars
   }
   if value <= 0x1E90 {
-    return "Z\u{0302}".unicodeScalars
+    return "Z\u{302}".unicodeScalars
   }
   if value <= 0x1E91 {
-    return "z\u{0302}".unicodeScalars
+    return "z\u{302}".unicodeScalars
   }
   if value <= 0x1E92 {
-    return "Z\u{0323}".unicodeScalars
+    return "Z\u{323}".unicodeScalars
   }
   if value <= 0x1E93 {
-    return "z\u{0323}".unicodeScalars
+    return "z\u{323}".unicodeScalars
   }
   if value <= 0x1E94 {
-    return "Z\u{0331}".unicodeScalars
+    return "Z\u{331}".unicodeScalars
   }
   if value <= 0x1E95 {
-    return "z\u{0331}".unicodeScalars
+    return "z\u{331}".unicodeScalars
   }
   if value <= 0x1E96 {
-    return "h\u{0331}".unicodeScalars
+    return "h\u{331}".unicodeScalars
   }
   if value <= 0x1E97 {
-    return "t\u{0308}".unicodeScalars
+    return "t\u{308}".unicodeScalars
   }
   if value <= 0x1E98 {
-    return "w\u{030A}".unicodeScalars
+    return "w\u{30A}".unicodeScalars
   }
   if value <= 0x1E99 {
-    return "y\u{030A}".unicodeScalars
+    return "y\u{30A}".unicodeScalars
   }
   if value <= 0x1E9A {
     return "aʾ".unicodeScalars
   }
   if value <= 0x1E9B {
-    return "s\u{0307}".unicodeScalars
+    return "s\u{307}".unicodeScalars
   }
   if value <= 0x1E9F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1EA0 {
-    return "A\u{0323}".unicodeScalars
+    return "A\u{323}".unicodeScalars
   }
   if value <= 0x1EA1 {
-    return "a\u{0323}".unicodeScalars
+    return "a\u{323}".unicodeScalars
   }
   if value <= 0x1EA2 {
-    return "A\u{0309}".unicodeScalars
+    return "A\u{309}".unicodeScalars
   }
   if value <= 0x1EA3 {
-    return "a\u{0309}".unicodeScalars
+    return "a\u{309}".unicodeScalars
   }
   if value <= 0x1EA4 {
-    return "A\u{0302}\u{0301}".unicodeScalars
+    return "A\u{302}\u{301}".unicodeScalars
   }
   if value <= 0x1EA5 {
-    return "a\u{0302}\u{0301}".unicodeScalars
+    return "a\u{302}\u{301}".unicodeScalars
   }
   if value <= 0x1EA6 {
-    return "A\u{0302}\u{0300}".unicodeScalars
+    return "A\u{302}\u{300}".unicodeScalars
   }
   if value <= 0x1EA7 {
-    return "a\u{0302}\u{0300}".unicodeScalars
+    return "a\u{302}\u{300}".unicodeScalars
   }
   if value <= 0x1EA8 {
-    return "A\u{0302}\u{0309}".unicodeScalars
+    return "A\u{302}\u{309}".unicodeScalars
   }
   if value <= 0x1EA9 {
-    return "a\u{0302}\u{0309}".unicodeScalars
+    return "a\u{302}\u{309}".unicodeScalars
   }
   if value <= 0x1EAA {
-    return "A\u{0302}\u{0303}".unicodeScalars
+    return "A\u{302}\u{303}".unicodeScalars
   }
   if value <= 0x1EAB {
-    return "a\u{0302}\u{0303}".unicodeScalars
+    return "a\u{302}\u{303}".unicodeScalars
   }
   if value <= 0x1EAC {
-    return "A\u{0323}\u{0302}".unicodeScalars
+    return "A\u{323}\u{302}".unicodeScalars
   }
   if value <= 0x1EAD {
-    return "a\u{0323}\u{0302}".unicodeScalars
+    return "a\u{323}\u{302}".unicodeScalars
   }
   if value <= 0x1EAE {
-    return "A\u{0306}\u{0301}".unicodeScalars
+    return "A\u{306}\u{301}".unicodeScalars
   }
   if value <= 0x1EAF {
-    return "a\u{0306}\u{0301}".unicodeScalars
+    return "a\u{306}\u{301}".unicodeScalars
   }
   if value <= 0x1EB0 {
-    return "A\u{0306}\u{0300}".unicodeScalars
+    return "A\u{306}\u{300}".unicodeScalars
   }
   if value <= 0x1EB1 {
-    return "a\u{0306}\u{0300}".unicodeScalars
+    return "a\u{306}\u{300}".unicodeScalars
   }
   if value <= 0x1EB2 {
-    return "A\u{0306}\u{0309}".unicodeScalars
+    return "A\u{306}\u{309}".unicodeScalars
   }
   if value <= 0x1EB3 {
-    return "a\u{0306}\u{0309}".unicodeScalars
+    return "a\u{306}\u{309}".unicodeScalars
   }
   if value <= 0x1EB4 {
-    return "A\u{0306}\u{0303}".unicodeScalars
+    return "A\u{306}\u{303}".unicodeScalars
   }
   if value <= 0x1EB5 {
-    return "a\u{0306}\u{0303}".unicodeScalars
+    return "a\u{306}\u{303}".unicodeScalars
   }
   if value <= 0x1EB6 {
-    return "A\u{0323}\u{0306}".unicodeScalars
+    return "A\u{323}\u{306}".unicodeScalars
   }
   if value <= 0x1EB7 {
-    return "a\u{0323}\u{0306}".unicodeScalars
+    return "a\u{323}\u{306}".unicodeScalars
   }
   if value <= 0x1EB8 {
-    return "E\u{0323}".unicodeScalars
+    return "E\u{323}".unicodeScalars
   }
   if value <= 0x1EB9 {
-    return "e\u{0323}".unicodeScalars
+    return "e\u{323}".unicodeScalars
   }
   if value <= 0x1EBA {
-    return "E\u{0309}".unicodeScalars
+    return "E\u{309}".unicodeScalars
   }
   if value <= 0x1EBB {
-    return "e\u{0309}".unicodeScalars
+    return "e\u{309}".unicodeScalars
   }
   if value <= 0x1EBC {
-    return "E\u{0303}".unicodeScalars
+    return "E\u{303}".unicodeScalars
   }
   if value <= 0x1EBD {
-    return "e\u{0303}".unicodeScalars
+    return "e\u{303}".unicodeScalars
   }
   if value <= 0x1EBE {
-    return "E\u{0302}\u{0301}".unicodeScalars
+    return "E\u{302}\u{301}".unicodeScalars
   }
   if value <= 0x1EBF {
-    return "e\u{0302}\u{0301}".unicodeScalars
+    return "e\u{302}\u{301}".unicodeScalars
   }
   if value <= 0x1EC0 {
-    return "E\u{0302}\u{0300}".unicodeScalars
+    return "E\u{302}\u{300}".unicodeScalars
   }
   if value <= 0x1EC1 {
-    return "e\u{0302}\u{0300}".unicodeScalars
+    return "e\u{302}\u{300}".unicodeScalars
   }
   if value <= 0x1EC2 {
-    return "E\u{0302}\u{0309}".unicodeScalars
+    return "E\u{302}\u{309}".unicodeScalars
   }
   if value <= 0x1EC3 {
-    return "e\u{0302}\u{0309}".unicodeScalars
+    return "e\u{302}\u{309}".unicodeScalars
   }
   if value <= 0x1EC4 {
-    return "E\u{0302}\u{0303}".unicodeScalars
+    return "E\u{302}\u{303}".unicodeScalars
   }
   if value <= 0x1EC5 {
-    return "e\u{0302}\u{0303}".unicodeScalars
+    return "e\u{302}\u{303}".unicodeScalars
   }
   if value <= 0x1EC6 {
-    return "E\u{0323}\u{0302}".unicodeScalars
+    return "E\u{323}\u{302}".unicodeScalars
   }
   if value <= 0x1EC7 {
-    return "e\u{0323}\u{0302}".unicodeScalars
+    return "e\u{323}\u{302}".unicodeScalars
   }
   if value <= 0x1EC8 {
-    return "I\u{0309}".unicodeScalars
+    return "I\u{309}".unicodeScalars
   }
   if value <= 0x1EC9 {
-    return "i\u{0309}".unicodeScalars
+    return "i\u{309}".unicodeScalars
   }
   if value <= 0x1ECA {
-    return "I\u{0323}".unicodeScalars
+    return "I\u{323}".unicodeScalars
   }
   if value <= 0x1ECB {
-    return "i\u{0323}".unicodeScalars
+    return "i\u{323}".unicodeScalars
   }
   if value <= 0x1ECC {
-    return "O\u{0323}".unicodeScalars
+    return "O\u{323}".unicodeScalars
   }
   if value <= 0x1ECD {
-    return "o\u{0323}".unicodeScalars
+    return "o\u{323}".unicodeScalars
   }
   if value <= 0x1ECE {
-    return "O\u{0309}".unicodeScalars
+    return "O\u{309}".unicodeScalars
   }
   if value <= 0x1ECF {
-    return "o\u{0309}".unicodeScalars
+    return "o\u{309}".unicodeScalars
   }
   if value <= 0x1ED0 {
-    return "O\u{0302}\u{0301}".unicodeScalars
+    return "O\u{302}\u{301}".unicodeScalars
   }
   if value <= 0x1ED1 {
-    return "o\u{0302}\u{0301}".unicodeScalars
+    return "o\u{302}\u{301}".unicodeScalars
   }
   if value <= 0x1ED2 {
-    return "O\u{0302}\u{0300}".unicodeScalars
+    return "O\u{302}\u{300}".unicodeScalars
   }
   if value <= 0x1ED3 {
-    return "o\u{0302}\u{0300}".unicodeScalars
+    return "o\u{302}\u{300}".unicodeScalars
   }
   if value <= 0x1ED4 {
-    return "O\u{0302}\u{0309}".unicodeScalars
+    return "O\u{302}\u{309}".unicodeScalars
   }
   if value <= 0x1ED5 {
-    return "o\u{0302}\u{0309}".unicodeScalars
+    return "o\u{302}\u{309}".unicodeScalars
   }
   if value <= 0x1ED6 {
-    return "O\u{0302}\u{0303}".unicodeScalars
+    return "O\u{302}\u{303}".unicodeScalars
   }
   if value <= 0x1ED7 {
-    return "o\u{0302}\u{0303}".unicodeScalars
+    return "o\u{302}\u{303}".unicodeScalars
   }
   if value <= 0x1ED8 {
-    return "O\u{0323}\u{0302}".unicodeScalars
+    return "O\u{323}\u{302}".unicodeScalars
   }
   if value <= 0x1ED9 {
-    return "o\u{0323}\u{0302}".unicodeScalars
+    return "o\u{323}\u{302}".unicodeScalars
   }
   if value <= 0x1EDA {
-    return "O\u{031B}\u{0301}".unicodeScalars
+    return "O\u{31B}\u{301}".unicodeScalars
   }
   if value <= 0x1EDB {
-    return "o\u{031B}\u{0301}".unicodeScalars
+    return "o\u{31B}\u{301}".unicodeScalars
   }
   if value <= 0x1EDC {
-    return "O\u{031B}\u{0300}".unicodeScalars
+    return "O\u{31B}\u{300}".unicodeScalars
   }
   if value <= 0x1EDD {
-    return "o\u{031B}\u{0300}".unicodeScalars
+    return "o\u{31B}\u{300}".unicodeScalars
   }
   if value <= 0x1EDE {
-    return "O\u{031B}\u{0309}".unicodeScalars
+    return "O\u{31B}\u{309}".unicodeScalars
   }
   if value <= 0x1EDF {
-    return "o\u{031B}\u{0309}".unicodeScalars
+    return "o\u{31B}\u{309}".unicodeScalars
   }
   if value <= 0x1EE0 {
-    return "O\u{031B}\u{0303}".unicodeScalars
+    return "O\u{31B}\u{303}".unicodeScalars
   }
   if value <= 0x1EE1 {
-    return "o\u{031B}\u{0303}".unicodeScalars
+    return "o\u{31B}\u{303}".unicodeScalars
   }
   if value <= 0x1EE2 {
-    return "O\u{031B}\u{0323}".unicodeScalars
+    return "O\u{31B}\u{323}".unicodeScalars
   }
   if value <= 0x1EE3 {
-    return "o\u{031B}\u{0323}".unicodeScalars
+    return "o\u{31B}\u{323}".unicodeScalars
   }
   if value <= 0x1EE4 {
-    return "U\u{0323}".unicodeScalars
+    return "U\u{323}".unicodeScalars
   }
   if value <= 0x1EE5 {
-    return "u\u{0323}".unicodeScalars
+    return "u\u{323}".unicodeScalars
   }
   if value <= 0x1EE6 {
-    return "U\u{0309}".unicodeScalars
+    return "U\u{309}".unicodeScalars
   }
   if value <= 0x1EE7 {
-    return "u\u{0309}".unicodeScalars
+    return "u\u{309}".unicodeScalars
   }
   if value <= 0x1EE8 {
-    return "U\u{031B}\u{0301}".unicodeScalars
+    return "U\u{31B}\u{301}".unicodeScalars
   }
   if value <= 0x1EE9 {
-    return "u\u{031B}\u{0301}".unicodeScalars
+    return "u\u{31B}\u{301}".unicodeScalars
   }
   if value <= 0x1EEA {
-    return "U\u{031B}\u{0300}".unicodeScalars
+    return "U\u{31B}\u{300}".unicodeScalars
   }
   if value <= 0x1EEB {
-    return "u\u{031B}\u{0300}".unicodeScalars
+    return "u\u{31B}\u{300}".unicodeScalars
   }
   if value <= 0x1EEC {
-    return "U\u{031B}\u{0309}".unicodeScalars
+    return "U\u{31B}\u{309}".unicodeScalars
   }
   if value <= 0x1EED {
-    return "u\u{031B}\u{0309}".unicodeScalars
+    return "u\u{31B}\u{309}".unicodeScalars
   }
   if value <= 0x1EEE {
-    return "U\u{031B}\u{0303}".unicodeScalars
+    return "U\u{31B}\u{303}".unicodeScalars
   }
   if value <= 0x1EEF {
-    return "u\u{031B}\u{0303}".unicodeScalars
+    return "u\u{31B}\u{303}".unicodeScalars
   }
   if value <= 0x1EF0 {
-    return "U\u{031B}\u{0323}".unicodeScalars
+    return "U\u{31B}\u{323}".unicodeScalars
   }
   if value <= 0x1EF1 {
-    return "u\u{031B}\u{0323}".unicodeScalars
+    return "u\u{31B}\u{323}".unicodeScalars
   }
   if value <= 0x1EF2 {
-    return "Y\u{0300}".unicodeScalars
+    return "Y\u{300}".unicodeScalars
   }
   if value <= 0x1EF3 {
-    return "y\u{0300}".unicodeScalars
+    return "y\u{300}".unicodeScalars
   }
   if value <= 0x1EF4 {
-    return "Y\u{0323}".unicodeScalars
+    return "Y\u{323}".unicodeScalars
   }
   if value <= 0x1EF5 {
-    return "y\u{0323}".unicodeScalars
+    return "y\u{323}".unicodeScalars
   }
   if value <= 0x1EF6 {
-    return "Y\u{0309}".unicodeScalars
+    return "Y\u{309}".unicodeScalars
   }
   if value <= 0x1EF7 {
-    return "y\u{0309}".unicodeScalars
+    return "y\u{309}".unicodeScalars
   }
   if value <= 0x1EF8 {
-    return "Y\u{0303}".unicodeScalars
+    return "Y\u{303}".unicodeScalars
   }
   if value <= 0x1EF9 {
-    return "y\u{0303}".unicodeScalars
+    return "y\u{303}".unicodeScalars
   }
   if value <= 0x1EFF {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F00 {
-    return "α\u{0313}".unicodeScalars
+    return "α\u{313}".unicodeScalars
   }
   if value <= 0x1F01 {
-    return "α\u{0314}".unicodeScalars
+    return "α\u{314}".unicodeScalars
   }
   if value <= 0x1F02 {
-    return "α\u{0313}\u{0300}".unicodeScalars
+    return "α\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F03 {
-    return "α\u{0314}\u{0300}".unicodeScalars
+    return "α\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F04 {
-    return "α\u{0313}\u{0301}".unicodeScalars
+    return "α\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F05 {
-    return "α\u{0314}\u{0301}".unicodeScalars
+    return "α\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F06 {
-    return "α\u{0313}\u{0342}".unicodeScalars
+    return "α\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F07 {
-    return "α\u{0314}\u{0342}".unicodeScalars
+    return "α\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F08 {
-    return "Α\u{0313}".unicodeScalars
+    return "Α\u{313}".unicodeScalars
   }
   if value <= 0x1F09 {
-    return "Α\u{0314}".unicodeScalars
+    return "Α\u{314}".unicodeScalars
   }
   if value <= 0x1F0A {
-    return "Α\u{0313}\u{0300}".unicodeScalars
+    return "Α\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F0B {
-    return "Α\u{0314}\u{0300}".unicodeScalars
+    return "Α\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F0C {
-    return "Α\u{0313}\u{0301}".unicodeScalars
+    return "Α\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F0D {
-    return "Α\u{0314}\u{0301}".unicodeScalars
+    return "Α\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F0E {
-    return "Α\u{0313}\u{0342}".unicodeScalars
+    return "Α\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F0F {
-    return "Α\u{0314}\u{0342}".unicodeScalars
+    return "Α\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F10 {
-    return "ε\u{0313}".unicodeScalars
+    return "ε\u{313}".unicodeScalars
   }
   if value <= 0x1F11 {
-    return "ε\u{0314}".unicodeScalars
+    return "ε\u{314}".unicodeScalars
   }
   if value <= 0x1F12 {
-    return "ε\u{0313}\u{0300}".unicodeScalars
+    return "ε\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F13 {
-    return "ε\u{0314}\u{0300}".unicodeScalars
+    return "ε\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F14 {
-    return "ε\u{0313}\u{0301}".unicodeScalars
+    return "ε\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F15 {
-    return "ε\u{0314}\u{0301}".unicodeScalars
+    return "ε\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F17 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F18 {
-    return "Ε\u{0313}".unicodeScalars
+    return "Ε\u{313}".unicodeScalars
   }
   if value <= 0x1F19 {
-    return "Ε\u{0314}".unicodeScalars
+    return "Ε\u{314}".unicodeScalars
   }
   if value <= 0x1F1A {
-    return "Ε\u{0313}\u{0300}".unicodeScalars
+    return "Ε\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F1B {
-    return "Ε\u{0314}\u{0300}".unicodeScalars
+    return "Ε\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F1C {
-    return "Ε\u{0313}\u{0301}".unicodeScalars
+    return "Ε\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F1D {
-    return "Ε\u{0314}\u{0301}".unicodeScalars
+    return "Ε\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F1F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F20 {
-    return "η\u{0313}".unicodeScalars
+    return "η\u{313}".unicodeScalars
   }
   if value <= 0x1F21 {
-    return "η\u{0314}".unicodeScalars
+    return "η\u{314}".unicodeScalars
   }
   if value <= 0x1F22 {
-    return "η\u{0313}\u{0300}".unicodeScalars
+    return "η\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F23 {
-    return "η\u{0314}\u{0300}".unicodeScalars
+    return "η\u{314}\u{300}".unicodeScalars
+  }
+  if value <= 0x1F24 {
+    return "η\u{313}\u{301}".unicodeScalars
+  }
+  if value <= 0x1F25 {
+    return "η\u{314}\u{301}".unicodeScalars
+  }
+  if value <= 0x1F26 {
+    return "η\u{313}\u{342}".unicodeScalars
+  }
+  if value <= 0x1F27 {
+    return "η\u{314}\u{342}".unicodeScalars
+  }
+  if value <= 0x1F28 {
+    return "Η\u{313}".unicodeScalars
+  }
+  if value <= 0x1F29 {
+    return "Η\u{314}".unicodeScalars
+  }
+  if value <= 0x1F2A {
+    return "Η\u{313}\u{300}".unicodeScalars
+  }
+  if value <= 0x1F2B {
+    return "Η\u{314}\u{300}".unicodeScalars
+  }
+  if value <= 0x1F2C {
+    return "Η\u{313}\u{301}".unicodeScalars
+  }
+  if value <= 0x1F2D {
+    return "Η\u{314}\u{301}".unicodeScalars
+  }
+  if value <= 0x1F2E {
+    return "Η\u{313}\u{342}".unicodeScalars
   }
   return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars0(scalar, value)
 }
 
 fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars0(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
-  if value <= 0x1F24 {
-    return "η\u{0313}\u{0301}".unicodeScalars
-  }
-  if value <= 0x1F25 {
-    return "η\u{0314}\u{0301}".unicodeScalars
-  }
-  if value <= 0x1F26 {
-    return "η\u{0313}\u{0342}".unicodeScalars
-  }
-  if value <= 0x1F27 {
-    return "η\u{0314}\u{0342}".unicodeScalars
-  }
-  if value <= 0x1F28 {
-    return "Η\u{0313}".unicodeScalars
-  }
-  if value <= 0x1F29 {
-    return "Η\u{0314}".unicodeScalars
-  }
-  if value <= 0x1F2A {
-    return "Η\u{0313}\u{0300}".unicodeScalars
-  }
-  if value <= 0x1F2B {
-    return "Η\u{0314}\u{0300}".unicodeScalars
-  }
-  if value <= 0x1F2C {
-    return "Η\u{0313}\u{0301}".unicodeScalars
-  }
-  if value <= 0x1F2D {
-    return "Η\u{0314}\u{0301}".unicodeScalars
-  }
-  if value <= 0x1F2E {
-    return "Η\u{0313}\u{0342}".unicodeScalars
-  }
   if value <= 0x1F2F {
-    return "Η\u{0314}\u{0342}".unicodeScalars
+    return "Η\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F30 {
-    return "ι\u{0313}".unicodeScalars
+    return "ι\u{313}".unicodeScalars
   }
   if value <= 0x1F31 {
-    return "ι\u{0314}".unicodeScalars
+    return "ι\u{314}".unicodeScalars
   }
   if value <= 0x1F32 {
-    return "ι\u{0313}\u{0300}".unicodeScalars
+    return "ι\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F33 {
-    return "ι\u{0314}\u{0300}".unicodeScalars
+    return "ι\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F34 {
-    return "ι\u{0313}\u{0301}".unicodeScalars
+    return "ι\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F35 {
-    return "ι\u{0314}\u{0301}".unicodeScalars
+    return "ι\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F36 {
-    return "ι\u{0313}\u{0342}".unicodeScalars
+    return "ι\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F37 {
-    return "ι\u{0314}\u{0342}".unicodeScalars
+    return "ι\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F38 {
-    return "Ι\u{0313}".unicodeScalars
+    return "Ι\u{313}".unicodeScalars
   }
   if value <= 0x1F39 {
-    return "Ι\u{0314}".unicodeScalars
+    return "Ι\u{314}".unicodeScalars
   }
   if value <= 0x1F3A {
-    return "Ι\u{0313}\u{0300}".unicodeScalars
+    return "Ι\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F3B {
-    return "Ι\u{0314}\u{0300}".unicodeScalars
+    return "Ι\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F3C {
-    return "Ι\u{0313}\u{0301}".unicodeScalars
+    return "Ι\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F3D {
-    return "Ι\u{0314}\u{0301}".unicodeScalars
+    return "Ι\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F3E {
-    return "Ι\u{0313}\u{0342}".unicodeScalars
+    return "Ι\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F3F {
-    return "Ι\u{0314}\u{0342}".unicodeScalars
+    return "Ι\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F40 {
-    return "ο\u{0313}".unicodeScalars
+    return "ο\u{313}".unicodeScalars
   }
   if value <= 0x1F41 {
-    return "ο\u{0314}".unicodeScalars
+    return "ο\u{314}".unicodeScalars
   }
   if value <= 0x1F42 {
-    return "ο\u{0313}\u{0300}".unicodeScalars
+    return "ο\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F43 {
-    return "ο\u{0314}\u{0300}".unicodeScalars
+    return "ο\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F44 {
-    return "ο\u{0313}\u{0301}".unicodeScalars
+    return "ο\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F45 {
-    return "ο\u{0314}\u{0301}".unicodeScalars
+    return "ο\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F47 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F48 {
-    return "Ο\u{0313}".unicodeScalars
+    return "Ο\u{313}".unicodeScalars
   }
   if value <= 0x1F49 {
-    return "Ο\u{0314}".unicodeScalars
+    return "Ο\u{314}".unicodeScalars
   }
   if value <= 0x1F4A {
-    return "Ο\u{0313}\u{0300}".unicodeScalars
+    return "Ο\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F4B {
-    return "Ο\u{0314}\u{0300}".unicodeScalars
+    return "Ο\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F4C {
-    return "Ο\u{0313}\u{0301}".unicodeScalars
+    return "Ο\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F4D {
-    return "Ο\u{0314}\u{0301}".unicodeScalars
+    return "Ο\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F4F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F50 {
-    return "υ\u{0313}".unicodeScalars
+    return "υ\u{313}".unicodeScalars
   }
   if value <= 0x1F51 {
-    return "υ\u{0314}".unicodeScalars
+    return "υ\u{314}".unicodeScalars
   }
   if value <= 0x1F52 {
-    return "υ\u{0313}\u{0300}".unicodeScalars
+    return "υ\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F53 {
-    return "υ\u{0314}\u{0300}".unicodeScalars
+    return "υ\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F54 {
-    return "υ\u{0313}\u{0301}".unicodeScalars
+    return "υ\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F55 {
-    return "υ\u{0314}\u{0301}".unicodeScalars
+    return "υ\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F56 {
-    return "υ\u{0313}\u{0342}".unicodeScalars
+    return "υ\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F57 {
-    return "υ\u{0314}\u{0342}".unicodeScalars
+    return "υ\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F58 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F59 {
-    return "Υ\u{0314}".unicodeScalars
+    return "Υ\u{314}".unicodeScalars
   }
   if value <= 0x1F5A {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F5B {
-    return "Υ\u{0314}\u{0300}".unicodeScalars
+    return "Υ\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F5C {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F5D {
-    return "Υ\u{0314}\u{0301}".unicodeScalars
+    return "Υ\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F5E {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F5F {
-    return "Υ\u{0314}\u{0342}".unicodeScalars
+    return "Υ\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F60 {
-    return "ω\u{0313}".unicodeScalars
+    return "ω\u{313}".unicodeScalars
   }
   if value <= 0x1F61 {
-    return "ω\u{0314}".unicodeScalars
+    return "ω\u{314}".unicodeScalars
   }
   if value <= 0x1F62 {
-    return "ω\u{0313}\u{0300}".unicodeScalars
+    return "ω\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F63 {
-    return "ω\u{0314}\u{0300}".unicodeScalars
+    return "ω\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F64 {
-    return "ω\u{0313}\u{0301}".unicodeScalars
+    return "ω\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F65 {
-    return "ω\u{0314}\u{0301}".unicodeScalars
+    return "ω\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F66 {
-    return "ω\u{0313}\u{0342}".unicodeScalars
+    return "ω\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F67 {
-    return "ω\u{0314}\u{0342}".unicodeScalars
+    return "ω\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F68 {
-    return "Ω\u{0313}".unicodeScalars
+    return "Ω\u{313}".unicodeScalars
   }
   if value <= 0x1F69 {
-    return "Ω\u{0314}".unicodeScalars
+    return "Ω\u{314}".unicodeScalars
   }
   if value <= 0x1F6A {
-    return "Ω\u{0313}\u{0300}".unicodeScalars
+    return "Ω\u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1F6B {
-    return "Ω\u{0314}\u{0300}".unicodeScalars
+    return "Ω\u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1F6C {
-    return "Ω\u{0313}\u{0301}".unicodeScalars
+    return "Ω\u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1F6D {
-    return "Ω\u{0314}\u{0301}".unicodeScalars
+    return "Ω\u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1F6E {
-    return "Ω\u{0313}\u{0342}".unicodeScalars
+    return "Ω\u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1F6F {
-    return "Ω\u{0314}\u{0342}".unicodeScalars
+    return "Ω\u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1F70 {
-    return "α\u{0300}".unicodeScalars
+    return "α\u{300}".unicodeScalars
   }
   if value <= 0x1F71 {
-    return "α\u{0301}".unicodeScalars
+    return "α\u{301}".unicodeScalars
   }
   if value <= 0x1F72 {
-    return "ε\u{0300}".unicodeScalars
+    return "ε\u{300}".unicodeScalars
   }
   if value <= 0x1F73 {
-    return "ε\u{0301}".unicodeScalars
+    return "ε\u{301}".unicodeScalars
   }
   if value <= 0x1F74 {
-    return "η\u{0300}".unicodeScalars
+    return "η\u{300}".unicodeScalars
   }
   if value <= 0x1F75 {
-    return "η\u{0301}".unicodeScalars
+    return "η\u{301}".unicodeScalars
   }
   if value <= 0x1F76 {
-    return "ι\u{0300}".unicodeScalars
+    return "ι\u{300}".unicodeScalars
   }
   if value <= 0x1F77 {
-    return "ι\u{0301}".unicodeScalars
+    return "ι\u{301}".unicodeScalars
   }
   if value <= 0x1F78 {
-    return "ο\u{0300}".unicodeScalars
+    return "ο\u{300}".unicodeScalars
   }
   if value <= 0x1F79 {
-    return "ο\u{0301}".unicodeScalars
+    return "ο\u{301}".unicodeScalars
   }
   if value <= 0x1F7A {
-    return "υ\u{0300}".unicodeScalars
+    return "υ\u{300}".unicodeScalars
   }
   if value <= 0x1F7B {
-    return "υ\u{0301}".unicodeScalars
+    return "υ\u{301}".unicodeScalars
   }
   if value <= 0x1F7C {
-    return "ω\u{0300}".unicodeScalars
+    return "ω\u{300}".unicodeScalars
   }
   if value <= 0x1F7D {
-    return "ω\u{0301}".unicodeScalars
+    return "ω\u{301}".unicodeScalars
   }
   if value <= 0x1F7F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1F80 {
-    return "α\u{0313}\u{0345}".unicodeScalars
+    return "α\u{313}\u{345}".unicodeScalars
   }
   if value <= 0x1F81 {
-    return "α\u{0314}\u{0345}".unicodeScalars
+    return "α\u{314}\u{345}".unicodeScalars
   }
   if value <= 0x1F82 {
-    return "α\u{0313}\u{0300}\u{0345}".unicodeScalars
+    return "α\u{313}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F83 {
-    return "α\u{0314}\u{0300}\u{0345}".unicodeScalars
+    return "α\u{314}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F84 {
-    return "α\u{0313}\u{0301}\u{0345}".unicodeScalars
+    return "α\u{313}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F85 {
-    return "α\u{0314}\u{0301}\u{0345}".unicodeScalars
+    return "α\u{314}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F86 {
-    return "α\u{0313}\u{0342}\u{0345}".unicodeScalars
+    return "α\u{313}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F87 {
-    return "α\u{0314}\u{0342}\u{0345}".unicodeScalars
+    return "α\u{314}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F88 {
-    return "Α\u{0313}\u{0345}".unicodeScalars
+    return "Α\u{313}\u{345}".unicodeScalars
   }
   if value <= 0x1F89 {
-    return "Α\u{0314}\u{0345}".unicodeScalars
+    return "Α\u{314}\u{345}".unicodeScalars
   }
   if value <= 0x1F8A {
-    return "Α\u{0313}\u{0300}\u{0345}".unicodeScalars
+    return "Α\u{313}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F8B {
-    return "Α\u{0314}\u{0300}\u{0345}".unicodeScalars
+    return "Α\u{314}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F8C {
-    return "Α\u{0313}\u{0301}\u{0345}".unicodeScalars
+    return "Α\u{313}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F8D {
-    return "Α\u{0314}\u{0301}\u{0345}".unicodeScalars
+    return "Α\u{314}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F8E {
-    return "Α\u{0313}\u{0342}\u{0345}".unicodeScalars
+    return "Α\u{313}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F8F {
-    return "Α\u{0314}\u{0342}\u{0345}".unicodeScalars
+    return "Α\u{314}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F90 {
-    return "η\u{0313}\u{0345}".unicodeScalars
+    return "η\u{313}\u{345}".unicodeScalars
   }
   if value <= 0x1F91 {
-    return "η\u{0314}\u{0345}".unicodeScalars
+    return "η\u{314}\u{345}".unicodeScalars
   }
   if value <= 0x1F92 {
-    return "η\u{0313}\u{0300}\u{0345}".unicodeScalars
+    return "η\u{313}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F93 {
-    return "η\u{0314}\u{0300}\u{0345}".unicodeScalars
+    return "η\u{314}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F94 {
-    return "η\u{0313}\u{0301}\u{0345}".unicodeScalars
+    return "η\u{313}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F95 {
-    return "η\u{0314}\u{0301}\u{0345}".unicodeScalars
+    return "η\u{314}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F96 {
-    return "η\u{0313}\u{0342}\u{0345}".unicodeScalars
+    return "η\u{313}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F97 {
-    return "η\u{0314}\u{0342}\u{0345}".unicodeScalars
+    return "η\u{314}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F98 {
-    return "Η\u{0313}\u{0345}".unicodeScalars
+    return "Η\u{313}\u{345}".unicodeScalars
   }
   if value <= 0x1F99 {
-    return "Η\u{0314}\u{0345}".unicodeScalars
+    return "Η\u{314}\u{345}".unicodeScalars
   }
   if value <= 0x1F9A {
-    return "Η\u{0313}\u{0300}\u{0345}".unicodeScalars
+    return "Η\u{313}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F9B {
-    return "Η\u{0314}\u{0300}\u{0345}".unicodeScalars
+    return "Η\u{314}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1F9C {
-    return "Η\u{0313}\u{0301}\u{0345}".unicodeScalars
+    return "Η\u{313}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F9D {
-    return "Η\u{0314}\u{0301}\u{0345}".unicodeScalars
+    return "Η\u{314}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1F9E {
-    return "Η\u{0313}\u{0342}\u{0345}".unicodeScalars
+    return "Η\u{313}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1F9F {
-    return "Η\u{0314}\u{0342}\u{0345}".unicodeScalars
+    return "Η\u{314}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FA0 {
-    return "ω\u{0313}\u{0345}".unicodeScalars
+    return "ω\u{313}\u{345}".unicodeScalars
   }
   if value <= 0x1FA1 {
-    return "ω\u{0314}\u{0345}".unicodeScalars
+    return "ω\u{314}\u{345}".unicodeScalars
   }
   if value <= 0x1FA2 {
-    return "ω\u{0313}\u{0300}\u{0345}".unicodeScalars
+    return "ω\u{313}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FA3 {
-    return "ω\u{0314}\u{0300}\u{0345}".unicodeScalars
+    return "ω\u{314}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FA4 {
-    return "ω\u{0313}\u{0301}\u{0345}".unicodeScalars
+    return "ω\u{313}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FA5 {
-    return "ω\u{0314}\u{0301}\u{0345}".unicodeScalars
+    return "ω\u{314}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FA6 {
-    return "ω\u{0313}\u{0342}\u{0345}".unicodeScalars
+    return "ω\u{313}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FA7 {
-    return "ω\u{0314}\u{0342}\u{0345}".unicodeScalars
+    return "ω\u{314}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FA8 {
-    return "Ω\u{0313}\u{0345}".unicodeScalars
+    return "Ω\u{313}\u{345}".unicodeScalars
   }
   if value <= 0x1FA9 {
-    return "Ω\u{0314}\u{0345}".unicodeScalars
+    return "Ω\u{314}\u{345}".unicodeScalars
   }
   if value <= 0x1FAA {
-    return "Ω\u{0313}\u{0300}\u{0345}".unicodeScalars
+    return "Ω\u{313}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FAB {
-    return "Ω\u{0314}\u{0300}\u{0345}".unicodeScalars
+    return "Ω\u{314}\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FAC {
-    return "Ω\u{0313}\u{0301}\u{0345}".unicodeScalars
+    return "Ω\u{313}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FAD {
-    return "Ω\u{0314}\u{0301}\u{0345}".unicodeScalars
+    return "Ω\u{314}\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FAE {
-    return "Ω\u{0313}\u{0342}\u{0345}".unicodeScalars
+    return "Ω\u{313}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FAF {
-    return "Ω\u{0314}\u{0342}\u{0345}".unicodeScalars
+    return "Ω\u{314}\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FB0 {
-    return "α\u{0306}".unicodeScalars
+    return "α\u{306}".unicodeScalars
   }
   if value <= 0x1FB1 {
-    return "α\u{0304}".unicodeScalars
+    return "α\u{304}".unicodeScalars
   }
   if value <= 0x1FB2 {
-    return "α\u{0300}\u{0345}".unicodeScalars
+    return "α\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FB3 {
-    return "α\u{0345}".unicodeScalars
+    return "α\u{345}".unicodeScalars
   }
   if value <= 0x1FB4 {
-    return "α\u{0301}\u{0345}".unicodeScalars
+    return "α\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FB5 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1FB6 {
-    return "α\u{0342}".unicodeScalars
+    return "α\u{342}".unicodeScalars
   }
   if value <= 0x1FB7 {
-    return "α\u{0342}\u{0345}".unicodeScalars
+    return "α\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FB8 {
-    return "Α\u{0306}".unicodeScalars
+    return "Α\u{306}".unicodeScalars
   }
   if value <= 0x1FB9 {
-    return "Α\u{0304}".unicodeScalars
+    return "Α\u{304}".unicodeScalars
   }
   if value <= 0x1FBA {
-    return "Α\u{0300}".unicodeScalars
+    return "Α\u{300}".unicodeScalars
   }
   if value <= 0x1FBB {
-    return "Α\u{0301}".unicodeScalars
+    return "Α\u{301}".unicodeScalars
   }
   if value <= 0x1FBC {
-    return "Α\u{0345}".unicodeScalars
+    return "Α\u{345}".unicodeScalars
   }
   if value <= 0x1FBD {
-    return " \u{0313}".unicodeScalars
+    return " \u{313}".unicodeScalars
   }
   if value <= 0x1FBE {
     return "ι".unicodeScalars
   }
   if value <= 0x1FBF {
-    return " \u{0313}".unicodeScalars
+    return " \u{313}".unicodeScalars
   }
   if value <= 0x1FC0 {
-    return " \u{0342}".unicodeScalars
+    return " \u{342}".unicodeScalars
   }
   if value <= 0x1FC1 {
-    return " \u{0308}\u{0342}".unicodeScalars
+    return " \u{308}\u{342}".unicodeScalars
   }
   if value <= 0x1FC2 {
-    return "η\u{0300}\u{0345}".unicodeScalars
+    return "η\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FC3 {
-    return "η\u{0345}".unicodeScalars
+    return "η\u{345}".unicodeScalars
   }
   if value <= 0x1FC4 {
-    return "η\u{0301}\u{0345}".unicodeScalars
+    return "η\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FC5 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1FC6 {
-    return "η\u{0342}".unicodeScalars
+    return "η\u{342}".unicodeScalars
   }
   if value <= 0x1FC7 {
-    return "η\u{0342}\u{0345}".unicodeScalars
+    return "η\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FC8 {
-    return "Ε\u{0300}".unicodeScalars
+    return "Ε\u{300}".unicodeScalars
   }
   if value <= 0x1FC9 {
-    return "Ε\u{0301}".unicodeScalars
+    return "Ε\u{301}".unicodeScalars
   }
   if value <= 0x1FCA {
-    return "Η\u{0300}".unicodeScalars
+    return "Η\u{300}".unicodeScalars
   }
   if value <= 0x1FCB {
-    return "Η\u{0301}".unicodeScalars
+    return "Η\u{301}".unicodeScalars
   }
   if value <= 0x1FCC {
-    return "Η\u{0345}".unicodeScalars
+    return "Η\u{345}".unicodeScalars
   }
   if value <= 0x1FCD {
-    return " \u{0313}\u{0300}".unicodeScalars
+    return " \u{313}\u{300}".unicodeScalars
   }
   if value <= 0x1FCE {
-    return " \u{0313}\u{0301}".unicodeScalars
+    return " \u{313}\u{301}".unicodeScalars
   }
   if value <= 0x1FCF {
-    return " \u{0313}\u{0342}".unicodeScalars
+    return " \u{313}\u{342}".unicodeScalars
   }
   if value <= 0x1FD0 {
-    return "ι\u{0306}".unicodeScalars
+    return "ι\u{306}".unicodeScalars
   }
   if value <= 0x1FD1 {
-    return "ι\u{0304}".unicodeScalars
+    return "ι\u{304}".unicodeScalars
   }
   if value <= 0x1FD2 {
-    return "ι\u{0308}\u{0300}".unicodeScalars
+    return "ι\u{308}\u{300}".unicodeScalars
   }
   if value <= 0x1FD3 {
-    return "ι\u{0308}\u{0301}".unicodeScalars
+    return "ι\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x1FD5 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1FD6 {
-    return "ι\u{0342}".unicodeScalars
+    return "ι\u{342}".unicodeScalars
   }
   if value <= 0x1FD7 {
-    return "ι\u{0308}\u{0342}".unicodeScalars
+    return "ι\u{308}\u{342}".unicodeScalars
   }
   if value <= 0x1FD8 {
-    return "Ι\u{0306}".unicodeScalars
+    return "Ι\u{306}".unicodeScalars
   }
   if value <= 0x1FD9 {
-    return "Ι\u{0304}".unicodeScalars
+    return "Ι\u{304}".unicodeScalars
   }
   if value <= 0x1FDA {
-    return "Ι\u{0300}".unicodeScalars
+    return "Ι\u{300}".unicodeScalars
   }
   if value <= 0x1FDB {
-    return "Ι\u{0301}".unicodeScalars
+    return "Ι\u{301}".unicodeScalars
   }
   if value <= 0x1FDC {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1FDD {
-    return " \u{0314}\u{0300}".unicodeScalars
+    return " \u{314}\u{300}".unicodeScalars
   }
   if value <= 0x1FDE {
-    return " \u{0314}\u{0301}".unicodeScalars
+    return " \u{314}\u{301}".unicodeScalars
   }
   if value <= 0x1FDF {
-    return " \u{0314}\u{0342}".unicodeScalars
+    return " \u{314}\u{342}".unicodeScalars
   }
   if value <= 0x1FE0 {
-    return "υ\u{0306}".unicodeScalars
+    return "υ\u{306}".unicodeScalars
   }
   if value <= 0x1FE1 {
-    return "υ\u{0304}".unicodeScalars
+    return "υ\u{304}".unicodeScalars
   }
   if value <= 0x1FE2 {
-    return "υ\u{0308}\u{0300}".unicodeScalars
+    return "υ\u{308}\u{300}".unicodeScalars
   }
   if value <= 0x1FE3 {
-    return "υ\u{0308}\u{0301}".unicodeScalars
+    return "υ\u{308}\u{301}".unicodeScalars
   }
   if value <= 0x1FE4 {
-    return "ρ\u{0313}".unicodeScalars
+    return "ρ\u{313}".unicodeScalars
   }
   if value <= 0x1FE5 {
-    return "ρ\u{0314}".unicodeScalars
+    return "ρ\u{314}".unicodeScalars
   }
   if value <= 0x1FE6 {
-    return "υ\u{0342}".unicodeScalars
+    return "υ\u{342}".unicodeScalars
   }
   if value <= 0x1FE7 {
-    return "υ\u{0308}\u{0342}".unicodeScalars
+    return "υ\u{308}\u{342}".unicodeScalars
   }
   if value <= 0x1FE8 {
-    return "Υ\u{0306}".unicodeScalars
+    return "Υ\u{306}".unicodeScalars
   }
   if value <= 0x1FE9 {
-    return "Υ\u{0304}".unicodeScalars
+    return "Υ\u{304}".unicodeScalars
   }
   if value <= 0x1FEA {
-    return "Υ\u{0300}".unicodeScalars
+    return "Υ\u{300}".unicodeScalars
   }
   if value <= 0x1FEB {
-    return "Υ\u{0301}".unicodeScalars
+    return "Υ\u{301}".unicodeScalars
   }
   if value <= 0x1FEC {
-    return "Ρ\u{0314}".unicodeScalars
+    return "Ρ\u{314}".unicodeScalars
   }
   if value <= 0x1FED {
-    return " \u{0308}\u{0300}".unicodeScalars
+    return " \u{308}\u{300}".unicodeScalars
   }
   if value <= 0x1FEE {
-    return " \u{0308}\u{0301}".unicodeScalars
+    return " \u{308}\u{301}".unicodeScalars
   }
   if value <= 0x1FEF {
     return "`".unicodeScalars
@@ -9011,43 +9011,43 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x1FF2 {
-    return "ω\u{0300}\u{0345}".unicodeScalars
+    return "ω\u{300}\u{345}".unicodeScalars
   }
   if value <= 0x1FF3 {
-    return "ω\u{0345}".unicodeScalars
+    return "ω\u{345}".unicodeScalars
   }
   if value <= 0x1FF4 {
-    return "ω\u{0301}\u{0345}".unicodeScalars
+    return "ω\u{301}\u{345}".unicodeScalars
   }
   if value <= 0x1FF5 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x1FF6 {
-    return "ω\u{0342}".unicodeScalars
+    return "ω\u{342}".unicodeScalars
   }
   if value <= 0x1FF7 {
-    return "ω\u{0342}\u{0345}".unicodeScalars
+    return "ω\u{342}\u{345}".unicodeScalars
   }
   if value <= 0x1FF8 {
-    return "Ο\u{0300}".unicodeScalars
+    return "Ο\u{300}".unicodeScalars
   }
   if value <= 0x1FF9 {
-    return "Ο\u{0301}".unicodeScalars
+    return "Ο\u{301}".unicodeScalars
   }
   if value <= 0x1FFA {
-    return "Ω\u{0300}".unicodeScalars
+    return "Ω\u{300}".unicodeScalars
   }
   if value <= 0x1FFB {
-    return "Ω\u{0301}".unicodeScalars
+    return "Ω\u{301}".unicodeScalars
   }
   if value <= 0x1FFC {
-    return "Ω\u{0345}".unicodeScalars
+    return "Ω\u{345}".unicodeScalars
   }
   if value <= 0x1FFD {
-    return " \u{0301}".unicodeScalars
+    return " \u{301}".unicodeScalars
   }
   if value <= 0x1FFE {
-    return " \u{0314}".unicodeScalars
+    return " \u{314}".unicodeScalars
   }
   if value <= 0x1FFF {
     return String(scalar).unicodeScalars
@@ -9065,7 +9065,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x2017 {
-    return " \u{0333}".unicodeScalars
+    return " \u{333}".unicodeScalars
   }
   if value <= 0x2023 {
     return String(scalar).unicodeScalars
@@ -9113,7 +9113,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x203E {
-    return " \u{0305}".unicodeScalars
+    return " \u{305}".unicodeScalars
   }
   if value <= 0x2046 {
     return String(scalar).unicodeScalars
@@ -9392,7 +9392,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "K".unicodeScalars
   }
   if value <= 0x212B {
-    return "A\u{030A}".unicodeScalars
+    return "A\u{30A}".unicodeScalars
   }
   if value <= 0x212C {
     return "B".unicodeScalars
@@ -9632,58 +9632,58 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x219A {
-    return "←\u{0338}".unicodeScalars
+    return "←\u{338}".unicodeScalars
   }
   if value <= 0x219B {
-    return "→\u{0338}".unicodeScalars
+    return "→\u{338}".unicodeScalars
   }
   if value <= 0x21AD {
     return String(scalar).unicodeScalars
   }
   if value <= 0x21AE {
-    return "↔\u{0338}".unicodeScalars
+    return "↔\u{338}".unicodeScalars
   }
   if value <= 0x21CC {
     return String(scalar).unicodeScalars
   }
   if value <= 0x21CD {
-    return "⇐\u{0338}".unicodeScalars
+    return "⇐\u{338}".unicodeScalars
   }
   if value <= 0x21CE {
-    return "⇔\u{0338}".unicodeScalars
+    return "⇔\u{338}".unicodeScalars
   }
   if value <= 0x21CF {
-    return "⇒\u{0338}".unicodeScalars
+    return "⇒\u{338}".unicodeScalars
   }
   if value <= 0x2203 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2204 {
-    return "∃\u{0338}".unicodeScalars
+    return "∃\u{338}".unicodeScalars
   }
   if value <= 0x2208 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2209 {
-    return "∈\u{0338}".unicodeScalars
+    return "∈\u{338}".unicodeScalars
   }
   if value <= 0x220B {
     return String(scalar).unicodeScalars
   }
   if value <= 0x220C {
-    return "∋\u{0338}".unicodeScalars
+    return "∋\u{338}".unicodeScalars
   }
   if value <= 0x2223 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2224 {
-    return "∣\u{0338}".unicodeScalars
+    return "∣\u{338}".unicodeScalars
   }
   if value <= 0x2225 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2226 {
-    return "∥\u{0338}".unicodeScalars
+    return "∥\u{338}".unicodeScalars
   }
   if value <= 0x222B {
     return String(scalar).unicodeScalars
@@ -9707,145 +9707,145 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x2241 {
-    return "∼\u{0338}".unicodeScalars
+    return "∼\u{338}".unicodeScalars
   }
   if value <= 0x2243 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2244 {
-    return "≃\u{0338}".unicodeScalars
+    return "≃\u{338}".unicodeScalars
   }
   if value <= 0x2246 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2247 {
-    return "≅\u{0338}".unicodeScalars
+    return "≅\u{338}".unicodeScalars
   }
   if value <= 0x2248 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2249 {
-    return "≈\u{0338}".unicodeScalars
+    return "≈\u{338}".unicodeScalars
   }
   if value <= 0x225F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2260 {
-    return "=\u{0338}".unicodeScalars
+    return "=\u{338}".unicodeScalars
   }
   if value <= 0x2261 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2262 {
-    return "≡\u{0338}".unicodeScalars
+    return "≡\u{338}".unicodeScalars
   }
   if value <= 0x226C {
     return String(scalar).unicodeScalars
   }
   if value <= 0x226D {
-    return "≍\u{0338}".unicodeScalars
+    return "≍\u{338}".unicodeScalars
   }
   if value <= 0x226E {
-    return "<\u{0338}".unicodeScalars
+    return "<\u{338}".unicodeScalars
   }
   if value <= 0x226F {
-    return ">\u{0338}".unicodeScalars
+    return ">\u{338}".unicodeScalars
   }
   if value <= 0x2270 {
-    return "≤\u{0338}".unicodeScalars
+    return "≤\u{338}".unicodeScalars
   }
   if value <= 0x2271 {
-    return "≥\u{0338}".unicodeScalars
+    return "≥\u{338}".unicodeScalars
   }
   if value <= 0x2273 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2274 {
-    return "≲\u{0338}".unicodeScalars
+    return "≲\u{338}".unicodeScalars
   }
   if value <= 0x2275 {
-    return "≳\u{0338}".unicodeScalars
+    return "≳\u{338}".unicodeScalars
   }
   if value <= 0x2277 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2278 {
-    return "≶\u{0338}".unicodeScalars
+    return "≶\u{338}".unicodeScalars
   }
   if value <= 0x2279 {
-    return "≷\u{0338}".unicodeScalars
+    return "≷\u{338}".unicodeScalars
   }
   if value <= 0x227F {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2280 {
-    return "≺\u{0338}".unicodeScalars
+    return "≺\u{338}".unicodeScalars
   }
   if value <= 0x2281 {
-    return "≻\u{0338}".unicodeScalars
+    return "≻\u{338}".unicodeScalars
   }
   if value <= 0x2283 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2284 {
-    return "⊂\u{0338}".unicodeScalars
+    return "⊂\u{338}".unicodeScalars
   }
   if value <= 0x2285 {
-    return "⊃\u{0338}".unicodeScalars
+    return "⊃\u{338}".unicodeScalars
   }
   if value <= 0x2287 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x2288 {
-    return "⊆\u{0338}".unicodeScalars
+    return "⊆\u{338}".unicodeScalars
   }
   if value <= 0x2289 {
-    return "⊇\u{0338}".unicodeScalars
+    return "⊇\u{338}".unicodeScalars
   }
   if value <= 0x22AB {
     return String(scalar).unicodeScalars
   }
   if value <= 0x22AC {
-    return "⊢\u{0338}".unicodeScalars
+    return "⊢\u{338}".unicodeScalars
   }
   if value <= 0x22AD {
-    return "⊨\u{0338}".unicodeScalars
+    return "⊨\u{338}".unicodeScalars
   }
   if value <= 0x22AE {
-    return "⊩\u{0338}".unicodeScalars
+    return "⊩\u{338}".unicodeScalars
   }
   if value <= 0x22AF {
-    return "⊫\u{0338}".unicodeScalars
+    return "⊫\u{338}".unicodeScalars
   }
   if value <= 0x22DF {
     return String(scalar).unicodeScalars
   }
   if value <= 0x22E0 {
-    return "≼\u{0338}".unicodeScalars
+    return "≼\u{338}".unicodeScalars
   }
   if value <= 0x22E1 {
-    return "≽\u{0338}".unicodeScalars
+    return "≽\u{338}".unicodeScalars
   }
   if value <= 0x22E2 {
-    return "⊑\u{0338}".unicodeScalars
+    return "⊑\u{338}".unicodeScalars
   }
   if value <= 0x22E3 {
-    return "⊒\u{0338}".unicodeScalars
+    return "⊒\u{338}".unicodeScalars
   }
   if value <= 0x22E9 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x22EA {
-    return "⊲\u{0338}".unicodeScalars
+    return "⊲\u{338}".unicodeScalars
   }
   if value <= 0x22EB {
-    return "⊳\u{0338}".unicodeScalars
+    return "⊳\u{338}".unicodeScalars
   }
   if value <= 0x22EC {
-    return "⊴\u{0338}".unicodeScalars
+    return "⊴\u{338}".unicodeScalars
   }
   if value <= 0x22ED {
-    return "⊵\u{0338}".unicodeScalars
+    return "⊵\u{338}".unicodeScalars
   }
   if value <= 0x2328 {
     return String(scalar).unicodeScalars
@@ -10298,7 +10298,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x2ADC {
-    return "⫝\u{0338}".unicodeScalars
+    return "⫝\u{338}".unicodeScalars
   }
   if value <= 0x2C7B {
     return String(scalar).unicodeScalars
@@ -11563,10 +11563,6 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x3180 {
     return "ᅇ".unicodeScalars
   }
-  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars1(scalar, value)
-}
-
-fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars1(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x3181 {
     return "ᅌ".unicodeScalars
   }
@@ -11627,6 +11623,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x3196 {
     return "上".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars1(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars1(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x3197 {
     return "中".unicodeScalars
   }
@@ -14682,13 +14682,13 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB1D {
-    return "י\u{05B4}".unicodeScalars
+    return "י\u{5B4}".unicodeScalars
   }
   if value <= 0xFB1E {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB1F {
-    return "ײ\u{05B7}".unicodeScalars
+    return "ײ\u{5B7}".unicodeScalars
   }
   if value <= 0xFB20 {
     return "ע".unicodeScalars
@@ -14721,115 +14721,115 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "+".unicodeScalars
   }
   if value <= 0xFB2A {
-    return "ש\u{05C1}".unicodeScalars
+    return "ש\u{5C1}".unicodeScalars
   }
   if value <= 0xFB2B {
-    return "ש\u{05C2}".unicodeScalars
+    return "ש\u{5C2}".unicodeScalars
   }
   if value <= 0xFB2C {
-    return "ש\u{05BC}\u{05C1}".unicodeScalars
+    return "ש\u{5BC}\u{5C1}".unicodeScalars
   }
   if value <= 0xFB2D {
-    return "ש\u{05BC}\u{05C2}".unicodeScalars
+    return "ש\u{5BC}\u{5C2}".unicodeScalars
   }
   if value <= 0xFB2E {
-    return "א\u{05B7}".unicodeScalars
+    return "א\u{5B7}".unicodeScalars
   }
   if value <= 0xFB2F {
-    return "א\u{05B8}".unicodeScalars
+    return "א\u{5B8}".unicodeScalars
   }
   if value <= 0xFB30 {
-    return "א\u{05BC}".unicodeScalars
+    return "א\u{5BC}".unicodeScalars
   }
   if value <= 0xFB31 {
-    return "ב\u{05BC}".unicodeScalars
+    return "ב\u{5BC}".unicodeScalars
   }
   if value <= 0xFB32 {
-    return "ג\u{05BC}".unicodeScalars
+    return "ג\u{5BC}".unicodeScalars
   }
   if value <= 0xFB33 {
-    return "ד\u{05BC}".unicodeScalars
+    return "ד\u{5BC}".unicodeScalars
   }
   if value <= 0xFB34 {
-    return "ה\u{05BC}".unicodeScalars
+    return "ה\u{5BC}".unicodeScalars
   }
   if value <= 0xFB35 {
-    return "ו\u{05BC}".unicodeScalars
+    return "ו\u{5BC}".unicodeScalars
   }
   if value <= 0xFB36 {
-    return "ז\u{05BC}".unicodeScalars
+    return "ז\u{5BC}".unicodeScalars
   }
   if value <= 0xFB37 {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB38 {
-    return "ט\u{05BC}".unicodeScalars
+    return "ט\u{5BC}".unicodeScalars
   }
   if value <= 0xFB39 {
-    return "י\u{05BC}".unicodeScalars
+    return "י\u{5BC}".unicodeScalars
   }
   if value <= 0xFB3A {
-    return "ך\u{05BC}".unicodeScalars
+    return "ך\u{5BC}".unicodeScalars
   }
   if value <= 0xFB3B {
-    return "כ\u{05BC}".unicodeScalars
+    return "כ\u{5BC}".unicodeScalars
   }
   if value <= 0xFB3C {
-    return "ל\u{05BC}".unicodeScalars
+    return "ל\u{5BC}".unicodeScalars
   }
   if value <= 0xFB3D {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB3E {
-    return "מ\u{05BC}".unicodeScalars
+    return "מ\u{5BC}".unicodeScalars
   }
   if value <= 0xFB3F {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB40 {
-    return "נ\u{05BC}".unicodeScalars
+    return "נ\u{5BC}".unicodeScalars
   }
   if value <= 0xFB41 {
-    return "ס\u{05BC}".unicodeScalars
+    return "ס\u{5BC}".unicodeScalars
   }
   if value <= 0xFB42 {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB43 {
-    return "ף\u{05BC}".unicodeScalars
+    return "ף\u{5BC}".unicodeScalars
   }
   if value <= 0xFB44 {
-    return "פ\u{05BC}".unicodeScalars
+    return "פ\u{5BC}".unicodeScalars
   }
   if value <= 0xFB45 {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFB46 {
-    return "צ\u{05BC}".unicodeScalars
+    return "צ\u{5BC}".unicodeScalars
   }
   if value <= 0xFB47 {
-    return "ק\u{05BC}".unicodeScalars
+    return "ק\u{5BC}".unicodeScalars
   }
   if value <= 0xFB48 {
-    return "ר\u{05BC}".unicodeScalars
+    return "ר\u{5BC}".unicodeScalars
   }
   if value <= 0xFB49 {
-    return "ש\u{05BC}".unicodeScalars
+    return "ש\u{5BC}".unicodeScalars
   }
   if value <= 0xFB4A {
-    return "ת\u{05BC}".unicodeScalars
+    return "ת\u{5BC}".unicodeScalars
   }
   if value <= 0xFB4B {
-    return "ו\u{05B9}".unicodeScalars
+    return "ו\u{5B9}".unicodeScalars
   }
   if value <= 0xFB4C {
-    return "ב\u{05BF}".unicodeScalars
+    return "ב\u{5BF}".unicodeScalars
   }
   if value <= 0xFB4D {
-    return "כ\u{05BF}".unicodeScalars
+    return "כ\u{5BF}".unicodeScalars
   }
   if value <= 0xFB4E {
-    return "פ\u{05BF}".unicodeScalars
+    return "פ\u{5BF}".unicodeScalars
   }
   if value <= 0xFB4F {
     return "אל".unicodeScalars
@@ -14910,7 +14910,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ڻ".unicodeScalars
   }
   if value <= 0xFBA5 {
-    return "ە\u{0654}".unicodeScalars
+    return "ە\u{654}".unicodeScalars
   }
   if value <= 0xFBA9 {
     return "ہ".unicodeScalars
@@ -14918,15 +14918,11 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0xFBAD {
     return "ھ".unicodeScalars
   }
-  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars2(scalar, value)
-}
-
-fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars2(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0xFBAF {
     return "ے".unicodeScalars
   }
   if value <= 0xFBB1 {
-    return "ے\u{0654}".unicodeScalars
+    return "ے\u{654}".unicodeScalars
   }
   if value <= 0xFBD2 {
     return String(scalar).unicodeScalars
@@ -14962,46 +14958,50 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ى".unicodeScalars
   }
   if value <= 0xFBEB {
-    return "ي\u{0654}ا".unicodeScalars
+    return "ي\u{654}ا".unicodeScalars
   }
   if value <= 0xFBED {
-    return "ي\u{0654}ە".unicodeScalars
+    return "ي\u{654}ە".unicodeScalars
   }
   if value <= 0xFBEF {
-    return "ي\u{0654}و".unicodeScalars
+    return "ي\u{654}و".unicodeScalars
   }
   if value <= 0xFBF1 {
-    return "ي\u{0654}ۇ".unicodeScalars
+    return "ي\u{654}ۇ".unicodeScalars
   }
   if value <= 0xFBF3 {
-    return "ي\u{0654}ۆ".unicodeScalars
+    return "ي\u{654}ۆ".unicodeScalars
   }
   if value <= 0xFBF5 {
-    return "ي\u{0654}ۈ".unicodeScalars
+    return "ي\u{654}ۈ".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars2(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars2(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0xFBF8 {
-    return "ي\u{0654}ې".unicodeScalars
+    return "ي\u{654}ې".unicodeScalars
   }
   if value <= 0xFBFB {
-    return "ي\u{0654}ى".unicodeScalars
+    return "ي\u{654}ى".unicodeScalars
   }
   if value <= 0xFBFF {
     return "ی".unicodeScalars
   }
   if value <= 0xFC00 {
-    return "ي\u{0654}ج".unicodeScalars
+    return "ي\u{654}ج".unicodeScalars
   }
   if value <= 0xFC01 {
-    return "ي\u{0654}ح".unicodeScalars
+    return "ي\u{654}ح".unicodeScalars
   }
   if value <= 0xFC02 {
-    return "ي\u{0654}م".unicodeScalars
+    return "ي\u{654}م".unicodeScalars
   }
   if value <= 0xFC03 {
-    return "ي\u{0654}ى".unicodeScalars
+    return "ي\u{654}ى".unicodeScalars
   }
   if value <= 0xFC04 {
-    return "ي\u{0654}ي".unicodeScalars
+    return "ي\u{654}ي".unicodeScalars
   }
   if value <= 0xFC05 {
     return "بج".unicodeScalars
@@ -15262,49 +15262,49 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "يي".unicodeScalars
   }
   if value <= 0xFC5B {
-    return "ذ\u{0670}".unicodeScalars
+    return "ذ\u{670}".unicodeScalars
   }
   if value <= 0xFC5C {
-    return "ر\u{0670}".unicodeScalars
+    return "ر\u{670}".unicodeScalars
   }
   if value <= 0xFC5D {
-    return "ى\u{0670}".unicodeScalars
+    return "ى\u{670}".unicodeScalars
   }
   if value <= 0xFC5E {
-    return " \u{064C}\u{0651}".unicodeScalars
+    return " \u{64C}\u{651}".unicodeScalars
   }
   if value <= 0xFC5F {
-    return " \u{064D}\u{0651}".unicodeScalars
+    return " \u{64D}\u{651}".unicodeScalars
   }
   if value <= 0xFC60 {
-    return " \u{064E}\u{0651}".unicodeScalars
+    return " \u{64E}\u{651}".unicodeScalars
   }
   if value <= 0xFC61 {
-    return " \u{064F}\u{0651}".unicodeScalars
+    return " \u{64F}\u{651}".unicodeScalars
   }
   if value <= 0xFC62 {
-    return " \u{0650}\u{0651}".unicodeScalars
+    return " \u{650}\u{651}".unicodeScalars
   }
   if value <= 0xFC63 {
-    return " \u{0651}\u{0670}".unicodeScalars
+    return " \u{651}\u{670}".unicodeScalars
   }
   if value <= 0xFC64 {
-    return "ي\u{0654}ر".unicodeScalars
+    return "ي\u{654}ر".unicodeScalars
   }
   if value <= 0xFC65 {
-    return "ي\u{0654}ز".unicodeScalars
+    return "ي\u{654}ز".unicodeScalars
   }
   if value <= 0xFC66 {
-    return "ي\u{0654}م".unicodeScalars
+    return "ي\u{654}م".unicodeScalars
   }
   if value <= 0xFC67 {
-    return "ي\u{0654}ن".unicodeScalars
+    return "ي\u{654}ن".unicodeScalars
   }
   if value <= 0xFC68 {
-    return "ي\u{0654}ى".unicodeScalars
+    return "ي\u{654}ى".unicodeScalars
   }
   if value <= 0xFC69 {
-    return "ي\u{0654}ي".unicodeScalars
+    return "ي\u{654}ي".unicodeScalars
   }
   if value <= 0xFC6A {
     return "بر".unicodeScalars
@@ -15421,7 +15421,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ني".unicodeScalars
   }
   if value <= 0xFC90 {
-    return "ى\u{0670}".unicodeScalars
+    return "ى\u{670}".unicodeScalars
   }
   if value <= 0xFC91 {
     return "ير".unicodeScalars
@@ -15442,19 +15442,19 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "يي".unicodeScalars
   }
   if value <= 0xFC97 {
-    return "ي\u{0654}ج".unicodeScalars
+    return "ي\u{654}ج".unicodeScalars
   }
   if value <= 0xFC98 {
-    return "ي\u{0654}ح".unicodeScalars
+    return "ي\u{654}ح".unicodeScalars
   }
   if value <= 0xFC99 {
-    return "ي\u{0654}خ".unicodeScalars
+    return "ي\u{654}خ".unicodeScalars
   }
   if value <= 0xFC9A {
-    return "ي\u{0654}م".unicodeScalars
+    return "ي\u{654}م".unicodeScalars
   }
   if value <= 0xFC9B {
-    return "ي\u{0654}ه".unicodeScalars
+    return "ي\u{654}ه".unicodeScalars
   }
   if value <= 0xFC9C {
     return "بج".unicodeScalars
@@ -15640,7 +15640,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "هم".unicodeScalars
   }
   if value <= 0xFCD9 {
-    return "ه\u{0670}".unicodeScalars
+    return "ه\u{670}".unicodeScalars
   }
   if value <= 0xFCDA {
     return "يج".unicodeScalars
@@ -15658,10 +15658,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "يه".unicodeScalars
   }
   if value <= 0xFCDF {
-    return "ي\u{0654}م".unicodeScalars
+    return "ي\u{654}م".unicodeScalars
   }
   if value <= 0xFCE0 {
-    return "ي\u{0654}ه".unicodeScalars
+    return "ي\u{654}ه".unicodeScalars
   }
   if value <= 0xFCE1 {
     return "بم".unicodeScalars
@@ -15715,13 +15715,13 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "يه".unicodeScalars
   }
   if value <= 0xFCF2 {
-    return "ـ\u{064E}\u{0651}".unicodeScalars
+    return "ـ\u{64E}\u{651}".unicodeScalars
   }
   if value <= 0xFCF3 {
-    return "ـ\u{064F}\u{0651}".unicodeScalars
+    return "ـ\u{64F}\u{651}".unicodeScalars
   }
   if value <= 0xFCF4 {
-    return "ـ\u{0650}\u{0651}".unicodeScalars
+    return "ـ\u{650}\u{651}".unicodeScalars
   }
   if value <= 0xFCF5 {
     return "طى".unicodeScalars
@@ -15937,7 +15937,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ظم".unicodeScalars
   }
   if value <= 0xFD3D {
-    return "ا\u{064B}".unicodeScalars
+    return "ا\u{64B}".unicodeScalars
   }
   if value <= 0xFD4F {
     return String(scalar).unicodeScalars
@@ -16396,7 +16396,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "]".unicodeScalars
   }
   if value <= 0xFE4C {
-    return " \u{0305}".unicodeScalars
+    return " \u{305}".unicodeScalars
   }
   if value <= 0xFE4F {
     return "_".unicodeScalars
@@ -16474,7 +16474,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0xFE68 {
-    return "\u{005C}".unicodeScalars
+    return "\u{5C}".unicodeScalars
   }
   if value <= 0xFE69 {
     return "$".unicodeScalars
@@ -16489,70 +16489,70 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0xFE70 {
-    return " \u{064B}".unicodeScalars
+    return " \u{64B}".unicodeScalars
   }
   if value <= 0xFE71 {
-    return "ـ\u{064B}".unicodeScalars
+    return "ـ\u{64B}".unicodeScalars
   }
   if value <= 0xFE72 {
-    return " \u{064C}".unicodeScalars
+    return " \u{64C}".unicodeScalars
   }
   if value <= 0xFE73 {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFE74 {
-    return " \u{064D}".unicodeScalars
+    return " \u{64D}".unicodeScalars
   }
   if value <= 0xFE75 {
     return String(scalar).unicodeScalars
   }
   if value <= 0xFE76 {
-    return " \u{064E}".unicodeScalars
+    return " \u{64E}".unicodeScalars
   }
   if value <= 0xFE77 {
-    return "ـ\u{064E}".unicodeScalars
+    return "ـ\u{64E}".unicodeScalars
   }
   if value <= 0xFE78 {
-    return " \u{064F}".unicodeScalars
+    return " \u{64F}".unicodeScalars
   }
   if value <= 0xFE79 {
-    return "ـ\u{064F}".unicodeScalars
+    return "ـ\u{64F}".unicodeScalars
   }
   if value <= 0xFE7A {
-    return " \u{0650}".unicodeScalars
+    return " \u{650}".unicodeScalars
   }
   if value <= 0xFE7B {
-    return "ـ\u{0650}".unicodeScalars
+    return "ـ\u{650}".unicodeScalars
   }
   if value <= 0xFE7C {
-    return " \u{0651}".unicodeScalars
+    return " \u{651}".unicodeScalars
   }
   if value <= 0xFE7D {
-    return "ـ\u{0651}".unicodeScalars
+    return "ـ\u{651}".unicodeScalars
   }
   if value <= 0xFE7E {
-    return " \u{0652}".unicodeScalars
+    return " \u{652}".unicodeScalars
   }
   if value <= 0xFE7F {
-    return "ـ\u{0652}".unicodeScalars
+    return "ـ\u{652}".unicodeScalars
   }
   if value <= 0xFE80 {
     return "ء".unicodeScalars
   }
   if value <= 0xFE82 {
-    return "ا\u{0653}".unicodeScalars
+    return "ا\u{653}".unicodeScalars
   }
   if value <= 0xFE84 {
-    return "ا\u{0654}".unicodeScalars
+    return "ا\u{654}".unicodeScalars
   }
   if value <= 0xFE86 {
-    return "و\u{0654}".unicodeScalars
+    return "و\u{654}".unicodeScalars
   }
   if value <= 0xFE88 {
-    return "ا\u{0655}".unicodeScalars
+    return "ا\u{655}".unicodeScalars
   }
   if value <= 0xFE8C {
-    return "ي\u{0654}".unicodeScalars
+    return "ي\u{654}".unicodeScalars
   }
   if value <= 0xFE8E {
     return "ا".unicodeScalars
@@ -16645,13 +16645,13 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "ي".unicodeScalars
   }
   if value <= 0xFEF6 {
-    return "لا\u{0653}".unicodeScalars
+    return "لا\u{653}".unicodeScalars
   }
   if value <= 0xFEF8 {
-    return "لا\u{0654}".unicodeScalars
+    return "لا\u{654}".unicodeScalars
   }
   if value <= 0xFEFA {
-    return "لا\u{0655}".unicodeScalars
+    return "لا\u{655}".unicodeScalars
   }
   if value <= 0xFEFC {
     return "لا".unicodeScalars
@@ -16663,7 +16663,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "!".unicodeScalars
   }
   if value <= 0xFF02 {
-    return "\u{0022}".unicodeScalars
+    return "\u{22}".unicodeScalars
   }
   if value <= 0xFF03 {
     return "#".unicodeScalars
@@ -16837,7 +16837,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "[".unicodeScalars
   }
   if value <= 0xFF3C {
-    return "\u{005C}".unicodeScalars
+    return "\u{5C}".unicodeScalars
   }
   if value <= 0xFF3D {
     return "]".unicodeScalars
@@ -17317,7 +17317,7 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return "¬".unicodeScalars
   }
   if value <= 0xFFE3 {
-    return " \u{0304}".unicodeScalars
+    return " \u{304}".unicodeScalars
   }
   if value <= 0xFFE4 {
     return "¦".unicodeScalars
@@ -17356,13 +17356,13 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
     return String(scalar).unicodeScalars
   }
   if value <= 0x105C9 {
-    return "𐗒\u{0307}".unicodeScalars
+    return "𐗒\u{307}".unicodeScalars
   }
   if value <= 0x105E3 {
     return String(scalar).unicodeScalars
   }
   if value <= 0x105E4 {
-    return "𐗚\u{0307}".unicodeScalars
+    return "𐗚\u{307}".unicodeScalars
   }
   if value <= 0x10780 {
     return String(scalar).unicodeScalars
@@ -18243,10 +18243,6 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1D484 {
     return "c".unicodeScalars
   }
-  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars3(scalar, value)
-}
-
-fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars3(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1D485 {
     return "d".unicodeScalars
   }
@@ -18313,6 +18309,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1D49A {
     return "y".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars3(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars3(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1D49B {
     return "z".unicodeScalars
   }
@@ -21598,10 +21598,6 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1EEB8 {
     return "ذ".unicodeScalars
   }
-  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars4(scalar, value)
-}
-
-fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars4(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1EEB9 {
     return "ض".unicodeScalars
   }
@@ -21665,6 +21661,10 @@ fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_
   if value <= 0x1F114 {
     return "(E)".unicodeScalars
   }
+  return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars4(scalar, value)
+}
+
+fileprivate func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars4(_ scalar: Unicode.Scalar, _ value: UInt32) -> String.UnicodeScalarView {
   if value <= 0x1F115 {
     return "(F)".unicodeScalars
   }
