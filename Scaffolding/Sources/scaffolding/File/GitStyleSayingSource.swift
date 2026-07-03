@@ -3,6 +3,6 @@ import Foundation
 extension GitStyleSayingSource {
 
   init(from url: URL) throws {
-    self.init(origin: UnicodeText(url.path), code: UnicodeText(try String(from: url)))
+    self.init(origin: UnicodeText(url.path), code: UnicodeText(try String(contentsOf: url, encoding: .utf8)))
   }
 }

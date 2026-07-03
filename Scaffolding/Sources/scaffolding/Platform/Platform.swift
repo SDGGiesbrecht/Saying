@@ -304,19 +304,28 @@ extension Platform {
     || scalar.isVulnerableToNormalization
   }
 
+  static func fixedLengthHexadecimal(for scalar: Unicode.Scalar) -> String {
+    var result = String(scalar.value, radix: 16, uppercase: true)
+    let fixedLength = 4
+    assert(result.count <= fixedLength, "Sanitized scalar hexadecimal length exeeded. (\(result))")
+    while result.count < fixedLength {
+      result = "0\(result)"
+    }
+    return result
+  }
   static func sanitize(identifier: UnicodeText, leading: Bool, entire: Bool) -> String {
     var result: String = identifier.lazy
-      .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\($0.hexadecimalCode)" })
+      .map({ allowedAsIdentifierContinuation($0) && $0 != "_" ? "\($0)" : "_\(fixedLengthHexadecimal(for: $0))" })
       .joined()
     if leading,
-      let first = result.scalars.first,
+      let first = result.unicodeScalars.first,
       !allowedAsIdentifierStart(first) {
-      result.scalars.removeFirst()
-      result.prepend(contentsOf: "_\(first.hexadecimalCode)")
+      result.unicodeScalars.removeFirst()
+      result = "_\(fixedLengthHexadecimal(for: first))\(result)"
     }
     if entire && reservedIdentifiers.contains(UnicodeText(result)) {
-      let last = result.scalars.removeLast()
-      result.append(contentsOf: "_\(last.hexadecimalCode)")
+      let last = result.unicodeScalars.removeLast()
+      result.append(contentsOf: "_\(fixedLengthHexadecimal(for: last))")
     }
     return result
   }
@@ -1083,7 +1092,7 @@ extension Platform {
     coverageRegionCounter += 1
     if let coverage = contextCoverageIdentifier,
       statements.first?.isDeadEnd != true {
-      let appendedIdentifier = "\(coverage):{\(coverageRegionCounter.inDigits())}"
+      let appendedIdentifier = "\(coverage):{\(String(coverageRegionCounter))}"
       let indent = String(repeating: self.indent, count: indentationLevel)
       if let index = coverageIndex[UnicodeText(appendedIdentifier)] {
         return "\n\(indent)\(self.coverageRegistration(index: index))"
@@ -2776,7 +2785,7 @@ extension Platform {
       entry.append(contentsOf: deadEnd())
     }
     let presentIndent = String(repeating: indent, count: indentationLevel)
-    entry.scalars.replaceMatches(for: "\n".scalars.literal(), with: "\n\(presentIndent)".scalars)
+    entry.unicodeScalars.replaceMatches(for: "\n".unicodeScalars.literal(), with: "\n\(presentIndent)".unicodeScalars)
     return entry.prepending(contentsOf: presentIndent).components(separatedBy: "\n")
   }
 

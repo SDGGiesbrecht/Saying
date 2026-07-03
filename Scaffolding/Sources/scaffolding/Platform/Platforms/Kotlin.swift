@@ -87,7 +87,7 @@ enum Kotlin: Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     return character.utf16.map({ code in
       var digits = String(code, radix: 16, uppercase: true)
-      digits.scalars.fill(to: 4, with: "0", from: .start)
+      digits.unicodeScalars.fill(to: 4, with: "0", from: .start)
       return "\u{5C}u\(digits)"
     }).joined()
   }

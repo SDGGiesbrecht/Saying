@@ -13,7 +13,7 @@ let package = Package(
       name: "scaffolding",
       dependencies: [
         .product(name: "Source", package: "Source"), // Just so that IDEs show the files.
-        .product(name: "SDGExternalProcess", package: "SDGCornerstone"),
+        .product(name: "SDGCollections", package: "SDGCornerstone"),
       ],
       plugins: [
         .plugin(name: "GenerateSyntax")

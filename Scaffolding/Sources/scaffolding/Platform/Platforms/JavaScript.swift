@@ -84,7 +84,7 @@ enum JavaScript: Platform {
   }
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
-    return "\u{5C}u{\(character.hexadecimalCode)}"
+    return "\u{5C}u{\(String(character.value, radix: 16, uppercase: true))}"
   }
 
   static func literal(scalars: String, escaped: String) -> String {

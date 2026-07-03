@@ -1237,7 +1237,7 @@ extension ActionIntermediate {
     result.append(base)
     if !skippingSubregions {
       for entry in coverageSubregions() {
-        result.append(UnicodeText("\(base):{\(entry.inDigits())}"))
+        result.append(UnicodeText("\(base):{\(String(entry))}"))
       }
     }
     return result
@@ -1301,7 +1301,7 @@ extension ActionIntermediate {
         parameterType = parameters[zeroBased].type
       }
       let type = platform.source(for: parameterType, referenceLookup: referenceLookup)
-      functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_".scalars)
+      functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_".unicodeScalars)
     }
     if let initializerSuffix = platform.initializerSuffix,
       String(functionName).hasSuffix(String(initializerSuffix)) {
@@ -1347,7 +1347,7 @@ extension ActionIntermediate {
     var result: UnicodeText = ""
     if components.count == parameters.count {
       let selfType = parameters.removeFirst()
-      result.prepend(contentsOf: Swift.source(for: selfType.type, referenceLookup: referenceLookup).scalars)
+      result.prepend(contentsOf: Swift.source(for: selfType.type, referenceLookup: referenceLookup).unicodeScalars)
       result.append(".")
     }
     for index in parameters.indices {
@@ -1355,13 +1355,13 @@ extension ActionIntermediate {
         result.append(contentsOf: ", ")
       }
       result.append(contentsOf: components[index].contents.unicodeScalars)
-      result.append(contentsOf: ": ".scalars)
-      result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).scalars)
+      result.append(contentsOf: ": ".unicodeScalars)
+      result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).unicodeScalars)
     }
     result.append(contentsOf: components.last!.contents.unicodeScalars)
     if result.starts(with: "init(".unicodeScalars) {
-      result.prepend(contentsOf: ".".scalars)
-      result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).scalars)
+      result.prepend(contentsOf: ".".unicodeScalars)
+      result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).unicodeScalars)
     }
     return result
   }
