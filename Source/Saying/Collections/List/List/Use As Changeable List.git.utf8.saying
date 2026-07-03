@@ -26,6 +26,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (index: index) replaced with (element: element)
+    Swift: (self: [list]).replacing at (i: [index]) with (newElement: [element])
    )
    list
    {
@@ -42,6 +43,7 @@ ability (clients)
    ]
    (
     English: insert (element: element) at (boundary: boundary) in (list: ↓ list)
+    Swift: (self: [list]).insert (newElement: [element]) at (i: [boundary])
    )
 
   choice (clients)
@@ -53,6 +55,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (element: element) inserted at (boundary: boundary)
+    Swift: (self: [list]).inserting (newElement: [element]) at (i: [boundary])
    )
    list
    {
@@ -71,6 +74,7 @@ ability (clients)
    ]
    (
     English: append (element: element) to (list: ↓ list)
+    Swift: (self: [list]).append (newElement: [element])
    )
    {
     append (element) to (↓ list) according to default use as changeable list
@@ -82,6 +86,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (element: element) appended
+    Swift: (self: [list]).appending (newElement: [element])
    )
    list
    {
@@ -98,6 +103,7 @@ ability (clients)
    ]
    (
     English: prepend (element: element) to (list: ↓ list)
+    Swift: (self: [list]).prepend (newElement: [element])
    )
    {
     prepend (element) to (↓ list) according to default use as changeable list
@@ -109,6 +115,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (element: element) prepended
+    Swift: (self: [list]).prepending (newElement: [element])
    )
    list
    {
@@ -124,6 +131,7 @@ ability (clients)
    ]
    (
     English: remove (index: index) from (list: ↓ list)
+    Swift: (self: [list]).remove at (i: [index])
    )
 
   choice (clients)
@@ -135,6 +143,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (index: index) removed
+    Swift: (self: [list]).removing at (i: [index])
    )
    list
    {
@@ -161,6 +170,7 @@ ability (clients)
    ]
    (
     English: remove first from (list: ↓ list)
+    Swift: (self: [list]).removeFirst
    )
    {
     remove first from (↓ list) according to default use as changeable list
@@ -179,6 +189,7 @@ ability (clients)
    ]
    (
     English: (list: list) with first removed
+    Swift: (self: [list]).removingFirst
    )
    list
    {
@@ -207,6 +218,7 @@ ability (clients)
    ]
    (
     English: remove last from (list: ↓ list)
+    Swift: (self: [list]).removeLast
    )
    {
     remove last from (↓ list) according to default use as changeable list
@@ -225,6 +237,7 @@ ability (clients)
    ]
    (
     English: (list: list) with last removed
+    Swift: (self: [list]).removingLast
    )
    list
    {
@@ -268,6 +281,7 @@ extension
   action (clients)
    (
     English: non‐empty example according to use as changeable list
+    Swift: var Self.nonemptyExampleAccordingToUseAsChangeableList
    )
    list
    {
@@ -285,6 +299,7 @@ extension
    ]
    (
     English: (list: list) with (index: index) replaced with (element: element) according to default use as changeable list
+    Swift: (self: [list]).replacingAccordingToDefaultUseAsChangeableList at (i: [index]) with (newElement: [element])
    )
    list
    {
@@ -302,6 +317,7 @@ extension
    ]
    (
     English: (list: list) with (element: element) inserted at (boundary: boundary) according to default use as changeable list
+    Swift: (self: [list]).insertingAccordingToDefaultUseAsChangeableList (newElement: [element]) at (i: [boundary])
    )
    list
    {
@@ -320,6 +336,7 @@ extension
    ]
    (
     English: append (element: element) to (list: ↓ list) according to default use as changeable list
+    Swift: (self: [list]).appendAccordingToDefaultUseAsChangeableList (newElement: [element])
    )
    {
     insert (element) at (end of (list)) in (↓ list)
@@ -331,6 +348,7 @@ extension
    ]
    (
     English: (list: list) with (element: element) appended according to default use as changeable list
+    Swift: (self: [list]).appendingAccordingToDefaultUseAsChangeableList (newElement: [element])
    )
    list
    {
@@ -349,6 +367,7 @@ extension
    ]
    (
     English: prepend (element: element) to (list: ↓ list) according to default use as changeable list
+    Swift: (self: [list]).prependAccordingToDefaultUseAsChangeableList (newElement: [element])
    )
    {
     insert (element) at (beginning of (list)) in (↓ list)
@@ -360,6 +379,7 @@ extension
    ]
    (
     English: (list: list) with (element: element) prepended according to default use as changeable list
+    Swift: (self: [list]).prependingAccordingToDefaultUseAsChangeableList (newElement: [element])
    )
    list
    {
@@ -377,6 +397,7 @@ extension
    ]
    (
     English: (list: list) with (index: index) removed according to default use as changeable list
+    Swift: (self: [list]).removingAccordingToDefaultUseAsChangeableList at (i: [index])
    )
    list
    {
@@ -399,6 +420,7 @@ extension
    ]
    (
     English: remove first from (list: ↓ list) according to default use as changeable list
+    Swift: (self: [list]).removeFirstAccordingToDefaultUseAsChangeableList
    )
    {
     if (index after (beginning of (list)) in (list)) exists, unwrap it as (• first: index), {
@@ -420,6 +442,7 @@ extension
    ]
    (
     English: remove last from (list: ↓ list) according to default use as changeable list
+    Swift: (self: [list]).removeLastAccordingToDefaultUseAsChangeableList
    )
    {
     if (index before (end of (list)) in (list)) exists, unwrap it as (• last: index), {
@@ -436,6 +459,7 @@ extension
    ]
    (
     English: (list: list) with (range: range of (boundary)) removed according to default use as changeable list
+    Swift: (self: [list]).removingSubrangeAccordingToDefaultUseAsChangeableList (bounds: [range])
    )
    list
    {
