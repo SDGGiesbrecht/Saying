@@ -343,7 +343,7 @@ extension Platform {
       disambiguator = index[truncated, default: [:]].count
       index[truncated, default: [:]][identifier] = disambiguator
     }
-    return truncated.appending(contentsOf: String(disambiguator, radix: 10))
+    return truncated + String(disambiguator, radix: 10)
   }
 
   static func sanitize(stringLiteral: UnicodeText) -> String {
@@ -359,7 +359,7 @@ extension Platform {
     let insert = String(repeating: indent, count: indentation)
     return source
       .components(separatedBy: "\n")
-      .map({ "\(insert)\($0.contents)" })
+      .map({ "\(insert)\($0)" })
       .joined(separator: "\n")
   }
 
@@ -505,7 +505,7 @@ extension Platform {
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
     if let identifier = action.identifier(for: self, referenceLookup: referenceLookup) {
       if let functionName = String(identifier).prefix(upTo: "(") {
-        return String(functionName.contents)
+        return String(functionName)
       } else {
         return String(identifier)
       }
@@ -539,7 +539,7 @@ extension Platform {
   static func nativeDeclarationIsInitializer(declaration: UnicodeText) -> Bool {
     let parsableDeclaration = String(declaration)
     if let initializer = initializerSuffix,
-       (parsableDeclaration.prefix(upTo: " ")?.contents ?? parsableDeclaration[...]).hasSuffix(String(initializer)) {
+       (parsableDeclaration.prefix(upTo: " ") ?? parsableDeclaration[...]).hasSuffix(String(initializer)) {
       return true
     }
     return false
@@ -554,7 +554,7 @@ extension Platform {
   static func nativeDeclarationIsStaticMember(declaration: UnicodeText) -> Bool {
     if let memberInfix = staticMemberInfix {
       let nameString = String(declaration)
-      let upToFirstArgument = nameString.prefix(upTo: "(")?.contents ?? nameString[...]
+      let upToFirstArgument = nameString.prefix(upTo: "(") ?? nameString[...]
       if upToFirstArgument.contains(String(memberInfix)) {
         return true
       }
@@ -760,7 +760,7 @@ extension Platform {
     var members: [String] = []
     var handledActionDeclarations: Set<String> = []
     for module in modulesToSearchForMembers {
-      let referenceLookup = externalReferenceLookup.appending(module.referenceDictionary)
+      let referenceLookup = externalReferenceLookup + [module.referenceDictionary]
       var typeNameCache: [TypeReference: String] = [:]
       for action in module.referenceDictionary.allActions(
         filter: { action in
@@ -1196,7 +1196,7 @@ extension Platform {
       if let implementation = getImplementation(parameterType, referenceLookup) {
         let wrapped = apply(nativeReferenceCountingAction: implementation, around: parameter, referenceLookup: referenceLookup)
         if delayUntilCleanUp {
-          cleanUpCode.prepend(contentsOf: statement(expression: wrapped).appending(contentsOf: "\n"))
+          cleanUpCode.prepend(contentsOf: statement(expression: wrapped) + "\n")
         } else {
           parameter = wrapped
         }
@@ -1255,13 +1255,14 @@ extension Platform {
       contentsOf: source(
         for: actionLiteral.implementation.statements,
         context: context,
-        localLookup: localLookup.appending(
-          actionLiteral.parameterDictionary(
-            rearrangedParameters: reference.rearrangedParameters,
-            explicitSignature: reference.explicitResultType!,
-            referenceLookup: referenceLookup
-          )
-        ),
+        localLookup: localLookup
+          + [
+            actionLiteral.parameterDictionary(
+              rearrangedParameters: reference.rearrangedParameters,
+              explicitSignature: reference.explicitResultType!,
+              referenceLookup: referenceLookup
+            )
+          ],
         coverageRegionCounter: &coverageRegionCounter,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -1790,7 +1791,7 @@ extension Platform {
                   to: actionArgument,
                   expectedPassedActionParameters: resolveExpectedParameterOrder(for: usedParameters[argumentIndex].executeAction),
                   context: context,
-                  localLookup: localLookup.appending(local),
+                  localLookup: localLookup + [local],
                   referenceLookup: referenceLookup,
                   isNativeArgument: true,
                   contextCoverageIdentifier: contextCoverageIdentifier,
@@ -1869,7 +1870,7 @@ extension Platform {
                   contentsOf: source(
                     for: statements.statements,
                     context: context,
-                    localLookup: localLookup.appending(local),
+                    localLookup: localLookup + [local],
                     coverageRegionCounter: &coverageRegionCounter,
                     coverageIndex: coverageIndex,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -1890,7 +1891,7 @@ extension Platform {
                 _ = local.add(action: new)
               }
               if !newActions.isEmpty {
-                local.resolveTypeIdentifiers(externalLookup: referenceLookup.appending(contentsOf: localLookup))
+                local.resolveTypeIdentifiers(externalLookup: referenceLookup + localLookup)
               }
             } else {
               fatalError()
@@ -1940,7 +1941,7 @@ extension Platform {
               to: action,
               expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
               context: context,
-              localLookup: localLookup.appending(locals),
+              localLookup: localLookup + [locals],
               referenceLookup: referenceLookup,
               isNativeArgument: false,
               contextCoverageIdentifier: contextCoverageIdentifier,
@@ -1969,7 +1970,7 @@ extension Platform {
               to: action,
               expectedPassedActionParameters: resolveExpectedParameterOrder(for: parameter.executeAction),
               context: context,
-              localLookup: localLookup.appending(locals),
+              localLookup: localLookup + [locals],
               referenceLookup: referenceLookup,
               isNativeArgument: false,
               contextCoverageIdentifier: contextCoverageIdentifier,
@@ -2004,7 +2005,7 @@ extension Platform {
           var source: [String] = source(
             for: flow.statements,
             context: context,
-            localLookup: localLookup.appending(locals),
+            localLookup: localLookup + [locals],
             coverageRegionCounter: &coverageRegionCounter,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -2025,7 +2026,7 @@ extension Platform {
             indentationLevel: 0,
             statements: flow.statements[...]
           ) {
-            source.prepend(coverage)
+            source = [coverage] + source
           }
           newInliningArguments[parameter.names.identifier()] = (
             argument: source.joined(separator: "\n"),
@@ -2196,7 +2197,7 @@ extension Platform {
           let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
           if infersConstructors {
             argumentsArray = referenceLookup.lookupThing(action.returnValue!.key)!.parts.map { part in
-              let index = parameters.firstIndex(where: { $0.names.overlaps(part.names) })!
+              let index = parameters.firstIndex(where: { !$0.names.intersection(part.names).isEmpty })!
               return argumentsArray[index]
             }
           }
@@ -2745,7 +2746,7 @@ extension Platform {
             normalizeNextNestedLiteral: false,
             mode: mode,
             captures: &captures
-          ).appending(contentsOf: closingParenthesis)
+          ) + closingParenthesis
         )
       )
       if !extractedCoverageRegistrations.isEmpty {
@@ -2764,7 +2765,7 @@ extension Platform {
       }
       for reference in referenceList.reversed() {
         if let unpack = unpackReference(to: reference) {
-          entry.append(unpack.prepending("\n"))
+          entry.append("\n" + unpack)
         }
       }
       if !referenceList.isEmpty || !cleanUpCode.isEmpty {
@@ -2785,8 +2786,8 @@ extension Platform {
       entry.append(contentsOf: deadEnd())
     }
     let presentIndent = String(repeating: indent, count: indentationLevel)
-    entry.unicodeScalars.replaceMatches(for: "\n".unicodeScalars.literal(), with: "\n\(presentIndent)".unicodeScalars)
-    return entry.prepending(contentsOf: presentIndent).components(separatedBy: "\n")
+    entry = entry.replacingOccurrences(of: "\n", with: "\n\(presentIndent)")
+    return (presentIndent + entry).components(separatedBy: "\n")
   }
 
   static func name(of parameter: ParameterIntermediate) -> String {
@@ -2898,8 +2899,8 @@ extension Platform {
       let result = source(
         for: entry,
         context: context,
-        localLookup: localLookup.appending(locals),
-        referenceLookup: referenceLookup.appending(locals),
+        localLookup: localLookup + [locals],
+        referenceLookup: referenceLookup + [locals],
         contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
         coverageRegionCounter: &coverageRegionCounter,
         coverageIndex: coverageIndex,
@@ -3054,9 +3055,8 @@ extension Platform {
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
-        referenceLookup: externalReferenceLookup.appending(
-          action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)
-        ),
+        referenceLookup: externalReferenceLookup
+          + [action.parameterReferenceDictionary(externalLookup: externalReferenceLookup)],
         inliningLevel: 0,
         inliningArguments: [:],
         mode: mode,
@@ -3265,7 +3265,7 @@ extension Platform {
 
   static func coverageRegions(for module: ModuleIntermediate, moduleWideImports: [ReferenceDictionary]) -> Set<UnicodeText> {
     let moduleReferenceLookup = module.referenceDictionary
-    let allLookup = moduleWideImports.appending(moduleReferenceLookup)
+    let allLookup = moduleWideImports + [moduleReferenceLookup]
     let actionRegions: [UnicodeText] = moduleReferenceLookup.allActions()
       .lazy.filter({ $0.deservesTesting })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
@@ -3328,7 +3328,7 @@ extension Platform {
     modulesToSearchForMembers: [ModuleIntermediate]
   ) -> String {
     var result: [String] = []
-    let moduleReferenceLookup = moduleWideImports.appending(module.referenceDictionary)
+    let moduleReferenceLookup = moduleWideImports + [module.referenceDictionary]
     let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
       if let declaration = self.declaration(
@@ -3363,7 +3363,7 @@ extension Platform {
   ) -> String {
     var result: [String] = []
     let moduleReferenceLookup = module.referenceDictionary
-    let referenceLookup = moduleWideImports.appending(moduleReferenceLookup)
+    let referenceLookup = moduleWideImports + [moduleReferenceLookup]
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
       for action in allActions where !action.isFlow {
@@ -3598,13 +3598,13 @@ extension Platform {
           moduleWideImports: builtSayingModule.map({ [$0] }) ?? []) }
       )
     if let saying = sayingModule {
-      builtModules.prepend(
+      builtModules = [
         try saying.build(
           mode: mode,
           entryPoints: &entryPoints,
           moduleWideImports: []
         )
-      )
+      ] + builtModules
     }
 
     var source: [String] = [

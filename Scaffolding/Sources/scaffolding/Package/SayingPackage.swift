@@ -39,7 +39,13 @@ struct Package {
 
   func files() throws -> [URL] {
     return try FileManager.default.deepFileEnumeration(in: location)
-      .lazy.filter({ !Package.ignoredDirectories.contains($0.path(relativeTo: location).truncated(before: "/")) })
+      .lazy.filter({ url in
+        var path = url.path(relativeTo: location)
+        if let slash = path.firstIndex(of: "/") {
+          path.removeSubrange(slash...)
+        }
+        return !Package.ignoredDirectories.contains(path)
+      })
       .lazy.filter({ !Package.ignoredFiles.contains($0.lastPathComponent) })
       .sorted(by: { $0.path < $1.path })
   }

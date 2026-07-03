@@ -88,7 +88,7 @@ extension ActionPrototype {
         labels.append(
           contentsOf: parameterList.components(separatedBy: "()").dropLast()
             .map({ component in
-              var label = component.contents
+              var label = component
               if label.first == " " {
                 label.removeFirst()
               }
@@ -111,14 +111,12 @@ extension ActionPrototype {
         documentation.documentation,
         namespace: namespace
           .appending(names)
-          .appending(
-            contentsOf: parameters.ordered(for: names.identifier())
+          + parameters.ordered(for: names.identifier())
               .map({ parameter in
                 return [
                   parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
                 ] as Set<UnicodeText>
-              })
-          ),
+              }),
         inheritedVisibility: access
       ) {
       case .failure(let nested):

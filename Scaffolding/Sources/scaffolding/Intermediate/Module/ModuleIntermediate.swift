@@ -131,7 +131,7 @@ extension ModuleIntermediate {
     errors: inout [ReferenceError]
   ) {
     let identifier = use.ability
-    guard let ability = externalLookup.appending(referenceDictionary)
+    guard let ability = (externalLookup + [referenceDictionary])
       .lookupAbility(identifier: identifier) else {
       errors.append(.noSuchAbility(name: identifier, reference: use.declaration.use))
       return
@@ -270,7 +270,7 @@ extension ModuleIntermediate {
   ) {
     let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
     referenceDictionary.resolveTypes(parentContexts: parentContexts)
-    let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
+    let externalAndModuleLookup = parentContexts + [referenceDictionary]
     for index in tests.indices {
       tests[index].statements.resolveTypes(
         context: nil,
@@ -324,7 +324,7 @@ extension ModuleIntermediate {
   ) throws {
     var errors: [ReferenceError] = []
     let parentContexts = moduleWideImports.map({ $0.referenceDictionary })
-    let externalAndModuleLookup = parentContexts.appending(referenceDictionary)
+    let externalAndModuleLookup = parentContexts + [referenceDictionary]
 
     validateTransitiveAbilityRequirements(
       externalAndModuleLookup: externalAndModuleLookup,

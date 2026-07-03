@@ -51,7 +51,7 @@ extension Cache {
         continue
       }
       for ignored in ignoredDirectories {
-        if relativePath.hasPrefix(ignored) {
+        if relativePath.starts(with: ignored) {
           continue eachFile
         }
       }

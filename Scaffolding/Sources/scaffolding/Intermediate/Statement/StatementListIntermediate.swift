@@ -33,7 +33,7 @@ extension StatementListIntermediate {
     for index in statements.indices {
       statements[index].resolveTypes(
         context: context,
-        referenceLookup: referenceLookup.appending(locals),
+        referenceLookup: referenceLookup + [locals],
         finalReturnValue: finalReturnValue
       )
       let newActions = statements[index].localActions()
@@ -55,7 +55,7 @@ extension StatementListIntermediate {
     var local = ReferenceDictionary(scope: .local)
     for statement in statements {
       statement.validateReferences(
-        context: context.appending(local),
+        context: context + [local],
         testContext: testContext,
         allowTestOnly: allowTestOnly,
         errors: &errors

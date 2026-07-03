@@ -5,6 +5,28 @@ extension String {
   init(_ text: UnicodeText) {
     self.init(String.UnicodeScalarView(text))
   }
+
+  init(_ text: UnicodeText.SubSequence) {
+    self.init(String.UnicodeScalarView(text))
+  }
+
+  func prefix(upTo searchTerm: String) -> String.SubSequence? {
+    guard let index = indices.first(where: { self[$0...].starts(with: searchTerm) }) else {
+      return nil
+    }
+    return self[..<index]
+  }
+
+  func dropping(through searchTerm: String) -> String.SubSequence {
+    guard let index = indices.first(where: { self[$0...].starts(with: searchTerm) }) else {
+      return self[...]
+    }
+    return self[index...].dropFirst(searchTerm.count)
+  }
+
+  mutating func prepend(contentsOf prependix: String) {
+    self = prependix + self
+  }
 }
 
 func compute(_ compute: () -> String, cachingIn cache: inout String?) -> String {

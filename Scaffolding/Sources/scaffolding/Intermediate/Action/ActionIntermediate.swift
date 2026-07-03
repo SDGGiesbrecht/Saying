@@ -86,8 +86,8 @@ extension ActionIntermediate {
       resolvedReturnValue = self.returnValue
     }
     return [identifier]
-      .appending(contentsOf: resolvedParameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() }))
-      .appending(contentsOf: resolvedReturnValue.unresolvedGloballyUniqueIdentifierComponents())
+      + resolvedParameters.lazy.flatMap({ $0.unresolvedGloballyUniqueIdentifierComponents() })
+      + resolvedReturnValue.unresolvedGloballyUniqueIdentifierComponents()
   }
 
   func resolve(
@@ -897,9 +897,10 @@ extension ActionIntermediate {
         referenceLookup: referenceLookup,
         errors: &errors
       )
-      for parameterReference in native.indirectRequirements.compactMap({ $0.parameters })
-        .appending(contentsOf: native.requiredDeclarations.compactMap({ $0.parameters }))
-        .joined() {
+      for parameterReference in (
+        native.indirectRequirements.compactMap({ $0.parameters })
+          + native.requiredDeclarations.compactMap({ $0.parameters })
+      ).joined() {
         if let typeInstead = parameterReference.resolvedType {
           typeInstead.validateReferences(
             requiredAccess: access,
@@ -915,7 +916,7 @@ extension ActionIntermediate {
         }
       }
     }
-    let externalAndParameters = referenceLookup.appending(self.parameterReferenceDictionary(externalLookup: referenceLookup))
+    let externalAndParameters = referenceLookup + [self.parameterReferenceDictionary(externalLookup: referenceLookup)]
     implementation?.validateReferences(
       context: externalAndParameters,
       testContext: nil,
@@ -927,7 +928,7 @@ extension ActionIntermediate {
       let type = referenceLookup.lookupThing(created.key) {
       var expected = type.parts
       for parameter in parameters.ordered(for: names.identifier()) {
-        if let found = expected.firstIndex(where: { $0.names.overlaps(parameter.names) }) {
+        if let found = expected.firstIndex(where: { !$0.names.intersection(parameter.names).isEmpty }) {
           expected.remove(at: found)
         } else {
           errors.append(.noSuchPart(name: parameter.names, creationAction: self.declaration!))
@@ -1273,11 +1274,11 @@ extension ActionIntermediate {
     var disambiguatorParameters: [Int] = []
     if !platform.permitsOverloads {
       while let typePrefix = String(name).prefix(upTo: " "),
-        typePrefix.contents.unicodeScalars
+        typePrefix.unicodeScalars
           .allSatisfy({ $0.isASCII && $0.properties.numericType == .decimal }),
-        let parsedNumber = Int(String(typePrefix.contents)) {
+        let parsedNumber = Int(String(typePrefix)) {
           disambiguatorParameters.append(parsedNumber)
-          name.removeFirst(typePrefix.contents.count)
+          name.removeFirst(typePrefix.count)
           name.removeFirst()
       }
     }
@@ -1301,7 +1302,7 @@ extension ActionIntermediate {
         parameterType = parameters[zeroBased].type
       }
       let type = platform.source(for: parameterType, referenceLookup: referenceLookup)
-      functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_".unicodeScalars)
+      functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_")
     }
     if let initializerSuffix = platform.initializerSuffix,
       String(functionName).hasSuffix(String(initializerSuffix)) {
@@ -1342,26 +1343,25 @@ extension ActionIntermediate {
       let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup) else {
       return nil
     }
-    let components = String(identifier).components(separatedBy: ":")
+    let components: [String] = String(identifier).components(separatedBy: ":")
     var parameters = self.parameters.ordered(for: name)
     var result: UnicodeText = ""
     if components.count == parameters.count {
       let selfType = parameters.removeFirst()
-      result.prepend(contentsOf: Swift.source(for: selfType.type, referenceLookup: referenceLookup).unicodeScalars)
+      result.prepend(contentsOf: UnicodeText(Swift.source(for: selfType.type, referenceLookup: referenceLookup)))
       result.append(".")
     }
     for index in parameters.indices {
       if index != parameters.startIndex {
         result.append(contentsOf: ", ")
       }
-      result.append(contentsOf: components[index].contents.unicodeScalars)
+      result.append(contentsOf: components[index].unicodeScalars)
       result.append(contentsOf: ": ".unicodeScalars)
       result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).unicodeScalars)
     }
-    result.append(contentsOf: components.last!.contents.unicodeScalars)
+    result.append(contentsOf: components.last!.unicodeScalars)
     if result.starts(with: "init(".unicodeScalars) {
-      result.prepend(contentsOf: ".".unicodeScalars)
-      result.prepend(contentsOf: Swift.source(for: returnValue!, referenceLookup: referenceLookup).unicodeScalars)
+      result = "\(Swift.source(for: returnValue!, referenceLookup: referenceLookup)).\(result)"
     }
     return result
   }

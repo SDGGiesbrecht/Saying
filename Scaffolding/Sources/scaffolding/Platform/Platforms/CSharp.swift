@@ -124,7 +124,9 @@ enum CSharp: Platform {
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
-    digits.unicodeScalars.fill(to: 8, with: "0", from: .start)
+    while digits.unicodeScalars.count < 8 {
+      digits = "0\(digits)"
+    }
     return "\u{5C}U\(digits)"
   }
 
@@ -141,7 +143,7 @@ enum CSharp: Platform {
     if byte.unicodeScalars.count == 2 {
       return "0x\(byte)"
     } else {
-      return "0b_\(byte.replacingMatches(for: " ", with: "_"))"
+      return "0b_\(byte.replacingOccurrences(of: " ", with: "_"))"
     }
   }
   static func literal(unicodeScalarNumericalValue: String) -> String {

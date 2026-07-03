@@ -175,7 +175,7 @@ enum Swift: Platform {
     if byte.unicodeScalars.count == 2 {
       return "0x\(byte)"
     } else {
-      return "0b\(byte.replacingMatches(for: " ", with: "_"))"
+      return "0b\(byte.replacingOccurrences(of: " ", with: "_"))"
     }
   }
   static func literal(unicodeScalarNumericalValue: String) -> String {
@@ -255,8 +255,8 @@ enum Swift: Platform {
   static func repair(compoundNativeType: String) -> String {
     if compoundNativeType.contains("].") {
       return compoundNativeType
-        .replacingMatches(for: "[", with: "Array<")
-        .replacingMatches(for: "].", with: ">.")
+        .replacingOccurrences(of: "[", with: "Array<")
+        .replacingOccurrences(of: "].", with: ">.")
     } else {
       return compoundNativeType
     }
@@ -297,8 +297,8 @@ enum Swift: Platform {
     var extraIndent = ""
     var result: [String] = []
     if typeName.contains(".") {
-      let namespace = String(typeName.prefix(upTo: ".")!.contents)
-      typeName = typeName.dropping(through: ".")
+      let namespace = String(typeName.prefix(upTo: ".")!)
+      typeName = String(typeName.dropping(through: "."))
       extraIndent = indent
       result.append("extension \(namespace) {")
     }
@@ -319,7 +319,7 @@ enum Swift: Platform {
     result.append("\(extraIndent)\(indent)}")
     for member in otherMembers {
       result.append("")
-      result.append("\(extraIndent)\(indent)\(member.replacingMatches(for: "\n", with: "\n\(extraIndent)\(indent)"))")
+      result.append("\(extraIndent)\(indent)\(member.replacingOccurrences(of: "\n", with: "\n\(extraIndent)\(indent)"))")
     }
     result.append(contentsOf: [
       "\(extraIndent)}"
@@ -353,7 +353,7 @@ enum Swift: Platform {
     }
     for member in otherMembers {
       result.append("")
-      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
+      result.append("\(indent)\(member.replacingOccurrences(of: "\n", with: "\n\(indent)"))")
     }
     result.append(contentsOf: [
       "}"

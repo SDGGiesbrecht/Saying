@@ -86,7 +86,7 @@ ability (clients)
    ]
    (
     English: (list: list) with (appendix: insertion) appended
-    Swift: (self: [list]).appending contentsOf (newElements: [appendix])
+    Swift: + (lhs: [list]) (rhs: [appendix])
    )
    list
    {
@@ -218,7 +218,7 @@ extension
    ]
    (
     English: (list: list) with (appendix: insertion) appended according to default list insertion
-    Swift: (self: [list]).appendingAccordingToDefaultListInsertion contentsOf (newElements: [appendix])
+    Swift: plusAccordingToDefaultListInsertion (lhs: [list]) (rhs: [appendix])
    )
    list
    {
