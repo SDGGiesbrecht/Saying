@@ -33,8 +33,6 @@ extension UnicodeText: ExpressibleByStringLiteral {
   }
 }
 
-extension UnicodeText: Hashable {}
-
 extension UnicodeText: RangeReplaceableCollection {
 
   init() {
