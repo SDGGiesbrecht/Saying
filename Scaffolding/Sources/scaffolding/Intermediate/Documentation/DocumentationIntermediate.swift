@@ -95,9 +95,9 @@ extension Optional where Wrapped == DocumentationIntermediate {
       return base
     }
     return DocumentationIntermediate(
-      paragraphs: base.paragraphs.appending(contentsOf: child.paragraphs),
-      parameters: base.parameters.appending(contentsOf: child.parameters),
-      tests: base.tests.appending(contentsOf: child.tests),
+      paragraphs: base.paragraphs + child.paragraphs,
+      parameters: base.parameters + child.parameters,
+      tests: base.tests + child.tests,
       declaration: nil
     )
   }
@@ -116,7 +116,7 @@ extension DocumentationIntermediate {
     for paragraph in paragraphs {
       for languageEntry in paragraph.paragraphs.text {
         for span in languageEntry.text.spans {
-          for segment in [span.first].appending(contentsOf: span.continuations) {
+          for segment in [span.first] + span.continuations {
             switch segment {
             case .identifierCharacters, .openingParenthesis, .closingParenthesis, .openingQuestionMark, .closingQuestionMark, .rightToLeftQuestionMark, .greekQuestionMark, .openingExclamationMark, .closingExclamationMark:
               break

@@ -184,7 +184,7 @@ extension ActionUse {
         }
         guesses = guesses.flatMap({ preceding in
           return narrowed.map({ guess in
-            return preceding.appending(guess)
+            return preceding + [guess]
           })
         })
       }
@@ -245,7 +245,7 @@ extension ActionUse {
       }
       arguments[index].resolveTypes(
         context: context,
-        referenceLookup: referenceLookup.appending(local),
+        referenceLookup: referenceLookup + [local],
         specifiedReturnValue: explicitArgumentReturnValue,
         finalReturnValue: finalReturnValue
       )
@@ -257,7 +257,7 @@ extension ActionUse {
         local.resolveTypeIdentifiers(externalLookup: referenceLookup)
       }
     }
-    let referenceLookupWithFlowLocals = referenceLookup.appending(local)
+    let referenceLookupWithFlowLocals = referenceLookup + [local]
     switch specifiedReturnValue {
     case .some(.some(let value)):
       resolvedResultType = value
@@ -314,7 +314,7 @@ extension ActionUse {
     var local = ReferenceDictionary(scope: .local)
     for argument in arguments {
       argument.validateReferences(
-        context: context.appending(local),
+        context: context + [local],
         testContext: testContext,
         allowTestOnly: allowTestOnly,
         errors: &errors
@@ -481,11 +481,11 @@ extension ActionUse {
       }
       result.append(
         contentsOf: actionLiteral.implementation.requiredIdentifiers(
-          context: context.appending(actionLiteral.parameterDictionary(
+          context: context + [actionLiteral.parameterDictionary(
             rearrangedParameters: rearrangedParameters,
             explicitSignature: explicitResultType!,
             referenceLookup: context
-          ))
+          )]
         )
       )
     }

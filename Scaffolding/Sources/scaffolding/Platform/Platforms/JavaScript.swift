@@ -100,7 +100,7 @@ enum JavaScript: Platform {
     if byte.unicodeScalars.count == 2 {
       return "0x\(byte)"
     } else {
-      return "0b\(byte.replacingMatches(for: " ", with: ""))"
+      return "0b\(byte.replacingOccurrences(of: " ", with: ""))"
     }
   }
   static func literal(unicodeScalarNumericalValue: String) -> String {

@@ -252,9 +252,9 @@ extension Thing {
   func validateReferences(referenceLookup: [ReferenceDictionary], errors: inout [ReferenceError]) {
     let testContext = TestContext.inherited(visibility: access, isTestOnly: testOnlyAccess)
     for native in allNativeImplementations() {
-      for parameterReference in [native.parameters]
-        .appending(contentsOf: native.indirectRequirements.compactMap({ $0.parameters }))
-        .appending(contentsOf: native.requiredDeclarations.compactMap({ $0.parameters }))
+      for parameterReference in ([native.parameters]
+        + native.indirectRequirements.compactMap({ $0.parameters })
+        + native.requiredDeclarations.compactMap({ $0.parameters }))
         .joined() {
         if let typeInstead = parameterReference.resolvedType {
           typeInstead.validateReferences(

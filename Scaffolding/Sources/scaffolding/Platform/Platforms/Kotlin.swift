@@ -87,7 +87,9 @@ enum Kotlin: Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     return character.utf16.map({ code in
       var digits = String(code, radix: 16, uppercase: true)
-      digits.unicodeScalars.fill(to: 4, with: "0", from: .start)
+      while digits.unicodeScalars.count < 4 {
+        digits = "0\(digits)"
+      }
       return "\u{5C}u\(digits)"
     }).joined()
   }
@@ -116,7 +118,7 @@ enum Kotlin: Platform {
         needsWraparound = true
       }
     } else {
-      base = "0b\(byte.replacingMatches(for: " ", with: "_"))"
+      base = "0b\(byte.replacingOccurrences(of: " ", with: "_"))"
       if byte.unicodeScalars.first == "1" {
         needsWraparound = true
       }
@@ -251,7 +253,7 @@ enum Kotlin: Platform {
     ]
     for member in otherMembers {
       result.append("")
-      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
+      result.append("\(indent)\(member.replacingOccurrences(of: "\n", with: "\n\(indent)"))")
     }
     result.append(contentsOf: [
       "}",
@@ -283,7 +285,7 @@ enum Kotlin: Platform {
     }
     for member in otherMembers {
       result.append("")
-      result.append("\(indent)\(member.replacingMatches(for: "\n", with: "\n\(indent)"))")
+      result.append("\(indent)\(member.replacingOccurrences(of: "\n", with: "\n\(indent)"))")
     }
     result.append(contentsOf: [
       "}"

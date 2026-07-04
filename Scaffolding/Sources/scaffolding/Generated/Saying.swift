@@ -171,6 +171,14 @@ struct UnicodeText {
     return self.scalars.distance(from: start, to: end)
   }
 
+  mutating func prependAccordingToDefaultListInsertion(contentsOf newElements: UnicodeText) {
+    self.replaceSubrange(self.startIndex ..< self.startIndex, with: newElements)
+  }
+
+  mutating func prepend(contentsOf newElements: UnicodeText) {
+    self.prependAccordingToDefaultListInsertion(contentsOf: newElements)
+  }
+
   func primaryMatch(beginningAt beginning: String.UnicodeScalarView.Index, in haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
     return primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_0029_0020in_0020_0028_0029_0020according_0020to_0020use_0020as_0020literal_0020pattern_003AUnicodeText_003AUnicode_0020scalar_0020boundary_003A_0028_003Aslice_0020of_0020_0028_0029_003AUnicodeText_003A_0029_003A_0028_003Aoptional_0020_0028_0029_003A_0028_003Aslice_0020of_0020_0028_0029_003AUnicodeText_003A_0029_003A_0029(self, beginning, haystack)
   }

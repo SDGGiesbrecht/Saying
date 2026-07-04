@@ -95,6 +95,7 @@ import Foundation
         "UnicodeText.init(_: UnicodeText)",
         "==(_: UnicodeText, _: UnicodeText)",
         "UnicodeText.hash(into: Hasher)",
+        "UnicodeText.prepend(contentsOf: UnicodeText)",
         "[UnicodeText].joined()",
         "[UnicodeText].joined(separator: UnicodeText)",
         "UnicodeText.replace(_: UnicodeText, with: UnicodeText)",

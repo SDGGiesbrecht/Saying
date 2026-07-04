@@ -125,10 +125,14 @@ enum C: Platform {
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
     var digits = String(character.value, radix: 16, uppercase: true)
     if character.value < 0xA0 {
-      digits.unicodeScalars.fill(to: 2, with: "0", from: .start)
+      while digits.unicodeScalars.count < 2 {
+        digits = "0\(digits)"
+      }
       return "\u{5C}x\(digits)"
     } else {
-      digits.unicodeScalars.fill(to: 8, with: "0", from: .start)
+      while digits.unicodeScalars.count < 8 {
+        digits = "0\(digits)"
+      }
       return "\u{5C}U\(digits)"
     }
   }
@@ -146,7 +150,7 @@ enum C: Platform {
     if byte.unicodeScalars.count == 2 {
       return "0x\(byte)"
     } else {
-      return "0b\(byte.replacingMatches(for: " ", with: ""))"
+      return "0b\(byte.replacingOccurrences(of: " ", with: ""))"
     }
   }
   static func literal(unicodeScalarNumericalValue: String) -> String {
@@ -311,7 +315,7 @@ enum C: Platform {
           accessModifier: nil,
           coverageRegistration: nil,
           implementation: componentHolds.map({"\(indent)\($0);"})
-            .appending("\(indent)return target;"),
+            + ["\(indent)return target;"],
           parentType: nil,
           isStatic: false,
           isMutating: false,

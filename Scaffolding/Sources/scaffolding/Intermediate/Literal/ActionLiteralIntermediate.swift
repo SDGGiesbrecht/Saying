@@ -11,7 +11,7 @@ extension ActionLiteralIntermediate {
   ) {
     implementation.resolveTypes(
       context: context,
-      referenceLookup: referenceLookup.appending(parameters),
+      referenceLookup: referenceLookup + [parameters],
       finalReturnValue: returnType
     )
   }
@@ -24,7 +24,7 @@ extension ActionLiteralIntermediate {
     errors: inout [ReferenceError]
   ) {
     implementation.validateReferences(
-      context: context.appending(parameters),
+      context: context + [parameters],
       testContext: testContext,
       allowTestOnly: allowTestOnly,
       errors: &errors

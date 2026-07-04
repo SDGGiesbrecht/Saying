@@ -239,7 +239,7 @@ extension ReferenceDictionary {
       return []
     }
     let mappedSignature = signature.isEmpty ? [] : order(
-      signature.map({ $0.key.resolving(fromReferenceLookup: parentContexts.appending(self)) }),
+      signature.map({ $0.key.resolving(fromReferenceLookup: parentContexts + [self]) }),
       for: mappedIdentifier.reordering
     )
     let returnOverloads: [() -> [TypeReference?: ActionIntermediate]]
@@ -254,7 +254,7 @@ extension ReferenceDictionary {
     for set in returnOverloads.lazy.map({ $0() }) {
       switch specifiedReturnValue {
       case .some(.some(let value)):
-        let mappedReturn = value.key.resolving(fromReferenceLookup: parentContexts.appending(self))
+        let mappedReturn = value.key.resolving(fromReferenceLookup: parentContexts + [self])
         if let result = set[mappedReturn] {
           return [result]
         }
@@ -333,7 +333,7 @@ extension Array where Element == ReferenceDictionary {
         identifier,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue,
-        parentContexts: externalLookup.appending(contentsOf: self[..<index]),
+        parentContexts: externalLookup + self[..<index],
         reportAllForErrorAnalysis: reportAllForErrorAnalysis
       )
     }
@@ -350,7 +350,7 @@ extension Array where Element == ReferenceDictionary {
         identifier,
         signature: signature,
         specifiedReturnValue: specifiedReturnValue,
-        parentContexts: externalLookup.appending(contentsOf: self[..<index]),
+        parentContexts: externalLookup + self[..<index],
         reportAllForErrorAnalysis: false
       ) {
         return found
@@ -436,7 +436,7 @@ extension ReferenceDictionary {
     var newThings: [UnicodeText: [[TypeReference]: Thing]] = [:]
     for (thingName, group) in things {
       for (signature, thing) in group {
-        let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup.appending(self)) })
+        let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup + [self]) })
         newThings[thingName, default: [:]][resolvedSignature] = thing
       }
     }
@@ -445,9 +445,9 @@ extension ReferenceDictionary {
     var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
-        let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup.appending(self)) })
+        let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup + [self]) })
         for (overload, action) in returnOverloads {
-          let resolvedReturn = overload.flatMap({ $0.resolving(fromReferenceLookup: externalLookup.appending(self)) })
+          let resolvedReturn = overload.flatMap({ $0.resolving(fromReferenceLookup: externalLookup + [self]) })
           newActions[actionName, default: [:]][resolvedSignature, default: [:]][resolvedReturn] = action
         }
       }
@@ -459,7 +459,7 @@ extension ReferenceDictionary {
     while performOnePassResolvingSpecializedAccess(externalLookup: externalLookup) {}
   }
   mutating func performOnePassResolvingSpecializedAccess(externalLookup: [ReferenceDictionary]) -> Bool {
-    let allLookup = externalLookup.appending(self)
+    let allLookup = externalLookup + [self]
     var changedSomething = false
     for (thingName, group) in things {
       for (signature, thing) in group {
@@ -514,7 +514,7 @@ extension ReferenceDictionary {
           var modified = action
           modified.implementation?.resolveTypes(
             context: action,
-            referenceLookup: parentContexts.appending(self),
+            referenceLookup: parentContexts + [self],
             finalReturnValue: action.returnValue
           )
           newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
@@ -528,7 +528,7 @@ extension ReferenceDictionary {
     moduleWideImports: [ModuleIntermediate],
     errors: inout [ReferenceError]
   ) {
-    let referenceLookup = moduleWideImports.map({ $0.referenceDictionary }).appending(self)
+    let referenceLookup = moduleWideImports.map({ $0.referenceDictionary }) + [self]
     for thing in allThings() {
       thing.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
@@ -552,7 +552,7 @@ extension ReferenceDictionary {
   private mutating func performOnePassResolvingNestedReferenceCounting(
     externalLookup: [ReferenceDictionary]
   ) -> Bool {
-    let allLookup = externalLookup.appending(self)
+    let allLookup = externalLookup + [self]
     var changedSomething = false
     for (thingName, group) in things {
       thingIteration: for (signature, thing) in group {
@@ -595,7 +595,7 @@ extension ReferenceDictionary {
   func applyingTestCoverageTracking(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
     var new = self
     for action in allActions() {
-      let wrapped = action.wrappedToTrackCoverage(referenceLookup: externalLookup.appending(self))
+      let wrapped = action.wrappedToTrackCoverage(referenceLookup: externalLookup + [self])
       _ = new.add(action: wrapped)
     }
     new.resolveTypeIdentifiers(externalLookup: externalLookup)
@@ -608,7 +608,7 @@ extension ReferenceDictionary {
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
     externalReferenceLookup: [ReferenceDictionary]
   ) {
-    let referenceLookup = externalReferenceLookup.appending(self)
+    let referenceLookup = externalReferenceLookup + [self]
     var optimized = ReferenceDictionary(scope: self.scope)
     optimized.languages = self.languages // For temporary simplicity; not output anyway.
     var found: Set<UnicodeText> = []

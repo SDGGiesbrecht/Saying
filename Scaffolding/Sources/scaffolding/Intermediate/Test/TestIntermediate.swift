@@ -69,7 +69,7 @@ extension TestIntermediate {
     specializationVisibility: AccessIntermediate
   ) -> TestIntermediate {
     return TestIntermediate(
-      location: location.appending(contentsOf: specializationNamespace),
+      location: location + specializationNamespace,
       isHidden: isHidden,
       inheritedVisibility: min(self.inheritedVisibility, specializationVisibility),
       statements: statements.specializing(typeLookup: typeLookup)
