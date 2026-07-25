@@ -12,6 +12,9 @@ thing (clients)
  }
 
 action (unit)
+ [
+  test {ignore (scalars of (extended grapheme clusters of (example: Unicode scalars)))}
+ ]
  (
   English: scalars of (clusters: extended grapheme clusters)
  )
