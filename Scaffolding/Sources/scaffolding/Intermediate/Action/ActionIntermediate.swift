@@ -1301,7 +1301,12 @@ extension ActionIntermediate {
       } else {
         parameterType = parameters[zeroBased].type
       }
-      let type = platform.source(for: parameterType, referenceLookup: referenceLookup)
+      var emptyIdentifierIndex: [String: [String: Int]] = [:]
+      let type = platform.source(
+        for: parameterType,
+        referenceLookup: referenceLookup,
+        identifierIndex: &emptyIdentifierIndex
+      )
       functionName.prepend(contentsOf: "\(P.identifierPrefix(for: type))_")
     }
     if let initializerSuffix = platform.initializerSuffix,
@@ -1346,9 +1351,18 @@ extension ActionIntermediate {
     let components: [String] = String(identifier).components(separatedBy: ":")
     var parameters = self.parameters.ordered(for: name)
     var result: UnicodeText = ""
+    var emptyIdentifierIndex: [String: [String: Int]] = [:]
     if components.count == parameters.count {
       let selfType = parameters.removeFirst()
-      result.prepend(contentsOf: UnicodeText(Swift.source(for: selfType.type, referenceLookup: referenceLookup)))
+      result.prepend(
+        contentsOf: UnicodeText(
+          Swift.source(
+            for: selfType.type,
+            referenceLookup: referenceLookup,
+            identifierIndex: &emptyIdentifierIndex
+          )
+        )
+      )
       result.append(".")
     }
     for index in parameters.indices {
@@ -1357,11 +1371,17 @@ extension ActionIntermediate {
       }
       result.append(contentsOf: components[index].unicodeScalars)
       result.append(contentsOf: ": ".unicodeScalars)
-      result.append(contentsOf: Swift.source(for: parameters[index].type, referenceLookup: referenceLookup).unicodeScalars)
+      result.append(
+        contentsOf: Swift.source(
+          for: parameters[index].type,
+          referenceLookup: referenceLookup,
+          identifierIndex: &emptyIdentifierIndex
+        ).unicodeScalars
+      )
     }
     result.append(contentsOf: components.last!.unicodeScalars)
     if result.starts(with: "init(".unicodeScalars) {
-      result = "\(Swift.source(for: returnValue!, referenceLookup: referenceLookup)).\(result)"
+      result = "\(Swift.source(for: returnValue!, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)).\(result)"
     }
     return result
   }
@@ -1391,9 +1411,14 @@ extension ActionIntermediate {
         }
       }
       for indirectRequirement in native.indirectRequirements {
+        var emptyIdentifierIndex: [String: [String: Int]] = [:]
         result.append(
           UnicodeText(
-            platform.source(for: indirectRequirement, referenceLookup: moduleAndExternalReferenceLookup)
+            platform.source(
+              for: indirectRequirement,
+              referenceLookup: moduleAndExternalReferenceLookup,
+              identifierIndex: &emptyIdentifierIndex
+            )
           )
         )
       }

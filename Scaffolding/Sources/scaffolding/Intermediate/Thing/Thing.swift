@@ -402,10 +402,15 @@ extension Thing {
         declaration.removeFirst(2)
       }
       let parameter = parameters.removeFirst()
+      var emptyIdentifierIndex: [String: [String: Int]] = [:]
       name.append(
         contentsOf: UnicodeText(
           platform.identifierPrefix(
-            for: platform.source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+            for: platform.source(
+              for: parameter.resolvedType!,
+              referenceLookup: referenceLookup,
+              identifierIndex: &emptyIdentifierIndex
+            )
           )
         )
       )
@@ -439,11 +444,16 @@ extension Thing {
         )
       }
     }
+    var emptyIdentifierIndex: [String: [String: Int]] = [:]
     if let native = platform.nativeType(of: self) {
       for indirectRequirement in native.indirectRequirements {
         result.append(
           UnicodeText(
-            platform.source(for: indirectRequirement, referenceLookup: moduleAndExternalReferenceLookup)
+            platform.source(
+              for: indirectRequirement,
+              referenceLookup: moduleAndExternalReferenceLookup,
+              identifierIndex: &emptyIdentifierIndex
+            )
           )
         )
       }

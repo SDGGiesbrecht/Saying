@@ -305,6 +305,7 @@ enum C: Platform {
     result.append(contentsOf: [
       "} \(name);"
     ])
+    var emptyIdentifierIndex: [String: [String: Int]] = [:]
     if synthesizeReferenceCounting {
       result.append(contentsOf: [
         "",
@@ -350,7 +351,7 @@ enum C: Platform {
           accessModifier: nil,
           coverageRegistration: nil,
           implementation: [
-            "\(indent)return \(apply(nativeReferenceCountingAction: synthesizedHold(on: name)!, around: "target", referenceLookup: []));"
+            "\(indent)return \(apply(nativeReferenceCountingAction: synthesizedHold(on: name)!, around: "target", referenceLookup: [], identifierIndex: &emptyIdentifierIndex));"
           ],
           parentType: nil,
           isStatic: false,
