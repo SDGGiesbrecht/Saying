@@ -253,13 +253,32 @@ enum Swift: Platform {
     return nil
   }
   static func repair(compoundNativeType: String) -> String {
-    if compoundNativeType.contains("].") {
-      return compoundNativeType
-        .replacingOccurrences(of: "[", with: "Array<")
-        .replacingOccurrences(of: "].", with: ">.")
-    } else {
-      return compoundNativeType
+    var result = compoundNativeType
+    while result.contains("].") {
+      var array = Array(result.unicodeScalars)
+      if var cursor = array.indices.first(where: { array[$0...].starts(with: "].".unicodeScalars) }) {
+        array.remove(at: cursor)
+        array.insert(">", at: cursor)
+        var depth = 0
+        while cursor != array.startIndex {
+          array.formIndex(before: &cursor)
+          if array[cursor] == "]" {
+            depth += 1
+          } else if array[cursor] == "[" {
+            if depth == 0 {
+              array.remove(at: cursor)
+              array.insert(contentsOf: "Array<".unicodeScalars, at: cursor)
+            } else {
+              depth -= 1
+            }
+          }
+        }
+      } else {
+        break
+      }
+      result = String(String.UnicodeScalarView(array))
     }
+    return result
   }
   static func actionType(parameters: String, returnValue: String) -> String {
     return "(\(parameters)) -> \(returnValue)"

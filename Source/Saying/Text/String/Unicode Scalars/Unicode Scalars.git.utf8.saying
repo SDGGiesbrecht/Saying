@@ -1324,6 +1324,25 @@ action (file)
   ← Unicode scalars of (convert ((converted range) in ((8‐bit encoded) of (scalars))) into list) skipping validity check
  }
 
+action (file)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if most efficient, convert (from (beginning of (scalars)) to (end of (scalars))) in (scalars) into scalars by extended grapheme clusters)
+  }
+ ]
+ (
+  English: if most efficient, convert (range: range of (Unicode scalar boundary)) in (scalars: Unicode scalars) into scalars by extended grapheme clusters
+ )
+ Unicode scalars
+ C: “” scalars “”
+ C♯: “” scalars “”
+ JavaScript: “” scalars “”
+ Kotlin: “” scalars “”
+ {
+  ← scalars of (if possible, extended grapheme clusters of (platform optimized slice at (range) in (scalars)))
+ }
+
 use (clients)
  insertion from (slice of (Unicode scalars)) into (Unicode scalars) as list of (Unicode scalar) indexed by (Unicode scalar index) separated by (Unicode scalar boundary)
  {
@@ -1359,11 +1378,10 @@ use (clients)
     English: convert (other: slice of (Unicode scalars)) into list
    )
    Unicode scalars
-   Swift: “String.UnicodeScalarView(” other “)”
    {
     let (• bounds: range of (Unicode scalar boundary)) be ((bounds) of (other))
     let (• whole: Unicode scalars) be ((whole) of (other))
-    ← if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (whole) into scalars by bounds) into scalars by 8‐bit encoded
+    ← if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (whole) into scalars by bounds) into scalars by 8‐bit encoded) into scalars by extended grapheme clusters
    }
 
   action (clients)

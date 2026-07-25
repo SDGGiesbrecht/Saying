@@ -1,0 +1,45 @@
+extension
+ slicing (list) as list of (element) indexed by (index) separated by (boundary)
+ {
+  thing (unit)
+   (
+    English: platform optimized slice of (list)
+   )
+   Swift: “” list “.SubSequence” [
+     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
+     “” list “.startIndex”
+     “” list “.endIndex”
+     “” list “.subscript(¤(5F): ” boundary “)”
+     “” list “.indices”
+     “” list “.isEmpty”
+     “” list “.count”
+     “” list “.distance(from: ” boundary “, to: ” boundary “)”
+     “” list “.index(after: ” boundary “)”
+     “” list “.formIndex(after: ” boundary “)”
+    ] {
+     “extension ” list “: Collection {}”
+     “extension ” boundary “: Comparable {}”
+    }
+   {
+    part (file/nowhere)
+     (
+      English: whole
+     )
+     list
+
+    part (file/nowhere)
+     (
+      English: bounds
+     )
+     range of (boundary)
+   }
+
+  action (unit)
+   (
+    English: platform optimized slice at (bounds: range of (boundary)) in (whole: list)
+   )
+   platform optimized slice of (list)
+   Swift: “” whole “[” bounds “]”
+   create
+ }
