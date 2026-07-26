@@ -1,0 +1,57 @@
+thing (clients)
+ (
+  English: extended grapheme clusters
+ )
+ Swift: “String”
+ {
+  part (file/nowhere)
+   (
+    English: scalars
+   )
+   Unicode scalars
+ }
+
+action (unit)
+ [
+  test {ignore (scalars of (extended grapheme clusters of (example: Unicode scalars)))}
+ ]
+ (
+  English: scalars of (clusters: extended grapheme clusters)
+ )
+ Unicode scalars
+ Swift: “” clusters “.unicodeScalars”
+ {
+  ← (scalars) of (clusters)
+ }
+
+action (clients)
+ [
+  test {ignore (extended grapheme clusters of (example: Unicode scalars))}
+ ]
+ (
+  English: extended grapheme clusters of (scalars: Unicode scalars)
+ )
+ extended grapheme clusters
+ Swift: “String(” scalars “)”
+ create
+
+use (clients)
+ general use of (extended grapheme clusters)
+ {
+ }
+
+action (unit)
+ [
+  test {
+   let (• scalars: Unicode scalars) be (example: Unicode scalars)
+   ignore (if possible, extended grapheme clusters of (platform optimized slice at (from (beginning of (scalars)) to (end of (scalars))) in (scalars)))
+  }
+ ]
+ (
+  English: if possible, extended grapheme clusters of (scalars: platform optimized slice of (Unicode scalars))
+ )
+ extended grapheme clusters
+ Swift: “String(” scalars “)”
+ {
+  ← extended grapheme clusters of (empty: Unicode scalars)
+ }

@@ -407,11 +407,19 @@ extension Platform {
     }
   }
 
-  static func nativeName(of thing: Thing, referenceLookup: [ReferenceDictionary]) -> String? {
+  static func nativeName(
+    of thing: Thing,
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
+  ) -> String? {
     if let identifier = thing.identifier(for: self, referenceLookup: referenceLookup) {
       return String(identifier)
     } else if let native = nativeType(of: thing) {
-      return source(for: native, referenceLookup: referenceLookup)
+      return source(
+        for: native,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
     } else {
       return nil
     }
@@ -437,14 +445,19 @@ extension Platform {
   }
   static func source(
     for native: NativeThingImplementationIntermediate,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String {
     var result = ""
     for index in native.textComponents.indices {
       result.append(contentsOf: String(native.textComponents[index]))
       if index != native.textComponents.indices.last {
         let parameter = native.parameters[index]
-        var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+        var type = source(
+          for: parameter.resolvedType!,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
         if parameter.sanitizedForIdentifier {
           type = identifierPrefix(for: type)
         }
@@ -453,16 +466,31 @@ extension Platform {
     }
     return repair(compoundNativeType: result)
   }
-  static func source(for type: ParsedTypeReference, referenceLookup: [ReferenceDictionary]) -> String {
+  static func source(
+    for type: ParsedTypeReference,
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
+  ) -> String {
     switch type {
     case .simple(let simple):
       let type = referenceLookup.lookupThing(simple.identifier, components: [])!
       if let native = nativeType(of: type) {
         return native.textComponents.lazy.map({ String($0) }).joined()
-      } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
+      } else if let native = nativeName(
+        of: type,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      ) {
         return native
       } else {
-        return sanitize(identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup), leading: true, entire: true)
+        return capLengthOf(
+          identifier: sanitize(
+            identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+            leading: true,
+            entire: true
+          ),
+          index: &identifierIndex
+        )
       }
     case .compound(identifier: let identifier, components: let components):
       let type = referenceLookup.lookupThing(
@@ -470,31 +498,61 @@ extension Platform {
         components: components.map({ $0.key })
       )!
       if let native = nativeType(of: type) {
-        return source(for: native, referenceLookup: referenceLookup)
-      } else if let native = nativeName(of: type, referenceLookup: referenceLookup) {
+        return source(
+          for: native,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      } else if let native = nativeName(
+        of: type,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      ) {
         return native
       } else {
-        return sanitize(
-          identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-          leading: true,
-          entire: true
+        return capLengthOf(
+          identifier: sanitize(
+            identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+            leading: true,
+            entire: true
+          ),
+          index: &identifierIndex
         )
       }
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
         parameters: actionParameters
-          .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
+          .map({ thing in
+            source(
+              for: thing,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            )
+          })
           .joined(separator: ", "),
         returnValue:
-          actionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
-            ?? emptyReturnTypeForActionType
+          actionReturn.map({ thing in
+            return source(
+              for: thing,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            )
+          }) ?? emptyReturnTypeForActionType
       )
     case .statements:
       fatalError("Statements have no platform type.")
     case .partReference(container: let container, identifier: _):
-      return source(for: container, referenceLookup: referenceLookup)
+      return source(
+        for: container,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
     case .enumerationCase(enumeration: let enumeration, identifier: _):
-      return source(for: enumeration, referenceLookup: referenceLookup)
+      return source(
+        for: enumeration,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
     }
   }
 
@@ -624,7 +682,8 @@ extension Platform {
     index: Int,
     simple: Bool,
     parentType: String,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String {
     let name = sanitize(
       identifier: enumerationCase.names.identifier(),
@@ -632,7 +691,13 @@ extension Platform {
       entire: true
     )
     let contents = enumerationCase.contents
-      .map({ source(for: $0, referenceLookup: referenceLookup) })
+      .map({ thing in
+        return source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      })
     return caseDeclaration(
       name: name,
       contents: contents,
@@ -644,13 +709,20 @@ extension Platform {
   static func storageDeclaration(
     for enumerationCase: CaseIntermediate,
     parentType: String,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String? {
     if !needsSeparateCaseStorage {
       return nil
     }
     guard let contents = enumerationCase.contents
-      .map({ source(for: $0, referenceLookup: referenceLookup) }) else {
+      .map({ thing in
+        return source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      }) else {
       return nil
     }
     let name = sanitize(
@@ -667,7 +739,8 @@ extension Platform {
   static func copyOld(
     thing: Thing,
     name: String,
-    externalReferenceLookup: [ReferenceDictionary]
+    externalReferenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String? {
     guard thing.requiresCleanUp == true,
       let copy = nativeType(of: thing)?.copy ?? synthesizedCopy(of: name) else {
@@ -676,13 +749,15 @@ extension Platform {
     return apply(
       nativeReferenceCountingAction: copy,
       around: "old",
-      referenceLookup: externalReferenceLookup
+      referenceLookup: externalReferenceLookup,
+      identifierIndex: &identifierIndex
     )
   }
   static func releaseOld(
     thing: Thing,
     name: String,
-    externalReferenceLookup: [ReferenceDictionary]
+    externalReferenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String? {
     guard thing.requiresCleanUp == true,
       let release = nativeType(of: thing)?.release ?? synthesizedRelease(of: name) else {
@@ -691,13 +766,15 @@ extension Platform {
     return apply(
       nativeReferenceCountingAction: release,
       around: "old",
-      referenceLookup: externalReferenceLookup
+      referenceLookup: externalReferenceLookup,
+      identifierIndex: &identifierIndex
     )
   }
   static func declaration(
     for thing: Thing,
     externalReferenceLookup: [ReferenceDictionary],
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     relocatedActions: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
     coverageIndex: [UnicodeText: Int],
@@ -715,17 +792,28 @@ extension Platform {
       if let required = source(
         for: native.requiredDeclarations,
         referenceLookup: externalReferenceLookup,
+        identifierIndex: &identifierIndex,
         alreadyHandled: &alreadyHandledNativeRequirements
       ) {
         result.append(required)
       }
       if thing.requiresCleanUp == true {
-        let name: String = source(for: native, referenceLookup: externalReferenceLookup)
-        if let copy = copyOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup),
+        let name: String = source(
+          for: native,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        )
+        if let copy = copyOld(
+          thing: thing,
+          name: name,
+          externalReferenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        ),
           let release = releaseOld(
             thing: thing,
             name: name,
-            externalReferenceLookup: externalReferenceLookup
+            externalReferenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
           ) {
           let detach = detachDeclaration(
             name: name,
@@ -751,10 +839,17 @@ extension Platform {
       return nil
     }
 
-    let name = nativeName(of: thing, referenceLookup: externalReferenceLookup) ?? sanitize(
-      identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
-      leading: true,
-      entire: true
+    let name = nativeName(
+      of: thing,
+      referenceLookup: externalReferenceLookup,
+      identifierIndex: &identifierIndex
+    ) ?? capLengthOf(
+      identifier: sanitize(
+        identifier: thing.globallyUniqueIdentifier(referenceLookup: externalReferenceLookup),
+        leading: true,
+        entire: true
+      ),
+      index: &identifierIndex
     )
     let access = accessModifier(for: thing.access, memberScope: false)
     var members: [String] = []
@@ -787,7 +882,13 @@ extension Platform {
               }
             }
             if name == compute(
-              { source(for: typeToCompare, referenceLookup: referenceLookup) },
+              {
+                return source(
+                  for: typeToCompare,
+                  referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex
+                )
+              },
               cachingIn: &typeNameCache[typeToCompare.key]
             ) {
               return true
@@ -801,6 +902,7 @@ extension Platform {
           for: action,
           externalReferenceLookup: referenceLookup,
           mode: mode,
+          identifierIndex: &identifierIndex,
           isAbsorbedMember: true,
           hasBeenRelocated: false,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
@@ -822,7 +924,11 @@ extension Platform {
           leading: true,
           entire: true
         )
-        let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
+        let type = source(
+          for: part.contents,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        )
         let access = accessModifier(for: part.readAccess, memberScope: true)
         return partDeclaration(
           name: name,
@@ -836,7 +942,11 @@ extension Platform {
       if let specified = specifiedConstructor {
         let orderIdentifier = nativeNameDeclaration(of: specified) ?? specified.names.identifier()
         constructorParameters = specified.parameters.ordered(for: orderIdentifier).map({ parameter in
-          return source(for: parameter, referenceLookup: externalReferenceLookup)
+          return source(
+            for: parameter,
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
+          )
         })
       } else {
         constructorParameters = thing.parts.map({ part in
@@ -845,7 +955,11 @@ extension Platform {
             leading: true,
             entire: true
           )
-          let type = source(for: part.contents, referenceLookup: externalReferenceLookup)
+          let type = source(
+            for: part.contents,
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
+          )
           return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
         })
       }
@@ -859,7 +973,11 @@ extension Platform {
         return constructorSetter(name: name)
       })
       let componentHolds: [String] = thing.parts.compactMap { part in
-        guard let hold = nativeHold(on: part.contents, referenceLookup: externalReferenceLookup) else {
+        guard let hold = nativeHold(
+          on: part.contents,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        ) else {
           return nil
         }
         let partName = sanitize(
@@ -870,11 +988,16 @@ extension Platform {
         return apply(
           nativeReferenceCountingAction: hold,
           around: "target.\(partName)",
-          referenceLookup: externalReferenceLookup
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
         )
       }
       let componentReleases: [String] = thing.parts.compactMap { part in
-        guard let release = nativeRelease(of: part.contents, referenceLookup: externalReferenceLookup) else {
+        guard let release = nativeRelease(
+          of: part.contents,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        ) else {
           return nil
         }
         let partName = sanitize(
@@ -885,7 +1008,8 @@ extension Platform {
         return apply(
           nativeReferenceCountingAction: release,
           around: "target.\(partName)",
-          referenceLookup: externalReferenceLookup
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
         )
       }
       constructedDeclaration = thingDeclaration(
@@ -900,8 +1024,18 @@ extension Platform {
         synthesizeReferenceCounting: thing.requiresCleanUp == true && thing.c?.release == nil,
         componentHolds: componentHolds,
         componentReleases: componentReleases,
-        copyOld: copyOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup),
-        releaseOld: releaseOld(thing: thing, name: name, externalReferenceLookup: externalReferenceLookup)
+        copyOld: copyOld(
+          thing: thing,
+          name: name,
+          externalReferenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        ),
+        releaseOld: releaseOld(
+          thing: thing,
+          name: name,
+          externalReferenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        )
       )
     } else {
       var cases: [String] = []
@@ -913,17 +1047,27 @@ extension Platform {
             index: cases.endIndex,
             simple: thing.isSimple,
             parentType: name,
-            referenceLookup: externalReferenceLookup
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
           )
         )
-        if let storage = storageDeclaration(for: enumerationCase, parentType: name, referenceLookup: externalReferenceLookup) {
+        if let storage = storageDeclaration(
+          for: enumerationCase,
+          parentType: name,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        ) {
           storageCases.append(storage)
         }
       }
       var componentReferenceCountingExhaustive = true
       let componentHolds: [(String, String)] = thing.cases.compactMap { enumerationCase in
         guard let contents = enumerationCase.contents,
-          let hold = nativeHold(on: contents, referenceLookup: externalReferenceLookup) else {
+          let hold = nativeHold(
+            on: contents,
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
+          ) else {
           componentReferenceCountingExhaustive = false
           return nil
         }
@@ -935,13 +1079,18 @@ extension Platform {
         let call = apply(
           nativeReferenceCountingAction: hold,
           around: "target.value.\(name)_case_\(caseName)",
-          referenceLookup: externalReferenceLookup
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
         )
         return (caseName, call)
       }
       let componentReleases: [(String, String)] = thing.cases.compactMap { enumerationCase in
         guard let contents = enumerationCase.contents,
-          let release = nativeRelease(of: contents, referenceLookup: externalReferenceLookup) else {
+          let release = nativeRelease(
+            of: contents,
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
+          ) else {
           return nil
         }
         let caseName = sanitize(
@@ -952,7 +1101,8 @@ extension Platform {
         let call = apply(
           nativeReferenceCountingAction: release,
           around: "target.value.\(name)_case_\(caseName)",
-          referenceLookup: externalReferenceLookup
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
         )
         return (caseName, call)
       }
@@ -961,7 +1111,8 @@ extension Platform {
           apply(
             nativeReferenceCountingAction: copy,
             around: "old",
-            referenceLookup: externalReferenceLookup
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
           )
         }
       let releaseOld: String? = (thing.requiresCleanUp == true ? synthesizedRelease(of: name) : nil)
@@ -969,7 +1120,8 @@ extension Platform {
           apply(
             nativeReferenceCountingAction: release,
             around: "old",
-            referenceLookup: externalReferenceLookup
+            referenceLookup: externalReferenceLookup,
+            identifierIndex: &identifierIndex
           )
         }
       constructedDeclaration = enumerationTypeDeclaration(
@@ -997,7 +1149,8 @@ extension Platform {
 
   static func nativeHold(
     on thing: ParsedTypeReference,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> NativeActionExpressionIntermediate? {
     guard let type = referenceLookup.lookupThing(thing.key) else {
       return nil
@@ -1005,7 +1158,13 @@ extension Platform {
     if let native = nativeType(of: type) {
       return native.hold
     } else if type.requiresCleanUp == true {
-      return synthesizedHold(on: source(for: thing, referenceLookup: referenceLookup))
+      return synthesizedHold(
+        on: source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      )
     } else {
       return nil
     }
@@ -1013,7 +1172,8 @@ extension Platform {
 
   static func nativeRelease(
     of thing: ParsedTypeReference,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> NativeActionExpressionIntermediate? {
     guard let type = referenceLookup.lookupThing(thing.key) else {
       return nil
@@ -1021,7 +1181,13 @@ extension Platform {
     if let native = nativeType(of: type) {
       return native.release
     } else if type.requiresCleanUp == true {
-      return synthesizedRelease(of: source(for: thing, referenceLookup: referenceLookup))
+      return synthesizedRelease(
+        of: source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      )
     } else {
       return nil
     }
@@ -1029,7 +1195,8 @@ extension Platform {
 
   static func nativeCopy(
     of thing: ParsedTypeReference,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> NativeActionExpressionIntermediate? {
     guard let type = referenceLookup.lookupThing(thing.key) else {
       return nil
@@ -1037,7 +1204,13 @@ extension Platform {
     if let native = nativeType(of: type) {
       return native.copy
     } else if type.requiresCleanUp == true {
-      return synthesizedCopy(of: source(for: thing, referenceLookup: referenceLookup))
+      return synthesizedCopy(
+        of: source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      )
     } else {
       return nil
     }
@@ -1045,13 +1218,20 @@ extension Platform {
 
   static func nativeDetachment(
     from thing: ParsedTypeReference,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> NativeActionExpressionIntermediate? {
     guard let type = referenceLookup.lookupThing(thing.key) else {
       return nil
     }
     if type.requiresCleanUp == true {
-      return synthesizedDetachment(from: source(for: thing, referenceLookup: referenceLookup))
+      return synthesizedDetachment(
+        from: source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      )
     } else {
       return nil
     }
@@ -1060,7 +1240,8 @@ extension Platform {
   static func apply(
     nativeReferenceCountingAction: NativeActionExpressionIntermediate,
     around wrappedExpression: String,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String {
     var accumulator: String = ""
     for index in nativeReferenceCountingAction.textComponents.indices {
@@ -1068,7 +1249,11 @@ extension Platform {
       if index != nativeReferenceCountingAction.textComponents.indices.last {
         let parameter = nativeReferenceCountingAction.parameters[index]
         if let type = parameter.typeInstead {
-          let typeSource = source(for: type, referenceLookup: referenceLookup)
+          let typeSource = source(
+            for: type,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
           if parameter.sanitizedForIdentifier {
             accumulator.append(contentsOf: identifierPrefix(for: typeSource))
           } else {
@@ -1132,6 +1317,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     captures: inout [Capture]?
   ) -> String {
     if let loading = literal.loadingAction(type: type) {
@@ -1159,6 +1345,7 @@ extension Platform {
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: type.names.contains(LiteralIntermediate.unicodeTextName),
         mode: mode,
+        identifierIndex: &identifierIndex,
         captures: &captures
       )
     } else if type.names.contains(LiteralIntermediate.unicodeScalarName) {
@@ -1186,15 +1373,25 @@ extension Platform {
     skipEntirelyIfIrrelevant: Bool = false,
     argument: ActionUse,
     referenceLookup: [ReferenceDictionary],
-    getImplementation: (ParsedTypeReference, [ReferenceDictionary]) -> NativeActionExpressionIntermediate?,
+    identifierIndex: inout [String: [String: Int]],
+    getImplementation: (
+      ParsedTypeReference,
+      [ReferenceDictionary],
+      inout [String: [String: Int]]
+    ) -> NativeActionExpressionIntermediate?,
     delayUntilCleanUp: Bool = false,
     cleanUpCode: inout String
   ) {
     if condition(details),
       let partiallyUnwrapped = argument.resolvedResultType,
       let parameterType = partiallyUnwrapped {
-      if let implementation = getImplementation(parameterType, referenceLookup) {
-        let wrapped = apply(nativeReferenceCountingAction: implementation, around: parameter, referenceLookup: referenceLookup)
+      if let implementation = getImplementation(parameterType, referenceLookup, &identifierIndex) {
+        let wrapped = apply(
+          nativeReferenceCountingAction: implementation,
+          around: parameter,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
         if delayUntilCleanUp {
           cleanUpCode.prepend(contentsOf: statement(expression: wrapped) + "\n")
         } else {
@@ -1217,6 +1414,7 @@ extension Platform {
     reference: ActionUse,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]],
     context: ActionIntermediate?,
     contextCoverageIdentifier: UnicodeText?,
     coverageRegionCounter: inout Int,
@@ -1230,14 +1428,26 @@ extension Platform {
     mode: CompilationMode
   ) -> String {
     guard case .action(let passedActionParameters, let passedActionReturn) = reference.resolvedResultType!! else { fatalError() }
-    let parameterTypes = passedActionParameters.map({ source(for: $0, referenceLookup: referenceLookup) })
+    let parameterTypes = passedActionParameters.map({ thing in
+      return source(
+        for: thing,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
+    })
     let parameterTypesList = parameterTypes.joined(separator: ", ")
     var parameterNames = reference.rearrangedParameters.map({ String($0) })
     var parameters = zip(parameterNames, parameterTypes)
       .map({ name, type in
         return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
       }).joined(separator: ", ")
-    let returnType = passedActionReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
+    let returnType = passedActionReturn.map({ thing in
+      return source(
+        for: thing,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
+    })
     var implementation: [String] = []
     if let coverage = flowCoverageRegistration(
         contextCoverageIdentifier: contextCoverageIdentifier,
@@ -1272,6 +1482,7 @@ extension Platform {
         inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,
         mode: mode,
+        identifierIndex: &identifierIndex,
         indentationLevel: 0,
         captures: &captures
       )
@@ -1358,6 +1569,7 @@ extension Platform {
     actionTypeReturn: ParsedTypeReference?,
     rearrangementList: [UnicodeText],
     referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]],
     lookupAction: () -> ActionIntermediate?,
     lookupActionOutputName: (ActionIntermediate?) -> UnicodeText?,
     lookupCallOrder: (ActionIntermediate?, UnicodeText?) -> [UnicodeText],
@@ -1365,11 +1577,11 @@ extension Platform {
     expectedPassedActionParameters: [ParameterIntermediate],
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
-    directPass: (inout Int, inout [String]) -> String,
-    wrappedNode: (inout Int, inout [String]) -> String
+    directPass: (inout Int, inout [String], inout [String: [String: Int]]) -> String,
+    wrappedNode: (inout Int, inout [String], inout [String: [String: Int]]) -> String
   ) -> String {
     if actionTypeParameters.count <= 1 {
-      return directPass(&anonymousCounter, &extractedAnonymousFunctions)
+      return directPass(&anonymousCounter, &extractedAnonymousFunctions, &identifierIndex)
     } else {
       if !rearrangementList.isEmpty {
         let action = lookupAction()
@@ -1380,23 +1592,33 @@ extension Platform {
         })
         let sorted = reordering.sorted()
         if reordering == sorted {
-          return directPass(&anonymousCounter, &extractedAnonymousFunctions)
+          return directPass(&anonymousCounter, &extractedAnonymousFunctions, &identifierIndex)
         } else {
           let fromParameterTypes = lookupCallParameterTypes(action, actionOutputName)
           let from = sorted.map({ index in
             return numberedParameter(
               position: index + 1,
-              type: source(for: fromParameterTypes[index], referenceLookup: referenceLookup)
+              type: source(
+                for: fromParameterTypes[index],
+                referenceLookup: referenceLookup,
+                identifierIndex: &identifierIndex
+              )
             )
           }).joined(separator: ", ")
           let to = reordering.map({ numberedParameter(position: $0 + 1, type: nil) }).joined(separator: ", ")
-          let returnType = actionTypeReturn.map({ source(for: $0, referenceLookup: referenceLookup) })
+          let returnType = actionTypeReturn.map({ thing in
+            return source(
+              for: thing,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            )
+          })
           if needsFunctionLiteralsExtracted {
             anonymousCounter += 1
             let wrapperName = "anonymous_\(anonymousCounter)"
             extractedAnonymousFunctions.append(
               wrap(
-                passedFunction: wrappedNode(&anonymousCounter, &extractedAnonymousFunctions),
+                passedFunction: wrappedNode(&anonymousCounter, &extractedAnonymousFunctions, &identifierIndex),
                 rearrangingParametersFrom: from,
                 to: to,
                 wrapperName: wrapperName,
@@ -1406,7 +1628,7 @@ extension Platform {
             return wrapperName
           } else {
             return wrap(
-              passedFunction: wrappedNode(&anonymousCounter, &extractedAnonymousFunctions),
+              passedFunction: wrappedNode(&anonymousCounter, &extractedAnonymousFunctions, &identifierIndex),
               rearrangingParametersFrom: from,
               to: to,
               wrapperName: nil,
@@ -1446,13 +1668,18 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     captures: inout [Capture]?
   ) -> String {
     if let literal = reference.literal {
       let resolvedReference = reference.resolvedResultType!!
       if !isArgumentExtraction,
         !extractedArgumentsForReferenceCounting.isEmpty,
-        nativeRelease(of: resolvedReference, referenceLookup: referenceLookup) != nil {
+        nativeRelease(
+          of: resolvedReference,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        ) != nil {
         return extractedArgumentsForReferenceCounting.removeFirst()
       }
       let type = referenceLookup.lookupThing(resolvedReference.key)!
@@ -1479,6 +1706,7 @@ extension Platform {
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
         mode: mode,
+        identifierIndex: &identifierIndex,
         captures: &captures
       )
     }
@@ -1489,6 +1717,7 @@ extension Platform {
         actionTypeReturn: assembledActionReturn,
         rearrangementList: reference.rearrangedParameters,
         referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex,
         lookupAction: { nil },
         lookupActionOutputName: { _ in nil },
         lookupCallOrder: { _, _ in reference.rearrangedParameters },
@@ -1496,12 +1725,13 @@ extension Platform {
         expectedPassedActionParameters: expectedPassedActionParameters!,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
-        directPass: { anonymousCounter, extractedAnonymousFunctions in
+        directPass: { anonymousCounter, extractedAnonymousFunctions, identifierIndex in
           return pass(
             actionLiteral: actionLiteral,
             reference: reference,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex,
             context: context,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
@@ -1515,12 +1745,13 @@ extension Platform {
             mode: mode
           )
         },
-        wrappedNode: { anonymousCounter, extractedAnonymousFunctions in
+        wrappedNode: { anonymousCounter, extractedAnonymousFunctions, identifierIndex in
           return pass(
             actionLiteral: actionLiteral,
             reference: reference,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex,
             context: context,
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
@@ -1567,7 +1798,11 @@ extension Platform {
         captures?.append(
           Capture(
             name: name,
-            type: source(for: reference.resolvedResultType!!,referenceLookup: referenceLookup),
+            type: source(
+              for: reference.resolvedResultType!!,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            ),
             isThroughParameter: false
           )
         )
@@ -1579,7 +1814,11 @@ extension Platform {
         captures?.append(
           Capture(
             name: parameterName,
-            type: source(for: reference.resolvedResultType!!,referenceLookup: referenceLookup),
+            type: source(
+              for: reference.resolvedResultType!!,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            ),
             isThroughParameter: parameter.passage == .through
           )
         )
@@ -1596,8 +1835,17 @@ extension Platform {
           returnValue = parameterName
         }
         if isDirectReturn,
-          let hold = nativeHold(on: parameter.type, referenceLookup: referenceLookup)  {
-          return apply(nativeReferenceCountingAction: hold, around: returnValue, referenceLookup: referenceLookup)
+          let hold = nativeHold(
+            on: parameter.type,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )  {
+          return apply(
+            nativeReferenceCountingAction: hold,
+            around: returnValue,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
         } else {
           return returnValue
         }
@@ -1625,6 +1873,7 @@ extension Platform {
           inliningArguments: [:],
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode,
+          identifierIndex: &identifierIndex,
           captures: &captures
         )
       }
@@ -1653,7 +1902,11 @@ extension Platform {
         if !extractedArgumentsForReferenceCounting.isEmpty,
            reference.passage != .through,
            let result = action.returnValue,
-           nativeRelease(of: result, referenceLookup: referenceLookup) != nil {
+           nativeRelease(
+            of: result,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+           ) != nil {
           return extractedArgumentsForReferenceCounting.removeFirst()
         }
         if !extractedArgumentsForReferenceUnpacking.isEmpty,
@@ -1684,6 +1937,7 @@ extension Platform {
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: normalizeNextNestedLiteral,
         mode: mode,
+        identifierIndex: &identifierIndex,
         captures: &captures
       )
       if mode == .testing,
@@ -1697,11 +1951,16 @@ extension Platform {
         !isDetachment,
         bareAction.isAccessor,
         let returnType = bareAction.returnValue,
-        let hold = nativeHold(on: returnType, referenceLookup: referenceLookup) {
+        let hold = nativeHold(
+          on: returnType,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        ) {
         return apply(
           nativeReferenceCountingAction: hold,
           around: basicCall,
-          referenceLookup: referenceLookup
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
         )
       } else {
         return basicCall
@@ -1731,6 +1990,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     captures: inout [Capture]?
   ) -> String {
     var didUseClashAvoidance = false
@@ -1752,9 +2012,17 @@ extension Platform {
           let parameter = nativeExpression.parameters[index]
           if let type = parameter.typeInstead {
             if parameter.hold {
-              nativeWrap = nativeHold(on: type, referenceLookup: referenceLookup)
+              nativeWrap = nativeHold(
+                on: type,
+                referenceLookup: referenceLookup,
+                identifierIndex: &identifierIndex
+              )
             } else {
-              let typeSource = source(for: type, referenceLookup: referenceLookup)
+              let typeSource = source(
+                for: type,
+                referenceLookup: referenceLookup,
+                identifierIndex: &identifierIndex
+              )
               if parameter.sanitizedForIdentifier {
                 accumulator.append(contentsOf: identifierPrefix(for: typeSource))
               } else {
@@ -1768,7 +2036,11 @@ extension Platform {
             case .enumerationCase(enumeration: let type, identifier: let identifier):
               let reference = caseReference(
                 name: sanitize(identifier: identifier, leading: true, entire: true),
-                type: source(for: type, referenceLookup: referenceLookup),
+                type: source(
+                  for: type,
+                  referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex
+                ),
                 simple: false,
                 ignoringValue: true
               )
@@ -1811,6 +2083,7 @@ extension Platform {
                   inliningArguments: inliningArguments,
                   normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                   mode: mode,
+                  identifierIndex: &identifierIndex,
                   captures: &captures
                 )
                 modify(
@@ -1819,6 +2092,7 @@ extension Platform {
                   condition: { $0.hold },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex,
                   getImplementation: nativeHold,
                   cleanUpCode: &cleanUpCode
                 )
@@ -1829,6 +2103,7 @@ extension Platform {
                   skipEntirelyIfIrrelevant: true,
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex,
                   getImplementation: nativeRelease,
                   cleanUpCode: &cleanUpCode
                 )
@@ -1838,6 +2113,7 @@ extension Platform {
                   condition: { $0.copy },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex,
                   getImplementation: nativeCopy,
                   cleanUpCode: &cleanUpCode
                 )
@@ -1847,6 +2123,7 @@ extension Platform {
                   condition: { $0.held },
                   argument: actionArgument,
                   referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex,
                   getImplementation: nativeRelease,
                   delayUntilCleanUp: true,
                   cleanUpCode: &cleanUpCode
@@ -1880,6 +2157,7 @@ extension Platform {
                     inliningLevel: inliningLevel,
                     inliningArguments: inliningArguments,
                     mode: mode,
+                    identifierIndex: &identifierIndex,
                     indentationLevel: 1,
                     captures: &captures
                   ).joined(separator: "\n")
@@ -1903,7 +2181,8 @@ extension Platform {
         accumulator = apply(
           nativeReferenceCountingAction: wrap,
           around: accumulator,
-          referenceLookup: referenceLookup
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
         )
       }
       if let before = beforeCleanUp {
@@ -1917,7 +2196,11 @@ extension Platform {
       if case .partReference = action.returnValue! {
         return name
       } else {
-        let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+        let type = source(
+          for: action.returnValue!,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
         return caseReference(
           name: name,
           type: type,
@@ -1961,6 +2244,7 @@ extension Platform {
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: normalizeNextNestedLiteral,
               mode: mode,
+              identifierIndex: &identifierIndex,
               captures: &captures
             ),
             stillNeedsDereferencingIfNativeArgument: context?.lookupParameter(action.actionName) != nil
@@ -1990,6 +2274,7 @@ extension Platform {
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: normalizeNextNestedLiteral,
               mode: mode,
+              identifierIndex: &identifierIndex,
               captures: &captures
             )
           )
@@ -2015,6 +2300,7 @@ extension Platform {
             inliningLevel: inliningLevel,
             inliningArguments: inliningArguments,
             mode: mode,
+            identifierIndex: &identifierIndex,
             indentationLevel: 0,
             captures: &captures
           )
@@ -2050,6 +2336,7 @@ extension Platform {
         inliningLevel: inliningLevel + 1,
         inliningArguments: newInliningArguments,
         mode: mode,
+        identifierIndex: &identifierIndex,
         indentationLevel: 0,
         captures: &captures
       ).joined(separator: "\n")
@@ -2068,6 +2355,7 @@ extension Platform {
           actionTypeReturn: returnedActionReturn,
           rearrangementList: reference.rearrangedParameters,
           referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex,
           lookupAction: {
             let bareIdentifier = bareAction.names.identifier()
             return referenceLookup.lookupAction(bareIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
@@ -2087,11 +2375,11 @@ extension Platform {
           expectedPassedActionParameters: expectedPassedActionParameters!,
           anonymousCounter: &anonymousCounter,
           extractedAnonymousFunctions: &extractedAnonymousFunctions,
-          directPass: { _, _ in
+          directPass: { _, _, _ in
             let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
             return "\(prefix)\(name)"
           },
-          wrappedNode: { _, _ in name }
+          wrappedNode: { _, _, _ in name }
         )
       } else {
         var argumentsArray: [String] = []
@@ -2130,6 +2418,7 @@ extension Platform {
                 inliningArguments: inliningArguments,
                 normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                 mode: mode,
+                identifierIndex: &identifierIndex,
                 captures: &captures
               )
               var reference = passReference(
@@ -2139,8 +2428,17 @@ extension Platform {
               )
               if !nestedCall.unicodeScalars.allSatisfy({ allowedIdentifierContinuationCharacters.contains($0) }),
                 let referenceType = actionArgument.resolvedResultType?.flatMap({ $0 }),
-                let detachmentAction = nativeDetachment(from: referenceType, referenceLookup: referenceLookup) {
-                reference = apply(nativeReferenceCountingAction: detachmentAction, around: reference, referenceLookup: referenceLookup)
+                let detachmentAction = nativeDetachment(
+                  from: referenceType,
+                  referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex
+                ) {
+                reference = apply(
+                  nativeReferenceCountingAction: detachmentAction,
+                  around: reference,
+                  referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex
+                )
               }
               argumentsArray.append(
                 parameterLabel + reference
@@ -2170,17 +2468,23 @@ extension Platform {
                 inliningArguments: inliningArguments,
                 normalizeNextNestedLiteral: normalizeNextNestedLiteral,
                 mode: mode,
+                identifierIndex: &identifierIndex,
                 captures: &captures
               )
               let wrappedCall: String
               if action.isCreation,
                 let partiallyUnwrapped = actionArgument.resolvedResultType,
                 let memberType: ParsedTypeReference = partiallyUnwrapped,
-                let hold = nativeHold(on: memberType, referenceLookup: referenceLookup) {
+                let hold = nativeHold(
+                  on: memberType,
+                  referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex
+                ) {
                 wrappedCall = apply(
                   nativeReferenceCountingAction: hold,
                   around: basicCall,
-                  referenceLookup: referenceLookup
+                  referenceLookup: referenceLookup,
+                  identifierIndex: &identifierIndex
                 )
               } else {
                 wrappedCall = basicCall
@@ -2194,7 +2498,11 @@ extension Platform {
           }
         }
         if action.isCreation {
-          let type = source(for: action.returnValue!, referenceLookup: referenceLookup)
+          let type = source(
+            for: action.returnValue!,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
           if infersConstructors {
             argumentsArray = referenceLookup.lookupThing(action.returnValue!.key)!.parts.map { part in
               let index = parameters.firstIndex(where: { !$0.names.intersection(part.names).isEmpty })!
@@ -2211,7 +2519,11 @@ extension Platform {
             var result: String = ""
             var modifiedName = name
             if nativeIsInitializer(action: action) {
-              modifiedName = source(for: action.returnValue!, referenceLookup: referenceLookup)
+              modifiedName = source(
+                for: action.returnValue!,
+                referenceLookup: referenceLookup,
+                identifierIndex: &identifierIndex
+              )
             } else if nativeIsStaticMember(action: action) {
               if let inference = staticMemberInferredType {
                 if modifiedName.unicodeScalars.starts(with: inference) {
@@ -2260,6 +2572,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     captures: inout [Capture]?
   ) -> ReferencePassingExtractions {
     var entries = ReferencePassingExtractions()
@@ -2292,6 +2605,7 @@ extension Platform {
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
+      identifierIndex: &identifierIndex,
       entries: &entries,
       captures: &captures
     )
@@ -2315,6 +2629,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     entries: inout ReferencePassingExtractions,
     captures: inout [Capture]?
   ) {
@@ -2343,6 +2658,7 @@ extension Platform {
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: normalizeNextNestedLiteral,
           mode: mode,
+          identifierIndex: &identifierIndex,
           entries: &entriesInThisBranch,
           captures: &captures
         )
@@ -2352,7 +2668,11 @@ extension Platform {
           let actualResult = result {
           clashAvoidanceCounter += 1
           let localName = "local\(clashAvoidanceCounter)"
-          let typeName = source(for: actualResult, referenceLookup: referenceLookup)
+          let typeName = source(
+            for: actualResult,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
           let call = self.call(
             to: action,
             expectedPassedActionParameters: nil,
@@ -2378,6 +2698,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
+            identifierIndex: &identifierIndex,
             captures: &captures
           )
           entriesInThisBranch.append(
@@ -2411,6 +2732,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     captures: inout [Capture]?
   ) -> ReferenceCountedReturns {
     var entries = ReferenceCountedReturns()
@@ -2432,6 +2754,7 @@ extension Platform {
       inliningArguments: inliningArguments,
       normalizeNextNestedLiteral: normalizeNextNestedLiteral,
       mode: mode,
+      identifierIndex: &identifierIndex,
       entries: &entries,
       captures: &captures
     )
@@ -2455,6 +2778,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     normalizeNextNestedLiteral: Bool,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     entries: inout ReferenceCountedReturns,
     captures: inout [Capture]?
   ) {
@@ -2507,6 +2831,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
+            identifierIndex: &identifierIndex,
             entries: &entriesInThisBranch,
             captures: &captures
           )
@@ -2514,10 +2839,18 @@ extension Platform {
 
         if let result = argument.resolvedResultType,
           let actualResult = result,
-          let release = nativeRelease(of: actualResult, referenceLookup: referenceLookup) {
+          let release = nativeRelease(
+            of: actualResult,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          ) {
           clashAvoidanceCounter += 1
           let localName = "local\(clashAvoidanceCounter)"
-          let typeName = source(for: actualResult, referenceLookup: referenceLookup)
+          let typeName = source(
+            for: actualResult,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
           let call = self.call(
             to: action,
             expectedPassedActionParameters: nil,
@@ -2543,12 +2876,14 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: normalizeNextNestedLiteral,
             mode: mode,
+            identifierIndex: &identifierIndex,
             captures: &captures
           )
           let releaseExpression = apply(
             nativeReferenceCountingAction: release,
             around: localName,
-            referenceLookup: referenceLookup
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
           )
           entriesInThisBranch.append(
             ReferenceCountedReturn(
@@ -2581,6 +2916,7 @@ extension Platform {
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     existingReferences: inout Set<String>,
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     indentationLevel: Int,
     captures: inout [Capture]?
   ) -> [String] {
@@ -2609,6 +2945,7 @@ extension Platform {
           inliningArguments: inliningArguments,
           normalizeNextNestedLiteral: false,
           mode: mode,
+          identifierIndex: &identifierIndex,
           captures: &captures
         )
         referenceList = statement.passedReferences(platform: self, referenceLookup: referenceLookup)
@@ -2643,6 +2980,7 @@ extension Platform {
               inliningArguments: inliningArguments,
               normalizeNextNestedLiteral: false,
               mode: mode,
+              identifierIndex: &identifierIndex,
               captures: &captures
             )
           })
@@ -2685,6 +3023,7 @@ extension Platform {
         inliningArguments: inliningArguments,
         normalizeNextNestedLiteral: false,
         mode: mode,
+        identifierIndex: &identifierIndex,
         captures: &captures
       )
       if !extractedForReferenceCounting.all.isEmpty {
@@ -2702,15 +3041,26 @@ extension Platform {
           entry.append(
             contentsOf: returnDelayStorage(
               type: storageType
-                .map({ source(for: $0, referenceLookup: referenceLookup) })
+                .map({ thing in
+                  return source(
+                    for: thing,
+                    referenceLookup: referenceLookup,
+                    identifierIndex: &identifierIndex
+                  )
+                })
             )
           )
           if let expectedType = storageType,
-            let hold = nativeHold(on: expectedType, referenceLookup: referenceLookup) {
+            let hold = nativeHold(
+              on: expectedType,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            ) {
             let call = apply(
               nativeReferenceCountingAction: hold,
               around: "",
-              referenceLookup: referenceLookup
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
             )
             entry.append(contentsOf: call.dropLast())
             closingParenthesis = String(call.last!)
@@ -2745,6 +3095,7 @@ extension Platform {
             inliningArguments: inliningArguments,
             normalizeNextNestedLiteral: false,
             mode: mode,
+            identifierIndex: &identifierIndex,
             captures: &captures
           ) + closingParenthesis
         )
@@ -2796,7 +3147,8 @@ extension Platform {
   }
   static func source(
     for parameter: ParameterIntermediate,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String {
     let name = self.name(of: parameter)
     if !isTyped {
@@ -2805,16 +3157,30 @@ extension Platform {
       switch parameter.type {
       case .simple, .compound:
         let label = nativeLabel(of: parameter, isCreation: false)
-        let typeSource = source(for: parameter.type, referenceLookup: referenceLookup)
+        let typeSource = source(
+          for: parameter.type,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
         return parameterDeclaration(label: label, name: name, type: typeSource, isThrough: parameter.passage == .through)
       case .action(parameters: let actionParameters, returnValue: let actionReturn):
         let label = nativeLabel(of: parameter, isCreation: false)
         let parameters = actionParameters
-          .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
+          .map({ thing in
+            return source(
+              for: thing,
+              referenceLookup: referenceLookup,
+              identifierIndex: &identifierIndex
+            )
+          })
           .joined(separator: ", ")
         let returnValue: String
         if let specified = actionReturn {
-          returnValue = source(for: specified, referenceLookup: referenceLookup)
+          returnValue = source(
+            for: specified,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
         } else {
           returnValue = emptyReturnTypeForActionType
         }
@@ -2836,7 +3202,8 @@ extension Platform {
 
   static func forwardDeclaration(
     for action: ActionIntermediate,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String? {
     if nativeImplementation(of: action) != nil
       || action.isMemberWrapper {
@@ -2856,12 +3223,22 @@ extension Platform {
     let parameters = action.parameters.ordered(
       for: nativeNameDeclaration(of: action) ?? action.names.identifier()
     )
-      .lazy.map({ source(for: $0, referenceLookup: referenceLookup) })
+      .map({ thing in
+        return source(
+          for: thing,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      })
       .joined(separator: ", ")
 
     let returnValue: String?
     if let specified = action.returnValue {
-      returnValue = source(for: specified, referenceLookup: referenceLookup)
+      returnValue = source(
+        for: specified,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
     } else {
       returnValue = emptyReturnType
     }
@@ -2888,6 +3265,7 @@ extension Platform {
     inliningLevel: Int,
     inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     indentationLevel: Int,
     captures: inout [Capture]?
   ) -> [String] {
@@ -2913,6 +3291,7 @@ extension Platform {
         inliningArguments: inliningArguments,
         existingReferences: &existingReferences,
         mode: mode,
+        identifierIndex: &identifierIndex,
         indentationLevel: indentationLevel,
         captures: &captures
       )
@@ -2941,6 +3320,7 @@ extension Platform {
     for action: ActionIntermediate,
     externalReferenceLookup: [ReferenceDictionary],
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     isAbsorbedMember: Bool,
     hasBeenRelocated: Bool,
     alreadyHandledNativeRequirements: inout Set<String>,
@@ -2957,6 +3337,7 @@ extension Platform {
         nativeRequirements = source(
           for: native.requiredDeclarations,
           referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex,
           alreadyHandled: &alreadyHandledNativeRequirements
         ).map { UniqueDeclaration(full: $0, uniquenessDefinition: $0) }
       }
@@ -2995,10 +3376,20 @@ extension Platform {
        !nativeIsStaticMember(action: action) {
       let first = parameterEntries.removeFirst()
       isMutating = first.passage == .through
-      parentType = source(for: first.type, referenceLookup: externalReferenceLookup)
+      parentType = source(
+        for: first.type,
+        referenceLookup: externalReferenceLookup,
+        identifierIndex: &identifierIndex
+      )
     }
     let parameters: String = parameterEntries
-      .lazy.map({ source(for: $0, referenceLookup: externalReferenceLookup) })
+      .map({ thing in
+        return source(
+          for: thing,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      })
       .joined(separator: ", ")
     let parameterNames = parameterEntries
       .lazy.map({ self.name(of: $0) })
@@ -3006,7 +3397,11 @@ extension Platform {
 
     let returnValue: String?
     if let specified = action.returnValue {
-      let resultType = source(for: specified, referenceLookup: externalReferenceLookup)
+      let resultType = source(
+        for: specified,
+        referenceLookup: externalReferenceLookup,
+        identifierIndex: &identifierIndex
+      )
       if isInitializer {
         parentType = resultType
         returnValue = nil
@@ -3060,6 +3455,7 @@ extension Platform {
         inliningLevel: 0,
         inliningArguments: [:],
         mode: mode,
+        identifierIndex: &identifierIndex,
         indentationLevel: 0,
         captures: &captures
       ),
@@ -3215,6 +3611,7 @@ extension Platform {
       inliningLevel: 0,
       inliningArguments: [:],
       mode: .testing,
+      identifierIndex: &identifierIndex,
       indentationLevel: 0,
       captures: &captures
     )
@@ -3280,14 +3677,19 @@ extension Platform {
 
   static func source(
     for requirement: NativeRequirementImplementationIntermediate,
-    referenceLookup: [ReferenceDictionary]
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
   ) -> String {
     var line = ""
     for index in requirement.textComponents.indices {
       line.append(contentsOf: String(requirement.textComponents[index]))
       if index != requirement.textComponents.indices.last {
         let parameter = requirement.parameters[index]
-        var type = source(for: parameter.resolvedType!, referenceLookup: referenceLookup)
+        var type = source(
+          for: parameter.resolvedType!,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
         if parameter.sanitizedForIdentifier {
           type = identifierPrefix(for: type)
         }
@@ -3299,11 +3701,16 @@ extension Platform {
   static func source(
     for nativeRequirements: [NativeRequirementImplementationIntermediate],
     referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]],
     alreadyHandled: inout Set<String>
   ) -> String? {
     var result: [String] = []
     for declaration in nativeRequirements {
-      let line = source(for: declaration, referenceLookup: referenceLookup)
+      let line = source(
+        for: declaration,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
       if alreadyHandled.insert(line).inserted,
         !isAlgorithmicallyPreexistingNativeRequirement(source: line) {
         result.append(line)
@@ -3320,6 +3727,7 @@ extension Platform {
     for module: ModuleIntermediate,
     moduleWideImports: [ReferenceDictionary],
     mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
     relocatedActions: inout Set<String>,
     alreadyHandledDeclarations: inout Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
@@ -3335,6 +3743,7 @@ extension Platform {
         for: thing,
         externalReferenceLookup: moduleReferenceLookup,
         mode: mode,
+        identifierIndex: &identifierIndex,
         relocatedActions: &relocatedActions,
         alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
         coverageIndex: coverageIndex,
@@ -3367,7 +3776,11 @@ extension Platform {
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
       for action in allActions where !action.isFlow {
-        if let declaration = forwardDeclaration(for: action, referenceLookup: referenceLookup) {
+        if let declaration = forwardDeclaration(
+          for: action,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        ) {
           result.appendSeparatorLine()
           result.append(declaration)
         }
@@ -3378,6 +3791,7 @@ extension Platform {
         for: action,
         externalReferenceLookup: referenceLookup,
         mode: mode,
+        identifierIndex: &identifierIndex,
         isAbsorbedMember: false,
         hasBeenRelocated: relocatedActions
           .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
@@ -3458,6 +3872,7 @@ extension Platform {
       result.append(contentsOf: registerCoverageAction)
     }
 
+    var identifierIndex: [String: [String: Int]] = [:]
     var relocatedActions: Set<String> = []
     for module in modules {
       result.appendSeparatorLine()
@@ -3466,6 +3881,7 @@ extension Platform {
           for: module,
           moduleWideImports: moduleWideImportDictionary,
           mode: mode,
+          identifierIndex: &identifierIndex,
           relocatedActions: &relocatedActions,
           alreadyHandledDeclarations: &alreadyHandledDeclarations,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
@@ -3481,7 +3897,6 @@ extension Platform {
       result.append(contentsOf: start)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
-    var identifierIndex: [String: [String: Int]] = [:]
     for module in modules {
       result.appendSeparatorLine()
       result.append(
