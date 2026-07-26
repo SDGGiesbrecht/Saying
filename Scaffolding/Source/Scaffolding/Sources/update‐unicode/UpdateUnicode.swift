@@ -15,6 +15,8 @@ import Foundation
     .deletingLastPathComponent()
     .deletingLastPathComponent()
     .deletingLastPathComponent()
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
   static let generatedDirectory = projectRoot
     .appendingPathComponent("Source")
     .appendingPathComponent("Saying")

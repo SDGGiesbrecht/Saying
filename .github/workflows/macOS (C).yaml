@@ -21,7 +21,7 @@ jobs:
       shell: bash
       run: |
         set -x
-        swift run --package-path Scaffolding scaffolding test‐c
+        swift run --package-path Scaffolding/Source/Scaffolding scaffolding test‐c
     - name: Check for warnings
       shell: bash
       run: |
