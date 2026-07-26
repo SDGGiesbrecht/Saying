@@ -14,7 +14,7 @@ jobs:
       with:
         run: |
           set -x
-          swift run --package-path Scaffolding/Scaffolding scaffolding prepare‐kotlin
+          swift run --package-path Scaffolding/Source/Scaffolding scaffolding prepare‐kotlin
     - name: Upload
       uses: actions/upload-artifact@v4
       with:

@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "scaffolding",
   dependencies: [
-    .package(path: "../../Source"),
+    .package(path: "../../../Source"),
   ],
   targets: [
     .executableTarget(
