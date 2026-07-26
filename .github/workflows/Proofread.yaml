@@ -14,13 +14,13 @@ jobs:
       with:
         run: |
           set -x
-          swift run --package-path Scaffolding scaffolding format
+          swift run --package-path Scaffolding/Scaffolding scaffolding format
     - name: Rescaffold
       uses: ./.github/actions/Scaffolding
       with:
         run: |
           set -x
-          swift run --package-path Scaffolding scaffolding rescaffold
+          swift run --package-path Scaffolding/Scaffolding scaffolding rescaffold
     - name: Check repository for changes
       shell: bash
       run: |

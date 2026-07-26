@@ -8,6 +8,7 @@ import Foundation
       .deletingLastPathComponent()
       .deletingLastPathComponent()
       .deletingLastPathComponent()
+      .deletingLastPathComponent()
     let package = Package(location: packageRoot)
 
     // Platforms:
@@ -81,6 +82,7 @@ import Foundation
   ) throws {
     let intermediate = package.productsDirectory.appendingPathComponent("Saying.swift")
     let file = packageRoot
+      .appendingPathComponent("Scaffolding")
       .appendingPathComponent("Scaffolding")
       .appendingPathComponent("Sources")
       .appendingPathComponent("scaffolding")

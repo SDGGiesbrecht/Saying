@@ -15,7 +15,7 @@ jobs:
       with:
         run: |
           set -x
-          swift run --package-path Scaffolding scaffolding build‐javascript
+          swift run --package-path Scaffolding/Scaffolding scaffolding build‐javascript
     - name: Test
       uses: ./.github/actions/Node
       with:
