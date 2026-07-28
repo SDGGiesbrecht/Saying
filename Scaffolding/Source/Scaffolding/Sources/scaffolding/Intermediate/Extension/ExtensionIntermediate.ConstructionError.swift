@@ -1,3 +1,5 @@
+import Saying
+
 extension ExtensionIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenThing(Thing.ConstructionError)

@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 enum Swift: Platform {
 
   static var directoryName: String {
@@ -185,14 +187,23 @@ enum Swift: Platform {
     return "$\(position - 1)"
   }
 
-  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
+  static func accessModifier(
+    for access: AccessIntermediate,
+    memberScope: Bool,
+    libraryAccessMode: LibraryAccessMode
+  ) -> String? {
     switch access {
     case .nowhere:
       return "private"
     case .file, .unit:
       return "fileprivate"
     case .clients:
-      return nil // internal
+      switch libraryAccessMode {
+      case .unit:
+        return nil // internal
+      case .clients:
+        return "public"
+      }
     }
   }
 

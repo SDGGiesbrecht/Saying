@@ -1,3 +1,5 @@
+import Saying
+
 struct ThingParameterIntermediate {
   var names: Set<UnicodeText>
   var resolvedType: ParsedTypeReference?

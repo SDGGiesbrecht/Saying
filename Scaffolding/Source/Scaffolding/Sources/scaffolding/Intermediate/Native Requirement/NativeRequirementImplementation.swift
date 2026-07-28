@@ -1,3 +1,5 @@
+import Saying
+
 struct NativeRequirementImplementationIntermediate {
   var textComponents: [UnicodeText]
   var parameters: [NativeThingImplementationParameter]

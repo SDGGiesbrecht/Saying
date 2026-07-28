@@ -1,3 +1,5 @@
+import Saying
+
 indirect enum ParsedTypeReference {
   case simple(SimpleTypeReference)
   case compound(identifier: ParsedUseSignature, components: [ParsedTypeReference])

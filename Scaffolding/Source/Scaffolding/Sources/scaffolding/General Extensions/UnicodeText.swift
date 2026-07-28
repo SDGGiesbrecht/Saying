@@ -1,6 +1,8 @@
+import Saying
+
 extension UnicodeText {
 
-  init<Scalars>(_ scalars: Scalars) where Scalars : Sequence, Scalars.Element == Unicode.Scalar {
+  public init<Scalars>(_ scalars: Scalars) where Scalars : Sequence, Scalars.Element == Unicode.Scalar {
     if let text = scalars as? UnicodeText {
       self.init(text)
     } else if let slice = scalars as? Slice<UnicodeText> {
@@ -19,7 +21,7 @@ extension UnicodeText {
 
 extension UnicodeText: CustomStringConvertible {
 
-  var description: String {
+  public var description: String {
     return String(self)
   }
 }
@@ -28,18 +30,18 @@ extension UnicodeText: ExpressibleByStringInterpolation {}
 
 extension UnicodeText: ExpressibleByStringLiteral {
 
-  init(stringLiteral value: String) {
+  public init(stringLiteral value: String) {
     self.init(value)
   }
 }
 
 extension UnicodeText: RangeReplaceableCollection {
 
-  init() {
+  public init() {
     self = ""
   }
 
-  mutating func replaceSubrange<C>(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: C)
+  public mutating func replaceSubrange<C>(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: C)
   where C : Collection, Unicode.Scalar == C.Element {
     replaceSubrange(subrange, with: UnicodeText(newElements))
   }

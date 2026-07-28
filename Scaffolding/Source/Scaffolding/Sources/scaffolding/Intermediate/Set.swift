@@ -1,3 +1,5 @@
+import Saying
+
 extension Set where Element == UnicodeText {
 
   func identifier() -> UnicodeText {

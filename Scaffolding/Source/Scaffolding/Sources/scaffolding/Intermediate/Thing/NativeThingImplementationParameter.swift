@@ -1,3 +1,5 @@
+import Saying
+
 struct NativeThingImplementationParameter {
   var name: UnicodeText
   var syntaxNode: ParsedUninterruptedIdentifier

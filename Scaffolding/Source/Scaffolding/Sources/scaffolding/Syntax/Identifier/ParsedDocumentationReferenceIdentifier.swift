@@ -1,3 +1,5 @@
+import Saying
+
 extension ParsedDocumentationReferenceIdentifier {
 
   func identifierText() -> UnicodeText {

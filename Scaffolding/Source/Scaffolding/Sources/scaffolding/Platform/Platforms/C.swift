@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 // Memory Management
 
 // Memory is managed by reference counting.
@@ -165,7 +167,11 @@ enum C: Platform {
     }
   }
 
-  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
+  static func accessModifier(
+    for access: AccessIntermediate,
+    memberScope: Bool,
+    libraryAccessMode: LibraryAccessMode
+  ) -> String? {
     return nil
   }
 

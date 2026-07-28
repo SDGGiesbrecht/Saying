@@ -1,3 +1,5 @@
+import Saying
+
 struct Thing {
   var names: Set<UnicodeText>
   var parameters: Interpolation<ThingParameterIntermediate>

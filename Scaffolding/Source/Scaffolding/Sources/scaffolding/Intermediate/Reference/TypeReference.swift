@@ -1,3 +1,5 @@
+import Saying
+
 indirect enum TypeReference: Hashable {
   case simple(UnicodeText)
   case compound(identifier: UnicodeText, components: [TypeReference])

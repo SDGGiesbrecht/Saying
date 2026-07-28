@@ -1,3 +1,5 @@
+import Saying
+
 struct CaseIntermediate {
   var names: Set<UnicodeText>
   var contents: ParsedTypeReference?

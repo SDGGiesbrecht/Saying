@@ -1,3 +1,5 @@
+import Saying
+
 struct NativeActionImplementationIntermediate {
   var expression: NativeActionExpressionIntermediate
   var requiredImports: [ImportIntermediate] = []

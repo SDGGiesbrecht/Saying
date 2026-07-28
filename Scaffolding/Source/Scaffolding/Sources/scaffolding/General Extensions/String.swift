@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 extension String {
 
   init(_ text: UnicodeText) {

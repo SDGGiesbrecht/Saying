@@ -1,3 +1,5 @@
+import Saying
+
 extension PartIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenDocumentation(LiteralIntermediate.ConstructionError)

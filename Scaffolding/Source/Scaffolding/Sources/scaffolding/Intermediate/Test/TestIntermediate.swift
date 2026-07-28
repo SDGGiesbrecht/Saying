@@ -1,3 +1,5 @@
+import Saying
+
 struct TestIntermediate {
   var location: [Set<UnicodeText>]
   var isHidden: Bool

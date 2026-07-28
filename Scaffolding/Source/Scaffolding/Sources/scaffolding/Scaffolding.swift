@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 @main struct Scaffolding {
   static func main() throws {
     let thisFile = URL(fileURLWithPath: #filePath)
@@ -84,15 +86,15 @@ import Foundation
     let intermediate = package.productsDirectory.appendingPathComponent("Saying.swift")
     let file = packageRoot
       .appendingPathComponent("Scaffolding")
-      .appendingPathComponent("Source")
-      .appendingPathComponent("Scaffolding")
-      .appendingPathComponent("Sources")
-      .appendingPathComponent("scaffolding")
       .appendingPathComponent("Generated")
+      .appendingPathComponent("Swift")
+      .appendingPathComponent("Saying")
+      .appendingPathComponent("Sources")
+      .appendingPathComponent("Saying")
       .appendingPathComponent("Saying.swift")
     try Swift.prepare(
       package: package,
-      mode: .release,
+      mode: .scaffolding,
       entryPoints: [
         "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
         "UnicodeText.init(_: String.UnicodeScalarView)",
@@ -173,7 +175,7 @@ import Foundation
     var appendix: [String] = [
       "",
       "extension SayingSourceSlice {",
-      "  init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
+      "  public init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
       "    self.init(origin, code)",
       "  }",
       "}",
@@ -210,7 +212,7 @@ import Foundation
       appendix.append(contentsOf: [
         "",
         "extension \(nodeType) {",
-        "  init(location: SayingSourceSlice) {",
+        "  public init(location: SayingSourceSlice) {",
         "    self.init(location)",
         "  }",
         "}",

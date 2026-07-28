@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 enum Kotlin: Platform {
 
   static var directoryName: String {
@@ -132,7 +134,11 @@ enum Kotlin: Platform {
     return "p\(position)"
   }
 
-  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
+  static func accessModifier(
+    for access: AccessIntermediate,
+    memberScope: Bool,
+    libraryAccessMode: LibraryAccessMode
+  ) -> String? {
     switch access {
     case .nowhere:
       return "private"
@@ -140,7 +146,12 @@ enum Kotlin: Platform {
       // Cannot be “private”, due to differences in meaning between classes and members. A “private” member can only be used within the same class, not in the rest of the file as required. Once members are elevated to “internal”, their signatures cannot reference “private” classes as required. Elevating classes to “internal” means everything is just “internal” anyway.
       return "internal"
     case .clients:
-      return "internal"
+      switch libraryAccessMode {
+      case .unit:
+        return "internal"
+      case .clients:
+        return nil // public
+      }
     }
   }
 

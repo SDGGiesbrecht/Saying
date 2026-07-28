@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 enum CSharp: Platform {
 
   static var directoryName: String {
@@ -153,16 +155,25 @@ enum CSharp: Platform {
     return "p\(position)"
   }
 
-  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
+  static func accessModifier(
+    for access: AccessIntermediate,
+    memberScope: Bool,
+    libraryAccessMode: LibraryAccessMode
+  ) -> String? {
     switch access {
     case .nowhere:
       return "private"
     case .file, .unit, .clients:
       // “file” is too new
-      if memberScope {
-        return "internal"
-      } else {
-        return nil // internal
+      switch libraryAccessMode {
+      case .unit:
+        if memberScope {
+          return "internal"
+        } else {
+          return nil // internal
+        }
+      case .clients:
+        return "public"
       }
     }
   }

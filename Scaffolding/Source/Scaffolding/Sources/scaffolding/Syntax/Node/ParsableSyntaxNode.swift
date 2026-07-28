@@ -1,3 +1,5 @@
+import Saying
+
 protocol ParsableSyntaxNode: ParsedSyntaxNode {
   associatedtype ParseError: DiagnosticError
   static func diagnosticParseNext(

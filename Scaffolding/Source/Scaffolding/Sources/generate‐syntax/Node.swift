@@ -14,7 +14,9 @@ struct Node {
   }
 
   static func source() -> String {
-    var result: [String] = []
+    var result: [String] = [
+      "import Saying",
+    ]
     result.append(contentsOf: nodes.lazy.map({ $0.source() }))
     result.append(contentsOf: [
       nodeKind(parsed: false),
