@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 extension GitStyleSayingSource {
 
   init(from url: URL) throws {

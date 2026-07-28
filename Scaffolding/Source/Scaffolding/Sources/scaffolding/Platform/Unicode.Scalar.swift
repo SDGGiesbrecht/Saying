@@ -1,3 +1,5 @@
+import Saying
+
 extension Unicode.Scalar {
 
   var isVulnerableToNormalization: Bool {

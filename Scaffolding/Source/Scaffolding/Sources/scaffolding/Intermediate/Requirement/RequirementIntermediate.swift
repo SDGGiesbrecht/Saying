@@ -1,3 +1,5 @@
+import Saying
+
 struct RequirementIntermediate {
   fileprivate var prototype: ActionPrototype
   var declaration: ParsedRequirementDeclarationPrototype?

@@ -1,3 +1,5 @@
+import Saying
+
 extension ReferenceDictionary {
   struct RedeclaredIdentifierError {
     var identifier: UnicodeText

@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 enum JavaScript: Platform {
 
   static var directoryName: String {
@@ -110,7 +112,11 @@ enum JavaScript: Platform {
     return "p\(position)"
   }
 
-  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String? {
+  static func accessModifier(
+    for access: AccessIntermediate,
+    memberScope: Bool,
+    libraryAccessMode: LibraryAccessMode
+  ) -> String? {
     return nil
   }
 

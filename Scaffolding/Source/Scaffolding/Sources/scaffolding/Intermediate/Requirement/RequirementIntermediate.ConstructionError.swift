@@ -1,3 +1,5 @@
+import Saying
+
 extension RequirementIntermediate {
   enum ConstructionError: DiagnosticError {
     case brokenPrototype(ActionPrototype.ConstructionError)

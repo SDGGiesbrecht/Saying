@@ -6,12 +6,14 @@ let package = Package(
   name: "scaffolding",
   dependencies: [
     .package(path: "../../../Source"),
+    .package(path: "../../Generated/Swift/Saying"),
   ],
   targets: [
     .executableTarget(
       name: "scaffolding",
       dependencies: [
         .product(name: "Source", package: "Source"), // Just so that IDEs show the files.
+        .product(name: "Saying", package: "Saying")
       ],
       plugins: [
         .plugin(name: "GenerateSyntax")

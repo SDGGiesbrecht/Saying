@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 struct Module {
 
   var directory: URL
@@ -42,9 +44,10 @@ struct Module {
     switch mode {
     case .testing:
       return module.applyingTestCoverageTracking(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
-    case .debugging, .dependency:
+    case .debugging, .dependency, .export:
+      // .dependency should remove unreachable instead, but transitive reachability detection is not implemented yet.
       return module
-    case .release:
+    case .release, .scaffolding:
       guard var entries = entryPoints else {
         fatalError("General reachability checks without specifying entry points are not implemented yet.")
       }

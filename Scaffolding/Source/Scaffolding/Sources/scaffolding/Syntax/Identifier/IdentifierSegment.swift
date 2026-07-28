@@ -1,3 +1,5 @@
+import Saying
+
 protocol ParsedIdentifierSegment: ParsedSyntaxNode {
   var identifierSegmentKind: ParsedIdentifierSegmentKind { get }
 }

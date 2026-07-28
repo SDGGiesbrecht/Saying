@@ -1,3 +1,5 @@
+import Saying
+
 struct ReferenceDictionary {
   internal let scope: ScopeType
   private var languages: Set<UnicodeText>

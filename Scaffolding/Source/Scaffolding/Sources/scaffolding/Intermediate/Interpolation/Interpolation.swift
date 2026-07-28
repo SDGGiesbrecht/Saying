@@ -1,3 +1,5 @@
+import Saying
+
 struct Interpolation<InterpolationParameter>
 where InterpolationParameter: InterpolationParameterProtocol {
   private var parameters: [InterpolationParameter]

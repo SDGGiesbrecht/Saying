@@ -1,3 +1,5 @@
+import Saying
+
 extension ModuleIntermediate {
   mutating func unfoldSyntax() throws {
     for nodePrototype in referenceDictionary.allThings() {

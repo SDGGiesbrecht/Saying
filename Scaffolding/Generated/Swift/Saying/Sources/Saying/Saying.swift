@@ -1,15 +1,15 @@
-struct UnicodeText {
+public struct UnicodeText {
   fileprivate var scalars: String.UnicodeScalarView
 
-  init(skippingNormalizationOf scalars: String.UnicodeScalarView) {
+  public init(skippingNormalizationOf scalars: String.UnicodeScalarView) {
     self.scalars = scalars
   }
 
-  var isEmpty: Bool {
+  public var isEmpty: Bool {
     return self.scalars.isEmpty
   }
 
-  func replacingAccordingToDefaultSearchingAndReplacing(_ pattern: UnicodeText, with replacement: UnicodeText) -> UnicodeText {
+  public func replacingAccordingToDefaultSearchingAndReplacing(_ pattern: UnicodeText, with replacement: UnicodeText) -> UnicodeText {
     var cursor: String.UnicodeScalarView.Index = self.startIndex
     var changed: UnicodeText = .empty
     for hit in self.matches(of: pattern) {
@@ -22,27 +22,27 @@ struct UnicodeText {
     return changed
   }
 
-  func replacing(_ pattern: UnicodeText, with replacement: UnicodeText) -> UnicodeText {
+  public func replacing(_ pattern: UnicodeText, with replacement: UnicodeText) -> UnicodeText {
     return self.replacingAccordingToDefaultSearchingAndReplacing(pattern, with: replacement)
   }
 
-  init(_ scalars: String.UnicodeScalarView) {
+  public init(_ scalars: String.UnicodeScalarView) {
     self = UnicodeText(skippingNormalizationOf: scalars.compatibilityDecomposition())
   }
 
-  func formIndex(after i: inout String.UnicodeScalarView.Index) {
+  public func formIndex(after i: inout String.UnicodeScalarView.Index) {
     self.scalars.formIndex(after: &i)
   }
 
-  mutating func appendAccordingToDefaultListInsertion(contentsOf newElements: Slice<UnicodeText>) {
+  public mutating func appendAccordingToDefaultListInsertion(contentsOf newElements: Slice<UnicodeText>) {
     self.replaceSubrange(self.endIndex ..< self.endIndex, with: newElements)
   }
 
-  mutating func append(contentsOf newElements: Slice<UnicodeText>) {
+  public mutating func append(contentsOf newElements: Slice<UnicodeText>) {
     self.appendAccordingToDefaultListInsertion(contentsOf: newElements)
   }
 
-  mutating func append(contentsOf newElements: UnicodeText) {
+  public mutating func append(contentsOf newElements: UnicodeText) {
     if let next = newElements.first {
       if let previous = self.last {
         let next_0020class: Unicode.CanonicalCombiningClass = next.combiningClass
@@ -71,46 +71,46 @@ struct UnicodeText {
     }
   }
 
-  func formIndex(before i: inout String.UnicodeScalarView.Index) {
+  public func formIndex(before i: inout String.UnicodeScalarView.Index) {
     self.scalars.formIndex(before: &i)
   }
 
-  func index(after i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+  public func index(after i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.scalars.index(after: i)
   }
 
-  func index(before i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+  public func index(before i: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.scalars.index(before: i)
   }
 
-  func boundary(beforeBoundary cursor: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
+  public func boundary(beforeBoundary cursor: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
     if cursor > self.startIndex {
       return self.index(before: cursor)
     }
     return nil
   }
 
-  init(_ other: Slice<UnicodeText>) {
+  public init(_ other: Slice<UnicodeText>) {
     self = UnicodeText(skippingNormalizationOf: String.UnicodeScalarView(Slice(base: other.base.scalars, bounds: { let slice = other; return slice.startIndex ..< slice.endIndex }())))
   }
 
-  init(_ other: UnicodeText) {
+  public init(_ other: UnicodeText) {
     self = other
   }
 
-  var endIndex: String.UnicodeScalarView.Index {
+  public var endIndex: String.UnicodeScalarView.Index {
     return self.scalars.endIndex
   }
 
-  subscript(_ position: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+  public subscript(_ position: String.UnicodeScalarView.Index) -> Unicode.Scalar {
     return self.scalars[position]
   }
 
-  subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+  public subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
     return self.scalars[index]
   }
 
-  var first: Unicode.Scalar? {
+  public var first: Unicode.Scalar? {
     return self.scalars.first
   }
 
@@ -118,33 +118,33 @@ struct UnicodeText {
     hasher.combine(self.scalars)
   }
 
-  func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+  public func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return boundary
   }
 
-  func entryIndex(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
+  public func entryIndex(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
     if boundary < self.endIndex {
       return self.indexSkippingBoundsCheck(afterBoundary: boundary)
     }
     return nil
   }
 
-  func indexSkippingBoundsCheck(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+  public func indexSkippingBoundsCheck(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.indexSkippingBoundsCheck(afterBoundary: self.index(before: boundary))
   }
 
-  func entryIndex(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
+  public func entryIndex(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
     if boundary > self.startIndex {
       return self.indexSkippingBoundsCheck(beforeBoundary: boundary)
     }
     return nil
   }
 
-  var last: Unicode.Scalar? {
+  public var last: Unicode.Scalar? {
     return self.scalars.last
   }
 
-  func matches(of pattern: UnicodeText) -> [Slice<UnicodeText>] {
+  public func matches(of pattern: UnicodeText) -> [Slice<UnicodeText>] {
     var cursor: String.UnicodeScalarView.Index = self.startIndex
     let end: String.UnicodeScalarView.Index = self.endIndex
     var matches: [Slice<UnicodeText>] = []
@@ -155,47 +155,47 @@ struct UnicodeText {
     return matches
   }
 
-  func numberOfEntries() -> UInt64 {
+  public func numberOfEntries() -> UInt64 {
     return self.scalars.numberOfEntries()
   }
 
-  func offset(from origin: String.UnicodeScalarView.Index, to destination: String.UnicodeScalarView.Index) -> Int64 {
+  public func offset(from origin: String.UnicodeScalarView.Index, to destination: String.UnicodeScalarView.Index) -> Int64 {
     return self.scalars.offset(from: origin, to: destination)
   }
 
-  var count: Int {
+  public var count: Int {
     return self.scalars.count
   }
 
-  func distance(from start: String.UnicodeScalarView.Index, to end: String.UnicodeScalarView.Index) -> Int {
+  public func distance(from start: String.UnicodeScalarView.Index, to end: String.UnicodeScalarView.Index) -> Int {
     return self.scalars.distance(from: start, to: end)
   }
 
-  mutating func prependAccordingToDefaultListInsertion(contentsOf newElements: UnicodeText) {
+  public mutating func prependAccordingToDefaultListInsertion(contentsOf newElements: UnicodeText) {
     self.replaceSubrange(self.startIndex ..< self.startIndex, with: newElements)
   }
 
-  mutating func prepend(contentsOf newElements: UnicodeText) {
+  public mutating func prepend(contentsOf newElements: UnicodeText) {
     self.prependAccordingToDefaultListInsertion(contentsOf: newElements)
   }
 
-  func primaryMatch(beginningAt beginning: String.UnicodeScalarView.Index, in haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
+  public func primaryMatch(beginningAt beginning: String.UnicodeScalarView.Index, in haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
     return primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_0029_0020in_0020_0028_0029_0020according_0020to_0020use_0020as_0020literal_0020pattern_003AUnicodeText_003AUnicode_0020scalar_0020boundary_003A_0028_003Aslice_0020of_0020_0028_0029_003AUnicodeText_003A_0029_003A_0028_003Aoptional_0020_0028_0029_003A_0028_003Aslice_0020of_0020_0028_0029_003AUnicodeText_003A_0029_003A_0029(self, beginning, haystack)
   }
 
-  mutating func removeSubrangeAccordingToListInsertion(_ bounds: Range<String.UnicodeScalarView.Index>) {
+  public mutating func removeSubrangeAccordingToListInsertion(_ bounds: Range<String.UnicodeScalarView.Index>) {
     self.replaceSubrange(bounds, with: .empty)
   }
 
-  mutating func removeSubrange(_ bounds: Range<String.UnicodeScalarView.Index>) {
+  public mutating func removeSubrange(_ bounds: Range<String.UnicodeScalarView.Index>) {
     self.removeSubrangeAccordingToListInsertion(bounds)
   }
 
-  mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: Slice<UnicodeText>) {
+  public mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: Slice<UnicodeText>) {
     self.replaceSubrange(subrange, with: UnicodeText(newElements))
   }
 
-  mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: UnicodeText) {
+  public mutating func replaceSubrange(_ subrange: Range<String.UnicodeScalarView.Index>, with newElements: UnicodeText) {
     let end: String.UnicodeScalarView.Index = self.endIndex
     let after: UnicodeText = UnicodeText(Slice(base: self, bounds: subrange.upperBound ..< end))
     self.scalars.removeSubrange(subrange.lowerBound ..< end)
@@ -203,19 +203,19 @@ struct UnicodeText {
     self.append(contentsOf: after)
   }
 
-  mutating func replaceAccordingToDefaultSearchingAndReplacing(_ pattern: UnicodeText, with replacement: UnicodeText) {
+  public mutating func replaceAccordingToDefaultSearchingAndReplacing(_ pattern: UnicodeText, with replacement: UnicodeText) {
     self = self.replacing(pattern, with: replacement)
   }
 
-  mutating func replace(_ pattern: UnicodeText, with replacement: UnicodeText) {
+  public mutating func replace(_ pattern: UnicodeText, with replacement: UnicodeText) {
     self.replaceAccordingToDefaultSearchingAndReplacing(pattern, with: replacement)
   }
 
-  var startIndex: String.UnicodeScalarView.Index {
+  public var startIndex: String.UnicodeScalarView.Index {
     return self.scalars.startIndex
   }
 
-  init(_ slice: Slice<UnicodeSegments>) {
+  public init(_ slice: Slice<UnicodeSegments>) {
     let segments_0020of_0020whole: [Unicode_0020segment] = slice.base.segments
     var cursor: UnicodeSegments.Boundary = slice.startIndex
     let end: UnicodeSegments.Boundary = slice.endIndex
@@ -246,27 +246,27 @@ struct UnicodeText {
 
 extension UnicodeText: Collection {}
 extension UnicodeText {
-typealias Indices = DefaultIndices<UnicodeText>
+public typealias Indices = DefaultIndices<UnicodeText>
 }
 
 extension UnicodeText: Hashable {}
 
-struct ParagraphBreakSyntax {
+public struct ParagraphBreakSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct GitStyleSayingSource {
-  let origin: UnicodeText
-  let code: UnicodeText
+public struct GitStyleSayingSource {
+  public let origin: UnicodeText
+  public let code: UnicodeText
 
-  init(origin: UnicodeText, code: UnicodeText) {
+  public init(origin: UnicodeText, code: UnicodeText) {
     self.origin = origin
     self.code = code
   }
 
-  func parsed() -> SayingSource {
+  public func parsed() -> SayingSource {
     let code: UnicodeText = self.code
     var beginning_0020of_0020segment: Git_2010style_0020parsing_0020cursor? = nil
     var segments: [Unicode_0020segment] = []
@@ -315,75 +315,75 @@ fileprivate struct Git_2010style_0020parsing_0020cursor {
   }
 }
 
-struct GreekQuestionMarkSyntax {
+public struct GreekQuestionMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct LeftArrowSyntax {
+public struct LeftArrowSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct LeftChevronQuotationMarkSyntax {
+public struct LeftChevronQuotationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct OpeningExclamationMarkSyntax {
+public struct OpeningExclamationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct OpeningBracketSyntax {
+public struct OpeningBracketSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct OpeningQuestionMarkSyntax {
+public struct OpeningQuestionMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct OpeningParenthesisSyntax {
+public struct OpeningParenthesisSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct RightChevronQuotationMarkSyntax {
+public struct RightChevronQuotationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct RightArrowSyntax {
+public struct RightArrowSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct ClosingExclamationMarkSyntax {
+public struct ClosingExclamationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct ClosingQuestionMarkSyntax {
+public struct ClosingQuestionMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct ClosingParenthesisSyntax {
+public struct ClosingParenthesisSyntax {
 
-  init() {
+  public init() {
   }
 }
 
@@ -398,7 +398,7 @@ fileprivate struct Unicode_0020segment {
 }
 
 extension UnicodeSegments {
-  struct Boundary {
+  public struct Boundary {
     fileprivate let beginning_0020of_0020segment: Int
     fileprivate let scalar: String.UnicodeScalarView.Index?
 
@@ -410,7 +410,7 @@ extension UnicodeSegments {
 }
 
 extension UnicodeSegments {
-  struct EntryIndex {
+  public struct EntryIndex {
     fileprivate let segment: Int
     fileprivate let scalar: String.UnicodeScalarView.Index
 
@@ -421,110 +421,110 @@ extension UnicodeSegments {
   }
 }
 
-struct BulletCharacterSyntax {
+public struct BulletCharacterSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct ClosingBraceSyntax {
+public struct ClosingBraceSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct ClosingBracketSyntax {
+public struct ClosingBracketSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct ColonCharacterSyntax {
+public struct ColonCharacterSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct DownArrowSyntax {
+public struct DownArrowSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct LineBreakSyntax {
+public struct LineBreakSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct LowQuotationMarkSyntax {
+public struct LowQuotationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct OpeningBraceSyntax {
+public struct OpeningBraceSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct RightToLeftQuestionMarkSyntax {
+public struct RightToLeftQuestionMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct SlashSyntax {
+public struct SlashSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct SpaceSyntax {
+public struct SpaceSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct SymbolInsertionMarkSyntax {
+public struct SymbolInsertionMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct NinesQuotationMarkSyntax {
+public struct NinesQuotationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
-struct SixesQuotationMarkSyntax {
+public struct SixesQuotationMarkSyntax {
 
-  init() {
+  public init() {
   }
 }
 
 extension UnicodeSegments.Boundary: Comparable {}
 
-struct UnicodeSegments {
+public struct UnicodeSegments {
   fileprivate let segments: [Unicode_0020segment]
 
   fileprivate init(_ segments: [Unicode_0020segment]) {
     self.segments = segments
   }
 
-  init(allOf text: UnicodeText) {
+  public init(allOf text: UnicodeText) {
     var segments: [Unicode_0020segment] = []
     segments.append(Unicode_0020segment(.arithmeticZero, text))
     self = UnicodeSegments(segments)
   }
 
-  func formIndex(after i: inout UnicodeSegments.Boundary) {
+  public func formIndex(after i: inout UnicodeSegments.Boundary) {
     i = self.index(after: i)
   }
 
-  func index(after i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
+  public func index(after i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
     let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020cursor: Int = i.beginning_0020of_0020segment
     let segment: UnicodeText = segment_0020list[segment_0020cursor].source
@@ -542,7 +542,7 @@ struct UnicodeSegments {
     fatalError()
   }
 
-  func index(before i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
+  public func index(before i: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary {
     let segment_0020cursor: Int = i.beginning_0020of_0020segment
     if let scalar_0020cursor = i.scalar {
       let segment_0020list: [Unicode_0020segment] = self.segments
@@ -555,23 +555,23 @@ struct UnicodeSegments {
     return before_0020end_0020of_0020segment_0020before_0020_0028_0029_0020in_0020_0028_0029_002C_0020skipping_0020bounds_0020check_003Alist_0020boundary_003AUnicode_0020segments_003AUnicode_0020segments_0020boundary(segment_0020cursor, self)
   }
 
-  var endIndex: UnicodeSegments.Boundary {
+  public var endIndex: UnicodeSegments.Boundary {
     return UnicodeSegments.Boundary(self.segments.endIndex, nil)
   }
 
-  subscript(accordingToDefaultUseAsList position: UnicodeSegments.Boundary) -> Unicode.Scalar {
+  public subscript(accordingToDefaultUseAsList position: UnicodeSegments.Boundary) -> Unicode.Scalar {
     return self[entryIndex: self.indexSkippingBoundsCheck(afterBoundary: position)]
   }
 
-  subscript(_ position: UnicodeSegments.Boundary) -> Unicode.Scalar {
+  public subscript(_ position: UnicodeSegments.Boundary) -> Unicode.Scalar {
     return self[accordingToDefaultUseAsList: position]
   }
 
-  subscript(entryIndex index: UnicodeSegments.EntryIndex) -> Unicode.Scalar {
+  public subscript(entryIndex index: UnicodeSegments.EntryIndex) -> Unicode.Scalar {
     return self.segments[index.segment].source[entryIndex: index.scalar]
   }
 
-  func indexSkippingBoundsCheck(afterBoundary boundary: UnicodeSegments.Boundary) -> UnicodeSegments.EntryIndex {
+  public func indexSkippingBoundsCheck(afterBoundary boundary: UnicodeSegments.Boundary) -> UnicodeSegments.EntryIndex {
     if let scalar_0020boundary = boundary.scalar {
       let segment_0020list: [Unicode_0020segment] = self.segments
       let segment_0020index: Int = boundary.beginning_0020of_0020segment
@@ -580,7 +580,7 @@ struct UnicodeSegments {
     fatalError()
   }
 
-  func underlyingScalarOffset(of boundary: UnicodeSegments.Boundary) -> UInt64 {
+  public func underlyingScalarOffset(of boundary: UnicodeSegments.Boundary) -> UInt64 {
     if let scalar_0020boundary = boundary.scalar {
       let segment: Unicode_0020segment = segments_0020of_0020_0028_0029_003AUnicode_0020segments_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029(self)[boundary.beginning_0020of_0020segment]
       let segment_0020source: UnicodeText = segment.source
@@ -592,7 +592,7 @@ struct UnicodeSegments {
     return .arithmeticZero
   }
 
-  var startIndex: UnicodeSegments.Boundary {
+  public var startIndex: UnicodeSegments.Boundary {
     let segment_0020list: [Unicode_0020segment] = self.segments
     let segment_0020cursor: Int = segment_0020list.startIndex
     if let first_0020segment = segment_0020list.first {
@@ -604,29 +604,29 @@ struct UnicodeSegments {
 
 extension UnicodeSegments: Collection {}
 
-enum SayingSourceCode {
+public enum SayingSourceCode {
   case writing
   case utf8(UnicodeSegments)
 }
 
-struct SayingSource {
-  let origin: UnicodeText
-  let code: SayingSourceCode
+public struct SayingSource {
+  public let origin: UnicodeText
+  public let code: SayingSourceCode
 
-  init(origin: UnicodeText, code: SayingSourceCode) {
+  public init(origin: UnicodeText, code: SayingSourceCode) {
     self.origin = origin
     self.code = code
   }
 }
 
-enum SayingSourceCodeSlice {
+public enum SayingSourceCodeSlice {
   case writing
   case utf8(Slice<UnicodeSegments>)
 }
 
-struct SayingSourceSlice {
-  let origin: UnicodeText
-  let code: SayingSourceCodeSlice
+public struct SayingSourceSlice {
+  public let origin: UnicodeText
+  public let code: SayingSourceCodeSlice
 
   fileprivate init(_ origin: UnicodeText, _ code: SayingSourceCodeSlice) {
     self.origin = origin
@@ -634,216 +634,216 @@ struct SayingSourceSlice {
   }
 }
 
-struct ParsedGreekQuestionMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedGreekQuestionMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedBulletCharacterSyntax {
-  let location: SayingSourceSlice
+public struct ParsedBulletCharacterSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedClosingBraceSyntax {
-  let location: SayingSourceSlice
+public struct ParsedClosingBraceSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedClosingBracketSyntax {
-  let location: SayingSourceSlice
+public struct ParsedClosingBracketSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedClosingParenthesisSyntax {
-  let location: SayingSourceSlice
+public struct ParsedClosingParenthesisSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedClosingQuestionMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedClosingQuestionMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedColonCharacterSyntax {
-  let location: SayingSourceSlice
+public struct ParsedColonCharacterSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedDownArrowSyntax {
-  let location: SayingSourceSlice
+public struct ParsedDownArrowSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedLeftArrowSyntax {
-  let location: SayingSourceSlice
+public struct ParsedLeftArrowSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedLineBreakSyntax {
-  let location: SayingSourceSlice
+public struct ParsedLineBreakSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedLowQuotationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedLowQuotationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedNinesQuotationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedNinesQuotationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedOpeningBraceSyntax {
-  let location: SayingSourceSlice
+public struct ParsedOpeningBraceSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedOpeningBracketSyntax {
-  let location: SayingSourceSlice
+public struct ParsedOpeningBracketSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedParagraphBreakSyntax {
-  let location: SayingSourceSlice
+public struct ParsedParagraphBreakSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedRightArrowSyntax {
-  let location: SayingSourceSlice
+public struct ParsedRightArrowSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedRightToLeftQuestionMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedRightToLeftQuestionMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedSixesQuotationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedSixesQuotationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedSlashSyntax {
-  let location: SayingSourceSlice
+public struct ParsedSlashSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedSpaceSyntax {
-  let location: SayingSourceSlice
+public struct ParsedSpaceSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedSymbolInsertionMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedSymbolInsertionMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedLeftChevronQuotationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedLeftChevronQuotationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedOpeningExclamationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedOpeningExclamationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedOpeningQuestionMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedOpeningQuestionMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedOpeningParenthesisSyntax {
-  let location: SayingSourceSlice
+public struct ParsedOpeningParenthesisSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedRightChevronQuotationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedRightChevronQuotationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
   }
 }
 
-struct ParsedClosingExclamationMarkSyntax {
-  let location: SayingSourceSlice
+public struct ParsedClosingExclamationMarkSyntax {
+  public let location: SayingSourceSlice
 
   fileprivate init(_ location: SayingSourceSlice) {
     self.location = location
@@ -854,12 +854,12 @@ public func ==(_ lhs: String.UnicodeScalarView, _ rhs: String.UnicodeScalarView)
   return lhs.elementsEqual(rhs)
 }
 
-func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
+public func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
   return lhs.scalars == rhs.scalars
 }
 
 extension String.UnicodeScalarView {
-  func scalarsAreIndividuallyDecomposedAccordingToCompatibilityDecomposition() -> Bool {
+  public func scalarsAreIndividuallyDecomposedAccordingToCompatibilityDecomposition() -> Bool {
     for scalar in self {
       if !scalar.isDecomposedAccordingtoCompatibilityDecomposition {
         return false
@@ -870,7 +870,7 @@ extension String.UnicodeScalarView {
 }
 
 extension String.UnicodeScalarView {
-  func isOrderedCanonically() -> Bool {
+  public func isOrderedCanonically() -> Bool {
     var previous: Unicode.CanonicalCombiningClass = .notReordered
     for scalar in self {
       let clas_0073: Unicode.CanonicalCombiningClass = scalar.combiningClass
@@ -894,7 +894,7 @@ fileprivate func _0028_0029_0020individually_0020decomposed_0020according_0020to
 }
 
 extension String.UnicodeScalarView {
-  func individuallyDecomposedAccordingToCompatibilityDecomposition() -> String.UnicodeScalarView {
+  public func individuallyDecomposedAccordingToCompatibilityDecomposition() -> String.UnicodeScalarView {
     if self.scalarsAreIndividuallyDecomposedAccordingToCompatibilityDecomposition() {
       return self
     }
@@ -903,25 +903,25 @@ extension String.UnicodeScalarView {
 }
 
 extension Unicode.Scalar {
-  var isDecomposedAccordingtoCompatibilityDecomposition: Bool {
+  public var isDecomposedAccordingtoCompatibilityDecomposition: Bool {
     return compatibility_0020decomposition_0020quick_0020check_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003Aערך_0020אמת((self).value)
   }
 }
 
 extension Slice<UnicodeText> {
-  var isNotEmptyAccordingToDefaultUseAsList: Bool {
+  public var isNotEmptyAccordingToDefaultUseAsList: Bool {
     return !self.isEmpty
   }
 }
 
 extension Slice<UnicodeText> {
-  var isNotEmpty: Bool {
+  public var isNotEmpty: Bool {
     return self.isNotEmptyAccordingToDefaultUseAsList
   }
 }
 
 extension [UnicodeText] {
-  func joinedAccordingToDefaultUseAsStringableList(separator: UnicodeText) -> UnicodeText {
+  public func joinedAccordingToDefaultUseAsStringableList(separator: UnicodeText) -> UnicodeText {
     var string: UnicodeText = .empty
     var first: Bool = true
     for segment in self {
@@ -936,7 +936,7 @@ extension [UnicodeText] {
 }
 
 extension [UnicodeText] {
-  func joined(separator: UnicodeText) -> UnicodeText {
+  public func joined(separator: UnicodeText) -> UnicodeText {
     return self.joinedAccordingToDefaultUseAsStringableList(separator: separator)
   }
 }
@@ -959,7 +959,7 @@ fileprivate func _0028_0029_0020reordered_0020canonically_002C_0020skipping_0020
 }
 
 extension String.UnicodeScalarView {
-  func reorderedCanonically() -> String.UnicodeScalarView {
+  public func reorderedCanonically() -> String.UnicodeScalarView {
     if self.isOrderedCanonically() {
       return self
     }
@@ -968,7 +968,7 @@ extension String.UnicodeScalarView {
 }
 
 extension [UnicodeText] {
-  func joinedAccordingToDefaultUseAsStringableList() -> UnicodeText {
+  public func joinedAccordingToDefaultUseAsStringableList() -> UnicodeText {
     var string: UnicodeText = .empty
     for segment in self {
       string.append(contentsOf: segment)
@@ -978,13 +978,13 @@ extension [UnicodeText] {
 }
 
 extension [UnicodeText] {
-  func joined() -> UnicodeText {
+  public func joined() -> UnicodeText {
     return self.joinedAccordingToDefaultUseAsStringableList()
   }
 }
 
 extension [Set<UnicodeText>] {
-  func appendingAccordingToDefaultUseAsChangeableList(_ newElement: Set<UnicodeText>) -> [Set<UnicodeText>] {
+  public func appendingAccordingToDefaultUseAsChangeableList(_ newElement: Set<UnicodeText>) -> [Set<UnicodeText>] {
     var copy: [Set<UnicodeText>] = self
     copy.append(newElement)
     return copy
@@ -992,12 +992,12 @@ extension [Set<UnicodeText>] {
 }
 
 extension [Set<UnicodeText>] {
-  func appending(_ newElement: Set<UnicodeText>) -> [Set<UnicodeText>] {
+  public func appending(_ newElement: Set<UnicodeText>) -> [Set<UnicodeText>] {
     return self.appendingAccordingToDefaultUseAsChangeableList(newElement)
   }
 }
 
-func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
+public func compute(_ compute: () -> Set<Unicode.Scalar>, cachingIn cache: inout Set<Unicode.Scalar>?) -> Set<Unicode.Scalar> {
   if let cached = cache {
     return cached
   }
@@ -1019,25 +1019,25 @@ fileprivate func _0028_0029의_0020자모_003AUnicode_0020scalar_0020nu
 }
 
 extension UInt64 {
-  static var arithmeticZero: UInt64 {
+  public static var arithmeticZero: UInt64 {
     return 0
   }
 }
 
 extension Int64 {
-  static var arithmeticZero: Int64 {
+  public static var arithmeticZero: Int64 {
     return 0
   }
 }
 
 extension UInt64 {
-  static var one: UInt64 {
+  public static var one: UInt64 {
     return 1
   }
 }
 
 extension Unicode.Scalar {
-  init(skippingValidityCheck value: UInt32) {
+  public init(skippingValidityCheck value: UInt32) {
     self = {
       if let scalar = Unicode.Scalar(value) {
         return scalar
@@ -2867,12 +2867,12 @@ fileprivate func canonical_0020combining_0020class_0020of_0020_0028_0029_003AUni
 }
 
 extension Unicode.Scalar {
-  var combiningClass: Unicode.CanonicalCombiningClass {
+  public var combiningClass: Unicode.CanonicalCombiningClass {
     return Unicode.CanonicalCombiningClass(rawValue: canonical_0020combining_0020class_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003A8_2010bit_0020natural_0020number((self).value))
   }
 }
 
-func compare(_ first: Int, to second: Int) -> Bool? {
+public func compare(_ first: Int, to second: Int) -> Bool? {
   if first < second {
     return true
   }
@@ -2883,13 +2883,13 @@ func compare(_ first: Int, to second: Int) -> Bool? {
 }
 
 extension Unicode.Scalar {
-  func compatibilityDecomposition() -> String.UnicodeScalarView {
+  public func compatibilityDecomposition() -> String.UnicodeScalarView {
     return full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars(self)
   }
 }
 
 extension String.UnicodeScalarView {
-  func compatibilityDecomposition() -> String.UnicodeScalarView {
+  public func compatibilityDecomposition() -> String.UnicodeScalarView {
     return self.individuallyDecomposedAccordingToCompatibilityDecomposition().reorderedCanonically()
   }
 }
@@ -5347,13 +5347,13 @@ fileprivate func compatibility_0020decomposition_0020quick_0020check_0020of_0020
 }
 
 extension Slice<UnicodeText> {
-  var contents: Slice<UnicodeText> {
+  public var contents: Slice<UnicodeText> {
     return self
   }
 }
 
 extension String.UnicodeScalarView {
-  init(_ other: Slice<String.UnicodeScalarView>) {
+  public init(_ other: Slice<String.UnicodeScalarView>) {
     let bounds: Range<String.UnicodeScalarView.Index> = { let slice = other; return slice.startIndex ..< slice.endIndex }()
     let whole: String.UnicodeScalarView = other.base
     self = if_0020most_0020efficient_002C_0020convert_0020_0028_0029_0020in_0020_0028_0029_0020into_0020scalars_0020by_0020extended_0020grapheme_0020clusters_003A_0028_003Arange_0020of_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003A_0029_003AUnicode_0020scalars_003AUnicode_0020scalars(bounds, whole)
@@ -5361,13 +5361,13 @@ extension String.UnicodeScalarView {
 }
 
 extension Slice<UnicodeText> {
-  subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
+  public subscript(entryIndex index: String.UnicodeScalarView.Index) -> Unicode.Scalar {
     return self.base[entryIndex: index]
   }
 }
 
 extension Slice<UnicodeText> {
-  func firstMatch(of pattern: UnicodeText) -> Slice<UnicodeText>? {
+  public func firstMatch(of pattern: UnicodeText) -> Slice<UnicodeText>? {
     var cursor: String.UnicodeScalarView.Index = self.startIndex
     let end: String.UnicodeScalarView.Index = self.endIndex
     while (cursor < end) {
@@ -23709,31 +23709,31 @@ fileprivate func if_0020most_0020efficient_002C_0020offset_0020from_0020_0028_00
 }
 
 extension UInt64 {
-  mutating func incrementAccordingToDefaultUnlimitedIncrementation() {
+  public mutating func incrementAccordingToDefaultUnlimitedIncrementation() {
     self += .one
   }
 }
 
 extension UInt64 {
-  mutating func increment() {
+  public mutating func increment() {
     self.incrementAccordingToDefaultUnlimitedIncrementation()
   }
 }
 
 extension Slice<UnicodeText> {
-  func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+  public func indexSkippingBoundsCheck(afterBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.base.indexSkippingBoundsCheck(afterBoundary: boundary)
   }
 }
 
 extension String.UnicodeScalarView {
-  func indexSkippingBoundsCheck(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
+  public func indexSkippingBoundsCheck(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index {
     return self.index(before: boundary)
   }
 }
 
 extension String.UnicodeScalarView {
-  func entryIndex(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
+  public func entryIndex(beforeBoundary boundary: String.UnicodeScalarView.Index) -> String.UnicodeScalarView.Index? {
     if boundary > self.startIndex {
       return self.indexSkippingBoundsCheck(beforeBoundary: boundary)
     }
@@ -23744,13 +23744,13 @@ extension String.UnicodeScalarView {
 extension UnicodeText: BidirectionalCollection {}
 
 extension UnicodeText {
-  static var empty: UnicodeText {
+  public static var empty: UnicodeText {
     return UnicodeText(skippingNormalizationOf: "".unicodeScalars)
   }
 }
 
 extension String.UnicodeScalarView {
-  func numberOfEntries() -> UInt64 {
+  public func numberOfEntries() -> UInt64 {
     var result: UInt64 = .arithmeticZero
     if_0020most_0020efficient_002C_0020number_0020of_0020entries_0020in_0020_0028_0029_0020by_0020platform_0020offset_002C_0020storing_0020in_0020_0028_0029_003AUnicode_0020scalars_003A자연수_003A(self, &result)
     return result
@@ -23758,7 +23758,7 @@ extension String.UnicodeScalarView {
 }
 
 extension String.UnicodeScalarView {
-  func offset(from origin: String.UnicodeScalarView.Index, to destination: String.UnicodeScalarView.Index) -> Int64 {
+  public func offset(from origin: String.UnicodeScalarView.Index, to destination: String.UnicodeScalarView.Index) -> Int64 {
     var result: Int64 = .arithmeticZero
     if_0020most_0020efficient_002C_0020offset_0020from_0020_0028_0029_0020to_0020_0028_0029_0020in_0020_0028_0029_0020by_0020platform_0020offset_002C_0020storing_0020in_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003A정수_003A(origin, destination, self, &result)
     return result
@@ -23784,7 +23784,7 @@ fileprivate func primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0
 }
 
 extension String.UnicodeScalarView {
-  mutating func reorderCanonically() {
+  public mutating func reorderCanonically() {
     if self.isOrderedCanonically() {
       return
     }
@@ -23841,11 +23841,11 @@ fileprivate func 최종_0020쌍의_0020수_003AUnicode_0020
   return 중성의_0020개수_003AUnicode_0020scalar_0020numerical_0020value() &* 종성의_0020개수_0020및_0020없음_003AUnicode_0020scalar_0020numerical_0020value()
 }
 
-func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
+public func ==(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   return lhs.beginning_0020of_0020segment == rhs.beginning_0020of_0020segment && lhs.scalar == rhs.scalar
 }
 
-func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
+public func <(_ lhs: UnicodeSegments.Boundary, _ rhs: UnicodeSegments.Boundary) -> Bool {
   if let result = compare(lhs.beginning_0020of_0020segment, to: rhs.beginning_0020of_0020segment) {
     return result
   }
@@ -23927,169 +23927,169 @@ fileprivate func source_0020of_0020_0028_0029_003AUnicode_0020segment_003AUnicod
 }
 
 extension SayingSourceSlice {
-  init(origin: UnicodeText, code: SayingSourceCodeSlice) {
+  public init(origin: UnicodeText, code: SayingSourceCodeSlice) {
     self.init(origin, code)
   }
 }
 
 extension ParsedDownArrowSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLeftArrowSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedRightArrowSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingBraceSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningBraceSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingBracketSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningBracketSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingParenthesisSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningParenthesisSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLineBreakSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedParagraphBreakSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedBulletCharacterSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningQuestionMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingQuestionMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedRightToLeftQuestionMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedGreekQuestionMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedOpeningExclamationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedClosingExclamationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedColonCharacterSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLeftChevronQuotationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedLowQuotationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedNinesQuotationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedRightChevronQuotationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSixesQuotationMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSlashSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSpaceSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }
 
 extension ParsedSymbolInsertionMarkSyntax {
-  init(location: SayingSourceSlice) {
+  public init(location: SayingSourceSlice) {
     self.init(location)
   }
 }

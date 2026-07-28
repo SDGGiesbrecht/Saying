@@ -1,3 +1,5 @@
+import Saying
+
 extension ParsedSignature {
 
   func identifierSegments() -> [ParsedIdentifierSegment?] {

@@ -1,3 +1,5 @@
+import Saying
+
 struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary(scope: .unit)
   var uses: [UseIntermediate] = []

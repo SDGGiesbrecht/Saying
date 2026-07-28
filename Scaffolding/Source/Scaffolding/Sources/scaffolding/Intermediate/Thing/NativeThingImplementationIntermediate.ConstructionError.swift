@@ -1,3 +1,5 @@
+import Saying
+
 extension NativeThingImplementationIntermediate {
   enum ConstructionError: DiagnosticError {
     case literalError(LiteralIntermediate.ConstructionError)

@@ -1,5 +1,7 @@
 import Foundation
 
+import Saying
+
 protocol Platform {
   // Miscellaneous
   static var directoryName: String { get }
@@ -28,7 +30,11 @@ protocol Platform {
   static func numberedParameter(position: Int, type: String?) -> String
 
   // Access
-  static func accessModifier(for access: AccessIntermediate, memberScope: Bool) -> String?
+  static func accessModifier(
+    for access: AccessIntermediate,
+    memberScope: Bool,
+    libraryAccessMode: LibraryAccessMode
+  ) -> String?
 
   // Parts
   static func partDeclaration(
@@ -851,7 +857,11 @@ extension Platform {
       ),
       index: &identifierIndex
     )
-    let access = accessModifier(for: thing.access, memberScope: false)
+    let access = accessModifier(
+      for: thing.access,
+      memberScope: false,
+      libraryAccessMode: mode.libraryAccessMode
+    )
     var members: [String] = []
     var handledActionDeclarations: Set<String> = []
     for module in modulesToSearchForMembers {
@@ -931,7 +941,11 @@ extension Platform {
           referenceLookup: externalReferenceLookup,
           identifierIndex: &identifierIndex
         )
-        let access = accessModifier(for: part.readAccess, memberScope: true)
+        let access = accessModifier(
+          for: part.readAccess,
+          memberScope: true,
+          libraryAccessMode: mode.libraryAccessMode
+        )
         return partDeclaration(
           name: name,
           type: type,
@@ -965,7 +979,11 @@ extension Platform {
           return parameterDeclaration(label: nil, name: name, type: type, isThrough: false)
         })
       }
-      let constructorAccess = accessModifier(for: specifiedConstructor?.access ?? .file, memberScope: true)
+      let constructorAccess = accessModifier(
+        for: specifiedConstructor?.access ?? .file,
+        memberScope: true,
+        libraryAccessMode: mode.libraryAccessMode
+      )
       let constructorSetters = thing.parts.map({ part in
         let name = nativeName(of: part, referenceLookup: externalReferenceLookup) ?? sanitize(
           identifier: part.names.identifier(),
@@ -1885,7 +1903,7 @@ extension Platform {
         signature: signature,
         specifiedReturnValue: reference.resolvedResultType
       )!
-      let redirectingToCoverageWrapper = mode == .testing && !(context?.isCoverageWrapper ?? false)
+      let redirectingToCoverageWrapper = mode.hasTestCoverage && !(context?.isCoverageWrapper ?? false)
       let action = !redirectingToCoverageWrapper
         ? bareAction
         : referenceLookup.lookupAction(
@@ -1942,7 +1960,7 @@ extension Platform {
         identifierIndex: &identifierIndex,
         captures: &captures
       )
-      if mode == .testing,
+      if mode.hasTestCoverage,
         bareAction.isFlow,
         bareAction.deservesTesting,
         let coveredIdentifier = action.coveredIdentifier,
@@ -2134,7 +2152,7 @@ extension Platform {
                   contentsOf: result
                 )
               case .flow(let statements):
-                if mode == .testing,
+                if mode.hasTestCoverage,
                    let coverage = flowCoverageRegistration(
                     contextCoverageIdentifier: contextCoverageIdentifier,
                     coverageRegionCounter: &coverageRegionCounter,
@@ -2306,7 +2324,7 @@ extension Platform {
             indentationLevel: 0,
             captures: &captures
           )
-          if mode == .testing,
+          if mode.hasTestCoverage,
             let coverage = flowCoverageRegistration(
             contextCoverageIdentifier: contextCoverageIdentifier,
             coverageRegionCounter: &coverageRegionCounter,
@@ -3105,7 +3123,7 @@ extension Platform {
       if !extractedCoverageRegistrations.isEmpty {
         entry = extractedCoverageRegistrations.joined(separator: "\n").appending("\n") + entry
       }
-      if mode == .testing,
+      if mode.hasTestCoverage,
          coverageRegionCounter != before,
          let coverage = flowCoverageRegistration(
           contextCoverageIdentifier: contextCoverageIdentifier,
@@ -3428,10 +3446,14 @@ extension Platform {
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0, isProperty: isProperty) })
 
-    let access = accessModifier(for: action.access, memberScope: false)
+    let access = accessModifier(
+      for: action.access,
+      memberScope: false,
+      libraryAccessMode: mode.libraryAccessMode
+    )
 
     let coverageRegistration: String?
-    if mode == .testing,
+    if mode.hasTestCoverage,
       let identifier = action.coveredIdentifier,
       let index = coverageIndex[identifier] {
       coverageRegistration = "\(indent)\(self.coverageRegistration(index: index))"
@@ -3467,7 +3489,11 @@ extension Platform {
         return "\(name)\(disambiguator)(\(parameterNames)\(extra))"
       },
       subdeclaration: { disambiguator, extraParameters in
-        let access = self.accessModifier(for: .unit, memberScope: parentType != nil).map({ "\($0) " }) ?? ""
+        let access = self.accessModifier(
+          for: .unit,
+          memberScope: parentType != nil,
+          libraryAccessMode: mode.libraryAccessMode
+        ).map({ "\($0) " }) ?? ""
         let extra = extraParameters.map({ ", \($0)" }) ?? ""
         let returnValue = returnSection ?? ""
         return "\(access)\(actionContinuationKeyword!) \(name)\(disambiguator)(\(parameters)\(extra))\(returnValue)"
@@ -3818,7 +3844,7 @@ extension Platform {
         }
       }
     }
-    if mode == .testing {
+    if mode.hasTestCoverage {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
         result.appendSeparatorLine()
@@ -3867,7 +3893,7 @@ extension Platform {
     }
 
     var coverageIndex: [UnicodeText: Int] = [:]
-    if mode == .testing {
+    if mode.hasTestCoverage {
       result.appendSeparatorLine()
       result.append(currentTestVariable)
       result.appendSeparatorLine()
@@ -3926,7 +3952,7 @@ extension Platform {
         )
       )
     }
-    if mode == .testing {
+    if mode.hasTestCoverage {
       var allTests: [TestIntermediate] = []
       for module in modules {
         allTests.append(contentsOf: module.allTests(sorted: true))
@@ -4012,7 +4038,15 @@ extension Platform {
     var noEntryPoints: Set<UnicodeText>? = nil
     let sayingModule = sourceModules.first(where: { $0.isSayingModule })
     let builtSayingModule = try sayingModule?.build(
-      mode: mode == .release ? .dependency : mode,
+      mode: { () -> CompilationMode in
+        if case .release = mode {
+          return .dependency
+        } else if case .scaffolding = mode {
+          return .dependency
+        } else {
+          return mode
+        }
+      }(),
       entryPoints: &noEntryPoints,
       moduleWideImports: []
     )
@@ -4040,7 +4074,7 @@ extension Platform {
     ]
 
     switch mode {
-    case .testing, .debugging, .dependency:
+    case .testing, .debugging, .dependency, .export:
       if let entryPoint = testEntryPoint() {
         source.appendSeparatorLine()
         source.append(contentsOf: entryPoint)
@@ -4069,7 +4103,7 @@ extension Platform {
       }
       try createOtherProjectContainerFiles(projectDirectory: &constructionDirectory)
       try constructionDirectory.removeStale()
-    case .release:
+    case .release, .scaffolding:
       let productsDirectory = location ?? productsDirectory(for: package)
       var joined = source.joined(separator: "\n").appending("\n")
       while joined.first == "\n" {

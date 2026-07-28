@@ -1,3 +1,5 @@
+import Saying
+
 enum ReferenceError: DiagnosticError {
   case noSuchThing(UnicodeText, reference: ParsedThingReferenceProtocol)
   case noSuchAction(name: UnicodeText, reference: ParsedAction)

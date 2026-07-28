@@ -1,3 +1,5 @@
+import Saying
+
 extension NativeThingImplementationParameter {
   enum ConstructionError: DiagnosticError {
     case unknownModifier(ParsedModifiedImplementationParameter)

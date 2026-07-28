@@ -1,3 +1,5 @@
+import Saying
+
 extension Signature {
 
   func identifierSegments() -> [IdentifierSegment?] {

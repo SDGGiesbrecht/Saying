@@ -1,3 +1,5 @@
+import Saying
+
 protocol DiagnosticError: Error {
   var range: SayingSourceSlice { get }
   var message: String { get }

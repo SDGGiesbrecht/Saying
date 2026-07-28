@@ -1,3 +1,5 @@
+import Saying
+
 extension ParsedThingName {
 
   var namesDictionary: [UnicodeText: ParsedThingSignature] {

@@ -1,3 +1,5 @@
+import Saying
+
 extension ModuleIntermediate {
 
   enum ConstructionError: DiagnosticError {
