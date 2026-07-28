@@ -196,7 +196,12 @@ enum Swift: Platform {
     case .nowhere:
       return "private"
     case .file, .unit:
-      return "fileprivate"
+      switch libraryAccessMode {
+      case .unit, .clients(.file):
+        return "fileprivate"
+      case .clients(.package):
+        return nil // internal
+      }
     case .clients:
       switch libraryAccessMode {
       case .unit:
@@ -747,8 +752,18 @@ enum Swift: Platform {
     return nil
   }
 
-  static var sourceFileUpToName: [String] {
-    return ["Sources", "Products", "Source"]
+  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
+    switch mode {
+    case .dependency, .debugging, .testing, .export:
+      return ["Sources", "Products", "Source"]
+    case .release, .scaffolding:
+      switch mode.libraryAccessMode {
+      case .unit, .clients(.file):
+        return [libraryName]
+      case .clients(.package):
+        return ["Sources", libraryName, libraryName]
+      }
+    }
   }
   static var sourceFileExtension: String {
     return "swift"
@@ -774,57 +789,106 @@ enum Swift: Platform {
       .joined(separator: "\n")
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
-    try projectDirectory.update(
-      ["Package.swift"],
-      to: ([
+  static func createOtherProjectContainerFiles(
+    projectDirectory: inout Cache,
+    mode: CompilationMode,
+    libraryName: String
+  ) throws {
+    let needsPackage: Bool
+    let needsProduct: Bool
+    let packageName: String
+    let mainTargetName: String
+    let needsTests: Bool
+    switch mode {
+    case .dependency, .debugging, .testing, .export:
+      needsPackage = true
+      packageName = "Package"
+      needsProduct = false
+      mainTargetName = "Products"
+      needsTests = true
+    case .release, .scaffolding:
+      switch mode.libraryAccessMode {
+      case .unit, .clients(.file):
+        needsPackage = false
+        needsProduct = false
+      case .clients(.package):
+        needsPackage = true
+        needsProduct = true
+      }
+      packageName = libraryName
+      mainTargetName = libraryName
+      needsTests = false
+    }
+    if needsPackage {
+      var manifestSource = [
         "// swift-tools-version: 5.7",
         "",
         "import PackageDescription",
         "",
         "let package = Package(",
-        "\(indent)name: \u{22}Package\u{22},",
+        "\(indent)name: \u{22}\(packageName)\u{22},",
+      ]
+      if needsProduct {
+        manifestSource.append(contentsOf: [
+          "\(indent)products: [",
+          "\(indent)\(indent).library(name: \u{22}\(mainTargetName)\u{22}, targets: [\u{22}\(mainTargetName)\u{22}]),",
+          "\(indent)],",
+        ])
+      }
+      manifestSource.append(contentsOf: [
         "\(indent)targets: [",
-        "\(indent)\(indent).target(name: \u{22}Products\u{22}),",
-        "\(indent)\(indent).executableTarget(",
-        "\(indent)\(indent)\(indent)name: \u{22}test\u{22},",
-        "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
-        "\(indent)\(indent)),",
-        "\(indent)\(indent).testTarget(",
-        "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
-        "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
-        "\(indent)\(indent))",
-        "\(indent)]",
+        "\(indent)\(indent).target(name: \u{22}\(mainTargetName)\u{22}),",
+      ])
+      if needsTests {
+        manifestSource.append(contentsOf: [
+          "\(indent)\(indent).executableTarget(",
+          "\(indent)\(indent)\(indent)name: \u{22}test\u{22},",
+          "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+          "\(indent)\(indent)),",
+          "\(indent)\(indent).testTarget(",
+          "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
+          "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+          "\(indent)\(indent))",
+          "\(indent)]",
+        ])
+      }
+      manifestSource.append(contentsOf: [
         ")",
-      ] as [String]).joined(separator: "\n").appending("\n")
-    )
-    try projectDirectory.update(
-      ["Sources", "test", "Test.swift"],
-      to: ([
-        "@testable import Products",
-        "",
-        "@main struct Test {",
-        "",
-        "\(indent)static func main() {",
-        "\(indent)\(indent)Products.test()",
-        "\(indent)}",
-        "}",
-      ] as [String]).joined(separator: "\n").appending("\n")
-    )
-    try projectDirectory.update(
-      ["Tests", "WrappedTests", "WrappedTests.swift"],
-      to: ([
-        "import XCTest",
-        "@testable import Products",
-        "",
-        "class WrappedTests: XCTestCase {",
-        "",
-        "\(indent)func testProject() {",
-        "\(indent)\(indent)Products.test()",
-        "\(indent)}",
-        "}",
-      ] as [String]).joined(separator: "\n").appending("\n")
-    )
+      ])
+      try projectDirectory.update(
+        ["Package.swift"],
+        to: manifestSource.joined(separator: "\n").appending("\n")
+      )
+    }
+    if needsTests {
+      try projectDirectory.update(
+        ["Sources", "test", "Test.swift"],
+        to: ([
+          "@testable import Products",
+          "",
+          "@main struct Test {",
+          "",
+          "\(indent)static func main() {",
+          "\(indent)\(indent)Products.test()",
+          "\(indent)}",
+          "}",
+        ] as [String]).joined(separator: "\n").appending("\n")
+      )
+      try projectDirectory.update(
+        ["Tests", "WrappedTests", "WrappedTests.swift"],
+        to: ([
+          "import XCTest",
+          "@testable import Products",
+          "",
+          "class WrappedTests: XCTestCase {",
+          "",
+          "\(indent)func testProject() {",
+          "\(indent)\(indent)Products.test()",
+          "\(indent)}",
+          "}",
+        ] as [String]).joined(separator: "\n").appending("\n")
+      )
+    }
   }
 
   static var usesSnakeCase: Bool {

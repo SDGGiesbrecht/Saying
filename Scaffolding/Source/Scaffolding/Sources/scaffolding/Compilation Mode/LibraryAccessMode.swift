@@ -1,4 +1,4 @@
 enum LibraryAccessMode {
   case unit
-  case clients
+  case clients(LibraryForm)
 }

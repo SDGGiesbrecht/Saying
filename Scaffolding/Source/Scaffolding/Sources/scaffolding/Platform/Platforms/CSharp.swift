@@ -737,14 +737,18 @@ enum CSharp: Platform {
     ]
   }
 
-  static var sourceFileUpToName: [String] {
+  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
     return ["Test"]
   }
   static var sourceFileExtension: String {
     return "cs"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+  static func createOtherProjectContainerFiles(
+    projectDirectory: inout Cache,
+    mode: CompilationMode,
+    libraryName: String
+  ) throws {
     try projectDirectory.update(
       ["Project.csproj"],
       to: ([

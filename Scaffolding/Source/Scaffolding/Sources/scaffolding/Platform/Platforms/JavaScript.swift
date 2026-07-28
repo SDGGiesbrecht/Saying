@@ -496,14 +496,18 @@ enum JavaScript: Platform {
     ]
   }
 
-  static var sourceFileUpToName: [String] {
+  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
     return ["Package"]
   }
   static var sourceFileExtension: String {
     return "js"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+  static func createOtherProjectContainerFiles(
+    projectDirectory: inout Cache,
+    mode: CompilationMode,
+    libraryName: String
+  ) throws {
     try projectDirectory.update(
       ["Test.html"],
       to: ([

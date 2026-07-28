@@ -593,14 +593,18 @@ enum Kotlin: Platform {
     ]
   }
 
-  static var sourceFileUpToName: [String] {
+  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
     return ["app", "src", "main", "kotlin", "Test"]
   }
   static var sourceFileExtension: String {
     return "kt"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+  static func createOtherProjectContainerFiles(
+    projectDirectory: inout Cache,
+    mode: CompilationMode,
+    libraryName: String
+  ) throws {
     try projectDirectory.update(
       ["gradle.properties"],
       to: ([

@@ -82,7 +82,7 @@ enum CompilationMode {
     case .dependency, .debugging, .testing:
       return .unit
     case .export, .scaffolding:
-      return .clients
+      return .clients(.package)
     }
   }
 }

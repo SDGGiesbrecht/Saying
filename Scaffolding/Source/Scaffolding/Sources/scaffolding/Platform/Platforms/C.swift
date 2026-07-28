@@ -797,14 +797,18 @@ enum C: Platform {
     ]
   }
 
-  static var sourceFileUpToName: [String] {
+  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
     return ["test"]
   }
   static var sourceFileExtension: String {
     return "c"
   }
 
-  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws {
+  static func createOtherProjectContainerFiles(
+    projectDirectory: inout Cache,
+    mode: CompilationMode,
+    libraryName: String
+  ) throws {
     try projectDirectory.update(
       ["Makefile"],
       to: ([

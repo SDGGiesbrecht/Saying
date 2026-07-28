@@ -5,9 +5,8 @@ import PackageDescription
 let package = Package(
   name: "Saying",
   products: [
-    .library(name: "Saying", targets: ["Saying"])
+    .library(name: "Saying", targets: ["Saying"]),
   ],
   targets: [
-    .target(name: "Saying")
-  ]
+    .target(name: "Saying"),
 )
