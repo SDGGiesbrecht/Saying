@@ -857,8 +857,9 @@ extension Platform {
     for module in modulesToSearchForMembers {
       let referenceLookup = externalReferenceLookup + [module.referenceDictionary]
       var typeNameCache: [TypeReference: String] = [:]
-      for action in module.referenceDictionary.allActions(
-        filter: { action in
+      for copyReducing in module.referenceDictionary.allActions(
+        filter: { copyReducing in
+          let action = copyReducing.value
           if !action.isCreation,
              nativeIsMember(action: action) {
             let typeToCompare: ParsedTypeReference
@@ -898,6 +899,7 @@ extension Platform {
         },
         sorted: true
       ) {
+        let action = copyReducing.value
         if let declaration = self.declaration(
           for: action,
           externalReferenceLookup: referenceLookup,
@@ -3653,7 +3655,7 @@ extension Platform {
       }
     }
     for action in referenceDictionary.allActions() {
-      for requiredImport in nativeImplementation(of: action)?.requiredImports ?? [] {
+      for requiredImport in nativeImplementation(of: action.value)?.requiredImports ?? [] {
         imports.insert(requiredImport)
       }
     }
@@ -3664,8 +3666,13 @@ extension Platform {
     let moduleReferenceLookup = module.referenceDictionary
     let allLookup = moduleWideImports + [moduleReferenceLookup]
     let actionRegions: [UnicodeText] = moduleReferenceLookup.allActions()
-      .lazy.filter({ $0.deservesTesting })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
+      .lazy.filter({ $0.value.deservesTesting })
+      .lazy.flatMap({ copyReducing in
+        let action = copyReducing.value
+        return action.allCoverageRegionIdentifiers(
+          referenceLookup: allLookup,
+          skippingSubregions: nativeImplementation(of: action) != nil)
+      })
     let choiceRegions: [UnicodeText] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.allDefaults() })
       .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
@@ -3775,33 +3782,39 @@ extension Platform {
     let referenceLookup = moduleWideImports + [moduleReferenceLookup]
     let allActions = moduleReferenceLookup.allActions(sorted: true)
     if needsForwardDeclarations {
-      for action in allActions where !action.isFlow {
-        if let declaration = forwardDeclaration(
-          for: action,
-          referenceLookup: referenceLookup,
-          identifierIndex: &identifierIndex
-        ) {
-          result.appendSeparatorLine()
-          result.append(declaration)
+      for copyReducing in allActions {
+        let action = copyReducing.value
+        if !action.isFlow {
+          if let declaration = forwardDeclaration(
+            for: action,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          ) {
+            result.appendSeparatorLine()
+            result.append(declaration)
+          }
         }
       }
     }
-    for action in allActions where !action.isFlow {
-      if let declaration = self.declaration(
-        for: action,
-        externalReferenceLookup: referenceLookup,
-        mode: mode,
-        identifierIndex: &identifierIndex,
-        isAbsorbedMember: false,
-        hasBeenRelocated: relocatedActions
-          .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
-        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
-        coverageIndex: coverageIndex,
-        anonymousCounter: &anonymousCounter
-      ) {
-        if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
-          result.appendSeparatorLine()
-          result.append(declaration.full)
+    for copyReducing in allActions {
+      let action = copyReducing.value
+      if !action.isFlow {
+        if let declaration = self.declaration(
+          for: action,
+          externalReferenceLookup: referenceLookup,
+          mode: mode,
+          identifierIndex: &identifierIndex,
+          isAbsorbedMember: false,
+          hasBeenRelocated: relocatedActions
+            .contains(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))),
+          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+          coverageIndex: coverageIndex,
+          anonymousCounter: &anonymousCounter
+        ) {
+          if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
+            result.appendSeparatorLine()
+            result.append(declaration.full)
+          }
         }
       }
     }

@@ -3,7 +3,7 @@ struct ReferenceDictionary {
   private var languages: Set<UnicodeText>
   private var identifierMapping: [UnicodeText: MappedIdentifier]
   private var things: [UnicodeText: [[TypeReference]: Thing]]
-  private var actions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]]
+  private var actions: [UnicodeText: [[TypeReference]: [TypeReference?: CopyReducing<ActionIntermediate>]]]
   private var abilities: [UnicodeText: Ability]
 }
 
@@ -211,18 +211,18 @@ extension ReferenceDictionary {
       }
       identifierMapping[name] = MappedIdentifier(identifier: identifier, reordering: action.parameters.reordering(from: name, to: identifier))
     }
-    actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = action
+    actions[identifier, default: [:]][action.signature(orderedFor: identifier).map({ $0.key }), default: [:]][action.returnValue?.key] = CopyReducing(action)
     return errors
   }
 
-  func referenceActions(
-    from overloads: [[TypeReference] : [TypeReference? : ActionIntermediate]]
-  ) -> [TypeReference? : ActionIntermediate] {
-    var result: [TypeReference?: ActionIntermediate] = [:]
+  private func referenceActions(
+    from overloads: [[TypeReference] : [TypeReference?: CopyReducing<ActionIntermediate>]]
+  ) -> [TypeReference?: CopyReducing<ActionIntermediate>] {
+    var result: [TypeReference?: CopyReducing<ActionIntermediate>] = [:]
     for (signature, returnOverloads) in overloads {
       for (returnValue, action) in returnOverloads {
         let actionType = TypeReference.action(parameters: signature, returnValue: returnValue)
-        result[actionType] = action.asReference()
+        result[actionType] = CopyReducing(action.value.asReference())
       }
     }
     return result
@@ -242,7 +242,7 @@ extension ReferenceDictionary {
       signature.map({ $0.key.resolving(fromReferenceLookup: parentContexts + [self]) }),
       for: mappedIdentifier.reordering
     )
-    let returnOverloads: [() -> [TypeReference?: ActionIntermediate]]
+    let returnOverloads: [() -> [TypeReference?: CopyReducing<ActionIntermediate>]]
     switch ActionUse.isReferenceNotCall(name: identifier, arguments: mappedSignature) {
     case .some(true):
       returnOverloads = [{ referenceActions(from: group) }]
@@ -256,20 +256,23 @@ extension ReferenceDictionary {
       case .some(.some(let value)):
         let mappedReturn = value.key.resolving(fromReferenceLookup: parentContexts + [self])
         if let result = set[mappedReturn] {
-          return [result]
+          return [result.value]
         }
       case .some(.none):
         if let result = set[.none] ?? set[.statements] {
-          return [result]
+          return [result.value]
         }
       case .none:
         if set.count == 1 {
-          return Array(set.values)
+          return set.values.map { $0.value }
         } else {
           if reportAllForErrorAnalysis {
-            return Array(set.values)
+            return set.values.map { $0.value }
           } else {
-            return set.values.filter({ $0.isMemberWrapper })
+            return set.values.compactMap { copyReducing in
+              let action = copyReducing.value
+              return action.isMemberWrapper ? action : nil
+            }
           }
         }
       }
@@ -298,9 +301,9 @@ extension ReferenceDictionary {
   }
 
   func allActions(
-    filter: (ActionIntermediate) -> Bool = { _ in true },
+    filter: (CopyReducing<ActionIntermediate>) -> Bool = { _ in true },
     sorted: Bool = false
-  ) -> [ActionIntermediate] {
+  ) -> [CopyReducing<ActionIntermediate>] {
     let result =
     actions.values
       .lazy.map({ $0.values })
@@ -311,9 +314,9 @@ extension ReferenceDictionary {
     if !sorted {
       return Array(result)
     } else {
-      var dictionary: [UnicodeText: ActionIntermediate] = [:]
+      var dictionary: [UnicodeText: CopyReducing<ActionIntermediate>] = [:]
       for entry in result {
-        dictionary[entry.globallyUniqueIdentifier(referenceLookup: [self])] = entry
+        dictionary[entry.value.globallyUniqueIdentifier(referenceLookup: [self])] = entry
       }
       return dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
     }
@@ -367,9 +370,11 @@ extension ReferenceDictionary {
     for (_, signatureGroup) in actions {
       for (_, returnGroup) in signatureGroup {
         for (returnValue, action) in returnGroup {
-          if returnValue == thing,
-            action.isCreation {
-            return action
+          if returnValue == thing {
+            let actionValue = action.value
+            if actionValue.isCreation {
+              return actionValue
+            }
           }
         }
       }
@@ -442,7 +447,7 @@ extension ReferenceDictionary {
     }
     things = newThings
 
-    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
+    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: CopyReducing<ActionIntermediate>]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
         let resolvedSignature = signature.map({ $0.resolving(fromReferenceLookup: externalLookup + [self]) })
@@ -486,17 +491,18 @@ extension ReferenceDictionary {
     }
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
-        for (overload, action) in returnOverloads {
+        for (overload, copyReducing) in returnOverloads {
+          let action = copyReducing.value
           if action.isSpecialized {
             let proxy = ParsedTypeReference.action(parameters: action.parameters.inAnyOrder.map({ $0.type }), returnValue: action.returnValue)
             let access = min(action.access, proxy.derivedAccessLimit(referenceLookup: allLookup))
             if access != action.access {
-              actions[actionName]![signature]![overload]!.resolveSpecializedAccess(to: access)
+              actions[actionName]![signature]![overload]!.value.resolveSpecializedAccess(to: access)
               changedSomething = true
             }
             let testOnly = action.testOnlyAccess || proxy.derivedTestAccess(referenceLookup: allLookup)
             if testOnly != action.testOnlyAccess {
-              actions[actionName]![signature]![overload]!.testOnlyAccess = testOnly
+              actions[actionName]![signature]![overload]!.value.testOnlyAccess = testOnly
               changedSomething = true
             }
           }
@@ -507,17 +513,18 @@ extension ReferenceDictionary {
   }
 
   mutating func resolveTypes(parentContexts: [ReferenceDictionary]) {
-    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: ActionIntermediate]]] = [:]
+    var newActions: [UnicodeText: [[TypeReference]: [TypeReference?: CopyReducing<ActionIntermediate>]]] = [:]
     for (actionName, group) in actions {
       for (signature, returnOverloads) in group {
-        for (overload, action) in returnOverloads {
+        for (overload, copyReducing) in returnOverloads {
+          let action = copyReducing.value
           var modified = action
           modified.implementation?.resolveTypes(
             context: action,
             referenceLookup: parentContexts + [self],
             finalReturnValue: action.returnValue
           )
-          newActions[actionName, default: [:]][signature, default: [:]][overload] = modified
+          newActions[actionName, default: [:]][signature, default: [:]][overload] = CopyReducing(modified)
         }
       }
     }
@@ -533,7 +540,7 @@ extension ReferenceDictionary {
       thing.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
     for action in allActions() {
-      action.validateReferences(referenceLookup: referenceLookup, errors: &errors)
+      action.value.validateReferences(referenceLookup: referenceLookup, errors: &errors)
     }
     for ability in allAbilities() {
       ability.documentation?.validateReferences(
@@ -595,7 +602,7 @@ extension ReferenceDictionary {
   func applyingTestCoverageTracking(externalLookup: [ReferenceDictionary]) -> ReferenceDictionary {
     var new = self
     for action in allActions() {
-      let wrapped = action.wrappedToTrackCoverage(referenceLookup: externalLookup + [self])
+      let wrapped = action.value.wrappedToTrackCoverage(referenceLookup: externalLookup + [self])
       _ = new.add(action: wrapped)
     }
     new.resolveTypeIdentifiers(externalLookup: externalLookup)
@@ -649,7 +656,8 @@ extension ReferenceDictionary {
           }
         }
       }
-      for action in allActions() {
+      for copyReducing in allActions() {
+        let action = copyReducing.value
         if let swift = action.swiftSignature(referenceLookup: referenceLookup),
            stillRequired.contains(swift) {
           stillRequired.remove(swift)
