@@ -83,15 +83,56 @@ import Saying
     packageRoot: URL,
     reportProgress: @escaping (String) -> Void
   ) throws {
-    let intermediate = package.productsDirectory.appendingPathComponent("Saying.swift")
-    let file = packageRoot
-      .appendingPathComponent("Scaffolding")
-      .appendingPathComponent("Generated")
-      .appendingPathComponent("Swift")
-      .appendingPathComponent("Saying")
-      .appendingPathComponent("Sources")
-      .appendingPathComponent("Saying")
-      .appendingPathComponent("Saying.swift")
+
+    var shims: [String] = [
+      "extension SayingSourceSlice {",
+      "  public init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
+      "    self.init(origin, code)",
+      "  }",
+      "}",
+    ]
+    for nodeType in [
+      "ParsedDownArrowSyntax",
+      "ParsedLeftArrowSyntax",
+      "ParsedRightArrowSyntax",
+      "ParsedClosingBraceSyntax",
+      "ParsedOpeningBraceSyntax",
+      "ParsedClosingBracketSyntax",
+      "ParsedOpeningBracketSyntax",
+      "ParsedClosingParenthesisSyntax",
+      "ParsedOpeningParenthesisSyntax",
+      "ParsedLineBreakSyntax",
+      "ParsedParagraphBreakSyntax",
+      "ParsedBulletCharacterSyntax",
+      "ParsedOpeningQuestionMarkSyntax",
+      "ParsedClosingQuestionMarkSyntax",
+      "ParsedRightToLeftQuestionMarkSyntax",
+      "ParsedGreekQuestionMarkSyntax",
+      "ParsedOpeningExclamationMarkSyntax",
+      "ParsedClosingExclamationMarkSyntax",
+      "ParsedColonCharacterSyntax",
+      "ParsedLeftChevronQuotationMarkSyntax",
+      "ParsedLowQuotationMarkSyntax",
+      "ParsedNinesQuotationMarkSyntax",
+      "ParsedRightChevronQuotationMarkSyntax",
+      "ParsedSixesQuotationMarkSyntax",
+      "ParsedSlashSyntax",
+      "ParsedSpaceSyntax",
+      "ParsedSymbolInsertionMarkSyntax",
+    ] {
+      shims.append(contentsOf: [
+        "",
+        "extension \(nodeType) {",
+        "  public init(location: SayingSourceSlice) {",
+        "    self.init(location)",
+        "  }",
+        "}",
+      ])
+    }
+    shims.append(contentsOf: [
+      "",
+    ])
+
     try Swift.prepare(
       package: package,
       mode: .scaffolding,
@@ -168,60 +209,13 @@ import Saying
         "ParsedSpaceSyntax",
         "ParsedSymbolInsertionMarkSyntax",
       ],
-      location: intermediate,
+      location: packageRoot
+        .appendingPathComponent("Scaffolding")
+        .appendingPathComponent("Generated")
+        .appendingPathComponent("Swift")
+        .appendingPathComponent("Saying"),
+      shims: shims.joined(separator: "\n"),
       reportProgress: reportProgress
     )
-    var source = try String(contentsOf: intermediate, encoding: .utf8)
-    var appendix: [String] = [
-      "",
-      "extension SayingSourceSlice {",
-      "  public init(origin: UnicodeText, code: SayingSourceCodeSlice) {",
-      "    self.init(origin, code)",
-      "  }",
-      "}",
-    ]
-    for nodeType in [
-      "ParsedDownArrowSyntax",
-      "ParsedLeftArrowSyntax",
-      "ParsedRightArrowSyntax",
-      "ParsedClosingBraceSyntax",
-      "ParsedOpeningBraceSyntax",
-      "ParsedClosingBracketSyntax",
-      "ParsedOpeningBracketSyntax",
-      "ParsedClosingParenthesisSyntax",
-      "ParsedOpeningParenthesisSyntax",
-      "ParsedLineBreakSyntax",
-      "ParsedParagraphBreakSyntax",
-      "ParsedBulletCharacterSyntax",
-      "ParsedOpeningQuestionMarkSyntax",
-      "ParsedClosingQuestionMarkSyntax",
-      "ParsedRightToLeftQuestionMarkSyntax",
-      "ParsedGreekQuestionMarkSyntax",
-      "ParsedOpeningExclamationMarkSyntax",
-      "ParsedClosingExclamationMarkSyntax",
-      "ParsedColonCharacterSyntax",
-      "ParsedLeftChevronQuotationMarkSyntax",
-      "ParsedLowQuotationMarkSyntax",
-      "ParsedNinesQuotationMarkSyntax",
-      "ParsedRightChevronQuotationMarkSyntax",
-      "ParsedSixesQuotationMarkSyntax",
-      "ParsedSlashSyntax",
-      "ParsedSpaceSyntax",
-      "ParsedSymbolInsertionMarkSyntax",
-    ] {
-      appendix.append(contentsOf: [
-        "",
-        "extension \(nodeType) {",
-        "  public init(location: SayingSourceSlice) {",
-        "    self.init(location)",
-        "  }",
-        "}",
-      ])
-    }
-    appendix.append(contentsOf: [
-      "",
-    ])
-    source.append(contentsOf: appendix.joined(separator: "\n"))
-    try source.overwriteIfDifferentThan(file, baseURL: packageRoot, reportProgress: reportProgress)
   }
 }

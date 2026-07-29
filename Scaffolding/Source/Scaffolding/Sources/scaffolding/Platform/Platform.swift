@@ -196,10 +196,13 @@ protocol Platform {
 
   // Package
   static func testEntryPoint() -> [String]?
-  static var sourceFileUpToName: [String] { get }
+  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String]
   static var sourceFileExtension: String { get }
   static func postprocessFileSplit(_ file: String) -> String
-  static func createOtherProjectContainerFiles(projectDirectory: inout Cache) throws
+  static func createOtherProjectContainerFiles(
+    projectDirectory: inout Cache,
+    mode: CompilationMode, libraryName: String
+  ) throws
 
   // Saying
   static var usesSnakeCase: Bool { get }
@@ -4032,6 +4035,7 @@ extension Platform {
     mode: CompilationMode,
     entryPoints: Set<UnicodeText>? = nil,
     location: URL? = nil,
+    shims: String? = nil,
     reportProgress: @escaping (String) -> Void
   ) throws {
     let sourceModules = try package.modules()
@@ -4073,47 +4077,65 @@ extension Platform {
       self.source(for: builtModules, mode: mode, moduleWideImports: builtSayingModule.map({ [$0] }) ?? [])
     ]
 
-    switch mode {
-    case .testing, .debugging, .dependency, .export:
+    if mode.hasTestCoverage {
       if let entryPoint = testEntryPoint() {
         source.appendSeparatorLine()
         source.append(contentsOf: entryPoint)
       }
-      var constructionDirectory = Cache(
-        location: location ?? preparedDirectory(for: package),
-        reportProgress: reportProgress,
-        ignoredSubdirectories: self.ignoredDirectories
-      )
-      let completedSource = source.joined(separator: "\n").appending("\n")
-      if let limit = fileSizeLimit,
-        completedSource.utf8.count > limit {
-        let split = splitLongFile(completedSource)
-        let baseName = sourceFileUpToName
-        for (index, part) in split.enumerated() {
-          try constructionDirectory.update(
-            baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
-            to: part
-          )
-        }
-      } else {
-        try constructionDirectory.update(
-          sourceFileUpToName.appendingToFileName(".\(sourceFileExtension)"),
-          to: completedSource
+    }
+    var completedSource = source.joined(separator: "\n").appending("\n")
+    while completedSource.first == "\n" {
+      completedSource.removeFirst()
+    }
+    while completedSource.hasSuffix("\n\n") {
+      completedSource.removeLast()
+    }
+
+    let outputDirectoryLocation: URL
+    switch mode {
+    case .release, .scaffolding:
+      outputDirectoryLocation = location ?? productsDirectory(for: package)
+    case .dependency, .debugging, .testing, .export:
+      outputDirectoryLocation = location ?? preparedDirectory(for: package)
+    }
+    var outputDirectory = Cache(
+      location: outputDirectoryLocation,
+      reportProgress: reportProgress,
+      ignoredSubdirectories: self.ignoredDirectories
+    )
+
+    let libraryName = "Saying" // Placeholder; nothing else can be built yet anyway.
+    let sourceFileLocation = sourceFileUpToName(mode: mode, libraryName: libraryName)
+
+    if let limit = fileSizeLimit,
+       completedSource.utf8.count > limit {
+      let split = splitLongFile(completedSource)
+      let baseName = sourceFileLocation
+      for (index, part) in split.enumerated() {
+        try outputDirectory.update(
+          baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
+          to: part
         )
       }
-      try createOtherProjectContainerFiles(projectDirectory: &constructionDirectory)
-      try constructionDirectory.removeStale()
-    case .release, .scaffolding:
-      let productsDirectory = location ?? productsDirectory(for: package)
-      var joined = source.joined(separator: "\n").appending("\n")
-      while joined.first == "\n" {
-        joined.removeFirst()
-      }
-      while joined.hasSuffix("\n\n") {
-        joined.removeLast()
-      }
-      try joined
-        .overwriteIfDifferentThan(productsDirectory, baseURL: package.location, reportProgress: reportProgress)
+    } else {
+      try outputDirectory.update(
+        sourceFileLocation.appendingToFileName(".\(sourceFileExtension)"),
+        to: completedSource
+      )
     }
+
+    try createOtherProjectContainerFiles(
+      projectDirectory: &outputDirectory,
+      mode: mode,
+      libraryName: libraryName
+    )
+
+    if let shims = shims {
+      try outputDirectory.update(
+        ["Sources", "Saying", "Shims.swift"],
+        to: shims
+      )
+    }
+    try outputDirectory.removeStale()
   }
 }
