@@ -1,3 +1,5 @@
+import Syntax
+
 protocol ParsedActionPrototype: ParsedSyntaxNode {
   var isFlow: Bool { get }
   var access: ParsedAccess? { get }

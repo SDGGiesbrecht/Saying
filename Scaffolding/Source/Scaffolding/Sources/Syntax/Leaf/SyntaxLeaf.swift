@@ -1,12 +1,12 @@
 import Saying
 
-protocol SyntaxLeaf: SyntaxNode {
+public protocol SyntaxLeaf: SyntaxNode {
   var leafKind: SyntaxLeafKind { get }
   var text: UnicodeText { get }
 }
 
 extension SyntaxLeaf { // SyntaxNode
-  func source() -> UnicodeText {
+  public func source() -> UnicodeText {
     return text
   }
 }

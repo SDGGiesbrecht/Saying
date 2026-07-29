@@ -1,3 +1,5 @@
+import Syntax
+
 extension ParsedBracedStatementList {
   var statements: [ParsedStatement] {
     switch self {

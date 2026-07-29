@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 struct ActionIntermediate {
   fileprivate var prototype: ActionPrototype

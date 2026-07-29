@@ -1,3 +1,5 @@
+import Syntax
+
 extension ParsedParameter {
   var definitionOrReference: DefinitionOrReference<ParameterTypeIntermediate> {
     switch type {

@@ -1,3 +1,5 @@
+import Syntax
+
 enum AccessIntermediate: Comparable {
   case nowhere
   static var inferred: AccessIntermediate { .file }

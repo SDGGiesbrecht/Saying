@@ -1,10 +1,7 @@
 import Saying
+import Syntax
 
-protocol ParsedIdentifierSegment: ParsedSyntaxNode {
-  var identifierSegmentKind: ParsedIdentifierSegmentKind { get }
-}
-
-extension ParsedIdentifierSegment {
+extension IdentifierSegment {
 
   func identifierText() -> UnicodeText {
     return source()

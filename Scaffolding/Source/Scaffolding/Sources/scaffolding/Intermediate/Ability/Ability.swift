@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 struct Ability {
   var names: Set<UnicodeText>

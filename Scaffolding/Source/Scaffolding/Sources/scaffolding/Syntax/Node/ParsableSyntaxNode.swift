@@ -1,13 +1,5 @@
 import Saying
-
-protocol ParsableSyntaxNode: ParsedSyntaxNode {
-  associatedtype ParseError: DiagnosticError
-  static func diagnosticParseNext(
-    in remainder: Slice<UnicodeSegments>,
-    origin: UnicodeText
-  ) -> Result<DiagnosticParseResult<Self>, ErrorList<ParseError>>
-  static func fastParseNext(in remainder: Slice<UnicodeSegments>, origin: UnicodeText) -> Self?
-}
+import Syntax
 
 extension ParsableSyntaxNode {
 
@@ -30,21 +22,6 @@ extension ParsableSyntaxNode {
   }
   static func diagnosticParse(source: UnicodeText, origin: UnicodeText) -> Result<Self, ErrorList<FileParseError<ParseError>>> {
     return diagnosticParse(source: UnicodeSegments(allOf: source), origin: origin)
-  }
-
-  static func fastParse(source: UnicodeSegments, origin: UnicodeText) -> Self? {
-    var remainder = source[...]
-    guard let parsed = fastParseNext(in: remainder, origin: origin) else {
-      return nil
-    }
-    remainder = remainder[parsed.endIndex...]
-    guard remainder.isEmpty else {
-      return nil
-    }
-    return parsed
-  }
-  static func fastParse(source: UnicodeText, origin: UnicodeText) -> Self? {
-    return fastParse(source: UnicodeSegments(allOf: source), origin: origin)
   }
 
   init?(source: UnicodeSegments, origin: UnicodeText) {

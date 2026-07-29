@@ -1,6 +1,7 @@
 import Foundation
 
 import Saying
+import Syntax
 
 extension SayingSource {
 
@@ -30,8 +31,4 @@ extension SayingSource {
   func formattedGitStyleSource() throws -> UnicodeText {
     return try parse().formattedGitStyleSource()
   }
-}
-
-func compilerGeneratedOrigin(file: StaticString = #filePath, line: UInt = #line) -> UnicodeText {
-  return "\(file) (\(line))"
 }

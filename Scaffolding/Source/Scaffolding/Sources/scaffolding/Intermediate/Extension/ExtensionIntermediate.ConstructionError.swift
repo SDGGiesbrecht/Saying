@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 extension ExtensionIntermediate {
   enum ConstructionError: DiagnosticError {

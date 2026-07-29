@@ -1,3 +1,5 @@
+import Syntax
+
 protocol ParsedActionReferenceProtocol: ParsedSyntaxNode {
 
 }

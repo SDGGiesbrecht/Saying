@@ -1,3 +1,5 @@
+import Syntax
+
 protocol ParsedActionDeclarationPrototype: ParsedActionPrototype {
   var implementation: ParsedActionImplementations { get }
 }
