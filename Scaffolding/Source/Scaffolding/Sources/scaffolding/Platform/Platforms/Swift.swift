@@ -849,10 +849,10 @@ enum Swift: Platform {
           "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
           "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
           "\(indent)\(indent))",
-          "\(indent)]",
         ])
       }
       manifestSource.append(contentsOf: [
+        "\(indent)]",
         ")",
       ])
       try projectDirectory.update(
