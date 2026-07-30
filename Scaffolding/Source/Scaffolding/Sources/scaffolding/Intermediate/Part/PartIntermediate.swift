@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 struct PartIntermediate {
   var names: Set<UnicodeText>

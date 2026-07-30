@@ -1,26 +1,7 @@
-struct ErrorList<Element>: Error where Element: DiagnosticError {
-
-  init(_ errors: [Element]) {
-    self.errors = errors
-  }
-
-  var errors: [Element]
-}
-
-extension ErrorList {
-  func map<NewElement>(_ closure: (Element) -> NewElement) -> ErrorList<NewElement> {
-    return ErrorList<NewElement>(errors.map(closure))
-  }
-}
-
-extension ErrorList: ExpressibleByArrayLiteral {
-  init(arrayLiteral elements: Element...) {
-    self.init(elements)
-  }
-}
+import Syntax
 
 extension ErrorList: CustomStringConvertible {
-  var description: String {
+  public var description: String {
     var result = ["["]
     result.append(contentsOf: errors.map({ $0.diagnostic }))
     result.append("]")

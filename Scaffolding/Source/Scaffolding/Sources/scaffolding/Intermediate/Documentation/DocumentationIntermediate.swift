@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 struct DocumentationIntermediate {
   var paragraphs: [ParsedParagraph]

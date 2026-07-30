@@ -1,3 +1,5 @@
+import Syntax
+
 protocol ParsedThingDeclarationProtocol: ParsedSyntaxNode {
   var documentation: ParsedAttachedDocumentation? { get }
   var access: ParsedAccess? { get }

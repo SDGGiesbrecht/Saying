@@ -1,3 +1,5 @@
+import Syntax
+
 extension ParsedActionImplementations {
 
   var source: ParsedSourceOrCreationActionImplementation? {

@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 enum FileParseError<NodeParseError>: DiagnosticError
 where NodeParseError: DiagnosticError {

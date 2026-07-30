@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 enum ReferenceError: DiagnosticError {
   case noSuchThing(UnicodeText, reference: ParsedThingReferenceProtocol)

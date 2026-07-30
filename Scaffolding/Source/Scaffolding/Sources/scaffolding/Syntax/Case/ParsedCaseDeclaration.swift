@@ -1,3 +1,5 @@
+import Syntax
+
 extension ParsedCaseDeclaration {
   var contents: ParsedRequirementReturnValue? {
     return details.flatMap { detailNode in

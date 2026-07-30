@@ -13,25 +13,12 @@ extension UnicodeText {
       self.init(String.UnicodeScalarView(scalars))
     }
   }
-
-  init(_ string: String) {
-    self.init(string.unicodeScalars)
-  }
 }
 
 extension UnicodeText: CustomStringConvertible {
 
   public var description: String {
     return String(self)
-  }
-}
-
-extension UnicodeText: ExpressibleByStringInterpolation {}
-
-extension UnicodeText: ExpressibleByStringLiteral {
-
-  public init(stringLiteral value: String) {
-    self.init(value)
   }
 }
 

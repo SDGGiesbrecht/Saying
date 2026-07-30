@@ -1,4 +1,5 @@
 import Saying
+import Syntax
 
 struct ModuleIntermediate {
   var referenceDictionary = ReferenceDictionary(scope: .unit)

@@ -83,14 +83,46 @@ struct Node {
     }
 
     var result: [String] = [
-      "\(typeKeyword()) \(parsed ? "Parsed" : "")\(name) {"
+      "public \(typeKeyword()) \(parsed ? "Parsed" : "")\(name) {"
     ]
     result.append(contentsOf: childrenProperties(parsed: parsed))
-    if let text = storedTextProperty(parsed: parsed) {
+    let possibleStoredTextProperty = storedTextProperty(parsed: parsed)
+    if let text = possibleStoredTextProperty {
       result.append(text)
     }
-    if let location = storedLocationProperty(parsed: parsed) {
+    let possibleStoredLocationProperty = storedLocationProperty(parsed: parsed)
+    if let location = possibleStoredLocationProperty {
       result.append(location)
+    }
+    if case .alternates = kind {
+    } else {
+      result.append(contentsOf: [
+        "  public init(",
+      ])
+      var parameters = childrenInitializerParameters(parsed: parsed)
+      if possibleStoredTextProperty != nil {
+        parameters.append("text: UnicodeText")
+      }
+      if possibleStoredLocationProperty != nil {
+        parameters.append("location: SayingSourceSlice")
+      }
+      let parametersString = parameters.joined(separator: ",\n    ")
+      if !parametersString.isEmpty {
+        result.append("    \(parametersString)")
+      }
+      result.append(contentsOf: [
+        "  ) {",
+      ])
+      result.append(contentsOf: childrenInitializerSetters(parsed: parsed))
+      if possibleStoredTextProperty != nil {
+        result.append("    self.text = text")
+      }
+      if possibleStoredLocationProperty != nil {
+        result.append("    self.location = location")
+      }
+      result.append(contentsOf: [
+        "  }",
+      ])
     }
     result.append(contentsOf: [
       "}",
@@ -118,7 +150,7 @@ struct Node {
         switch child.kind {
         case .fixed:
           if parsed {
-            return "  let \(child.name): Parsed\(child.type)"
+            return "  public let \(child.name): Parsed\(child.type)"
           } else {
             return [
               "  var \(child.name): \(child.type) {",
@@ -127,11 +159,11 @@ struct Node {
             ].joined(separator: "\n")
           }
         case .required:
-          return "  \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)"
+          return "  public \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)"
         case .optional:
-          return "  \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
+          return "  public \(parsed ? "let" : "var") \(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
         case .array:
-          return "  \(parsed ? "let" : "var") \(child.name): [\(parsed ? "Parsed" : "")\(child.type)]"
+          return "  public \(parsed ? "let" : "var") \(child.name): [\(parsed ? "Parsed" : "")\(child.type)]"
         }
       }
     case .alternates(let alternates):
@@ -149,7 +181,7 @@ struct Node {
       case .fixedLeaf, .compound, .alternates:
         return nil
       case .keyword, .variableLeaf:
-        return "  let text: UnicodeText"
+        return "  public let text: UnicodeText"
       }
     }
   }
@@ -160,9 +192,53 @@ struct Node {
     } else {
       switch kind {
       case .fixedLeaf, .keyword, .variableLeaf:
-        return "  let location: SayingSourceSlice"
+        return "  public let location: SayingSourceSlice"
       case .compound, .alternates:
         return nil
+      }
+    }
+  }
+
+  func childrenInitializerParameters(parsed: Bool) -> [String] {
+    switch kind {
+    case .fixedLeaf, .keyword, .variableLeaf, .alternates:
+      return []
+    case .compound(let children):
+      return children.compactMap { child in
+        switch child.kind {
+        case .fixed:
+          if parsed {
+            return "\(child.name): Parsed\(child.type)"
+          } else {
+            return nil
+          }
+        case .required:
+          return "\(child.name): \(parsed ? "Parsed" : "")\(child.type)"
+        case .optional:
+          return "\(child.name): \(parsed ? "Parsed" : "")\(child.type)?"
+        case .array:
+          return "\(child.name): [\(parsed ? "Parsed" : "")\(child.type)]"
+        }
+      }
+    }
+  }
+
+  func childrenInitializerSetters(parsed: Bool) -> [String] {
+    switch kind {
+    case .fixedLeaf, .keyword, .variableLeaf, .alternates:
+      return []
+    case .compound(let children):
+      return children.compactMap { child in
+        switch child.kind {
+        case .fixed:
+          if parsed {
+            return "    self.\(child.name) = \(child.name)"
+          } else {
+            return nil
+          }
+        case .required, .optional, .array:
+          return "    self.\(child.name) = \(child.name)"
+        }
       }
     }
   }
@@ -171,30 +247,30 @@ struct Node {
     var result: [String] = [
       "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxNode {",
       "",
-      "  var nodeKind: \(parsed ? "Parsed" : "")SyntaxNodeKind {",
+      "  public var nodeKind: \(parsed ? "Parsed" : "")SyntaxNodeKind {",
       "    return .\(lowercasedName)(self)",
       "  }",
       "",
-      "  var children: [\(parsed ? "Parsed" : "")SyntaxNode] {",
+      "  public var children: [\(parsed ? "Parsed" : "")SyntaxNode] {",
       childrenImplementation(parsed: parsed),
       "  }",
     ]
     if parsed {
       result.append(contentsOf: [
         "",
-        "  var context: UnicodeSegments {",
+        "  public var context: UnicodeSegments {",
       ])
       result.append(contentsOf: contextImplementation())
       result.append(contentsOf: [
         "  }",
         "",
-        "  var startIndex: UnicodeSegments.Index {",
+        "  public var startIndex: UnicodeSegments.Index {",
       ])
       result.append(contentsOf: startIndexImplementation())
       result.append(contentsOf: [
         "  }",
         "",
-        "  var endIndex: UnicodeSegments.Index {",
+        "  public var endIndex: UnicodeSegments.Index {",
       ])
       result.append(contentsOf: endIndexImplementation())
       result.append(contentsOf: [
@@ -203,7 +279,7 @@ struct Node {
       if let location = locationImplementation() {
         result.append(contentsOf: [
           "",
-          "  var location: SayingSourceSlice {",
+          "  public var location: SayingSourceSlice {",
           location,
           "  }",
         ])
@@ -212,14 +288,14 @@ struct Node {
     if parsed {
       result.append(contentsOf: [
         "",
-        "  func mutableNode() -> SyntaxNode {",
+        "  public func mutableNode() -> SyntaxNode {",
         "    return mutable()",
         "  }",
       ])
     } else {
       result.append(contentsOf: [
         "",
-        "  func parsedNode() -> ParsedSyntaxNode {",
+        "  public func parsedNode() -> ParsedSyntaxNode {",
         "    return parsed()",
         "  }",
       ])
@@ -345,14 +421,14 @@ struct Node {
     }
     result.append(contentsOf: [
       "",
-      "  static func diagnosticParseNext(",
+      "  public static func diagnosticParseNext(",
       "    in remainder: Slice<UnicodeSegments>,",
       "    origin: UnicodeText",
       "  ) -> Result<DiagnosticParseResult<Parsed\(name)>, ErrorList<ParseError>> {",
       diagnosticParseImplementation(),
       "  }",
       "",
-      "  static func fastParseNext(in remainder: Slice<UnicodeSegments>, origin: UnicodeText) -> Parsed\(name)? {",
+      "  public static func fastParseNext(in remainder: Slice<UnicodeSegments>, origin: UnicodeText) -> Parsed\(name)? {",
       fastParseImplementation(),
       "  }",
       "}",
@@ -623,16 +699,16 @@ struct Node {
     return [
       "extension Parsed\(name) {",
       "",
-      "  \(isIndirect ? "indirect " : "")enum ParseError: DiagnosticError {",
+      "  public \(isIndirect ? "indirect " : "")enum ParseError: DiagnosticError {",
       parseErrorCases().lazy.map({ "    \($0)" }).joined(separator: "\n"),
       "",
-      "    var message: String {",
+      "    public var message: String {",
       "      switch self {",
       parseDiagnosticMessageCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
       "      }",
       "    }",
       "",
-      "    var range: SayingSourceSlice {",
+      "    public var range: SayingSourceSlice {",
       "      switch self {",
       parseDiagnosticRangeCases().lazy.map({ "      \($0)" }).joined(separator: "\n"),
       "      }",
@@ -749,7 +825,7 @@ struct Node {
       var result: [String] = [
         "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxLeaf {",
         "",
-        "  var leafKind: \(parsed ? "Parsed" : "")SyntaxLeafKind {",
+        "  public var leafKind: \(parsed ? "Parsed" : "")SyntaxLeafKind {",
         "    return .\(lowercasedName)(self)",
         "  }",
       ]
@@ -772,7 +848,7 @@ struct Node {
       switch kind {
       case .fixedLeaf(let scalar):
         return [
-          "  var text: UnicodeText {",
+          "  public var text: UnicodeText {",
           "    return UnicodeText(\u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22})",
           "  }",
         ].joined(separator: "\n")
@@ -787,7 +863,7 @@ struct Node {
       return [
         "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")IdentifierSegment {",
         "",
-        "  var identifierSegmentKind: \(parsed ? "Parsed" : "")IdentifierSegmentKind {",
+        "  public var identifierSegmentKind: \(parsed ? "Parsed" : "")IdentifierSegmentKind {",
         "    return .\(lowercasedName)(self)",
         "  }",
         "}",
@@ -861,7 +937,7 @@ struct Node {
 
   static func nodeKind(parsed: Bool) -> String {
     var result: [String] = [
-      "enum \(parsed ? "Parsed" : "")SyntaxNodeKind {",
+      "public enum \(parsed ? "Parsed" : "")SyntaxNodeKind {",
     ]
     result.append(contentsOf: nodes.lazy.map({ $0.nodeKindCase(parsed: parsed) }))
     result.append(contentsOf: [
@@ -876,7 +952,7 @@ struct Node {
 
   static func leafKind(parsed: Bool) -> String {
     var result: [String] = [
-      "enum \(parsed ? "Parsed" : "")SyntaxLeafKind {",
+      "public enum \(parsed ? "Parsed" : "")SyntaxLeafKind {",
     ]
     result.append(contentsOf: nodes.lazy.compactMap({ $0.leafKindCase(parsed: parsed) }))
     result.append(contentsOf: [
@@ -896,7 +972,7 @@ struct Node {
 
   static func identifierSegmentKind(parsed: Bool) -> String {
     var result: [String] = [
-      "enum \(parsed ? "Parsed" : "")IdentifierSegmentKind {",
+      "public enum \(parsed ? "Parsed" : "")IdentifierSegmentKind {",
     ]
     result.append(contentsOf: nodes.lazy.compactMap({ $0.identifierSegmentKindCase(parsed: parsed) }))
     result.append(contentsOf: [
