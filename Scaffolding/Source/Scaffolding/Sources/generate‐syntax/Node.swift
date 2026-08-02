@@ -3,7 +3,6 @@ struct Node {
   let name: String
   let kind: Kind
   var isIdentifierSegment = false
-  var isIndirect = false
   var utilities: [String] = []
   var parsedUtilities: [String] = []
 
@@ -99,14 +98,12 @@ struct Node {
   }
 
   func typeKeyword() -> String {
-    let keyword: String
     switch kind {
     case .fixedLeaf, .keyword, .variableLeaf, .compound:
-      keyword = "struct"
+      return "struct"
     case .alternates:
-      keyword = "enum"
+      return "indirect enum"
     }
-    return "\(isIndirect ? "indirect " : "")\(keyword)"
   }
 
   func childrenProperties(parsed: Bool) -> [String] {
@@ -623,7 +620,7 @@ struct Node {
     return [
       "extension Parsed\(name) {",
       "",
-      "  \(isIndirect ? "indirect " : "")enum ParseError: DiagnosticError {",
+      "  indirect enum ParseError: DiagnosticError {",
       parseErrorCases().lazy.map({ "    \($0)" }).joined(separator: "\n"),
       "",
       "    var message: String {",
