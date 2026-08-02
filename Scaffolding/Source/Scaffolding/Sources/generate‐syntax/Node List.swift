@@ -551,8 +551,7 @@ extension Node {
               Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
               Alternate(name: "literal", type: "Literal")
-            ]),
-            isIndirect: true
+            ])
           ),
           Node(
             name: "Passage",
@@ -792,8 +791,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "compound", type: "UseSignature"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
-            ]),
-            isIndirect: true
+            ])
           ),
           Node(
             name: "ConcreteParameterType",
@@ -823,8 +821,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "type", type: "ParameterType"),
               Alternate(name: "reference", type: "ParameterReference"),
-            ]),
-            isIndirect: true
+            ])
           ),
         ],
         Node.separatedList(
@@ -884,8 +881,7 @@ extension Node {
             kind: .alternates([
               Alternate(name: "compound", type: "CompoundSignature"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
-            ]),
-            isIndirect: true
+            ])
           ),
           Node(
             name: "ActionNameEntry",
