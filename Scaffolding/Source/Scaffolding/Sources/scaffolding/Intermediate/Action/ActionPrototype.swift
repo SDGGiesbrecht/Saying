@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct ActionPrototype {
   var isFlow: Bool

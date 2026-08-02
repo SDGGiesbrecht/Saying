@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 enum ActionUseArgument {
   case action(ActionUse)

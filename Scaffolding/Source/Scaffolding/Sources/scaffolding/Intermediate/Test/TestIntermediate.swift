@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct TestIntermediate {
   var location: [Set<UnicodeText>]

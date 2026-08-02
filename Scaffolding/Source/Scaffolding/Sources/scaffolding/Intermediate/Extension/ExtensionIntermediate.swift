@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct ExtensionIntermediate {
   var ability: UnicodeText

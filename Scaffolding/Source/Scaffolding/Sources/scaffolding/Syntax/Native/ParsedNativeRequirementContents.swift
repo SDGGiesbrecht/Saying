@@ -1,5 +1,3 @@
-import Syntax
-
 extension ParsedNativeRequirementContents {
 
   var requirements: [ParsedNativeThingReference] {

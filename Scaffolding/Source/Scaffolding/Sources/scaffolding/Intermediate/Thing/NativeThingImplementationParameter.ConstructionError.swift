@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 extension NativeThingImplementationParameter {
   enum ConstructionError: DiagnosticError {

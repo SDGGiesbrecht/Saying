@@ -13,13 +13,6 @@ let package = Package(
       name: "scaffolding",
       dependencies: [
         .product(name: "Source", package: "Source"), // Just so that IDEs show the files.
-        .product(name: "Saying", package: "Saying"),
-        "Syntax",
-      ]
-    ),
-    .target(
-      name: "Syntax",
-      dependencies: [
         .product(name: "Saying", package: "Saying")
       ],
       plugins: [

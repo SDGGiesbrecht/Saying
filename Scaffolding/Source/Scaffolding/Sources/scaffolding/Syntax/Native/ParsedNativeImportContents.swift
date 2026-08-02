@@ -1,5 +1,3 @@
-import Syntax
-
 extension ParsedNativeImportContents {
 
   var imports: [ParsedImportSyntax] {

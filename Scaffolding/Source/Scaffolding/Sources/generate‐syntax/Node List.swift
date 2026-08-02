@@ -1760,7 +1760,7 @@ extension Node {
         ],
         parsedUtilities: [
           [
-            "  public var \(entryNamePlural): [Parsed\(entryType)] {",
+            "  var \(entryNamePlural): [Parsed\(entryType)] {",
             "    return Array([[first], continuations.lazy.map({ $0.\(entryName) })].joined())",
             "  }"
           ].joined(separator: "\n")

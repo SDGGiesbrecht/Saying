@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct NativeRequirementImplementationIntermediate {
   var textComponents: [UnicodeText]

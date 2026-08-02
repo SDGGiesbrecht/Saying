@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct LiteralIntermediate {
   var string: String

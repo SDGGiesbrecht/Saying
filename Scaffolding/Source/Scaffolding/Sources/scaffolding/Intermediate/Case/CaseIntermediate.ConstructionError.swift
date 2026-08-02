@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 extension CaseIntermediate {
   enum ConstructionError: DiagnosticError {

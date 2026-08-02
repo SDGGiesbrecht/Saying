@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 extension ReferenceDictionary {
   struct RedeclaredIdentifierError {

@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 indirect enum ParsedTypeReference {
   case simple(SimpleTypeReference)

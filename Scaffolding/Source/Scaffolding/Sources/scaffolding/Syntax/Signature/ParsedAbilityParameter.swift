@@ -1,5 +1,3 @@
-import Syntax
-
 extension ParsedAbilityParameter {
 
   var name: ParsedUninterruptedIdentifier {

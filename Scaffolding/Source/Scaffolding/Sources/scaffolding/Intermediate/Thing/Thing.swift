@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct Thing {
   var names: Set<UnicodeText>

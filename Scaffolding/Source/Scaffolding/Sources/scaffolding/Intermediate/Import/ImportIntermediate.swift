@@ -1,5 +1,3 @@
-import Syntax
-
 struct ImportIntermediate {
   var name: String
   var condition: String?
