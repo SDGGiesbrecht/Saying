@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct CaseIntermediate {
   var names: Set<UnicodeText>

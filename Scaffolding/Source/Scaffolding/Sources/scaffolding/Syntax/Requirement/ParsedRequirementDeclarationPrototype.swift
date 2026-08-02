@@ -1,5 +1,3 @@
-import Syntax
-
 protocol ParsedRequirementDeclarationPrototype: ParsedActionPrototype {
 }
 

@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 extension ModuleIntermediate {
   mutating func unfoldSyntax() throws {

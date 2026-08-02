@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 extension RequirementIntermediate {
   enum ConstructionError: DiagnosticError {

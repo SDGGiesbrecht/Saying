@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct Interpolation<InterpolationParameter>
 where InterpolationParameter: InterpolationParameterProtocol {

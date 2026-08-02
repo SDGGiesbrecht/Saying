@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 extension Thing {
   enum ConstructionError: DiagnosticError {

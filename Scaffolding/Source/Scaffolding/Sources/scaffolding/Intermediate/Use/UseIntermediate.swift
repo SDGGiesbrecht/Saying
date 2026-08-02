@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct UseIntermediate {
   var ability: UnicodeText

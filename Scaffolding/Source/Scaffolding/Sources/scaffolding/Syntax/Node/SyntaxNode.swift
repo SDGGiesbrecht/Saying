@@ -1,7 +1,18 @@
 import Saying
-import Syntax
+
+protocol SyntaxNode {
+  var nodeKind: SyntaxNodeKind { get }
+  var children: [SyntaxNode] { get }
+  func source() -> UnicodeText
+
+  func parsedNode() -> ParsedSyntaxNode
+}
 
 extension SyntaxNode {
+
+  func source() -> UnicodeText {
+    return children.map({ $0.source() }).joined()
+  }
 
   func formattedGitStyleSource() -> UnicodeText {
     return formattedGitStyleSource(indent: 0)

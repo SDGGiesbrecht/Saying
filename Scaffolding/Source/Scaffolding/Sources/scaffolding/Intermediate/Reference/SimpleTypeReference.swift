@@ -1,5 +1,4 @@
 import Saying
-import Syntax
 
 struct SimpleTypeReference {
   var identifier: UnicodeText
