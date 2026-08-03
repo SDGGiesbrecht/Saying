@@ -1379,6 +1379,7 @@ use (clients)
    )
    Unicode scalars
    {
+    note about Swift (“The existing overload from RangeReplaceableCollection is prohibitively inefficient.”)
     let (• bounds: range of (Unicode scalar boundary)) be ((bounds) of (other))
     let (• whole: Unicode scalars) be ((whole) of (other))
     ← if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (if most efficient, convert (bounds) in (whole) into scalars by bounds) into scalars by 8‐bit encoded) into scalars by extended grapheme clusters

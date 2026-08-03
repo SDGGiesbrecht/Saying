@@ -2082,33 +2082,38 @@ extension Platform {
               let argument = reference.arguments[argumentIndex]
               switch argument {
               case .action(let actionArgument):
-                var result = call(
-                  to: actionArgument,
-                  expectedPassedActionParameters: resolveExpectedParameterOrder(for: usedParameters[argumentIndex].executeAction),
-                  context: context,
-                  localLookup: localLookup + [local],
-                  referenceLookup: referenceLookup,
-                  isNativeArgument: true,
-                  contextCoverageIdentifier: contextCoverageIdentifier,
-                  extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                  coverageRegionCounter: &coverageRegionCounter,
-                  coverageIndex: coverageIndex,
-                  clashAvoidanceCounter: &clashAvoidanceCounter,
-                  anonymousCounter: &anonymousCounter,
-                  extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
-                  extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
-                  extractedAnonymousFunctions: &extractedAnonymousFunctions,
-                  isThrough: actionArgument.passage == .through,
-                  isDirectReturn: false,
-                  cleanUpCode: &cleanUpCode,
-                  inlineClosure: parameter.inlined,
-                  inliningLevel: inliningLevel,
-                  inliningArguments: inliningArguments,
-                  normalizeNextNestedLiteral: normalizeNextNestedLiteral,
-                  mode: mode,
-                  identifierIndex: &identifierIndex,
-                  captures: &captures
-                )
+                var result: String
+                if parameter.text {
+                  result = String(UnicodeText(actionArgument.literal!.string))
+                } else {
+                  result = call(
+                    to: actionArgument,
+                    expectedPassedActionParameters: resolveExpectedParameterOrder(for: usedParameters[argumentIndex].executeAction),
+                    context: context,
+                    localLookup: localLookup + [local],
+                    referenceLookup: referenceLookup,
+                    isNativeArgument: true,
+                    contextCoverageIdentifier: contextCoverageIdentifier,
+                    extractedCoverageRegistrations: &extractedCoverageRegistrations,
+                    coverageRegionCounter: &coverageRegionCounter,
+                    coverageIndex: coverageIndex,
+                    clashAvoidanceCounter: &clashAvoidanceCounter,
+                    anonymousCounter: &anonymousCounter,
+                    extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+                    extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+                    extractedAnonymousFunctions: &extractedAnonymousFunctions,
+                    isThrough: actionArgument.passage == .through,
+                    isDirectReturn: false,
+                    cleanUpCode: &cleanUpCode,
+                    inlineClosure: parameter.inlined,
+                    inliningLevel: inliningLevel,
+                    inliningArguments: inliningArguments,
+                    normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+                    mode: mode,
+                    identifierIndex: &identifierIndex,
+                    captures: &captures
+                  )
+                }
                 modify(
                   nativeParameter: &result,
                   accordingTo: parameter,
