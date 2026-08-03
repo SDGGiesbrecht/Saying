@@ -5,6 +5,7 @@ struct NativeActionImplementationParameter {
   var syntaxNode: ParsedUninterruptedIdentifier
   var typeInstead: ParsedTypeReference?
   var caseInstead: ParsedTypeReference?
+  var text: Bool
   var unique: Bool
   var hold: Bool
   var release: Bool
@@ -28,6 +29,7 @@ extension NativeActionImplementationParameter {
     syntaxNode = parameter
     self.typeInstead = typeInstead
     self.caseInstead = caseInstead
+    self.text = false
     self.unique = unique
     self.hold = hold
     self.release = false
@@ -47,6 +49,7 @@ extension NativeActionImplementationParameter {
 
     let name: UnicodeText
     let syntaxNode: ParsedUninterruptedIdentifier
+    var text = false
     var unique = false
     var hold = false
     var release = false
@@ -63,6 +66,8 @@ extension NativeActionImplementationParameter {
       name = modified.parameter.identifierText()
       syntaxNode = modified.parameter
       switch modified.identifierText() {
+      case "text of ()":
+        text = true
       case "unique ()":
         unique = true
       case "hold on ()":
@@ -93,6 +98,7 @@ extension NativeActionImplementationParameter {
         syntaxNode: syntaxNode,
         typeInstead: typeInstead,
         caseInstead: caseInstead,
+        text: text,
         unique: unique,
         hold: hold,
         release: release,
@@ -115,6 +121,7 @@ extension NativeActionImplementationParameter {
       syntaxNode: syntaxNode,
       typeInstead: typeLookup[name] ?? typeInstead?.specializing(typeLookup: typeLookup),
       caseInstead: typeLookup[name] ?? caseInstead?.specializing(typeLookup: typeLookup),
+      text: text,
       unique: unique,
       hold: hold,
       release: release,
