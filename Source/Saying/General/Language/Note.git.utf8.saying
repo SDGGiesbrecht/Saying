@@ -1,0 +1,17 @@
+flow (clients)
+ [
+  [
+   English: A note about nearby source’s implementation in Swift.
+  ]
+  [
+   English: The note is directly readable in the Saying source and produces a comment in exported Swift source. It is omitted from exports to other platforms.
+  ]
+ ]
+ (
+  English: note about Swift (note: Unicode text)
+ )
+ C: “”
+ C♯: “”
+ JavaScript: “”
+ Kotlin: “”
+ Swift: “// ” text of (note) “”
