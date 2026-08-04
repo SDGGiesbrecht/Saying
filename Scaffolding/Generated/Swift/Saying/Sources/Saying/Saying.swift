@@ -23814,6 +23814,12 @@ func scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant
   return false
 }
 
+extension String.UnicodeScalarView {
+  public init(_ text: UnicodeText) {
+    self = text.scalars
+  }
+}
+
 func 종성의_0020개수_0020및_0020없음_003AUnicode_0020scalar_0020numerical_0020value() -> UInt32 {
   return 0x1C
 }

@@ -24,7 +24,7 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(
           contentsOf: syntaxNodeCreation(
-            englishName: UnicodeText(englishName),
+            englishName: englishName,
             deutscherName: deutscherName,
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
