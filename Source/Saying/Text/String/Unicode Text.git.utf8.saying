@@ -28,6 +28,19 @@ thing (clients)
 
 action (clients)
  [
+  test {verify ((scalars of (“...”)) is (“...”: Unicode scalars))}
+ ]
+ (
+  English: scalars of (text: Unicode text)
+  Swift: String.UnicodeScalarView.init (text: [text])
+ )
+ Unicode scalars
+ {
+  ← (scalars) of (text)
+ }
+
+action (clients)
+ [
   [
    English: Creates Unicode text directly from scalars that are already in normalized form, without performing redundant normalization.
   ]
