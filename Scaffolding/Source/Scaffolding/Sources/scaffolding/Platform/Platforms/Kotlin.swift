@@ -137,7 +137,7 @@ enum Kotlin: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     switch access {
     case .nowhere:
@@ -146,7 +146,7 @@ enum Kotlin: Platform {
       // Cannot be “private”, due to differences in meaning between classes and members. A “private” member can only be used within the same class, not in the rest of the file as required. Once members are elevated to “internal”, their signatures cannot reference “private” classes as required. Elevating classes to “internal” means everything is just “internal” anyway.
       return "internal"
     case .clients:
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit:
         return "internal"
       case .clients:

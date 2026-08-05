@@ -190,20 +190,24 @@ enum Swift: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     switch access {
     case .nowhere:
       return "private"
     case .file, .unit:
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit, .clients(.file):
-        return "fileprivate"
+        if mode.singleFileMode {
+          return "fileprivate"
+        } else {
+          return nil // internal
+        }
       case .clients(.package):
         return nil // internal
       }
     case .clients:
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit:
         return nil // internal
       case .clients:

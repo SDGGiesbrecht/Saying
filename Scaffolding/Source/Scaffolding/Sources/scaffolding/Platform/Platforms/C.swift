@@ -170,7 +170,7 @@ enum C: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     return nil
   }

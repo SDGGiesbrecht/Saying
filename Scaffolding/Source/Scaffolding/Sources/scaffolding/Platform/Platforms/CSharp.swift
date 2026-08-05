@@ -158,14 +158,14 @@ enum CSharp: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     switch access {
     case .nowhere:
       return "private"
     case .file, .unit, .clients:
       // “file” is too new
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit:
         if memberScope {
           return "internal"

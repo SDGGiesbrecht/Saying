@@ -33,7 +33,7 @@ protocol Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String?
 
   // Parts
@@ -867,7 +867,7 @@ extension Platform {
     let access = accessModifier(
       for: thing.access,
       memberScope: false,
-      libraryAccessMode: mode.libraryAccessMode
+      mode: mode
     )
     var members: [String] = []
     var handledActionDeclarations: Set<String> = []
@@ -951,7 +951,7 @@ extension Platform {
         let access = accessModifier(
           for: part.readAccess,
           memberScope: true,
-          libraryAccessMode: mode.libraryAccessMode
+          mode: mode
         )
         return partDeclaration(
           name: name,
@@ -989,7 +989,7 @@ extension Platform {
       let constructorAccess = accessModifier(
         for: specifiedConstructor?.access ?? .file,
         memberScope: true,
-        libraryAccessMode: mode.libraryAccessMode
+        mode: mode
       )
       let constructorSetters = thing.parts.map({ part in
         let name = nativeName(of: part, referenceLookup: externalReferenceLookup) ?? sanitize(
@@ -3466,7 +3466,7 @@ extension Platform {
     let access = accessModifier(
       for: action.access,
       memberScope: false,
-      libraryAccessMode: mode.libraryAccessMode
+      mode: mode
     )
 
     let coverageRegistration: String?
@@ -3509,7 +3509,7 @@ extension Platform {
         let access = self.accessModifier(
           for: .unit,
           memberScope: parentType != nil,
-          libraryAccessMode: mode.libraryAccessMode
+          mode: mode
         ).map({ "\($0) " }) ?? ""
         let extra = extraParameters.map({ ", \($0)" }) ?? ""
         let returnValue = returnSection ?? ""
@@ -3909,9 +3909,9 @@ extension Platform {
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
-      result["", default: []].appendSeparatorLine()
+      result[mainFile, default: []].appendSeparatorLine()
       for importTarget in imports.sorted() {
-        result["", default: []].append(statementImporting(importTarget.name, condition: importTarget.condition))
+        result[mainFile, default: []].append(statementImporting(importTarget.name, condition: importTarget.condition))
       }
     }
 
