@@ -57,6 +57,9 @@ enum C: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
+  static var fileNameLengthLimit: Int? {
+    return nil
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false

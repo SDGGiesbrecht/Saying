@@ -19,6 +19,9 @@ enum Kotlin: Platform {
   static var fileSizeLimit: Int? {
     return 2500 * 1000 // idea.max.intellisense.filesize; exceeding it broke the build in the Android CI
   }
+  static var fileNameLengthLimit: Int? {
+    return nil
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false

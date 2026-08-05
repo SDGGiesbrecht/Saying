@@ -8,6 +8,7 @@ protocol Platform {
   static var ignoredDirectories: Set<[String]> { get }
   static var indent: String { get }
   static var fileSizeLimit: Int? { get }
+  static var fileNameLengthLimit: Int? { get }
 
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
@@ -3888,18 +3889,18 @@ extension Platform {
     mode: CompilationMode,
     libraryName: String,
     moduleWideImports: [ModuleIntermediate]
-  ) -> [String: String] {
+  ) -> ParallelFiles {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
     var alreadyHandledDeclarations: Set<String> = []
     var alreadyHandledNativeRequirements: Set<String> = preexistingNativeRequirements
     var anonymousCounter: Int = 0
 
-    var result: [String: [String]] = [:]
+    var files = ParallelFiles(fileNameLengthLimit: fileNameLengthLimit)
     let mainFile = mainSourceFileName(libraryName: libraryName)
 
     if let settings = fileSettings {
-      result[mainFile, default: []].appendSeparatorLine()
-      result[mainFile, default: []].append(settings)
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(settings)
     }
 
     var imports: Set<ImportIntermediate> = []
@@ -3909,17 +3910,17 @@ extension Platform {
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
     if !imports.isEmpty {
-      result[mainFile, default: []].appendSeparatorLine()
+      files[mainFile].appendSeparatorLine()
       for importTarget in imports.sorted() {
-        result[mainFile, default: []].append(statementImporting(importTarget.name, condition: importTarget.condition))
+        files[mainFile].append(statementImporting(importTarget.name, condition: importTarget.condition))
       }
     }
 
     var coverageIndex: [UnicodeText: Int] = [:]
     if mode.hasTestCoverage {
-      result[mainFile, default: []].appendSeparatorLine()
-      result[mainFile, default: []].append(currentTestVariable)
-      result[mainFile, default: []].appendSeparatorLine()
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(currentTestVariable)
+      files[mainFile].appendSeparatorLine()
       var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
@@ -3930,10 +3931,10 @@ extension Platform {
       for (index, region) in regions.enumerated() {
         coverageIndex[region] = index
       }
-      result[mainFile, default: []].append(
+      files[mainFile].append(
         contentsOf: coverageRegionIndex(regions: regions.map({ sanitize(stringLiteral: $0) }))
       )
-      result[mainFile, default: []].append(contentsOf: registerCoverageAction)
+      files[mainFile].append(contentsOf: registerCoverageAction)
     }
 
     var identifierIndex: [String: [String: Int]] = [:]
@@ -3952,19 +3953,19 @@ extension Platform {
         anonymousCounter: &anonymousCounter,
         modulesToSearchForMembers: modules
       ) {
-        result[file, default: []].appendSeparatorLine()
-        result[file, default: []].append(contents)
+        files[file].appendSeparatorLine()
+        files[file].append(contents)
       }
     }
 
     if let start = actionDeclarationsContainerStart {
-      result[mainFile, default: []].appendSeparatorLine()
-      result[mainFile, default: []].append(contentsOf: start)
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(contentsOf: start)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
-      result[mainFile, default: []].appendSeparatorLine()
-      result[mainFile, default: []].append(
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(
         self.actionsSource(
           for: module,
           mode: mode,
@@ -3983,7 +3984,7 @@ extension Platform {
       for module in modules {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
-      result[mainFile, default: []].appendSeparatorLine()
+      files[mainFile].appendSeparatorLine()
       let testCalls = splitFunctionImplementationIfTooLong(
         implementation: allTests.enumerated().flatMap({ (index, test) in
           return call(test: test, identifierIndex: &identifierIndex, ordinal: index + 1)
@@ -3992,13 +3993,13 @@ extension Platform {
         subcall: { "test\($0)(\($1 ?? ""))" },
         subdeclaration: { "\(actionContinuationKeyword!) test\($0)(\($1 ?? ""))" }
       )
-      result[mainFile, default: []].append(contentsOf: testSummary(testCalls: testCalls))
+      files[mainFile].append(contentsOf: testSummary(testCalls: testCalls))
     }
     if let end = actionDeclarationsContainerEnd {
-      result[mainFile, default: []].append(contentsOf: end)
+      files[mainFile].append(contentsOf: end)
     }
 
-    return result.mapValues { $0.joined(separator: "\n").appending("\n") }
+    return files
   }
 
   static func splitLongFile(_ file: String) -> [String] {
@@ -4099,28 +4100,18 @@ extension Platform {
     let libraryName = "Saying" // Placeholder; nothing else can be built yet anyway.
 
     let mainFile = mainSourceFileName(libraryName: libraryName)
-    var source: [String: [String]] = self.source(
+    var source: ParallelFiles = self.source(
       for: builtModules,
       mode: mode,
       libraryName: libraryName,
       moduleWideImports: builtSayingModule.map({ [$0] }) ?? []
-    ).mapValues { [$0] }
+    )
 
     if mode.hasTestCoverage {
       if let entryPoint = testEntryPoint() {
-        source[mainFile, default: []].appendSeparatorLine()
-        source[mainFile, default: []].append(contentsOf: entryPoint)
+        source[mainFile].appendSeparatorLine()
+        source[mainFile].append(contentsOf: entryPoint)
       }
-    }
-    let completedSource = source.mapValues {
-      var joined = $0.joined(separator: "\n").appending("\n")
-      while joined.first == "\n" {
-        joined.removeFirst()
-      }
-      while joined.hasSuffix("\n\n") {
-        joined.removeLast()
-      }
-      return joined
     }
 
     let outputDirectoryLocation: URL
@@ -4138,7 +4129,7 @@ extension Platform {
 
     let sourceSubdirectory = self.sourceSubdirectory(mode: mode, libraryName: libraryName)
 
-    for (name, contents) in completedSource {
+    for (name, contents) in source.completed() {
       if let limit = fileSizeLimit,
          contents.utf8.count > limit {
         let split = splitLongFile(contents)

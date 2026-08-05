@@ -17,6 +17,9 @@ enum Swift: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
+  static var fileNameLengthLimit: Int? {
+    return 128 // 224 caused compiler‐generated files to exceed file name size limits in the macOS CI.
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
