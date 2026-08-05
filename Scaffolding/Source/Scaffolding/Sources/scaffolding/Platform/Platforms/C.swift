@@ -797,8 +797,14 @@ enum C: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["test"]
+  static var supportsMultiFileMode: Bool {
+    return false // Only because handilng of individual headers and imports has not been implemented yet.
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return "test"
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return []
   }
   static var sourceFileExtension: String {
     return "c"

@@ -496,8 +496,14 @@ enum JavaScript: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["Package"]
+  static var supportsMultiFileMode: Bool {
+    return false
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return "Package"
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return []
   }
   static var sourceFileExtension: String {
     return "js"

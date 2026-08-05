@@ -593,8 +593,14 @@ enum Kotlin: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["app", "src", "main", "kotlin", "Test"]
+  static var supportsMultiFileMode: Bool {
+    return true
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return libraryName
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return ["app", "src", "main", "kotlin"]
   }
   static var sourceFileExtension: String {
     return "kt"
@@ -631,7 +637,7 @@ enum Kotlin: Platform {
         "\(indent)}",
         "}",
         "",
-        "rootProject.name = \u{22}Test\u{22}",
+        "rootProject.name = \u{22}\(libraryName)\u{22}",
         "include(\u{22}:app\u{22})",
       ] as [String]).joined(separator: "\n").appending("\n")
     )

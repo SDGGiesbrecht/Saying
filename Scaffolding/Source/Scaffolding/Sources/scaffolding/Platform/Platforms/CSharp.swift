@@ -737,8 +737,14 @@ enum CSharp: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["Test"]
+  static var supportsMultiFileMode: Bool {
+    return true
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return libraryName
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return []
   }
   static var sourceFileExtension: String {
     return "cs"
