@@ -9,6 +9,7 @@ enum CompilationMode {
   /// - No test coverage
   /// - All dependencies are also compiled in `.release` mode
   /// - Library access as specified (unit by default)
+  /// - Few large files (for maximum compiler optimization)
   case release(LibraryAccessMode)
 
   /// Intended for use as an external direct dependency during development.
@@ -20,6 +21,7 @@ enum CompilationMode {
   /// - No test coverage
   /// - Its own external dependencies are compiled in `.release` mode
   /// - No libraries (but potentially fowarded into a top‐level ones)
+  /// - Few large files (for maximum compiler optimization)
   case dependency
 
   /// Intended to be debugged.
@@ -31,6 +33,7 @@ enum CompilationMode {
   /// - No test coverage
   /// - External dependencies are compiled in `.dependency` mode
   /// - No libraries
+  /// - Many small files (for better incremental compilation and for the lighter memory load while viewing in an editor)
   case debugging
 
   /// Intended to be tested.
@@ -42,6 +45,7 @@ enum CompilationMode {
   /// - Test coverage
   /// - External dependencies are compiled in`.dependency` mode
   /// - No libraries
+  /// - Many small files (for better incremental compilation and for the lighter memory load while viewing in an editor)
   case testing
 
   /// Intended for exporting source to another format.
@@ -53,6 +57,7 @@ enum CompilationMode {
   /// - No test coverage
   /// - External dependencies exported separately
   /// - Libraries as units accessible to clients
+  /// - Many small files (for natural project structure)
   case export
 
   /// Intended for scaffolding the Saying compiler itself.
@@ -64,6 +69,7 @@ enum CompilationMode {
   /// - No test coverage
   /// - No external dependencies
   /// - Libraries as units accessible to clients
+  /// - Many small files (for better incremental compilation and for the lighter memory load while viewing in an editor)
   case scaffolding
 
   var hasTestCoverage: Bool {
@@ -83,6 +89,15 @@ enum CompilationMode {
       return .unit
     case .export, .scaffolding:
       return .clients(.package)
+    }
+  }
+
+  var singleFileMode: Bool {
+    switch self {
+    case .release, .dependency:
+      return true
+    case .debugging, .testing, .export, .scaffolding:
+      return false
     }
   }
 }

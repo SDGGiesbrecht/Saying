@@ -8,6 +8,7 @@ protocol Platform {
   static var ignoredDirectories: Set<[String]> { get }
   static var indent: String { get }
   static var fileSizeLimit: Int? { get }
+  static var fileNameLengthLimit: Int? { get }
 
   // Identifiers
   static var allowsAllUnicodeIdentifiers: Bool { get }
@@ -33,7 +34,7 @@ protocol Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String?
 
   // Parts
@@ -196,7 +197,9 @@ protocol Platform {
 
   // Package
   static func testEntryPoint() -> [String]?
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String]
+  static var supportsMultiFileMode: Bool { get }
+  static func mainSourceFileName(libraryName: String) -> String
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String]
   static var sourceFileExtension: String { get }
   static func postprocessFileSplit(_ file: String) -> String
   static func createOtherProjectContainerFiles(
@@ -789,7 +792,7 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
-  ) -> String? {
+  ) -> OutputDeclaration? {
     if !isTyped,
       thing.cases.isEmpty {
       return nil
@@ -806,12 +809,12 @@ extension Platform {
       ) {
         result.append(required)
       }
+      let name: String = source(
+        for: native,
+        referenceLookup: externalReferenceLookup,
+        identifierIndex: &identifierIndex
+      )
       if thing.requiresCleanUp == true {
-        let name: String = source(
-          for: native,
-          referenceLookup: externalReferenceLookup,
-          identifierIndex: &identifierIndex
-        )
         if let copy = copyOld(
           thing: thing,
           name: name,
@@ -838,7 +841,9 @@ extension Platform {
       if let condition = native.condition {
         nativeCondition = condition
       } else {
-        return nativeRequirements
+        return nativeRequirements.map { declaration in
+          return OutputDeclaration(declaration: declaration, idiomaticLocation: name)
+        }
       }
     }
     if !isTyped,
@@ -863,7 +868,7 @@ extension Platform {
     let access = accessModifier(
       for: thing.access,
       memberScope: false,
-      libraryAccessMode: mode.libraryAccessMode
+      mode: mode
     )
     var members: [String] = []
     var handledActionDeclarations: Set<String> = []
@@ -947,7 +952,7 @@ extension Platform {
         let access = accessModifier(
           for: part.readAccess,
           memberScope: true,
-          libraryAccessMode: mode.libraryAccessMode
+          mode: mode
         )
         return partDeclaration(
           name: name,
@@ -985,7 +990,7 @@ extension Platform {
       let constructorAccess = accessModifier(
         for: specifiedConstructor?.access ?? .file,
         memberScope: true,
-        libraryAccessMode: mode.libraryAccessMode
+        mode: mode
       )
       let constructorSetters = thing.parts.map({ part in
         let name = nativeName(of: part, referenceLookup: externalReferenceLookup) ?? sanitize(
@@ -1167,7 +1172,12 @@ extension Platform {
       condition: nativeCondition,
       nativeRequirements: nativeRequirements,
       declaration: constructedDeclaration
-    )
+    ).map { declaration in
+      return OutputDeclaration(
+        declaration: declaration,
+        idiomaticLocation: name
+      )
+    }
   }
 
   static func nativeHold(
@@ -3457,7 +3467,7 @@ extension Platform {
     let access = accessModifier(
       for: action.access,
       memberScope: false,
-      libraryAccessMode: mode.libraryAccessMode
+      mode: mode
     )
 
     let coverageRegistration: String?
@@ -3500,7 +3510,7 @@ extension Platform {
         let access = self.accessModifier(
           for: .unit,
           memberScope: parentType != nil,
-          libraryAccessMode: mode.libraryAccessMode
+          mode: mode
         ).map({ "\($0) " }) ?? ""
         let extra = extraParameters.map({ ", \($0)" }) ?? ""
         let returnValue = returnSection ?? ""
@@ -3768,6 +3778,7 @@ extension Platform {
     for module: ModuleIntermediate,
     moduleWideImports: [ReferenceDictionary],
     mode: CompilationMode,
+    libraryName: String,
     identifierIndex: inout [String: [String: Int]],
     relocatedActions: inout Set<String>,
     alreadyHandledDeclarations: inout Set<String>,
@@ -3775,8 +3786,8 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
-  ) -> String {
-    var result: [String] = []
+  ) -> [String: String] {
+    var result: [String: [String]] = [:]
     let moduleReferenceLookup = moduleWideImports + [module.referenceDictionary]
     let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
@@ -3791,13 +3802,16 @@ extension Platform {
         anonymousCounter: &anonymousCounter,
         modulesToSearchForMembers: modulesToSearchForMembers
       ) {
-        if alreadyHandledDeclarations.insert(declaration).inserted {
-          result.appendSeparatorLine()
-          result.append(declaration)
+        if alreadyHandledDeclarations.insert(declaration.declaration).inserted {
+          let file = supportsMultiFileMode && !mode.singleFileMode
+            ? declaration.idiomaticLocation
+            : mainSourceFileName(libraryName: libraryName)
+          result[file, default: []].appendSeparatorLine()
+          result[file, default: []].append(declaration.declaration)
         }
       }
     }
-    return result.joined(separator: "\n")
+    return result.mapValues({ $0.joined(separator: "\n") })
   }
 
   static func actionsSource(
@@ -3873,19 +3887,18 @@ extension Platform {
   static func source(
     for modules: [ModuleIntermediate],
     mode: CompilationMode,
+    libraryName: String,
     moduleWideImports: [ModuleIntermediate]
-  ) -> String {
+  ) -> ParallelFiles {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
     var alreadyHandledDeclarations: Set<String> = []
     var alreadyHandledNativeRequirements: Set<String> = preexistingNativeRequirements
     var anonymousCounter: Int = 0
 
-    var result: [String] = []
+    var files = ParallelFiles(fileNameLengthLimit: fileNameLengthLimit)
+    let mainFile = mainSourceFileName(libraryName: libraryName)
 
-    if let settings = fileSettings {
-      result.appendSeparatorLine()
-      result.append(settings)
-    }
+    files.fileSettings = fileSettings
 
     var imports: Set<ImportIntermediate> = []
     for module in modules {
@@ -3893,18 +3906,15 @@ extension Platform {
     }
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
-    if !imports.isEmpty {
-      result.appendSeparatorLine()
-      for importTarget in imports.sorted() {
-        result.append(statementImporting(importTarget.name, condition: importTarget.condition))
-      }
-    }
+    files.imports = imports.sorted().map({ importTarget in
+      return statementImporting(importTarget.name, condition: importTarget.condition)
+    })
 
     var coverageIndex: [UnicodeText: Int] = [:]
     if mode.hasTestCoverage {
-      result.appendSeparatorLine()
-      result.append(currentTestVariable)
-      result.appendSeparatorLine()
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(currentTestVariable)
+      files[mainFile].appendSeparatorLine()
       var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
@@ -3915,38 +3925,41 @@ extension Platform {
       for (index, region) in regions.enumerated() {
         coverageIndex[region] = index
       }
-      result.append(contentsOf: coverageRegionIndex(regions: regions.map({ sanitize(stringLiteral: $0) })))
-      result.append(contentsOf: registerCoverageAction)
+      files[mainFile].append(
+        contentsOf: coverageRegionIndex(regions: regions.map({ sanitize(stringLiteral: $0) }))
+      )
+      files[mainFile].append(contentsOf: registerCoverageAction)
     }
 
     var identifierIndex: [String: [String: Int]] = [:]
     var relocatedActions: Set<String> = []
     for module in modules {
-      result.appendSeparatorLine()
-      result.append(
-        typesSource(
-          for: module,
-          moduleWideImports: moduleWideImportDictionary,
-          mode: mode,
-          identifierIndex: &identifierIndex,
-          relocatedActions: &relocatedActions,
-          alreadyHandledDeclarations: &alreadyHandledDeclarations,
-          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
-          coverageIndex: coverageIndex,
-          anonymousCounter: &anonymousCounter,
-          modulesToSearchForMembers: modules
-        )
-      )
+      for (file, contents) in typesSource(
+        for: module,
+        moduleWideImports: moduleWideImportDictionary,
+        mode: mode,
+        libraryName: libraryName,
+        identifierIndex: &identifierIndex,
+        relocatedActions: &relocatedActions,
+        alreadyHandledDeclarations: &alreadyHandledDeclarations,
+        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        coverageIndex: coverageIndex,
+        anonymousCounter: &anonymousCounter,
+        modulesToSearchForMembers: modules
+      ) {
+        files[file].appendSeparatorLine()
+        files[file].append(contents)
+      }
     }
 
     if let start = actionDeclarationsContainerStart {
-      result.appendSeparatorLine()
-      result.append(contentsOf: start)
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(contentsOf: start)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
-      result.appendSeparatorLine()
-      result.append(
+      files[mainFile].appendSeparatorLine()
+      files[mainFile].append(
         self.actionsSource(
           for: module,
           mode: mode,
@@ -3965,7 +3978,7 @@ extension Platform {
       for module in modules {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
-      result.appendSeparatorLine()
+      files[mainFile].appendSeparatorLine()
       let testCalls = splitFunctionImplementationIfTooLong(
         implementation: allTests.enumerated().flatMap({ (index, test) in
           return call(test: test, identifierIndex: &identifierIndex, ordinal: index + 1)
@@ -3974,13 +3987,13 @@ extension Platform {
         subcall: { "test\($0)(\($1 ?? ""))" },
         subdeclaration: { "\(actionContinuationKeyword!) test\($0)(\($1 ?? ""))" }
       )
-      result.append(contentsOf: testSummary(testCalls: testCalls))
+      files[mainFile].append(contentsOf: testSummary(testCalls: testCalls))
     }
     if let end = actionDeclarationsContainerEnd {
-      result.append(contentsOf: end)
+      files[mainFile].append(contentsOf: end)
     }
 
-    return result.joined(separator: "\n").appending("\n")
+    return files
   }
 
   static func splitLongFile(_ file: String) -> [String] {
@@ -4078,22 +4091,21 @@ extension Platform {
       ] + builtModules
     }
 
-    var source: [String] = [
-      self.source(for: builtModules, mode: mode, moduleWideImports: builtSayingModule.map({ [$0] }) ?? [])
-    ]
+    let libraryName = "Saying" // Placeholder; nothing else can be built yet anyway.
+
+    let mainFile = mainSourceFileName(libraryName: libraryName)
+    var source: ParallelFiles = self.source(
+      for: builtModules,
+      mode: mode,
+      libraryName: libraryName,
+      moduleWideImports: builtSayingModule.map({ [$0] }) ?? []
+    )
 
     if mode.hasTestCoverage {
       if let entryPoint = testEntryPoint() {
-        source.appendSeparatorLine()
-        source.append(contentsOf: entryPoint)
+        source[mainFile].appendSeparatorLine()
+        source[mainFile].append(contentsOf: entryPoint)
       }
-    }
-    var completedSource = source.joined(separator: "\n").appending("\n")
-    while completedSource.first == "\n" {
-      completedSource.removeFirst()
-    }
-    while completedSource.hasSuffix("\n\n") {
-      completedSource.removeLast()
     }
 
     let outputDirectoryLocation: URL
@@ -4109,24 +4121,31 @@ extension Platform {
       ignoredSubdirectories: self.ignoredDirectories
     )
 
-    let libraryName = "Saying" // Placeholder; nothing else can be built yet anyway.
-    let sourceFileLocation = sourceFileUpToName(mode: mode, libraryName: libraryName)
+    let sourceSubdirectory = self.sourceSubdirectory(mode: mode, libraryName: libraryName)
 
-    if let limit = fileSizeLimit,
-       completedSource.utf8.count > limit {
-      let split = splitLongFile(completedSource)
-      let baseName = sourceFileLocation
-      for (index, part) in split.enumerated() {
+    for (name, contents) in source.completed() {
+      var fileName = name
+      if case .scaffolding = mode {
+        // So Windows can check out the repository.
+        fileName = fileName.replacingOccurrences(of: "<", with: "_")
+        fileName = fileName.replacingOccurrences(of: ">", with: "_")
+      }
+      if let limit = fileSizeLimit,
+         contents.utf8.count > limit {
+        let split = splitLongFile(contents)
+        let baseName = sourceSubdirectory + [fileName]
+        for (index, part) in split.enumerated() {
+          try outputDirectory.update(
+            baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
+            to: part
+          )
+        }
+      } else {
         try outputDirectory.update(
-          baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
-          to: part
+          (sourceSubdirectory + [fileName]).appendingToFileName(".\(sourceFileExtension)"),
+          to: contents
         )
       }
-    } else {
-      try outputDirectory.update(
-        sourceFileLocation.appendingToFileName(".\(sourceFileExtension)"),
-        to: completedSource
-      )
     }
 
     try createOtherProjectContainerFiles(

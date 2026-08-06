@@ -17,6 +17,9 @@ enum CSharp: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
+  static var fileNameLengthLimit: Int? {
+    return nil
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -158,14 +161,14 @@ enum CSharp: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     switch access {
     case .nowhere:
       return "private"
     case .file, .unit, .clients:
       // “file” is too new
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit:
         if memberScope {
           return "internal"
@@ -737,8 +740,14 @@ enum CSharp: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["Test"]
+  static var supportsMultiFileMode: Bool {
+    return true
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return libraryName
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return []
   }
   static var sourceFileExtension: String {
     return "cs"

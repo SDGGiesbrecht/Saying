@@ -17,6 +17,9 @@ enum Swift: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
+  static var fileNameLengthLimit: Int? {
+    return 128 // 224 caused compiler‐generated files to exceed file name size limits in the macOS CI.
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -190,20 +193,24 @@ enum Swift: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     switch access {
     case .nowhere:
       return "private"
     case .file, .unit:
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit, .clients(.file):
-        return "fileprivate"
+        if mode.singleFileMode {
+          return "fileprivate"
+        } else {
+          return nil // internal
+        }
       case .clients(.package):
         return nil // internal
       }
     case .clients:
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit:
         return nil // internal
       case .clients:
@@ -752,17 +759,23 @@ enum Swift: Platform {
     return nil
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
+  static var supportsMultiFileMode: Bool {
+    return true
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return libraryName
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
     switch mode {
-    case .dependency, .debugging, .testing, .export:
-      return ["Sources", "Products", "Source"]
-    case .release, .scaffolding:
+    case .release:
       switch mode.libraryAccessMode {
       case .unit, .clients(.file):
-        return [libraryName]
+        return []
       case .clients(.package):
-        return ["Sources", libraryName, libraryName]
+        return ["Sources", libraryName]
       }
+    case .dependency, .debugging, .testing, .export, .scaffolding:
+      return ["Sources", libraryName]
     }
   }
   static var sourceFileExtension: String {
@@ -797,14 +810,12 @@ enum Swift: Platform {
     let needsPackage: Bool
     let needsProduct: Bool
     let packageName: String
-    let mainTargetName: String
     let needsTests: Bool
     switch mode {
     case .dependency, .debugging, .testing, .export:
       needsPackage = true
       packageName = "Package"
       needsProduct = false
-      mainTargetName = "Products"
       needsTests = true
     case .release, .scaffolding:
       switch mode.libraryAccessMode {
@@ -816,7 +827,6 @@ enum Swift: Platform {
         needsProduct = true
       }
       packageName = libraryName
-      mainTargetName = libraryName
       needsTests = false
     }
     if needsPackage {
@@ -831,23 +841,23 @@ enum Swift: Platform {
       if needsProduct {
         manifestSource.append(contentsOf: [
           "\(indent)products: [",
-          "\(indent)\(indent).library(name: \u{22}\(mainTargetName)\u{22}, targets: [\u{22}\(mainTargetName)\u{22}]),",
+          "\(indent)\(indent).library(name: \u{22}\(libraryName)\u{22}, targets: [\u{22}\(libraryName)\u{22}]),",
           "\(indent)],",
         ])
       }
       manifestSource.append(contentsOf: [
         "\(indent)targets: [",
-        "\(indent)\(indent).target(name: \u{22}\(mainTargetName)\u{22}),",
+        "\(indent)\(indent).target(name: \u{22}\(libraryName)\u{22}),",
       ])
       if needsTests {
         manifestSource.append(contentsOf: [
           "\(indent)\(indent).executableTarget(",
           "\(indent)\(indent)\(indent)name: \u{22}test\u{22},",
-          "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+          "\(indent)\(indent)\(indent)dependencies: [\u{22}\(libraryName)\u{22}]",
           "\(indent)\(indent)),",
           "\(indent)\(indent).testTarget(",
           "\(indent)\(indent)\(indent)name: \u{22}WrappedTests\u{22},",
-          "\(indent)\(indent)\(indent)dependencies: [\u{22}Products\u{22}]",
+          "\(indent)\(indent)\(indent)dependencies: [\u{22}\(libraryName)\u{22}]",
           "\(indent)\(indent))",
         ])
       }
@@ -864,12 +874,12 @@ enum Swift: Platform {
       try projectDirectory.update(
         ["Sources", "test", "Test.swift"],
         to: ([
-          "@testable import Products",
+          "@testable import \(libraryName)",
           "",
           "@main struct Test {",
           "",
           "\(indent)static func main() {",
-          "\(indent)\(indent)Products.test()",
+          "\(indent)\(indent)\(libraryName).test()",
           "\(indent)}",
           "}",
         ] as [String]).joined(separator: "\n").appending("\n")
@@ -878,12 +888,12 @@ enum Swift: Platform {
         ["Tests", "WrappedTests", "WrappedTests.swift"],
         to: ([
           "import XCTest",
-          "@testable import Products",
+          "@testable import \(libraryName)",
           "",
           "class WrappedTests: XCTestCase {",
           "",
           "\(indent)func testProject() {",
-          "\(indent)\(indent)Products.test()",
+          "\(indent)\(indent)\(libraryName).test()",
           "\(indent)}",
           "}",
         ] as [String]).joined(separator: "\n").appending("\n")
