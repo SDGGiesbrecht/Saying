@@ -4133,7 +4133,13 @@ extension Platform {
       if let limit = fileSizeLimit,
          contents.utf8.count > limit {
         let split = splitLongFile(contents)
-        let baseName = sourceSubdirectory + [name]
+        var fileName = name
+        if case .scaffolding = mode {
+          // So Windows can check out the repository.
+          fileName = fileName.replacingOccurrences(of: "<", with: "_")
+          fileName = fileName.replacingOccurrences(of: ">", with: "_")
+        }
+        let baseName = sourceSubdirectory + [fileName]
         for (index, part) in split.enumerated() {
           try outputDirectory.update(
             baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
