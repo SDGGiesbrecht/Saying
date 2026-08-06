@@ -19,6 +19,9 @@ enum Kotlin: Platform {
   static var fileSizeLimit: Int? {
     return 2500 * 1000 // idea.max.intellisense.filesize; exceeding it broke the build in the Android CI
   }
+  static var fileNameLengthLimit: Int? {
+    return nil
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -137,7 +140,7 @@ enum Kotlin: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     switch access {
     case .nowhere:
@@ -146,7 +149,7 @@ enum Kotlin: Platform {
       // Cannot be “private”, due to differences in meaning between classes and members. A “private” member can only be used within the same class, not in the rest of the file as required. Once members are elevated to “internal”, their signatures cannot reference “private” classes as required. Elevating classes to “internal” means everything is just “internal” anyway.
       return "internal"
     case .clients:
-      switch libraryAccessMode {
+      switch mode.libraryAccessMode {
       case .unit:
         return "internal"
       case .clients:
@@ -593,8 +596,14 @@ enum Kotlin: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["app", "src", "main", "kotlin", "Test"]
+  static var supportsMultiFileMode: Bool {
+    return true
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return libraryName
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return ["app", "src", "main", "kotlin"]
   }
   static var sourceFileExtension: String {
     return "kt"
@@ -631,7 +640,7 @@ enum Kotlin: Platform {
         "\(indent)}",
         "}",
         "",
-        "rootProject.name = \u{22}Test\u{22}",
+        "rootProject.name = \u{22}\(libraryName)\u{22}",
         "include(\u{22}:app\u{22})",
       ] as [String]).joined(separator: "\n").appending("\n")
     )

@@ -14,6 +14,9 @@ enum JavaScript: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
+  static var fileNameLengthLimit: Int? {
+    return nil
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return true
@@ -115,7 +118,7 @@ enum JavaScript: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     return nil
   }
@@ -496,8 +499,14 @@ enum JavaScript: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["Package"]
+  static var supportsMultiFileMode: Bool {
+    return false
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return "Package"
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return []
   }
   static var sourceFileExtension: String {
     return "js"

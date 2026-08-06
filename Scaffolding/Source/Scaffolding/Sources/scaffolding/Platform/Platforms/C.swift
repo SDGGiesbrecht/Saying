@@ -57,6 +57,9 @@ enum C: Platform {
   static var fileSizeLimit: Int? {
     return nil
   }
+  static var fileNameLengthLimit: Int? {
+    return nil
+  }
 
   static var allowsAllUnicodeIdentifiers: Bool {
     return false
@@ -170,7 +173,7 @@ enum C: Platform {
   static func accessModifier(
     for access: AccessIntermediate,
     memberScope: Bool,
-    libraryAccessMode: LibraryAccessMode
+    mode: CompilationMode
   ) -> String? {
     return nil
   }
@@ -797,8 +800,14 @@ enum C: Platform {
     ]
   }
 
-  static func sourceFileUpToName(mode: CompilationMode, libraryName: String) -> [String] {
-    return ["test"]
+  static var supportsMultiFileMode: Bool {
+    return false // Only because handilng of individual headers and imports has not been implemented yet.
+  }
+  static func mainSourceFileName(libraryName: String) -> String {
+    return "test"
+  }
+  static func sourceSubdirectory(mode: CompilationMode, libraryName: String) -> [String] {
+    return []
   }
   static var sourceFileExtension: String {
     return "c"
