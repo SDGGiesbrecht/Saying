@@ -2,6 +2,9 @@ struct ParallelFiles {
   private var files: [String: [String]] = [:]
   let fileNameLengthLimit: Int?
 
+  var fileSettings: String? = nil
+  var imports: [String] = []
+
   init(fileNameLengthLimit: Int?) {
     let universalFileNameLengthLimit = 128 // 256 tripped limits cross‐compiling from Linux in Windows CI.
     var limit = universalFileNameLengthLimit
@@ -32,7 +35,21 @@ extension ParallelFiles {
   }
 
   func completed() -> [String: String] {
-    return files.mapValues { file in
+    return files.mapValues { body in
+      var file: [String] = []
+
+      if let settings = fileSettings {
+        file.appendSeparatorLine()
+        file.append(settings)
+      }
+
+      if !imports.isEmpty {
+        file.appendSeparatorLine()
+        file.append(contentsOf: imports)
+      }
+
+      file.append(contentsOf: body)
+
       var joined = file.joined(separator: "\n").appending("\n")
       while joined.first == "\n" {
         joined.removeFirst()

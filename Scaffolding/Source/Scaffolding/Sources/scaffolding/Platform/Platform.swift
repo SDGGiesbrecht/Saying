@@ -3898,10 +3898,7 @@ extension Platform {
     var files = ParallelFiles(fileNameLengthLimit: fileNameLengthLimit)
     let mainFile = mainSourceFileName(libraryName: libraryName)
 
-    if let settings = fileSettings {
-      files[mainFile].appendSeparatorLine()
-      files[mainFile].append(settings)
-    }
+    files.fileSettings = fileSettings
 
     var imports: Set<ImportIntermediate> = []
     for module in modules {
@@ -3909,12 +3906,9 @@ extension Platform {
     }
     imports.formUnion(importsNeededByDeadEnd)
     imports.formUnion(importsNeededByTestScaffolding)
-    if !imports.isEmpty {
-      files[mainFile].appendSeparatorLine()
-      for importTarget in imports.sorted() {
-        files[mainFile].append(statementImporting(importTarget.name, condition: importTarget.condition))
-      }
-    }
+    files.imports = imports.sorted().map({ importTarget in
+      return statementImporting(importTarget.name, condition: importTarget.condition)
+    })
 
     var coverageIndex: [UnicodeText: Int] = [:]
     if mode.hasTestCoverage {
