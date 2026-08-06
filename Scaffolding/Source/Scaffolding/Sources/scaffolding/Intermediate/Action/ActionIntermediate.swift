@@ -118,7 +118,7 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  
+
   static func disallowConditions(
     in implementation: ParsedNativeActionImplementation,
     errors: inout [ConstructionError]
