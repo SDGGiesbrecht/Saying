@@ -4130,15 +4130,15 @@ extension Platform {
     let sourceSubdirectory = self.sourceSubdirectory(mode: mode, libraryName: libraryName)
 
     for (name, contents) in source.completed() {
+      var fileName = name
+      if case .scaffolding = mode {
+        // So Windows can check out the repository.
+        fileName = fileName.replacingOccurrences(of: "<", with: "_")
+        fileName = fileName.replacingOccurrences(of: ">", with: "_")
+      }
       if let limit = fileSizeLimit,
          contents.utf8.count > limit {
         let split = splitLongFile(contents)
-        var fileName = name
-        if case .scaffolding = mode {
-          // So Windows can check out the repository.
-          fileName = fileName.replacingOccurrences(of: "<", with: "_")
-          fileName = fileName.replacingOccurrences(of: ">", with: "_")
-        }
         let baseName = sourceSubdirectory + [fileName]
         for (index, part) in split.enumerated() {
           try outputDirectory.update(
@@ -4148,7 +4148,7 @@ extension Platform {
         }
       } else {
         try outputDirectory.update(
-          (sourceSubdirectory + [name]).appendingToFileName(".\(sourceFileExtension)"),
+          (sourceSubdirectory + [fileName]).appendingToFileName(".\(sourceFileExtension)"),
           to: contents
         )
       }
