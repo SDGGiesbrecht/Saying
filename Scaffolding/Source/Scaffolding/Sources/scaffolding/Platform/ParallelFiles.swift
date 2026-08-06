@@ -3,7 +3,12 @@ struct ParallelFiles {
   let fileNameLengthLimit: Int?
 
   init(fileNameLengthLimit: Int?) {
-    self.fileNameLengthLimit = fileNameLengthLimit
+    let universalFileNameLengthLimit = 256 // 259 tripped limits cross‐compiling from Linux in Windows CI.
+    var limit = universalFileNameLengthLimit
+    if let fileNameLengthLimit = fileNameLengthLimit {
+      limit = min(limit, fileNameLengthLimit)
+    }
+    self.fileNameLengthLimit = limit
   }
 }
 
