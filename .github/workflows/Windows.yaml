@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Check out
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
     - name: Build
       uses: ./.github/actions/Scaffolding
       with:
@@ -16,7 +16,7 @@ jobs:
           set -x
           swift run --package-path Scaffolding/Source/Scaffolding scaffolding prepare‐c‐sharp
     - name: Upload
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: C♯
         path: .Construction/C♯
@@ -33,14 +33,14 @@ jobs:
     needs: Windows_Build
     steps:
     - name: Check out
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
     - name: Download
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: C♯
         path: .Construction/C♯
     - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
       with:
         vs-version: '[17.14,17.15)'
     - name: Build all

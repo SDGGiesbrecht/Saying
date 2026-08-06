@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Check out
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
     - name: Format
       uses: ./.github/actions/Scaffolding
       with:
