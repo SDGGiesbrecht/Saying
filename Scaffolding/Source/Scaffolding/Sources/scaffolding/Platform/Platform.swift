@@ -195,6 +195,7 @@ protocol Platform {
   static var actionDeclarationsContainerStart: [String]? { get }
   static var actionDeclarationsContainerEnd: [String]? { get }
   static func register(test: String, ordinal: Int) -> String
+  static var testSummaryFile: String { get }
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
@@ -3987,7 +3988,10 @@ extension Platform {
       for module in modules {
         allTests.append(contentsOf: module.allTests(sorted: true))
       }
-      files[mainFile].appendSeparatorLine()
+      let testSummaryFile = multiFileMode
+        ? self.testSummaryFile
+        : mainFile
+      files[testSummaryFile].appendSeparatorLine()
       let testCalls = splitFunctionImplementationIfTooLong(
         implementation: allTests.enumerated().flatMap({ (index, test) in
           return call(test: test, identifierIndex: &identifierIndex, ordinal: index + 1)
@@ -3996,7 +4000,7 @@ extension Platform {
         subcall: { "test\($0)(\($1 ?? ""))" },
         subdeclaration: { "\(actionContinuationKeyword!) test\($0)(\($1 ?? ""))" }
       )
-      files[mainFile].append(contentsOf: testSummary(testCalls: testCalls))
+      files[testSummaryFile].append(contentsOf: testSummary(testCalls: testCalls))
     }
     if let end = actionDeclarationsContainerEnd {
       files[mainFile].append(contentsOf: end)

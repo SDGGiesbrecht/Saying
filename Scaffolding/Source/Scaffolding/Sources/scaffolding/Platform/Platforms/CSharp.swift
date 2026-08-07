@@ -708,6 +708,9 @@ enum CSharp: Platform {
     return "CurrentTest.Test = \(ordinal); // \(test)"
   }
 
+  static var testSummaryFile: String {
+    return "Test"
+  }
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
       "\(indent)internal static void Test()",
