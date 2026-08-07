@@ -479,6 +479,9 @@ enum JavaScript: Platform {
     return "currentTest = \u{22}\(sanitize(stringLiteral: test))\u{22};"
   }
 
+  static var testSummaryFile: String {
+    return "test"
+  }
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
       "",

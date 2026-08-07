@@ -605,7 +605,7 @@ enum CSharp: Platform {
   }
 
   static var fileSettings: String? {
-    return "using static Tests;"
+    return "using static Global;"
   }
   static func statementImporting(_ importTarget: String, condition: String?) -> String {
     let using = "using \(importTarget);"
@@ -683,7 +683,7 @@ enum CSharp: Platform {
 
   static var actionDeclarationsContainerStart: [String]? {
     return [
-      "static class Tests",
+      "static partial class Global",
       "{",
       "",
       "\(indent)static void Assert(bool condition, string message)",
@@ -708,8 +708,14 @@ enum CSharp: Platform {
     return "CurrentTest.Test = \(ordinal); // \(test)"
   }
 
+  static var testSummaryFile: String {
+    return "Test"
+  }
   static func testSummary(testCalls: [String]) -> [String] {
     var result = [
+      "static partial class Global",
+      "{",
+      "",
       "\(indent)internal static void Test()",
       "\(indent){",
     ]
@@ -730,6 +736,7 @@ enum CSharp: Platform {
       "\(indent)\(indent)}",
       "\(indent)\(indent)Assert(!anyRemaining, \u{22}\u{22});",
       "\(indent)}",
+      "}",
     ])
     return result
   }
@@ -740,7 +747,7 @@ enum CSharp: Platform {
       "{",
       "\(indent)static void Main()",
       "\(indent){",
-      "\(indent)\(indent)Tests.Test();",
+      "\(indent)\(indent)Test();",
       "\(indent)}",
       "}",
     ]
