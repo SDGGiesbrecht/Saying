@@ -638,6 +638,9 @@ enum CSharp: Platform {
     ].lazy.map { ImportIntermediate(name: $0) })
   }
 
+  static var currentTestVariableFile: String {
+    return "CurrentTest"
+  }
   static var currentTestVariable: String {
     return [
       "static class CurrentTest",

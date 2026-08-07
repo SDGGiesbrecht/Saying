@@ -187,6 +187,7 @@ protocol Platform {
   // Module
   static var importsNeededByDeadEnd: Set<ImportIntermediate> { get }
   static var importsNeededByTestScaffolding: Set<ImportIntermediate> { get }
+  static var currentTestVariableFile: String { get }
   static var currentTestVariable: String { get }
   static func coverageRegionIndex(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
@@ -3896,6 +3897,7 @@ extension Platform {
     var anonymousCounter: Int = 0
 
     var files = ParallelFiles(fileNameLengthLimit: fileNameLengthLimit)
+    let multiFileMode = supportsMultiFileMode && !mode.singleFileMode
     let mainFile = mainSourceFileName(libraryName: libraryName)
 
     files.fileSettings = fileSettings
@@ -3912,8 +3914,11 @@ extension Platform {
 
     var coverageIndex: [UnicodeText: Int] = [:]
     if mode.hasTestCoverage {
-      files[mainFile].appendSeparatorLine()
-      files[mainFile].append(currentTestVariable)
+      let currentTestVariableFile = multiFileMode
+        ? self.currentTestVariableFile
+        : mainFile
+      files[currentTestVariableFile].appendSeparatorLine()
+      files[currentTestVariableFile].append(currentTestVariable)
       files[mainFile].appendSeparatorLine()
       var regionSet: Set<UnicodeText> = []
       for module in modules {

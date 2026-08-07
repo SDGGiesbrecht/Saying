@@ -719,6 +719,9 @@ enum C: Platform {
     ].lazy.map { ImportIntermediate(name: $0) })
   }
 
+  static var currentTestVariableFile: String {
+    return "current_test"
+  }
   static var currentTestVariable: String {
     return [
       "char* current_test;",

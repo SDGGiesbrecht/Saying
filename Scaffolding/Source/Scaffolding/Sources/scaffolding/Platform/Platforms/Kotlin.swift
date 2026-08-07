@@ -516,6 +516,9 @@ enum Kotlin: Platform {
     return []
   }
 
+  static var currentTestVariableFile: String {
+    return "currentTest"
+  }
   static var currentTestVariable: String {
     return "var currentTest: String = \u{22}\u{22}"
   }
