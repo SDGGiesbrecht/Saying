@@ -502,6 +502,9 @@ enum JavaScript: Platform {
     return result
   }
 
+  static var testEntryPointFile: String {
+    return "test"
+  }
   static func testEntryPoint() -> [String]? {
     return [
       "test();",

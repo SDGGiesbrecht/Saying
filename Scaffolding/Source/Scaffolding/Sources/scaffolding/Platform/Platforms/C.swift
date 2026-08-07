@@ -800,6 +800,9 @@ enum C: Platform {
     return result
   }
 
+  static var testEntryPointFile: String {
+    return "main"
+  }
   static func testEntryPoint() -> [String]? {
     return [
       "int main() {",
