@@ -736,6 +736,9 @@ enum C: Platform {
     ].joined(separator: "\n")
   }
 
+  static var coverageRegionIndexFile: String {
+    return "coverage_regions"
+  }
   static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = []
     result.append(contentsOf: [
