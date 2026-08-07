@@ -3897,6 +3897,7 @@ extension Platform {
     var anonymousCounter: Int = 0
 
     var files = ParallelFiles(fileNameLengthLimit: fileNameLengthLimit)
+    let multiFileMode = supportsMultiFileMode && !mode.singleFileMode
     let mainFile = mainSourceFileName(libraryName: libraryName)
 
     files.fileSettings = fileSettings
@@ -3913,6 +3914,9 @@ extension Platform {
 
     var coverageIndex: [UnicodeText: Int] = [:]
     if mode.hasTestCoverage {
+      let currentTestVariableFile = multiFileMode
+        ? self.currentTestVariableFile
+        : mainFile
       files[currentTestVariableFile].appendSeparatorLine()
       files[currentTestVariableFile].append(currentTestVariable)
       files[mainFile].appendSeparatorLine()
