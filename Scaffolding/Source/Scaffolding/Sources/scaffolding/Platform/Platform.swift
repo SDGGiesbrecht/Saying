@@ -3983,6 +3983,10 @@ extension Platform {
         )
       )
     }
+    if let end = actionDeclarationsContainerEnd {
+      files[mainFile].append(contentsOf: end)
+    }
+
     if mode.hasTestCoverage {
       var allTests: [TestIntermediate] = []
       for module in modules {
@@ -4001,9 +4005,6 @@ extension Platform {
         subdeclaration: { "\(actionContinuationKeyword!) test\($0)(\($1 ?? ""))" }
       )
       files[testSummaryFile].append(contentsOf: testSummary(testCalls: testCalls))
-    }
-    if let end = actionDeclarationsContainerEnd {
-      files[mainFile].append(contentsOf: end)
     }
 
     return files
