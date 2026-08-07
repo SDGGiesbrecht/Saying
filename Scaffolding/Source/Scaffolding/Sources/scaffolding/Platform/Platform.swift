@@ -189,6 +189,7 @@ protocol Platform {
   static var importsNeededByTestScaffolding: Set<ImportIntermediate> { get }
   static var currentTestVariableFile: String { get }
   static var currentTestVariable: String { get }
+  static var coverageRegionIndexFile: String { get }
   static func coverageRegionIndex(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
   static var actionDeclarationsContainerStart: [String]? { get }
@@ -3919,7 +3920,10 @@ extension Platform {
         : mainFile
       files[currentTestVariableFile].appendSeparatorLine()
       files[currentTestVariableFile].append(currentTestVariable)
-      files[mainFile].appendSeparatorLine()
+      let coverageRegionIndexFile = multiFileMode
+        ? self.coverageRegionIndexFile
+        : mainFile
+      files[coverageRegionIndexFile].appendSeparatorLine()
       var regionSet: Set<UnicodeText> = []
       for module in modules {
         regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
@@ -3930,10 +3934,10 @@ extension Platform {
       for (index, region) in regions.enumerated() {
         coverageIndex[region] = index
       }
-      files[mainFile].append(
+      files[coverageRegionIndexFile].append(
         contentsOf: coverageRegionIndex(regions: regions.map({ sanitize(stringLiteral: $0) }))
       )
-      files[mainFile].append(contentsOf: registerCoverageAction)
+      files[coverageRegionIndexFile].append(contentsOf: registerCoverageAction)
     }
 
     var identifierIndex: [String: [String: Int]] = [:]

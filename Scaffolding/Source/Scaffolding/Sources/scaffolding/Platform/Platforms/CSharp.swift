@@ -650,6 +650,9 @@ enum CSharp: Platform {
     ].joined(separator: "\n")
   }
 
+  static var coverageRegionIndexFile: String {
+    return "Coverage"
+  }
   static func coverageRegionIndex(regions: [String]) -> [String] {
     // Due to compiler limits on string literals (and resourses not having been implemented yet),
     // code is only aware of the indices and humans must look up legible identifiers by index in the source.

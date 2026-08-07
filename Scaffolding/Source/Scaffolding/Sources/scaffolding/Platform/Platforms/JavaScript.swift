@@ -444,6 +444,9 @@ enum JavaScript: Platform {
     return "let currentTest;"
   }
 
+  static var coverageRegionIndexFile: String {
+    return "coverageRegions"
+  }
   static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
       "let coverageRegions = [",

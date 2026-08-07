@@ -706,6 +706,9 @@ enum Swift: Platform {
     return "var currentTest: String = \u{22}\u{22}"
   }
 
+  static var coverageRegionIndexFile: String {
+    return "coverageRegions"
+  }
   static func coverageRegionIndex(regions: [String]) -> [String] {
     var result: [String] = [
       "var coverageRegions: [String?] = [",
