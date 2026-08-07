@@ -437,6 +437,9 @@ enum JavaScript: Platform {
     return []
   }
 
+  static var currentTestVariableFile: String {
+    return "currentTest"
+  }
   static var currentTestVariable: String {
     return "let currentTest;"
   }
