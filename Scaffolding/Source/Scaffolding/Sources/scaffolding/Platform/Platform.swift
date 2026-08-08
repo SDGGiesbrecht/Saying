@@ -3509,6 +3509,9 @@ extension Platform {
       }
       isStatic = true
     }
+    if let parentType = parentType {
+      fileName = parentType
+    }
 
     let returnSection = returnValue.flatMap({ self.returnSection(with: $0, isProperty: isProperty) })
 
