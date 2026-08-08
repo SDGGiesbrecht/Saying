@@ -48,6 +48,7 @@ extension ParallelFiles {
         file.append(contentsOf: imports)
       }
 
+      file.appendSeparatorLine()
       file.append(contentsOf: body)
 
       var joined = file.joined(separator: "\n").appending("\n")
