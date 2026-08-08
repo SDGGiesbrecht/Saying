@@ -796,7 +796,7 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
-  ) -> OutputDeclaration? {
+  ) -> OutputDeclaration<String>? {
     if !isTyped,
       thing.cases.isEmpty {
       return nil
@@ -933,9 +933,9 @@ extension Platform {
           coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter
         ) {
-          if handledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
+          if handledActionDeclarations.insert(declaration.declaration.uniquenessDefinition).inserted {
             relocatedActions.insert(String(action.globallyUniqueIdentifier(referenceLookup: referenceLookup)))
-            members.append(declaration.full)
+            members.append(declaration.declaration.full)
           }
         }
       }
@@ -3246,7 +3246,7 @@ extension Platform {
     for action: ActionIntermediate,
     referenceLookup: [ReferenceDictionary],
     identifierIndex: inout [String: [String: Int]]
-  ) -> String? {
+  ) -> OutputDeclaration<String>? {
     if nativeImplementation(of: action) != nil
       || action.isMemberWrapper {
       return nil
@@ -3262,10 +3262,18 @@ extension Platform {
         leading: true,
         entire: true
       )
+    var fileName: String?
     let parameters = action.parameters.ordered(
       for: nativeNameDeclaration(of: action) ?? action.names.identifier()
     )
       .map({ thing in
+        if fileName == nil {
+          fileName = source(
+            for: thing.type,
+            referenceLookup: referenceLookup,
+            identifierIndex: &identifierIndex
+          )
+        }
         return source(
           for: thing,
           referenceLookup: referenceLookup,
@@ -3276,6 +3284,13 @@ extension Platform {
 
     let returnValue: String?
     if let specified = action.returnValue {
+      if fileName == nil {
+        fileName = source(
+          for: specified,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      }
       returnValue = source(
         for: specified,
         referenceLookup: referenceLookup,
@@ -3291,7 +3306,12 @@ extension Platform {
       name: name,
       parameters: parameters,
       returnSection: returnSection
-    )
+    ).map { declaration in
+      OutputDeclaration(
+        declaration: declaration,
+        idiomaticLocation: fileName ?? name
+      )
+    }
   }
 
   static func source(
@@ -3368,10 +3388,32 @@ extension Platform {
     alreadyHandledNativeRequirements: inout Set<String>,
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int
-  ) -> UniqueDeclaration? {
+  ) -> OutputDeclaration<UniqueDeclaration>? {
     if action.isMemberWrapper {
       return nil
     }
+
+    var fileName: String?
+    var parameterEntries = action.parameters.ordered(
+      for: nativeNameDeclaration(of: action) ?? action.names.identifier()
+    )
+    if fileName == nil,
+      let first = parameterEntries.first {
+      fileName = source(
+        for: first.type,
+        referenceLookup: externalReferenceLookup,
+        identifierIndex: &identifierIndex
+      )
+    }
+    if fileName == nil,
+      let specified = action.returnValue {
+      fileName = source(
+        for: specified,
+        referenceLookup: externalReferenceLookup,
+        identifierIndex: &identifierIndex
+      )
+    }
+
     var nativeRequirements: UniqueDeclaration?
     var nativeCondition: String?
     if let native = nativeImplementation(of: action) {
@@ -3386,7 +3428,12 @@ extension Platform {
       if let condition = native.condition {
         nativeCondition = condition
       } else {
-        return nativeRequirements
+        return nativeRequirements.map { requirements in
+          OutputDeclaration(
+            declaration: requirements,
+            idiomaticLocation: fileName ?? String(native.expression.textComponents.joined())
+          )
+        }
       }
     }
     guard !hasBeenRelocated else {
@@ -3408,9 +3455,6 @@ extension Platform {
     let isProperty = nativeIsProperty(action: action)
     let isInitializer = nativeIsInitializer(action: action)
 
-    var parameterEntries = action.parameters.ordered(
-      for: nativeNameDeclaration(of: action) ?? action.names.identifier()
-    )
     var parentType: String?
     var isMutating = false
     if nativeIsMember(action: action),
@@ -3542,9 +3586,12 @@ extension Platform {
       nativeRequirements: nativeRequirements?.full,
       declaration: constructedDeclaration.full
     )
-    return UniqueDeclaration(
-      full: branched ?? constructedDeclaration.full,
-      uniquenessDefinition: constructedDeclaration.uniquenessDefinition
+    return OutputDeclaration(
+      declaration: UniqueDeclaration(
+        full: branched ?? constructedDeclaration.full,
+        uniquenessDefinition: constructedDeclaration.uniquenessDefinition
+      ),
+      idiomaticLocation: fileName ?? name
     )
   }
   static var actualFunctionImplementationSizeLimit: Int? {
@@ -3643,7 +3690,7 @@ extension Platform {
     anonymousCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
     identifierIndex: inout [String: [String: Int]]
-  ) -> String {
+  ) -> OutputDeclaration<String> {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
     var extractedAnonymousFunctions: [String] = []
@@ -3665,22 +3712,26 @@ extension Platform {
       indentationLevel: 0,
       captures: &captures
     )
-    return actionDeclaration(
-      name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex),
-      parameters: "",
-      returnSection: emptyReturnType.flatMap({ self.returnSection(with: $0, isProperty: false) }),
-      accessModifier: nil,
-      coverageRegistration: nil,
-      implementation: implementation,
-      parentType: nil,
-      isStatic: false,
-      isMutating: false,
-      isAbsorbedMember: false,
-      isOverride: false,
-      propertyInstead: false,
-      initializerInstead: false,
-      extractedDeclarations: extractedAnonymousFunctions
-    ).full
+    let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex)
+    return OutputDeclaration(
+      declaration: actionDeclaration(
+        name: name,
+        parameters: "",
+        returnSection: emptyReturnType.flatMap({ self.returnSection(with: $0, isProperty: false) }),
+        accessModifier: nil,
+        coverageRegistration: nil,
+        implementation: implementation,
+        parentType: nil,
+        isStatic: false,
+        isMutating: false,
+        isAbsorbedMember: false,
+        isOverride: false,
+        propertyInstead: false,
+        initializerInstead: false,
+        extractedDeclarations: extractedAnonymousFunctions
+      ).full,
+      idiomaticLocation: name
+    )
   }
 
   static func call(
@@ -3821,6 +3872,7 @@ extension Platform {
   static func actionsSource(
     for module: ModuleIntermediate,
     mode: CompilationMode,
+    libraryName: String,
     moduleWideImports: [ReferenceDictionary],
     relocatedActions: Set<String>,
     alreadyHandledNativeRequirements: inout Set<String>,
@@ -3828,8 +3880,8 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     identifierIndex: inout [String: [String: Int]]
-  ) -> String {
-    var result: [String] = []
+  ) -> [String: String] {
+    var result: [String: [String]] = [:]
     let moduleReferenceLookup = module.referenceDictionary
     let referenceLookup = moduleWideImports + [moduleReferenceLookup]
     let allActions = moduleReferenceLookup.allActions(sorted: true)
@@ -3842,8 +3894,11 @@ extension Platform {
             referenceLookup: referenceLookup,
             identifierIndex: &identifierIndex
           ) {
-            result.appendSeparatorLine()
-            result.append(declaration)
+            let file = supportsMultiFileMode && !mode.singleFileMode
+              ? declaration.idiomaticLocation
+              : mainSourceFileName(libraryName: libraryName)
+            result[file, default: []].appendSeparatorLine()
+            result[file, default: []].append(declaration.declaration)
           }
         }
       }
@@ -3863,9 +3918,13 @@ extension Platform {
           coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter
         ) {
-          if alreadyHandledActionDeclarations.insert(declaration.uniquenessDefinition).inserted {
-            result.appendSeparatorLine()
-            result.append(declaration.full)
+          if alreadyHandledActionDeclarations
+            .insert(declaration.declaration.uniquenessDefinition).inserted {
+            let file = supportsMultiFileMode && !mode.singleFileMode
+              ? declaration.idiomaticLocation
+              : mainSourceFileName(libraryName: libraryName)
+            result[file, default: []].appendSeparatorLine()
+            result[file, default: []].append(declaration.declaration.full)
           }
         }
       }
@@ -3873,19 +3932,21 @@ extension Platform {
     if mode.hasTestCoverage {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
-        result.appendSeparatorLine()
-        result.append(
-          source(
-            of: test,
-            coverageIndex: coverageIndex,
-            anonymousCounter: &anonymousCounter,
-            referenceLookup: referenceLookup,
-            identifierIndex: &identifierIndex
-          )
+        let declaration = source(
+          of: test,
+          coverageIndex: coverageIndex,
+          anonymousCounter: &anonymousCounter,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
         )
+        let file = supportsMultiFileMode && !mode.singleFileMode
+          ? declaration.idiomaticLocation
+          : mainSourceFileName(libraryName: libraryName)
+        result[file, default: []].appendSeparatorLine()
+        result[file, default: []].append(declaration.declaration)
       }
     }
-    return result.joined(separator: "\n")
+    return result.mapValues({ $0.joined(separator: "\n") })
   }
 
   static func source(
@@ -3964,16 +4025,18 @@ extension Platform {
     }
 
     if let verification = verificationScaffolding {
-      files[mainFile].appendSeparatorLine()
-      files[mainFile].append(contentsOf: verification)
+      let verificationScaffoldingFile = multiFileMode
+        ? self.verificationScaffoldingFile
+        : mainFile
+      files[verificationScaffoldingFile].appendSeparatorLine()
+      files[verificationScaffoldingFile].append(contentsOf: verification)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
-      files[mainFile].appendSeparatorLine()
-      files[mainFile].append(
-        self.actionsSource(
+      for (file, contents) in self.actionsSource(
           for: module,
           mode: mode,
+          libraryName: libraryName,
           moduleWideImports: moduleWideImportDictionary,
           relocatedActions: relocatedActions,
           alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
@@ -3981,8 +4044,10 @@ extension Platform {
           coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter,
           identifierIndex: &identifierIndex
-        )
-      )
+      ) {
+        files[file].appendSeparatorLine()
+        files[file].append(contents)
+      }
     }
 
     if mode.hasTestCoverage {

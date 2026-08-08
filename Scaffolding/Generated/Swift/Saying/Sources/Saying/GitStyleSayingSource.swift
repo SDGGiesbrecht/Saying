@@ -45,3 +45,18 @@ public struct GitStyleSayingSource {
     return SayingSource(origin: self.origin, code: SayingSourceCode.utf8(UnicodeSegments(segments)))
   }
 }
+
+func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_0028_0029_0020into_0020_0028_0029_003AGitStyleSayingSource_003A_0028_003Aoptional_0020_0028_0029_003AGit_2010style_0020parsing_0020cursor_003A_0029_003AUnicode_0020scalar_0020boundary_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029_003A(_ source: GitStyleSayingSource, _ beginning: inout Git_2010style_0020parsing_0020cursor?, _ end: String.UnicodeScalarView.Index, _ segments: inout [Unicode_0020segment]) {
+  if let start = beginning {
+    var adjusted_0020offset: UInt64 = start.offset
+    var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end)
+    while (segment.first == " " as Unicode.Scalar) {
+      segment.removeFirst()
+      adjusted_0020offset += .one
+    }
+    if segment.isNotEmpty {
+      segments.append(Unicode_0020segment(adjusted_0020offset, UnicodeText(segment)))
+    }
+  }
+  beginning = nil
+}

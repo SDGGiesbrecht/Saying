@@ -243,3 +243,37 @@ public struct UnicodeText {
     self = text
   }
 }
+
+public func ==(_ lhs: UnicodeText, _ rhs: UnicodeText) -> Bool {
+  return lhs.scalars == rhs.scalars
+}
+
+extension UnicodeText {
+  public static var empty: UnicodeText {
+    return UnicodeText(skippingNormalizationOf: "".unicodeScalars)
+  }
+}
+
+func primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_0029_0020in_0020_0028_0029_0020according_0020to_0020use_0020as_0020literal_0020pattern_003AUnicodeText_003AUnicode_0020scalar_0020boundary_003A_0028_003Aslice_0020of_0020_0028_0029_003AUnicodeText_003A_0029_003A_0028_003Aoptional_0020_0028_0029_003A_0028_003Aslice_0020of_0020_0028_0029_003AUnicodeText_003A_0029_003A_0029(_ pattern: UnicodeText, _ beginning: String.UnicodeScalarView.Index, _ haystack: Slice<UnicodeText>) -> Slice<UnicodeText>? {
+  var cursor_0020in_0020pattern: String.UnicodeScalarView.Index = pattern.startIndex
+  let end_0020of_0020pattern: String.UnicodeScalarView.Index = pattern.endIndex
+  var cursor_0020in_0020haystack: String.UnicodeScalarView.Index = beginning
+  let end_0020of_0020haystack: String.UnicodeScalarView.Index = haystack.endIndex
+  while (cursor_0020in_0020pattern < end_0020of_0020pattern) {
+    if cursor_0020in_0020haystack >= end_0020of_0020haystack {
+      return nil
+    }
+    if pattern[entryIndex: pattern.indexSkippingBoundsCheck(afterBoundary: cursor_0020in_0020pattern)] != haystack[entryIndex: haystack.indexSkippingBoundsCheck(afterBoundary: cursor_0020in_0020haystack)] {
+      return nil
+    }
+    pattern.formIndex(after: &cursor_0020in_0020pattern)
+    haystack.formIndex(after: &cursor_0020in_0020haystack)
+  }
+  return Slice(base: haystack.base, bounds: beginning ..< cursor_0020in_0020haystack)
+}
+
+extension String.UnicodeScalarView {
+  public init(_ text: UnicodeText) {
+    self = text.scalars
+  }
+}
