@@ -10,17 +10,6 @@ func _0028_0029의_0020자모_003AUnicode_0020scalar_0020numerical_0020
   return 자모
 }
 
-extension Unicode.Scalar {
-  public init(skippingValidityCheck value: UInt32) {
-    self = {
-      if let scalar = Unicode.Scalar(value) {
-        return scalar
-      }
-      fatalError()
-    }()
-  }
-}
-
 func canonical_0020combining_0020class_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003A8_2010bit_0020natural_0020number(_ scalar: UInt32) -> UInt8 {
   if scalar <= 0x02FF {
     return 0

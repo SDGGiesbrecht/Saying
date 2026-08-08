@@ -5,6 +5,17 @@ extension Unicode.Scalar {
 }
 
 extension Unicode.Scalar {
+  public init(skippingValidityCheck value: UInt32) {
+    self = {
+      if let scalar = Unicode.Scalar(value) {
+        return scalar
+      }
+      fatalError()
+    }()
+  }
+}
+
+extension Unicode.Scalar {
   public var combiningClass: Unicode.CanonicalCombiningClass {
     return Unicode.CanonicalCombiningClass(rawValue: canonical_0020combining_0020class_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003A8_2010bit_0020natural_0020number((self).value))
   }

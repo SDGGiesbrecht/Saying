@@ -271,9 +271,3 @@ func primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_002
   }
   return Slice(base: haystack.base, bounds: beginning ..< cursor_0020in_0020haystack)
 }
-
-extension String.UnicodeScalarView {
-  public init(_ text: UnicodeText) {
-    self = text.scalars
-  }
-}
