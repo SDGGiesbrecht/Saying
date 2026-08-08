@@ -92,3 +92,7 @@ public struct UnicodeSegments {
     return UnicodeSegments.Boundary(segment_0020cursor, nil)
   }
 }
+
+func segments_0020of_0020_0028_0029_003AUnicode_0020segments_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029(_ instance: UnicodeSegments) -> [Unicode_0020segment] {
+  return instance.segments
+}
