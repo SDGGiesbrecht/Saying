@@ -506,10 +506,18 @@ enum CSharp: Platform {
     }
     let staticKeyword = isAbsorbedMember && !isStatic ? "" : "static "
     let parametersSection = propertyInstead ? "" : "(\(adjustedParameters))"
-    var result: [String] = [
+    var result: [String] = []
+    if !isAbsorbedMember {
+      result.append(contentsOf: [
+        "static partial class Global",
+        "{",
+        "",
+      ])
+    }
+    result.append(contentsOf: [
       "\(indent)\(access)\(override)\(staticKeyword)\(returnSection!) \(name)\(parametersSection)",
       "\(indent){",
-    ]
+    ])
     var extraIndent = ""
     if propertyInstead {
       result.append(contentsOf: [
@@ -560,6 +568,11 @@ enum CSharp: Platform {
         "\(indent){",
         "\(indent)\(indent)return !(first == second);",
         "\(indent)}",
+      ])
+    }
+    if !isAbsorbedMember {
+      result.append(contentsOf: [
+        "}",
       ])
     }
     return UniqueDeclaration(
@@ -680,8 +693,10 @@ enum CSharp: Platform {
       "}",
     ]
   }
-
-  static var actionDeclarationsContainerStart: [String]? {
+  static var verificationScaffoldingFile: String {
+    return "Assert"
+  }
+  static var verificationScaffolding: [String]? {
     return [
       "static partial class Global",
       "{",
@@ -694,14 +709,9 @@ enum CSharp: Platform {
       "\(indent)\(indent)\(indent)Environment.Exit(1);",
       "\(indent)\(indent)}",
       "\(indent)}",
-    ]
-  }
-  static var actionDeclarationsContainerEnd: [String]? {
-    return [
       "}",
     ]
   }
-
   static func register(test: String, ordinal: Int) -> String {
     // Due to compiler limits on string literals (and resourses not having been implemented yet),
     // code is only aware of the line numbers and humans must look up legible identifiers in the source.

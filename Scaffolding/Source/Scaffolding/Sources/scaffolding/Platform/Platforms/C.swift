@@ -763,14 +763,12 @@ enum C: Platform {
     "}",
     ]
   }
-
-  static var actionDeclarationsContainerStart: [String]? {
+  static var verificationScaffoldingFile: String {
+    return "assert"
+  }
+  static var verificationScaffolding: [String]? {
     return nil
   }
-  static var actionDeclarationsContainerEnd: [String]? {
-    return nil
-  }
-
   static func register(test: String, ordinal: Int) -> String {
     return "current_test = \u{22}\(sanitize(stringLiteral: test))\u{22};"
   }

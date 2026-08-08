@@ -192,8 +192,8 @@ protocol Platform {
   static var coverageRegionIndexFile: String { get }
   static func coverageRegionIndex(regions: [String]) -> [String]
   static var registerCoverageAction: [String] { get }
-  static var actionDeclarationsContainerStart: [String]? { get }
-  static var actionDeclarationsContainerEnd: [String]? { get }
+  static var verificationScaffoldingFile: String { get }
+  static var verificationScaffolding: [String]? { get }
   static func register(test: String, ordinal: Int) -> String
   static var testSummaryFile: String { get }
   static func testSummary(testCalls: [String]) -> [String]
@@ -3963,9 +3963,9 @@ extension Platform {
       }
     }
 
-    if let start = actionDeclarationsContainerStart {
+    if let verification = verificationScaffolding {
       files[mainFile].appendSeparatorLine()
-      files[mainFile].append(contentsOf: start)
+      files[mainFile].append(contentsOf: verification)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
@@ -3983,9 +3983,6 @@ extension Platform {
           identifierIndex: &identifierIndex
         )
       )
-    }
-    if let end = actionDeclarationsContainerEnd {
-      files[mainFile].append(contentsOf: end)
     }
 
     if mode.hasTestCoverage {
