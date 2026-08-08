@@ -4211,6 +4211,11 @@ extension Platform {
         fileName = fileName.replacingOccurrences(of: "<", with: "_")
         fileName = fileName.replacingOccurrences(of: ">", with: "_")
       }
+      if self == CSharp.self || self == Kotlin.self {
+        // Currently built only by passing through action artifacts, which requires sanitization.
+        fileName = fileName.replacingOccurrences(of: "<", with: "_")
+        fileName = fileName.replacingOccurrences(of: ">", with: "_")
+      }
       if let limit = fileSizeLimit,
          contents.utf8.count > limit {
         let split = splitLongFile(contents)
