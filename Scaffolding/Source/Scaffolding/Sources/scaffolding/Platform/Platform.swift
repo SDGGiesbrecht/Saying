@@ -3940,7 +3940,7 @@ extension Platform {
           identifierIndex: &identifierIndex
         )
         let file = supportsMultiFileMode && !mode.singleFileMode
-          ? declaration.idiomaticLocation
+          ? test.location.prefix(1).map({ String($0.identifier()) }).joined(separator: ".")
           : mainSourceFileName(libraryName: libraryName)
         result[file, default: []].appendSeparatorLine()
         result[file, default: []].append(declaration.declaration)
