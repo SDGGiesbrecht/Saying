@@ -304,7 +304,7 @@ enum JavaScript: Platform {
     return nil
   }
   static var emptyReturnTypeForActionType: String {
-    return ""
+    return "undefined"
   }
   static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return nil

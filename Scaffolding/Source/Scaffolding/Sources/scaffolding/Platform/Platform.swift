@@ -3309,7 +3309,7 @@ extension Platform {
     ).map { declaration in
       OutputDeclaration(
         declaration: declaration,
-        idiomaticLocation: fileName ?? name
+        idiomaticLocation: fileName ?? emptyReturnTypeForActionType
       )
     }
   }
@@ -3591,7 +3591,7 @@ extension Platform {
         full: branched ?? constructedDeclaration.full,
         uniquenessDefinition: constructedDeclaration.uniquenessDefinition
       ),
-      idiomaticLocation: fileName ?? name
+      idiomaticLocation: fileName ?? emptyReturnTypeForActionType
     )
   }
   static var actualFunctionImplementationSizeLimit: Int? {
@@ -3939,7 +3939,7 @@ extension Platform {
           identifierIndex: &identifierIndex
         )
         let file = supportsMultiFileMode && !mode.singleFileMode
-          ? test.location.prefix(1).map({ String($0.identifier()) }).joined()
+          ? declaration.idiomaticLocation
           : mainSourceFileName(libraryName: libraryName)
         files[file].appendSeparatorLine()
         files[file].append(declaration.declaration)
