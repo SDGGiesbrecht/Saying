@@ -3829,7 +3829,8 @@ extension Platform {
     }
   }
 
-  static func typesSource(
+  static func addTypesSource(
+    to files:  inout ParallelFiles,
     for module: ModuleIntermediate,
     moduleWideImports: [ReferenceDictionary],
     mode: CompilationMode,
@@ -3841,8 +3842,7 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     modulesToSearchForMembers: [ModuleIntermediate]
-  ) -> [String: String] {
-    var result: [String: [String]] = [:]
+  ) {
     let moduleReferenceLookup = moduleWideImports + [module.referenceDictionary]
     let allThings = module.referenceDictionary.allThings(sorted: true)
     for thing in allThings {
@@ -3861,15 +3861,15 @@ extension Platform {
           let file = supportsMultiFileMode && !mode.singleFileMode
             ? declaration.idiomaticLocation
             : mainSourceFileName(libraryName: libraryName)
-          result[file, default: []].appendSeparatorLine()
-          result[file, default: []].append(declaration.declaration)
+          files[file].appendSeparatorLine()
+          files[file].append(declaration.declaration)
         }
       }
     }
-    return result.mapValues({ $0.joined(separator: "\n") })
   }
 
-  static func actionsSource(
+  static func addActionsSource(
+    to files:  inout ParallelFiles,
     for module: ModuleIntermediate,
     mode: CompilationMode,
     libraryName: String,
@@ -3880,8 +3880,7 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     identifierIndex: inout [String: [String: Int]]
-  ) -> [String: String] {
-    var result: [String: [String]] = [:]
+  ) {
     let moduleReferenceLookup = module.referenceDictionary
     let referenceLookup = moduleWideImports + [moduleReferenceLookup]
     let allActions = moduleReferenceLookup.allActions(sorted: true)
@@ -3897,8 +3896,8 @@ extension Platform {
             let file = supportsMultiFileMode && !mode.singleFileMode
               ? declaration.idiomaticLocation
               : mainSourceFileName(libraryName: libraryName)
-            result[file, default: []].appendSeparatorLine()
-            result[file, default: []].append(declaration.declaration)
+            files[file].appendSeparatorLine()
+            files[file].append(declaration.declaration)
           }
         }
       }
@@ -3923,8 +3922,8 @@ extension Platform {
             let file = supportsMultiFileMode && !mode.singleFileMode
               ? declaration.idiomaticLocation
               : mainSourceFileName(libraryName: libraryName)
-            result[file, default: []].appendSeparatorLine()
-            result[file, default: []].append(declaration.declaration.full)
+            files[file].appendSeparatorLine()
+            files[file].append(declaration.declaration.full)
           }
         }
       }
@@ -3942,11 +3941,10 @@ extension Platform {
         let file = supportsMultiFileMode && !mode.singleFileMode
           ? test.location.prefix(1).map({ String($0.identifier()) }).joined()
           : mainSourceFileName(libraryName: libraryName)
-        result[file, default: []].appendSeparatorLine()
-        result[file, default: []].append(declaration.declaration)
+        files[file].appendSeparatorLine()
+        files[file].append(declaration.declaration)
       }
     }
-    return result.mapValues({ $0.joined(separator: "\n") })
   }
 
   static func source(
@@ -4006,7 +4004,8 @@ extension Platform {
     var identifierIndex: [String: [String: Int]] = [:]
     var relocatedActions: Set<String> = []
     for module in modules {
-      for (file, contents) in typesSource(
+      addTypesSource(
+        to: &files,
         for: module,
         moduleWideImports: moduleWideImportDictionary,
         mode: mode,
@@ -4018,10 +4017,7 @@ extension Platform {
         coverageIndex: coverageIndex,
         anonymousCounter: &anonymousCounter,
         modulesToSearchForMembers: modules
-      ) {
-        files[file].appendSeparatorLine()
-        files[file].append(contents)
-      }
+      )
     }
 
     if let verification = verificationScaffolding {
@@ -4033,21 +4029,19 @@ extension Platform {
     }
     var alreadyHandledActionDeclarations: Set<String> = []
     for module in modules {
-      for (file, contents) in self.actionsSource(
-          for: module,
-          mode: mode,
-          libraryName: libraryName,
-          moduleWideImports: moduleWideImportDictionary,
-          relocatedActions: relocatedActions,
-          alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
-          alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations,
-          coverageIndex: coverageIndex,
-          anonymousCounter: &anonymousCounter,
-          identifierIndex: &identifierIndex
-      ) {
-        files[file].appendSeparatorLine()
-        files[file].append(contents)
-      }
+      addActionsSource(
+        to: &files,
+        for: module,
+        mode: mode,
+        libraryName: libraryName,
+        moduleWideImports: moduleWideImportDictionary,
+        relocatedActions: relocatedActions,
+        alreadyHandledNativeRequirements: &alreadyHandledNativeRequirements,
+        alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations,
+        coverageIndex: coverageIndex,
+        anonymousCounter: &anonymousCounter,
+        identifierIndex: &identifierIndex
+      )
     }
 
     if mode.hasTestCoverage {
@@ -4215,6 +4209,7 @@ extension Platform {
         // Currently built only by passing through action artifacts, which requires sanitization.
         fileName = fileName.replacingOccurrences(of: "<", with: "_")
         fileName = fileName.replacingOccurrences(of: ">", with: "_")
+        fileName = fileName.replacingOccurrences(of: "?", with: "_")
       }
       if let limit = fileSizeLimit,
          contents.utf8.count > limit {
