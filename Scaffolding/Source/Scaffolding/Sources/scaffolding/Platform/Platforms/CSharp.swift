@@ -741,6 +741,9 @@ enum CSharp: Platform {
     return result
   }
 
+  static var testEntryPointFile: String {
+    return "Test"
+  }
   static func testEntryPoint() -> [String]? {
     return [
       "class Test",

@@ -597,6 +597,9 @@ enum Kotlin: Platform {
     return result
   }
 
+  static var testEntryPointFile: String {
+    return "main"
+  }
   static func testEntryPoint() -> [String]? {
     return [
       "fun main() {",

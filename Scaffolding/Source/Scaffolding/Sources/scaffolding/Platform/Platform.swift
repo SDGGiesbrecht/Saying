@@ -199,6 +199,7 @@ protocol Platform {
   static func testSummary(testCalls: [String]) -> [String]
 
   // Package
+  static var testEntryPointFile: String { get }
   static func testEntryPoint() -> [String]?
   static var supportsMultiFileMode: Bool { get }
   static func mainSourceFileName(libraryName: String) -> String
@@ -4117,8 +4118,12 @@ extension Platform {
 
     if mode.hasTestCoverage {
       if let entryPoint = testEntryPoint() {
-        source[mainFile].appendSeparatorLine()
-        source[mainFile].append(contentsOf: entryPoint)
+        let multiFileMode = supportsMultiFileMode && !mode.singleFileMode
+        let testEntryPointFile = multiFileMode
+          ? self.testEntryPointFile
+          : mainFile
+        source[testEntryPointFile].appendSeparatorLine()
+        source[testEntryPointFile].append(contentsOf: entryPoint)
       }
     }
 
