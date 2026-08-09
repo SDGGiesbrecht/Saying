@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: opening bracket scalar
+  C: opening‐bracket‐scalar
+  Swift: var OpeningBracketSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “[”
+ }

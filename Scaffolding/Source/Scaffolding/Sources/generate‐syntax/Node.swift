@@ -359,10 +359,10 @@ struct Node {
 
   func diagnosticParseImplementation() -> String {
     switch kind {
-    case .fixedLeaf(let scalar):
+    case .fixedLeaf:
       return [
         "    guard let first = remainder.first,",
-        "      first == \u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22} else {",
+        "      first == \(name).scalar else {",
         "        return .failure([.notA\(name)(SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))])",
         "    }",
         "    return .success(DiagnosticParseResult(result: Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1)))), reasonNotContinued: nil))",
@@ -507,10 +507,10 @@ struct Node {
 
   func fastParseImplementation() -> String {
     switch kind {
-    case .fixedLeaf(let scalar):
+    case .fixedLeaf:
       return [
         "    guard let first = remainder.first,",
-        "      first == \u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22} else {",
+        "      first == \(name).scalar else {",
         "        return nil",
         "    }",
         "    return Parsed\(name)(location: SayingSourceSlice(origin: origin, code: .utf8(remainder.prefix(1))))",
@@ -767,10 +767,10 @@ struct Node {
       return nil
     } else {
       switch kind {
-      case .fixedLeaf(let scalar):
+      case .fixedLeaf:
         return [
           "  var text: UnicodeText {",
-          "    return UnicodeText(\u{22}\u{5C}u{\(String(scalar.value, radix: 16, uppercase: true))}\u{22})",
+          "    return UnicodeText(\(name).scalar)",
           "  }",
         ].joined(separator: "\n")
       case .keyword, .variableLeaf, .compound, .alternates:

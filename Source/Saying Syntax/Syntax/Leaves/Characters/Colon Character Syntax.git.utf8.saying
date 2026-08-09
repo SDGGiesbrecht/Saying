@@ -9,3 +9,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: colon scalar
+  C: colon‐scalar
+  Swift: var ColonCharacterSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “:”
+ }

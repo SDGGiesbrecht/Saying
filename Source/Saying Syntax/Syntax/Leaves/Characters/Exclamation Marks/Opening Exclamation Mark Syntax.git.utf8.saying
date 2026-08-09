@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: opening exclamation mark scalar
+  C: opening‐exclamation‐mark‐scalar
+  Swift: var OpeningExclamationMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¡”
+ }

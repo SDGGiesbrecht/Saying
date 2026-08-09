@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: slash scalar
+  C: slash‐scalar
+  Swift: var SlashSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “/”
+ }

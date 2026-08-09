@@ -6,7 +6,8 @@ func syntaxNodeCreation(
   nomFrançais: UnicodeText?,
   ελληνικόΌνομα: UnicodeText?,
   swiftName: UnicodeText,
-  parsed: Bool
+  parsed: Bool,
+  scalarName: UnicodeText?
 ) -> [String] {
   var source: [String] = [
     "action (\(parsed ? "unit" : "clients"))",
@@ -20,6 +21,11 @@ func syntaxNodeCreation(
     source.append(contentsOf: [
       "  test {ignore (create \(englishName))}",
     ])
+    if let scalarName = scalarName {
+      source.append(contentsOf: [
+        "  test {ignore (\(scalarName))}",
+      ])
+    }
   }
   source.append(contentsOf: [
     " ]",

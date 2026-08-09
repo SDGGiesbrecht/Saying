@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: nines quotation mark scalar
+  C: nines‐quotation‐mark‐scalar
+  Swift: var NinesQuotationMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(201D)”
+ }

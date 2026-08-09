@@ -17,6 +17,10 @@ extension UnicodeText {
   init(_ string: String) {
     self.init(string.unicodeScalars)
   }
+
+  init(_ scalar: Unicode.Scalar) {
+    self.init(String(scalar))
+  }
 }
 
 extension UnicodeText: CustomStringConvertible {

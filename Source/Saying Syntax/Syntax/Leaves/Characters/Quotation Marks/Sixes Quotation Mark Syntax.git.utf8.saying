@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: sixes quotation mark scalar
+  C: sixes‐quotation‐mark‐scalar
+  Swift: var SixesQuotationMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(201C)”
+ }

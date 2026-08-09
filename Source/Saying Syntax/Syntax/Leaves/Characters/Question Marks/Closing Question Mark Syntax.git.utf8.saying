@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: closing question mark scalar
+  C: closing‐question‐mark‐scalar
+  Swift: var ClosingQuestionMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “?”
+ }

@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: left chevron quotation mark scalar
+  C: left‐chevron‐quotation‐mark‐scalar
+  Swift: var LeftChevronQuotationMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(AB)”
+ }

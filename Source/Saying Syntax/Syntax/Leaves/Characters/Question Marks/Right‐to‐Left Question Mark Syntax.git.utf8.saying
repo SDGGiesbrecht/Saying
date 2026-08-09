@@ -6,3 +6,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: right‐to‐left question mark scalar
+  C: right‐to‐left‐question‐mark‐scalar
+  Swift: var RightToLeftQuestionMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “؟”
+ }

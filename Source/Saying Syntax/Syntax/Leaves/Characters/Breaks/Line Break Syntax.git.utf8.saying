@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: line break scalar
+  C: line‐break‐scalar
+  Swift: var LineBreakSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(2028)”
+ }
