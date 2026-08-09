@@ -4217,13 +4217,13 @@ extension Platform {
         for scalar in toSanitize {
           sanitizedName = sanitizedName.replacingOccurrences(of: "\(scalar)", with: "_")
         }
-        if var existing = sanitized[sanitizedName] {
-          existing.append(contentsOf: "\n")
-          existing.append(contentsOf: contents)
-          sanitized[sanitizedName] = existing
-        } else {
-          sanitized[sanitizedName] = contents
+        var disambiguator: Int = 1
+        var disambiguated = sanitizedName
+        while sanitized[disambiguated] != nil {
+          disambiguator += 1
+          disambiguated = "\(sanitizedName)\(disambiguator)"
         }
+        sanitized[disambiguated] = contents
       }
       completedSource = sanitized
     }
