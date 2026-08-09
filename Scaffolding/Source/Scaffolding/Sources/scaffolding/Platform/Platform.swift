@@ -3715,10 +3715,9 @@ extension Platform {
       indentationLevel: 0,
       captures: &captures
     )
-    let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex)
     return OutputDeclaration(
       declaration: actionDeclaration(
-        name: name,
+        name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex),
         parameters: "",
         returnSection: emptyReturnType.flatMap({ self.returnSection(with: $0, isProperty: false) }),
         accessModifier: nil,
@@ -3733,7 +3732,7 @@ extension Platform {
         initializerInstead: false,
         extractedDeclarations: extractedAnonymousFunctions
       ).full,
-      idiomaticLocation: name
+      idiomaticLocation: emptyReturnTypeForActionType
     )
   }
 
