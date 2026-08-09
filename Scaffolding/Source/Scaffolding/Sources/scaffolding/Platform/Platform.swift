@@ -4200,23 +4200,38 @@ extension Platform {
 
     let sourceSubdirectory = self.sourceSubdirectory(mode: mode, libraryName: libraryName)
 
-    for (name, contents) in source.completed() {
-      var fileName = name
-      if case .scaffolding = mode {
-        // So Windows can check out the repository.
-        fileName = fileName.replacingOccurrences(of: "<", with: "_")
-        fileName = fileName.replacingOccurrences(of: ">", with: "_")
+    var completedSource = source.completed()
+    var toSanitize: [Unicode.Scalar] = []
+    if case .scaffolding = mode {
+      // So Windows can check out the repository.
+      toSanitize = ["<", ">"]
+    } else if self == CSharp.self || self == Kotlin.self {
+      // Currently built only by passing through action artifacts, which requires sanitization.
+      toSanitize = ["<", ">", "?"]
+    }
+    if !toSanitize.isEmpty {
+      var sanitized: [String: String] = [:]
+      for unsanitizedName in completedSource.keys.sorted() {
+        let contents = completedSource[unsanitizedName]!
+        var sanitizedName = unsanitizedName
+        for scalar in toSanitize {
+          sanitizedName = sanitizedName.replacingOccurrences(of: "\(scalar)", with: "_")
+        }
+        if var existing = sanitized[sanitizedName] {
+          existing.append(contentsOf: "\n")
+          existing.append(contentsOf: contents)
+          sanitized[sanitizedName] = existing
+        } else {
+          sanitized[sanitizedName] = contents
+        }
       }
-      if self == CSharp.self || self == Kotlin.self {
-        // Currently built only by passing through action artifacts, which requires sanitization.
-        fileName = fileName.replacingOccurrences(of: "<", with: "_")
-        fileName = fileName.replacingOccurrences(of: ">", with: "_")
-        fileName = fileName.replacingOccurrences(of: "?", with: "_")
-      }
+      completedSource = sanitized
+    }
+    for (name, contents) in completedSource {
       if let limit = fileSizeLimit,
          contents.utf8.count > limit {
         let split = splitLongFile(contents)
-        let baseName = sourceSubdirectory + [fileName]
+        let baseName = sourceSubdirectory + [name]
         for (index, part) in split.enumerated() {
           try outputDirectory.update(
             baseName.appendingToFileName("\(index + 1).\(sourceFileExtension)"),
@@ -4225,7 +4240,7 @@ extension Platform {
         }
       } else {
         try outputDirectory.update(
-          (sourceSubdirectory + [fileName]).appendingToFileName(".\(sourceFileExtension)"),
+          (sourceSubdirectory + [name]).appendingToFileName(".\(sourceFileExtension)"),
           to: contents
         )
       }
