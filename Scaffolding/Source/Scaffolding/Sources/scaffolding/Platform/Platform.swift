@@ -3431,7 +3431,7 @@ extension Platform {
         return nativeRequirements.map { requirements in
           OutputDeclaration(
             declaration: requirements,
-            idiomaticLocation: fileName ?? String(native.expression.textComponents.joined())
+            idiomaticLocation: fileName ?? emptyReturnTypeForActionType
           )
         }
       }
