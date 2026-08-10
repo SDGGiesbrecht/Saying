@@ -1,8 +1,19 @@
 thing (clients)
  (
-  English: symobol insertion mark syntax
+  English: symbol insertion mark syntax
   C: symbol‐insertion‐mark‐syntax
   Swift: SymbolInsertionMarkSyntax
  )
  {
+ }
+
+action (clients)
+ (
+  English: symbol insertion mark scalar
+  C: symbol‐insertion‐mark‐scalar
+  Swift: var SymbolInsertionMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(A4)”
  }

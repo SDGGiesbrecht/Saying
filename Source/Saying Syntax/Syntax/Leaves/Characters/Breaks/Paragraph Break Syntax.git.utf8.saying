@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: paragraph break scalar
+  C: paragraph‐break‐scalar
+  Swift: var ParagraphBreakSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(2029)”
+ }

@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: right arrow scalar
+  C: right‐arrow‐scalar
+  Swift: var RightArrowSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “→”
+ }

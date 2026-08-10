@@ -11,6 +11,25 @@ extension ModuleIntermediate {
         let ελληνικόΌνομα = (names["ελληνικά"]?.name())
         let swiftName = names["Swift"]!.name()
 
+        let suffixesForScalarSwap = [" syntax", " character syntax"]
+        var scalarName: UnicodeText?
+        for suffix in suffixesForScalarSwap {
+          if scalarName != nil {
+            break
+          }
+          var possibleScalarAction = UnicodeText(englishName.dropLast(suffix.count))
+          possibleScalarAction.append(contentsOf: " scalar")
+          if referenceDictionary.lookupAction(
+            possibleScalarAction,
+            signature: [],
+            specifiedReturnValue: .compilerGeneratedReference(to: "Unicode scalar"),
+            parentContexts: [],
+            reportAllForErrorAnalysis: false
+          ) != nil {
+            scalarName = possibleScalarAction
+          }
+        }
+
         var newSource: [String] = []
         newSource.append(
           contentsOf: syntaxNodeParsedDeclaration(
@@ -29,7 +48,8 @@ extension ModuleIntermediate {
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
             swiftName: swiftName,
-            parsed: false
+            parsed: false,
+            scalarName: scalarName
           )
         )
         newSource.append("")
@@ -40,7 +60,8 @@ extension ModuleIntermediate {
             nomFrançais: nomFrançais,
             ελληνικόΌνομα: ελληνικόΌνομα,
             swiftName: swiftName,
-            parsed: true
+            parsed: true,
+            scalarName: scalarName
           )
         )
         newSource.append("")

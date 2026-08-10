@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: low quotation mark scalar
+  C: low‐quotation‐mark‐scalar
+  Swift: var LowQuotationMarkSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “¤(201E)”
+ }

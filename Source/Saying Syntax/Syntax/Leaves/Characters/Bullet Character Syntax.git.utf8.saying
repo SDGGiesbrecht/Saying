@@ -9,3 +9,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: bullet scalar
+  C: bullet‐scalar
+  Swift: var BulletCharacterSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “•”
+ }

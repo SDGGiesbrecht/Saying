@@ -9,3 +9,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: space scalar
+  C: space‐scalar
+  Swift: var SpaceSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “ ”
+ }

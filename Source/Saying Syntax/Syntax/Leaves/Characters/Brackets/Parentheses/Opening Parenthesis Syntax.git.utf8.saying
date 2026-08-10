@@ -8,3 +8,14 @@ thing (clients)
  )
  {
  }
+
+action (clients)
+ (
+  English: opening parenthesis scalar
+  C: opening‐parenthesis‐scalar
+  Swift: var OpeningParenthesisSyntax.scalar
+ )
+ Unicode scalar
+ {
+  ← “(”
+ }
