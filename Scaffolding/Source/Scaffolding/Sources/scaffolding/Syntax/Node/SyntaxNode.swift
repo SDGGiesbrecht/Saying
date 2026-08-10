@@ -23,10 +23,10 @@ extension SyntaxNode {
     while !stack.isEmpty {
       let node = stack.removeLast()
       switch node.nodeKind {
-      case .paragraphBreakSyntax:
+      case .implemented(.paragraphBreakSyntax):
         accumulator.append(contentsOf: "\n\n")
         accumulator.append(contentsOf: String(repeating: " ", count: indent))
-      case .lineBreakSyntax:
+      case .implemented(.lineBreakSyntax):
         accumulator.append("\n")
         accumulator.append(contentsOf: String(repeating: " ", count: indent))
       case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .nativeImport, .nativeIndirectRequirements, .nativeRequiredCode, .parameterDocumentation, .partDeclaration, .requirementAbilityDeclaration, .requirementDeclaration, .thingDeclaration, .use:

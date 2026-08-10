@@ -169,13 +169,30 @@ struct Node {
       "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxNode {",
       "",
       "  var nodeKind: \(parsed ? "Parsed" : "")SyntaxNodeKind {",
-      "    return .\(lowercasedName)(self)",
+    ]
+    switch kind {
+    case .fixedLeaf:
+      if !parsed {
+        result.append(contentsOf: [
+          "    return .implemented(.\(lowercasedName)(self))",
+        ])
+      } else {
+        result.append(contentsOf: [
+          "    return .\(lowercasedName)(self)",
+        ])
+      }
+    case .keyword, .variableLeaf, .compound, .alternates:
+      result.append(contentsOf: [
+        "    return .\(lowercasedName)(self)",
+      ])
+    }
+    result.append(contentsOf: [
       "  }",
       "",
       "  var children: [\(parsed ? "Parsed" : "")SyntaxNode] {",
       childrenImplementation(parsed: parsed),
       "  }",
-    ]
+    ])
     if parsed {
       result.append(contentsOf: [
         "",
@@ -860,15 +877,29 @@ struct Node {
     var result: [String] = [
       "enum \(parsed ? "Parsed" : "")SyntaxNodeKind {",
     ]
-    result.append(contentsOf: nodes.lazy.map({ $0.nodeKindCase(parsed: parsed) }))
+    if !parsed {
+      result.append(contentsOf: [
+        "  case implemented(SyntaxNodeType)"
+      ])
+    }
+    result.append(contentsOf: nodes.lazy.compactMap({ $0.nodeKindCase(parsed: parsed) }))
     result.append(contentsOf: [
       "}",
     ])
     return result.joined(separator: "\n")
   }
 
-  func nodeKindCase(parsed: Bool) -> String {
-    return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
+  func nodeKindCase(parsed: Bool) -> String? {
+    switch self.kind {
+    case .fixedLeaf:
+      if !parsed {
+        return nil
+      } else {
+        return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
+      }
+    case .keyword, .variableLeaf, .compound, .alternates:
+      return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
+    }
   }
 
   static func leafKind(parsed: Bool) -> String {

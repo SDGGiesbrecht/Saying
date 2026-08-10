@@ -387,8 +387,11 @@ enum Swift: Platform {
     releaseOld: String?
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
+    let indirectness =
+      name == "SyntaxNodeType" // Essential for compiler performance; no general solution yet.
+      ? "indirect " : ""
     var result: [String] = [
-      "\(access)enum \(name) {"
+      "\(access)\(indirectness)enum \(name) {"
     ]
     for enumerationCase in cases {
       result.append("\(indent)\(enumerationCase)")

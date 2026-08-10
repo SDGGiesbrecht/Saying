@@ -234,6 +234,7 @@ import Saying
         "ParsedSlashSyntax",
         "ParsedSpaceSyntax",
         "ParsedSymbolInsertionMarkSyntax",
+        "SyntaxNodeType",
       ],
       location: packageRoot
         .appendingPathComponent("Scaffolding")
