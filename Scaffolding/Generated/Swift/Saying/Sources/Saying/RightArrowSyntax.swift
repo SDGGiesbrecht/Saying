@@ -2,6 +2,10 @@ public struct RightArrowSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.rightArrowSyntax(self)
+  }
 }
 
 extension RightArrowSyntax {

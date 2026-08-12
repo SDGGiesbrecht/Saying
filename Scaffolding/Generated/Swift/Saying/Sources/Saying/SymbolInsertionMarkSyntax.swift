@@ -2,6 +2,10 @@ public struct SymbolInsertionMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.symbolInsertionMarkSyntax(self)
+  }
 }
 
 extension SymbolInsertionMarkSyntax {

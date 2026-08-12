@@ -2,6 +2,10 @@ public struct ColonCharacterSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.colonCharacterSyntax(self)
+  }
 }
 
 extension ColonCharacterSyntax {

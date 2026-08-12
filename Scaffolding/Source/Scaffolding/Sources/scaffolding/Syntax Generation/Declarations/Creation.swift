@@ -1,11 +1,7 @@
 import Saying
 
 func syntaxNodeCreation(
-  englishName: UnicodeText,
-  deutscherName: UnicodeText?,
-  nomFrançais: UnicodeText?,
-  ελληνικόΌνομα: UnicodeText?,
-  swiftName: UnicodeText,
+  names: NodeNames,
   parsed: Bool,
   scalarName: UnicodeText?
 ) -> [String] {
@@ -15,11 +11,11 @@ func syntaxNodeCreation(
   ]
   if parsed {
     source.append(contentsOf: [
-      "  test {ignore ((location) of (parsed \(englishName) (placeholder: slice of Saying source)))}",
+      "  test {ignore ((location) of (parsed \(names.english) (placeholder: slice of Saying source)))}",
     ])
   } else {
     source.append(contentsOf: [
-      "  test {ignore (create \(englishName))}",
+      "  test {ignore (create \(names.english))}",
     ])
     if let scalarName = scalarName {
       source.append(contentsOf: [
@@ -33,30 +29,30 @@ func syntaxNodeCreation(
   ])
   if parsed {
     source.append(contentsOf: [
-      "  English: parsed \(englishName) (location: slice of Saying source)",
+      "  English: parsed \(names.english) (location: slice of Saying source)",
     ])
   } else {
     source.append(contentsOf: [
-      "  English: create \(englishName)",
+      "  English: create \(names.english)",
     ])
   }
   if !parsed {
-    if let deutsch = deutscherName {
+    if let deutsch = names.deutscher {
       source.append("  Deutsch: \(deutsch) erstellen")
     }
-    if let français = nomFrançais {
+    if let français = names.français {
       source.append("  français : créer \(français)")
     }
-    if let ελληνικά = ελληνικόΌνομα {
+    if let ελληνικά = names.ελληνικό {
       source.append("  ελληνικά: δημιουργία σύνταξης \(UnicodeText(ελληνικά.dropFirst(9)))")
     }
     source.append(contentsOf: [
-      "  Swift: \(swiftName).init",
+      "  Swift: \(names.swift).init",
     ])
   }
   source.append(contentsOf: [
     " )",
-    " \(parsed ? "parsed " : "")\(englishName)",
+    " \(parsed ? "parsed " : "")\(names.english)",
     " create",
   ])
   return source

@@ -167,27 +167,26 @@ struct Node {
   func syntaxNodeConformance(parsed: Bool) -> String {
     var result: [String] = [
       "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxNode {",
-      "",
-      "  var nodeKind: \(parsed ? "Parsed" : "")SyntaxNodeKind {",
     ]
     switch kind {
     case .fixedLeaf:
-      if !parsed {
+      if parsed {
         result.append(contentsOf: [
-          "    return .implemented(.\(lowercasedName)(self))",
-        ])
-      } else {
-        result.append(contentsOf: [
+          "",
+          "  var nodeKind: ParsedSyntaxNodeKind {",
           "    return .\(lowercasedName)(self)",
+          "  }",
         ])
       }
     case .keyword, .variableLeaf, .compound, .alternates:
       result.append(contentsOf: [
+        "",
+        "  var nodeKind: \(parsed ? "Parsed" : "")SyntaxNodeKind {",
         "    return .\(lowercasedName)(self)",
+        "  }",
       ])
     }
     result.append(contentsOf: [
-      "  }",
       "",
       "  var children: [\(parsed ? "Parsed" : "")SyntaxNode] {",
       childrenImplementation(parsed: parsed),

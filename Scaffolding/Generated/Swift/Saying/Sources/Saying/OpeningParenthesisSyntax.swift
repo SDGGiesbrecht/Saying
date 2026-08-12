@@ -2,6 +2,10 @@ public struct OpeningParenthesisSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.openingParenthesisSyntax(self)
+  }
 }
 
 extension OpeningParenthesisSyntax {

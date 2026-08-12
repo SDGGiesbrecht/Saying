@@ -23,6 +23,11 @@ func syntaxNodeTypeDeclaration(nodeTypes: [NodeNames]) -> [String] {
   }
   source.append(contentsOf: [
     " }",
+    "",
+    "use (clients)",
+    " general use of (type of syntax node)",
+    " {",
+    " }",
   ])
   return source
 }

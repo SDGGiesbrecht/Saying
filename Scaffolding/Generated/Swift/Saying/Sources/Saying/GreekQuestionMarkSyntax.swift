@@ -2,6 +2,10 @@ public struct GreekQuestionMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.greekQuestionMarkSyntax(self)
+  }
 }
 
 extension GreekQuestionMarkSyntax {

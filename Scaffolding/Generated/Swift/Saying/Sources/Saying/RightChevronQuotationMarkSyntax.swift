@@ -2,6 +2,10 @@ public struct RightChevronQuotationMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.rightChevronQuotationMarkSyntax(self)
+  }
 }
 
 extension RightChevronQuotationMarkSyntax {

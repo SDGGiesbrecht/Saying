@@ -2,6 +2,10 @@ public struct BulletCharacterSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.bulletCharacterSyntax(self)
+  }
 }
 
 extension BulletCharacterSyntax {

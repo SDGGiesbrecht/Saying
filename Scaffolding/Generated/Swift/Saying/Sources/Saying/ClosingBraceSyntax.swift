@@ -2,6 +2,10 @@ public struct ClosingBraceSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.closingBraceSyntax(self)
+  }
 }
 
 extension ClosingBraceSyntax {

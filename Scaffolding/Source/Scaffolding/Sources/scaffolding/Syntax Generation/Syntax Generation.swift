@@ -7,17 +7,15 @@ extension ModuleIntermediate {
       let names = nodePrototype.declaration.name.namesDictionary
       let englishName = names["English"]!.name()
       if String(englishName).hasSuffix(" syntax") {
-        let deutscherName = (names["Deutsch"]?.name())
-        let nomFrançais = (names["français"]?.name())
-        let ελληνικόΌνομα = (names["ελληνικά"]?.name())
-        let swiftName = names["Swift"]!.name()
-        nodeTypes.append(
-          NodeNames(
-            identifier: Set(names.values.lazy.map({ $0.name() })).identifier(),
-            english: englishName,
-            swift: swiftName
-          )
+        let names = NodeNames(
+          identifier: Set(names.values.lazy.map({ $0.name() })).identifier(),
+          english: englishName,
+          deutscher: names["Deutsch"]?.name(),
+          français: names["français"]?.name(),
+          ελληνικό: names["ελληνικά"]?.name(),
+          swift: names["Swift"]!.name()
         )
+        nodeTypes.append(names)
 
         let suffixesForScalarSwap = [" syntax", " character syntax"]
         var scalarName: UnicodeText?
@@ -39,23 +37,11 @@ extension ModuleIntermediate {
         }
 
         var newSource: [String] = []
-        newSource.append(
-          contentsOf: syntaxNodeParsedDeclaration(
-            englishName: englishName,
-            deutscherName: deutscherName,
-            nomFrançais: nomFrançais,
-            ελληνικόΌνομα: ελληνικόΌνομα,
-            swiftName: swiftName
-          )
-        )
+        newSource.append(contentsOf: syntaxNodeParsedDeclaration(names: names))
         newSource.append("")
         newSource.append(
           contentsOf: syntaxNodeCreation(
-            englishName: englishName,
-            deutscherName: deutscherName,
-            nomFrançais: nomFrançais,
-            ελληνικόΌνομα: ελληνικόΌνομα,
-            swiftName: swiftName,
+            names: names,
             parsed: false,
             scalarName: scalarName
           )
@@ -63,19 +49,17 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(
           contentsOf: syntaxNodeCreation(
-            englishName: UnicodeText(englishName),
-            deutscherName: deutscherName,
-            nomFrançais: nomFrançais,
-            ελληνικόΌνομα: ελληνικόΌνομα,
-            swiftName: swiftName,
+            names: names,
             parsed: true,
             scalarName: scalarName
           )
         )
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: UnicodeText(englishName), parsed: false))
+        newSource.append(contentsOf: syntaxNodeGeneralUse(names: names, parsed: false))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeGeneralUse(englishName: UnicodeText(englishName), parsed: true))
+        newSource.append(contentsOf: syntaxNodeGeneralUse(names: names, parsed: true))
+        newSource.append("")
+        newSource.append(contentsOf: syntaxNodeType(names: names))
         try addGeneratedSource(newSource: newSource)
       }
     }

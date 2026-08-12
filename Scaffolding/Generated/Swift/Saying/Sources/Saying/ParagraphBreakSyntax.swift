@@ -2,6 +2,10 @@ public struct ParagraphBreakSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.paragraphBreakSyntax(self)
+  }
 }
 
 extension ParagraphBreakSyntax {

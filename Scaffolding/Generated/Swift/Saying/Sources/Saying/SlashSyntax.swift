@@ -2,6 +2,10 @@ public struct SlashSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.slashSyntax(self)
+  }
 }
 
 extension SlashSyntax {

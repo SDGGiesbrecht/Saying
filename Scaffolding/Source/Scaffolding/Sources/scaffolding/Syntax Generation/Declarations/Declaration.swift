@@ -1,28 +1,24 @@
 import Saying
 
 func syntaxNodeParsedDeclaration(
-  englishName: UnicodeText,
-  deutscherName: UnicodeText?,
-  nomFrançais: UnicodeText?,
-  ελληνικόΌνομα: UnicodeText?,
-  swiftName: UnicodeText
+  names: NodeNames
 ) -> [String] {
   var source: [String] = [
     "thing (clients)",
     " (",
-    "  English: parsed \(englishName)",
+    "  English: parsed \(names.english)",
   ]
-  if let deutsch = deutscherName {
+  if let deutsch = names.deutscher {
     source.append("  Deutsch: zerteilte \(deutsch)")
   }
-  if let français = nomFrançais {
+  if let français = names.français {
     source.append("  français : syntaxe analysée \(UnicodeText(français.dropFirst(8)))")
   }
-  if let ελληνικά = ελληνικόΌνομα {
+  if let ελληνικά = names.ελληνικό {
     source.append("  ελληνικά: αναλυμένη \(ελληνικά)")
   }
   source.append(contentsOf: [
-    "  Swift: Parsed\(swiftName)",
+    "  Swift: Parsed\(names.swift)",
     " )",
     " {",
     "  part (clients/nowhere)",
