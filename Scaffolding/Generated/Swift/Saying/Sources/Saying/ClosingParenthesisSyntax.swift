@@ -2,6 +2,10 @@ public struct ClosingParenthesisSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.closingParenthesisSyntax(self)
+  }
 }
 
 extension ClosingParenthesisSyntax {

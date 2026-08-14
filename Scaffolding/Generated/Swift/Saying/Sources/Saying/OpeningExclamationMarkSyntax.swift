@@ -2,6 +2,10 @@ public struct OpeningExclamationMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.openingExclamationMarkSyntax(self)
+  }
 }
 
 extension OpeningExclamationMarkSyntax {

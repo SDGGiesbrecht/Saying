@@ -2,6 +2,10 @@ public struct LeftArrowSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.leftArrowSyntax(self)
+  }
 }
 
 extension LeftArrowSyntax {

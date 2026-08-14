@@ -2,6 +2,10 @@ public struct OpeningBracketSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.openingBracketSyntax(self)
+  }
 }
 
 extension OpeningBracketSyntax {

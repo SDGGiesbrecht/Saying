@@ -2,6 +2,10 @@ public struct LowQuotationMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.lowQuotationMarkSyntax(self)
+  }
 }
 
 extension LowQuotationMarkSyntax {

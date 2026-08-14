@@ -3,6 +3,9 @@ import Saying
 struct NodeNames {
   var identifier: UnicodeText
   var english: UnicodeText
+  var deutscher: UnicodeText?
+  var français: UnicodeText?
+  var ελληνικό: UnicodeText?
   var swift: UnicodeText
 }
 

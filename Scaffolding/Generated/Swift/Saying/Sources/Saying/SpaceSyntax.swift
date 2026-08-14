@@ -2,6 +2,10 @@ public struct SpaceSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.spaceSyntax(self)
+  }
 }
 
 extension SpaceSyntax {

@@ -1,12 +1,12 @@
 import Saying
 
 func syntaxNodeGeneralUse(
-  englishName: UnicodeText,
+  names: NodeNames,
   parsed: Bool
 ) -> [String] {
   let source: [String] = [
     "use (clients)",
-    " general use of (\(parsed ? "parsed " : "")\(englishName))",
+    " general use of (\(parsed ? "parsed " : "")\(names.english))",
     " {",
     " }",
   ]

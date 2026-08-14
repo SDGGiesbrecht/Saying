@@ -2,6 +2,10 @@ public struct LineBreakSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.lineBreakSyntax(self)
+  }
 }
 
 extension LineBreakSyntax {

@@ -2,6 +2,10 @@ public struct ClosingQuestionMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.closingQuestionMarkSyntax(self)
+  }
 }
 
 extension ClosingQuestionMarkSyntax {

@@ -2,6 +2,10 @@ public struct RightToLeftQuestionMarkSyntax {
 
   public init() {
   }
+
+  public var type: SyntaxNodeType {
+    return SyntaxNodeType.rightToLeftQuestionMarkSyntax(self)
+  }
 }
 
 extension RightToLeftQuestionMarkSyntax {
