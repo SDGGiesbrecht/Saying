@@ -4,4 +4,8 @@ public struct ParsedOpeningBraceSyntax {
   init(_ location: SayingSourceSlice) {
     self.location = location
   }
+
+  public var type: ParsedSyntaxNodeType {
+    return ParsedSyntaxNodeType.openingBraceSyntax(self)
+  }
 }

@@ -1,21 +1,32 @@
 import Saying
 
 func syntaxNodeType(
-  names: NodeNames
+  names: NodeNames,
+  parsed: Bool
 ) -> [String] {
-  let source: [String] = [
+  var source: [String] = [
     "action (clients)",
     " [",
-    "  test {ignore (type of (create \(names.english)))}",
+  ]
+  if parsed {
+    source.append(contentsOf: [
+      "  test (hidden) {ignore (type of (parsed \(names.english) (placeholder: slice of Saying source)))}",
+    ])
+  } else {
+    source.append(contentsOf: [
+      "  test {ignore (type of (create \(names.english)))}",
+    ])
+  }
+  source.append(contentsOf: [
     " ]",
     " (",
-    "  English: type of (node: \(names.english))",
+    "  English: type of (node: \(parsed ? "parsed " : "")\(names.english))",
     "  Swift: var (self: [node]).type",
     " )",
-    " type of syntax node",
+    " type of \(parsed ? "parsed " : "")syntax node",
     " {",
     "  ← wrap (node) as (\(names.english) node type)",
     " }",
-  ]
+  ])
   return source
 }

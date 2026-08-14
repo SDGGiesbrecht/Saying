@@ -4,4 +4,8 @@ public struct ParsedDownArrowSyntax {
   init(_ location: SayingSourceSlice) {
     self.location = location
   }
+
+  public var type: ParsedSyntaxNodeType {
+    return ParsedSyntaxNodeType.downArrowSyntax(self)
+  }
 }
