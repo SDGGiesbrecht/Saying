@@ -4,4 +4,8 @@ public struct ParsedClosingQuestionMarkSyntax {
   init(_ location: SayingSourceSlice) {
     self.location = location
   }
+
+  public var type: ParsedSyntaxNodeType {
+    return ParsedSyntaxNodeType.closingQuestionMarkSyntax(self)
+  }
 }

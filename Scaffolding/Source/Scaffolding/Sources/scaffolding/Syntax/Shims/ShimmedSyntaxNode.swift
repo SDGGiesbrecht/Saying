@@ -6,7 +6,7 @@ protocol ShimmedSyntaxNode {
 
 extension ShimmedSyntaxNode {
   var nodeKind: SyntaxNodeKind {
-    return .implemented(self.type)
+    return .implemented(type)
   }
 }
 

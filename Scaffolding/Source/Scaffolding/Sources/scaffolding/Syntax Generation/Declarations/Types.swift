@@ -1,9 +1,9 @@
-func syntaxNodeTypeDeclaration(nodeTypes: [NodeNames]) -> [String] {
+func syntaxNodeTypeDeclaration(nodeTypes: [NodeNames], parsed: Bool) -> [String] {
   var source: [String] = [
     "enumeration (clients)",
     " (",
-    "  English: type of syntax node",
-    "  Swift: SyntaxNodeType",
+    "  English: type of \(parsed ? "parsed " : "")syntax node",
+    "  Swift: \(parsed ? "Parsed" : "")SyntaxNodeType",
     " )",
     " {",
   ]
@@ -18,14 +18,14 @@ func syntaxNodeTypeDeclaration(nodeTypes: [NodeNames]) -> [String] {
       "    English: \(names.english) node type",
       "    Swift: \(names.lowercasedSwift)",
       "   )",
-      "   \(names.english)",
+      "   \(parsed ? "parsed " : "")\(names.english)",
     ])
   }
   source.append(contentsOf: [
     " }",
     "",
     "use (clients)",
-    " general use of (type of syntax node)",
+    " general use of (type of \(parsed ? "parsed " : "")syntax node)",
     " {",
     " }",
   ])

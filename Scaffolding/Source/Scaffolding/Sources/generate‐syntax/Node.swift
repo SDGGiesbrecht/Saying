@@ -170,14 +170,7 @@ struct Node {
     ]
     switch kind {
     case .fixedLeaf:
-      if parsed {
-        result.append(contentsOf: [
-          "",
-          "  var nodeKind: ParsedSyntaxNodeKind {",
-          "    return .\(lowercasedName)(self)",
-          "  }",
-        ])
-      }
+      break
     case .keyword, .variableLeaf, .compound, .alternates:
       result.append(contentsOf: [
         "",
@@ -876,7 +869,11 @@ struct Node {
     var result: [String] = [
       "enum \(parsed ? "Parsed" : "")SyntaxNodeKind {",
     ]
-    if !parsed {
+    if parsed {
+      result.append(contentsOf: [
+        "  case implemented(ParsedSyntaxNodeType)"
+      ])
+    } else {
       result.append(contentsOf: [
         "  case implemented(SyntaxNodeType)"
       ])
@@ -891,11 +888,7 @@ struct Node {
   func nodeKindCase(parsed: Bool) -> String? {
     switch self.kind {
     case .fixedLeaf:
-      if !parsed {
-        return nil
-      } else {
-        return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
-      }
+      return nil
     case .keyword, .variableLeaf, .compound, .alternates:
       return "  case \(lowercasedName)(\(parsed ? "Parsed" : "")\(name))"
     }

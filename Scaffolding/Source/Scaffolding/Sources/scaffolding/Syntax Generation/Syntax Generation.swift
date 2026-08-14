@@ -59,12 +59,15 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeGeneralUse(names: names, parsed: true))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeType(names: names))
+        newSource.append(contentsOf: syntaxNodeType(names: names, parsed: false))
+        newSource.append("")
+        newSource.append(contentsOf: syntaxNodeType(names: names, parsed: true))
         try addGeneratedSource(newSource: newSource)
       }
     }
     nodeTypes.sort(by: { $0.identifier.lexicographicallyPrecedes($1.identifier) })
-    try addGeneratedSource(newSource: syntaxNodeTypeDeclaration(nodeTypes: nodeTypes))
+    try addGeneratedSource(newSource: syntaxNodeTypeDeclaration(nodeTypes: nodeTypes, parsed: false))
+    try addGeneratedSource(newSource: syntaxNodeTypeDeclaration(nodeTypes: nodeTypes, parsed: true))
   }
 
   mutating func addGeneratedSource(newSource: [String]) throws {
