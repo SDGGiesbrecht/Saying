@@ -179,12 +179,17 @@ struct Node {
         "  }",
       ])
     }
-    result.append(contentsOf: [
-      "",
-      "  var children: [\(parsed ? "Parsed" : "")SyntaxNode] {",
-      childrenImplementation(parsed: parsed),
-      "  }",
-    ])
+    switch kind {
+    case .fixedLeaf:
+      break
+    case .keyword, .variableLeaf, .compound, .alternates:
+      result.append(contentsOf: [
+        "",
+        "  var childNodes: [\(parsed ? "Parsed" : "")SyntaxNode] {",
+        childrenImplementation(parsed: parsed),
+        "  }",
+      ])
+    }
     if parsed {
       result.append(contentsOf: [
         "",

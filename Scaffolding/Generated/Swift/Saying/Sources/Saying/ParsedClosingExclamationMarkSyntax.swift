@@ -5,6 +5,10 @@ public struct ParsedClosingExclamationMarkSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.closingExclamationMarkSyntax(self)
   }

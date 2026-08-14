@@ -3,6 +3,10 @@ public struct LowQuotationMarkSyntax {
   public init() {
   }
 
+  public var children: [SyntaxNodeType] {
+    return []
+  }
+
   public var type: SyntaxNodeType {
     return SyntaxNodeType.lowQuotationMarkSyntax(self)
   }

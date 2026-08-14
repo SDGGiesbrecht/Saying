@@ -5,6 +5,10 @@ public struct ParsedColonCharacterSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.colonCharacterSyntax(self)
   }

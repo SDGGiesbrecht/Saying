@@ -25,8 +25,24 @@ func syntaxNodeTypeDeclaration(nodeTypes: [NodeNames], parsed: Bool) -> [String]
     " }",
     "",
     "use (clients)",
-    " general use of (type of \(parsed ? "parsed " : "")syntax node)",
+    " general containers of (type of \(parsed ? "parsed " : "")syntax node)",
     " {",
+    "  action (clients)",
+    "   example",
+    "   type of \(parsed ? "parsed " : "")syntax node",
+    "  {",
+  ])
+  if parsed {
+    source.append(contentsOf: [
+      "   ← wrap (parsed space syntax (placeholder: slice of Saying source)) as (space syntax node type)",
+    ])
+  } else {
+    source.append(contentsOf: [
+      "   ← wrap (create space syntax) as (space syntax node type)",
+    ])
+  }
+  source.append(contentsOf: [
+    "  }",
     " }",
   ])
   return source
