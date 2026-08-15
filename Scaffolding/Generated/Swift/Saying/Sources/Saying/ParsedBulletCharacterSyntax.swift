@@ -5,6 +5,10 @@ public struct ParsedBulletCharacterSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.bulletCharacterSyntax(self)
   }

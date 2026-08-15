@@ -2,7 +2,7 @@ import Saying
 
 protocol ParsedSyntaxNode {
   var nodeKind: ParsedSyntaxNodeKind { get }
-  var children: [ParsedSyntaxNode] { get }
+  var childNodes: [ParsedSyntaxNode] { get }
 
   var context: UnicodeSegments { get }
   var startIndex: UnicodeSegments.Index { get }
@@ -48,7 +48,7 @@ extension ParsedSyntaxNode {
       if self is SyntaxLeaf {
         break
       } else {
-        for child in children {
+        for child in childNodes {
           child.findAllLanguageReferences(list: &list)
         }
       }

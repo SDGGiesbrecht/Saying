@@ -2,7 +2,7 @@ import Saying
 
 protocol SyntaxNode {
   var nodeKind: SyntaxNodeKind { get }
-  var children: [SyntaxNode] { get }
+  var childNodes: [SyntaxNode] { get }
   func source() -> UnicodeText
 
   func parsedNode() -> ParsedSyntaxNode
@@ -11,7 +11,7 @@ protocol SyntaxNode {
 extension SyntaxNode {
 
   func source() -> UnicodeText {
-    return children.map({ $0.source() }).joined()
+    return childNodes.map({ $0.source() }).joined()
   }
 
   func formattedGitStyleSource() -> UnicodeText {
@@ -31,29 +31,29 @@ extension SyntaxNode {
         accumulator.append(contentsOf: String(repeating: " ", count: indent))
       case .abilityDeclaration, .actionDeclaration, .caseDeclaration, .choiceDeclaration, .enumerationDeclaration, .extensionSyntax, .languageDeclaration, .nativeImport, .nativeIndirectRequirements, .nativeRequiredCode, .parameterDocumentation, .partDeclaration, .requirementAbilityDeclaration, .requirementDeclaration, .thingDeclaration, .use:
         accumulator.append(
-          contentsOf: node.children
+          contentsOf: node.childNodes
             .lazy.map({ String($0.formattedGitStyleSource(indent: indent + 1)) })
             .joined()
         )
       case .spacedImportList, .spacedNativeRequirementList:
         accumulator.append(
-          contentsOf: node.children.dropLast(1)
+          contentsOf: node.childNodes.dropLast(1)
             .map({ String($0.formattedGitStyleSource(indent: indent + 1)) })
             .joined()
         )
-        stack.append(contentsOf: node.children.suffix(1).reversed())
+        stack.append(contentsOf: node.childNodes.suffix(1).reversed())
       case .abilityName, .caseName, .cases, .documentation, .fulfillments, .multipleActionNames, .nonEmptyBracedStatementList, .parameterDetails, .paragraph, .partName, .provisions, .requirements, .sourceThingImplementation, .thingName:
         accumulator.append(
-          contentsOf: node.children.dropLast(2)
+          contentsOf: node.childNodes.dropLast(2)
             .map({ String($0.formattedGitStyleSource(indent: indent + 1)) })
             .joined()
         )
-        stack.append(contentsOf: node.children.suffix(2).reversed())
+        stack.append(contentsOf: node.childNodes.suffix(2).reversed())
       default:
         if node is SyntaxLeaf {
           accumulator.append(contentsOf: String(node.source()))
         } else {
-          stack.append(contentsOf: node.children.reversed())
+          stack.append(contentsOf: node.childNodes.reversed())
         }
       }
     }

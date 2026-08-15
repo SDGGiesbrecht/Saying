@@ -5,6 +5,10 @@ public struct ParsedGreekQuestionMarkSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.greekQuestionMarkSyntax(self)
   }

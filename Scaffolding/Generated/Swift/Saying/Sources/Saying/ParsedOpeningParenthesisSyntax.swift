@@ -5,6 +5,10 @@ public struct ParsedOpeningParenthesisSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.openingParenthesisSyntax(self)
   }

@@ -3,6 +3,10 @@ public struct ColonCharacterSyntax {
   public init() {
   }
 
+  public var children: [SyntaxNodeType] {
+    return []
+  }
+
   public var type: SyntaxNodeType {
     return SyntaxNodeType.colonCharacterSyntax(self)
   }

@@ -5,6 +5,10 @@ public struct ParsedOpeningQuestionMarkSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.openingQuestionMarkSyntax(self)
   }

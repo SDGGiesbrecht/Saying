@@ -3,6 +3,10 @@ public struct SixesQuotationMarkSyntax {
   public init() {
   }
 
+  public var children: [SyntaxNodeType] {
+    return []
+  }
+
   public var type: SyntaxNodeType {
     return SyntaxNodeType.sixesQuotationMarkSyntax(self)
   }

@@ -5,6 +5,10 @@ public struct ParsedLowQuotationMarkSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.lowQuotationMarkSyntax(self)
   }

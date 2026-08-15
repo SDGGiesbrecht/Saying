@@ -3,6 +3,10 @@ public struct BulletCharacterSyntax {
   public init() {
   }
 
+  public var children: [SyntaxNodeType] {
+    return []
+  }
+
   public var type: SyntaxNodeType {
     return SyntaxNodeType.bulletCharacterSyntax(self)
   }

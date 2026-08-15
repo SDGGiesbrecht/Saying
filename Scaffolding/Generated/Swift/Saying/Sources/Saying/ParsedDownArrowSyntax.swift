@@ -5,6 +5,10 @@ public struct ParsedDownArrowSyntax {
     self.location = location
   }
 
+  public var children: [ParsedSyntaxNodeType] {
+    return []
+  }
+
   public var type: ParsedSyntaxNodeType {
     return ParsedSyntaxNodeType.downArrowSyntax(self)
   }
