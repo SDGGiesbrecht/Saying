@@ -1,0 +1,18 @@
+ability (clients)
+ (
+  English: use of (node) as syntax node
+ )
+ {
+  ability (clients)
+   general containers of (node)
+
+  requirement (clients)
+   [
+    test {ignore (children of (example: node))}
+   ]
+   (
+    English: children of (node: node)
+    Swift: var (self: [node]).children
+   )
+   list of (type of syntax node)
+ }
