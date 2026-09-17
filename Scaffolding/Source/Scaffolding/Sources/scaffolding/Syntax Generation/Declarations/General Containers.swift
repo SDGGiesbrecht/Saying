@@ -19,6 +19,15 @@ func syntaxNodeGeneralContainers(
   }
   source.append(contentsOf: [
     "  action (clients)",
+  ])
+  if !containers {
+    source.append(contentsOf: [
+      "  [",
+      "   test {ignore (example: \(parsed ? "parsed " : "")\(names.english))}",
+      "  ]",
+    ])
+  }
+  source.append(contentsOf: [
     "  example",
     "  \(parsed ? "parsed " : "")\(names.english)",
     "  {",
