@@ -1,10 +1,12 @@
 import Saying
 
+let nodeContainersEnabled = false
+
 func syntaxNodeGeneralContainers(
   names: NodeNames,
   parsed: Bool
 ) -> [String] {
-  let containers = false
+  let containers = nodeContainersEnabled
   let ability = containers ? "containers" : "use"
   var source: [String] = [
     "use (clients)",
@@ -19,15 +21,6 @@ func syntaxNodeGeneralContainers(
   }
   source.append(contentsOf: [
     "  action (clients)",
-  ])
-  if !containers {
-    source.append(contentsOf: [
-      "  [",
-      "   test {ignore (example: \(parsed ? "parsed " : "")\(names.english))}",
-      "  ]",
-    ])
-  }
-  source.append(contentsOf: [
     "  example",
     "  \(parsed ? "parsed " : "")\(names.english)",
     "  {",
