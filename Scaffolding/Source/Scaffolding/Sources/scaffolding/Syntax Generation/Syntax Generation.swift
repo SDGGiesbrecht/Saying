@@ -63,9 +63,9 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeType(names: names, parsed: true))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeChildren(names: names, parsed: false))
+        newSource.append(contentsOf: syntaxNodeAbility(names: names, parsed: false))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeChildren(names: names, parsed: true))
+        newSource.append(contentsOf: syntaxNodeAbility(names: names, parsed: true))
         try addGeneratedSource(newSource: newSource)
       }
     }

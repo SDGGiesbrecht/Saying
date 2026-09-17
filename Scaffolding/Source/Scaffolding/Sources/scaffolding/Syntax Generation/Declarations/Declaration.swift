@@ -5,19 +5,9 @@ func syntaxNodeParsedDeclaration(
 ) -> [String] {
   var source: [String] = [
     "thing (clients)",
-  ]
-  if !nodeContainersEnabled {
-    source.append(contentsOf: [
-      " [",
-      "  test {ignore (example: \(names.english))}",
-      "  test {ignore (example: parsed \(names.english))}",
-      " ]",
-    ])
-  }
-  source.append(contentsOf: [
     " (",
     "  English: parsed \(names.english)",
-  ])
+  ]
   if let deutsch = names.deutscher {
     source.append("  Deutsch: zerteilte \(deutsch)")
   }

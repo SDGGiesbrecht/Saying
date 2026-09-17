@@ -1,12 +1,10 @@
 import Saying
 
-let nodeContainersEnabled = false
-
 func syntaxNodeGeneralContainers(
   names: NodeNames,
   parsed: Bool
 ) -> [String] {
-  let containers = nodeContainersEnabled
+  let containers = false // Also upgrade ability requirement of “use of () as [parsed] syntax node”
   let ability = containers ? "containers" : "use"
   var source: [String] = [
     "use (clients)",
