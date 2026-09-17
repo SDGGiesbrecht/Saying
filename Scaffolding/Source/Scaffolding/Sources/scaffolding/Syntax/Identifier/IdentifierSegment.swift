@@ -1,6 +1,6 @@
 import Saying
 
-protocol ParsedIdentifierSegment: ParsedSyntaxNode {
+protocol ParsedIdentifierSegment: ParsedSyntaxNodeProtocol {
   var identifierSegmentKind: ParsedIdentifierSegmentKind { get }
 }
 

@@ -1,14 +1,14 @@
 import Saying
 
-protocol SyntaxNode {
+protocol SyntaxNodeProtocol {
   var nodeKind: SyntaxNodeKind { get }
-  var childNodes: [SyntaxNode] { get }
+  var childNodes: [SyntaxNodeProtocol] { get }
   func source() -> UnicodeText
 
-  func parsedNode() -> ParsedSyntaxNode
+  func parsedNode() -> ParsedSyntaxNodeProtocol
 }
 
-extension SyntaxNode {
+extension SyntaxNodeProtocol {
 
   func source() -> UnicodeText {
     return childNodes.map({ $0.source() }).joined()
@@ -18,7 +18,7 @@ extension SyntaxNode {
     return formattedGitStyleSource(indent: 0)
   }
   private func formattedGitStyleSource(indent: Int) -> UnicodeText {
-    var stack: [SyntaxNode] = [self]
+    var stack: [SyntaxNodeProtocol] = [self]
     var accumulator: String = ""
     while !stack.isEmpty {
       let node = stack.removeLast()

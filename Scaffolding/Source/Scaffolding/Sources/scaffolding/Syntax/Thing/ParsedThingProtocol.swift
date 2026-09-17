@@ -1,4 +1,4 @@
-protocol ParsedThingDeclarationProtocol: ParsedSyntaxNode {
+protocol ParsedThingDeclarationProtocol: ParsedSyntaxNodeProtocol {
   var documentation: ParsedAttachedDocumentation? { get }
   var access: ParsedAccess? { get }
   var testAccess: ParsedTestAccess? { get }

@@ -1,3 +1,3 @@
-protocol ParsedSyntaxLeaf: ParsedSyntaxNode {
+protocol ParsedSyntaxLeaf: ParsedSyntaxNodeProtocol {
   var leafKind: ParsedSyntaxLeafKind { get }
 }

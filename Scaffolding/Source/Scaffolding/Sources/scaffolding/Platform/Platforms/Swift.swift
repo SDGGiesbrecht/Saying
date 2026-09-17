@@ -388,8 +388,8 @@ enum Swift: Platform {
   ) -> String {
     let access = accessModifier.map({ "\($0) " }) ?? ""
     let indirectness =
-      name == "SyntaxNodeType" // Essential for compiler performance; no general solution yet.
-      || name == "ParsedSyntaxNodeType"
+      name == "SyntaxNode" // Essential for compiler performance; no general solution yet.
+      || name == "ParsedSyntaxNode"
       ? "indirect " : ""
     var result: [String] = [
       "\(access)\(indirectness)enum \(name) {"

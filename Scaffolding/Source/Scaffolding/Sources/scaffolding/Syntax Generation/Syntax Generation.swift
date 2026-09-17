@@ -2,7 +2,7 @@ import Saying
 
 extension ModuleIntermediate {
   mutating func unfoldSyntax() throws {
-    var nodeTypes: [NodeNames] = []
+    var nodes: [NodeNames] = []
     for nodePrototype in referenceDictionary.allThings() {
       let names = nodePrototype.declaration.name.namesDictionary
       let englishName = names["English"]!.name()
@@ -15,7 +15,7 @@ extension ModuleIntermediate {
           ελληνικό: names["ελληνικά"]?.name(),
           swift: names["Swift"]!.name()
         )
-        nodeTypes.append(names)
+        nodes.append(names)
 
         let suffixesForScalarSwap = [" syntax", " character syntax"]
         var scalarName: UnicodeText?
@@ -59,9 +59,9 @@ extension ModuleIntermediate {
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeGeneralContainers(names: names, parsed: true))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeType(names: names, parsed: false))
+        newSource.append(contentsOf: syntaxNodeGeneralize(names: names, parsed: false))
         newSource.append("")
-        newSource.append(contentsOf: syntaxNodeType(names: names, parsed: true))
+        newSource.append(contentsOf: syntaxNodeGeneralize(names: names, parsed: true))
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeAbility(names: names, parsed: false))
         newSource.append("")
@@ -69,9 +69,9 @@ extension ModuleIntermediate {
         try addGeneratedSource(newSource: newSource)
       }
     }
-    nodeTypes.sort(by: { $0.identifier.lexicographicallyPrecedes($1.identifier) })
-    try addGeneratedSource(newSource: syntaxNodeTypeDeclaration(nodeTypes: nodeTypes, parsed: false))
-    try addGeneratedSource(newSource: syntaxNodeTypeDeclaration(nodeTypes: nodeTypes, parsed: true))
+    nodes.sort(by: { $0.identifier.lexicographicallyPrecedes($1.identifier) })
+    try addGeneratedSource(newSource: syntaxNodeEnumeration(nodes: nodes, parsed: false))
+    try addGeneratedSource(newSource: syntaxNodeEnumeration(nodes: nodes, parsed: true))
   }
 
   mutating func addGeneratedSource(newSource: [String]) throws {

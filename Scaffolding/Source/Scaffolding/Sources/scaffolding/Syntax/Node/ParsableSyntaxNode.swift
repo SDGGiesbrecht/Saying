@@ -1,6 +1,6 @@
 import Saying
 
-protocol ParsableSyntaxNode: ParsedSyntaxNode {
+protocol ParsableSyntaxNode: ParsedSyntaxNodeProtocol {
   associatedtype ParseError: DiagnosticError
   static func diagnosticParseNext(
     in remainder: Slice<UnicodeSegments>,

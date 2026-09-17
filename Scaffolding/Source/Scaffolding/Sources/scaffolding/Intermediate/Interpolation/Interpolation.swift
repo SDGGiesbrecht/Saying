@@ -26,7 +26,7 @@ extension Interpolation {
       _ definition: ParameterDefinition
     ) -> InterpolationParameter
   ) -> Result<Interpolation, ErrorList<ConstructionError>>
-  where Entries: Collection, Entries.Element: ParsedSyntaxNode, ParameterNode: ParsedSyntaxNode {
+  where Entries: Collection, Entries.Element: ParsedSyntaxNodeProtocol, ParameterNode: ParsedSyntaxNodeProtocol {
     var errors: [ConstructionError] = []
     var parameterIndices: [UnicodeText: Int] = [:]
     var parameterReferences: [UnicodeText: UnicodeText] = [:]

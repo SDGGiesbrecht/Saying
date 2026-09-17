@@ -3,12 +3,8 @@ public struct ClosingParenthesisSyntax {
   public init() {
   }
 
-  public var children: [SyntaxNodeType] {
+  public var children: [SyntaxNode] {
     return []
-  }
-
-  public var type: SyntaxNodeType {
-    return SyntaxNodeType.closingParenthesisSyntax(self)
   }
 }
 

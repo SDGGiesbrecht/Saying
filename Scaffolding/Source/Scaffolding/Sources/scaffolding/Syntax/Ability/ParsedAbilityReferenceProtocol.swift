@@ -1,4 +1,4 @@
-protocol ParsedAbilityReferenceProtocol: ParsedSyntaxNode {
+protocol ParsedAbilityReferenceProtocol: ParsedSyntaxNodeProtocol {
 
 }
 

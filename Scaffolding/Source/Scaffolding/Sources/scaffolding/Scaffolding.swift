@@ -91,7 +91,7 @@ import Saying
       "  }",
       "}",
     ]
-    for nodeType in [
+    for node in [
       "ParsedDownArrowSyntax",
       "ParsedLeftArrowSyntax",
       "ParsedRightArrowSyntax",
@@ -122,7 +122,7 @@ import Saying
     ] {
       shims.append(contentsOf: [
         "",
-        "extension \(nodeType) {",
+        "extension \(node) {",
         "  public init(location: SayingSourceSlice) {",
         "    self.init(location)",
         "  }",
@@ -182,10 +182,10 @@ import Saying
     ] as [UnicodeText] {
       entryPoints.insert("\(node).scalar")
       entryPoints.insert("\(node).init()")
-      entryPoints.insert("\(node).type")
-      entryPoints.insert("Parsed\(node).type")
       entryPoints.insert("\(node).children")
       entryPoints.insert("Parsed\(node).children")
+      entryPoints.insert("SyntaxNode.init(_: \(node))")
+      entryPoints.insert("ParsedSyntaxNode.init(_: Parsed\(node))")
     }
 
     try Swift.prepare(
