@@ -1,18 +1,18 @@
 import Saying
 
-protocol ParsedSyntaxNode {
+protocol ParsedSyntaxNodeProtocol {
   var nodeKind: ParsedSyntaxNodeKind { get }
-  var childNodes: [ParsedSyntaxNode] { get }
+  var childNodes: [ParsedSyntaxNodeProtocol] { get }
 
   var context: UnicodeSegments { get }
   var startIndex: UnicodeSegments.Index { get }
   var endIndex: UnicodeSegments.Index { get }
   var location: SayingSourceSlice { get }
 
-  func mutableNode() -> SyntaxNode
+  func mutableNode() -> SyntaxNodeProtocol
 }
 
-extension ParsedSyntaxNode {
+extension ParsedSyntaxNodeProtocol {
 
   func source() -> UnicodeText {
     switch location.code {

@@ -3,12 +3,8 @@ public struct BulletCharacterSyntax {
   public init() {
   }
 
-  public var children: [SyntaxNodeType] {
+  public var children: [SyntaxNode] {
     return []
-  }
-
-  public var type: SyntaxNodeType {
-    return SyntaxNodeType.bulletCharacterSyntax(self)
   }
 }
 

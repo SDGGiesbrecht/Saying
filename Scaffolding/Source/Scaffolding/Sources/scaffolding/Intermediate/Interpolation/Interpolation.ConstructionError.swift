@@ -2,12 +2,12 @@ import Saying
 
 extension Interpolation {
   enum ConstructionError: DiagnosticError {
-    case multipleParameterDefinitionSets(ParsedSyntaxNode)
-    case definitionInReferenceSet(ParsedSyntaxNode)
-    case referenceInDefinitionSet(ParsedSyntaxNode)
-    case cyclicalParameterReference(ParsedSyntaxNode)
+    case multipleParameterDefinitionSets(ParsedSyntaxNodeProtocol)
+    case definitionInReferenceSet(ParsedSyntaxNodeProtocol)
+    case referenceInDefinitionSet(ParsedSyntaxNodeProtocol)
+    case cyclicalParameterReference(ParsedSyntaxNodeProtocol)
     case parameterNotFound(ParsedParameterReference)
-    case rearrangedParameters(ParsedSyntaxNode)
+    case rearrangedParameters(ParsedSyntaxNodeProtocol)
 
     var range: SayingSourceSlice {
       switch self {

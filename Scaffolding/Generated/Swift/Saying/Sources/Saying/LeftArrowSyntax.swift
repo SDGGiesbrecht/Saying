@@ -3,12 +3,8 @@ public struct LeftArrowSyntax {
   public init() {
   }
 
-  public var children: [SyntaxNodeType] {
+  public var children: [SyntaxNode] {
     return []
-  }
-
-  public var type: SyntaxNodeType {
-    return SyntaxNodeType.leftArrowSyntax(self)
   }
 }
 

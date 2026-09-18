@@ -14,5 +14,5 @@ ability (clients)
     English: children of (node: node)
     Swift: var (self: [node]).children
    )
-   list of (type of syntax node)
+   list of (syntax node)
  }

@@ -1,17 +1,17 @@
 import Saying
 
 protocol ShimmedSyntaxNode {
-  var type: SyntaxNodeType { get }
-  var children: [SyntaxNodeType] { get }
+  var node: SyntaxNode { get }
+  var children: [SyntaxNode] { get }
 }
 
 extension ShimmedSyntaxNode {
 
   var nodeKind: SyntaxNodeKind {
-    return .implemented(type)
+    return .implemented(node)
   }
 
-  var childNodes: [SyntaxNode] {
+  var childNodes: [SyntaxNodeProtocol] {
     return children.map { child in
       switch child {
       case .paragraphBreakSyntax(let node):
@@ -73,30 +73,84 @@ extension ShimmedSyntaxNode {
   }
 }
 
-extension DownArrowSyntax: ShimmedSyntaxNode {}
-extension LeftArrowSyntax: ShimmedSyntaxNode {}
-extension RightArrowSyntax: ShimmedSyntaxNode {}
-extension ClosingBraceSyntax: ShimmedSyntaxNode {}
-extension OpeningBraceSyntax: ShimmedSyntaxNode {}
-extension ClosingBracketSyntax: ShimmedSyntaxNode {}
-extension OpeningBracketSyntax: ShimmedSyntaxNode {}
-extension ClosingParenthesisSyntax: ShimmedSyntaxNode {}
-extension OpeningParenthesisSyntax: ShimmedSyntaxNode {}
-extension LineBreakSyntax: ShimmedSyntaxNode {}
-extension ParagraphBreakSyntax: ShimmedSyntaxNode {}
-extension BulletCharacterSyntax: ShimmedSyntaxNode {}
-extension OpeningQuestionMarkSyntax: ShimmedSyntaxNode {}
-extension ClosingQuestionMarkSyntax: ShimmedSyntaxNode {}
-extension RightToLeftQuestionMarkSyntax: ShimmedSyntaxNode {}
-extension GreekQuestionMarkSyntax: ShimmedSyntaxNode {}
-extension OpeningExclamationMarkSyntax: ShimmedSyntaxNode {}
-extension ClosingExclamationMarkSyntax: ShimmedSyntaxNode {}
-extension ColonCharacterSyntax: ShimmedSyntaxNode {}
-extension LeftChevronQuotationMarkSyntax: ShimmedSyntaxNode {}
-extension LowQuotationMarkSyntax: ShimmedSyntaxNode {}
-extension NinesQuotationMarkSyntax: ShimmedSyntaxNode {}
-extension RightChevronQuotationMarkSyntax: ShimmedSyntaxNode {}
-extension SixesQuotationMarkSyntax: ShimmedSyntaxNode {}
-extension SlashSyntax: ShimmedSyntaxNode {}
-extension SpaceSyntax: ShimmedSyntaxNode {}
-extension SymbolInsertionMarkSyntax: ShimmedSyntaxNode {}
+extension DownArrowSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension LeftArrowSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension RightArrowSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ClosingBraceSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension OpeningBraceSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ClosingBracketSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension OpeningBracketSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ClosingParenthesisSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension OpeningParenthesisSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension LineBreakSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ParagraphBreakSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension BulletCharacterSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension OpeningQuestionMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ClosingQuestionMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension RightToLeftQuestionMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension GreekQuestionMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension OpeningExclamationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ClosingExclamationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension ColonCharacterSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension LeftChevronQuotationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension LowQuotationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension NinesQuotationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension RightChevronQuotationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension SixesQuotationMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension SlashSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension SpaceSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}
+extension SymbolInsertionMarkSyntax: ShimmedSyntaxNode {
+  var node: SyntaxNode { SyntaxNode(self) }
+}

@@ -1,4 +1,4 @@
-protocol ParsedActionPrototype: ParsedSyntaxNode {
+protocol ParsedActionPrototype: ParsedSyntaxNodeProtocol {
   var isFlow: Bool { get }
   var access: ParsedAccess? { get }
   var testAccess: ParsedTestAccess? { get }

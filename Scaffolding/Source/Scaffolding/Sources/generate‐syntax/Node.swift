@@ -166,7 +166,7 @@ struct Node {
 
   func syntaxNodeConformance(parsed: Bool) -> String {
     var result: [String] = [
-      "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxNode {",
+      "extension \(parsed ? "Parsed" : "")\(name): \(parsed ? "Parsed" : "")SyntaxNodeProtocol {",
     ]
     switch kind {
     case .fixedLeaf:
@@ -185,7 +185,7 @@ struct Node {
     case .keyword, .variableLeaf, .compound, .alternates:
       result.append(contentsOf: [
         "",
-        "  var childNodes: [\(parsed ? "Parsed" : "")SyntaxNode] {",
+        "  var childNodes: [\(parsed ? "Parsed" : "")SyntaxNodeProtocol] {",
         childrenImplementation(parsed: parsed),
         "  }",
       ])
@@ -223,14 +223,14 @@ struct Node {
     if parsed {
       result.append(contentsOf: [
         "",
-        "  func mutableNode() -> SyntaxNode {",
+        "  func mutableNode() -> SyntaxNodeProtocol {",
         "    return mutable()",
         "  }",
       ])
     } else {
       result.append(contentsOf: [
         "",
-        "  func parsedNode() -> ParsedSyntaxNode {",
+        "  func parsedNode() -> ParsedSyntaxNodeProtocol {",
         "    return parsed()",
         "  }",
       ])
@@ -247,7 +247,7 @@ struct Node {
       return "    return []"
     case .compound(let children):
       var result: [String] = [
-        "    var result: [\(parsed ? "Parsed" : "")SyntaxNode] = []",
+        "    var result: [\(parsed ? "Parsed" : "")SyntaxNodeProtocol] = []",
       ]
       for child in children {
         switch child.kind {
@@ -876,11 +876,11 @@ struct Node {
     ]
     if parsed {
       result.append(contentsOf: [
-        "  case implemented(ParsedSyntaxNodeType)"
+        "  case implemented(ParsedSyntaxNode)"
       ])
     } else {
       result.append(contentsOf: [
-        "  case implemented(SyntaxNodeType)"
+        "  case implemented(SyntaxNode)"
       ])
     }
     result.append(contentsOf: nodes.lazy.compactMap({ $0.nodeKindCase(parsed: parsed) }))
@@ -964,7 +964,7 @@ struct Node {
       accumulator: for child in childList {
         switch child.kind {
         case .fixed, .required:
-          resolution.append("\(child.name) as \(parsed ? "Parsed" : "")SyntaxNode")
+          resolution.append("\(child.name) as \(parsed ? "Parsed" : "")SyntaxNodeProtocol")
           break accumulator
         case .optional:
           resolution.append("\(child.name) ??")
@@ -974,13 +974,13 @@ struct Node {
       }
       return [
         "",
-        "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNode {",
+        "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNodeProtocol {",
         "    return \(resolution.joined(separator: " "))",
         "  }",
       ].joined(separator: "\n")
     case .alternates(let alternates):
       var result: [String] = [
-        "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNode {",
+        "  var \(last ? "last" : "first")Child: \(parsed ? "Parsed" : "")SyntaxNodeProtocol {",
         "    switch self {"
       ]
       for alternate in alternates {
