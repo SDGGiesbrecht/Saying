@@ -8,6 +8,16 @@ ability (clients)
 
   requirement (clients)
    [
+    test {ignore ((example: node) as node)}
+   ]
+   (
+    English: (node: node) as node
+    Swift: SyntaxNode.init (node: [node])
+   )
+   syntax node
+
+  requirement (clients)
+   [
     test {ignore (children of (example: node))}
    ]
    (
