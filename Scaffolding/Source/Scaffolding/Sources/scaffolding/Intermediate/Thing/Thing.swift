@@ -315,7 +315,7 @@ extension Thing {
       cSharp: cSharp?.resolvingExtensionContext(typeLookup: typeLookup),
       kotlin: kotlin?.resolvingExtensionContext(typeLookup: typeLookup),
       swift: swift?.resolvingExtensionContext(typeLookup: typeLookup),
-      documentation: documentation,
+      documentation: documentation?.resolvingExtensionContext(typeLookup: typeLookup),
       declaration: declaration,
       cName: cName,
       swiftName: swiftName
