@@ -59,8 +59,6 @@ extension
    differing example according to list
    list of (thing)
    {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    append (differing example: thing) to (↓ list)
-    ← list
+    ← list of (differing example: thing)
    }
  }
