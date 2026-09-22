@@ -1237,4 +1237,19 @@ extension
    {
     ← memory of ((unmanaged) of (first)) and ((unmanaged) of (second)) are equal
    }
+
+  action (clients)
+   (
+    English: list of (entry: thing)
+   )
+   list of (thing)
+   C♯: “[” entry “]”
+   JavaScript: “[” entry “]”
+   Kotlin: “listOf(” entry “)”
+   Swift: “[” entry “]”
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    append (entry: thing) to (↓ list)
+    ← list
+   }
  }
