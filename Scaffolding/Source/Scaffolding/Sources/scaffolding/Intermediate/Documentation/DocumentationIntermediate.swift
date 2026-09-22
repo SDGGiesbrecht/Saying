@@ -56,7 +56,7 @@ extension DocumentationIntermediate {
       paragraphs: paragraphs,
       parameters: parameters,
       tests: tests.map({ test in
-        return test.resolvingExtensionContext(typeLookup: typeLookup)
+        return test.resolvingExtensionContext()
       })
     )
   }
