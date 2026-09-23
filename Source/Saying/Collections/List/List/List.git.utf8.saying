@@ -1268,4 +1268,21 @@ extension
     append (second) to (↓ list)
     ← list
    }
+
+  action (clients)
+   (
+    English: list of (first: thing), (second: thing) and (third: thing)
+   )
+   list of (thing)
+   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “ }”
+   JavaScript: “[” first “, ” second “, ” third “]”
+   Kotlin: “listOf(” first “, ” second “, ” third “)”
+   Swift: “[” first “, ” second “, ” third “]”
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    append (first) to (↓ list)
+    append (second) to (↓ list)
+    append (third) to (↓ list)
+    ← list
+   }
  }
