@@ -15,8 +15,9 @@ extension
  {
   action (clients)
    [
-    test {verify ((non‐empty example: list of (thing)) is (non‐empty example: list of (thing)) according to list)}
-    test {verify (not ((non‐empty example: list of (thing)) is (empty: list of (thing)) according to list))}
+    test {verify ((list of (true) and (false)) is (list of (true) and (false)) according to list)}
+    test {verify (not ((list of (false) and (true)) is (list of (true) and (false)) according to list))}
+    test (hidden) {verify (not ((empty: list of (truth value)) is (list of (true) and (false)) according to list))}
    ]
    (first: list of (thing)) is (second: list of (thing)) according to list
    truth value
@@ -45,7 +46,7 @@ extension
    [
     test {
      let (• hasher: hasher) start as (create hasher)
-     hash key (non‐empty example: list of (thing)) with (↓ hasher) according to list
+     hash key (non‐empty example: list of (truth value)) with (↓ hasher) according to list
     }
    ]
    hash key (key: list of (thing)) with (hasher: ↓ hasher) according to list
