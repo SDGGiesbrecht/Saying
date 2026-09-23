@@ -306,3 +306,8 @@ action (file)
   }
   ← 0
  }
+
+use (clients)
+ comparison of lists of (truth value) for equality
+ {
+ }
