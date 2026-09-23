@@ -12,10 +12,7 @@ thing (clients)
 action (clients)
  [
   test {
-   let (• units: list of (8‐bit Unicode code unit)) start as (empty: list of (8‐bit Unicode code unit))
-   append ((“C2”: byte) as Unicode code unit) to (↓ units)
-   append ((“A1”: byte) as Unicode code unit) to (↓ units)
-   verify ((Unicode scalars of (units) skipping validity check) is (“¡”: Unicode scalars))
+   verify ((Unicode scalars of (list of ((“C2”: byte) as Unicode code unit) and ((“A1”: byte) as Unicode code unit)) skipping validity check) is (“¡”: Unicode scalars))
   }
  ]
  (

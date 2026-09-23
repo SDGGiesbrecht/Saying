@@ -172,11 +172,7 @@ extension
   flow (clients)
    [
     test {
-     let (• offsets: list of (natural number)) start as (empty: list of (natural number))
-     append (“0”: natural number) to (↓ offsets)
-     append (“1”: natural number) to (↓ offsets)
-     append (“2”: natural number) to (↓ offsets)
-     for each (• entry: natural number) and its (• offset: natural number) in (offsets), {
+     for each (• entry: natural number) and its (• offset: natural number) in (list of (“0”: natural number), (“1”: natural number) and (“2”: natural number)), {
       verify ((entry) is (offset))
      }
     }

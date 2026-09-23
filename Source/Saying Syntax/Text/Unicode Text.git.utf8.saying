@@ -1,11 +1,7 @@
 action (clients)
  [
   test (hidden) {
-   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-   append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
-   append (Unicode segment at (“2”: natural number) containing (“(”)) to (↓ segment list)
-   append (Unicode segment at (“4”: natural number) containing (“)”)) to (↓ segment list)
-   verify ((Unicode text of (Unicode segments (segment list))) is (“!()”))
+   verify ((Unicode text of (Unicode segments (list of (Unicode segment at (“0”: natural number) containing (“!”)), (Unicode segment at (“2”: natural number) containing (“(”)) and (Unicode segment at (“4”: natural number) containing (“)”))))) is (“!()”))
   }
  ]
  (
@@ -24,20 +20,13 @@ action (clients)
 action (clients)
  [
   test (hidden) {
-   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-   append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
-   append (Unicode segment at (“2”: natural number) containing (“(”)) to (↓ segment list)
-   append (Unicode segment at (“4”: natural number) containing (“)”)) to (↓ segment list)
-   let (• segments: Unicode segments) be (Unicode segments (segment list))
+   let (• segments: Unicode segments) be (Unicode segments (list of (Unicode segment at (“0”: natural number) containing (“!”)), (Unicode segment at (“2”: natural number) containing (“(”)) and (Unicode segment at (“4”: natural number) containing (“)”))))
    let (• cursor: Unicode segments boundary) start as (beginning of (segments))
    advance (↓ cursor) to next in (segments) skipping bounds check
    verify ((Unicode text of ((from (cursor) to (end of (segments))) in (segments))) is (“()”))
   }
   test (hidden) {
-   let (• segment list: list of (Unicode segment)) start as (empty: list of (Unicode segment))
-   append (Unicode segment at (“0”: natural number) containing (“!”)) to (↓ segment list)
-   append (Unicode segment at (“2”: natural number) containing (“()”)) to (↓ segment list)
-   let (• segments: Unicode segments) be (Unicode segments (segment list))
+   let (• segments: Unicode segments) be (Unicode segments (list of (Unicode segment at (“0”: natural number) containing (“!”)) and (Unicode segment at (“2”: natural number) containing (“()”))))
    let (• cursor: Unicode segments boundary) start as (end of (segments))
    backtrack (↓ cursor) to previous in (segments) skipping bounds check
    verify ((Unicode text of ((from (beginning of (segments)) to (cursor)) in (segments))) is (“!(”))
