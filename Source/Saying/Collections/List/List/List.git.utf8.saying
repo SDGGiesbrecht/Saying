@@ -1249,7 +1249,23 @@ extension
    Swift: “[” entry “]”
    {
     let (• list: list of (thing)) start as (empty: list of (thing))
-    append (entry: thing) to (↓ list)
+    append (entry) to (↓ list)
+    ← list
+   }
+
+  action (clients)
+   (
+    English: list of (first: thing) and (second: thing)
+   )
+   list of (thing)
+   C♯: “new List<” thing “>() { ” first “, ” second “ }”
+   JavaScript: “[” first “, ” second “]”
+   Kotlin: “listOf(” first “, ” second “)”
+   Swift: “[” first “, ” second “]”
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    append (first) to (↓ list)
+    append (second) to (↓ list)
     ← list
    }
  }

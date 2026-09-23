@@ -59,11 +59,7 @@ extension
   action (clients)
    [
     test {ignore ((non‐empty example: list of (list)) linked together with (non‐empty example: list) according to default use as stringable list)}
-    test (hidden) {
-     let (• list: list of (list)) start as (non‐empty example: list of (list))
-     append (non‐empty example: list) to (↓ list)
-     ignore ((list) linked together with (non‐empty example: list) according to default use as stringable list)
-    }
+    test (hidden) {ignore ((list of (non‐empty example: list) and (non‐empty example: list)) linked together with (non‐empty example: list) according to default use as stringable list)}
    ]
    (
     English: (list of lists: list of (list)) linked together with (link: list) according to default use as stringable list
