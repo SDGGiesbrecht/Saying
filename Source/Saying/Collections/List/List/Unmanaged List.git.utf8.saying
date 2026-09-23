@@ -164,7 +164,7 @@ extension
      verify (reference count of (tracker) is (“1”: platform fixed‐width integer))
     }
     test (hidden) {
-     let (• list: unmanaged list of (thing)) start as (copy of unmanaged (empty: unmanaged list of (thing)))
+     let (• list: unmanaged list of (truth value)) start as (copy of unmanaged (empty: unmanaged list of (truth value)))
      release unmanaged (↓ list)
     }
    ]
@@ -189,9 +189,9 @@ extension
   action (unit)
    [
     test {
-     let (• list: unmanaged list of (thing)) start as (empty: unmanaged list of (thing))
+     let (• list: unmanaged list of (truth value)) start as (empty: unmanaged list of (truth value))
      let (• beginning: list boundary) be (beginning of (list))
-     insert (example: thing) at (beginning) in (↓ list)
+     insert (example: truth value) at (beginning) in (↓ list)
      verify ((boundary before (index after (beginning) in (list) skipping bounds check) in (list)) is (beginning))
      release unmanaged (↓ list)
     }

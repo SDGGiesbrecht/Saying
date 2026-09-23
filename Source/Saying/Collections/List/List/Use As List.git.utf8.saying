@@ -482,8 +482,8 @@ extension
     [
      English: Returns the index of the entry beginning at the specified boundary, but only if an entry actually exists at that position.
     ]
-    test {verify ((index after (beginning of (non‐empty example: list)) in (non‐empty example: list)) exists)}
-    test {verify ((index after (beginning of (empty: list)) in (empty: list)) does not exist)}
+    test {verify ((index after (beginning of (non‐empty example: list of (truth value))) in (non‐empty example: list of (truth value))) exists)}
+    test {verify ((index after (beginning of (empty: list of (truth value))) in (empty: list of (truth value))) does not exist)}
    ]
    (
     English: index after (boundary: boundary) in (list: list)
@@ -502,8 +502,8 @@ extension
     [
      English: Returns the index of the entry ending at the specified boundary, but only if an entry actually exists at that position.
     ]
-    test {verify ((index before (end of (non‐empty example: list)) in (non‐empty example: list)) exists)}
-    test {verify ((index before (end of (empty: list)) in (empty: list)) does not exist)}
+    test {verify ((index before (end of (non‐empty example: list of (truth value))) in (non‐empty example: list of (truth value))) exists)}
+    test {verify ((index before (end of (empty: list of (truth value))) in (empty: list of (truth value))) does not exist)}
    ]
    (
     English: index before (boundary: boundary) in (list: list)
@@ -559,16 +559,12 @@ extension
   action (clients)
    [
     test {
-     let (• list: list) be (empty: list)
-     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“0”: integer))
+     let (• list: list of (truth value)) be (list of (true) and (true))
+     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“2”: integer))
     }
     test {
-     let (• list: list) be (non‐empty example: list)
-     verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is greater than (“0”: integer))
-    }
-    test {
-     let (• list: list) be (non‐empty example: list)
-     verify ((offset from (end of (list)) to (beginning of (list)) in (list) according to default use as list) is less than (“0”: integer))
+     let (• list: list of (truth value)) be (non‐empty example: list of (true) and (true))
+     verify ((offset from (end of (list)) to (beginning of (list)) in (list) according to default use as list) is (“−2”: integer))
     }
    ]
    (
@@ -586,16 +582,12 @@ extension
   action (clients)
    [
     test {
-     let (• list: list) be (empty: list)
-     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check, according to default use as list) is (“0”: platform fixed‐width integer))
+     let (• list: list of (truth value)) be (list of (true) and (true))
+     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check, according to default use as list) is (“2”: platform fixed‐width integer))
     }
     test {
-     let (• list: list) be (non‐empty example: list)
-     verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check, according to default use as list) is greater than (“0”: platform fixed‐width integer))
-    }
-    test {
-     let (• list: list) be (non‐empty example: list)
-     verify ((platform fixed‐width offset from (end of (list)) to (beginning of (list)) in (list), skipping overflow check, according to default use as list) is less than (“0”: platform fixed‐width integer))
+     let (• list: list of (truth value)) be (list of (true) and (true))
+     verify ((platform fixed‐width offset from (end of (list)) to (beginning of (list)) in (list), skipping overflow check, according to default use as list) is (“−2”: platform fixed‐width integer))
     }
    ]
    (
@@ -612,8 +604,8 @@ extension
     [
      English: Returns the next boundary, but only if there actually is one.
     ]
-    test {verify ((boundary after (beginning of (non‐empty example: list)) in (non‐empty example: list)) exists)}
-    test {verify ((boundary after (end of (non‐empty example: list)) in (non‐empty example: list)) does not exist)}
+    test {verify ((boundary after (beginning of (non‐empty example: list of (truth value))) in (non‐empty example: list of (truth value))) exists)}
+    test {verify ((boundary after (end of (non‐empty example: list of (truth value))) in (non‐empty example: list of (truth value))) does not exist)}
    ]
    (
     English: boundary after (cursor: boundary) in (list: list)
@@ -632,8 +624,8 @@ extension
     [
      English: Returns the previous boundary, but only if there actually is one.
     ]
-    test {verify ((boundary before (end of (non‐empty example: list)) in (non‐empty example: list)) exists)}
-    test {verify ((boundary before (beginning of (non‐empty example: list)) in (non‐empty example: list)) does not exist)}
+    test {verify ((boundary before (end of (non‐empty example: list of (truth value))) in (non‐empty example: list of (truth value))) exists)}
+    test {verify ((boundary before (beginning of (non‐empty example: list of (truth value))) in (non‐empty example: list of (truth value))) does not exist)}
    ]
    (
     English: boundary before (cursor: boundary) in (list: list)
@@ -650,8 +642,8 @@ extension
   action (clients)
    [
     test {
-     let (• non‐empty: list) be (non‐empty example: list)
-     ignore (entry after (beginning of (non‐empty)) in (non‐empty) skipping bounds check, according to default use as list)
+     let (• list: list of (truth value)) be (list of (true) and (false))
+     verify ((entry after (beginning of (non‐empty)) in (non‐empty) skipping bounds check, according to default use as list) is (true))
     }
    ]
    (
@@ -665,10 +657,8 @@ extension
 
   action (clients)
    [
-    test {
-     verify ((first in (non‐empty example: list) according to default use as list) exists)
-     verify ((first in (empty: list) according to default use as list) does not exist)
-    }
+    test {verify ((first in (list of (true) and (false)) according to default use as list) is (wrap (true) into optional))}
+    test {verify ((first in (empty: list of (truth value)) according to default use as list) does not exist)}
    ]
    (
     English: first in (list: list) according to default use as list
@@ -685,8 +675,8 @@ extension
   action (clients)
    [
     test {
-     verify ((last in (non‐empty example: list) according to default use as list) exists)
-     verify ((last in (empty: list) according to default use as list) does not exist)
+     verify ((last in (list of (true) and (false)) according to default use as list) is (wrap (false) into optional))
+     verify ((last in (empty: list of (truth value)) according to default use as list) does not exist)
     }
    ]
    (
@@ -703,10 +693,7 @@ extension
 
   action (clients)
    [
-    test {
-     let (• list: list) be (non‐empty example: list)
-     verify (((number of entries in (list) according to default use as list) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
-    }
+    test {verify ((number of entries in (list of (true) and (false)) according to default use as list) is (“2”: natural number))}
    ]
    (
     English: number of entries in (list: list) according to default use as list
@@ -719,10 +706,7 @@ extension
 
   action (clients)
    [
-    test {
-     let (• list: list) be (non‐empty example: list)
-     verify (((platform fixed‐width number of entries in (list), skipping overflow check, according to default use as list) as integer) is (offset from (beginning of (list)) to (end of (list)) in (list)))
-    }
+    test {verify ((platform fixed‐width number of entries in (list of (true) and (false)), skipping overflow check, according to default use as list) is (“2”: platform fixed‐width integer))}
    ]
    (
     English: platform fixed‐width number of entries in (list: list), skipping overflow check, according to default use as list
@@ -735,7 +719,7 @@ extension
 
   action (clients)
    [
-    test {verify ((empty: list) is empty according to default use as list)}
+    test {verify ((empty: list of (truth value)) is empty according to default use as list)}
    ]
    (
     English: (list: list) is empty according to default use as list
@@ -748,7 +732,7 @@ extension
 
   action (clients)
    [
-    test {verify ((non‐empty example: list) is not empty according to default use as list)}
+    test {verify ((list of (true)) is not empty according to default use as list)}
    ]
    (
     English: (list: list) is not empty according to default use as list

@@ -39,7 +39,7 @@ extension
   action (unit)
    [
     test {
-     ignore (empty placeholder: unmanaged list of (thing) of unknown length)
+     ignore (empty placeholder: unmanaged list of (truth value) of unknown length)
     }
    ]
    (

@@ -36,7 +36,7 @@ extension
 
   action (unit)
    [
-    test {ignore (list in read‐only memory (unmanaged list of unknown length at (unallocated): unmanaged list of (thing) of unknown length) ending at (boundary at (“0”: memory offset)))}
+    test {verify ((list in read‐only memory (unmanaged list of unknown length at (unallocated): unmanaged list of (truth value) of unknown length) ending at (boundary at (“0”: memory offset)))) is (empty: list of (truth value))}
    ]
    (
     English: list in read‐only memory (uncounted: unmanaged list of (thing) of unknown length) ending at (end: list boundary)
@@ -55,7 +55,7 @@ extension
 
   action (file)
    [
-    test {ignore (create list with unmanaged list (empty: unmanaged list of (thing)))}
+    test {verify ((create list with unmanaged list (empty: unmanaged list of (truth value))) is (empty: list of (truth value)))}
    ]
    (
     English: create list with unmanaged list (list: unmanaged list of (thing))
@@ -79,7 +79,7 @@ extension
 
   action (file)
    [
-    test {ignore (memory address of (empty: list of (thing)))}
+    test {ignore (memory address of (empty: list of (truth value)))}
    ]
    (
     English: memory address of (list: list of (thing))
@@ -105,7 +105,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (empty: list of (thing))
+     let (• list: list of (truth value)) be (empty: list of (truth value))
      hold (list) without returning
      ignore (return (list) without holding)
     }
@@ -123,7 +123,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (empty: list of (thing))
+     let (• list: list of (truth value)) be (empty: list of (truth value))
      ignore (hold (list))
     }
    ]
@@ -144,7 +144,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (empty: list of (thing))
+     let (• list: list of (truth value)) be (empty: list of (truth value))
      hold (list) without returning
      release (list)
     }
@@ -167,9 +167,7 @@ extension
 
   action (file)
    [
-    test {
-     ignore (copy of (empty: list of (thing)))
-    }
+    test {verify ((copy of (empty: list of (truth value))) is (empty: list of (truth value)))}
    ]
    (
     English: copy of (list: list of (thing))
@@ -432,8 +430,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: thing) by unmanaged
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: truth value) by unmanaged
     }
    ]
    (
@@ -450,8 +448,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: thing) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, replace (index after (beginning of (list)) in (list) skipping bounds check) in (↓ list) with (example: truth value) by replacement
     }
    ]
    (
@@ -468,8 +466,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, insert (example: thing) at (beginning of (list)) in (↓ list) by unmanaged
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, insert (example: truth value) at (beginning of (list)) in (↓ list) by unmanaged
     }
    ]
    (
@@ -486,8 +484,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, insert (example: thing) at (beginning of (list)) in (↓ list) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, insert (example: truth value) at (beginning of (list)) in (↓ list) by replacement
     }
    ]
    (
@@ -504,8 +502,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, append (example: thing) to (↓ list) by changeable list
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, append (example: truth value) to (↓ list) by changeable list
     }
    ]
    (
@@ -522,8 +520,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, append (example: thing) to (↓ list) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, append (example: truth value) to (↓ list) by replacement
     }
    ]
    (
@@ -540,7 +538,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
      if most efficient, remove (index after (beginning of (list)) in (list) skipping bounds check) from (↓ list) by range
     }
    ]
@@ -560,7 +558,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
      if most efficient, remove (index after (beginning of (list)) in (list) skipping bounds check) from (↓ list) by replacement
     }
    ]
@@ -578,7 +576,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
      if most efficient, remove (from (beginning of (list)) to (end of (list))) from (↓ list) by empty replacement
     }
    ]
@@ -595,7 +593,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
      remove from (beginning of (list)) to (end of (list)) from (↓ list)
     }
    ]
@@ -609,7 +607,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
      if most efficient, remove (from (beginning of (list)) to (end of (list))) from (↓ list) by bounds
     }
    ]
@@ -764,8 +762,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (thing)) by unmanaged
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (truth value)) by unmanaged
     }
    ]
    (
@@ -782,8 +780,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: list of (thing))
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     replace from (beginning of (list)) to (end of (list)) in (↓ list) with (insertion example: list of (truth value))
     }
    ]
    (
@@ -795,8 +793,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (thing)) by bounds
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (truth value)) by bounds
     }
    ]
    (
@@ -813,8 +811,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (thing)) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, replace (from (beginning of (list)) to (end of (list))) in (↓ list) with (insertion example: list of (truth value)) by replacement
     }
    ]
    (
@@ -830,8 +828,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (thing)) by appending)
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
+     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (truth value)) by appending)
     }
    ]
    (
@@ -850,8 +848,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     ignore ((list) with (beginning of (list)) to (end of (list)) replaced with (insertion example: list of (thing)))
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
+     ignore ((list) with (beginning of (list)) to (end of (list)) replaced with (insertion example: list of (truth value)))
     }
    ]
    (
@@ -866,8 +864,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (thing)) by bounds)
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
+     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (truth value)) by bounds)
     }
    ]
    (
@@ -885,8 +883,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (thing)) by list insertion)
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
+     ignore (if most efficient, (list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: list of (truth value)) by list insertion)
     }
    ]
    (
@@ -903,8 +901,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, insert (insertion example: list of (thing)) at (beginning of (list)) in (↓ list) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, insert (insertion example: list of (truth value)) at (beginning of (list)) in (↓ list) by replacement
     }
    ]
    (
@@ -921,8 +919,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, insert (insertion example: list of (thing)) at (beginning of (list)) in (↓ list) by list insertion
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, insert (insertion example: list of (truth value)) at (beginning of (list)) in (↓ list) by list insertion
     }
    ]
    (
@@ -938,8 +936,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, append (insertion example: list of (thing)) to (↓ list) by list insertion
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, append (insertion example: list of (truth value)) to (↓ list) by list insertion
     }
    ]
    (
@@ -956,8 +954,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, append (insertion example: list of (thing)) to (↓ list) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, append (insertion example: list of (truth value)) to (↓ list) by replacement
     }
    ]
    (
@@ -974,8 +972,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, prepend (insertion example: list of (thing)) to (↓ list) by list insertion
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, prepend (insertion example: list of (truth value)) to (↓ list) by list insertion
     }
    ]
    (
@@ -990,8 +988,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) start as (non‐empty example: list of (thing))
-     if most efficient, prepend (insertion example: list of (thing)) to (↓ list) by replacement
+     let (• list: list of (truth value)) start as (non‐empty example: list of (truth value))
+     if most efficient, prepend (insertion example: list of (truth value)) to (↓ list) by replacement
     }
    ]
    (
@@ -1118,8 +1116,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     let (• result: list of (thing)) start as (empty: list of (thing))
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
+     let (• result: list of (truth value)) start as (empty: list of (truth value))
      if most efficient, convert ((from (beginning of (list)) to (end of (list))) in (list)) into list by unmanaged and store in (↓ result)
     }
    ]
@@ -1137,7 +1135,7 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
      ignore (convert from (beginning of (list)) to (end of (list)) in (list) into list)
     }
    ]
@@ -1155,8 +1153,8 @@ extension
   action (file)
    [
     test {
-     let (• list: list of (thing)) be (non‐empty example: list of (thing))
-     let (• result: list of (thing)) start as (empty: list of (thing))
+     let (• list: list of (truth value)) be (non‐empty example: list of (truth value))
+     let (• result: list of (truth value)) start as (empty: list of (truth value))
      if most efficient, convert ((from (beginning of (list)) to (end of (list))) in (list)) into list by bounds and store in (↓ result)
     }
    ]
@@ -1224,7 +1222,7 @@ extension
 
   action (unit)
    [
-    test {verify (if possible, memory of (empty: list of (thing)) and (empty: list of (thing)) are equal, otherwise return (true))}
+    test {verify (if possible, memory of (empty: list of (truth value)) and (empty: list of (truth value)) are equal, otherwise return (true))}
    ]
    (
     English: if possible, memory of (first: list of (thing)) and (second: list of (thing)) are equal, otherwise return (placeholder: truth value)
