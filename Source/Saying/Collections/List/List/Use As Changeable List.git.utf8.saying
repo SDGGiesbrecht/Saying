@@ -312,7 +312,7 @@ extension
    [
     test {
      let (• list: list of (truth value)) be (list of (true) and (true))
-     verify (((list) with (false) inserted at (boundary after (beginning of (list) in (list) skipping bounds check)) according to default use as changeable list) is (list of (true), (false) and (true)))
+     verify (((list) with (false) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default use as changeable list) is (list of (true), (false) and (true)))
     }
    ]
    (
