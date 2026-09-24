@@ -169,7 +169,7 @@ extension
     test {
      let (• list: list of (truth value)) start as (list of (true) and (true))
      insert (list of (false)) at (boundary after (beginning of (list)) in (list) skipping bounds check) in (↓ list) according to default list insertion
-     verify ((list) is (list of (true), (false), (true)))
+     verify ((list) is (list of (true), (false) and (true)))
     }
    ]
    (
