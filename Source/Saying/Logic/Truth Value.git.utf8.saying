@@ -311,3 +311,42 @@ use (clients)
  comparison of lists of (truth value) for equality
  {
  }
+
+use (clients)
+ comparison of (list of (truth value)) for equality
+ {
+  action (clients)
+   (first: list of (truth value)) is (second: list of (truth value))
+   truth value
+   C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”)
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “ == ” second “”
+   {
+    ← (first) is (second) according to list
+   }
+
+  action (clients)
+   hash key (key: list of (truth value)) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash key (key) with (↓ hasher) according to list
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: list of (truth value))
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default comparison for equality
+   }
+
+  action (clients)
+   differing example
+   list of (truth value)
+   {
+    ← differing example according to list
+   }
+ }
