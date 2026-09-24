@@ -50,6 +50,7 @@ extension
     }
    ]
    hash key (key: list of (thing)) with (hasher: ↓ hasher) according to list
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
    {
     for each (• entry: thing) in (key), {
      hash part (entry) with (↓ hasher)
