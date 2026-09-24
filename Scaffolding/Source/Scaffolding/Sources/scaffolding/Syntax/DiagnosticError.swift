@@ -36,7 +36,7 @@ extension DiagnosticError {
             return 0
           }
         })
-        .reduce(0, +)
+        .reduce(1, +)
       let source = String.UnicodeScalarView(unicode)
       return "\(range.origin)\n\(line): \(message) “\(source)”"
     }
