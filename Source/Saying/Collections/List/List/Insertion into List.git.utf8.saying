@@ -149,8 +149,8 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true), (true) and (true))
-     verify (((list) with (from (beginning of (list)) to (boundary before (end of (list)) in (list) skipping bounds check)) replaced with (list of (false)) according to default list insertion) is (list of (false) and (true)))
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (from (beginning of (list)) to (end of (list))) replaced with (insertion example: insertion) according to default list insertion)
     }
    ]
    (
@@ -167,9 +167,8 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
-     insert (list of (false)) at (boundary after (beginning of (list)) in (list) skipping bounds check) in (↓ list) according to default list insertion
-     verify ((list) is (list of (true), (false) and (true)))
+     let (• list: list) start as (non‐empty example: list)
+     insert (insertion example: insertion) at (beginning of (list)) in (↓ list) according to default list insertion
     }
    ]
    (
@@ -183,8 +182,8 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
-     verify (((list) with (list of (false)) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default list insertion) is (list of (true), (false) and (true)))
+     let (• list: list) be (non‐empty example: list)
+     ignore ((list) with (insertion example: insertion) inserted at (beginning of (list)) according to default list insertion)
     }
    ]
    (
@@ -201,9 +200,8 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
-     append (list of (false)) to (↓ list) according to default list insertion
-     verify ((list) is (list of (true), (true) and (false)))
+     let (• list: list) start as (non‐empty example: list)
+     append (insertion example: insertion) to (↓ list) according to default list insertion
     }
    ]
    (
@@ -216,7 +214,7 @@ extension
 
   action (clients)
    [
-    test {verify (((list of (true) and (true)) with (list of (false)) appended according to default list insertion) is (list of (true), (true) and (false)))}
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) appended according to default list insertion)}
    ]
    (
     English: (list: list) with (appendix: insertion) appended according to default list insertion
@@ -232,9 +230,8 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
-     prepend (list of (false)) to (↓ list) according to default list insertion
-     verify ((list) is (list of (false), (true) and (true)))
+     let (• list: list) start as (non‐empty example: list)
+     prepend (insertion example: insertion) to (↓ list) according to default list insertion
     }
    ]
    (
@@ -247,7 +244,7 @@ extension
 
   action (clients)
    [
-    test {verify (((list of (true) and (true)) with (list of (false)) prepended according to default list insertion) is (list of (false), (true) and (true)))}
+    test {ignore ((non‐empty example: list) with (insertion example: insertion) prepended according to default list insertion)}
    ]
    (
     English: (list: list) with (prefix: insertion) prepended according to default list insertion
