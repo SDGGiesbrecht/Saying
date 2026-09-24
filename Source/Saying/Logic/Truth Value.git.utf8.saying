@@ -308,6 +308,17 @@ action (file)
  }
 
 use (clients)
+ general containers of (list of (truth value))
+ {
+  action (clients)
+   example
+   list of (truth value)
+   {
+    ← non‐empty example
+   }
+ }
+
+use (clients)
  comparison of lists of (truth value) for equality
  {
  }
