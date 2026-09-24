@@ -8,6 +8,9 @@ ability (clients)
 
   ability (clients)
    general containers of (thing)
+
+  ability (clients)
+   comparison of (list of (thing)) for equality
  }
 
 extension
