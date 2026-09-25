@@ -183,7 +183,7 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
+     let (• list: list of (truth value)) be (list of (true) and (true))
      verify (((list) with (list of (false)) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default list insertion) is (list of (true), (false) and (true)))
     }
    ]
