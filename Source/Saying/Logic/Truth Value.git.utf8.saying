@@ -308,6 +308,54 @@ action (file)
  }
 
 use (clients)
+ general containers of (optional (truth value))
+ {
+  action (clients)
+   example
+   optional (truth value)
+   {
+    ← wrap (example: truth value) into optional
+   }
+ }
+
+use (clients)
+ comparison of (optional (truth value)) for equality
+ {
+  action (clients)
+   (first: optional (truth value)) is (second: optional (truth value))
+   truth value
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “ == ” second “”
+   {
+    ← (first) is (second) according to optional
+   }
+
+  action (clients)
+   hash key (key: optional (truth value)) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash key (key) with (↓ hasher) according to optional
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: optional (truth value))
+   )
+   hash value
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default comparison for equality
+   }
+
+  action (clients)
+   differing example
+   optional (truth value)
+   {
+    ← wrap (differing example: truth value) into optional
+   }
+ }
+
+use (clients)
  general containers of (list of (truth value))
  {
   action (clients)

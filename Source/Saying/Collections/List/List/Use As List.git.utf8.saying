@@ -563,7 +563,7 @@ extension
      verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“2”: integer))
     }
     test {
-     let (• list: list of (truth value)) be (non‐empty example: list of (true) and (true))
+     let (• list: list of (truth value)) be (list of (true) and (true))
      verify ((offset from (end of (list)) to (beginning of (list)) in (list) according to default use as list) is (“−2”: integer))
     }
    ]
@@ -643,7 +643,7 @@ extension
    [
     test {
      let (• list: list of (truth value)) be (list of (true) and (false))
-     verify ((entry after (beginning of (non‐empty)) in (non‐empty) skipping bounds check, according to default use as list) is (true))
+     verify ((entry after (beginning of (list)) in (list) skipping bounds check, according to default use as list) is (true))
     }
    ]
    (
