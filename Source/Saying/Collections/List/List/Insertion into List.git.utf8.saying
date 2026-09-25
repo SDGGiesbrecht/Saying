@@ -149,7 +149,7 @@ extension
   action (clients)
    [
     test {
-     let (• list: list) be (list of (true), (true) and (true))
+     let (• list: list of (truth value)) be (list of (true), (true) and (true))
      verify (((list) with (from (beginning of (list)) to (boundary before (end of (list)) in (list) skipping bounds check)) replaced with (list of (false)) according to default list insertion) is (list of (false) and (true)))
     }
    ]
@@ -169,7 +169,7 @@ extension
     test {
      let (• list: list of (truth value)) start as (list of (true) and (true))
      insert (list of (false)) at (boundary after (beginning of (list)) in (list) skipping bounds check) in (↓ list) according to default list insertion
-     verify ((list) is (list of (true), (false), (true)))
+     verify ((list) is (list of (true), (false) and (true)))
     }
    ]
    (
@@ -183,8 +183,8 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
-     verify (((list) with (list of (false)) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default list insertion) is (list of (true), (false), (true)))
+     let (• list: list of (truth value)) be (list of (true) and (true))
+     verify (((list) with (list of (false)) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default list insertion) is (list of (true), (false) and (true)))
     }
    ]
    (

@@ -979,8 +979,10 @@ extension
    (
     English: if most efficient, prepend (prefix: list of (thing)) to (list: ↓ list of (thing)) by list insertion
    )
-   C: “”
+   C♯: “”
    JavaScript: “”
+   Kotlin: “”
+   Swift: “”
    {
     prepend (prefix) to (↓ list) according to default list insertion
    }
@@ -996,7 +998,6 @@ extension
     English: if most efficient, prepend (prefix: list of (thing)) to (list: ↓ list of (thing)) by replacement
    )
    C: “”
-   JavaScript: “”
    {
     change (↓ list) to ((list) with (prefix) prepended)
    }
