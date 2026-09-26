@@ -633,6 +633,7 @@ extension
      Swift: “” list “[” index “] = ” element “”
      {
       if most efficient, replace (index) in (↓ list) with (element) by replacement
+      if most efficient, replace (index) in (↓ list) with (element) by unmanaged
      }
 
     action (clients)
