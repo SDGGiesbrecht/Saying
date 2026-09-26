@@ -714,7 +714,7 @@ extension
       English: remove (index: list index) from (list: ↓ list of (thing))
      )
      C♯: “” list “.RemoveAt(” index “)”
-     JavaScript: “” list “.splice(” index “, 0)”
+     JavaScript: “” list “.splice(” index “, 1)”
      Swift: “” list “.remove(at: ” index “)”
      {
       if most efficient, remove (index) from (↓ list) by replacement
