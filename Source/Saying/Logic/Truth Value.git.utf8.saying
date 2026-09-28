@@ -409,3 +409,8 @@ use (clients)
     ← differing example according to list
    }
  }
+
+use (clients)
+ use of (list of (truth value)) as stringable list of (truth value) indexed by (list index) separated by (list boundary)
+ {
+ }
