@@ -124,7 +124,7 @@ enum CSharp: Platform {
     "while"
   ]
   static var identifierLengthLimit: Int? {
-    return 256 // 512 exceeded metadata limits in Windows CI.
+    return 1024 // 1035 exceeded metadata limits in Windows CI.
   }
 
   static func escapeForStringLiteral(character: Unicode.Scalar) -> String {
