@@ -2385,10 +2385,13 @@ extension Platform {
     } else {
       let name = nativeName(of: action, referenceLookup: referenceLookup)
         ?? parameterName
-        ?? sanitize(
-          identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-          leading: true,
-          entire: true
+        ?? capLengthOf(
+          identifier:  sanitize(
+            identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+            leading: true,
+            entire: true
+          ),
+          index: &identifierIndex
         )
       if action.isReferenceWrapper {
         guard case .action(let returnedActionParameters, let returnedActionReturn) = bareAction.returnValue! else { fatalError() }
