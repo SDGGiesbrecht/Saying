@@ -412,3 +412,150 @@ use (clients)
  natural‐only arithmetic with (natural number)
  {
  }
+
+use (clients)
+ general containers of (list of (natural number))
+ {
+  action (clients)
+   example
+   list of (natural number)
+   {
+    ← non‐empty example
+   }
+ }
+
+use (clients)
+ comparison of lists of (natural number) for equality
+ {
+ }
+
+use (clients)
+ comparison of (list of (natural number)) for equality
+ {
+  action (clients)
+   (first: list of (natural number)) is (second: list of (natural number))
+   truth value
+   C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”)
+   Kotlin: “” first “ == ” second “”
+   Swift: “” first “ == ” second “”
+   {
+    ← (first) is (second) according to list
+   }
+
+  action (clients)
+   hash key (key: list of (natural number)) with (hasher: ↓ hasher)
+   Swift: “” key “.hash(into: ¤(26)” hasher “)”
+   {
+    hash key (key) with (↓ hasher) according to list
+   }
+
+  action (unit)
+   (
+    English: hash value of (key: list of (natural number))
+   )
+   hash value
+   C♯: “” key “.GetHashCode()”
+   Kotlin: “” key “.hashCode()”
+   {
+    ← hash value of (key) according to default comparison for equality
+   }
+
+  action (clients)
+   differing example
+   list of (natural number)
+   {
+    ← differing example according to list
+   }
+ }
+
+use (clients)
+ general containers of (slice of (list of (natural number)))
+ {
+  action (clients)
+   example
+   slice of (list of (natural number))
+   {
+    ← non‐empty example
+   }
+ }
+
+use (clients)
+ use of (slice of (list of (natural number))) as match in (list of (natural number)) as list of (natural number) indexed by (list index) separated by (list boundary)
+ {
+  action (clients)
+   (
+    English: contents of (match: slice of (list of (natural number)))
+   )
+   slice of (list of (natural number))
+   {
+    ← match
+   }
+ }
+
+use (clients)
+ searching for (list of (natural number)) matching as (slice of (list of (natural number))) in (list of (natural number)) as list of (natural number) indexed by (list index) separated by (list boundary)
+ {
+  action (clients)
+   (
+    English: matches for (pattern: list of (natural number)) beginning at (beginning: list boundary) in (haystack: slice of (list of (natural number)))
+   )
+   list of (slice of (list of (natural number)))
+   {
+    ← matches for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: primary match for (pattern: list of (natural number)) beginning at (beginning: list boundary) in (haystack: slice of (list of (natural number)))
+   )
+   optional (slice of (list of (natural number)))
+   {
+    ← primary match for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: example pattern
+   )
+   list of (natural number)
+   {
+    ← non‐empty example
+   }
+
+  action (clients)
+   (
+    English: example haystack for use with (pattern: list of (natural number))
+   )
+   list of (natural number)
+   {
+    ← non‐empty example
+   }
+
+  action (clients)
+   (
+    English: example match from searching for (pattern: list of (natural number)) in (haystack: list of (natural number))
+   )
+   slice of (list of (natural number))
+   {
+    ← entirety of (haystack)
+   }
+
+  action (clients)
+   (
+    English: example location without match from searching for (pattern: list of (natural number)) in (haystack: list of (natural number))
+   )
+   list boundary
+   {
+    ← end of (haystack)
+   }
+ }
+
+use (clients)
+ use of (list of (natural number)) as literal pattern indexed by (list index) separated by (list boundary) in (list of (natural number)) as list of (natural number) indexed by (list index) separated by (list boundary)
+ {
+ }
+
+use (clients)
+ searching for (list of (natural number)) matching as (slice of (list of (natural number))) and replacing with (list of (natural number)) in (list of (natural number)) as list of (natural number) indexed by (list index) separated by (list boundary)
+ {
+ }
