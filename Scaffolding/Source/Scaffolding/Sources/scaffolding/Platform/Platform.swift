@@ -3692,7 +3692,8 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     referenceLookup: [ReferenceDictionary],
-    identifierIndex: inout [String: [String: Int]]
+    identifierIndex: inout [String: [String: Int]],
+    implementation generatedImplementation: inout [String]
   ) -> OutputDeclaration<String> {
     var coverageRegionCounter = 0
     var clashAvoidanceCounter = 0
@@ -3715,6 +3716,7 @@ extension Platform {
       indentationLevel: 0,
       captures: &captures
     )
+    generatedImplementation = implementation
     return OutputDeclaration(
       declaration: actionDeclaration(
         name: capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex),
@@ -3881,7 +3883,9 @@ extension Platform {
     alreadyHandledActionDeclarations: inout Set<String>,
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
-    identifierIndex: inout [String: [String: Int]]
+    identifierIndex: inout [String: [String: Int]],
+    filteredTests: inout [TestIntermediate],
+    testImplementations: inout Set<[String]>
   ) {
     let moduleReferenceLookup = module.referenceDictionary
     let referenceLookup = moduleWideImports + [moduleReferenceLookup]
@@ -3933,18 +3937,23 @@ extension Platform {
     if mode.hasTestCoverage {
       let allTests = module.allTests(sorted: true)
       for test in allTests {
+        var implementation: [String] = []
         let declaration = source(
           of: test,
           coverageIndex: coverageIndex,
           anonymousCounter: &anonymousCounter,
           referenceLookup: referenceLookup,
-          identifierIndex: &identifierIndex
+          identifierIndex: &identifierIndex,
+          implementation: &implementation
         )
-        let file = supportsMultiFileMode && !mode.singleFileMode
-          ? declaration.idiomaticLocation
-          : mainSourceFileName(libraryName: libraryName)
-        files[file].appendSeparatorLine()
-        files[file].append(declaration.declaration)
+        if testImplementations.insert(implementation).inserted {
+          filteredTests.append(test)
+          let file = supportsMultiFileMode && !mode.singleFileMode
+            ? declaration.idiomaticLocation
+            : mainSourceFileName(libraryName: libraryName)
+          files[file].appendSeparatorLine()
+          files[file].append(declaration.declaration)
+        }
       }
     }
   }
@@ -4030,6 +4039,9 @@ extension Platform {
       files[verificationScaffoldingFile].append(contentsOf: verification)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
+    // Temporarily filtering duplicate tests.
+    var filteredTests: [TestIntermediate] = []
+    var testImplementations: Set<[String]> = []
     for module in modules {
       addActionsSource(
         to: &files,
@@ -4042,7 +4054,9 @@ extension Platform {
         alreadyHandledActionDeclarations: &alreadyHandledActionDeclarations,
         coverageIndex: coverageIndex,
         anonymousCounter: &anonymousCounter,
-        identifierIndex: &identifierIndex
+        identifierIndex: &identifierIndex,
+        filteredTests: &filteredTests,
+        testImplementations: &testImplementations
       )
     }
 
@@ -4056,7 +4070,7 @@ extension Platform {
         : mainFile
       files[testSummaryFile].appendSeparatorLine()
       let testCalls = splitFunctionImplementationIfTooLong(
-        implementation: allTests.enumerated().flatMap({ (index, test) in
+        implementation: filteredTests.enumerated().flatMap({ (index, test) in
           return call(test: test, identifierIndex: &identifierIndex, ordinal: index + 1)
         }),
         indent: self.indent,
