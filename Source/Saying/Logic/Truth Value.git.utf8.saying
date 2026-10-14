@@ -411,6 +411,98 @@ use (clients)
  }
 
 use (clients)
+ general containers of (slice of (list of (truth value)))
+ {
+  action (clients)
+   example
+   slice of (list of (truth value))
+   {
+    ← non‐empty example
+   }
+ }
+
+use (clients)
+ use of (slice of (list of (truth value))) as match in (list of (truth value)) as list of (truth value) indexed by (list index) separated by (list boundary)
+ {
+  action (clients)
+   (
+    English: contents of (match: slice of (list of (truth value)))
+   )
+   slice of (list of (truth value))
+   {
+    ← match
+   }
+ }
+
+use (clients)
+ searching for (list of (truth value)) matching as (slice of (list of (truth value))) in (list of (truth value)) as list of (truth value) indexed by (list index) separated by (list boundary)
+ {
+  action (clients)
+   (
+    English: matches for (pattern: list of (truth value)) beginning at (beginning: list boundary) in (haystack: slice of (list of (truth value)))
+   )
+   list of (slice of (list of (truth value)))
+   {
+    ← matches for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: primary match for (pattern: list of (truth value)) beginning at (beginning: list boundary) in (haystack: slice of (list of (truth value)))
+   )
+   optional (slice of (list of (truth value)))
+   {
+    ← primary match for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: example pattern
+   )
+   list of (truth value)
+   {
+    ← non‐empty example
+   }
+
+  action (clients)
+   (
+    English: example haystack for use with (pattern: list of (truth value))
+   )
+   list of (truth value)
+   {
+    ← non‐empty example
+   }
+
+  action (clients)
+   (
+    English: example match from searching for (pattern: list of (truth value)) in (haystack: list of (truth value))
+   )
+   slice of (list of (truth value))
+   {
+    ← entirety of (haystack)
+   }
+
+  action (clients)
+   (
+    English: example location without match from searching for (pattern: list of (truth value)) in (haystack: list of (truth value))
+   )
+   list boundary
+   {
+    ← end of (haystack)
+   }
+ }
+
+use (clients)
+ use of (list of (truth value)) as literal pattern indexed by (list index) separated by (list boundary) in (list of (truth value)) as list of (truth value) indexed by (list index) separated by (list boundary)
+ {
+ }
+
+use (clients)
+ searching for (list of (truth value)) matching as (slice of (list of (truth value))) and replacing with (list of (truth value)) in (list of (truth value)) as list of (truth value) indexed by (list index) separated by (list boundary)
+ {
+ }
+
+use (clients)
  use of (list of (truth value)) as stringable list of (truth value) indexed by (list index) separated by (list boundary)
  {
  }

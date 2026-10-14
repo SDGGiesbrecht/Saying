@@ -11,6 +11,9 @@ ability (clients)
 
   ability (clients)
    comparison of (list of (thing)) for equality
+
+  ability (clients)
+   searching for (list of (thing)) matching as (slice of (list of (thing))) in (list of (thing)) as list of (thing) indexed by (list index) separated by (list boundary)
  }
 
 extension

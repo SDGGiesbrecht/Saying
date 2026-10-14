@@ -1285,4 +1285,44 @@ extension
     append (third) to (↓ list)
     ← list
    }
+
+  action (clients)
+   [
+    test {ignore (list of (true), (false), (true) and (false))}
+   ]
+   (
+    English: list of (first: thing), (second: thing), (third: thing) and (fourth: thing)
+   )
+   list of (thing)
+   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “, ” fourth “ }”
+   JavaScript: “[” first “, ” second “, ” third “, ” fourth “]”
+   Kotlin: “listOf(” first “, ” second “, ” third “, ” fourth “)”
+   Swift: “[” first “, ” second “, ” third “, ” fourth “]”
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    append (first) to (↓ list)
+    append (second) to (↓ list)
+    append (third) to (↓ list)
+    append (fourth) to (↓ list)
+    ← list
+   }
+
+  action (clients)
+   (
+    English: list of (first: thing), (second: thing), (third: thing), (fourth: thing) and (fifth: thing)
+   )
+   list of (thing)
+   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “, ” fourth “, ” fifth “ }”
+   JavaScript: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “]”
+   Kotlin: “listOf(” first “, ” second “, ” third “, ” fourth “, ” fifth “)”
+   Swift: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “]”
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    append (first) to (↓ list)
+    append (second) to (↓ list)
+    append (third) to (↓ list)
+    append (fourth) to (↓ list)
+    append (fifth) to (↓ list)
+    ← list
+   }
  }

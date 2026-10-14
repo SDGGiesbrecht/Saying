@@ -179,6 +179,98 @@ use (clients)
    }
  }
 
+use (clients)
+ general containers of (slice of (list of (8‐bit Unicode code unit)))
+ {
+  action (clients)
+   example
+   slice of (list of (8‐bit Unicode code unit))
+   {
+    ← non‐empty example
+   }
+ }
+
+use (clients)
+ use of (slice of (list of (8‐bit Unicode code unit))) as match in (list of (8‐bit Unicode code unit)) as list of (8‐bit Unicode code unit) indexed by (list index) separated by (list boundary)
+ {
+  action (clients)
+   (
+    English: contents of (match: slice of (list of (8‐bit Unicode code unit)))
+   )
+   slice of (list of (8‐bit Unicode code unit))
+   {
+    ← match
+   }
+ }
+
+use (clients)
+ searching for (list of (8‐bit Unicode code unit)) matching as (slice of (list of (8‐bit Unicode code unit))) in (list of (8‐bit Unicode code unit)) as list of (8‐bit Unicode code unit) indexed by (list index) separated by (list boundary)
+ {
+  action (clients)
+   (
+    English: matches for (pattern: list of (8‐bit Unicode code unit)) beginning at (beginning: list boundary) in (haystack: slice of (list of (8‐bit Unicode code unit)))
+   )
+   list of (slice of (list of (8‐bit Unicode code unit)))
+   {
+    ← matches for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: primary match for (pattern: list of (8‐bit Unicode code unit)) beginning at (beginning: list boundary) in (haystack: slice of (list of (8‐bit Unicode code unit)))
+   )
+   optional (slice of (list of (8‐bit Unicode code unit)))
+   {
+    ← primary match for (pattern) beginning at (beginning) in (haystack) according to use as literal pattern
+   }
+
+  action (clients)
+   (
+    English: example pattern
+   )
+   list of (8‐bit Unicode code unit)
+   {
+    ← non‐empty example
+   }
+
+  action (clients)
+   (
+    English: example haystack for use with (pattern: list of (8‐bit Unicode code unit))
+   )
+   list of (8‐bit Unicode code unit)
+   {
+    ← non‐empty example
+   }
+
+  action (clients)
+   (
+    English: example match from searching for (pattern: list of (8‐bit Unicode code unit)) in (haystack: list of (8‐bit Unicode code unit))
+   )
+   slice of (list of (8‐bit Unicode code unit))
+   {
+    ← entirety of (haystack)
+   }
+
+  action (clients)
+   (
+    English: example location without match from searching for (pattern: list of (8‐bit Unicode code unit)) in (haystack: list of (8‐bit Unicode code unit))
+   )
+   list boundary
+   {
+    ← end of (haystack)
+   }
+ }
+
+use (clients)
+ searching for (list of (8‐bit Unicode code unit)) matching as (slice of (list of (8‐bit Unicode code unit))) and replacing with (list of (8‐bit Unicode code unit)) in (list of (8‐bit Unicode code unit)) as list of (8‐bit Unicode code unit) indexed by (list index) separated by (list boundary)
+ {
+ }
+
+use (clients)
+ use of (list of (8‐bit Unicode code unit)) as literal pattern indexed by (list index) separated by (list boundary) in (list of (8‐bit Unicode code unit)) as list of (8‐bit Unicode code unit) indexed by (list index) separated by (list boundary)
+ {
+ }
+
 action (clients)
  (
   English: null control code
