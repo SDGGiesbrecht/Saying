@@ -183,19 +183,18 @@ extension
      English: The result is the same as {matches for () beginning at () in ()} for a slice encompassing the entire list.
     ]
     test {
-     let (• pattern: pattern) be (example pattern: pattern)
-     let (• haystack: haystack) be (example haystack for use with (pattern))
-     let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
-     let (• matches: list of (match)) be (matches for (pattern) beginning at (beginning of (expected)) in (haystack))
-     verify ((matches) is not empty)
-     if (first in (matches)) exists, unwrap it as (• primary: match), {
-      verify ((end of (contents of (primary))) is (end of (expected)))
+     let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
+     let (• cursor: list boundary) be (boundary after (beginning of (haystack)) in (haystack) skipping bounds check)
+     let (• matches: list of (slice of (list of (truth value)))) be (matches for (list of (false) and (true)) beginning at (cursor) in (haystack))
+     verify ((number of entries in (matches)) is (“1”: natural number))
+     if (first in (matches)) exists, unwrap it as (• match: slice of (list of (truth value))), {
+      verify ((beginning of (match)) is (cursor))
+      verify ((number of entries in (match)) is (“2”: natural number))
      }
     }
     test {
-     let (• pattern: pattern) be (example pattern: pattern)
-     let (• haystack: haystack) be (example haystack for use with (pattern))
-     verify ((matches for (pattern) beginning at (example location without match from searching for (pattern) in (haystack)) in (haystack)) is empty)
+     let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
+     verify ((matches for (list of (true) and (false)) beginning at (boundary after (beginning of (haystack)) in (haystack) skipping bounds check) in (haystack)) is empty)
     }
    ]
    (
@@ -238,8 +237,12 @@ extension
   action (clients)
    [
     test {
-     let (• pattern: pattern) be (example pattern: pattern)
-     verify ((matches for (pattern) in (example haystack for use with (pattern))) is not empty)
+     let (• haystack: list of (natural number)) be (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“1”: natural number) and (“2”: natural number))
+     verify ((number of entries in (matches for (list of (“1”: natural number) and (“2”: natural number)) in (haystack))) is (“2”: natural number))
+    }
+    test {
+     let (• haystack: list of (truth value)) be (list of (true), (true), (true) and (true))
+     verify ((number of entries in (matches for (list of (true) and (true)) in (haystack))) is (“2”: natural number))
     }
    ]
    (
