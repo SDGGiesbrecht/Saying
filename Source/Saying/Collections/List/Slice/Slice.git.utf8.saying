@@ -266,14 +266,15 @@ extension
      English: Skipping the bounds check can be more efficient when a first element is already known from context to exist. However, the caller takes responsibility for assuring that the slice is not empty. Removing from an empty slice may cause a fatal error or overflow into invalid program state.
     ]
     test {
-     let (• text: Unicode text) be (“...”)
-     let (• slice: slice of (Unicode text)) start as (entirety of (text))
+     let (• list: list of (truth value)) be (list of (true), (true) and (true))
+     let (• slice: slice of (list of (truth value))) start as (entirety of (list))
      while ({
-      ← (first in (slice)) is (“.”: Unicode scalar)
+      ← (first in (slice)) is (true)
      }: → truth value), {
       remove first from (↓ slice) skipping bounds check
      }
      verify ((slice) is empty)
+     verify ((number of entries in (list)) is (“3”: natural number))
     }
    ]
    (
@@ -294,15 +295,15 @@ extension
      English: The list behind the slice remains unaffected.
     ]
     test {
-     let (• numbers: Unicode text) be (“123”)
-     let (• slice: slice of (Unicode text)) start as (entirety of (numbers))
+     let (• list: list of (natural number)) be (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number))
+     let (• slice: slice of (list of (natural number))) start as (entirety of (list))
      remove first from (↓ slice)
-     verify ((first in (slice)) is (“2”: Unicode scalar))
+     verify ((first in (slice)) is (“2”: natural number))
      remove first from (↓ slice)
-     verify ((first in (slice)) is (“3”: Unicode scalar))
+     verify ((first in (slice)) is (“3”: natural number))
      remove first from (↓ slice)
      verify ((slice) is empty)
-     verify ((numbers) is (“123”))
+     verify ((list) is (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)))
     }
     [
      English: This action safely does nothing if the slice is already empty.

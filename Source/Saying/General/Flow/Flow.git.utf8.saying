@@ -31,6 +31,7 @@ flow (clients)
    }: → truth value), {
     change (↓ value) to (false)
    }
+   verify ((value) is (false))
   }
  ]
  (
@@ -48,10 +49,14 @@ flow (clients)
 flow (clients)
  [
   test {
-   for each (• entry: truth value) in (non‐empty example: list of (truth value)), {
-    ignore (entry)
-    skip to next loop
+   let (• count: natural number) start as (“0”: natural number)
+   for each (• entry: truth value) in (list of (true), (false) and (true)), {
+    if (not (entry)), {
+     skip to next loop
+    }
+    increment (↓ count)
    }
+   verify ((count) is (“2”: natural number))
   }
  ]
  (
@@ -132,9 +137,11 @@ extension
   flow (clients)
    [
     test {
-     for each (• element: element) in (non‐empty example: list), {
-      ignore (element)
+     let (• sum: natural number) start as (“0”: natural number)
+     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)), {
+      add (number) to (↓ sum)
      }
+     verify ((sum) is (“6”: natural number))
     }
    ]
    (

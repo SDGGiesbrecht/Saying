@@ -148,7 +148,8 @@ extension
 
   action (clients)
    [
-    test {verify ((example: thing) is not (differing example: thing) according to default comparison for equality)}
+    test {verify ((true) is not (false) according to default comparison for equality)}
+    test {verify (not ((true) is not (true) according to default comparison for equality))}
    ]
    (
     English: (first: thing) is not (second: thing) according to default comparison for equality
@@ -173,11 +174,11 @@ extension
 
   action (clients)
    [
-    test {verify ((wrap (example: thing) into optional) is (wrap (example: thing) into optional) according to optional)}
-    test {verify (not ((wrap (example: thing) into optional) is (wrap (differing example: thing) into optional) according to optional))}
-    test {verify (not ((wrap (example: thing) into optional) is (nothing: optional (thing)) according to optional))}
-    test {verify (not ((nothing: optional (thing)) is (wrap (example: thing) into optional) according to optional))}
-    test {verify ((nothing: optional (thing)) is (nothing: optional (thing)) according to optional)}
+    test {verify ((wrap (true) into optional) is (wrap (true) into optional) according to optional)}
+    test {verify (not ((wrap (true) into optional) is (wrap (false) into optional) according to optional))}
+    test {verify (not ((wrap (true) into optional) is (nothing: optional (truth value)) according to optional))}
+    test {verify (not ((nothing: optional (truth value)) is (wrap (true) into optional) according to optional))}
+    test {verify ((nothing: optional (truth value)) is (nothing: optional (truth value)) according to optional)}
    ]
    (
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
@@ -197,9 +198,9 @@ extension
 
   action (clients)
    [
-    test {verify ((wrap (example: thing) into optional) is (example: thing))}
-    test {verify (not ((wrap (example: thing) into optional) is (differing example: thing)))}
-    test {verify (not ((nothing: optional (thing)) is (example: thing)))}
+    test {verify ((wrap (true) into optional) is (true))}
+    test {verify (not ((wrap (true) into optional) is (false)))}
+    test {verify (not ((nothing: optional (truth value)) is (true)))}
    ]
    (
     English: (first: optional (thing)) is (second: thing)
@@ -225,9 +226,9 @@ extension
 
   action (clients)
    [
-    test {verify ((example: thing) is (wrap (example: thing) into optional))}
-    test {verify (not ((example: thing) is (wrap (differing example: thing) into optional)))}
-    test {verify (not ((example: thing) is (nothing: optional (thing))))}
+    test {verify ((true) is (wrap (true) into optional))}
+    test {verify (not ((true) is (wrap (false) into optional)))}
+    test {verify (not ((true) is (nothing: optional (truth value))))}
    ]
    (
     English: (first: thing) is (second: optional (thing))
@@ -250,11 +251,11 @@ extension
 
   action (clients)
    [
-    test {verify (not ((wrap (example: thing) into optional) is not (wrap (example: thing) into optional) according to optional))}
-    test {verify ((wrap (example: thing) into optional) is not (wrap (differing example: thing) into optional) according to optional)}
-    test {verify ((wrap (example: thing) into optional) is not (nothing: optional (thing)) according to optional)}
-    test {verify ((nothing: optional (thing)) is not (wrap (example: thing) into optional) according to optional)}
-    test {verify (not ((nothing: optional (thing)) is not (nothing: optional (thing)) according to optional))}
+    test {verify (not ((wrap (true) into optional) is not (wrap (true) into optional) according to optional))}
+    test {verify ((wrap (true) into optional) is not (wrap (false) into optional) according to optional)}
+    test {verify ((wrap (true) into optional) is not (nothing: optional (truth value)) according to optional)}
+    test {verify ((nothing: optional (truth value)) is not (wrap (true) into optional) according to optional)}
+    test {verify (not ((nothing: optional (truth value)) is not (nothing: optional (truth value)) according to optional))}
    ]
    (
     English: (first: optional (thing)) is not (second: optional (thing)) according to optional
@@ -268,9 +269,9 @@ extension
 
   action (clients)
    [
-    test {verify (not ((wrap (example: thing) into optional) is not (example: thing)))}
-    test {verify ((wrap (example: thing) into optional) is not (differing example: thing))}
-    test {verify ((nothing: optional (thing)) is not (example: thing))}
+    test {verify (not ((wrap (true) into optional) is not (true)))}
+    test {verify ((wrap (true) into optional) is not (false))}
+    test {verify ((nothing: optional (truth value)) is not (true))}
    ]
    (
     English: (first: optional (thing)) is not (second: thing)
@@ -293,9 +294,9 @@ extension
 
   action (clients)
    [
-    test {verify (not ((example: thing) is not (wrap (example: thing) into optional)))}
-    test {verify ((example: thing) is not (wrap (differing example: thing) into optional))}
-    test {verify ((example: thing) is not (nothing: optional (thing)))}
+    test {verify (not ((true) is not (wrap (true) into optional)))}
+    test {verify ((true) is not (wrap (false) into optional))}
+    test {verify ((true) is not (nothing: optional (truth value)))}
    ]
    (
     English: (first: thing) is not (second: optional (thing))
@@ -320,7 +321,7 @@ extension
    [
     test {
      let (• hasher: hasher) start as (create hasher)
-     hash key (wrap (example: thing) into optional) with (↓ hasher) according to optional
+     hash key (wrap (true) into optional) with (↓ hasher) according to optional
     }
    ]
    (
