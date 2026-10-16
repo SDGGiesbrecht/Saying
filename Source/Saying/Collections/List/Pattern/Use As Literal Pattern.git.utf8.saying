@@ -34,9 +34,13 @@ extension
 
   action (clients)
    [
-    test (hidden) {
-     let (• haystack: Unicode text) be (“ ”)
-     verify ((primary match for (“!”) beginning at (beginning of (haystack)) in (haystack)) does not exist)
+    test {
+     let (• haystack: list of (truth value)) be (list of (true), (false) and (true))
+     verify ((primary match for (list of (true) and (false)) beginning at (beginning of (haystack)) in (entirety of (haystack)) according to use as literal pattern) exists)
+    }
+    test {
+     let (• haystack: list of (truth value)) be (list of (true), (false) and (true))
+     verify ((primary match for (list of (false) and (true)) beginning at (beginning of (haystack)) in (entirety of (haystack)) according to use as literal pattern) does not exist)
     }
    ]
    (
