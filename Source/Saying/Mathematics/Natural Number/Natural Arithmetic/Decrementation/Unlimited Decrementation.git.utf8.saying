@@ -62,9 +62,9 @@ extension
   action (clients)
    [
     test {
-     let (• counter: number) start as (one: number)
+     let (• counter: integer) start as (“0”: integer)
      decrement (↓ counter) according to default unlimited decrementation
-     verify ((counter) is (zero: number))
+     verify ((counter) is (“−1”: integer))
     }
    ]
    (

@@ -75,8 +75,14 @@ extension
      English: Decrements the counter if it has a representable predecessor state and then returns whether or not the decrementation succeeded.
     ]
     test {
-     let (• counter: number) start as (one: number)
+     let (• counter: natural number) start as (“2”: natural number)
      verify (decrement (↓ counter))
+     verify ((counter) is (“1”: natural number))
+    }
+    test {
+     let (• counter: natural number) start as (“0”: natural number)
+     verify (not (decrement (↓ counter)))
+     verify ((counter) is (“0”: natural number))
     }
    ]
    (
@@ -97,14 +103,8 @@ extension
     [
      English: Returns the previous number if it is representable.
     ]
-    test {verify ((predecessor to (one: number)) exists)}
-    test {
-     if (can subtract (one: number) from (zero: number)), {
-      verify ((predecessor to (zero: number)) exists)
-     }, otherwise {
-      verify ((predecessor to (zero: number)) does not exist)
-     }
-    }
+    test {verify ((predecessor to (“2”: natural number)) is (“1”: natural number))}
+    test {verify ((predecessor to (“0”: natural number)) does not exist)}
    ]
    (
     English: predecessor to (number: number)
