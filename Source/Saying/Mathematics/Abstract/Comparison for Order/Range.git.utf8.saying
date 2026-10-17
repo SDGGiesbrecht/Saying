@@ -30,7 +30,7 @@ extension
 
   action (clients)
    [
-    test {ignore (from (example: thing) to (greater example: thing))}
+    test {ignore (from (“1”: natural number) to (“3”: natural number))}
    ]
    (
     English: from (lower bound: thing) to (upper bound: thing)

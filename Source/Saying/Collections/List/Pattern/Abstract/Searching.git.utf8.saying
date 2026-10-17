@@ -49,9 +49,10 @@ ability (clients)
      let (• haystack: haystack) be (example haystack for use with (pattern))
      let (• expected: match) be (contents of (example match from searching for (pattern) in (haystack)))
      let (• match: optional (match)) be (primary match for (pattern) beginning at (beginning of (expected)) in (entirety of (haystack)))
-     verify ((match) exists)
      if (match) exists, unwrap it as (• primary: match), {
       verify ((end of (contents of (primary))) is (end of (expected)))
+     }, otherwise {
+      fail
      }
     }
     test {
@@ -218,10 +219,11 @@ extension
      let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
      let (• cursor: list boundary) be (boundary after (beginning of (haystack)) in (haystack) skipping bounds check)
      let (• primary match: optional (slice of (list of (truth value)))) be (primary match for (list of (false) and (true)) beginning at (cursor) in (haystack))
-     verify ((primary match) exists)
      if (primary match) exists, unwrap it as (• match: slice of (list of (truth value))), {
       verify ((beginning of (match)) is (cursor))
       verify ((number of entries in (match)) is (“2”: natural number))
+     }, otherwise {
+      fail
      }
     }
     test {

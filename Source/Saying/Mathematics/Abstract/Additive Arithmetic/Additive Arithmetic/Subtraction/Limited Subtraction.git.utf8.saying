@@ -77,9 +77,14 @@ extension
      English: Subtracts the subtrahend from the value if possible and then returns whether or not the subtraction succeeded.
     ]
     test {
-     let (• value: value) start as (example sum: value)
-     verify (subtract (example addend: value) from (↓ value))
-     verify ((value) is (example augend: value))
+     let (• value: natural number) start as (“3”: natural number)
+     verify (subtract (“2”: natural number) from (↓ value))
+     verify ((value) is (“1”: natural number))
+    }
+    test {
+     let (• value: natural number) start as (“2”: natural number)
+     verify (not (subtract (“3”: natural number) from (↓ value)))
+     verify ((value) is (“2”: natural number))
     }
    ]
    (
@@ -96,11 +101,8 @@ extension
 
   action (clients)
    [
-    test {
-     if ((example sum: value) − (example addend: value)) exists, unwrap it as (• difference: value), {
-      verify ((difference) = (example augend: value))
-     }
-    }
+    test {verify (((“3”: natural number) − (“2”: natural number)) is (“1”: natural number))}
+    test {verify (((“0”: natural number) − (“1”: natural number)) does not exist)}
    ]
    (
     English: (minuend: value) minus (subtrahend: value)

@@ -59,9 +59,9 @@ extension
   action (clients)
    [
     test {
-     let (• counter: number) start as (zero: number)
+     let (• counter: natural number) start as (“1”: natural number)
      increment (↓ counter) according to default unlimited incrementation
-     verify ((counter) is (one: number))
+     verify ((counter) is (“2”: natural number))
     }
    ]
    (

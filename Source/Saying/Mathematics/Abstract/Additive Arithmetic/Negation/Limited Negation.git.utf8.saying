@@ -75,9 +75,14 @@ extension
      English: Negates the value if possible and then returns whether or not the negation succeeded.
     ]
     test {
-     let (• value: value) start as (positive example: value)
+     let (• value: platform fixed‐width integer) start as (“1”: platform fixed‐width integer)
      verify (negate (↓ value))
-     verify ((value) is (negative example: value))
+     verify ((value) is (“−1”: platform fixed‐width integer))
+    }
+    test {
+     let (• value: platform fixed‐width integer) start as (least representable: platform fixed‐width integer)
+     verify (not (negate (↓ value)))
+     verify ((value) is (least representable: platform fixed‐width integer))
     }
    ]
    (
@@ -94,7 +99,8 @@ extension
 
   action (clients)
    [
-    test {verify ((negative (positive example: value)) is (negative example: value))}
+    test {verify ((negative (“1”: platform fixed‐width integer)) is (“−1”: platform fixed‐width integer))}
+    test {verify ((negative (least representable: platform fixed‐width integer)) does not exist)}
    ]
    (
     English: negative (value: value)

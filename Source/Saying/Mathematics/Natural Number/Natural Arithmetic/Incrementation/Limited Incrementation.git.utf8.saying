@@ -75,8 +75,14 @@ extension
      English: Increments the counter if it has a representable successor state and then returns whether or not the incrementation succeeded.
     ]
     test {
-     let (• counter: number) start as (zero: number)
+     let (• counter: 8‐bit natural number) start as (“1”: 8‐bit natural number)
      verify (increment (↓ counter))
+     verify ((counter) is (“2”: 8‐bit natural number))
+    }
+    test {
+     let (• counter: 8‐bit natural number) start as (“255”: 8‐bit natural number)
+     verify (not (increment (↓ counter)))
+     verify ((counter) is (“255”: 8‐bit natural number))
     }
    ]
    (
@@ -97,8 +103,8 @@ extension
     [
      English: Returns the next number if it is representable.
     ]
-    test {verify ((successor to (zero: number)) exists)}
-    test {verify ((successor to (greatest representable: number)) does not exist)}
+    test {verify ((successor to (“1”: 8‐bit natural number)) is (“2”: 8‐bit natural number))}
+    test {verify ((successor to (“255”: 8‐bit natural number)) does not exist)}
    ]
    (
     English: successor to (number: number)

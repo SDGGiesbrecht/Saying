@@ -85,9 +85,14 @@ extension
      English: Adds to the cumulative sum if possible and then returns whether or not the addition succeeded.
     ]
     test {
-     let (• cumulative sum: value) start as (example augend: value)
-     verify (add (example addend: value) to (↓ cumulative sum))
-     verify ((cumulative sum) is (example sum: value))
+     let (• cumulative sum: 8‐bit natural number) start as (“1”: 8‐bit natural number)
+     verify (add (“2”: 8‐bit natural number) to (↓ cumulative sum))
+     verify ((cumulative sum) is (“3”: 8‐bit natural number))
+    }
+    test {
+     let (• cumulative sum: 8‐bit natural number) start as (“254”: 8‐bit natural number)
+     verify (not (add (“2”: 8‐bit natural number) to (↓ cumulative sum)))
+     verify ((cumulative sum) is (“254”: 8‐bit natural number))
     }
    ]
    (
@@ -104,11 +109,8 @@ extension
 
   action (clients)
    [
-    test {
-     if ((example augend: value) + (example addend: value)) exists, unwrap it as (• sum: value), {
-      verify ((sum) = (example sum: value))
-     }
-    }
+    test {verify (((“1”: 8‐bit natural number) + (“2”: 8‐bit natural number)) is (“3”: 8‐bit natural number))}
+    test {verify (((“255”: 8‐bit natural number) + (“1”: 8‐bit natural number)) does not exist)}
    ]
    (
     English: (augend: value) plus (addend: value)

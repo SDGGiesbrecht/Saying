@@ -200,7 +200,8 @@ extension
  {
   action (clients)
    [
-    test {verify ((greater example: thing) is greater than (example: thing) according to default comparison for order)}
+    test {verify ((“2”: natural number) is greater than (“1”: natural number) according to default comparison for order)}
+    test {verify (not ((“1”: natural number) is greater than (“1”: natural number) according to default comparison for order))}
    ]
    (
     English: (first: thing) is greater than (second: thing) according to default comparison for order
@@ -212,7 +213,9 @@ extension
 
   action (clients)
    [
-    test {verify ((example: thing) is less than or equal to (greater example: thing) according to default comparison for order)}
+    test {verify ((“1”: natural number) is less than or equal to (“2”: natural number) according to default comparison for order)}
+    test {verify ((“2”: natural number) is less than or equal to (“2”: natural number) according to default comparison for order)}
+    test {verify (not ((“3”: natural number) is less than or equal to (“2”: natural number) according to default comparison for order))}
    ]
    (
     English: (first: thing) is less than or equal to (second: thing) according to default comparison for order
@@ -224,7 +227,9 @@ extension
 
   action (clients)
    [
-    test {verify ((greater example: thing) is greater than or equal to (example: thing) according to default comparison for order)}
+    test {verify ((“3”: natural number) is greater than or equal to (“2”: natural number) according to default comparison for order)}
+    test {verify ((“2”: natural number) is greater than or equal to (“2”: natural number) according to default comparison for order)}
+    test {verify (not ((“1”: natural number) is greater than or equal to (“2”: natural number) according to default comparison for order))}
    ]
    (
     English: (first: thing) is greater than or equal to (second: thing) according to default comparison for order
