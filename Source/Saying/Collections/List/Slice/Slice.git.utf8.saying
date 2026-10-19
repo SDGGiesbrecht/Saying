@@ -309,7 +309,7 @@ extension
      English: This action safely does nothing if the slice is already empty.
     ]
     test {
-     let (• slice: slice of (list)) start as (empty: slice of (list))
+     let (• slice: slice of (list of (truth value))) start as (empty: slice of (list of (truth value)))
      remove first from (↓ slice)
     }
    ]
