@@ -5,6 +5,7 @@ struct TestIntermediate {
   var isHidden: Bool
   var inheritedVisibility: AccessIntermediate
   var statements: StatementListIntermediate
+  var fromExtension: Bool
 }
 
 extension TestIntermediate {
@@ -47,21 +48,21 @@ extension TestIntermediate {
         location: nestedLocation,
         isHidden: isHidden,
         inheritedVisibility: inheritedVisibility,
-        statements: StatementListIntermediate(statements: statements)
+        statements: StatementListIntermediate(statements: statements),
+        fromExtension: false
       )
     )
   }
 }
 
 extension TestIntermediate {
-  func resolvingExtensionContext(
-    typeLookup: [UnicodeText: UnicodeText]
-  ) -> TestIntermediate {
+  func resolvingExtensionContext() -> TestIntermediate {
     return TestIntermediate(
       location: location,
       isHidden: isHidden,
       inheritedVisibility: inheritedVisibility,
-      statements: statements.resolvingExtensionContext(typeLookup: typeLookup)
+      statements: statements,
+      fromExtension: true
     )
   }
 
@@ -74,7 +75,9 @@ extension TestIntermediate {
       location: location + specializationNamespace,
       isHidden: isHidden,
       inheritedVisibility: min(self.inheritedVisibility, specializationVisibility),
-      statements: statements.specializing(typeLookup: typeLookup)
+      // While in would be intuitive for tests in an extension to have access to abitily parameters, doing so creates a new concrete test for each use, which is wasteful, since there is only one code region and logical flow to test. Tests that actually should be duplicated for each use belong at the ability requirements instead. Thus with no *good* reason to have specialized tests in extensions, this functionality is deliberately disabled. (Though there is no good place yet to put the relevant documentation and diagnostics.)
+      statements: fromExtension ? statements : statements.specializing(typeLookup: typeLookup),
+      fromExtension: fromExtension
     )
   }
 }
