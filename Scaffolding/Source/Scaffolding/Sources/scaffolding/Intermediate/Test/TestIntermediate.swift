@@ -81,3 +81,12 @@ extension TestIntermediate {
     )
   }
 }
+
+extension TestIntermediate {
+
+  func identifier() -> UnicodeText {
+    return location.lazy
+      .map({ $0.identifier() })
+      .joined(separator: ":")
+  }
+}
