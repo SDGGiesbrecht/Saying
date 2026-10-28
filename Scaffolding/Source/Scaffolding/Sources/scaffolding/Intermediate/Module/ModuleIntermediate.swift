@@ -19,7 +19,9 @@ extension ModuleIntermediate {
       for entry in tests {
         dictionary[entry.identifier()] = entry
       }
-      return dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
+      let result = dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
+      assert(result.count == tests.count, "Tests dropped due to overlapping identifiers.")
+      return result
     }
   }
 }
