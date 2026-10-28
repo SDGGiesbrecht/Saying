@@ -3682,11 +3682,6 @@ extension Platform {
     return result
   }
 
-  static func sayingIdentifier(for test: TestIntermediate) -> String {
-    return test.location.lazy
-      .map({ String($0.identifier()) })
-      .joined(separator: ":")
-  }
   static func identifier(for test: TestIntermediate, leading: Bool, entire: Bool) -> String {
     return test.location.lazy.enumerated()
       .map({ sanitize(identifier: $1.identifier(), leading: leading && $0 == 0, entire: entire && test.location.count == 1) })
@@ -3751,7 +3746,7 @@ extension Platform {
   ) -> [String] {
     let name = capLengthOf(identifier: "run_\(identifier(for: test, leading: false, entire: false))", index: &identifierIndex)
     return [
-      register(test: "\(sayingIdentifier(for: test)) (\(name))", ordinal: ordinal),
+      register(test: "\(test.identifier()) (\(name))", ordinal: ordinal),
       statement(expression: "\(name)()")
     ]
   }

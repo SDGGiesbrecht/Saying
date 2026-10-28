@@ -106,6 +106,7 @@ extension ActionPrototype {
         names.insert(name)
       }
     }
+    let returnValue = declaration.returnValueType.map({ ParsedTypeReference($0) })
     let access = AccessIntermediate(declaration.access)
     var attachedDocumentation: DocumentationIntermediate?
     if let documentation = declaration.documentation {
@@ -118,7 +119,12 @@ extension ActionPrototype {
                 return [
                   parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
                 ] as Set<UnicodeText>
-              }),
+              })
+          .appending(returnValue.map({ type in
+            return [
+              type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
+            ] as Set<UnicodeText>
+          }) ?? [""]),
         inheritedVisibility: access
       ) {
       case .failure(let nested):
@@ -142,7 +148,7 @@ extension ActionPrototype {
         names: names,
         namespace: namespace,
         parameters: parameters,
-        returnValue: declaration.returnValueType.map({ ParsedTypeReference($0) }),
+        returnValue: returnValue,
         access: access,
         testOnlyAccess: declaration.testAccess?.keyword is ParsedTestsKeyword,
         documentation: attachedDocumentation,
