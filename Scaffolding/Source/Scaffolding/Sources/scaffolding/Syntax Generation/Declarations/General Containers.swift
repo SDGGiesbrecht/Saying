@@ -4,19 +4,11 @@ func syntaxNodeGeneralContainers(
   names: NodeNames,
   parsed: Bool
 ) -> [String] {
-  let containers = false // Also upgrade ability requirement of “use of () as [parsed] syntax node”
-  let ability = containers ? "containers" : "use"
   var source: [String] = [
     "use (clients)",
-    " general \(ability) of (\(parsed ? "parsed " : "")\(names.english))",
+    " general containers of (\(parsed ? "parsed " : "")\(names.english))",
     " {",
   ]
-  if !containers {
-    source.append(contentsOf: [
-      " }",
-      "",
-    ])
-  }
   source.append(contentsOf: [
     "  action (clients)",
     "  example",
@@ -34,11 +26,7 @@ func syntaxNodeGeneralContainers(
   }
   source.append(contentsOf: [
     "  }",
+    " }",
   ])
-  if containers {
-    source.append(contentsOf: [
-      " }",
-    ])
-  }
   return source
 }
