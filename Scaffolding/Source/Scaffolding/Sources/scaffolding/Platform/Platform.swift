@@ -3885,7 +3885,6 @@ extension Platform {
     coverageIndex: [UnicodeText: Int],
     anonymousCounter: inout Int,
     identifierIndex: inout [String: [String: Int]],
-    filteredTests: inout [TestIntermediate],
     testImplementations: inout Set<[String]>
   ) {
     let moduleReferenceLookup = module.referenceDictionary
@@ -3947,14 +3946,11 @@ extension Platform {
           identifierIndex: &identifierIndex,
           implementation: &implementation
         )
-        if testImplementations.insert(implementation).inserted {
-          filteredTests.append(test)
-          let file = supportsMultiFileMode && !mode.singleFileMode
-            ? declaration.idiomaticLocation
-            : mainSourceFileName(libraryName: libraryName)
-          files[file].appendSeparatorLine()
-          files[file].append(declaration.declaration)
-        }
+        let file = supportsMultiFileMode && !mode.singleFileMode
+          ? declaration.idiomaticLocation
+          : mainSourceFileName(libraryName: libraryName)
+        files[file].appendSeparatorLine()
+        files[file].append(declaration.declaration)
       }
     }
   }
@@ -4040,8 +4036,6 @@ extension Platform {
       files[verificationScaffoldingFile].append(contentsOf: verification)
     }
     var alreadyHandledActionDeclarations: Set<String> = []
-    // Temporarily filtering duplicate tests.
-    var filteredTests: [TestIntermediate] = []
     var testImplementations: Set<[String]> = []
     for module in modules {
       addActionsSource(
@@ -4056,7 +4050,6 @@ extension Platform {
         coverageIndex: coverageIndex,
         anonymousCounter: &anonymousCounter,
         identifierIndex: &identifierIndex,
-        filteredTests: &filteredTests,
         testImplementations: &testImplementations
       )
     }
@@ -4071,7 +4064,7 @@ extension Platform {
         : mainFile
       files[testSummaryFile].appendSeparatorLine()
       let testCalls = splitFunctionImplementationIfTooLong(
-        implementation: filteredTests.enumerated().flatMap({ (index, test) in
+        implementation: allTests.enumerated().flatMap({ (index, test) in
           return call(test: test, identifierIndex: &identifierIndex, ordinal: index + 1)
         }),
         indent: self.indent,

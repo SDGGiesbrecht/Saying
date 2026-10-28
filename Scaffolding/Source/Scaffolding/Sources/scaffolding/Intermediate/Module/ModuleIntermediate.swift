@@ -264,7 +264,17 @@ extension ModuleIntermediate {
       referenceDictionary.allThings().lazy.flatMap({ $0.cases.compactMap({ $0.documentation }) }),
       referenceDictionary.allActions().lazy.compactMap({ $0.value.documentation })
     ].joined() {
-      tests.append(contentsOf: documentation.tests)
+      tests.append(contentsOf: documentation.tests.lazy.filter({ !$0.fromExtension }))
+    }
+    for ext in extensions {
+      for documentation in [
+        ext.things.lazy.compactMap({ $0.documentation }),
+        ext.things.lazy.flatMap({ $0.parts.compactMap({ $0.documentation }) }),
+        ext.things.lazy.flatMap({ $0.cases.compactMap({ $0.documentation }) }),
+        ext.actions.lazy.compactMap({ $0.documentation })
+      ].joined() {
+        tests.append(contentsOf: documentation.tests)
+      }
     }
     tests.append(contentsOf: useTests)
   }
