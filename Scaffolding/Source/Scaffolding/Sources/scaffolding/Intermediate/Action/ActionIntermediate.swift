@@ -1108,7 +1108,9 @@ extension ActionIntermediate {
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       isAccessor: isAccessor,
-      originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
+      originalUnresolvedCoverageRegionIdentifierComponents:
+        originalUnresolvedCoverageRegionIdentifierComponents
+          ?? unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier,
       isSpecialized: true,
       deservesTesting: deservesTesting
