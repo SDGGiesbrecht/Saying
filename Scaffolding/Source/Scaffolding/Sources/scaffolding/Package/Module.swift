@@ -22,7 +22,6 @@ struct Module {
 
   func build(
     mode: CompilationMode,
-    entryPoints: inout Set<UnicodeText>?,
     moduleWideImports: [ModuleIntermediate]
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
@@ -41,22 +40,11 @@ struct Module {
     module.resolveTypes(moduleWideImports: moduleWideImports)
     try module.validateReferences(moduleWideImports: moduleWideImports)
     module.resolveNestedReferenceCounting(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
-    switch mode {
-    case .testing:
-      return module.applyingTestCoverageTracking(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
-    case .debugging, .dependency, .export:
-      // .dependency should remove unreachable instead, but transitive reachability detection is not implemented yet.
-      return module
-    case .release, .scaffolding:
-      guard var entries = entryPoints else {
-        fatalError("General reachability checks without specifying entry points are not implemented yet.")
-      }
-      let result = module.removingUnreachable(
-        fromEntryPoints: &entries,
+    if mode.hasTestCoverage {
+      module.applyTestCoverageTracking(
         externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary })
       )
-      entryPoints = entries
-      return result
     }
+    return module
   }
 }

@@ -72,6 +72,15 @@ enum CompilationMode {
   /// - Many small files (for better incremental compilation and for the lighter memory load while viewing in an editor)
   case scaffolding
 
+  var includesUnreachableComponents: Bool {
+    switch self {
+    case .release, .dependency, .scaffolding:
+      return false
+    case .debugging, .testing, .export:
+      return true
+    }
+  }
+
   var hasTestCoverage: Bool {
     switch self {
     case .release, .dependency, .debugging, .export, .scaffolding:
