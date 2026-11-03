@@ -144,6 +144,7 @@ import Saying
       "UnicodeText.replace(_: UnicodeText, with: UnicodeText)",
       "[Set<UnicodeText>].appending(_: Set<UnicodeText>)",
 
+      "UnicodeSegments.Boundary.hash(into: Hasher)",
       "UnicodeSegments.init(allOf: UnicodeText)",
       "UnicodeSegments.index(before: UnicodeSegments.Boundary)",
       "UnicodeText.init(_: Slice<UnicodeSegments>)",

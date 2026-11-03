@@ -7,6 +7,11 @@ extension UnicodeSegments {
       self.beginning_0020of_0020segment = beginning_0020of_0020segment
       self.scalar = scalar
     }
+
+    public func hash(into hasher: inout Hasher) {
+      self.beginning_0020of_0020segment.hash(into: &hasher)
+      self.scalar.hash(into: &hasher)
+    }
   }
 }
 

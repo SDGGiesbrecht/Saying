@@ -21,7 +21,6 @@ struct Module {
   }
 
   func build(
-    mode: CompilationMode,
     moduleWideImports: [ModuleIntermediate]
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
@@ -40,11 +39,6 @@ struct Module {
     module.resolveTypes(moduleWideImports: moduleWideImports)
     try module.validateReferences(moduleWideImports: moduleWideImports)
     module.resolveNestedReferenceCounting(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
-    if mode.hasTestCoverage {
-      module.applyTestCoverageTracking(
-        externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary })
-      )
-    }
     return module
   }
 }

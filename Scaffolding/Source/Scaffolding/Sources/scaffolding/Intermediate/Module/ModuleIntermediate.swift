@@ -401,6 +401,52 @@ extension ModuleIntermediate {
 }
 
 extension ModuleIntermediate {
+  func addIdentifiersRequiredForUniqueInclusionMode<P>(
+    to identifiers: inout Set<UnicodeText>,
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) where P: Platform {
+    let referenceLookup = externalReferenceLookup + [referenceDictionary]
+    var coveredSource: Set<HashableSourceLocation> = []
+    for thing in referenceDictionary.allThings(sorted: true) {
+      if coveredSource.insert(thing.declaration.location.hashableStartLocation).inserted {
+        for identifier in thing.requiredIdentifiers(
+          moduleAndExternalReferenceLookup: referenceLookup,
+          platform: platform
+        ) {
+          identifiers.insert(identifier)
+        }
+      }
+    }
+    var coveredRegions: Set<UnicodeText> = []
+    for copyReducing in referenceDictionary.allActions(sorted: true) {
+      let action = copyReducing.value
+      if action.deservesTesting {
+        var required = false
+        if let declaration = action.declaration,
+          coveredSource.insert(declaration.location.hashableStartLocation).inserted {
+          required = true
+        } else if action.declaration == nil,
+          // Slower, but some actions do not originate from source.
+          coveredRegions.insert(action.coverageRegionIdentifier(referenceLookup: referenceLookup)).inserted {
+          required = true
+        }
+        if required {
+          for identifier in action.requiredIdentifiers(
+            moduleAndExternalReferenceLookup: referenceLookup,
+            platform: platform
+          ) {
+            identifiers.insert(identifier)
+          }
+        }
+      }
+    }
+    for test in allTests() {
+      for identifier in test.statements.requiredIdentifiers(context: referenceLookup) {
+        identifiers.insert(identifier)
+      }
+    }
+  }
   func removingUnreachable(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
     externalReferenceLookup: [ReferenceDictionary]

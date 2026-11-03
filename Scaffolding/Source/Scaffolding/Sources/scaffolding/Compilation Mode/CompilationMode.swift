@@ -72,12 +72,14 @@ enum CompilationMode {
   /// - Many small files (for better incremental compilation and for the lighter memory load while viewing in an editor)
   case scaffolding
 
-  var includesUnreachableComponents: Bool {
+  var includedComponents: ComponentInclusion {
     switch self {
     case .release, .dependency, .scaffolding:
-      return false
-    case .debugging, .testing, .export:
-      return true
+      return .reachable
+    case .export:
+      return .all
+    case .debugging, .testing:
+      return .unique
     }
   }
 

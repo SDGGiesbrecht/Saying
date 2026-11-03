@@ -3849,7 +3849,10 @@ extension Platform {
     modulesToSearchForMembers: [ModuleIntermediate]
   ) {
     let moduleReferenceLookup = moduleWideImports + [module.referenceDictionary]
-    let allThings = module.referenceDictionary.allThings(sorted: true)
+    let allThings = module.referenceDictionary.allThings(
+      sorted: true,
+      adjustingOrderForInterdependency: true
+    )
     for thing in allThings {
       if let declaration = self.declaration(
         for: thing,
@@ -3959,6 +3962,7 @@ extension Platform {
     for modules: [ModuleIntermediate],
     mode: CompilationMode,
     libraryName: String,
+    originalTestCoverageRegions: Set<UnicodeText>,
     moduleWideImports: [ModuleIntermediate]
   ) -> ParallelFiles {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
@@ -3993,12 +3997,7 @@ extension Platform {
         ? self.coverageRegionIndexFile
         : mainFile
       files[coverageRegionIndexFile].appendSeparatorLine()
-      var regionSet: Set<UnicodeText> = []
-      for module in modules {
-        regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
-      }
-      regionSet.remove(":fail:") // ← No general solution for testing deliberate failures yet.
-      let regions = regionSet
+      let regions = originalTestCoverageRegions
         .sorted(by: { $0.lexicographicallyPrecedes($1) })
       for (index, region) in regions.enumerated() {
         coverageIndex[region] = index
@@ -4145,21 +4144,62 @@ extension Platform {
     func getSayingModuleInCurrentState() -> ModuleIntermediate? {
       return builtModules.first
     }
-    for index in sourceModules.indices {
+    for module in sourceModules {
       builtModules.append(
-        try sourceModules[index].build(
-          mode: mode,
+        try module.build(
           moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
         )
       )
     }
-    if !mode.includesUnreachableComponents {
-      guard var entries = entryPoints else {
+
+    var testCoverageRegions: Set<UnicodeText> = []
+    if mode.hasTestCoverage {
+      for module in builtModules {
+        testCoverageRegions.formUnion(
+          self.coverageRegions(
+            for: module,
+            moduleWideImports: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
+          )
+        )
+      }
+      testCoverageRegions.remove(":fail:") // ← No general solution for testing deliberate failures yet.
+    }
+
+    let performRemoval: Bool
+    var requiredComponents: Set<UnicodeText>
+    switch mode.includedComponents {
+    case .all:
+      performRemoval = false
+      requiredComponents = []
+    case .unique:
+      performRemoval = true
+      requiredComponents = []
+      for module in builtModules {
+        module.addIdentifiersRequiredForUniqueInclusionMode(
+          to: &requiredComponents,
+          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? [],
+          platform: Self.self
+        )
+      }
+    case .reachable:
+      performRemoval = true
+      guard let entries = entryPoints else {
         fatalError("General reachability checks without specifying entry points are not implemented yet.")
       }
+      requiredComponents = entries
+    }
+    if performRemoval {
       for index in builtModules.indices.reversed() {
         builtModules[index].removeUnreachable(
-          fromEntryPoints: &entries,
+          fromEntryPoints: &requiredComponents,
+          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
+        )
+      }
+    }
+
+    if mode.hasTestCoverage {
+      for index in builtModules.indices {
+        builtModules[index].applyTestCoverageTracking(
           externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
         )
       }
@@ -4172,6 +4212,7 @@ extension Platform {
       for: builtModules,
       mode: mode,
       libraryName: libraryName,
+      originalTestCoverageRegions: testCoverageRegions,
       moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
     )
 

@@ -147,7 +147,7 @@ extension ReferenceDictionary {
       return lookupThing(requirement.key)?.globallyUniqueIdentifier(referenceLookup: [self])
     }
   }
-  func allThings(sorted: Bool = false) -> [Thing] {
+  func allThings(sorted: Bool = false, adjustingOrderForInterdependency: Bool = false) -> [Thing] {
     let unsorted =
     things.values
       .lazy.map({ $0.values })
@@ -160,6 +160,9 @@ extension ReferenceDictionary {
         dictionary[entry.globallyUniqueIdentifier(referenceLookup: [self])] = entry
       }
       var alphabetical = dictionary.keys.sorted(by: { $0.lexicographicallyPrecedes($1) }).map({ dictionary[$0]! })
+      if !adjustingOrderForInterdependency {
+        return alphabetical
+      }
       var sorted: [Thing] = []
       var already: Set<UnicodeText> = []
       var foundMore: Bool = false

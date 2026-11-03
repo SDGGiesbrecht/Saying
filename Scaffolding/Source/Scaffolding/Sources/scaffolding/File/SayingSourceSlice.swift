@@ -9,4 +9,7 @@ extension SayingSourceSlice {
       return unicode.startIndex
     }
   }
+  var hashableStartLocation: HashableSourceLocation {
+    return HashableSourceLocation(origin: origin, position: sortableStartPosition)
+  }
 }
