@@ -395,6 +395,9 @@ extension ModuleIntermediate {
       tests: tests
     )
   }
+  mutating func applyTestCoverageTracking(externalReferenceLookup: [ReferenceDictionary]) {
+    self = applyingTestCoverageTracking(externalReferenceLookup: externalReferenceLookup)
+  }
 }
 
 extension ModuleIntermediate {
@@ -406,5 +409,14 @@ extension ModuleIntermediate {
     result.referenceDictionary.removeUnreachable(fromEntryPoints: &entryPoints, externalReferenceLookup: externalReferenceLookup)
     result.resolveTypeIdentifiers(externalReferenceLookup: externalReferenceLookup)
     return result
+  }
+  mutating func removeUnreachable(
+    fromEntryPoints entryPoints: inout Set<UnicodeText>,
+    externalReferenceLookup: [ReferenceDictionary]
+  ) {
+    self = removingUnreachable(
+      fromEntryPoints: &entryPoints,
+      externalReferenceLookup: externalReferenceLookup
+    )
   }
 }

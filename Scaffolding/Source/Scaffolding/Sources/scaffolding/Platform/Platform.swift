@@ -4138,38 +4138,31 @@ extension Platform {
     reportProgress: @escaping (String) -> Void
   ) throws {
     let sourceModules = try package.modules()
-    var noEntryPoints: Set<UnicodeText>? = nil
-    let sayingModule = sourceModules.first(where: { $0.isSayingModule })
-    let builtSayingModule = try sayingModule?.build(
-      mode: { () -> CompilationMode in
-        if case .release = mode {
-          return .dependency
-        } else if case .scaffolding = mode {
-          return .dependency
-        } else {
-          return mode
-        }
-      }(),
-      entryPoints: &noEntryPoints,
-      moduleWideImports: []
-    )
-    var entryPoints = entryPoints
-    var builtModules = try sourceModules
-      .lazy.filter({ !$0.isSayingModule })
-      .map({ module in
-        return try module.build(
+    // No real way to declare interdependencies yet; this hard‐codes enough to build Saying itself.
+    assert(sourceModules.first?.isSayingModule == true, "Module interdepency is scrambled.")
+
+    var builtModules: [ModuleIntermediate] = []
+    func getSayingModuleInCurrentState() -> ModuleIntermediate? {
+      return builtModules.first
+    }
+    for index in sourceModules.indices {
+      builtModules.append(
+        try sourceModules[index].build(
           mode: mode,
-          entryPoints: &entryPoints,
-          moduleWideImports: builtSayingModule.map({ [$0] }) ?? []) }
-      )
-    if let saying = sayingModule {
-      builtModules = [
-        try saying.build(
-          mode: mode,
-          entryPoints: &entryPoints,
-          moduleWideImports: []
+          moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
         )
-      ] + builtModules
+      )
+    }
+    if !mode.includesUnreachableComponents {
+      guard var entries = entryPoints else {
+        fatalError("General reachability checks without specifying entry points are not implemented yet.")
+      }
+      for index in builtModules.indices.reversed() {
+        builtModules[index].removeUnreachable(
+          fromEntryPoints: &entries,
+          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
+        )
+      }
     }
 
     let libraryName = "Saying" // Placeholder; nothing else can be built yet anyway.
@@ -4179,7 +4172,7 @@ extension Platform {
       for: builtModules,
       mode: mode,
       libraryName: libraryName,
-      moduleWideImports: builtSayingModule.map({ [$0] }) ?? []
+      moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
     )
 
     if mode.hasTestCoverage {
