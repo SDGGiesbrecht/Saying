@@ -6,16 +6,15 @@ extension
     English: indices of (list)
    )
    Swift: “” list “.Indices” [
-     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “” list “.startIndex”
-     “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” boundary “)”
-     “” list “.indices”
-     “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
-     “” list “.index(after: ” boundary “)”
+     “==(” boundary “, ” boundary “) ¤(2D)> Bool”
+     “<(” boundary “, ” boundary “) ¤(2D)> Bool”
+     “” list “.startIndex: ” boundary “”
+     “” list “.endIndex: ” boundary “”
+     “” list “.subscript(” boundary “) ¤(2D)> ” element “”
+     “” list “.isEmpty: Bool”
+     “” list “.count: Int”
+     “” list “.distance(from: ” boundary “, to: ” boundary “) ¤(2D)> Int”
+     “” list “.index(after: ” boundary “) ¤(2D)> ” boundary “”
      “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”
@@ -111,7 +110,7 @@ extension
       English: backtrack (cursor: ↓ boundary) to previous in (list: indices of (list)) skipping bounds check
      )
      Swift: “” list “.formIndex(before: ¤(26)” cursor “)” [
-       “” list “.index(before: ” boundary “)”
+       “” list “.index(before: ” boundary “) ¤(2D)> ” boundary “”
        “” list “.formIndex(before: ” boundary “)”
       ] {
        “extension ” list “: BidirectionalCollection {}”
@@ -126,7 +125,7 @@ extension
      )
      boundary
      Swift: “” list “.index(before: ” cursor “)” [
-       “” list “.index(before: ” boundary “)”
+       “” list “.index(before: ” boundary “) ¤(2D)> ” boundary “”
        “” list “.formIndex(before: ” boundary “)”
       ] {
        “extension ” list “: BidirectionalCollection {}”
@@ -192,7 +191,7 @@ extension
      )
      optional (index)
      Swift: “” list “.last” [
-       “” list “.index(before: ” boundary “)”
+       “” list “.index(before: ” boundary “) ¤(2D)> ” boundary “”
        “” list “.formIndex(before: ” boundary “)”
       ] {
        “extension ” list “: BidirectionalCollection {}”

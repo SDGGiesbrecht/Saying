@@ -29,7 +29,7 @@ extension
    truth value
    C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”) [“override ” thing “.Equals(” thing “)”]
    Kotlin: “” first “ == ” second “” [“override ” thing “.equals(” thing “)”]
-   Swift: “” first “ == ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: “” first “ == ” second “” [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     let (• end of first: list boundary) be (end of (first))
     if ((end of first) is not (end of (second))), {

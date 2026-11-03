@@ -19,7 +19,7 @@ extension
      “override ” thing “.hashCode()”
     ]
    Swift: “Set<” thing “>” [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
      “” thing “.hash(into: Hasher)”
     ] {
      “extension ” thing “: Hashable {}”

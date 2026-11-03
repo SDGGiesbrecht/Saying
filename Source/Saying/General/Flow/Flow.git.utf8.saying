@@ -148,16 +148,15 @@ extension
     English: for each (entry: • element) in (sequence: list), (repetition: {})
    )
    Swift: “for ” entry “ in ” sequence “ {” repetition “}” [
-     “==(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “<(¤(5F): ” boundary “, ¤(5F): ” boundary “)”
-     “” list “.startIndex”
-     “” list “.endIndex”
-     “” list “.subscript(¤(5F): ” boundary “)”
-     “” list “.indices”
-     “” list “.isEmpty”
-     “” list “.count”
-     “” list “.distance(from: ” boundary “, to: ” boundary “)”
-     “” list “.index(after: ” boundary “)”
+     “==(” boundary “, ” boundary “) ¤(2D)> Bool”
+     “<(” boundary “, ” boundary “) ¤(2D)> Bool”
+     “” list “.startIndex: ” boundary “”
+     “” list “.endIndex: ” boundary “”
+     “” list “.subscript(” boundary “) ¤(2D)> ” element “”
+     “” list “.isEmpty: Bool”
+     “” list “.count: Int”
+     “” list “.distance(from: ” boundary “, to: ” boundary “) ¤(2D)> Int”
+     “” list “.index(after: ” boundary “) ¤(2D)> ” boundary “”
      “” list “.formIndex(after: ” boundary “)”
     ] {
      “extension ” list “: Collection {}”

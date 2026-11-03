@@ -7,8 +7,8 @@ extension
     C: range‐(thing: [thing])
    )
    Swift: “Range<” thing “>” [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
+     “<(” thing “, ” thing “) ¤(2D)> Bool”
     ] {
      “extension ” thing “: Comparable {}”
     }

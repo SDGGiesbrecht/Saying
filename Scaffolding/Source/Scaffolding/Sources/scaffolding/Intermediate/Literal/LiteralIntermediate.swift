@@ -249,6 +249,6 @@ extension LiteralIntermediate {
     context: [ReferenceDictionary]
   ) -> [UnicodeText] {
     return (loadingAction(type: type)?.requiredIdentifiers(context: context) ?? [])
-      + ["Unicode scalars of string literal () ending at () skipping validity check"]
+      + ["Unicode scalars of string literal () ending at () skipping validity check:string literal of unknown length:memory offset:Unicode scalars"]
   }
 }

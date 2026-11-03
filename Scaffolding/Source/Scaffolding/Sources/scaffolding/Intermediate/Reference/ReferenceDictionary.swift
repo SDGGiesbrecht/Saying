@@ -616,89 +616,94 @@ extension ReferenceDictionary {
 }
 
 extension ReferenceDictionary {
+
+  func thingReachabilityLookup<P>(
+    referenceLookup: [ReferenceDictionary],
+    platform: P.Type,
+    nativeAliases: inout [UnicodeText: UnicodeText]
+  ) -> [UnicodeText: Thing]
+  where P: Platform {
+    var result: [UnicodeText: Thing] = [:]
+    for thing in allThings() {
+      let identifier = thing.globallyUniqueIdentifier(referenceLookup: referenceLookup)
+      result[identifier] = thing
+      if let native = thing.swiftName {
+        nativeAliases[native] = identifier
+      }
+    }
+    return result
+  }
+  func actionReachabilityLookup<P>(
+    referenceLookup: [ReferenceDictionary],
+    platform: P.Type,
+    nativeAliases: inout [UnicodeText: UnicodeText]
+  ) -> [UnicodeText: CopyReducing<ActionIntermediate>]
+  where P: Platform {
+    var result: [UnicodeText: CopyReducing<ActionIntermediate>] = [:]
+    for copyReducing in allActions() {
+      let action = copyReducing.value
+      let identifier = action.globallyUniqueIdentifier(referenceLookup: referenceLookup)
+      result[identifier] = copyReducing
+      if let native = action.signature(for: platform, referenceLookup: referenceLookup) {
+        nativeAliases[native] = identifier
+      }
+    }
+    return result
+  }
   mutating func removeUnreachable<P>(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
     externalReferenceLookup: [ReferenceDictionary],
     platform: P.Type
   ) where P: Platform {
-    let referenceLookup = externalReferenceLookup + [self]
     var optimized = ReferenceDictionary(scope: self.scope)
     optimized.languages = self.languages // For temporary simplicity; not output anyway.
-    var found: Set<UnicodeText> = []
-    var stillRequired: Set<UnicodeText> = entryPoints
-    var foundSomething = false
-    repeat {
-      foundSomething = false
-      for thing in allThings() {
-        if let swift = thing.swiftName,
-           stillRequired.contains(swift) {
-          stillRequired.remove(swift)
-          foundSomething = true
-          found.insert(swift)
-          found.insert(thing.globallyUniqueIdentifier(referenceLookup: referenceLookup))
-          _ = optimized.add(thing: thing)
-          for child in thing.requiredIdentifiers(
-            moduleAndExternalReferenceLookup: referenceLookup,
-            platform: platform
-          ) {
-            if !found.contains(child) {
-              stillRequired.insert(child)
-            }
-          }
-        }
-        let identifier = thing.globallyUniqueIdentifier(referenceLookup: referenceLookup)
-        if stillRequired.contains(identifier) {
-          stillRequired.remove(identifier)
-          foundSomething = true
-          found.insert(identifier)
-          _ = optimized.add(thing: thing)
-          for child in thing.requiredIdentifiers(
-            moduleAndExternalReferenceLookup: referenceLookup,
-            platform: platform
-          ) {
-            if !found.contains(child) {
-              stillRequired.insert(child)
-            }
-          }
-        }
+
+    let referenceLookup = externalReferenceLookup + [self]
+    var nativeAliases: [UnicodeText: UnicodeText] = [:]
+    let thingLookup: [UnicodeText: Thing] = thingReachabilityLookup(
+      referenceLookup: referenceLookup,
+      platform: platform,
+      nativeAliases: &nativeAliases
+    )
+    let actionLookup: [UnicodeText: CopyReducing<ActionIntermediate>] = actionReachabilityLookup(
+      referenceLookup: referenceLookup,
+      platform: platform,
+      nativeAliases: &nativeAliases
+    )
+    var remaining = Set(entryPoints.lazy.map({ nativeAliases[$0] ?? $0 }))
+    var handled: Set<UnicodeText> = []
+    entryPoints = []
+    while let reference = remaining.first {
+      var transitiveRequirements: [UnicodeText]?
+      if let thing = thingLookup[reference] {
+        _ = optimized.add(thing: thing)
+        transitiveRequirements = thing.requiredIdentifiers(
+          moduleAndExternalReferenceLookup: referenceLookup,
+          platform: platform
+        )
       }
-      for copyReducing in allActions() {
+      if let copyReducing = actionLookup[reference] {
         let action = copyReducing.value
-        if let swift = action.swiftSignature(referenceLookup: referenceLookup),
-           stillRequired.contains(swift) {
-          stillRequired.remove(swift)
-          foundSomething = true
-          found.insert(swift)
-          found.insert(action.globallyUniqueIdentifier(referenceLookup: referenceLookup))
-          _ = optimized.add(action: action)
-          for identifer in action.requiredIdentifiers(
-            moduleAndExternalReferenceLookup: referenceLookup,
-            platform: platform
-          ) {
-            if !found.contains(identifer) {
-              stillRequired.insert(identifer)
-            }
-          }
-        }
-        let identifier = action.globallyUniqueIdentifier(referenceLookup: referenceLookup)
-        if stillRequired.contains(identifier) {
-          stillRequired.remove(identifier)
-          foundSomething = true
-          found.insert(identifier)
-          _ = optimized.add(action: action)
-          for child in action.requiredIdentifiers(
-            moduleAndExternalReferenceLookup: referenceLookup,
-            platform: platform
-          ) {
-            if !found.contains(child) {
-              stillRequired.insert(child)
-            }
-          }
-        }
+        _ = optimized.add(action: action)
+        transitiveRequirements = action.requiredIdentifiers(
+          moduleAndExternalReferenceLookup: referenceLookup,
+          platform: platform
+        )
       }
-    } while !stillRequired.isEmpty && foundSomething
+      remaining.remove(reference)
+      handled.insert(reference)
+      if let transitiveRequirements = transitiveRequirements {
+        for requirement in transitiveRequirements.lazy.map({ nativeAliases[$0] ?? $0 }) {
+          if !handled.contains(requirement) {
+            remaining.insert(requirement)
+          }
+        }
+      } else {
+        // non‐existent; dependency entry point (or error)
+        entryPoints.insert(reference)
+      }
+    }
     self = optimized
-    entryPoints = stillRequired
   }
 }
 

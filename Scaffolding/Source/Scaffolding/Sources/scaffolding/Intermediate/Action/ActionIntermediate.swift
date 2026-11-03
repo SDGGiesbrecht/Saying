@@ -14,6 +14,7 @@ struct ActionIntermediate {
   var isMemberWrapper: Bool = false
   var isEnumerationValueWrapper: Bool = false
   var isAccessor: Bool = false
+  var isParameterWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
   var coveredIdentifier: UnicodeText?
   var isSpecialized: Bool
@@ -168,6 +169,7 @@ extension ActionIntermediate {
         nativeNames: .none
       ),
       isCreation: false,
+      isParameterWrapper: true,
       isSpecialized: false,
       deservesTesting: false
     )
@@ -1318,6 +1320,9 @@ extension ActionIntermediate {
       String(functionName).hasSuffix(String(initializerSuffix)) {
       functionName = platform.initializerName
     }
+    if !platform.permitsOverloads {
+      return functionName
+    }
     var parameterNames: [UnicodeText] = []
     while !name.isEmpty {
       if name.starts(with: "()".unicodeScalars) {
@@ -1348,10 +1353,15 @@ extension ActionIntermediate {
     let parameterSection = isVariable ? "" : "(\(parameters))"
     return UnicodeText("\(functionName)\(parameterSection)")
   }
-  func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
-    guard let name = nativeNames.swift,
-      let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup) else {
+
+  func signature<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
+  where P: Platform {
+    guard let name = platform.nativeNameDeclaration(of: self),
+      let identifier = identifier(for: platform, referenceLookup: referenceLookup) else {
       return nil
+    }
+    if !platform.permitsOverloads {
+      return identifier
     }
     let components: [String] = String(identifier).components(separatedBy: ":")
     var parameters = self.parameters.ordered(for: name)
@@ -1371,11 +1381,20 @@ extension ActionIntermediate {
       result.append(".")
     }
     for index in parameters.indices {
-      if index != parameters.startIndex {
+      if index == parameters.startIndex  {
+        result.append(contentsOf: components[index].unicodeScalars)
+        if String(result).hasSuffix("(_") {
+          result.removeLast()
+        } else {
+          result.append(contentsOf: ": ".unicodeScalars)
+        }
+      } else {
         result.append(contentsOf: ", ")
+        if components[index] != "_" {
+          result.append(contentsOf: components[index].unicodeScalars)
+          result.append(contentsOf: ": ".unicodeScalars)
+        }
       }
-      result.append(contentsOf: components[index].unicodeScalars)
-      result.append(contentsOf: ": ".unicodeScalars)
       result.append(
         contentsOf: Swift.source(
           for: parameters[index].type,
@@ -1385,8 +1404,15 @@ extension ActionIntermediate {
       )
     }
     result.append(contentsOf: components.last!.unicodeScalars)
-    if result.starts(with: "init(".unicodeScalars) {
-      result = "\(Swift.source(for: returnValue!, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)).\(result)"
+    if let returned = self.returnValue {
+      let returnValue = Swift.source(for: returned, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)
+      if result.starts(with: "init(".unicodeScalars) {
+        result = "\(returnValue).\(result)"
+      } else if result.last != ")" {
+        result.append(contentsOf: ": \(returnValue)")
+      } else {
+        result.append(contentsOf: " -> \(returnValue)")
+      }
     }
     return result
   }

@@ -82,10 +82,10 @@ ability (clients)
    )
    truth value
    Swift: «» first “ > ” second „“ [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “<=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
+     “<(” thing “, ” thing “) ¤(2D)> Bool”
+     “<=(” thing “, ” thing “) ¤(2D)> Bool”
+     “>=(” thing “, ” thing “) ¤(2D)> Bool”
     ] {“extension ” thing “: Comparable {}”}
    {
     ← (first) is greater than (second) according to default comparison for order
@@ -129,10 +129,10 @@ ability (clients)
    )
    truth value
    Swift: «» first “ <= ” second „“ [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “>=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
+     “<(” thing “, ” thing “) ¤(2D)> Bool”
+     “>=(” thing “, ” thing “) ¤(2D)> Bool”
+     “>(” thing “, ” thing “) ¤(2D)> Bool”
     ] {“extension ” thing “: Comparable {}”}
    {
     ← (first) is less than or equal to (second) according to default comparison for order
@@ -176,10 +176,10 @@ ability (clients)
    )
    truth value
    Swift: «» first “ >= ” second „“ [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “<(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “<=(¤(5F): ” thing “, ¤(5F): ” thing “)”
-     “>(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
+     “<(” thing “, ” thing “) ¤(2D)> Bool”
+     “<=(” thing “, ” thing “) ¤(2D)> Bool”
+     “>(” thing “, ” thing “) ¤(2D)> Bool”
     ] {“extension ” thing “: Comparable {}”}
    {
     ← (first) is greater than or equal to (second) according to default comparison for order

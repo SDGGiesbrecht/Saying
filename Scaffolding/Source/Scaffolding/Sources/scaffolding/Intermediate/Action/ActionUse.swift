@@ -460,7 +460,8 @@ extension ActionUse {
          let action = context.lookupAction(
           actionName,
           signature: signature,
-          specifiedReturnValue: resolvedResultType) {
+          specifiedReturnValue: resolvedResultType),
+        !action.isParameterWrapper {
         result.append(action.globallyUniqueIdentifier(referenceLookup: context))
       }
     }

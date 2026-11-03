@@ -134,23 +134,23 @@ import Saying
     ])
 
     var entryPoints: Set<UnicodeText> = [
-      "compute(_: () -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?)",
-      "UnicodeText.init(_: String.UnicodeScalarView)",
-      "UnicodeText.init(_: UnicodeText)",
-      "String.UnicodeScalarView.init(_: UnicodeText)",
+      "compute(() -> Set<Unicode.Scalar>, cachingIn: Set<Unicode.Scalar>?) -> Set<Unicode.Scalar>",
+      "UnicodeText.init(String.UnicodeScalarView)",
+      "UnicodeText.init(UnicodeText)",
+      "String.UnicodeScalarView.init(UnicodeText)",
       "UnicodeText.prepend(contentsOf: UnicodeText)",
-      "[UnicodeText].joined()",
-      "[UnicodeText].joined(separator: UnicodeText)",
-      "UnicodeText.replace(_: UnicodeText, with: UnicodeText)",
-      "[Set<UnicodeText>].appending(_: Set<UnicodeText>)",
+      "[UnicodeText].joined() -> UnicodeText",
+      "[UnicodeText].joined(separator: UnicodeText) -> UnicodeText",
+      "UnicodeText.replace(UnicodeText, with: UnicodeText)",
+      "[Set<UnicodeText>].appending(Set<UnicodeText>) -> [Set<UnicodeText>]",
 
       "UnicodeSegments.Boundary.hash(into: Hasher)",
       "UnicodeSegments.init(allOf: UnicodeText)",
-      "UnicodeSegments.index(before: UnicodeSegments.Boundary)",
-      "UnicodeText.init(_: Slice<UnicodeSegments>)",
-      "UnicodeSegments.underlyingScalarOffset(of: UnicodeSegments.Boundary)",
+      "UnicodeSegments.index(before: UnicodeSegments.Boundary) -> UnicodeSegments.Boundary",
+      "UnicodeText.init(Slice<UnicodeSegments>)",
+      "UnicodeSegments.underlyingScalarOffset(of: UnicodeSegments.Boundary) -> UInt64",
       "GitStyleSayingSource.init(origin: UnicodeText, code: UnicodeText)",
-      "GitStyleSayingSource.parsed()",
+      "GitStyleSayingSource.parsed() -> SayingSource",
     ]
     for node in [
       "DownArrowSyntax",
@@ -181,12 +181,12 @@ import Saying
       "SpaceSyntax",
       "SymbolInsertionMarkSyntax",
     ] as [UnicodeText] {
-      entryPoints.insert("\(node).scalar")
+      entryPoints.insert("\(node).scalar: Unicode.Scalar")
       entryPoints.insert("\(node).init()")
-      entryPoints.insert("\(node).children")
-      entryPoints.insert("Parsed\(node).children")
-      entryPoints.insert("SyntaxNode.init(_: \(node))")
-      entryPoints.insert("ParsedSyntaxNode.init(_: Parsed\(node))")
+      entryPoints.insert("\(node).children: [SyntaxNode]")
+      entryPoints.insert("Parsed\(node).children: [ParsedSyntaxNode]")
+      entryPoints.insert("SyntaxNode.init(\(node))")
+      entryPoints.insert("ParsedSyntaxNode.init(Parsed\(node))")
     }
 
     try Swift.prepare(

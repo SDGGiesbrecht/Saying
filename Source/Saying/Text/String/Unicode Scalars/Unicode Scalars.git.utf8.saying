@@ -157,7 +157,7 @@ use (clients)
    C♯: “” first “ != ” second “”
    JavaScript: “” first “ != ” second “”
    Kotlin: “” first “ != ” second “”
-   Swift: “” first “ != ” second “” [“==(¤(5F): String.UnicodeScalarView, ¤(5F): String.UnicodeScalarView)”] {“extension String.UnicodeScalarView: Equatable {}”}
+   Swift: “” first “ != ” second “” [“==(String.UnicodeScalarView, String.UnicodeScalarView) ¤(2D)> Bool”] {“extension String.UnicodeScalarView: Equatable {}”}
    {
     ← (first) is not (second) according to default comparison for equality
    }

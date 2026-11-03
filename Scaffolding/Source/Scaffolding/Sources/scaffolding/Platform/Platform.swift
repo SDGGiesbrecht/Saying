@@ -482,6 +482,34 @@ extension Platform {
     }
     return repair(compoundNativeType: result)
   }
+  static func sourceForReference(
+    to type: Thing,
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
+  ) -> String {
+    if let native = nativeType(of: type) {
+      return source(
+        for: native,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
+    } else if let native = nativeName(
+      of: type,
+      referenceLookup: referenceLookup,
+      identifierIndex: &identifierIndex
+    ) {
+      return native
+    } else {
+      return capLengthOf(
+        identifier: sanitize(
+          identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+          leading: true,
+          entire: true
+        ),
+        index: &identifierIndex
+      )
+    }
+  }
   static func source(
     for type: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary],
@@ -489,52 +517,20 @@ extension Platform {
   ) -> String {
     switch type {
     case .simple(let simple):
-      let type = referenceLookup.lookupThing(simple.identifier, components: [])!
-      if let native = nativeType(of: type) {
-        return native.textComponents.lazy.map({ String($0) }).joined()
-      } else if let native = nativeName(
-        of: type,
+      return sourceForReference(
+        to: referenceLookup.lookupThing(simple.identifier, components: [])!,
         referenceLookup: referenceLookup,
         identifierIndex: &identifierIndex
-      ) {
-        return native
-      } else {
-        return capLengthOf(
-          identifier: sanitize(
-            identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-            leading: true,
-            entire: true
-          ),
-          index: &identifierIndex
-        )
-      }
+      )
     case .compound(identifier: let identifier, components: let components):
-      let type = referenceLookup.lookupThing(
-        identifier.name(),
-        components: components.map({ $0.key })
-      )!
-      if let native = nativeType(of: type) {
-        return source(
-          for: native,
-          referenceLookup: referenceLookup,
-          identifierIndex: &identifierIndex
-        )
-      } else if let native = nativeName(
-        of: type,
+      return sourceForReference(
+        to: referenceLookup.lookupThing(
+          identifier.name(),
+          components: components.map({ $0.key })
+        )!,
         referenceLookup: referenceLookup,
         identifierIndex: &identifierIndex
-      ) {
-        return native
-      } else {
-        return capLengthOf(
-          identifier: sanitize(
-            identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-            leading: true,
-            entire: true
-          ),
-          index: &identifierIndex
-        )
-      }
+      )
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
         parameters: actionParameters
@@ -4194,6 +4190,11 @@ extension Platform {
           fromEntryPoints: &requiredComponents,
           externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? [],
           platform: Self.self
+        )
+      }
+      if !requiredComponents.isEmpty {
+        throw CompilationError.missingEntryPoints(
+          requiredComponents.sorted(by: { $0.lexicographicallyPrecedes($1) })
         )
       }
     }

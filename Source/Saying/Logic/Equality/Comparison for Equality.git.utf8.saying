@@ -82,7 +82,7 @@ ability (clients)
    )
    truth value
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: “” first “ != ” second “” [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← (first) is not (second) according to default comparison for equality
    }
@@ -137,7 +137,7 @@ extension
     ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
    )
    Swift: “” hasher “.combine(” part “)” [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
      “” thing “.hash(into: Hasher)”
     ] {
      “extension ” thing “: Hashable {}”
@@ -156,7 +156,7 @@ extension
    )
    truth value
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: “” first “ != ” second “” [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
    }
@@ -185,7 +185,7 @@ extension
    )
    truth value
    Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ == ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {
      if (second) exists, unwrap it as (• second value: thing), {
@@ -216,7 +216,7 @@ extension
    )
    truth value
    Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ == ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {
      ← (first value: thing) is (second: thing)
@@ -244,7 +244,7 @@ extension
    )
    truth value
    Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ == ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← (second) is (first)
    }
@@ -262,7 +262,7 @@ extension
    )
    truth value
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ != ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second) according to optional)
    }
@@ -287,7 +287,7 @@ extension
    )
    truth value
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ != ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
    }
@@ -312,7 +312,7 @@ extension
    )
    truth value
    Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Swift: «» first “ != ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← (second) is not (first)
    }
