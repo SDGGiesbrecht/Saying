@@ -616,10 +616,11 @@ extension ReferenceDictionary {
 }
 
 extension ReferenceDictionary {
-  mutating func removeUnreachable(
+  mutating func removeUnreachable<P>(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
-    externalReferenceLookup: [ReferenceDictionary]
-  ) {
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) where P: Platform {
     let referenceLookup = externalReferenceLookup + [self]
     var optimized = ReferenceDictionary(scope: self.scope)
     optimized.languages = self.languages // For temporary simplicity; not output anyway.
@@ -638,7 +639,7 @@ extension ReferenceDictionary {
           _ = optimized.add(thing: thing)
           for child in thing.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
-            platform: Swift.self
+            platform: platform
           ) {
             if !found.contains(child) {
               stillRequired.insert(child)
@@ -653,7 +654,7 @@ extension ReferenceDictionary {
           _ = optimized.add(thing: thing)
           for child in thing.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
-            platform: Swift.self
+            platform: platform
           ) {
             if !found.contains(child) {
               stillRequired.insert(child)
@@ -672,7 +673,7 @@ extension ReferenceDictionary {
           _ = optimized.add(action: action)
           for identifer in action.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
-            platform: Swift.self
+            platform: platform
           ) {
             if !found.contains(identifer) {
               stillRequired.insert(identifer)
@@ -687,7 +688,7 @@ extension ReferenceDictionary {
           _ = optimized.add(action: action)
           for child in action.requiredIdentifiers(
             moduleAndExternalReferenceLookup: referenceLookup,
-            platform: Swift.self
+            platform: platform
           ) {
             if !found.contains(child) {
               stillRequired.insert(child)

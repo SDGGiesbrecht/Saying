@@ -447,22 +447,30 @@ extension ModuleIntermediate {
       }
     }
   }
-  func removingUnreachable(
+  func removingUnreachable<P>(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
-    externalReferenceLookup: [ReferenceDictionary]
-  ) -> ModuleIntermediate {
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) -> ModuleIntermediate
+  where P: Platform {
     var result = self
-    result.referenceDictionary.removeUnreachable(fromEntryPoints: &entryPoints, externalReferenceLookup: externalReferenceLookup)
+    result.referenceDictionary.removeUnreachable(
+      fromEntryPoints: &entryPoints,
+      externalReferenceLookup: externalReferenceLookup,
+      platform: platform
+    )
     result.resolveTypeIdentifiers(externalReferenceLookup: externalReferenceLookup)
     return result
   }
-  mutating func removeUnreachable(
+  mutating func removeUnreachable<P>(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
-    externalReferenceLookup: [ReferenceDictionary]
-  ) {
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) where P: Platform {
     self = removingUnreachable(
       fromEntryPoints: &entryPoints,
-      externalReferenceLookup: externalReferenceLookup
+      externalReferenceLookup: externalReferenceLookup,
+      platform: platform
     )
   }
 }

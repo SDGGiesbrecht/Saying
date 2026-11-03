@@ -4192,7 +4192,8 @@ extension Platform {
       for index in builtModules.indices.reversed() {
         builtModules[index].removeUnreachable(
           fromEntryPoints: &requiredComponents,
-          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
+          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? [],
+          platform: Self.self
         )
       }
     }
