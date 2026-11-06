@@ -468,6 +468,9 @@ enum Swift: Platform {
       return " -> \(returnValue)"
     }
   }
+  static func signature(callSection: UnicodeText, returnSection: UnicodeText) -> UnicodeText {
+    return "\(callSection)\(returnSection)"
+  }
 
   static var needsForwardDeclarations: Bool { false }
   static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {

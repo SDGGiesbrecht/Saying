@@ -127,6 +127,7 @@ protocol Platform {
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String, isProperty: Bool) -> String?
+  static func signature(callSection: UnicodeText, returnSection: UnicodeText) -> UnicodeText
   static var needsForwardDeclarations: Bool { get }
   static func forwardActionDeclaration(
     name: String,
@@ -573,15 +574,7 @@ extension Platform {
   }
 
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
-    if let identifier = action.identifier(for: self, referenceLookup: referenceLookup) {
-      if let functionName = String(identifier).prefix(upTo: "(") {
-        return String(functionName)
-      } else {
-        return String(identifier)
-      }
-    } else {
-      return nil
-    }
+    return action.baseName(for: self, referenceLookup: referenceLookup).map({ String($0.baseName) })
   }
 
   static func nativeIsOverride(action: ActionIntermediate) -> Bool {

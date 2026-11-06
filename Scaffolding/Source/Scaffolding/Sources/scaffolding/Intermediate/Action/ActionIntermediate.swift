@@ -1258,7 +1258,10 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func identifier<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
+
+  func baseName<P>(
+    for platform: P.Type, referenceLookup: [ReferenceDictionary]
+  ) -> PlatformActionNamePrototype?
   where P: Platform {
     guard let nameDeclaration = platform.nativeNameDeclaration(of: self) else {
       return nil
@@ -1274,9 +1277,11 @@ extension ActionIntermediate {
         name.removeFirst(variablePrefix.count)
         isVariable = true
     }
+    var isMember = false
     if let memberPrefix = platform.memberPrefix,
       name.starts(with: memberPrefix) {
       name.removeFirst(memberPrefix.count)
+      isMember = true
     }
     var disambiguatorParameters: [Int] = []
     if !platform.permitsOverloads {
@@ -1320,58 +1325,30 @@ extension ActionIntermediate {
       String(functionName).hasSuffix(String(initializerSuffix)) {
       functionName = platform.initializerName
     }
-    if !platform.permitsOverloads {
-      return functionName
-    }
-    var parameterNames: [UnicodeText] = []
-    while !name.isEmpty {
-      if name.starts(with: "()".unicodeScalars) {
-        parameterNames.append(platform.emptyParameterLabel)
-        name.removeFirst(2)
-      } else {
-        guard let next = name.firstIndex(of: "(") else {
-          fatalError("Illegal postfix name component: \(platform.nativeNameDeclaration(of: self)!)")
-        }
-        guard platform.permitsParameterLabels else {
-          fatalError("Illegal parameter label: \(platform.nativeNameDeclaration(of: self)!)")
-        }
-        var parameterName = name[..<next]
-        name.removeSubrange(..<next)
-        if parameterName.last == " " {
-          parameterName.removeLast()
-        }
-        parameterNames.append(UnicodeText(parameterName))
-        if name.starts(with: "()".unicodeScalars) {
-          name.removeFirst(2)
-        }
-      }
-      if name.first == " " {
-        name.removeFirst()
-      }
-    }
-    let parameters = parameterNames.map({ "\($0)\(platform.parameterLabelSuffix)" }).joined()
-    let parameterSection = isVariable ? "" : "(\(parameters))"
-    return UnicodeText("\(functionName)\(parameterSection)")
+    return PlatformActionNamePrototype(
+      baseName: functionName,
+      parameterOrderKey: nameDeclaration,
+      isVariable: isVariable,
+      isMember: isMember
+    )
   }
 
   func signature<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
   where P: Platform {
-    guard let name = platform.nativeNameDeclaration(of: self),
-      let identifier = identifier(for: platform, referenceLookup: referenceLookup) else {
+    guard let prototype = self.baseName(for: platform, referenceLookup: referenceLookup) else {
       return nil
     }
     if !platform.permitsOverloads {
-      return identifier
+      return prototype.baseName
     }
-    let components: [String] = String(identifier).components(separatedBy: ":")
-    var parameters = self.parameters.ordered(for: name)
+    var parameters = self.parameters.ordered(for: prototype.parameterOrderKey)
     var result: UnicodeText = ""
     var emptyIdentifierIndex: [String: [String: Int]] = [:]
-    if components.count == parameters.count {
+    if prototype.isMember {
       let selfType = parameters.removeFirst()
-      result.prepend(
+      result.append(
         contentsOf: UnicodeText(
-          Swift.source(
+          platform.source(
             for: selfType.type,
             referenceLookup: referenceLookup,
             identifierIndex: &emptyIdentifierIndex
@@ -1380,38 +1357,38 @@ extension ActionIntermediate {
       )
       result.append(".")
     }
-    for index in parameters.indices {
-      if index == parameters.startIndex  {
-        result.append(contentsOf: components[index].unicodeScalars)
-        if String(result).hasSuffix("(_") {
-          result.removeLast()
-        } else {
-          result.append(contentsOf: ": ".unicodeScalars)
+    result.append(contentsOf: prototype.baseName)
+    if !prototype.isVariable {
+      result.append("(")
+      for index in parameters.indices {
+        let parameter = parameters[index]
+        if index != parameters.startIndex {
+          result.append(contentsOf: ", ")
         }
-      } else {
-        result.append(contentsOf: ", ")
-        if components[index] != "_" {
-          result.append(contentsOf: components[index].unicodeScalars)
-          result.append(contentsOf: ": ".unicodeScalars)
+        if let label = parameter.swiftLabel {
+          result.append(contentsOf: label)
+          result.append(contentsOf: ": ")
         }
+        result.append(
+          contentsOf: platform.source(
+            for: parameter.type,
+            referenceLookup: referenceLookup,
+            identifierIndex: &emptyIdentifierIndex
+          ).unicodeScalars
+        )
       }
-      result.append(
-        contentsOf: Swift.source(
-          for: parameters[index].type,
-          referenceLookup: referenceLookup,
-          identifierIndex: &emptyIdentifierIndex
-        ).unicodeScalars
-      )
+      result.append(")")
     }
-    result.append(contentsOf: components.last!.unicodeScalars)
     if let returned = self.returnValue {
-      let returnValue = Swift.source(for: returned, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)
-      if result.starts(with: "init(".unicodeScalars) {
+      let returnValue = platform.source(for: returned, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)
+      if let initializerSuffix = platform.initializerSuffix,
+        ".\(result)".starts(with: "\(initializerSuffix)(") {
         result = "\(returnValue).\(result)"
-      } else if result.last != ")" {
-        result.append(contentsOf: ": \(returnValue)")
-      } else {
-        result.append(contentsOf: " -> \(returnValue)")
+      } else if let returnSection = platform.returnSection(
+        with: returnValue,
+        isProperty: prototype.isVariable
+      ) {
+        return platform.signature(callSection: result, returnSection: UnicodeText(returnSection))
       }
     }
     return result
