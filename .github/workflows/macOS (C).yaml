@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   macOS_C:
     name: macOS (C)
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
     - name: Check out
       uses: actions/checkout@v7
