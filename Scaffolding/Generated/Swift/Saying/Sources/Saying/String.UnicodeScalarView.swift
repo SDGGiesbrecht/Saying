@@ -93,7 +93,7 @@ extension String.UnicodeScalarView {
   }
 }
 
-extension String.UnicodeScalarView: Hashable {}
+extension Swift.String.UnicodeScalarView: Swift.Hashable {}
 
 func if_0020most_0020efficient_002C_0020hash_0020key_0020_0028_0029_0020with_0020_0028_0029_0020by_0020iteration_003AUnicode_0020scalars_003Ahasher_003A(_ key: String.UnicodeScalarView, _ hasher: inout Hasher) {
   for scalar in key {

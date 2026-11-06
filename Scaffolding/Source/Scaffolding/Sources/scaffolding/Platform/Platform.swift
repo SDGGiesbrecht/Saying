@@ -183,6 +183,7 @@ protocol Platform {
   // Native Requirements
   static var preexistingNativeRequirements: Set<String> { get }
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool
+  static var nativeRequirementsRequiringAdjustment: [String: String] { get }
 
   // Module
   static var importsNeededByDeadEnd: Set<ImportIntermediate> { get }
@@ -3817,14 +3818,15 @@ extension Platform {
   ) -> String? {
     var result: [String] = []
     for declaration in nativeRequirements {
-      let line = source(
+      let unadjustedRequirement = source(
         for: declaration,
         referenceLookup: referenceLookup,
         identifierIndex: &identifierIndex
       )
-      if alreadyHandled.insert(line).inserted,
-        !isAlgorithmicallyPreexistingNativeRequirement(source: line) {
-        result.append(line)
+      let requirement = nativeRequirementsRequiringAdjustment[unadjustedRequirement] ?? unadjustedRequirement
+      if alreadyHandled.insert(requirement).inserted,
+        !isAlgorithmicallyPreexistingNativeRequirement(source: requirement) {
+        result.append(requirement)
       }
     }
     if result.isEmpty {
