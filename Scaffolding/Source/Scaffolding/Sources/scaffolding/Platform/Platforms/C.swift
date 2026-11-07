@@ -561,6 +561,9 @@ enum C: Platform {
   static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return returnValue
   }
+  static func signature(callSection: UnicodeText, returnSection: UnicodeText) -> UnicodeText {
+    return callSection
+  }
 
   static func actionDeclarationBase(name: String, parameters: String, returnSection: String?) -> String {
     return "\(returnSection!) \(name)(\(parameters))"

@@ -401,22 +401,76 @@ extension ModuleIntermediate {
 }
 
 extension ModuleIntermediate {
-  func removingUnreachable(
+  func addIdentifiersRequiredForUniqueInclusionMode<P>(
+    to identifiers: inout Set<UnicodeText>,
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) where P: Platform {
+    let referenceLookup = externalReferenceLookup + [referenceDictionary]
+    var coveredSource: Set<HashableSourceLocation> = []
+    for thing in referenceDictionary.allThings(sorted: true) {
+      if coveredSource.insert(thing.declaration.location.hashableStartLocation).inserted {
+        for identifier in thing.requiredIdentifiers(
+          moduleAndExternalReferenceLookup: referenceLookup,
+          platform: platform
+        ) {
+          identifiers.insert(identifier)
+        }
+      }
+    }
+    var coveredRegions: Set<UnicodeText> = []
+    for copyReducing in referenceDictionary.allActions(sorted: true) {
+      let action = copyReducing.value
+      if action.deservesTesting {
+        var required = false
+        if let declaration = action.declaration,
+          coveredSource.insert(declaration.location.hashableStartLocation).inserted {
+          required = true
+        } else if action.declaration == nil,
+          // Slower, but some actions do not originate from source.
+          coveredRegions.insert(action.coverageRegionIdentifier(referenceLookup: referenceLookup)).inserted {
+          required = true
+        }
+        if required {
+          for identifier in action.requiredIdentifiers(
+            moduleAndExternalReferenceLookup: referenceLookup,
+            platform: platform
+          ) {
+            identifiers.insert(identifier)
+          }
+        }
+      }
+    }
+    for test in allTests() {
+      for identifier in test.statements.requiredIdentifiers(context: referenceLookup) {
+        identifiers.insert(identifier)
+      }
+    }
+  }
+  func removingUnreachable<P>(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
-    externalReferenceLookup: [ReferenceDictionary]
-  ) -> ModuleIntermediate {
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) -> ModuleIntermediate
+  where P: Platform {
     var result = self
-    result.referenceDictionary.removeUnreachable(fromEntryPoints: &entryPoints, externalReferenceLookup: externalReferenceLookup)
+    result.referenceDictionary.removeUnreachable(
+      fromEntryPoints: &entryPoints,
+      externalReferenceLookup: externalReferenceLookup,
+      platform: platform
+    )
     result.resolveTypeIdentifiers(externalReferenceLookup: externalReferenceLookup)
     return result
   }
-  mutating func removeUnreachable(
+  mutating func removeUnreachable<P>(
     fromEntryPoints entryPoints: inout Set<UnicodeText>,
-    externalReferenceLookup: [ReferenceDictionary]
-  ) {
+    externalReferenceLookup: [ReferenceDictionary],
+    platform: P.Type
+  ) where P: Platform {
     self = removingUnreachable(
       fromEntryPoints: &entryPoints,
-      externalReferenceLookup: externalReferenceLookup
+      externalReferenceLookup: externalReferenceLookup,
+      platform: platform
     )
   }
 }

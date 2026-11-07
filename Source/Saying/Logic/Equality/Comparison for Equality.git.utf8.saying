@@ -81,8 +81,8 @@ ability (clients)
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
-   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ != ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: “” first “ != ” second “” [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← (first) is not (second) according to default comparison for equality
    }
@@ -137,7 +137,7 @@ extension
     ελληνικά: κατατεμαχισμός μέρος (μέρος: [part]) με (κατακερματιστής: [hasher])
    )
    Swift: “” hasher “.combine(” part “)” [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
      “” thing “.hash(into: Hasher)”
     ] {
      “extension ” thing “: Hashable {}”
@@ -155,8 +155,8 @@ extension
     English: (first: thing) is not (second: thing) according to default comparison for equality
    )
    truth value
-   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: “” first “ != ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ != ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: “” first “ != ” second “” [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
    }
@@ -184,8 +184,8 @@ extension
     English: (first: optional (thing)) is (second: optional (thing)) according to optional
    )
    truth value
-   Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ == ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: «» first “ == ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {
      if (second) exists, unwrap it as (• second value: thing), {
@@ -215,8 +215,8 @@ extension
     עברית +: (ראשון: [first]) = (שני: [second])
    )
    truth value
-   Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ == ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: «» first “ == ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     if (first) exists, unwrap it as (• first value: thing), {
      ← (first value: thing) is (second: thing)
@@ -243,8 +243,8 @@ extension
     עברית +: (ראשון: [first]) = (שני: [second])
    )
    truth value
-   Kotlin: «» first “ == ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ == ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ == ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: «» first “ == ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← (second) is (first)
    }
@@ -261,8 +261,8 @@ extension
     English: (first: optional (thing)) is not (second: optional (thing)) according to optional
    )
    truth value
-   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ != ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: «» first “ != ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second) according to optional)
    }
@@ -286,8 +286,8 @@ extension
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
-   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ != ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: «» first “ != ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← not ((first) is (second))
    }
@@ -311,8 +311,8 @@ extension
     עברית +: (ראשון: [first]) ≠ (שני: [second])
    )
    truth value
-   Kotlin: «» first “ != ” second „“ [“override ” thing “.equals(” thing “)”]
-   Swift: «» first “ != ” second „“ [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   Kotlin: «» first “ != ” second „“ [“” thing “.equals(” thing “): Boolean”]
+   Swift: «» first “ != ” second „“ [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     ← (second) is not (first)
    }

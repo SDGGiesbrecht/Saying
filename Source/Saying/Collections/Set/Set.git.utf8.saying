@@ -11,15 +11,15 @@ extension
     C: set‐(thing: [thing])
    )
    C♯: “HashSet<” thing “>” (“System.Collections.Generic”) [
-     “override ” thing “.Equals(” thing “)”
-     “override ” thing “.GetHashCode()”
+     “bool ” thing “.Equals(” thing “)”
+     “int ” thing “.GetHashCode()”
     ]
    Kotlin: “Set<” thing “>” [
-     “override ” thing “.equals(” thing “)”
-     “override ” thing “.hashCode()”
+     “” thing “.equals(” thing “): Boolean”
+     “” thing “.hashCode(): Int”
     ]
    Swift: “Set<” thing “>” [
-     “==(¤(5F): ” thing “, ¤(5F): ” thing “)”
+     “==(” thing “, ” thing “) ¤(2D)> Bool”
      “” thing “.hash(into: Hasher)”
     ] {
      “extension ” thing “: Hashable {}”

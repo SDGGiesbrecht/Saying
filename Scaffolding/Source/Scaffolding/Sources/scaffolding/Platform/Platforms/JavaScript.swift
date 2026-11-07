@@ -309,6 +309,9 @@ enum JavaScript: Platform {
   static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
     return nil
   }
+  static func signature(callSection: UnicodeText, returnSection: UnicodeText) -> UnicodeText {
+    return callSection
+  }
 
   static var needsForwardDeclarations: Bool { false }
   static func forwardActionDeclaration(name: String, parameters: String, returnSection: String?) -> String? {

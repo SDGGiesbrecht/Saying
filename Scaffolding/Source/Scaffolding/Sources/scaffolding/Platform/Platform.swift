@@ -127,6 +127,7 @@ protocol Platform {
   static var emptyReturnType: String? { get }
   static var emptyReturnTypeForActionType: String { get }
   static func returnSection(with returnValue: String, isProperty: Bool) -> String?
+  static func signature(callSection: UnicodeText, returnSection: UnicodeText) -> UnicodeText
   static var needsForwardDeclarations: Bool { get }
   static func forwardActionDeclaration(
     name: String,
@@ -483,6 +484,34 @@ extension Platform {
     }
     return repair(compoundNativeType: result)
   }
+  static func sourceForReference(
+    to type: Thing,
+    referenceLookup: [ReferenceDictionary],
+    identifierIndex: inout [String: [String: Int]]
+  ) -> String {
+    if let native = nativeType(of: type) {
+      return source(
+        for: native,
+        referenceLookup: referenceLookup,
+        identifierIndex: &identifierIndex
+      )
+    } else if let native = nativeName(
+      of: type,
+      referenceLookup: referenceLookup,
+      identifierIndex: &identifierIndex
+    ) {
+      return native
+    } else {
+      return capLengthOf(
+        identifier: sanitize(
+          identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+          leading: true,
+          entire: true
+        ),
+        index: &identifierIndex
+      )
+    }
+  }
   static func source(
     for type: ParsedTypeReference,
     referenceLookup: [ReferenceDictionary],
@@ -490,52 +519,20 @@ extension Platform {
   ) -> String {
     switch type {
     case .simple(let simple):
-      let type = referenceLookup.lookupThing(simple.identifier, components: [])!
-      if let native = nativeType(of: type) {
-        return native.textComponents.lazy.map({ String($0) }).joined()
-      } else if let native = nativeName(
-        of: type,
+      return sourceForReference(
+        to: referenceLookup.lookupThing(simple.identifier, components: [])!,
         referenceLookup: referenceLookup,
         identifierIndex: &identifierIndex
-      ) {
-        return native
-      } else {
-        return capLengthOf(
-          identifier: sanitize(
-            identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-            leading: true,
-            entire: true
-          ),
-          index: &identifierIndex
-        )
-      }
+      )
     case .compound(identifier: let identifier, components: let components):
-      let type = referenceLookup.lookupThing(
-        identifier.name(),
-        components: components.map({ $0.key })
-      )!
-      if let native = nativeType(of: type) {
-        return source(
-          for: native,
-          referenceLookup: referenceLookup,
-          identifierIndex: &identifierIndex
-        )
-      } else if let native = nativeName(
-        of: type,
+      return sourceForReference(
+        to: referenceLookup.lookupThing(
+          identifier.name(),
+          components: components.map({ $0.key })
+        )!,
         referenceLookup: referenceLookup,
         identifierIndex: &identifierIndex
-      ) {
-        return native
-      } else {
-        return capLengthOf(
-          identifier: sanitize(
-            identifier: type.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-            leading: true,
-            entire: true
-          ),
-          index: &identifierIndex
-        )
-      }
+      )
     case .action(parameters: let actionParameters, returnValue: let actionReturn):
       return actionType(
         parameters: actionParameters
@@ -578,15 +575,7 @@ extension Platform {
   }
 
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
-    if let identifier = action.identifier(for: self, referenceLookup: referenceLookup) {
-      if let functionName = String(identifier).prefix(upTo: "(") {
-        return String(functionName)
-      } else {
-        return String(identifier)
-      }
-    } else {
-      return nil
-    }
+    return action.baseName(for: self, referenceLookup: referenceLookup).map({ String($0.baseName) })
   }
 
   static func nativeIsOverride(action: ActionIntermediate) -> Bool {
@@ -3851,7 +3840,10 @@ extension Platform {
     modulesToSearchForMembers: [ModuleIntermediate]
   ) {
     let moduleReferenceLookup = moduleWideImports + [module.referenceDictionary]
-    let allThings = module.referenceDictionary.allThings(sorted: true)
+    let allThings = module.referenceDictionary.allThings(
+      sorted: true,
+      adjustingOrderForInterdependency: true
+    )
     for thing in allThings {
       if let declaration = self.declaration(
         for: thing,
@@ -3961,6 +3953,7 @@ extension Platform {
     for modules: [ModuleIntermediate],
     mode: CompilationMode,
     libraryName: String,
+    originalTestCoverageRegions: Set<UnicodeText>,
     moduleWideImports: [ModuleIntermediate]
   ) -> ParallelFiles {
     let moduleWideImportDictionary = moduleWideImports.map { $0.referenceDictionary }
@@ -3995,12 +3988,7 @@ extension Platform {
         ? self.coverageRegionIndexFile
         : mainFile
       files[coverageRegionIndexFile].appendSeparatorLine()
-      var regionSet: Set<UnicodeText> = []
-      for module in modules {
-        regionSet.formUnion(self.coverageRegions(for: module, moduleWideImports: moduleWideImportDictionary))
-      }
-      regionSet.remove(":fail:") // ← No general solution for testing deliberate failures yet.
-      let regions = regionSet
+      let regions = originalTestCoverageRegions
         .sorted(by: { $0.lexicographicallyPrecedes($1) })
       for (index, region) in regions.enumerated() {
         coverageIndex[region] = index
@@ -4147,21 +4135,68 @@ extension Platform {
     func getSayingModuleInCurrentState() -> ModuleIntermediate? {
       return builtModules.first
     }
-    for index in sourceModules.indices {
+    for module in sourceModules {
       builtModules.append(
-        try sourceModules[index].build(
-          mode: mode,
+        try module.build(
           moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
         )
       )
     }
-    if !mode.includesUnreachableComponents {
-      guard var entries = entryPoints else {
+
+    var testCoverageRegions: Set<UnicodeText> = []
+    if mode.hasTestCoverage {
+      for module in builtModules {
+        testCoverageRegions.formUnion(
+          self.coverageRegions(
+            for: module,
+            moduleWideImports: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
+          )
+        )
+      }
+      testCoverageRegions.remove(":fail:") // ← No general solution for testing deliberate failures yet.
+    }
+
+    let performRemoval: Bool
+    var requiredComponents: Set<UnicodeText>
+    switch mode.includedComponents {
+    case .all:
+      performRemoval = false
+      requiredComponents = []
+    case .unique:
+      performRemoval = true
+      requiredComponents = []
+      for module in builtModules {
+        module.addIdentifiersRequiredForUniqueInclusionMode(
+          to: &requiredComponents,
+          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? [],
+          platform: Self.self
+        )
+      }
+    case .reachable:
+      performRemoval = true
+      guard let entries = entryPoints else {
         fatalError("General reachability checks without specifying entry points are not implemented yet.")
       }
+      requiredComponents = entries
+    }
+    if performRemoval {
       for index in builtModules.indices.reversed() {
         builtModules[index].removeUnreachable(
-          fromEntryPoints: &entries,
+          fromEntryPoints: &requiredComponents,
+          externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? [],
+          platform: Self.self
+        )
+      }
+      if !requiredComponents.isEmpty {
+        throw CompilationError.missingEntryPoints(
+          requiredComponents.sorted(by: { $0.lexicographicallyPrecedes($1) })
+        )
+      }
+    }
+
+    if mode.hasTestCoverage {
+      for index in builtModules.indices {
+        builtModules[index].applyTestCoverageTracking(
           externalReferenceLookup: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
         )
       }
@@ -4174,6 +4209,7 @@ extension Platform {
       for: builtModules,
       mode: mode,
       libraryName: libraryName,
+      originalTestCoverageRegions: testCoverageRegions,
       moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
     )
 

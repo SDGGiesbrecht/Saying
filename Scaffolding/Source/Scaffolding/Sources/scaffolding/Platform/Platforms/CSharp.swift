@@ -439,7 +439,10 @@ enum CSharp: Platform {
     return "void"
   }
   static func returnSection(with returnValue: String, isProperty: Bool) -> String? {
-    return "\(returnValue)"
+    return returnValue
+  }
+  static func signature(callSection: UnicodeText, returnSection: UnicodeText) -> UnicodeText {
+    return "\(returnSection) \(callSection)"
   }
 
   static var needsForwardDeclarations: Bool { false }

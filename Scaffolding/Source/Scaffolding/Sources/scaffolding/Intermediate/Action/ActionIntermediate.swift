@@ -14,6 +14,7 @@ struct ActionIntermediate {
   var isMemberWrapper: Bool = false
   var isEnumerationValueWrapper: Bool = false
   var isAccessor: Bool = false
+  var isParameterWrapper: Bool = false
   var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
   var coveredIdentifier: UnicodeText?
   var isSpecialized: Bool
@@ -168,6 +169,7 @@ extension ActionIntermediate {
         nativeNames: .none
       ),
       isCreation: false,
+      isParameterWrapper: true,
       isSpecialized: false,
       deservesTesting: false
     )
@@ -1256,7 +1258,10 @@ extension ActionIntermediate {
 }
 
 extension ActionIntermediate {
-  func identifier<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
+
+  func baseName<P>(
+    for platform: P.Type, referenceLookup: [ReferenceDictionary]
+  ) -> PlatformActionNamePrototype?
   where P: Platform {
     guard let nameDeclaration = platform.nativeNameDeclaration(of: self) else {
       return nil
@@ -1272,9 +1277,11 @@ extension ActionIntermediate {
         name.removeFirst(variablePrefix.count)
         isVariable = true
     }
+    var isMember = false
     if let memberPrefix = platform.memberPrefix,
       name.starts(with: memberPrefix) {
       name.removeFirst(memberPrefix.count)
+      isMember = true
     }
     var disambiguatorParameters: [Int] = []
     if !platform.permitsOverloads {
@@ -1318,50 +1325,30 @@ extension ActionIntermediate {
       String(functionName).hasSuffix(String(initializerSuffix)) {
       functionName = platform.initializerName
     }
-    var parameterNames: [UnicodeText] = []
-    while !name.isEmpty {
-      if name.starts(with: "()".unicodeScalars) {
-        parameterNames.append(platform.emptyParameterLabel)
-        name.removeFirst(2)
-      } else {
-        guard let next = name.firstIndex(of: "(") else {
-          fatalError("Illegal postfix name component: \(platform.nativeNameDeclaration(of: self)!)")
-        }
-        guard platform.permitsParameterLabels else {
-          fatalError("Illegal parameter label: \(platform.nativeNameDeclaration(of: self)!)")
-        }
-        var parameterName = name[..<next]
-        name.removeSubrange(..<next)
-        if parameterName.last == " " {
-          parameterName.removeLast()
-        }
-        parameterNames.append(UnicodeText(parameterName))
-        if name.starts(with: "()".unicodeScalars) {
-          name.removeFirst(2)
-        }
-      }
-      if name.first == " " {
-        name.removeFirst()
-      }
-    }
-    let parameters = parameterNames.map({ "\($0)\(platform.parameterLabelSuffix)" }).joined()
-    let parameterSection = isVariable ? "" : "(\(parameters))"
-    return UnicodeText("\(functionName)\(parameterSection)")
+    return PlatformActionNamePrototype(
+      baseName: functionName,
+      parameterOrderKey: nameDeclaration,
+      isVariable: isVariable,
+      isMember: isMember
+    )
   }
-  func swiftSignature(referenceLookup: [ReferenceDictionary]) -> UnicodeText? {
-    guard let name = nativeNames.swift,
-      let identifier = identifier(for: Swift.self, referenceLookup: referenceLookup) else {
+
+  func signature<P>(for platform: P.Type, referenceLookup: [ReferenceDictionary]) -> UnicodeText?
+  where P: Platform {
+    guard let prototype = self.baseName(for: platform, referenceLookup: referenceLookup) else {
       return nil
     }
-    let components: [String] = String(identifier).components(separatedBy: ":")
-    var parameters = self.parameters.ordered(for: name)
+    if !platform.permitsOverloads {
+      return prototype.baseName
+    }
+    var parameters = self.parameters.ordered(for: prototype.parameterOrderKey)
     var result: UnicodeText = ""
     var emptyIdentifierIndex: [String: [String: Int]] = [:]
-    if components.count == parameters.count {
+    if prototype.isMember {
       let selfType = parameters.removeFirst()
-      result.prepend(
+      result.append(
         contentsOf: UnicodeText(
-          Swift.source(
+          platform.source(
             for: selfType.type,
             referenceLookup: referenceLookup,
             identifierIndex: &emptyIdentifierIndex
@@ -1370,23 +1357,39 @@ extension ActionIntermediate {
       )
       result.append(".")
     }
-    for index in parameters.indices {
-      if index != parameters.startIndex {
-        result.append(contentsOf: ", ")
+    result.append(contentsOf: prototype.baseName)
+    if !prototype.isVariable {
+      result.append("(")
+      for index in parameters.indices {
+        let parameter = parameters[index]
+        if index != parameters.startIndex {
+          result.append(contentsOf: ", ")
+        }
+        if let label = parameter.swiftLabel {
+          result.append(contentsOf: label)
+          result.append(contentsOf: ": ")
+        }
+        result.append(
+          contentsOf: platform.source(
+            for: parameter.type,
+            referenceLookup: referenceLookup,
+            identifierIndex: &emptyIdentifierIndex
+          ).unicodeScalars
+        )
       }
-      result.append(contentsOf: components[index].unicodeScalars)
-      result.append(contentsOf: ": ".unicodeScalars)
-      result.append(
-        contentsOf: Swift.source(
-          for: parameters[index].type,
-          referenceLookup: referenceLookup,
-          identifierIndex: &emptyIdentifierIndex
-        ).unicodeScalars
-      )
+      result.append(")")
     }
-    result.append(contentsOf: components.last!.unicodeScalars)
-    if result.starts(with: "init(".unicodeScalars) {
-      result = "\(Swift.source(for: returnValue!, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)).\(result)"
+    if let returned = self.returnValue {
+      let returnValue = platform.source(for: returned, referenceLookup: referenceLookup, identifierIndex: &emptyIdentifierIndex)
+      if let initializerSuffix = platform.initializerSuffix,
+        ".\(result)".starts(with: "\(initializerSuffix)(") {
+        result = "\(returnValue).\(result)"
+      } else if let returnSection = platform.returnSection(
+        with: returnValue,
+        isProperty: prototype.isVariable
+      ) {
+        return platform.signature(callSection: result, returnSection: UnicodeText(returnSection))
+      }
     }
     return result
   }
@@ -1405,7 +1408,11 @@ extension ActionIntermediate {
         moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
       )
     )
+    var alwaysNative = false
     if let native = platform.nativeImplementation(of: self) {
+      if native.condition == nil {
+        alwaysNative = true
+      }
       for parameterReference in native.expression.parameters {
         if let typeInstead = parameterReference.typeInstead {
           result.append(
@@ -1427,7 +1434,9 @@ extension ActionIntermediate {
           )
         )
       }
-    } else if let implementation = self.implementation {
+    }
+    if let implementation = self.implementation,
+      !alwaysNative {
       result.append(
         contentsOf: implementation.requiredIdentifiers(
           context: moduleAndExternalReferenceLookup

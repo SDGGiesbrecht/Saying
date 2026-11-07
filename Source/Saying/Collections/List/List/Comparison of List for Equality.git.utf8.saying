@@ -27,9 +27,9 @@ extension
    ]
    (first: list of (thing)) is (second: list of (thing)) according to list
    truth value
-   C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”) [“override ” thing “.Equals(” thing “)”]
-   Kotlin: “” first “ == ” second “” [“override ” thing “.equals(” thing “)”]
-   Swift: “” first “ == ” second “” [“==(¤(5F): ” thing “, ¤(5F): ” thing “)”] {“extension ” thing “: Equatable {}”}
+   C♯: “” first “.SequenceEqual(” second “)” (“System.Linq”) [“bool ” thing “.Equals(” thing “)”]
+   Kotlin: “” first “ == ” second “” [“” thing “.equals(” thing “): Boolean”]
+   Swift: “” first “ == ” second “” [“==(” thing “, ” thing “) ¤(2D)> Bool”] {“extension ” thing “: Equatable {}”}
    {
     let (• end of first: list boundary) be (end of (first))
     if ((end of first) is not (end of (second))), {
