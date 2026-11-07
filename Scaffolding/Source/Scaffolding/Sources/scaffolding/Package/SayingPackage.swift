@@ -137,7 +137,7 @@ struct Package {
 
   func testIOS(reportProgress: @escaping (String) -> Void) throws {
     let simulatorName: String
-    #if swift(>=6) // Xcode 16
+    #if compiler(>=6) // Xcode 16
       simulatorName = "iPhone 16"
     #else
       simulatorName = "iPhone 14"
@@ -151,7 +151,7 @@ struct Package {
 
   func testWatchOS(reportProgress: @escaping (String) -> Void) throws {
     let simulatorName: String
-    #if swift(>=6) // Xcode 16
+    #if compiler(>=6) // Xcode 16
       simulatorName = "Apple Watch Series 10 (42mm)"
     #else
       simulatorName = "Apple Watch Series 5 (40mm)"
