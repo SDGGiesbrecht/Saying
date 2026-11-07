@@ -17,6 +17,12 @@ jobs:
         defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
         xcodebuild -version
         swift --version
+    - name: Set up tvOS Simulator
+      shell: bash
+      run: |
+        set -x
+        xcrun simctl list > /dev/null
+        xcrun xcodebuild -downloadPlatform tvOS
     - name: Test
       shell: bash
       run: |
