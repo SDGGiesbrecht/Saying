@@ -1430,7 +1430,8 @@ extension ActionIntermediate {
           )
         )
       }
-    } else if let implementation = self.implementation {
+    }
+    if let implementation = self.implementation {
       result.append(
         contentsOf: implementation.requiredIdentifiers(
           context: moduleAndExternalReferenceLookup
