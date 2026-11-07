@@ -705,6 +705,10 @@ enum Swift: Platform {
     }
     return false
   }
+  static let nativeRequirementsRequiringAdjustment: [String: String] = [
+    "extension String.UnicodeScalarView: Equatable {}": "extension Swift.String.UnicodeScalarView: Swift.Equatable {}",
+    "extension String.UnicodeScalarView: Hashable {}": "extension Swift.String.UnicodeScalarView: Swift.Hashable {}",
+  ]
 
   static var currentTestVariableFile: String {
     return "currentTest"
