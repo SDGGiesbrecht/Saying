@@ -136,7 +136,13 @@ struct Package {
   }
 
   func testIOS(reportProgress: @escaping (String) -> Void) throws {
-    try testXcode(platform: "iOS", simulator: "iPhone 14", reportProgress: reportProgress)
+    let simulatorName: String
+    #if swift(>=6) // Xcode 16
+      simulatorName = "iPhone 16"
+    #else
+      simulatorName = "iPhone 14"
+    #endif
+    try testXcode(platform: "iOS", simulator: simulatorName, reportProgress: reportProgress)
   }
 
   func testTVOS(reportProgress: @escaping (String) -> Void) throws {
@@ -144,6 +150,12 @@ struct Package {
   }
 
   func testWatchOS(reportProgress: @escaping (String) -> Void) throws {
-    try testXcode(platform: "watchOS", simulator: "Apple Watch Series 5 (40mm)", reportProgress: reportProgress)
+    let simulatorName: String
+    #if swift(>=6) // Xcode 16
+      simulatorName = "Apple Watch Series 10 (42mm)"
+    #else
+      simulatorName = "Apple Watch Series 5 (40mm)"
+    #endif
+    try testXcode(platform: "watchOS", simulator: simulatorName, reportProgress: reportProgress)
   }
 }
