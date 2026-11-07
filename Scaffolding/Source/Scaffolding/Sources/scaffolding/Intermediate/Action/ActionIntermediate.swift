@@ -1408,7 +1408,11 @@ extension ActionIntermediate {
         moduleAndExternalReferenceLookup: moduleAndExternalReferenceLookup
       )
     )
+    var alwaysNative = false
     if let native = platform.nativeImplementation(of: self) {
+      if native.condition == nil {
+        alwaysNative = true
+      }
       for parameterReference in native.expression.parameters {
         if let typeInstead = parameterReference.typeInstead {
           result.append(
@@ -1431,7 +1435,8 @@ extension ActionIntermediate {
         )
       }
     }
-    if let implementation = self.implementation {
+    if let implementation = self.implementation,
+      !alwaysNative {
       result.append(
         contentsOf: implementation.requiredIdentifiers(
           context: moduleAndExternalReferenceLookup
