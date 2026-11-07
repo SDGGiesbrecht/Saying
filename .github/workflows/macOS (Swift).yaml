@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   macOS_Swift:
     name: macOS (Swift)
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
     - name: Check out
       uses: actions/checkout@v7
@@ -13,7 +13,7 @@ jobs:
       shell: bash
       run: |
         set -x
-        sudo xcode-select -switch /Applications/Xcode_15.0.app
+        sudo xcode-select -switch /Applications/Xcode_16.0.app
         defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
         xcodebuild -version
         swift --version

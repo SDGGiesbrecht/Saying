@@ -704,6 +704,7 @@ enum C: Platform {
   static func isAlgorithmicallyPreexistingNativeRequirement(source: String) -> Bool {
     return false
   }
+  static let nativeRequirementsRequiringAdjustment: [String: String] = [:]
 
   static var importsNeededByDeadEnd: Set<ImportIntermediate> {
     return Set([
