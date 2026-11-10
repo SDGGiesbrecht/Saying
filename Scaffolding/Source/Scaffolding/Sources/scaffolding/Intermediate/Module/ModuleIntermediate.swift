@@ -117,11 +117,21 @@ extension ModuleIntermediate {
     }
   }
 
-  mutating func resolveUses(externalLookup: [ReferenceDictionary]) throws {
+  mutating func resolveUses(
+    externalLookup: [ReferenceDictionary],
+    testedUses: inout Set<HashableSourceLocation>
+  ) throws {
     var errors: [ReferenceError] = []
     var nestedUses: [UseIntermediate] = []
     for use in uses {
-      resolve(use, externalLookup: externalLookup, nestedUses: &nestedUses, errors: &errors)
+      resolve(
+        use,
+        externalLookup: externalLookup,
+        nestedUses: &nestedUses,
+        testedUses: &testedUses,
+        isDuplicate: false,
+        errors: &errors
+      )
     }
     self.uses.append(contentsOf: nestedUses)
     if !errors.isEmpty {
@@ -132,6 +142,8 @@ extension ModuleIntermediate {
     _ use: UseIntermediate,
     externalLookup: [ReferenceDictionary],
     nestedUses: inout [UseIntermediate],
+    testedUses: inout Set<HashableSourceLocation>,
+    isDuplicate: Bool,
     errors: inout [ReferenceError]
   ) {
     let identifier = use.ability
@@ -176,7 +188,8 @@ extension ModuleIntermediate {
           requirement: requirement,
           useAccess: use.access,
           typeLookup: useTypes,
-          specializationNamespace: specializationNamespace
+          specializationNamespace: specializationNamespace,
+          intoExtensionAsDuplicate: isDuplicate
         ) {
         case .success(let new):
           _ = referenceDictionary.add(action: new)
@@ -187,7 +200,8 @@ extension ModuleIntermediate {
         let specialized = provision.specializing(
           for: use,
           typeLookup: useTypes,
-          specializationNamespace: specializationNamespace
+          specializationNamespace: specializationNamespace,
+          intoExtensionAsDuplicate: isDuplicate
         )
         _ = referenceDictionary.add(action: specialized)
       } else {
@@ -203,7 +217,8 @@ extension ModuleIntermediate {
       let specialized = thing.specializing(
         for: use,
         typeLookup: useTypes,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: false
       )
       if externalLookup.lookupThing(
         specialized.names.identifier(),
@@ -218,7 +233,8 @@ extension ModuleIntermediate {
       let specialized = action.specializing(
         for: use,
         typeLookup: useTypes,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: false
       )
       if externalLookup.lookupAction(
         specialized.names.identifier(),
@@ -229,11 +245,18 @@ extension ModuleIntermediate {
       }
     }
     for use in ability.provisionUses {
-      let specialized = use.specializing(typeLookup: useTypes, specializationNamespace: specializationNamespace)
+      let isDuplicate = !testedUses.insert(use.declaration.location.hashableStartLocation).inserted
+      let specialized = use.specializing(
+        typeLookup: useTypes,
+        specializationNamespace: specializationNamespace,
+        isDuplicate: isDuplicate
+      )
       resolve(
         specialized,
         externalLookup: externalLookup,
         nestedUses: &nestedUses,
+        testedUses: &testedUses,
+        isDuplicate: isDuplicate,
         errors: &errors
       )
       nestedUses.append(specialized)
@@ -243,7 +266,8 @@ extension ModuleIntermediate {
         test.specializing(
           typeLookup: useTypes,
           specializationNamespace: specializationNamespace,
-          specializationVisibility: use.access
+          specializationVisibility: use.access,
+          intoExtensionAsDuplicate: isDuplicate
         )
       )
     }

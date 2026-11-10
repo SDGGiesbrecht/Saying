@@ -997,7 +997,8 @@ extension ActionIntermediate {
     requirement: RequirementIntermediate,
     useAccess: AccessIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    intoExtensionAsDuplicate: Bool
   ) -> Result<ActionIntermediate, ErrorList<ReferenceError>> {
     var errors: [ReferenceError] = []
     let mergedParameters: Interpolation<ParameterIntermediate>
@@ -1024,7 +1025,8 @@ extension ActionIntermediate {
       inherited: requirement.documentation,
       typeLookup: typeLookup,
       specializationNamespace: specializationNamespace,
-      specializationVisibility: access
+      specializationVisibility: access,
+      intoExtensionAsDuplicate: intoExtensionAsDuplicate
     )
     return .success(
       ActionIntermediate(
@@ -1054,7 +1056,7 @@ extension ActionIntermediate {
         originalUnresolvedCoverageRegionIdentifierComponents: nil,
         coveredIdentifier: coveredIdentifier,
         isSpecialized: isSpecialized,
-        deservesTesting: deservesTesting
+        deservesTesting: deservesTesting && !intoExtensionAsDuplicate
       )
     )
   }
@@ -1062,13 +1064,15 @@ extension ActionIntermediate {
   func specializing(
     for use: UseIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    intoExtensionAsDuplicate: Bool
   ) -> ActionIntermediate {
     let newParameters = parameters.mappingParameters({ parameter in
       return parameter.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       )
     })
     let newReturnValue = returnValue.flatMap { $0.specializing(typeLookup: typeLookup) }
@@ -1077,7 +1081,8 @@ extension ActionIntermediate {
       return documentation.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace,
-        specializationVisibility: newAccess
+        specializationVisibility: newAccess,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       )
     })
     var nativeImplementationTypeLookup = typeLookup
@@ -1115,7 +1120,7 @@ extension ActionIntermediate {
           ?? unresolvedGloballyUniqueIdentifierComponents(),
       coveredIdentifier: coveredIdentifier,
       isSpecialized: true,
-      deservesTesting: deservesTesting
+      deservesTesting: deservesTesting && !intoExtensionAsDuplicate
     )
   }
 

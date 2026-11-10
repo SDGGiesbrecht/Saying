@@ -63,7 +63,8 @@ extension DocumentationIntermediate {
   func specializing(
     typeLookup: [UnicodeText: ParsedTypeReference],
     specializationNamespace: [Set<UnicodeText>],
-    specializationVisibility: AccessIntermediate
+    specializationVisibility: AccessIntermediate,
+    intoExtensionAsDuplicate: Bool
   ) -> DocumentationIntermediate {
     return DocumentationIntermediate(
       paragraphs: paragraphs,
@@ -72,7 +73,8 @@ extension DocumentationIntermediate {
         return test.specializing(
           typeLookup: typeLookup,
           specializationNamespace: specializationNamespace,
-          specializationVisibility: specializationVisibility
+          specializationVisibility: specializationVisibility,
+          intoExtensionAsDuplicate: intoExtensionAsDuplicate
         )
       })
     )
@@ -84,12 +86,14 @@ extension Optional where Wrapped == DocumentationIntermediate {
     inherited: DocumentationIntermediate?,
     typeLookup: [UnicodeText: ParsedTypeReference],
     specializationNamespace: [Set<UnicodeText>],
-    specializationVisibility: AccessIntermediate
+    specializationVisibility: AccessIntermediate,
+    intoExtensionAsDuplicate: Bool
   ) -> DocumentationIntermediate? {
     guard let base = inherited?.specializing(
       typeLookup: typeLookup,
       specializationNamespace: specializationNamespace,
-      specializationVisibility: specializationVisibility
+      specializationVisibility: specializationVisibility,
+      intoExtensionAsDuplicate: intoExtensionAsDuplicate
     ) else {
       return self
     }

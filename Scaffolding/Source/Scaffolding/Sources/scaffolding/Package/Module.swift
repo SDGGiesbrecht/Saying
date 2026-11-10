@@ -21,7 +21,8 @@ struct Module {
   }
 
   func build(
-    moduleWideImports: [ModuleIntermediate]
+    moduleWideImports: [ModuleIntermediate],
+    testedUses: inout Set<HashableSourceLocation>
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
@@ -32,7 +33,10 @@ struct Module {
       try module.unfoldSyntax()
     }
     try module.resolveExtensions()
-    try module.resolveUses(externalLookup: moduleWideImports.map({ $0.referenceDictionary }))
+    try module.resolveUses(
+      externalLookup: moduleWideImports.map({ $0.referenceDictionary }),
+      testedUses: &testedUses
+    )
     module.resolveTypeIdentifiers(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
     module.resolveSpecializedAccess(moduleWideImports: moduleWideImports)
     module.collectTests()

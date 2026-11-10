@@ -119,7 +119,8 @@ extension ParameterIntermediate {
   func specializing(
     for use: UseIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    intoExtensionAsDuplicate: Bool
   ) -> ParameterIntermediate {
     return ParameterIntermediate(
       names: names,
@@ -128,12 +129,14 @@ extension ParameterIntermediate {
       passAction: passAction.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       executeAction: executeAction?.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       nativeNames: nativeNames,
       swiftLabel: swiftLabel

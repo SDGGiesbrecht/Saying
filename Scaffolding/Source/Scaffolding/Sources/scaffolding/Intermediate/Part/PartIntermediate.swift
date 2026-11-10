@@ -180,7 +180,8 @@ extension PartIntermediate {
   func specializing(
     for use: UseIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    intoExtensionAsDuplicate: Bool
   ) -> PartIntermediate {
     return PartIntermediate(
       names: names,
@@ -191,17 +192,20 @@ extension PartIntermediate {
       referenceAction: referenceAction.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       accessor: accessor.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace,
-        specializationVisibility: use.access
+        specializationVisibility: use.access,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       declaration: declaration
     )
