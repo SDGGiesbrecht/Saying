@@ -8,6 +8,7 @@ ability (clients)
     [
      English: An arbitrary example value intended for use in tests.
     ]
+    test {ignore (example: thing)}
    ]
    example
    thing

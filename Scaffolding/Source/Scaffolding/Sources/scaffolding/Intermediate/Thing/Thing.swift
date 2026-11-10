@@ -325,7 +325,8 @@ extension Thing {
   func specializing(
     for use: UseIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    intoExtensionAsDuplicate: Bool
   ) -> Thing {
     let mappedParameters = parameters.mappingParameters { $0.specializing(typeLookup: typeLookup) }
     let newAccess = min(access, use.access)
@@ -333,7 +334,8 @@ extension Thing {
       return part.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       )
     })
     let newCases = cases.map({ enumerationCase in
@@ -341,14 +343,16 @@ extension Thing {
         for: use,
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace,
-        specializationVisibility: newAccess
+        specializationVisibility: newAccess,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       )
     })
     let newDocumentation = documentation.flatMap({ documentation in
       return documentation.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace,
-        specializationVisibility: newAccess
+        specializationVisibility: newAccess,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       )
     })
     return Thing(

@@ -334,7 +334,8 @@ extension CaseIntermediate {
     for use: UseIntermediate,
     typeLookup: [UnicodeText: ParsedTypeReference],
     specializationNamespace: [Set<UnicodeText>],
-    specializationVisibility: AccessIntermediate
+    specializationVisibility: AccessIntermediate,
+    intoExtensionAsDuplicate: Bool
   ) -> CaseIntermediate {
     return CaseIntermediate(
       names: names,
@@ -342,32 +343,38 @@ extension CaseIntermediate {
       referenceAction: referenceAction?.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       wrapAction: wrapAction.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       unwrapAction: unwrapAction?.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       unwrapOtherwiseAction: unwrapOtherwiseAction?.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       checkAction: checkAction.specializing(
         for: use,
         typeLookup: typeLookup,
-        specializationNamespace: specializationNamespace
+        specializationNamespace: specializationNamespace,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       documentation: documentation?.specializing(
         typeLookup: typeLookup,
         specializationNamespace: specializationNamespace,
-        specializationVisibility: specializationVisibility
+        specializationVisibility: specializationVisibility,
+        intoExtensionAsDuplicate: intoExtensionAsDuplicate
       ),
       declaration: declaration
     )

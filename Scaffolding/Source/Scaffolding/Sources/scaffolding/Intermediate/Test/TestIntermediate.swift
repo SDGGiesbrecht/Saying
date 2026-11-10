@@ -69,7 +69,8 @@ extension TestIntermediate {
   func specializing(
     typeLookup: [UnicodeText: ParsedTypeReference],
     specializationNamespace: [Set<UnicodeText>],
-    specializationVisibility: AccessIntermediate
+    specializationVisibility: AccessIntermediate,
+    intoExtensionAsDuplicate: Bool
   ) -> TestIntermediate {
     return TestIntermediate(
       location: location + specializationNamespace,
@@ -77,7 +78,7 @@ extension TestIntermediate {
       inheritedVisibility: min(self.inheritedVisibility, specializationVisibility),
       // While it would be intuitive for tests in an extension to have access to abitily parameters, doing so creates a new concrete test for each use, which is wasteful, since there is only one code region and logical flow to test. Tests that actually should be duplicated for each use belong at the ability requirements instead. Thus with no *good* reason to have specialized tests in extensions, this functionality is deliberately disabled. (Though there is no good place yet to put the relevant documentation and diagnostics.)
       statements: fromExtension ? statements : statements.specializing(typeLookup: typeLookup),
-      fromExtension: fromExtension
+      fromExtension: fromExtension || intoExtensionAsDuplicate
     )
   }
 }

@@ -59,12 +59,19 @@ extension UseIntermediate {
 
   func specializing(
     typeLookup: [UnicodeText: ParsedTypeReference],
-    specializationNamespace: [Set<UnicodeText>]
+    specializationNamespace: [Set<UnicodeText>],
+    isDuplicate: Bool
   ) -> UseIntermediate {
     return UseIntermediate(
       ability: ability,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
-      actions: actions.map({ $0.specializing(for: self, typeLookup: typeLookup, specializationNamespace: specializationNamespace) }),
+      actions: actions.map({ action in
+        return action.specializing(
+          for: self,
+          typeLookup: typeLookup,
+          specializationNamespace: specializationNamespace,
+          intoExtensionAsDuplicate: isDuplicate)
+      }),
       access: access,
       testOnlyAccess: testOnlyAccess,
       declaration: declaration

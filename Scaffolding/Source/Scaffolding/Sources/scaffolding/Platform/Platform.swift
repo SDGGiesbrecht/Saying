@@ -4132,13 +4132,15 @@ extension Platform {
     assert(sourceModules.first?.isSayingModule == true, "Module interdepency is scrambled.")
 
     var builtModules: [ModuleIntermediate] = []
+    var testedUses: Set<HashableSourceLocation> = []
     func getSayingModuleInCurrentState() -> ModuleIntermediate? {
       return builtModules.first
     }
     for module in sourceModules {
       builtModules.append(
         try module.build(
-          moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? []
+          moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? [],
+          testedUses: &testedUses
         )
       )
     }
