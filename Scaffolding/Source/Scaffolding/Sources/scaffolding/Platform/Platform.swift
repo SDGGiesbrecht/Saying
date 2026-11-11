@@ -3334,7 +3334,7 @@ extension Platform {
         context: context,
         localLookup: localLookup + [locals],
         referenceLookup: referenceLookup + [locals],
-        contextCoverageIdentifier: context?.coverageRegionIdentifier(referenceLookup: referenceLookup),
+        contextCoverageIdentifier: context?.coverageRegionIdentifier(),
         coverageRegionCounter: &coverageRegionCounter,
         coverageIndex: coverageIndex,
         followingStatements: statements[entryIndex...].dropFirst(),
@@ -3756,20 +3756,22 @@ extension Platform {
     return imports
   }
 
-  static func coverageRegions(for module: ModuleIntermediate, moduleWideImports: [ReferenceDictionary]) -> Set<UnicodeText> {
+  static func coverageRegions(for module: ModuleIntermediate) -> Set<UnicodeText> {
     let moduleReferenceLookup = module.referenceDictionary
-    let allLookup = moduleWideImports + [moduleReferenceLookup]
     let actionRegions: [UnicodeText] = moduleReferenceLookup.allActions()
       .lazy.filter({ $0.value.deservesTesting })
       .lazy.flatMap({ copyReducing in
         let action = copyReducing.value
         return action.allCoverageRegionIdentifiers(
-          referenceLookup: allLookup,
           skippingSubregions: nativeImplementation(of: action) != nil)
       })
     let choiceRegions: [UnicodeText] = moduleReferenceLookup.allAbilities()
       .lazy.flatMap({ $0.allDefaults() })
-      .lazy.flatMap({ $0.allCoverageRegionIdentifiers(referenceLookup: allLookup, skippingSubregions: nativeImplementation(of: $0) != nil) })
+      .lazy.flatMap({ action in
+        return action.allCoverageRegionIdentifiers(
+          skippingSubregions: nativeImplementation(of: action) != nil
+        )
+      })
     return Set([
       actionRegions,
       choiceRegions
@@ -4140,7 +4142,8 @@ extension Platform {
       builtModules.append(
         try module.build(
           moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? [],
-          testedUses: &testedUses
+          testedUses: &testedUses,
+          packageURL: package.location
         )
       )
     }
@@ -4150,12 +4153,10 @@ extension Platform {
       for module in builtModules {
         testCoverageRegions.formUnion(
           self.coverageRegions(
-            for: module,
-            moduleWideImports: getSayingModuleInCurrentState().map({ [$0.referenceDictionary] }) ?? []
+            for: module
           )
         )
       }
-      testCoverageRegions.remove(":fail:") // ← No general solution for testing deliberate failures yet.
     }
 
     let performRemoval: Bool

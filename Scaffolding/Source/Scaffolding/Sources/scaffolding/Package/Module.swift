@@ -22,12 +22,13 @@ struct Module {
 
   func build(
     moduleWideImports: [ModuleIntermediate],
-    testedUses: inout Set<HashableSourceLocation>
+    testedUses: inout Set<HashableSourceLocation>,
+    packageURL: URL
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
-      try module.add(file: SayingSource(from: sourceFile).parse())
+      try module.add(file: SayingSource(from: sourceFile, packageURL: packageURL).parse())
     }
     if isSayingSyntaxModule {
       try module.unfoldSyntax()
