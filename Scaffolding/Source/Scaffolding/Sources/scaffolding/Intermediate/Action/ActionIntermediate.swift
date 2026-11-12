@@ -1218,7 +1218,8 @@ extension ActionIntermediate {
               resolvedResultType: returnValue
             )
           )
-        ]
+        ],
+        openingBrace: nil
       ),
       isCreation: false,
       externalTestCoverageLocation: nil,
@@ -1233,7 +1234,8 @@ extension ActionIntermediate {
       return external
     }
     if let declaration = self.declaration {
-      return declaration.location.legibleStartLocation()
+      return declaration.implementation.openingBrace?.location.stableEndLocation()
+        ?? declaration.location.stableStartLocation()
     }
     if deservesTesting {
       let names = String(names.sorted(by: { $0.lexicographicallyPrecedes($1) }).joined(separator: " • "))
@@ -1249,17 +1251,14 @@ extension ActionIntermediate {
     if let base = coverageRegionIdentifier() {
       result.append(base)
       if !skippingSubregions {
-        for entry in coverageSubregions() {
-          result.append(UnicodeText("\(base):{\(String(entry))}"))
-        }
+        result.append(contentsOf: coverageSubregions())
       }
     }
     return result
   }
 
-  func coverageSubregions() -> [Int] {
-    var counter: Int = 0
-    return implementation?.coverageSubregions(counter: &counter) ?? []
+  func coverageSubregions() -> [UnicodeText] {
+    return implementation?.coverageSubregions().compactMap({ $0 }) ?? []
   }
 }
 

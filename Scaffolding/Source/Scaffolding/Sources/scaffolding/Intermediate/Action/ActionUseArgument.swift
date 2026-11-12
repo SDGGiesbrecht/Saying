@@ -163,19 +163,20 @@ extension ActionUseArgument {
 }
 
 extension ActionUseArgument {
-  func coverageSubregions(counter: inout Int) -> [Int] {
-    var list: [Int] = []
+  func coverageSubregions() -> [UnicodeText?] {
     switch self {
     case .action(let action):
-      return action.coverageSubregions(counter: &counter)
+      return action.coverageSubregions()
     case .flow(let statements):
-      counter += 1
+      var list: [UnicodeText?] = []
       if statements.statements.first?.isDeadEnd != true {
-        list.append(counter)
+        list.append(statements.openingBrace?.location.stableEndLocation())
+      } else {
+        list.append(nil)
       }
-      list.append(contentsOf: statements.coverageSubregions(counter: &counter))
+      list.append(contentsOf: statements.coverageSubregions())
+      return list
     }
-    return list
   }
 }
 

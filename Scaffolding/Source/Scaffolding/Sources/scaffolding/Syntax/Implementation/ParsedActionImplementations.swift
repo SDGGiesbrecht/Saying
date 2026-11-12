@@ -1,3 +1,5 @@
+import Saying
+
 extension ParsedActionImplementations {
 
   var source: ParsedSourceOrCreationActionImplementation? {
@@ -19,6 +21,19 @@ extension ParsedActionImplementations {
       return dual.native
     case .native(let native):
       return native
+    }
+  }
+}
+
+extension ParsedActionImplementations {
+  var openingBrace: ParsedOpeningBraceSyntax? {
+    switch self {
+    case .source(let source):
+      return source.openingBrace
+    case .dual(let dual):
+      return dual.source.openingBrace
+    case .native:
+      return nil
     }
   }
 }

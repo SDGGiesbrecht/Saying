@@ -240,7 +240,7 @@ extension CaseIntermediate {
         javaScript: javaScriptStore,
         kotlin: kotlinStore,
         swift: swiftStore,
-        testCoverageLocation: declaration.location.legibleStartLocation()
+        testCoverageLocation: declaration.location.stableStartLocation()
       )
     }) ?? ActionIntermediate.enumerationWrapNothing(
       names: names,
@@ -252,7 +252,7 @@ extension CaseIntermediate {
       javaScript: javaScriptStore,
       kotlin: kotlinStore,
       swift: swiftStore,
-      testCoverageLocation: declaration.location.legibleStartLocation()
+      testCoverageLocation: declaration.location.stableStartLocation()
     )
     let unwrapAction: ActionIntermediate? = contents.map({ valueType in
       ActionIntermediate.enumerationUnwrap(
@@ -266,7 +266,7 @@ extension CaseIntermediate {
         javaScript: javaScriptRetrieve,
         kotlin: kotlinRetrieve,
         swift: swiftRetrieve,
-        testCoverageLocation: declaration.location.legibleStartLocation()
+        testCoverageLocation: declaration.location.stableStartLocation()
       )
     })
     let unwrapOtherwiseAction: ActionIntermediate? = contents.map({ valueType in
@@ -294,7 +294,7 @@ extension CaseIntermediate {
       javaScript: javaScriptCheck,
       kotlin: kotlinCheck,
       swift: swiftCheck,
-      testCoverageLocation: declaration.location.legibleStartLocation()
+      testCoverageLocation: declaration.location.stableStartLocation()
     )
 
     if !errors.isEmpty {

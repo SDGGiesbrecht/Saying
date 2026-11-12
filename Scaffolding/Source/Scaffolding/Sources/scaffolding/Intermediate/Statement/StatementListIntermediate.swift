@@ -2,6 +2,7 @@ import Saying
 
 struct StatementListIntermediate {
   var statements: [StatementIntermediate]
+  var openingBrace: ParsedOpeningBraceSyntax?
 }
 
 extension StatementListIntermediate {
@@ -21,7 +22,7 @@ extension StatementListIntermediate {
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
     }
-    return .success(StatementListIntermediate(statements: constructedStatements))
+    return .success(StatementListIntermediate(statements: constructedStatements, openingBrace: statements.openingBrace))
   }
 }
 
@@ -78,7 +79,8 @@ extension StatementListIntermediate {
     typeLookup: [UnicodeText: UnicodeText]
   ) -> StatementListIntermediate {
     return StatementListIntermediate(
-      statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) })
+      statements: statements.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
+      openingBrace: openingBrace
     )
   }
 
@@ -86,16 +88,16 @@ extension StatementListIntermediate {
     typeLookup: [UnicodeText: ParsedTypeReference]
   ) -> StatementListIntermediate {
     return StatementListIntermediate(
-      statements: statements.map({ $0.specializing(typeLookup: typeLookup) })
+      statements: statements.map({ $0.specializing(typeLookup: typeLookup) }),
+      openingBrace: openingBrace
     )
   }
 }
 
 extension StatementListIntermediate {
-  func coverageSubregions(counter: inout Int) -> [Int] {
+  func coverageSubregions() -> [UnicodeText?] {
     return statements.indices.flatMap { index in
       return statements[index].coverageSubregions(
-        counter: &counter,
         followingStatements: statements[index...].dropFirst()
       )
     }

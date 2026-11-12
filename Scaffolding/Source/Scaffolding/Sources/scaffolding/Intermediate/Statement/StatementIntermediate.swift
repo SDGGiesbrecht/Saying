@@ -106,16 +106,18 @@ extension StatementIntermediate {
 
 extension StatementIntermediate {
   func coverageSubregions(
-    counter: inout Int,
     followingStatements: Array<StatementIntermediate>.SubSequence
-  ) -> [Int] {
-    var list: [Int] = []
-    let before = counter
-    list.append(contentsOf: action?.coverageSubregions(counter: &counter) ?? [])
-    if counter != before {
-      counter += 1 // afterward (since could have returned)
+  ) -> [UnicodeText?] {
+    var list: [UnicodeText?] = action?.coverageSubregions() ?? []
+    if !list.isEmpty {
+      // afterward (since could have returned)
       if followingStatements.first?.isDeadEnd != true {
-        list.append(counter)
+        list.append(
+          followingStatements.first?.action?.source?.location.stableStartLocation()
+           ?? action?.source?.location.stableEndLocation()
+        )
+      } else {
+        list.append(nil)
       }
     }
     return list

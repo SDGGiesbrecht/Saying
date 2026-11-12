@@ -48,7 +48,10 @@ extension TestIntermediate {
         location: nestedLocation,
         isHidden: isHidden,
         inheritedVisibility: inheritedVisibility,
-        statements: StatementListIntermediate(statements: statements),
+        statements: StatementListIntermediate(
+          statements: statements,
+          openingBrace: test.implementation.openingBrace
+        ),
         fromExtension: false
       )
     )
