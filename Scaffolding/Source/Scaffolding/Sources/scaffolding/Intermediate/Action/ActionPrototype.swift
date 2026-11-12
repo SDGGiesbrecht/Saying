@@ -3,7 +3,6 @@ import Saying
 struct ActionPrototype {
   var isFlow: Bool
   var names: Set<UnicodeText>
-  var namespace: [Set<UnicodeText>]
   var parameters: Interpolation<ParameterIntermediate>
   var returnValue: ParsedTypeReference?
   var access: AccessIntermediate
@@ -14,7 +13,6 @@ struct ActionPrototype {
   init(
     isFlow: Bool,
     names: Set<UnicodeText>,
-    namespace: [Set<UnicodeText>],
     parameters: Interpolation<ParameterIntermediate>,
     returnValue: ParsedTypeReference?,
     access: AccessIntermediate,
@@ -24,7 +22,6 @@ struct ActionPrototype {
   ) {
     self.isFlow = isFlow
     self.names = names
-    self.namespace = namespace
     self.parameters = parameters
     self.returnValue = returnValue
     self.access = access
@@ -146,7 +143,6 @@ extension ActionPrototype {
       ActionPrototype(
         isFlow: declaration.isFlow,
         names: names,
-        namespace: namespace,
         parameters: parameters,
         returnValue: returnValue,
         access: access,

@@ -15,7 +15,7 @@ struct ActionIntermediate {
   var isEnumerationValueWrapper: Bool = false
   var isAccessor: Bool = false
   var isParameterWrapper: Bool = false
-  var originalUnresolvedCoverageRegionIdentifierComponents: [UnicodeText]?
+  var externalTestCoverageLocation: UnicodeText?
   var coveredIdentifier: UnicodeText?
   var isSpecialized: Bool
   var deservesTesting: Bool
@@ -160,7 +160,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: false,
         names: names,
-        namespace: [],
         parameters: parameters,
         returnValue: returnValue,
         access: .anywhereCapableOfDiscovery,
@@ -185,7 +184,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: true,
         names: names,
-        namespace: [],
         parameters: .none,
         returnValue: .partReference(container: containerType, identifier: names.identifier()),
         access: access,
@@ -210,7 +208,8 @@ extension ActionIntermediate {
     cSharp: NativeActionImplementationIntermediate?,
     javaScript: NativeActionImplementationIntermediate?,
     kotlin: NativeActionImplementationIntermediate?,
-    swift: NativeActionImplementationIntermediate?
+    swift: NativeActionImplementationIntermediate?,
+    testCoverageLocation: UnicodeText
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.accessor(
       containerType: containerType,
@@ -220,7 +219,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: true,
         names: parameters.names(),
-        namespace: [],
         parameters: parameters,
         returnValue: partType,
         access: access,
@@ -280,6 +278,7 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isAccessor: true,
+      externalTestCoverageLocation: testCoverageLocation,
       isSpecialized: false,
       deservesTesting: existsForAnyPlatform(
         c: c,
@@ -302,7 +301,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: true,
         names: names,
-        namespace: [],
         parameters: .none,
         returnValue: .enumerationCase(enumeration: enumerationType, identifier: names.identifier()),
         access: access,
@@ -327,18 +325,19 @@ extension ActionIntermediate {
     cSharp: NativeActionImplementationIntermediate?,
     javaScript: NativeActionImplementationIntermediate?,
     kotlin: NativeActionImplementationIntermediate?,
-    swift: NativeActionImplementationIntermediate?
+    swift: NativeActionImplementationIntermediate?,
+    testCoverageLocation: UnicodeText
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationWrap(
       enumerationType: enumerationType,
       caseIdentifier: caseIdentifier,
       valueType: valueType
     )
+    let names = parameters.names()
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: true,
-        names: parameters.names(),
-        namespace: [],
+        names: names,
         parameters: parameters,
         returnValue: enumerationType,
         access: access,
@@ -400,6 +399,7 @@ extension ActionIntermediate {
       ),
       isCreation: false,
       isEnumerationValueWrapper: true,
+      externalTestCoverageLocation: "\(testCoverageLocation) (\(names.identifier()))",
       isSpecialized: false,
       deservesTesting: existsForAnyPlatform(
         c: c,
@@ -420,13 +420,13 @@ extension ActionIntermediate {
     cSharp: NativeActionImplementationIntermediate?,
     javaScript: NativeActionImplementationIntermediate?,
     kotlin: NativeActionImplementationIntermediate?,
-    swift: NativeActionImplementationIntermediate?
+    swift: NativeActionImplementationIntermediate?,
+    testCoverageLocation: UnicodeText
   ) -> ActionIntermediate {
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: false,
         names: names,
-        namespace: [],
         parameters: .none,
         returnValue: returnValue,
         access: access,
@@ -441,6 +441,7 @@ extension ActionIntermediate {
       swift: swift,
       isCreation: false,
       isMemberWrapper: true,
+      externalTestCoverageLocation: "\(testCoverageLocation) (\(names.identifier()))",
       isSpecialized: false,
       deservesTesting: existsForAnyPlatform(
         c: c,
@@ -462,18 +463,19 @@ extension ActionIntermediate {
     cSharp: NativeActionImplementationIntermediate?,
     javaScript: NativeActionImplementationIntermediate?,
     kotlin: NativeActionImplementationIntermediate?,
-    swift: NativeActionImplementationIntermediate?
+    swift: NativeActionImplementationIntermediate?,
+    testCoverageLocation: UnicodeText
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationUnwrap(
       enumerationType: enumerationType,
       caseIdentifier: caseIdentifier,
       valueType: valueType
     )
+    let names = parameters.names()
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: true,
-        names: parameters.names(),
-        namespace: [],
+        names: names,
         parameters: parameters,
         returnValue: nil,
         access: access,
@@ -555,6 +557,7 @@ extension ActionIntermediate {
         specifiedInSource: false
       ),
       isCreation: false,
+      externalTestCoverageLocation: "\(testCoverageLocation) (\(names.identifier()))",
       isSpecialized: false,
       deservesTesting: existsForAnyPlatform(
         c: c,
@@ -587,7 +590,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: true,
         names: parameters.names(),
-        namespace: [],
         parameters: parameters,
         returnValue: nil,
         access: access,
@@ -695,19 +697,20 @@ extension ActionIntermediate {
     cSharp: NativeActionImplementationIntermediate?,
     javaScript: NativeActionImplementationIntermediate?,
     kotlin: NativeActionImplementationIntermediate?,
-    swift: NativeActionImplementationIntermediate?
+    swift: NativeActionImplementationIntermediate?,
+    testCoverageLocation: UnicodeText
   ) -> ActionIntermediate {
     let parameters = Interpolation<ParameterIntermediate>.enumerationCheck(
       enumerationType: enumerationType,
       caseIdentifier: caseIdentifier,
       empty: empty
     )
+    let names = parameters.names()
     let caseInstead: ParsedTypeReference? = empty ? .enumerationCase(enumeration: enumerationType, identifier: caseIdentifier) : nil
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: true,
-        names: parameters.names(),
-        namespace: [],
+        names: names,
         parameters: parameters,
         returnValue: .simple(SimpleTypeReference(ParsedUninterruptedIdentifier(source: UnicodeText("truth value"), origin: compilerGeneratedOrigin())!)),
         access: access,
@@ -766,6 +769,7 @@ extension ActionIntermediate {
         specifiedInSource: false
       ),
       isCreation: false,
+      externalTestCoverageLocation: "\(testCoverageLocation) (\(names.identifier()))",
       isSpecialized: false,
       deservesTesting: existsForAnyPlatform(
         c: c,
@@ -875,7 +879,11 @@ extension ActionIntermediate {
         isCreation: isCreation,
         isSpecialized: false,
         deservesTesting: (
-          !isCreation || existsForAnyPlatform(
+          (
+            !isCreation
+            &&
+            !prototype.names.contains("fail") // ← No general solution for testing deliberate failures yet.
+          ) || existsForAnyPlatform(
             c: c,
             cSharp: cSharp,
             javaScript: javaScript,
@@ -966,7 +974,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: isFlow,
         names: names,
-        namespace: prototype.namespace,
         parameters: newParameters,
         returnValue: newReturnValue,
         access: access,
@@ -986,7 +993,7 @@ extension ActionIntermediate {
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       isAccessor: isAccessor,
-      originalUnresolvedCoverageRegionIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
+      externalTestCoverageLocation: externalTestCoverageLocation,
       coveredIdentifier: coveredIdentifier,
       isSpecialized: isSpecialized,
       deservesTesting: deservesTesting
@@ -1033,7 +1040,6 @@ extension ActionIntermediate {
         prototype: ActionPrototype(
           isFlow: isFlow,
           names: names.union(requirement.names),
-          namespace: prototype.namespace,
           parameters: mergedParameters,
           returnValue: returnValue,
           access: access,
@@ -1053,10 +1059,10 @@ extension ActionIntermediate {
         isMemberWrapper: isMemberWrapper,
         isEnumerationValueWrapper: isEnumerationValueWrapper,
         isAccessor: isAccessor,
-        originalUnresolvedCoverageRegionIdentifierComponents: nil,
+        externalTestCoverageLocation: externalTestCoverageLocation,
         coveredIdentifier: coveredIdentifier,
         isSpecialized: isSpecialized,
-        deservesTesting: deservesTesting && !intoExtensionAsDuplicate
+        deservesTesting: deservesTesting
       )
     )
   }
@@ -1095,7 +1101,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: isFlow,
         names: names,
-        namespace: prototype.namespace,
         parameters: newParameters,
         returnValue: newReturnValue,
         access: newAccess,
@@ -1115,12 +1120,10 @@ extension ActionIntermediate {
       isMemberWrapper: isMemberWrapper,
       isEnumerationValueWrapper: isEnumerationValueWrapper,
       isAccessor: isAccessor,
-      originalUnresolvedCoverageRegionIdentifierComponents:
-        originalUnresolvedCoverageRegionIdentifierComponents
-          ?? unresolvedGloballyUniqueIdentifierComponents(),
+      externalTestCoverageLocation: externalTestCoverageLocation,
       coveredIdentifier: coveredIdentifier,
       isSpecialized: true,
-      deservesTesting: deservesTesting && !intoExtensionAsDuplicate
+      deservesTesting: deservesTesting
     )
   }
 
@@ -1150,7 +1153,6 @@ extension ActionIntermediate {
       prototype: ActionPrototype(
         isFlow: false,
         names: names,
-        namespace: [],
         parameters: .none,
         returnValue: .action(
           parameters: parameters.ordered(for: names.identifier()).map({ $0.type }),
@@ -1177,15 +1179,14 @@ extension ActionIntermediate {
   func coverageTrackingIdentifier() -> UnicodeText {
     return UnicodeText("☐\(prototype.names.identifier())")
   }
-  func wrappedToTrackCoverage(referenceLookup: [ReferenceDictionary]) -> ActionIntermediate {
-    let coverageIdentifier = coverageRegionIdentifier(referenceLookup: referenceLookup)
+  func wrappedToTrackCoverage() -> ActionIntermediate {
+    let coverageIdentifier = coverageRegionIdentifier()
     let baseName = names.identifier()
     let wrapperName = coverageTrackingIdentifier()
     return ActionIntermediate(
       prototype: ActionPrototype(
         isFlow: isFlow,
         names: [wrapperName],
-        namespace: [],
         parameters: prototype.parameters
           .removingOtherNamesAnd(replacing: baseName, with: wrapperName)
           .prefixingEach(with: UnicodeText("→")),
@@ -1220,37 +1221,37 @@ extension ActionIntermediate {
         ]
       ),
       isCreation: false,
-      originalUnresolvedCoverageRegionIdentifierComponents: nil,
+      externalTestCoverageLocation: nil,
       coveredIdentifier: coverageIdentifier,
       isSpecialized: isSpecialized,
       deservesTesting: false
     )
   }
 
-  func coverageRegionIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
-    let namespace = prototype.namespace
-      .map({ $0.identifier() })
-      .joined(separator: ":")
-    let identifier: UnicodeText
-    if let inherited = originalUnresolvedCoverageRegionIdentifierComponents {
-      identifier = resolve(globallyUniqueIdentifierComponents: inherited, referenceLookup: referenceLookup)
-    } else {
-      identifier = globallyUniqueIdentifier(referenceLookup: referenceLookup)
+  func coverageRegionIdentifier() -> UnicodeText? {
+    if let external = externalTestCoverageLocation {
+      return external
     }
-    return [namespace, identifier]
-      .joined(separator: ":")
+    if let declaration = self.declaration {
+      return declaration.location.legibleStartLocation()
+    }
+    if deservesTesting {
+      let names = String(names.sorted(by: { $0.lexicographicallyPrecedes($1) }).joined(separator: " • "))
+      fatalError("No source location to track test coverage: \(names)")
+    }
+    return nil
   }
 
   func allCoverageRegionIdentifiers(
-    referenceLookup: [ReferenceDictionary],
     skippingSubregions: Bool
   ) -> [UnicodeText] {
     var result: [UnicodeText] = []
-    let base = coverageRegionIdentifier(referenceLookup: referenceLookup)
-    result.append(base)
-    if !skippingSubregions {
-      for entry in coverageSubregions() {
-        result.append(UnicodeText("\(base):{\(String(entry))}"))
+    if let base = coverageRegionIdentifier() {
+      result.append(base)
+      if !skippingSubregions {
+        for entry in coverageSubregions() {
+          result.append(UnicodeText("\(base):{\(String(entry))}"))
+        }
       }
     }
     return result

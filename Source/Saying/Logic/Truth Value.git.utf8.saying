@@ -42,7 +42,7 @@ enumeration (clients)
     English: true
     العربية: صواب
     português: verdadeiro
-    русский: истина.
+    русский: истина
     Deutsch: wahr
     한국어: 참
     français : vrai
@@ -81,7 +81,7 @@ enumeration (clients)
     English: false
     العربية: خطأ
     português: falso
-    русский: ложь.
+    русский: ложь
     Deutsch: falsch
     한국어: 거짓
     français : faux

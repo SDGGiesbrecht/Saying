@@ -61,7 +61,7 @@ struct Package {
         case false:
           reportProgress("¬ \(relativePath)")
         case true:
-          let file = try SayingSource(from: fileURL)
+          let file = try SayingSource(from: fileURL, packageURL: location)
           let formatted = try file.formattedGitStyleSource()
           try String(formatted).appending("\n")
             .overwriteIfDifferentThan(fileURL, baseURL: location, reportProgress: reportProgress)

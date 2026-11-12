@@ -137,7 +137,8 @@ extension PartIntermediate {
       cSharp: cSharp,
       javaScript: javaScript,
       kotlin: kotlin,
-      swift: swift
+      swift: swift,
+      testCoverageLocation: declaration.location.legibleStartLocation()
     )
 
     if !errors.isEmpty {

@@ -442,17 +442,12 @@ extension ModuleIntermediate {
         }
       }
     }
-    var coveredRegions: Set<UnicodeText> = []
     for copyReducing in referenceDictionary.allActions(sorted: true) {
       let action = copyReducing.value
       if action.deservesTesting {
         var required = false
         if let declaration = action.declaration,
           coveredSource.insert(declaration.location.hashableStartLocation).inserted {
-          required = true
-        } else if action.declaration == nil,
-          // Slower, but some actions do not originate from source.
-          coveredRegions.insert(action.coverageRegionIdentifier(referenceLookup: referenceLookup)).inserted {
           required = true
         }
         if required {
