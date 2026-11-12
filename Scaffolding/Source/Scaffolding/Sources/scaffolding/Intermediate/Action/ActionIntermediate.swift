@@ -1062,7 +1062,7 @@ extension ActionIntermediate {
         externalTestCoverageLocation: externalTestCoverageLocation,
         coveredIdentifier: coveredIdentifier,
         isSpecialized: isSpecialized,
-        deservesTesting: deservesTesting && !intoExtensionAsDuplicate
+        deservesTesting: deservesTesting
       )
     )
   }
@@ -1123,7 +1123,7 @@ extension ActionIntermediate {
       externalTestCoverageLocation: externalTestCoverageLocation,
       coveredIdentifier: coveredIdentifier,
       isSpecialized: true,
-      deservesTesting: deservesTesting && !intoExtensionAsDuplicate
+      deservesTesting: deservesTesting
     )
   }
 
