@@ -432,12 +432,12 @@ extension ActionUse {
 }
 
 extension ActionUse {
-  func coverageSubregions(counter: inout Int) -> [Int] {
+  func coverageSubregions() -> [UnicodeText?] {
     if let action = actionLiteral {
-      counter += 1
-      return [counter] + action.implementation.coverageSubregions(counter: &counter)
+      return [action.implementation.openingBrace?.location.stableEndLocation()]
+        + action.implementation.coverageSubregions()
     } else {
-      return arguments.flatMap { $0.coverageSubregions(counter: &counter) }
+      return arguments.flatMap { $0.coverageSubregions() }
     }
   }
 }

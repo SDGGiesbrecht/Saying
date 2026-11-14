@@ -1295,18 +1295,17 @@ extension Platform {
   }
 
   static func flowCoverageRegistration(
-    contextCoverageIdentifier: UnicodeText?,
-    coverageRegionCounter: inout Int,
+    identifier: () -> UnicodeText?,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     indentationLevel: Int,
     statements: Array<StatementIntermediate>.SubSequence
   ) -> String? {
-    coverageRegionCounter += 1
-    if let coverage = contextCoverageIdentifier,
-      statements.first?.isDeadEnd != true {
-      let appendedIdentifier = "\(coverage):{\(String(coverageRegionCounter))}"
+    earlyReturnOpportunity = true
+    if statements.first?.isDeadEnd != true {
       let indent = String(repeating: self.indent, count: indentationLevel)
-      if let index = coverageIndex[UnicodeText(appendedIdentifier)] {
+      if let resolved = identifier(),
+        let index = coverageIndex[resolved] {
         return "\n\(indent)\(self.coverageRegistration(index: index))"
       }
     }
@@ -1328,9 +1327,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     isNativeArgument: Bool,
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -1355,9 +1353,8 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         isNativeArgument: isNativeArgument,
-        contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -1443,8 +1440,7 @@ extension Platform {
     referenceLookup: [ReferenceDictionary],
     identifierIndex: inout [String: [String: Int]],
     context: ActionIntermediate?,
-    contextCoverageIdentifier: UnicodeText?,
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -1477,11 +1473,11 @@ extension Platform {
     })
     var implementation: [String] = []
     if let coverage = flowCoverageRegistration(
-        contextCoverageIdentifier: contextCoverageIdentifier,
-        coverageRegionCounter: &coverageRegionCounter,
-        coverageIndex: coverageIndex,
-        indentationLevel: 0,
-        statements: actionLiteral.implementation.statements[...]
+      identifier: { actionLiteral.implementation.openingBrace?.location.stableEndLocation() },
+      earlyReturnOpportunity: &earlyReturnOpportunity,
+      coverageIndex: coverageIndex,
+      indentationLevel: 0,
+      statements: actionLiteral.implementation.statements[...]
     ) {
       implementation.append(coverage)
     }
@@ -1500,7 +1496,7 @@ extension Platform {
               referenceLookup: referenceLookup
             )
           ],
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -1676,9 +1672,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     isNativeArgument: Bool,
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -1717,9 +1712,8 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         isNativeArgument: isNativeArgument,
-        contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -1760,8 +1754,7 @@ extension Platform {
             referenceLookup: referenceLookup,
             identifierIndex: &identifierIndex,
             context: context,
-            contextCoverageIdentifier: contextCoverageIdentifier,
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &earlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -1780,8 +1773,7 @@ extension Platform {
             referenceLookup: referenceLookup,
             identifierIndex: &identifierIndex,
             context: context,
-            contextCoverageIdentifier: contextCoverageIdentifier,
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &earlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -1886,9 +1878,8 @@ extension Platform {
           localLookup: localLookup,
           referenceLookup: referenceLookup,
           parameterName: parameterName,
-          contextCoverageIdentifier: contextCoverageIdentifier,
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
-          coverageRegionCounter: &coverageRegionCounter,
+          earlyReturnOpportunity: &earlyReturnOpportunity,
           coverageIndex: coverageIndex,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           anonymousCounter: &anonymousCounter,
@@ -1950,9 +1941,8 @@ extension Platform {
         localLookup: localLookup,
         referenceLookup: referenceLookup,
         parameterName: nil,
-        contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -2003,9 +1993,8 @@ extension Platform {
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
     parameterName: String?,
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -2097,9 +2086,8 @@ extension Platform {
                     localLookup: localLookup + [local],
                     referenceLookup: referenceLookup,
                     isNativeArgument: true,
-                    contextCoverageIdentifier: contextCoverageIdentifier,
                     extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                    coverageRegionCounter: &coverageRegionCounter,
+                    earlyReturnOpportunity: &earlyReturnOpportunity,
                     coverageIndex: coverageIndex,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     anonymousCounter: &anonymousCounter,
@@ -2166,8 +2154,8 @@ extension Platform {
               case .flow(let statements):
                 if mode.hasTestCoverage,
                    let coverage = flowCoverageRegistration(
-                    contextCoverageIdentifier: contextCoverageIdentifier,
-                    coverageRegionCounter: &coverageRegionCounter,
+                    identifier: { statements.openingBrace?.location.stableEndLocation() },
+                    earlyReturnOpportunity: &earlyReturnOpportunity,
                     coverageIndex: coverageIndex,
                     indentationLevel: 1,
                     statements: statements.statements[...]
@@ -2180,7 +2168,7 @@ extension Platform {
                     for: statements.statements,
                     context: context,
                     localLookup: localLookup + [local],
-                    coverageRegionCounter: &coverageRegionCounter,
+                    earlyReturnOpportunity: &earlyReturnOpportunity,
                     coverageIndex: coverageIndex,
                     clashAvoidanceCounter: &clashAvoidanceCounter,
                     anonymousCounter: &anonymousCounter,
@@ -2249,8 +2237,6 @@ extension Platform {
         let argument = reference.arguments[index]
         switch argument {
         case .action(let action):
-          var coverageRegionCounterPass = coverageRegionCounter
-          var coverageRegionCounterExecute = coverageRegionCounter
           newInliningArguments[parameter.names.identifier()] = (
             argument: call(
               to: action,
@@ -2259,9 +2245,8 @@ extension Platform {
               localLookup: localLookup + [locals],
               referenceLookup: referenceLookup,
               isNativeArgument: false,
-              contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
-              coverageRegionCounter: &coverageRegionCounterPass,
+              earlyReturnOpportunity: &earlyReturnOpportunity,
               coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
@@ -2289,9 +2274,8 @@ extension Platform {
               localLookup: localLookup + [locals],
               referenceLookup: referenceLookup,
               isNativeArgument: false,
-              contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
-              coverageRegionCounter: &coverageRegionCounterExecute,
+              earlyReturnOpportunity: &earlyReturnOpportunity,
               coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
@@ -2310,7 +2294,6 @@ extension Platform {
               captures: &captures
             )
           )
-          coverageRegionCounter = max(coverageRegionCounterPass, coverageRegionCounterExecute)
           let newActions = action.localActions()
           for local in newActions {
             _ = locals.add(action: local)
@@ -2323,7 +2306,7 @@ extension Platform {
             for: flow.statements,
             context: context,
             localLookup: localLookup + [locals],
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &earlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -2338,11 +2321,11 @@ extension Platform {
           )
           if mode.hasTestCoverage,
             let coverage = flowCoverageRegistration(
-            contextCoverageIdentifier: contextCoverageIdentifier,
-            coverageRegionCounter: &coverageRegionCounter,
-            coverageIndex: coverageIndex,
-            indentationLevel: 0,
-            statements: flow.statements[...]
+              identifier: { flow.openingBrace?.location.stableEndLocation() },
+              earlyReturnOpportunity: &earlyReturnOpportunity,
+              coverageIndex: coverageIndex,
+              indentationLevel: 0,
+              statements: flow.statements[...]
           ) {
             source = [coverage] + source
           }
@@ -2354,12 +2337,12 @@ extension Platform {
           )
         }
       }
-      var newCoverageRegionCounter = 0
+      var nestedEarlyReturnOpportunity = false
       return source(
         for: action.implementation!.statements,
         context: action,
         localLookup: localLookup,
-        coverageRegionCounter: &newCoverageRegionCounter,
+        earlyReturnOpportunity: &nestedEarlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -2436,9 +2419,8 @@ extension Platform {
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
                 isNativeArgument: false,
-                contextCoverageIdentifier: contextCoverageIdentifier,
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                coverageRegionCounter: &coverageRegionCounter,
+                earlyReturnOpportunity: &earlyReturnOpportunity,
                 coverageIndex: coverageIndex,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
                 anonymousCounter: &anonymousCounter,
@@ -2486,9 +2468,8 @@ extension Platform {
                 localLookup: localLookup,
                 referenceLookup: referenceLookup,
                 isNativeArgument: false,
-                contextCoverageIdentifier: contextCoverageIdentifier,
                 extractedCoverageRegistrations: &extractedCoverageRegistrations,
-                coverageRegionCounter: &coverageRegionCounter,
+                earlyReturnOpportunity: &earlyReturnOpportunity,
                 coverageIndex: coverageIndex,
                 clashAvoidanceCounter: &clashAvoidanceCounter,
                 anonymousCounter: &anonymousCounter,
@@ -2594,9 +2575,8 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -2627,9 +2607,8 @@ extension Platform {
       context: context,
       localLookup: localLookup,
       referenceLookup: referenceLookup,
-      contextCoverageIdentifier: contextCoverageIdentifier,
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
-      coverageRegionCounter: &coverageRegionCounter,
+      earlyReturnOpportunity: &earlyReturnOpportunity,
       coverageIndex: coverageIndex,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       anonymousCounter: &anonymousCounter,
@@ -2651,9 +2630,8 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -2680,9 +2658,8 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
-          contextCoverageIdentifier: contextCoverageIdentifier,
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
-          coverageRegionCounter: &coverageRegionCounter,
+          earlyReturnOpportunity: &earlyReturnOpportunity,
           coverageIndex: coverageIndex,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           anonymousCounter: &anonymousCounter,
@@ -2715,9 +2692,8 @@ extension Platform {
             localLookup: localLookup,
             referenceLookup: referenceLookup,
             isNativeArgument: false,
-            contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &earlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -2754,9 +2730,8 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -2776,9 +2751,8 @@ extension Platform {
       context: context,
       localLookup: localLookup,
       referenceLookup: referenceLookup,
-      contextCoverageIdentifier: contextCoverageIdentifier,
       extractedCoverageRegistrations: &extractedCoverageRegistrations,
-      coverageRegionCounter: &coverageRegionCounter,
+      earlyReturnOpportunity: &earlyReturnOpportunity,
       coverageIndex: coverageIndex,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       anonymousCounter: &anonymousCounter,
@@ -2800,9 +2774,8 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
     extractedCoverageRegistrations: inout [String],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -2853,9 +2826,8 @@ extension Platform {
             context: context,
             localLookup: localLookup,
             referenceLookup: referenceLookup,
-            contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &earlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -2893,9 +2865,8 @@ extension Platform {
             localLookup: localLookup,
             referenceLookup: referenceLookup,
             isNativeArgument: false,
-            contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &earlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -2939,8 +2910,7 @@ extension Platform {
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
     referenceLookup: [ReferenceDictionary],
-    contextCoverageIdentifier: UnicodeText?,
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     followingStatements: Array<StatementIntermediate>.SubSequence,
     clashAvoidanceCounter: inout Int,
@@ -2967,9 +2937,8 @@ extension Platform {
           context: context,
           localLookup: localLookup,
           referenceLookup: referenceLookup,
-          contextCoverageIdentifier: contextCoverageIdentifier,
           extractedCoverageRegistrations: &extractedCoverageRegistrations,
-          coverageRegionCounter: &coverageRegionCounter,
+          earlyReturnOpportunity: &earlyReturnOpportunity,
           coverageIndex: coverageIndex,
           clashAvoidanceCounter: &clashAvoidanceCounter,
           anonymousCounter: &anonymousCounter,
@@ -2997,9 +2966,8 @@ extension Platform {
               localLookup: localLookup,
               referenceLookup: referenceLookup,
               isNativeArgument: false,
-              contextCoverageIdentifier: contextCoverageIdentifier,
               extractedCoverageRegistrations: &extractedCoverageRegistrations,
-              coverageRegionCounter: &coverageRegionCounter,
+              earlyReturnOpportunity: &earlyReturnOpportunity,
               coverageIndex: coverageIndex,
               clashAvoidanceCounter: &clashAvoidanceCounter,
               anonymousCounter: &anonymousCounter,
@@ -3045,9 +3013,8 @@ extension Platform {
         context: context,
         localLookup: localLookup,
         referenceLookup: referenceLookup,
-        contextCoverageIdentifier: contextCoverageIdentifier,
         extractedCoverageRegistrations: &extractedCoverageRegistrations,
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -3102,7 +3069,7 @@ extension Platform {
           }
         }
       }
-      let before = coverageRegionCounter
+      var nestedEarlyReturnOpportunity = false
       var remainingExtractedArgumentsForReferenceCounting = extractedForReferenceCounting.unused
       entry.append(
         contentsOf: self.statement(
@@ -3113,9 +3080,8 @@ extension Platform {
             localLookup: localLookup,
             referenceLookup: referenceLookup,
             isNativeArgument: false,
-            contextCoverageIdentifier: contextCoverageIdentifier,
             extractedCoverageRegistrations: &extractedCoverageRegistrations,
-            coverageRegionCounter: &coverageRegionCounter,
+            earlyReturnOpportunity: &nestedEarlyReturnOpportunity,
             coverageIndex: coverageIndex,
             clashAvoidanceCounter: &clashAvoidanceCounter,
             anonymousCounter: &anonymousCounter,
@@ -3139,10 +3105,13 @@ extension Platform {
         entry = extractedCoverageRegistrations.joined(separator: "\n").appending("\n") + entry
       }
       if mode.hasTestCoverage,
-         coverageRegionCounter != before,
-         let coverage = flowCoverageRegistration(
-          contextCoverageIdentifier: contextCoverageIdentifier,
-          coverageRegionCounter: &coverageRegionCounter,
+        nestedEarlyReturnOpportunity,
+        let coverage = flowCoverageRegistration(
+          identifier: {
+            return followingStatements.first?.action?.source?.location.stableStartLocation()
+              ?? statement.action?.source?.location.stableEndLocation()
+          },
+          earlyReturnOpportunity: &earlyReturnOpportunity,
           coverageIndex: coverageIndex,
           indentationLevel: 0,
           statements: followingStatements
@@ -3311,7 +3280,7 @@ extension Platform {
     for statements: [StatementIntermediate],
     context: ActionIntermediate?,
     localLookup: [ReferenceDictionary],
-    coverageRegionCounter: inout Int,
+    earlyReturnOpportunity: inout Bool,
     coverageIndex: [UnicodeText: Int],
     clashAvoidanceCounter: inout Int,
     anonymousCounter: inout Int,
@@ -3334,8 +3303,7 @@ extension Platform {
         context: context,
         localLookup: localLookup + [locals],
         referenceLookup: referenceLookup + [locals],
-        contextCoverageIdentifier: context?.coverageRegionIdentifier(),
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         followingStatements: statements[entryIndex...].dropFirst(),
         clashAvoidanceCounter: &clashAvoidanceCounter,
@@ -3525,7 +3493,7 @@ extension Platform {
     } else {
       coverageRegistration = nil
     }
-    var coverageRegionCounter = 0
+    var earlyReturnOpportunity = false
     var clashAvoidanceCounter = 0
     var extractedAnonymousFunctions: [String] = []
     var captures: [Capture]? = nil
@@ -3534,7 +3502,7 @@ extension Platform {
         for: actionImplementation.statements,
         context: action,
         localLookup: [],
-        coverageRegionCounter: &coverageRegionCounter,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
         coverageIndex: coverageIndex,
         clashAvoidanceCounter: &clashAvoidanceCounter,
         anonymousCounter: &anonymousCounter,
@@ -3686,7 +3654,7 @@ extension Platform {
     identifierIndex: inout [String: [String: Int]],
     implementation generatedImplementation: inout [String]
   ) -> OutputDeclaration<String> {
-    var coverageRegionCounter = 0
+    var earlyReturnOpportunity = false
     var clashAvoidanceCounter = 0
     var extractedAnonymousFunctions: [String] = []
     var captures: [Capture]? = nil
@@ -3694,7 +3662,7 @@ extension Platform {
       for: test.statements.statements,
       context: nil,
       localLookup: [],
-      coverageRegionCounter: &coverageRegionCounter,
+      earlyReturnOpportunity: &earlyReturnOpportunity,
       coverageIndex: coverageIndex,
       clashAvoidanceCounter: &clashAvoidanceCounter,
       anonymousCounter: &anonymousCounter,

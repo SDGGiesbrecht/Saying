@@ -138,7 +138,7 @@ extension PartIntermediate {
       javaScript: javaScript,
       kotlin: kotlin,
       swift: swift,
-      testCoverageLocation: declaration.location.legibleStartLocation()
+      testCoverageLocation: declaration.location.stableStartLocation()
     )
 
     if !errors.isEmpty {
