@@ -103,7 +103,8 @@ extension Thing {
 
   static func construct<ThingNode>(
     _ declaration: ThingNode,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    includeDocumentation: DocumentationInclusion
   ) -> Result<Thing, ErrorList<Thing.ConstructionError>>
   where ThingNode: ParsedThingDeclarationProtocol {
     var errors: [Thing.ConstructionError] = []
@@ -154,7 +155,8 @@ extension Thing {
         namespace: thingNamespace,
         containerType: selfReference,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        includeDocumentation: includeDocumentation
       ) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ .brokenPartImplementation($0) }))
@@ -170,7 +172,8 @@ extension Thing {
         namespace: thingNamespace,
         type: selfReference,
         access: access,
-        testOnlyAccess: testOnlyAccess
+        testOnlyAccess: testOnlyAccess,
+        includeDocumentation: includeDocumentation
       ) {
       case .failure(let error):
         errors.append(contentsOf: error.errors.map({ .brokenCaseImplementation($0) }))
@@ -211,20 +214,25 @@ extension Thing {
       }
     }
     var attachedDocumentation: DocumentationIntermediate?
-    if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(
-        documentation.documentation,
-        namespace: thingNamespace,
-        inheritedVisibility: access
-      ) {
-      case .failure(let nested):
-        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
-      case .success(let intermediateDocumentation):
-        attachedDocumentation = intermediateDocumentation
-        for parameter in intermediateDocumentation.parameters.joined() {
-          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+    switch includeDocumentation {
+    case .all, .reachable, .errorDetection:
+      if let documentation = declaration.documentation {
+        switch DocumentationIntermediate.construct(
+          documentation.documentation,
+          namespace: thingNamespace,
+          inheritedVisibility: access
+        ) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
+        case .success(let intermediateDocumentation):
+          attachedDocumentation = intermediateDocumentation
+          for parameter in intermediateDocumentation.parameters.joined() {
+            errors.append(ConstructionError.documentedParameterNotFound(parameter))
+          }
         }
       }
+    case .none:
+      break
     }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))

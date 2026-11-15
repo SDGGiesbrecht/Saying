@@ -50,7 +50,8 @@ extension PartIntermediate {
     namespace: [Set<UnicodeText>],
     containerType: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    includeDocumentation: DocumentationInclusion
   ) -> Result<PartIntermediate, ErrorList<PartIntermediate.ConstructionError>> {
     var errors: [PartIntermediate.ConstructionError] = []
 
@@ -66,20 +67,25 @@ extension PartIntermediate {
     let partNamespace = namespace.appending(names)
 
     var attachedDocumentation: DocumentationIntermediate?
-    if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(
-        documentation.documentation,
-        namespace: partNamespace,
-        inheritedVisibility: max(readAccess, writeAccess)
-      ) {
-      case .failure(let nested):
-        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
-      case .success(let intermediateDocumentation):
-        attachedDocumentation = intermediateDocumentation
-        for parameter in intermediateDocumentation.parameters.joined() {
-          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+    switch includeDocumentation {
+    case .all, .reachable, .errorDetection:
+      if let documentation = declaration.documentation {
+        switch DocumentationIntermediate.construct(
+          documentation.documentation,
+          namespace: partNamespace,
+          inheritedVisibility: max(readAccess, writeAccess)
+        ) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
+        case .success(let intermediateDocumentation):
+          attachedDocumentation = intermediateDocumentation
+          for parameter in intermediateDocumentation.parameters.joined() {
+            errors.append(ConstructionError.documentedParameterNotFound(parameter))
+          }
         }
       }
+    case .none:
+      break
     }
 
     var c: NativeActionImplementationIntermediate? = nil

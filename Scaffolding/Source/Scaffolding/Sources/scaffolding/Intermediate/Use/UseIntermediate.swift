@@ -13,14 +13,19 @@ extension UseIntermediate {
 
   static func construct(
     _ declaration: ParsedUse,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    includeDocumentation: DocumentationInclusion
   ) -> Result<UseIntermediate, ErrorList<UseIntermediate.ConstructionError>> {
     var errors: [UseIntermediate.ConstructionError] = []
     let abilityName = declaration.use.name()
     let useNamespace = namespace
     var actions: [ActionIntermediate] = []
     for action in declaration.fulfillments.fulfillments?.fulfillments.fulfillments ?? [] {
-      switch ActionIntermediate.construct(action, namespace: useNamespace) {
+      switch ActionIntermediate.construct(
+        action,
+        namespace: useNamespace,
+        includeDocumentation: includeDocumentation
+      ) {
       case .failure(let nested):
         errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenAction($0) }))
       case .success(let action):

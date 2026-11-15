@@ -76,10 +76,23 @@ enum CompilationMode {
     switch self {
     case .release, .dependency, .scaffolding:
       return .reachable
-    case .export:
-      return .all
     case .debugging, .testing:
       return .unique
+    case .export:
+      return .all
+    }
+  }
+
+  var includedDocumentation: DocumentationInclusion {
+    switch self {
+    case .release:
+      return .reachable
+    case .dependency, .scaffolding:
+      return .none
+    case .debugging, .testing:
+      return .errorDetection
+    case .export:
+      return .all
     }
   }
 

@@ -13,7 +13,8 @@ extension ExtensionIntermediate {
 
   static func construct(
     _ declaration: ParsedExtensionSyntax,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    includeDocumentation: DocumentationInclusion
   ) -> Result<ExtensionIntermediate, ErrorList<ExtensionIntermediate.ConstructionError>> {
     var errors: [ExtensionIntermediate.ConstructionError] = []
     let abilityName = declaration.ability.name()
@@ -24,28 +25,44 @@ extension ExtensionIntermediate {
     for provision in declaration.provisions.provisions?.provisions.provisions ?? [] {
       switch provision {
       case .thing(let thing):
-        switch Thing.construct(thing, namespace: extensionNamespace) {
+        switch Thing.construct(
+          thing,
+          namespace: extensionNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ .brokenThing($0) }))
         case .success(let result):
           things.append(result)
         }
       case .enumeration(let enumeration):
-        switch Thing.construct(enumeration, namespace: extensionNamespace) {
+        switch Thing.construct(
+          enumeration,
+          namespace: extensionNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ .brokenThing($0) }))
         case .success(let result):
           things.append(result)
         }
       case .action(let action):
-        switch ActionIntermediate.construct(action, namespace: extensionNamespace) {
+        switch ActionIntermediate.construct(
+          action,
+          namespace: extensionNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ .brokenAction($0) }))
         case .success(let result):
           actions.append(result)
         }
       case .use(let use):
-        switch UseIntermediate.construct(use, namespace: extensionNamespace) {
+        switch UseIntermediate.construct(
+          use,
+          namespace: extensionNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let error):
           errors.append(contentsOf: error.errors.map({ .brokenUse($0) }))
         case .success(let result):
