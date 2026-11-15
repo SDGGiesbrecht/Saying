@@ -21,21 +21,21 @@ struct Module {
   }
 
   func build(
+    mode: CompilationMode,
     moduleWideImports: [ModuleIntermediate],
     testedUses: inout Set<HashableSourceLocation>,
-    packageURL: URL,
-    includeDocumentation: DocumentationInclusion
+    packageURL: URL
   ) throws -> ModuleIntermediate {
     let sourceFiles = try self.sourceFiles()
     var module = ModuleIntermediate()
     for sourceFile in sourceFiles {
       try module.add(
         file: SayingSource(from: sourceFile, packageURL: packageURL).parse(),
-        includeDocumentation: includeDocumentation
+        includeDocumentation: mode.includedDocumentation
       )
     }
     if isSayingSyntaxModule {
-      try module.unfoldSyntax(includeDocumentation: includeDocumentation)
+      try module.unfoldSyntax(includeDocumentation: mode.includedDocumentation)
     }
     try module.resolveExtensions()
     try module.resolveUses(
@@ -44,7 +44,9 @@ struct Module {
     )
     module.resolveTypeIdentifiers(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
     module.resolveSpecializedAccess(moduleWideImports: moduleWideImports)
-    module.collectTests()
+    if mode.hasTestCoverage {
+      module.collectTests()
+    }
     module.resolveTypes(moduleWideImports: moduleWideImports)
     try module.validateReferences(moduleWideImports: moduleWideImports)
     module.resolveNestedReferenceCounting(externalReferenceLookup: moduleWideImports.map({ $0.referenceDictionary }))
