@@ -1,7 +1,7 @@
 import Saying
 
 extension ModuleIntermediate {
-  mutating func unfoldSyntax() throws {
+  mutating func unfoldSyntax(includeDocumentation: DocumentationInclusion) throws {
     var nodes: [NodeNames] = []
     for nodePrototype in referenceDictionary.allThings() {
       let names = nodePrototype.declaration.name.namesDictionary
@@ -62,15 +62,24 @@ extension ModuleIntermediate {
         newSource.append(contentsOf: syntaxNodeAbility(names: names, parsed: false))
         newSource.append("")
         newSource.append(contentsOf: syntaxNodeAbility(names: names, parsed: true))
-        try addGeneratedSource(newSource: newSource)
+        try addGeneratedSource(newSource: newSource, includeDocumentation: includeDocumentation)
       }
     }
     nodes.sort(by: { $0.identifier.lexicographicallyPrecedes($1.identifier) })
-    try addGeneratedSource(newSource: syntaxNodeEnumeration(nodes: nodes, parsed: false))
-    try addGeneratedSource(newSource: syntaxNodeEnumeration(nodes: nodes, parsed: true))
+    try addGeneratedSource(
+      newSource: syntaxNodeEnumeration(nodes: nodes, parsed: false),
+      includeDocumentation: includeDocumentation
+    )
+    try addGeneratedSource(
+      newSource: syntaxNodeEnumeration(nodes: nodes, parsed: true),
+      includeDocumentation: includeDocumentation
+    )
   }
 
-  mutating func addGeneratedSource(newSource: [String]) throws {
+  mutating func addGeneratedSource(
+    newSource: [String],
+    includeDocumentation: DocumentationInclusion
+  ) throws {
     switch GitStyleSayingSource(
       origin: compilerGeneratedOrigin(),
       code: UnicodeText(newSource.joined(separator: "\n"))
@@ -80,7 +89,8 @@ extension ModuleIntermediate {
     case .utf8(let file):
       try self.add(
         file: ParsedDeclarationList.fastParse(source: file, origin: compilerGeneratedOrigin())
-        ?? ParsedDeclarationList.diagnosticParse(source: file, origin: compilerGeneratedOrigin()).get()
+        ?? ParsedDeclarationList.diagnosticParse(source: file, origin: compilerGeneratedOrigin()).get(),
+        includeDocumentation: includeDocumentation
       )
     }
   }

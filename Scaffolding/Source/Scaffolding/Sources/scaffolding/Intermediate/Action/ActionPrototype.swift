@@ -35,7 +35,8 @@ extension ActionPrototype {
 
   static func construct<S>(
     _ declaration: S,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    includeDocumentation: DocumentationInclusion
   ) -> Result<ActionPrototype, ErrorList<ActionPrototype.ConstructionError>>
   where S: ParsedActionPrototype {
     var errors: [ActionPrototype.ConstructionError] = []
@@ -106,35 +107,40 @@ extension ActionPrototype {
     let returnValue = declaration.returnValueType.map({ ParsedTypeReference($0) })
     let access = AccessIntermediate(declaration.access)
     var attachedDocumentation: DocumentationIntermediate?
-    if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(
-        documentation.documentation,
-        namespace: namespace
-          .appending(names)
+    switch includeDocumentation {
+    case .all, .reachable, .errorDetection:
+      if let documentation = declaration.documentation {
+        switch DocumentationIntermediate.construct(
+          documentation.documentation,
+          namespace: namespace
+            .appending(names)
           + parameters.ordered(for: names.identifier())
-              .map({ parameter in
-                return [
-                  parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
-                ] as Set<UnicodeText>
-              })
-          .appending(returnValue.map({ type in
-            return [
-              type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
-            ] as Set<UnicodeText>
-          }) ?? [""]),
-        inheritedVisibility: access
-      ) {
-      case .failure(let nested):
-        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
-      case .success(let intermediateDocumentation):
-        attachedDocumentation = intermediateDocumentation
-        let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
-        for parameter in intermediateDocumentation.parameters.joined() {
-          if !existingParameters.contains(parameter.name.identifierText()) {
-            errors.append(ConstructionError.documentedParameterNotFound(parameter))
+            .map({ parameter in
+              return [
+                parameter.type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
+              ] as Set<UnicodeText>
+            })
+            .appending(returnValue.map({ type in
+              return [
+                type.unresolvedGloballyUniqueIdentifierComponents().joined(separator: ",")
+              ] as Set<UnicodeText>
+            }) ?? [""]),
+          inheritedVisibility: access
+        ) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
+        case .success(let intermediateDocumentation):
+          attachedDocumentation = intermediateDocumentation
+          let existingParameters = parameters.inAnyOrder.reduce(Set(), { $0.union($1.names) })
+          for parameter in intermediateDocumentation.parameters.joined() {
+            if !existingParameters.contains(parameter.name.identifierText()) {
+              errors.append(ConstructionError.documentedParameterNotFound(parameter))
+            }
           }
         }
       }
+    case .none:
+      break
     }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))

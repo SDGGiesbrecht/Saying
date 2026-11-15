@@ -29,7 +29,8 @@ extension Ability {
 
   static func construct(
     _ declaration: ParsedAbilityDeclaration,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    includeDocumentation: DocumentationInclusion
   ) -> Result<Ability, ErrorList<Ability.ConstructionError>> {
     var errors: [Ability.ConstructionError] = []
     let namesDictionary = declaration.name.namesDictionary
@@ -64,7 +65,11 @@ extension Ability {
       switch requirementEntry {
       case .requirement(let requirementNode):
         let requirement: RequirementIntermediate
-        switch RequirementIntermediate.construct(requirementNode, namespace: abilityNamespace) {
+        switch RequirementIntermediate.construct(
+          requirementNode,
+          namespace: abilityNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let nested):
           errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
           continue
@@ -82,7 +87,11 @@ extension Ability {
         requirements[identifier, default: [:]][requirement.signature(orderedFor: identifier).map({ $0.key }), default: [:]][requirement.returnValue?.key] = requirement
       case .choice(let choiceNode):
         let requirement: RequirementIntermediate
-        switch RequirementIntermediate.construct(choiceNode, namespace: abilityNamespace) {
+        switch RequirementIntermediate.construct(
+          choiceNode,
+          namespace: abilityNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let nested):
           errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenRequirement($0) }))
           continue
@@ -99,7 +108,11 @@ extension Ability {
         }
         requirements[identifier, default: [:]][requirement.signature(orderedFor: identifier).map({ $0.key }), default: [:]][requirement.returnValue?.key] = requirement
         let defaultImplementation: ActionIntermediate
-        switch ActionIntermediate.construct(choiceNode, namespace: abilityNamespace) {
+        switch ActionIntermediate.construct(
+          choiceNode,
+          namespace: abilityNamespace,
+          includeDocumentation: includeDocumentation
+        ) {
         case .failure(let nested):
           errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenChoice($0) }))
           continue
@@ -113,20 +126,25 @@ extension Ability {
     }
     let access = AccessIntermediate(declaration.access)
     var attachedDocumentation: DocumentationIntermediate?
-    if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(
-        documentation.documentation,
-        namespace: namespace.appending(names),
-        inheritedVisibility: access
-      ) {
-      case .failure(let nested):
-        errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
-      case .success(let intermediateDocumentation):
-        attachedDocumentation = intermediateDocumentation
-        for parameter in intermediateDocumentation.parameters.joined() {
-          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+    switch includeDocumentation {
+    case .all, .reachable, .errorDetection:
+      if let documentation = declaration.documentation {
+        switch DocumentationIntermediate.construct(
+          documentation.documentation,
+          namespace: namespace.appending(names),
+          inheritedVisibility: access
+        ) {
+        case .failure(let nested):
+          errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
+        case .success(let intermediateDocumentation):
+          attachedDocumentation = intermediateDocumentation
+          for parameter in intermediateDocumentation.parameters.joined() {
+            errors.append(ConstructionError.documentedParameterNotFound(parameter))
+          }
         }
       }
+    case .none:
+      break
     }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))

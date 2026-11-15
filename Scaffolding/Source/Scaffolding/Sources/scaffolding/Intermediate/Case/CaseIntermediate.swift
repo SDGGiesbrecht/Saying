@@ -58,7 +58,8 @@ extension CaseIntermediate {
     namespace: [Set<UnicodeText>],
     type: ParsedTypeReference,
     access: AccessIntermediate,
-    testOnlyAccess: Bool
+    testOnlyAccess: Bool,
+    includeDocumentation: DocumentationInclusion
   ) -> Result<CaseIntermediate, ErrorList<CaseIntermediate.ConstructionError>> {
     var errors: [CaseIntermediate.ConstructionError] = []
 
@@ -70,20 +71,25 @@ extension CaseIntermediate {
     let caseNamespace = namespace.appending(names)
 
     var attachedDocumentation: DocumentationIntermediate?
-    if let documentation = declaration.documentation {
-      switch DocumentationIntermediate.construct(
-        documentation.documentation,
-        namespace: caseNamespace,
-        inheritedVisibility: access
-      ) {
+    switch includeDocumentation {
+    case .all, .reachable, .errorDetection:
+      if let documentation = declaration.documentation {
+        switch DocumentationIntermediate.construct(
+          documentation.documentation,
+          namespace: caseNamespace,
+          inheritedVisibility: access
+        ) {
         case .failure(let nested):
           errors.append(contentsOf: nested.errors.map({ ConstructionError.brokenDocumentation($0) }))
         case .success(let intermediateDocumentation):
-        attachedDocumentation = intermediateDocumentation
-        for parameter in intermediateDocumentation.parameters.joined() {
-          errors.append(ConstructionError.documentedParameterNotFound(parameter))
+          attachedDocumentation = intermediateDocumentation
+          for parameter in intermediateDocumentation.parameters.joined() {
+            errors.append(ConstructionError.documentedParameterNotFound(parameter))
+          }
         }
       }
+    case .none:
+      break
     }
 
     var cStore: NativeActionImplementationIntermediate?

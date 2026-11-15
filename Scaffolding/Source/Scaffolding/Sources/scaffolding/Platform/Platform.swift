@@ -4111,7 +4111,8 @@ extension Platform {
         try module.build(
           moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? [],
           testedUses: &testedUses,
-          packageURL: package.location
+          packageURL: package.location,
+          includeDocumentation: mode.includedDocumentation
         )
       )
     }

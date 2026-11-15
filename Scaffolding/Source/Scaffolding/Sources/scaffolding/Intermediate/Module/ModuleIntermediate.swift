@@ -28,7 +28,7 @@ extension ModuleIntermediate {
 
 extension ModuleIntermediate {
 
-  mutating func add(file: ParsedDeclarationList) throws {
+  mutating func add(file: ParsedDeclarationList, includeDocumentation: DocumentationInclusion) throws {
     languageNodes.append(contentsOf: file.findAllLanguageReferences())
     var errors: [ConstructionError] = []
     let baseNamespace: [Set<UnicodeText>] = []
@@ -40,22 +40,46 @@ extension ModuleIntermediate {
         }
         referenceDictionary.add(language: languageNode.name.identifierText())
       case .thing(let thingNode):
-        let thing = try Thing.construct(thingNode, namespace: baseNamespace).get()
+        let thing = try Thing.construct(
+          thingNode,
+          namespace: baseNamespace,
+          includeDocumentation: includeDocumentation
+        ).get()
         errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
       case .enumeration(let enumeration):
-        let thing = try Thing.construct(enumeration, namespace: baseNamespace).get()
+        let thing = try Thing.construct(
+          enumeration,
+          namespace: baseNamespace,
+          includeDocumentation: includeDocumentation
+        ).get()
         errors.append(contentsOf: referenceDictionary.add(thing: thing).map({ .redeclaredIdentifier($0) }))
       case .action(let actionNode):
-        let action = try ActionIntermediate.construct(actionNode, namespace: baseNamespace).get()
+        let action = try ActionIntermediate.construct(
+          actionNode,
+          namespace: baseNamespace,
+          includeDocumentation: includeDocumentation
+        ).get()
         errors.append(contentsOf: referenceDictionary.add(action: action).map({ .redeclaredIdentifier($0) }))
       case .ability(let abilityNode):
-        let ability = try Ability.construct(abilityNode, namespace: baseNamespace).get()
+        let ability = try Ability.construct(
+          abilityNode,
+          namespace: baseNamespace,
+          includeDocumentation: includeDocumentation
+        ).get()
         errors.append(contentsOf: referenceDictionary.add(ability: ability).map({ .redeclaredIdentifier($0) }))
       case .use(let use):
-        let intermediate = try UseIntermediate.construct(use, namespace: baseNamespace).get()
+        let intermediate = try UseIntermediate.construct(
+          use,
+          namespace: baseNamespace,
+          includeDocumentation: includeDocumentation
+        ).get()
         uses.append(intermediate)
       case .extensionSyntax(let extensionSyntax):
-        let intermediate = try ExtensionIntermediate.construct(extensionSyntax, namespace: baseNamespace).get()
+        let intermediate = try ExtensionIntermediate.construct(
+          extensionSyntax,
+          namespace: baseNamespace,
+          includeDocumentation: includeDocumentation
+        ).get()
         extensions.append(intermediate)
       }
     }

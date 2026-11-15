@@ -31,13 +31,18 @@ extension RequirementIntermediate {
 
   static func construct<Declaration>(
     _ declaration: Declaration,
-    namespace: [Set<UnicodeText>]
+    namespace: [Set<UnicodeText>],
+    includeDocumentation: DocumentationInclusion
   ) -> Result<RequirementIntermediate, ErrorList<RequirementIntermediate.ConstructionError>>
   where Declaration: ParsedRequirementDeclarationPrototype {
     var errors: [RequirementIntermediate.ConstructionError] = []
 
     let prototype: ActionPrototype
-    switch ActionPrototype.construct(declaration, namespace: namespace) {
+    switch ActionPrototype.construct(
+      declaration, namespace:
+        namespace,
+      includeDocumentation: includeDocumentation
+    ) {
     case .failure(let prototypeError):
       errors.append(contentsOf: prototypeError.errors.map({ .brokenPrototype($0) }))
       return .failure(ErrorList(errors))
