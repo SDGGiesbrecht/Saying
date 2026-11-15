@@ -4109,10 +4109,10 @@ extension Platform {
     for module in sourceModules {
       builtModules.append(
         try module.build(
+          mode: mode,
           moduleWideImports: getSayingModuleInCurrentState().map({ [$0] }) ?? [],
           testedUses: &testedUses,
-          packageURL: package.location,
-          includeDocumentation: mode.includedDocumentation
+          packageURL: package.location
         )
       )
     }
