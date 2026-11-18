@@ -23,24 +23,6 @@ action (file)
 
 action (unit)
  [
-  test {ignore ((example: natural number) as memory offset)}
- ]
- (
-  English: (number: natural number) as memory offset
- )
- optional (memory offset)
- JavaScript: “” number “”
- Swift: “Int(exactly: ” number “)”
- {
-  if ((number) ≤ ((greatest representable: memory offset) as natural number, skipping underflow check)), {
-   ← wrap ((number) as memory offset, skipping overflow check) into optional
-  }, otherwise {
-   ← nothing
-  }
- }
-
-action (unit)
- [
   test {ignore ((example: natural number) as memory offset, skipping overflow check)}
  ]
  (
@@ -52,6 +34,18 @@ action (unit)
  JavaScript: “” number “”
  Kotlin: “” number “.toInt()”
  Swift: “Int(” number “)”
+
+action (unit)
+ [
+  test {ignore ((example: natural number) is representable as memory offset)}
+ ]
+ (
+  English: (number: natural number) is representable as memory offset
+ )
+ truth value
+ {
+  ← (number) ≤ ((greatest representable: memory offset) as natural number, skipping underflow check)
+ }
 
 action (unit)
  [
@@ -68,14 +62,8 @@ action (unit)
  Swift: “” integer “”
 
 use (unit)
- general containers of (memory offset)
+ general use of (memory offset)
  {
-  action (unit)
-   example
-   memory offset
-   {
-    ← “0”
-   }
  }
 
 action (unit)

@@ -1275,8 +1275,8 @@ extension
    JavaScript: “”
    Kotlin: “”
    {
-    if ((amount) as memory offset) exists, unwrap it as (• offset: memory offset), {
-     expect (offset) entries in (↓ list) eventually, skipping underflow check
+    if ((amount) is representable as memory offset), {
+     expect ((amount) as memory offset, skipping overflow check) entries in (↓ list) eventually, skipping underflow check
     }
    }
 
