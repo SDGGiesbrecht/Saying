@@ -304,6 +304,23 @@ extension
     change (↓ (limit) of (list)) to (new limit)
    }
 
+  action (unit)
+   [
+    test {
+     let (• list: unmanaged list of (truth value)) start as (empty: unmanaged list of (truth value))
+     expect eventual end of (↓ list) at (boundary at (“1”: memory offset))
+     release unmanaged (↓ list)
+    }
+   ]
+   (
+    English: expect eventual end of (list: ↓ unmanaged list of (thing)) at (eventual end: list boundary)
+   )
+   {
+    if ((eventual end) is greater than ((limit) of (list))), {
+     resize storage of (↓ list) to end at (eventual end)
+    }
+   }
+
   action (file)
    (
     English: ensure enough storage for (new end: list boundary) in (list: ↓ unmanaged list of (thing))

@@ -1239,6 +1239,60 @@ extension
    }
 
   action (clients)
+   [
+    [
+     English: Communicates the intention to fill the list up to a precise number of entries.
+    ]
+    [
+     English: By declaring this intent, the foreknowedge may enable the list to adjust its memory use to perform the imminent actions more efficiently. Use this action only if the list is about to be assembled by repeadly appending before stablizing at a final size known in advance. In the following example, notifying the list that three entries are expected gives it the opportunity to allocate enough memory up front for precisely the 3 slots of storage it will ever use. (Without foreknowledge, it might guess to reallocate for 1, then 2, then 4, finalizing with an extra memory slot reserved for potential use that will never occur.)
+    ]
+    test {
+     let (• list: list of (natural number)) start as (empty: list of (natural number))
+     expect (“3”: natural number) entries in (↓ list) eventually
+     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)), {
+      append (number) to (↓ list)
+     }
+     verify ((number of entries in (list)) is (“3”: natural number))
+    }
+    [
+     English: Do not use this action repeadedly within a mult‐step build‐up; such miscommunicated intent is likely to lead to even less‐efficient memory use. In the following example, repeatedly notifying the list that only three more entries are expected is likely to lead to it reallocating for exactly 1, then 2, then 3, then 4, then 5, then 6, then 7, then 8, then 9, running out of space again at each step and having to copy the entirety to a new location. Without it, it might guess to reallocate for 1, then 2, then 4, then 8, then 16, with half as many reallocations and two‐thirds as much memory allocated over time.
+    ]
+    test {
+     let (• groups: list of (list of (natural number))) be (list of (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)), (list of (“4”: natural number), (“5”: natural number) and (“6”: natural number)) and (list of (“7”: natural number), (“8”: natural number) and (“9”: natural number)))
+     let (• list: list of (natural number)) start as (empty: list of (natural number))
+     for each (• group: list of (natural number)) in (groups), {
+      expect ((number of entries in (list)) plus (“3”: natural number)) entries in (↓ list) eventually
+      for each (• number: natural number) in (group), {
+       append (number) to (↓ list)
+      }
+     }
+     verify ((number of entries in (list)) is (“9”: natural number))
+    }
+   ]
+   (
+    English: expect (amount: natural number) entries in (list: ↓ list of (thing)) eventually
+   )
+   JavaScript: “”
+   Kotlin: “”
+   {
+    if ((amount) as memory offset) exists, unwrap it as (• offset: memory offset), {
+     expect (offset) entries in (↓ list) eventually, skipping underflow check
+    }
+   }
+
+  action (file)
+   (
+    English: expect (amount: memory offset) entries in (list: ↓ list of (thing)) eventually, skipping underflow check
+   )
+   C♯: “” list “.EnsureCapacity(” amount “)”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “” list “.reserveCapacity(” amount “)”
+   {
+    expect eventual end of (↓ (unmanaged) of (list)) at (boundary at (amount))
+   }
+
+  action (clients)
    (
     English: list of (entry: thing)
    )
@@ -1249,6 +1303,7 @@ extension
    Swift: “[” entry “]”
    {
     let (• list: list of (thing)) start as (empty: list of (thing))
+    expect (“1”: natural number) entries in (↓ list) eventually
     append (entry) to (↓ list)
     ← list
    }
@@ -1264,6 +1319,7 @@ extension
    Swift: “[” first “, ” second “]”
    {
     let (• list: list of (thing)) start as (empty: list of (thing))
+    expect (“2”: natural number) entries in (↓ list) eventually
     append (first) to (↓ list)
     append (second) to (↓ list)
     ← list
@@ -1280,6 +1336,7 @@ extension
    Swift: “[” first “, ” second “, ” third “]”
    {
     let (• list: list of (thing)) start as (empty: list of (thing))
+    expect (“3”: natural number) entries in (↓ list) eventually
     append (first) to (↓ list)
     append (second) to (↓ list)
     append (third) to (↓ list)
@@ -1300,6 +1357,7 @@ extension
    Swift: “[” first “, ” second “, ” third “, ” fourth “]”
    {
     let (• list: list of (thing)) start as (empty: list of (thing))
+    expect (“4”: natural number) entries in (↓ list) eventually
     append (first) to (↓ list)
     append (second) to (↓ list)
     append (third) to (↓ list)
@@ -1318,6 +1376,7 @@ extension
    Swift: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “]”
    {
     let (• list: list of (thing)) start as (empty: list of (thing))
+    expect (“5”: natural number) entries in (↓ list) eventually
     append (first) to (↓ list)
     append (second) to (↓ list)
     append (third) to (↓ list)

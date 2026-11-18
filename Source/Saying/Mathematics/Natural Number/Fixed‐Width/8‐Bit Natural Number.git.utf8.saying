@@ -221,10 +221,10 @@ use (clients)
 
 action (file)
  [
-  test {verify ((if most efficient, (example augend: 8‐bit natural number) plus (example addend: 8‐bit natural number) by widening, skipping overflow check) is (example sum: platform fixed‐width natural number))}
+  test {verify ((if most efficient, (example augend: 8‐bit natural number) plus (example addend: 8‐bit natural number), by widening, skipping overflow check) is (example sum: platform fixed‐width natural number))}
  ]
  (
-  English: if most efficient, (augend: 8‐bit natural number) plus (addend: 8‐bit natural number) by widening, skipping overflow check
+  English: if most efficient, (augend: 8‐bit natural number) plus (addend: 8‐bit natural number), by widening, skipping overflow check
  )
  platform fixed‐width natural number
  JavaScript: “” augend “ + ” addend “”
@@ -256,7 +256,7 @@ use (clients)
    JavaScript: “” augend “ + ” addend “”
    Swift: “” augend “ ¤(26)+ ” addend “”
    {
-    ← (if most efficient, (augend) plus (addend) by widening, skipping overflow check) as 8‐bit natural number, skipping overflow check
+    ← (if most efficient, (augend) plus (addend), by widening, skipping overflow check) as 8‐bit natural number, skipping overflow check
    }
 
   action (clients)
