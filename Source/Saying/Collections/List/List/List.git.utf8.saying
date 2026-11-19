@@ -1308,7 +1308,7 @@ extension
    (
     English: expect (amount: memory offset) entries in (list: ↓ list of (thing)) eventually, skipping underflow check
    )
-   C♯ (“NETCOREAPP6¤(5F)0¤(5F)OR¤(5F)GREATER”): “” list “.EnsureCapacity(” amount “)”
+   C♯ (“NET6¤(5F)0¤(5F)OR¤(5F)GREATER”): “” list “.EnsureCapacity(” amount “)”
    JavaScript: “”
    Kotlin: “”
    Swift: “” list “.reserveCapacity(” amount “)”
