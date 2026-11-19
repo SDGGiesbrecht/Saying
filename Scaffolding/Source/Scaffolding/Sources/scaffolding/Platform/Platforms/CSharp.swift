@@ -794,7 +794,7 @@ enum CSharp: Platform {
         "<Project Sdk=\u{22}Microsoft.NET.Sdk\u{22}>",
         "  <PropertyGroup>",
         "    <OutputType>Exe</OutputType>",
-        "    <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>",
+        "    <TargetFrameworks>net48;netcoreapp1.0;net6.0</TargetFrameworks>",
         "    <CheckEolTargetFramework>false</CheckEolTargetFramework>",
         "    <RuntimeIdentifier>win-x86</RuntimeIdentifier>",
         "    <SelfContained>true</SelfContained>",
