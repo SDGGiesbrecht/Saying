@@ -1328,7 +1328,7 @@ extension
    (
     English: if possible, expect (amount: memory offset) entries in (list: ↓ list of (thing)) eventually, skipping underflow check, by unmanaged
    )
-   C♯ “”
+   C♯: “”
    JavaScript: “”
    Kotlin: “”
    Swift: “”
