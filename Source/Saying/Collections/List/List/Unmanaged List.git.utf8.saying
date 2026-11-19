@@ -315,7 +315,6 @@ extension
    (
     English: expect eventual end of (list: ↓ unmanaged list of (thing)) at (eventual end: list boundary)
    )
-   C♯: “”
    {
     if ((eventual end) is greater than ((limit) of (list))), {
      resize storage of (↓ list) to end at (eventual end)

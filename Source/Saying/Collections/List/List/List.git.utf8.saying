@@ -1313,6 +1313,26 @@ extension
    Kotlin: “”
    Swift: “” list “.reserveCapacity(” amount “)”
    {
+    if possible, expect (amount: memory offset) entries in (list: ↓ list of (thing)) eventually, skipping underflow check, by unmanaged
+   }
+
+  action (file)
+   [
+    test {
+     let (• list: list of (natural number)) start as (empty: list of (natural number))
+     if possible, expect (“1”: memory offset) entries in (↓ list) eventually, skipping underflow check, by unmanaged
+     append (“1”: natural number) to (↓ list)
+     verify ((number of entries in (list)) is (“1”: natural number))
+    }
+   ]
+   (
+    English: if possible, expect (amount: memory offset) entries in (list: ↓ list of (thing)) eventually, skipping underflow check, by unmanaged
+   )
+   C♯ “”
+   JavaScript: “”
+   Kotlin: “”
+   Swift: “”
+   {
     expect eventual end of (↓ (unmanaged) of (list)) at (boundary at (amount))
    }
 
