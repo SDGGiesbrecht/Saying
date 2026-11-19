@@ -1297,6 +1297,14 @@ extension
    }
 
   action (file)
+   [
+    test {
+     let (• list: list of (natural number)) start as (empty: list of (natural number))
+     expect (“1”: memory offset) entries in (↓ list) eventually, skipping underflow check
+     append (“1”: natural number) to (↓ list)
+     verify ((number of entries in (list)) is (“1”: natural number))
+    }
+   ]
    (
     English: expect (amount: memory offset) entries in (list: ↓ list of (thing)) eventually, skipping underflow check
    )
