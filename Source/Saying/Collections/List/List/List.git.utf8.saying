@@ -1244,30 +1244,46 @@ extension
      English: Communicates the intention to fill the list up to a precise number of entries.
     ]
     [
-     English: By declaring this intent, the foreknowedge may enable the list to adjust its memory use to perform the imminent actions more efficiently. Use this action only if the list is about to be assembled by repeadly appending before stablizing at a final size known in advance. In the following example, notifying the list that three entries are expected gives it the opportunity to allocate enough memory up front for precisely the 3 slots of storage it will ever use. (Without foreknowledge, it might guess to reallocate for 1, then 2, then 4, finalizing with an extra memory slot reserved for potential use that will never occur.)
+     English: By declaring this intent, the foreknowedge may enable the list to adjust its memory use to perform the imminent actions more efficiently.
+    ]
+    [
+     English: Use this action only if the list is about to be assembled by repeadly appending before stablizing at a final size known in advance.
+    ]
+    [
+     English: Assuming the platform uses a typical amortized memory strategy, the first example is likely to reserve memory for 1, 2, 4, then 8 slots, which is 4 allocations totaling 15 slots with 2 excess slots permenantly reserved, whereas the second example is likely to reserve memory for all 6 slots up front, which is 1 allocation totaling 6 slots with 0 excess slots permanently reserved.
     ]
     test {
      let (• list: list of (natural number)) start as (empty: list of (natural number))
-     expect (“3”: natural number) entries in (↓ list) eventually
-     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)), {
+     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“4”: natural number), (“5”: natural number) and (“6”: natural number)), {
       append (number) to (↓ list)
      }
-     verify ((number of entries in (list)) is (“3”: natural number))
+     verify ((number of entries in (list)) is (“6”: natural number))
+    }
+    test {
+     let (• list: list of (natural number)) start as (empty: list of (natural number))
+     expect (“6”: natural number) entries in (↓ list) eventually
+     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“4”: natural number), (“5”: natural number) and (“6”: natural number)), {
+      append (number) to (↓ list)
+     }
+     verify ((number of entries in (list)) is (“6”: natural number))
     }
     [
-     English: Do not use this action repeadedly within a mult‐step build‐up; such miscommunicated intent is likely to lead to even less‐efficient memory use. In the following example, repeatedly notifying the list that only three more entries are expected is likely to lead to it reallocating for exactly 1, then 2, then 3, then 4, then 5, then 6, then 7, then 8, then 9, running out of space again at each step and having to copy the entirety to a new location. Without it, it might guess to reallocate for 1, then 2, then 4, then 8, then 16, with half as many reallocations and two‐thirds as much memory allocated over time.
+     English: Do not use this action repeadedly within a mult‐step build‐up; such miscommunicated intent is likely to lead to even less‐efficient memory use.
+    ]
+    [
+     English: The following example is likely to reserve memory for 1, 2, 3, 4, 5, then 6 slots, which is 6 allocations totaling 21 slots.
     ]
     test {
-     let (• groups: list of (list of (natural number))) be (list of (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)), (list of (“4”: natural number), (“5”: natural number) and (“6”: natural number)) and (list of (“7”: natural number), (“8”: natural number) and (“9”: natural number)))
      let (• list: list of (natural number)) start as (empty: list of (natural number))
-     for each (• group: list of (natural number)) in (groups), {
-      expect ((number of entries in (list)) plus (“3”: natural number)) entries in (↓ list) eventually
-      for each (• number: natural number) in (group), {
-       append (number) to (↓ list)
-      }
+     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“4”: natural number), (“5”: natural number) and (“6”: natural number)), {
+      expect (number: natural number) entries in (↓ list) eventually
+      append (number) to (↓ list)
      }
-     verify ((number of entries in (list)) is (“9”: natural number))
+     verify ((number of entries in (list)) is (“6”: natural number))
     }
+    [
+     English: These are simplified representative examples. Actual memory use varies by platform.
+    ]
    ]
    (
     English: expect (amount: natural number) entries in (list: ↓ list of (thing)) eventually
@@ -1382,6 +1398,27 @@ extension
     append (third) to (↓ list)
     append (fourth) to (↓ list)
     append (fifth) to (↓ list)
+    ← list
+   }
+
+  action (clients)
+   (
+    English: list of (first: thing), (second: thing), (third: thing), (fourth: thing), (fifth: thing) and (sixth: thing)
+   )
+   list of (thing)
+   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “ }”
+   JavaScript: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “]”
+   Kotlin: “listOf(” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “)”
+   Swift: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “]”
+   {
+    let (• list: list of (thing)) start as (empty: list of (thing))
+    expect (“6”: natural number) entries in (↓ list) eventually
+    append (first) to (↓ list)
+    append (second) to (↓ list)
+    append (third) to (↓ list)
+    append (fourth) to (↓ list)
+    append (fifth) to (↓ list)
+    append (sixth) to (↓ list)
     ← list
    }
  }
