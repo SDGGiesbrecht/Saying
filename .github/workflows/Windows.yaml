@@ -53,11 +53,11 @@ jobs:
       run: |
         echo on
         .Construction\C♯\bin\Debug\net48\win-x86\Project.exe
-    - name: Test with .NET (Core 2.2) # baseline
+    - name: Test with .NET (Core 2.0) # baseline
       shell: cmd
       run: |
         echo on
-        .Construction\C♯\bin\Debug\netcoreapp2.2\win-x86\Project.exe
+        .Construction\C♯\bin\Debug\netcoreapp2.0\win-x86\Project.exe
     - name: Test with .NET (6.0) # newest #if difference
       shell: cmd
       run: |
