@@ -429,6 +429,9 @@ enum Swift: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "_ \(name): \(actionType(parameters: parameters, returnValue: returnValue))"
   }
+  static var extensionsUseFirstParameter: Bool {
+    return false
+  }
   static func createInstance(of type: String, parts: String) -> String {
     return "\(type)(\(parts))"
   }
@@ -520,6 +523,7 @@ enum Swift: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    extendsFirstParameter: Bool,
     isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,

@@ -116,6 +116,7 @@ protocol Platform {
   static func nativeImplementation(of action: ActionIntermediate) -> NativeActionImplementationIntermediate?
   static func parameterDeclaration(label: String?, name: String, type: String, isThrough: Bool) -> String
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String
+  static var extensionsUseFirstParameter: Bool { get }
   static func createInstance(of type: String, parts: String) -> String
   static func constructorSetter(name: String) -> String
   static func localStorage(named name: String, ofType type: String, containing contents: String) -> String
@@ -151,6 +152,7 @@ protocol Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    extendsFirstParameter: Bool,
     isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
@@ -1547,6 +1549,7 @@ extension Platform {
           coverageRegistration: nil,
           implementation: implementation,
           parentType: nil,
+          extendsFirstParameter: false,
           isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
@@ -3421,16 +3424,22 @@ extension Platform {
 
     var parentType: String?
     var isMutating = false
+    var extendsFirstParameter: Bool = false
     if nativeIsMember(action: action),
        !isInitializer,
        !nativeIsStaticMember(action: action) {
-      let first = parameterEntries.removeFirst()
-      isMutating = first.passage == .through
-      parentType = source(
-        for: first.type,
-        referenceLookup: externalReferenceLookup,
-        identifierIndex: &identifierIndex
-      )
+      if !isAbsorbedMember,
+        extensionsUseFirstParameter {
+        extendsFirstParameter = true
+      } else {
+        let first = parameterEntries.removeFirst()
+        isMutating = first.passage == .through
+        parentType = source(
+          for: first.type,
+          referenceLookup: externalReferenceLookup,
+          identifierIndex: &identifierIndex
+        )
+      }
     }
     let parameters: String = parameterEntries
       .map({ thing in
@@ -3540,6 +3549,7 @@ extension Platform {
       coverageRegistration: coverageRegistration,
       implementation: implementation,
       parentType: parentType,
+      extendsFirstParameter: extendsFirstParameter,
       isStatic: isStatic,
       isMutating: isMutating,
       isAbsorbedMember: isAbsorbedMember,
@@ -3685,6 +3695,7 @@ extension Platform {
         coverageRegistration: nil,
         implementation: implementation,
         parentType: nil,
+        extendsFirstParameter: false,
         isStatic: false,
         isMutating: false,
         isAbsorbedMember: false,
