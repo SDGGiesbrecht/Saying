@@ -340,7 +340,7 @@ action (file)
  )
  list boundary
  {
-  ← boundary at (((offset) of (boundary)) plus (distance) skipping overflow check)
+  ← boundary at (((offset) of (boundary)) plus (distance), skipping overflow check)
  }
 
 action (unit)
@@ -352,7 +352,7 @@ action (unit)
  )
  list boundary
  {
-  ← boundary at (((offset) of (boundary)) plus (distance) skipping negative overflow checks, but aborting on positive overflow)
+  ← boundary at (((offset) of (boundary)) plus (distance), skipping negative overflow checks, but aborting on positive overflow)
  }
 
 action (unit)

@@ -23,10 +23,36 @@ action (file)
 
 action (unit)
  [
-  test {ignore ((example: platform fixed‐width integer) as memory offset skipping overflow check)}
+  test {ignore ((example: natural number) as memory offset, skipping overflow check)}
  ]
  (
-  English: (integer: platform fixed‐width integer) as memory offset skipping overflow check
+  English: (number: natural number) as memory offset, skipping overflow check
+ )
+ memory offset
+ C: “(size¤(5F)t)” number “”
+ C♯: “(int)” number “”
+ JavaScript: “” number “”
+ Kotlin: “” number “.toInt()”
+ Swift: “Int(” number “)”
+
+action (unit)
+ [
+  test {ignore ((example: natural number) is representable as memory offset)}
+ ]
+ (
+  English: (number: natural number) is representable as memory offset
+ )
+ truth value
+ {
+  ← (number) ≤ ((greatest representable: memory offset) as natural number, skipping underflow check)
+ }
+
+action (unit)
+ [
+  test {ignore ((example: platform fixed‐width integer) as memory offset, skipping overflow check)}
+ ]
+ (
+  English: (integer: platform fixed‐width integer) as memory offset, skipping overflow check
  )
  memory offset
  C: “(size¤(5F)t)” integer “”
@@ -208,7 +234,7 @@ action (unit)
 
 action (unit)
  (
-  English: (augend: memory offset) plus (addend: memory offset) skipping overflow check
+  English: (augend: memory offset) plus (addend: memory offset), skipping overflow check
  )
  memory offset
  C: “” augend “ + ” addend “”
@@ -237,7 +263,7 @@ flow (file)
 
 action (unit)
  (
-  English: (augend: memory offset) plus (addend: memory offset) skipping negative overflow checks, but aborting on positive overflow
+  English: (augend: memory offset) plus (addend: memory offset), skipping negative overflow checks, but aborting on positive overflow
  )
  memory offset
  C♯: “checked(” augend “ + ” addend “)”
@@ -245,7 +271,7 @@ action (unit)
  Swift: “” augend “ + ” addend “”
  {
   if ((augend) is greater than ((greatest representable: memory offset) minus (addend) skipping overflow check)), abort due to addition overflow
-  ← (augend) plus (addend) skipping overflow check
+  ← (augend) plus (addend), skipping overflow check
  }
 
 action (unit)
