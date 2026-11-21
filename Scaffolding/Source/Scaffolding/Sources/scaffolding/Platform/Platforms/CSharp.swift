@@ -512,6 +512,10 @@ enum CSharp: Platform {
       adjustedParameters = "object other"
     }
     let staticKeyword = isAbsorbedMember && !isStatic ? "" : "static "
+    if extendsFirstParameter,
+      adjustedParameters.starts(with: "ref ") {
+      adjustedParameters.removeFirst(4)
+    }
     let thisKeyword = extendsFirstParameter ? "this " : ""
     let parametersSection = propertyInstead ? "" : "(\(thisKeyword)\(adjustedParameters))"
     var result: [String] = []
