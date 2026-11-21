@@ -278,6 +278,7 @@ enum C: Platform {
         "\(indent)return reference;",
       ],
       parentType: nil,
+      extendsFirstParameter: false,
       isStatic: false,
       isMutating: false,
       isAbsorbedMember: false,
@@ -327,6 +328,7 @@ enum C: Platform {
           implementation: componentHolds.map({"\(indent)\($0);"})
             + ["\(indent)return target;"],
           parentType: nil,
+          extendsFirstParameter: false,
           isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
@@ -344,6 +346,7 @@ enum C: Platform {
           coverageRegistration: nil,
           implementation: componentReleases.map({"\(indent)\($0);"}),
           parentType: nil,
+          extendsFirstParameter: false,
           isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
@@ -363,6 +366,7 @@ enum C: Platform {
             "\(indent)return \(apply(nativeReferenceCountingAction: synthesizedHold(on: name)!, around: "target", referenceLookup: [], identifierIndex: &emptyIdentifierIndex));"
           ],
           parentType: nil,
+          extendsFirstParameter: false,
           isStatic: false,
           isMutating: false,
           isAbsorbedMember: false,
@@ -522,6 +526,9 @@ enum C: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     "\(returnValue) (*\(name))(\(parameters))"
   }
+  static var extensionsUseFirstParameter: Bool {
+    return false
+  }
   static func constructorSetter(name: String) -> String {
     return ""
   }
@@ -615,6 +622,7 @@ enum C: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    extendsFirstParameter: Bool,
     isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
@@ -677,6 +685,7 @@ enum C: Platform {
         "\(indent)return \(passedFunction)(\(forFurtherIn));",
       ],
       parentType: nil,
+      extendsFirstParameter: false,
       isStatic: false,
       isMutating: false,
       isAbsorbedMember: false,

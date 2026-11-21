@@ -407,6 +407,9 @@ enum CSharp: Platform {
   static func parameterDeclaration(label: String?, name: String, parameters: String, returnValue: String) -> String {
     return "\(actionType(parameters: parameters, returnValue: returnValue)) \(name)"
   }
+  static var extensionsUseFirstParameter: Bool {
+    return true
+  }
   static func constructorSetter(name: String) -> String {
     return "this.\(name) = \(name);"
   }
@@ -491,6 +494,7 @@ enum CSharp: Platform {
     coverageRegistration: String?,
     implementation: [String],
     parentType: String?,
+    extendsFirstParameter: Bool,
     isStatic: Bool,
     isMutating: Bool,
     isAbsorbedMember: Bool,
@@ -508,7 +512,8 @@ enum CSharp: Platform {
       adjustedParameters = "object other"
     }
     let staticKeyword = isAbsorbedMember && !isStatic ? "" : "static "
-    let parametersSection = propertyInstead ? "" : "(\(adjustedParameters))"
+    let thisKeyword = extendsFirstParameter ? "this " : ""
+    let parametersSection = propertyInstead ? "" : "(\(thisKeyword)\(adjustedParameters))"
     var result: [String] = []
     if !isAbsorbedMember {
       result.append(contentsOf: [
