@@ -34,6 +34,23 @@ extension
      Swift: “”
    }
 
+  action (clients)
+   [
+    test (hidden) {ignore (list literal (empty: list literal of unknown length containing (truth value)) ending at (“0”: memory offset))}
+   ]
+   (
+    English: list literal (uncounted: list literal of unknown length containing (thing)) ending at (end: memory offset)
+    C: 3 literal (uncounted: [uncounted]) (end: [end])
+   )
+   list of (thing)
+   C♯: “” uncounted “”
+   JavaScript: “” uncounted “”
+   Kotlin: “” uncounted “”
+   Swift: “” uncounted “”
+   {
+    ← create list with unmanaged list (unmanaged list copied from ((uncounted) as unmanaged list of unknown length) ending at (boundary at (end)))
+   }
+
   action (unit)
    [
     test {verify ((list in read‐only memory (unmanaged list of unknown length at (unallocated): unmanaged list of (truth value) of unknown length) ending at (boundary at (“0”: memory offset))) is (empty: list of (truth value)))}
@@ -1342,16 +1359,20 @@ extension
     English: list of (entry: thing)
    )
    list of (thing)
+   {
+    ← list literal (list literal containing (entry)) ending at (“1”: memory offset)
+   }
+
+  flow (file)
+   (
+    English: list literal containing (entry: thing)
+   )
+   list literal of unknown length containing (thing)
+   C: “(” thing “[]){” entry “}”
    C♯: “new List<” thing “>() { ” entry “ }”
    JavaScript: “[” entry “]”
    Kotlin: “listOf(” entry “)”
    Swift: “[” entry “]”
-   {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    expect (“1”: natural number) entries in (↓ list) eventually
-    append (entry) to (↓ list)
-    ← list
-   }
 
   action (clients)
    (

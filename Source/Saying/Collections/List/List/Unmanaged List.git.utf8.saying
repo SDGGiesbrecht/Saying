@@ -109,6 +109,31 @@ extension
    }
 
   action (unit)
+   [
+    test (hidden) {
+     let (• original: unmanaged list of (truth value)) start as (empty: unmanaged list of (truth value))
+     let (• empty copy: unmanaged list of (truth value)) start as (unmanaged list copied from ((uncounted) of (original)) ending at (boundary at (“0”: memory offset)))
+     insert (true) at (beginning of (original)) in (↓ original)
+     let (• non‐empty copy: unmanaged list of (truth value)) start as (unmanaged list copied from ((uncounted) of (original)) ending at (boundary at (“1”: memory offset)))
+     release unmanaged (↓ original)
+     release unmanaged (↓ empty copy)
+     release unmanaged (↓ non‐empty copy)
+    }
+   ]
+   (
+    English: unmanaged list copied from (origin: unmanaged list of (thing) of unknown length) ending at (end: list boundary)
+   )
+   unmanaged list of (thing)
+   {
+    if (((offset) of (end)) is (“0”: memory offset)), {
+     ← empty
+    }
+    let (• list: unmanaged list of (thing)) start as (create unmanaged list with uncounted (allocate memory up to (end): unmanaged list of (thing) of unknown length), end (end) and limit (end) where memory is read‐only (false))
+    copy (from (beginning of (origin)) to (end)) from (origin) to (beginning of (list)) in (↓ (uncounted) of (list))
+    ← list
+   }
+
+  action (unit)
    (
     English: hold unmanaged (list: ↓ unmanaged list of (thing))
    )
