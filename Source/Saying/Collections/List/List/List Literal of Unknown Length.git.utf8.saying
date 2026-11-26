@@ -1,0 +1,28 @@
+extension
+ general containers of (thing)
+ {
+  thing (clients)
+   (
+    English: list literal of unknown length containing (thing)
+   )
+   C: “” thing “¤(2A)”
+   C♯: “List<” thing “>” (“System.Collections.Generic”)
+   Kotlin: “List<” thing “>”
+   Swift: “[” thing “]”
+   {
+   }
+
+  action (unit)
+   (
+    English: empty
+    Deutsch: leer
+    français : vide
+    ελληνικά: άδειος
+   )
+   list literal of unknown length containing (thing)
+   C: “NULL” (“stddef”)
+   C♯: “new List<” thing “>()”
+   JavaScript: “[]”
+   Kotlin: “listOf()”
+   Swift: “[]”
+ }

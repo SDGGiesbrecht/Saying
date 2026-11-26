@@ -55,6 +55,19 @@ extension
    }
 
   action (unit)
+   [
+    test {ignore ((empty: list literal of unknown length containing (truth value)) as unmanaged list of unknown length)}
+   ]
+   (
+    English: (literal: list literal of unknown length containing (thing)) as unmanaged list of unknown length
+   )
+   unmanaged list of (thing) of unknown length
+   C: “” literal “”
+   {
+    ← empty placeholder
+   }
+
+  action (unit)
    (
     English: unmanaged list of unknown length at (address: memory address)
    )
