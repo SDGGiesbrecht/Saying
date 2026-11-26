@@ -28,6 +28,8 @@ protocol Platform {
   static func literal(number: String, typeNames: Set<UnicodeText>) -> String
   static func literal(byte: String) -> String
   static func literal(unicodeScalarNumericalValue: String) -> String
+  static func listStart(listType: String, entryType: String) -> String
+  static func listEnd(listType: String, numberOfEntries: Int) -> String
   static func numberedParameter(position: Int, type: String?) -> String
 
   // Access
@@ -1392,6 +1394,76 @@ extension Platform {
     }
   }
 
+  static func callListLiteral(
+    literal: ActionUse,
+    context: ActionIntermediate?,
+    localLookup: [ReferenceDictionary],
+    referenceLookup: [ReferenceDictionary],
+    extractedCoverageRegistrations: inout [String],
+    earlyReturnOpportunity: inout Bool,
+    coverageIndex: [UnicodeText: Int],
+    clashAvoidanceCounter: inout Int,
+    anonymousCounter: inout Int,
+    extractedArgumentsForReferenceUnpacking: inout [String],
+    extractedArgumentsForReferenceCounting: inout [String],
+    extractedAnonymousFunctions: inout [String],
+    cleanUpCode: inout String,
+    inliningLevel: Int,
+    inliningArguments: [UnicodeText: (argument: String, stillNeedsDereferencingIfNativeArgument: Bool, executionType: TypeReference?, executionArgument: String?)],
+    normalizeNextNestedLiteral: Bool,
+    mode: CompilationMode,
+    identifierIndex: inout [String: [String: Int]],
+    captures: inout [Capture]?
+  ) -> String {
+    let entries: [String] = literal.arguments.map { entry in
+      switch entry {
+      case .action(let action):
+        return call(
+          to: action,
+          expectedPassedActionParameters: nil,
+          context: context,
+          localLookup: localLookup,
+          referenceLookup: referenceLookup,
+          isNativeArgument: false,
+          extractedCoverageRegistrations: &extractedCoverageRegistrations,
+          earlyReturnOpportunity: &earlyReturnOpportunity,
+          coverageIndex: coverageIndex,
+          clashAvoidanceCounter: &clashAvoidanceCounter,
+          anonymousCounter: &anonymousCounter,
+          extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+          extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+          extractedAnonymousFunctions: &extractedAnonymousFunctions,
+          isThrough: false,
+          isDirectReturn: false,
+          cleanUpCode: &cleanUpCode,
+          inlineClosure: false,
+          inliningLevel: inliningLevel,
+          inliningArguments: inliningArguments,
+          normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+          mode: mode,
+          identifierIndex: &identifierIndex,
+          captures: &captures
+        )
+      case .flow:
+        fatalError("Statement entry in list literal.")
+      }
+    }
+    let type = source(
+      for: literal.resolvedResultType!!,
+      referenceLookup: referenceLookup,
+      identifierIndex: &identifierIndex
+    )
+    let entry = source(
+      for: literal.resolvedEntryType!,
+      referenceLookup: referenceLookup,
+      identifierIndex: &identifierIndex
+    )
+    let start = listStart(listType: type, entryType: entry)
+    let end = listEnd(listType: type, numberOfEntries: entries.count)
+    let entryString = entries.joined(separator: ",\n\(indent)")
+    return "\(start)\n\(indent)\(entryString)\n\(end)"
+  }
+
   static func modify(
     nativeParameter parameter: inout String,
     accordingTo details: NativeActionImplementationParameter,
@@ -1725,6 +1797,39 @@ extension Platform {
         isArgumentExtraction: isArgumentExtraction,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
         isDirectReturn: isDirectReturn,
+        cleanUpCode: &cleanUpCode,
+        inliningLevel: inliningLevel,
+        inliningArguments: inliningArguments,
+        normalizeNextNestedLiteral: normalizeNextNestedLiteral,
+        mode: mode,
+        identifierIndex: &identifierIndex,
+        captures: &captures
+      )
+    }
+    if reference.isList {
+      let resolvedReference = reference.resolvedResultType!!
+      if !isArgumentExtraction,
+        !extractedArgumentsForReferenceCounting.isEmpty,
+        nativeRelease(
+          of: resolvedReference,
+          referenceLookup: referenceLookup,
+          identifierIndex: &identifierIndex
+        ) != nil {
+        return extractedArgumentsForReferenceCounting.removeFirst()
+      }
+      return callListLiteral(
+        literal: reference,
+        context: context,
+        localLookup: localLookup,
+        referenceLookup: referenceLookup,
+        extractedCoverageRegistrations: &extractedCoverageRegistrations,
+        earlyReturnOpportunity: &earlyReturnOpportunity,
+        coverageIndex: coverageIndex,
+        clashAvoidanceCounter: &clashAvoidanceCounter,
+        anonymousCounter: &anonymousCounter,
+        extractedArgumentsForReferenceUnpacking: &extractedArgumentsForReferenceUnpacking,
+        extractedArgumentsForReferenceCounting: &extractedArgumentsForReferenceCounting,
+        extractedAnonymousFunctions: &extractedAnonymousFunctions,
         cleanUpCode: &cleanUpCode,
         inliningLevel: inliningLevel,
         inliningArguments: inliningArguments,

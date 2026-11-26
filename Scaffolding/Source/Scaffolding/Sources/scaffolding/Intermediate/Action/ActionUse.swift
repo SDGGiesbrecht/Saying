@@ -4,11 +4,13 @@ struct ActionUse {
   var actionName: UnicodeText
   var arguments: [ActionUseArgument]
   var literal: LiteralIntermediate?
+  var isList: Bool
   var actionLiteral: ActionLiteralIntermediate?
   var source: ParsedAction?
   var passage: ParameterPassage
   var explicitResultType: ParsedTypeReference?
   var resolvedResultType: ParsedTypeReference??
+  var resolvedEntryType: ParsedTypeReference?
   var rearrangedParameters: [UnicodeText] = []
   var narrowedResultTypes: [ParsedTypeReference?]?
 }
@@ -19,6 +21,7 @@ extension ActionUse {
     var errors: [LiteralIntermediate.ConstructionError] = []
     let arguments: [ActionUseArgument]
     let literal: LiteralIntermediate?
+    let isList: Bool
     switch use {
     case .compound(let compound):
       arguments = compound.arguments.arguments.compactMap { argument in
@@ -42,12 +45,15 @@ extension ActionUse {
         }
       }
       literal = nil
+      isList = false
     case .reference:
       arguments = []
       literal = nil
+      isList = false
     case .simple:
       arguments = []
       literal = nil
+      isList = false
     case .literal(let literalSyntax):
       arguments = []
       switch LiteralIntermediate.construct(literal: literalSyntax) {
@@ -57,6 +63,24 @@ extension ActionUse {
       case .success(let constructed):
         literal = constructed
       }
+      isList = false
+    case .list(let listSyntax):
+      switch listSyntax {
+      case .empty:
+        arguments = []
+      case .nonEmpty(let nonEmpty):
+        arguments = nonEmpty.entries.entries.compactMap { argument in
+          switch ActionUse.construct(argument) {
+          case .failure(let error):
+            errors.append(contentsOf: error.errors)
+            return nil
+          case .success(let action):
+            return .action(action)
+          }
+        }
+      }
+      literal = nil
+      isList = true
     }
     if !errors.isEmpty {
       return .failure(ErrorList(errors))
@@ -66,22 +90,32 @@ extension ActionUse {
         actionName: use.name(),
         arguments: arguments,
         literal: literal,
+        isList: isList,
         source: use,
         passage: .into
       )
     )
   }
 
-  static func construct(_ use: ParsedAnnotatedAction) -> Result<ActionUse, ErrorList<LiteralIntermediate.ConstructionError>> {
-    let passage: ParameterPassage
-    switch use.passage {
-    case .none:
-      passage = .into
-    case .bullet:
-      passage = .out
-    case .throughArrow:
-      passage = .through
+  static func construct(_ use: ParsedAnnotatedArgument) -> Result<ActionUse, ErrorList<LiteralIntermediate.ConstructionError>> {
+    switch construct(use.action) {
+    case .failure(let errors):
+      return .failure(errors)
+    case .success(var action):
+      switch use.passage {
+      case .none:
+        action.passage = .into
+      case .bullet:
+        action.passage = .out
+      case .throughArrow:
+        action.passage = .through
+      }
+      return .success(action)
     }
+  }
+
+  static func construct(_ use: ParsedAnnotatedAction) -> Result<ActionUse, ErrorList<LiteralIntermediate.ConstructionError>> {
+    let passage: ParameterPassage = .into
     let type = use.type.map({ ParsedTypeReference($0.type) })
     var rearrangedParameters: [UnicodeText] = []
     let explicitResultType: ParsedTypeReference?
@@ -109,6 +143,7 @@ extension ActionUse {
         return ActionUse(
           actionName: "",
           arguments: [],
+          isList: false,
           actionLiteral: ActionLiteralIntermediate(implementation: statements),
           passage: passage,
           explicitResultType: explicitResultType,
@@ -281,7 +316,31 @@ extension ActionUse {
         )
       }
     case .none:
-      if let parameter = context?.lookupParameter(actionName) {
+      if isList {
+        let resolved: [ParsedTypeReference] = arguments.compactMap({ $0.resolvedResultType ?? nil })
+        if resolved.areAllEqual(by: { entry in
+          return referenceLookup.lookupThing(entry.key)?
+            .globallyUniqueIdentifier(referenceLookup: referenceLookup)
+        }) {
+          resolvedEntryType = resolved.first
+        } else {
+          let explicit: [ParsedTypeReference] = arguments.compactMap({ $0.explicitResultType })
+          if explicit.areAllEqual(by: { entry in
+            return referenceLookup.lookupThing(entry.key)?
+              .globallyUniqueIdentifier(referenceLookup: referenceLookup)
+          }) {
+            resolvedEntryType = explicit.first
+          }
+        }
+        if let resolvedEntryType = resolvedEntryType {
+          for index in arguments.indices {
+            if arguments[index].explicitResultType == nil {
+              arguments[index].resolvedResultType = resolvedEntryType
+            }
+          }
+          resolvedResultType = ParsedTypeReference.compilerGeneratedReferenceToList(of: resolvedEntryType)
+        }
+      } else if let parameter = context?.lookupParameter(actionName) {
         resolvedResultType = parameter.type
         if arguments.contains(where: { $0.resolvedResultType == nil }) {
           _ = resolveArgumentTypes(
@@ -330,27 +389,8 @@ extension ActionUse {
       }
     }
     if passage != .out {
-      if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
-         let action = context.lookupAction(
-          actionName,
-          signature: signature,
-          specifiedReturnValue: resolvedResultType) {
-        testContext.validateAccess(
-          to: action.access,
-          testOnly: action.testOnlyAccess,
-          allowTestOnly: allowTestOnly,
-          errors: &errors,
-          unavailableOutsideTestsError: { .actionUnavailableOutsideTests(reference: source!) },
-          unavailableInVisibleTestsError: { .actionAccessNarrowerThanDocumentationVisibility(reference: source!) }
-        )
-        for (parameter, argument) in zip(action.parameters.ordered(for: actionName), arguments) {
-          if parameter.passage != argument.passage {
-            errors.append(.mismatchedPassage(attempted: argument.passage, expected: parameter.passage, location: argument.source!))
-          }
-        }
-      } else {
-        if let literal = literal,
-           let resolved = resolvedResultType,
+      if let literal = literal {
+        if let resolved = resolvedResultType,
            let reference = resolved,
            let type = context.lookupThing(reference.key) {
           literal.validate(
@@ -358,18 +398,52 @@ extension ActionUse {
             reference: reference,
             errors: &errors
           )
-        } else if let actionLiteral = actionLiteral {
-          actionLiteral.validateReferences(
-            parameters: actionLiteral.parameterDictionary(
-              rearrangedParameters: rearrangedParameters,
-              explicitSignature: explicitResultType!,
-              referenceLookup: context
-            ),
-            context: context,
-            testContext: testContext,
+        }
+      } else if isList {
+        if let resolved = resolvedEntryType,
+          let entryType = context.lookupThing(resolved.key) {
+          let identifier = entryType.globallyUniqueIdentifier(referenceLookup: context)
+          for argument in arguments {
+            if let resolved = argument.resolvedResultType,
+               let reference = resolved,
+               let type = context.lookupThing(reference.key) {
+              if type.globallyUniqueIdentifier(referenceLookup: context) != identifier {
+                errors.append(.incompatibleListEntry(argument.source!))
+              }
+            }
+          }
+        }
+      } else if let actionLiteral = actionLiteral {
+        actionLiteral.validateReferences(
+          parameters: actionLiteral.parameterDictionary(
+            rearrangedParameters: rearrangedParameters,
+            explicitSignature: explicitResultType!,
+            referenceLookup: context
+          ),
+          context: context,
+          testContext: testContext,
+          allowTestOnly: allowTestOnly,
+          errors: &errors
+        )
+      } else {
+        if let signature = arguments.mapAll({ $0.resolvedResultType })?.mapAll({ $0 }),
+           let action = context.lookupAction(
+            actionName,
+            signature: signature,
+            specifiedReturnValue: resolvedResultType) {
+          testContext.validateAccess(
+            to: action.access,
+            testOnly: action.testOnlyAccess,
             allowTestOnly: allowTestOnly,
-            errors: &errors
+            errors: &errors,
+            unavailableOutsideTestsError: { .actionUnavailableOutsideTests(reference: source!) },
+            unavailableInVisibleTestsError: { .actionAccessNarrowerThanDocumentationVisibility(reference: source!) }
           )
+          for (parameter, argument) in zip(action.parameters.ordered(for: actionName), arguments) {
+            if parameter.passage != argument.passage {
+              errors.append(.mismatchedPassage(attempted: argument.passage, expected: parameter.passage, location: argument.source!))
+            }
+          }
         } else {
           errors.append(.noSuchAction(name: actionName, reference: source!))
         }
@@ -386,6 +460,7 @@ extension ActionUse {
       actionName: actionName,
       arguments: arguments.map({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       literal: literal,
+      isList: isList,
       actionLiteral: actionLiteral?.resolvingExtensionContext(typeLookup: typeLookup),
       source: source,
       passage: passage,
@@ -406,6 +481,7 @@ extension ActionUse {
       actionName: actionName,
       arguments: arguments.map({ $0.specializing(typeLookup: typeLookup) }),
       literal: literal,
+      isList: isList,
       actionLiteral: actionLiteral?.specializing(typeLookup: typeLookup),
       source: source,
       passage: passage,
@@ -474,6 +550,9 @@ extension ActionUse {
         result.append(contentsOf: loading.requiredIdentifiers(context: context))
       }
     }
+    if isList {
+      result.append(contentsOf: requiredIdentifiersForListLiteral(context: context))
+    }
     if let actionLiteral = self.actionLiteral,
       case .action(let parameters, let returnType) = explicitResultType {
       for parameter in parameters {
@@ -490,6 +569,35 @@ extension ActionUse {
             referenceLookup: context
           )]
         )
+      )
+    }
+    return result
+  }
+  func requiredIdentifiersForListLiteral(
+    context: [ReferenceDictionary]
+  ) -> [UnicodeText] {
+    var result: [UnicodeText] = []
+    if let entry = resolvedEntryType,
+       let thing = context.lookupThing(entry.key) {
+      let entryComponents = thing.unresolvedGloballyUniqueIdentifierComponents()
+      var unresolved: [UnicodeText] = [
+        "list literal () ending at ()",
+        "(",
+        "list literal of unknown length containing ()",
+      ]
+      unresolved.append(contentsOf: entryComponents)
+      unresolved.append(contentsOf: [
+        ")",
+        "memory offset",
+        "(",
+        "list of ()",
+      ])
+      unresolved.append(contentsOf: entryComponents)
+      unresolved.append(contentsOf: [
+        ")",
+      ])
+      result.append(
+        Thing.resolve(globallyUniqueIdentifierComponents: unresolved, referenceLookup: context)
       )
     }
     return result

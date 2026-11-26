@@ -28,6 +28,7 @@ enum ReferenceError: DiagnosticError {
   case notAnInteger(ParsedLiteral)
   case notAByte(ParsedLiteral)
   case notAUnicodeScalarNumericalValue(ParsedLiteral)
+  case incompatibleListEntry(ParsedAction)
 
   var message: String {
     switch self {
@@ -84,6 +85,8 @@ enum ReferenceError: DiagnosticError {
     case .notAByte:
       return defaultMessage
     case .notAUnicodeScalarNumericalValue:
+      return defaultMessage
+    case .incompatibleListEntry:
       return defaultMessage
     }
   }
@@ -144,6 +147,8 @@ enum ReferenceError: DiagnosticError {
       return literal.location
     case .notAUnicodeScalarNumericalValue(let literal):
       return literal.location
+    case .incompatibleListEntry(let action):
+      return action.location
     }
   }
 }

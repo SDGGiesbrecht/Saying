@@ -161,6 +161,12 @@ enum C: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func listStart(listType: String, entryType: String) -> String {
+    return "\(listType.dropLast())_literal((\(entryType)[]){"
+  }
+  static func listEnd(listType: String, numberOfEntries: Int) -> String {
+    return "}, \(numberOfEntries))"
+  }
   static func numberedParameter(position: Int, type: String?) -> String {
     let name = "p\(position)"
     if let type = type {

@@ -57,7 +57,7 @@ extension Thing {
     }
   }
 
-  func resolve(
+  static func resolve(
     globallyUniqueIdentifierComponents: [UnicodeText],
     referenceLookup: [ReferenceDictionary]
   ) -> UnicodeText {
@@ -67,7 +67,7 @@ extension Thing {
   }
 
   func globallyUniqueIdentifier(referenceLookup: [ReferenceDictionary]) -> UnicodeText {
-    return resolve(
+    return Thing.resolve(
       globallyUniqueIdentifierComponents: unresolvedGloballyUniqueIdentifierComponents(),
       referenceLookup: referenceLookup
     )

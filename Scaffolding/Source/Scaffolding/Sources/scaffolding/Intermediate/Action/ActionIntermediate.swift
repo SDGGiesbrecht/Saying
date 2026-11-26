@@ -1214,11 +1214,13 @@ extension ActionIntermediate {
                     ActionUse(
                       actionName: parameter.names.identifier(),
                       arguments: [],
+                      isList: false,
                       passage: parameter.passage,
                       resolvedResultType: parameter.type
                     )
                   )
                 }),
+              isList: false,
               passage: .into,
               resolvedResultType: returnValue
             )

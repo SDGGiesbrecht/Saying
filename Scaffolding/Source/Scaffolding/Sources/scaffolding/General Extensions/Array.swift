@@ -11,6 +11,15 @@ extension Array {
     }
     return result
   }
+
+  func areAllEqual<T>(by definition: (Element) -> T) -> Bool
+  where T: Equatable {
+    guard let rawFirst = self.first else {
+      return true
+    }
+    let first = definition(rawFirst)
+    return dropFirst().allSatisfy({ definition($0) == first })
+  }
 }
 
 extension Array where Element == String {
