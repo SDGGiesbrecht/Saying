@@ -21,9 +21,24 @@ extension
  {
   action (clients)
    [
-    test {verify ((list of (true) and (false)) is (list of (true) and (false)) according to list)}
-    test {verify (not ((list of (false) and (true)) is (list of (true) and (false)) according to list))}
-    test (hidden) {verify (not ((empty: list of (truth value)) is (list of (true) and (false)) according to list))}
+    test {verify (([
+     true
+     false
+    ]) is ([
+     true
+     false
+    ]) according to list)}
+    test {verify (not (([
+     false
+     true
+    ]) is ([
+     true
+     false
+    ]) according to list))}
+    test (hidden) {verify (not ((empty: list of (truth value)) is ([
+     true
+     false
+    ]) according to list))}
    ]
    (first: list of (thing)) is (second: list of (thing)) according to list
    truth value
@@ -67,6 +82,8 @@ extension
    differing example according to list
    list of (thing)
    {
-    ← list of (differing example: thing)
+    ← [
+     differing example: thing
+    ]
    }
  }

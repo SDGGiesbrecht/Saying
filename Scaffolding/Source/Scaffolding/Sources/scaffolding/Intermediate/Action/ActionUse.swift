@@ -306,6 +306,16 @@ extension ActionUse {
           context: context
         )
       }
+      if isList {
+        switch value {
+        case .simple, .action, .statements, .partReference, .enumerationCase:
+          break
+        case .compound(_, let components):
+          if components.count == 1 {
+            resolvedEntryType = components.first
+          }
+        }
+      }
     case .some(.none):
       resolvedResultType = .some(.none)
       if arguments.contains(where: { $0.resolvedResultType == nil }) {
@@ -468,6 +478,8 @@ extension ActionUse {
         .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       resolvedResultType: resolvedResultType
         .flatMap({ $0?.resolvingExtensionContext(typeLookup: typeLookup) }),
+      resolvedEntryType: resolvedEntryType
+        .flatMap({ $0.resolvingExtensionContext(typeLookup: typeLookup) }),
       rearrangedParameters: rearrangedParameters,
       narrowedResultTypes: narrowedResultTypes?
         .map({ $0?.resolvingExtensionContext(typeLookup: typeLookup) })
@@ -487,6 +499,7 @@ extension ActionUse {
       passage: passage,
       explicitResultType: explicitResultType.flatMap({ $0.specializing(typeLookup: typeLookup) }),
       resolvedResultType: resolvedResultType.flatMap({ $0?.specializing(typeLookup: typeLookup) }),
+      resolvedEntryType: resolvedEntryType.flatMap({ $0.specializing(typeLookup: typeLookup) }),
       rearrangedParameters: rearrangedParameters,
       narrowedResultTypes: narrowedResultTypes?.map({ $0?.specializing(typeLookup: typeLookup) })
     )

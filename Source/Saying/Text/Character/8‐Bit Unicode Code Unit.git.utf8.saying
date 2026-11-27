@@ -12,7 +12,10 @@ thing (clients)
 action (clients)
  [
   test {
-   verify ((Unicode scalars of (list of ((“C2”: byte) as Unicode code unit) and ((“A1”: byte) as Unicode code unit)) skipping validity check) is (“¡”: Unicode scalars))
+   verify ((Unicode scalars of ([
+    (“C2”: byte) as Unicode code unit
+    (“A1”: byte) as Unicode code unit
+   ]) skipping validity check) is (“¡”: Unicode scalars))
   }
  ]
  (

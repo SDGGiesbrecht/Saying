@@ -51,9 +51,24 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (natural number)) start as (list of (“1”: natural number), (“2”: natural number), (“1”: natural number), (“1”: natural number) and (“2”: natural number))
-     replace matches for (list of (“1”: natural number) and (“2”: natural number)) in (↓ list) with (list of (“0”: natural number)) according to default searching and replacing
-     verify ((list) is (list of (“0”: natural number), (“1”: natural number) and (“0”: natural number)))
+     let (• list: list of (natural number)) start as ([
+      “1”: natural number
+      “2”
+      “1”
+      “1”
+      “2”
+     ])
+     replace matches for ([
+      “1”: natural number
+      “2”
+     ]) in (↓ list) with ([
+      “0”: natural number
+     ]) according to default searching and replacing
+     verify ((list) is ([
+      “0”: natural number
+      “1”
+      “0”
+     ]))
     }
    ]
    (
@@ -66,7 +81,22 @@ extension
 
   action (clients)
    [
-    test {verify (((list of (“1”: natural number), (“2”: natural number), (“1”: natural number), (“1”: natural number) and (“2”: natural number)) with matches for (list of (“1”: natural number) and (“2”: natural number)) replaced with (list of (“0”: natural number)) according to default searching and replacing) is (list of (“0”: natural number), (“1”: natural number) and (“0”: natural number)))}
+    test {verify ((([
+     “1”: natural number
+     “2”
+     “1”
+     “1”
+     “2”
+    ]) with matches for ([
+     “1”: natural number
+     “2”
+    ]) replaced with ([
+     “0”: natural number
+    ]) according to default searching and replacing) is ([
+     “0”: natural number
+     “1”
+     “0”
+    ]))}
    ]
    (
     English: (haystack: haystack) with matches for (pattern: pattern) replaced with (replacement: replacement) according to default searching and replacing
@@ -89,11 +119,23 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (natural number)) start as (list of (“1”: natural number), (“2”: natural number) and (“1”: natural number))
-     change matches for (list of (“1”: natural number)) in (↓ list) according to ({
+     let (• list: list of (natural number)) start as ([
+      “1”: natural number
+      “2”
+      “1”
+     ])
+     change matches for ([
+      “1”: natural number
+     ]) in (↓ list) according to ({
       ← (convert (match) into list) with (“0”: natural number) appended
      }: (match: slice of (list of (natural number))) → list of (natural number))
-     verify ((list) is (list of (“1”: natural number), (“0”: natural number), (“2”: natural number), (“1”: natural number) and (“0”: natural number)))
+     verify ((list) is ([
+      “1”: natural number
+      “0”
+      “2”
+      “1”
+      “0”
+     ]))
     }
    ]
    (

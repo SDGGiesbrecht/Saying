@@ -1271,7 +1271,14 @@ extension
     ]
     test {
      let (• list: list of (natural number)) start as (empty: list of (natural number))
-     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“4”: natural number), (“5”: natural number) and (“6”: natural number)), {
+     for each (• number: natural number) in ([
+      “1”: natural number
+      “2”
+      “3”
+      “4”
+      “5”
+      “6”
+     ]), {
       append (number) to (↓ list)
      }
      verify ((number of entries in (list)) is (“6”: natural number))
@@ -1299,7 +1306,14 @@ extension
     ]
     test {
      let (• list: list of (natural number)) start as (empty: list of (natural number))
-     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“4”: natural number), (“5”: natural number) and (“6”: natural number)), {
+     for each (• number: natural number) in ([
+      “1”: natural number
+      “2”
+      “3”
+      “4”
+      “5”
+      “6”
+     ]), {
       expect (number: natural number) entries in (↓ list) eventually
       append (number) to (↓ list)
      }
@@ -1359,123 +1373,5 @@ extension
    Swift: “”
    {
     expect eventual end of (↓ (unmanaged) of (list)) at (boundary at (amount))
-   }
-
-  action (clients)
-   (
-    English: list of (entry: thing)
-   )
-   list of (thing)
-   {
-    ← list literal (list literal containing (entry)) ending at (“1”: memory offset)
-   }
-
-  flow (file)
-   (
-    English: list literal containing (entry: thing)
-   )
-   list literal of unknown length containing (thing)
-   C: “(” thing “[]){” entry “}”
-   C♯: “new List<” thing “>() { ” entry “ }”
-   JavaScript: “[” entry “]”
-   Kotlin: “listOf(” entry “)”
-   Swift: “[” entry “]”
-
-  action (clients)
-   (
-    English: list of (first: thing) and (second: thing)
-   )
-   list of (thing)
-   C♯: “new List<” thing “>() { ” first “, ” second “ }”
-   JavaScript: “[” first “, ” second “]”
-   Kotlin: “listOf(” first “, ” second “)”
-   Swift: “[” first “, ” second “]”
-   {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    expect (“2”: natural number) entries in (↓ list) eventually
-    append (first) to (↓ list)
-    append (second) to (↓ list)
-    ← list
-   }
-
-  action (clients)
-   (
-    English: list of (first: thing), (second: thing) and (third: thing)
-   )
-   list of (thing)
-   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “ }”
-   JavaScript: “[” first “, ” second “, ” third “]”
-   Kotlin: “listOf(” first “, ” second “, ” third “)”
-   Swift: “[” first “, ” second “, ” third “]”
-   {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    expect (“3”: natural number) entries in (↓ list) eventually
-    append (first) to (↓ list)
-    append (second) to (↓ list)
-    append (third) to (↓ list)
-    ← list
-   }
-
-  action (clients)
-   [
-    test {ignore (list of (true), (false), (true) and (false))}
-   ]
-   (
-    English: list of (first: thing), (second: thing), (third: thing) and (fourth: thing)
-   )
-   list of (thing)
-   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “, ” fourth “ }”
-   JavaScript: “[” first “, ” second “, ” third “, ” fourth “]”
-   Kotlin: “listOf(” first “, ” second “, ” third “, ” fourth “)”
-   Swift: “[” first “, ” second “, ” third “, ” fourth “]”
-   {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    expect (“4”: natural number) entries in (↓ list) eventually
-    append (first) to (↓ list)
-    append (second) to (↓ list)
-    append (third) to (↓ list)
-    append (fourth) to (↓ list)
-    ← list
-   }
-
-  action (clients)
-   (
-    English: list of (first: thing), (second: thing), (third: thing), (fourth: thing) and (fifth: thing)
-   )
-   list of (thing)
-   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “, ” fourth “, ” fifth “ }”
-   JavaScript: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “]”
-   Kotlin: “listOf(” first “, ” second “, ” third “, ” fourth “, ” fifth “)”
-   Swift: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “]”
-   {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    expect (“5”: natural number) entries in (↓ list) eventually
-    append (first) to (↓ list)
-    append (second) to (↓ list)
-    append (third) to (↓ list)
-    append (fourth) to (↓ list)
-    append (fifth) to (↓ list)
-    ← list
-   }
-
-  action (clients)
-   (
-    English: list of (first: thing), (second: thing), (third: thing), (fourth: thing), (fifth: thing) and (sixth: thing)
-   )
-   list of (thing)
-   C♯: “new List<” thing “>() { ” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “ }”
-   JavaScript: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “]”
-   Kotlin: “listOf(” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “)”
-   Swift: “[” first “, ” second “, ” third “, ” fourth “, ” fifth “, ” sixth “]”
-   {
-    let (• list: list of (thing)) start as (empty: list of (thing))
-    expect (“6”: natural number) entries in (↓ list) eventually
-    append (first) to (↓ list)
-    append (second) to (↓ list)
-    append (third) to (↓ list)
-    append (fourth) to (↓ list)
-    append (fifth) to (↓ list)
-    append (sixth) to (↓ list)
-    ← list
    }
  }

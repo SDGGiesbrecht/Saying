@@ -293,8 +293,14 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true) and (true))
-     verify (((list) with (index after (beginning of (list)) in (list) skipping bounds check) replaced with (false) according to default use as changeable list) is (list of (false) and (true)))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+     ])
+     verify (((list) with (index after (beginning of (list)) in (list) skipping bounds check) replaced with (false) according to default use as changeable list) is ([
+      false
+      true
+     ]))
     }
    ]
    (
@@ -311,8 +317,15 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true) and (true))
-     verify (((list) with (false) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default use as changeable list) is (list of (true), (false) and (true)))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+     ])
+     verify (((list) with (false) inserted at (boundary after (beginning of (list)) in (list) skipping bounds check) according to default use as changeable list) is ([
+      true
+      false
+      true
+     ]))
     }
    ]
    (
@@ -329,9 +342,16 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
+     let (• list: list of (truth value)) start as ([
+      true
+      true
+     ])
      append (false) to (↓ list) according to default use as changeable list
-     verify ((list) is (list of (true), (true) and (false)))
+     verify ((list) is ([
+      true
+      true
+      false
+     ]))
     }
    ]
    (
@@ -344,7 +364,14 @@ extension
 
   action (clients)
    [
-    test {verify (((list of (true) and (true)) with (false) appended according to default use as changeable list) is (list of (true), (true) and (false)))}
+    test {verify ((([
+     true
+     true
+    ]) with (false) appended according to default use as changeable list) is ([
+     true
+     true
+     false
+    ]))}
    ]
    (
     English: (list: list) with (element: element) appended according to default use as changeable list
@@ -360,9 +387,16 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (true))
+     let (• list: list of (truth value)) start as ([
+      true
+      true
+     ])
      prepend (false) to (↓ list) according to default use as changeable list
-     verify ((list) is (list of (false), (true) and (true)))
+     verify ((list) is ([
+      false
+      true
+      true
+     ]))
     }
    ]
    (
@@ -375,7 +409,14 @@ extension
 
   action (clients)
    [
-    test {verify (((list of (true) and (true)) with (false) prepended according to default use as changeable list) is (list of (false), (true) and (true)))}
+    test {verify ((([
+     true
+     true
+    ]) with (false) prepended according to default use as changeable list) is ([
+     false
+     true
+     true
+    ]))}
    ]
    (
     English: (list: list) with (element: element) prepended according to default use as changeable list
@@ -391,8 +432,13 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true) and (false))
-     verify (((list) with (index after (beginning of (list)) in (list) skipping bounds check) removed according to default use as changeable list) is (list of (false)))
+     let (• list: list of (truth value)) be ([
+      true
+      false
+     ])
+     verify (((list) with (index after (beginning of (list)) in (list) skipping bounds check) removed according to default use as changeable list) is ([
+      false
+     ]))
     }
    ]
    (
@@ -409,9 +455,14 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (false))
+     let (• list: list of (truth value)) start as ([
+      true
+      false
+     ])
      remove first from (↓ list) according to default use as changeable list
-     verify ((list) is (list of (false)))
+     verify ((list) is ([
+      false
+     ]))
     }
     test {
      let (• list: list of (truth value)) start as (empty: list of (truth value))
@@ -432,9 +483,14 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) start as (list of (true) and (false))
+     let (• list: list of (truth value)) start as ([
+      true
+      false
+     ])
      remove last from (↓ list) according to default use as changeable list
-     verify ((list) is (list of (true)))
+     verify ((list) is ([
+      true
+     ]))
     }
     test {
      let (• list: list of (truth value)) start as (empty: list of (truth value))
@@ -455,8 +511,14 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true), (true) and (false))
-     verify (((list) with (from (beginning of (list)) to (boundary before (end of (list)) in (list) skipping bounds check)) removed according to default use as changeable list) is (list of (false)))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+      false
+     ])
+     verify (((list) with (from (beginning of (list)) to (boundary before (end of (list)) in (list) skipping bounds check)) removed according to default use as changeable list) is ([
+      false
+     ]))
     }
    ]
    (

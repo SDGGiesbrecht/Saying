@@ -41,7 +41,19 @@ extension
  {
   action (clients)
    [
-    test {verify (((list of (list of (true) and (true)) and (list of (false))) strung together according to default use as stringable list) is (list of (true), (true) and (false)))}
+    test {verify ((([
+     [
+      true
+      true
+     ]
+     [
+      false
+     ]
+    ]) strung together according to default use as stringable list) is ([
+     true
+     true
+     false
+    ]))}
    ]
    (
     English: (list of lists: list of (list)) strung together according to default use as stringable list
@@ -58,7 +70,20 @@ extension
 
   action (clients)
    [
-    test {verify (((list of (list of (true)) and (list of (true))) linked together with (list of (false)) according to default use as stringable list) is (list of (true), (false) and (true)))}
+    test {verify ((([
+     [
+      true
+     ]
+     [
+      true
+     ]
+    ]) linked together with ([
+     false
+    ]) according to default use as stringable list) is ([
+     true
+     false
+     true
+    ]))}
    ]
    (
     English: (list of lists: list of (list)) linked together with (link: list) according to default use as stringable list
