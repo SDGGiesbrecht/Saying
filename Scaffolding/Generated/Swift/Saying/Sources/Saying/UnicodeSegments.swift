@@ -6,7 +6,9 @@ public struct UnicodeSegments {
   }
 
   public init(allOf text: UnicodeText) {
-    self = UnicodeSegments(list_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0028_003Alist_0020of_0020_0028_0029_003AUnicode_0020segment_003A_0029(Unicode_0020segment(.arithmeticZero, text)))
+    self = UnicodeSegments([
+      Unicode_0020segment(.arithmeticZero, text)
+    ] as [Unicode_0020segment])
   }
 
   public func formIndex(after i: inout UnicodeSegments.Boundary) {
