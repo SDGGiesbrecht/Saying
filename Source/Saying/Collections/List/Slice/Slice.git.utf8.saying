@@ -265,7 +265,11 @@ extension
      English: Skipping the bounds check can be more efficient when a first element is already known from context to exist. However, the caller takes responsibility for assuring that the slice is not empty. Removing from an empty slice may cause a fatal error or overflow into invalid program state.
     ]
     test {
-     let (• list: list of (truth value)) be (list of (true), (true) and (true))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+      true
+     ])
      let (• slice: slice of (list of (truth value))) start as (entirety of (list))
      while ({
       ← (first in (slice)) is (true)
@@ -294,7 +298,11 @@ extension
      English: The list behind the slice remains unaffected.
     ]
     test {
-     let (• list: list of (natural number)) be (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number))
+     let (• list: list of (natural number)) be ([
+      “1”: natural number
+      “2”
+      “3”
+     ])
      let (• slice: slice of (list of (natural number))) start as (entirety of (list))
      remove first from (↓ slice)
      verify ((first in (slice)) is (“2”: natural number))
@@ -302,7 +310,11 @@ extension
      verify ((first in (slice)) is (“3”: natural number))
      remove first from (↓ slice)
      verify ((slice) is empty)
-     verify ((list) is (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)))
+     verify ((list) is ([
+      “1”: natural number
+      “2”
+      “3”
+     ]))
     }
     [
      English: This action safely does nothing if the slice is already empty.

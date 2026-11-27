@@ -50,7 +50,11 @@ flow (clients)
  [
   test {
    let (• count: natural number) start as (“0”: natural number)
-   for each (• entry: truth value) in (list of (true), (false) and (true)), {
+   for each (• entry: truth value) in ([
+    true
+    false
+    true
+   ]), {
     if (not (entry)), {
      skip to next loop
     }
@@ -138,7 +142,11 @@ extension
    [
     test {
      let (• sum: natural number) start as (“0”: natural number)
-     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number) and (“3”: natural number)), {
+     for each (• number: natural number) in ([
+      “1”: natural number
+      “2”
+      “3”
+     ]), {
       add (number) to (↓ sum)
      }
      verify ((sum) is (“6”: natural number))
@@ -178,7 +186,11 @@ extension
   flow (clients)
    [
     test {
-     for each (• entry: natural number) and its (• offset: natural number) in (list of (“0”: natural number), (“1”: natural number) and (“2”: natural number)), {
+     for each (• entry: natural number) and its (• offset: natural number) in ([
+      “0”: natural number
+      “1”
+      “2”
+     ]), {
       verify ((entry) is (offset))
      }
     }

@@ -35,12 +35,26 @@ extension
   action (clients)
    [
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (false) and (true))
-     verify ((primary match for (list of (true) and (false)) beginning at (beginning of (haystack)) in (entirety of (haystack)) according to use as literal pattern) exists)
+     let (• haystack: list of (truth value)) be ([
+      true
+      false
+      true
+     ])
+     verify ((primary match for ([
+      true
+      false
+     ]) beginning at (beginning of (haystack)) in (entirety of (haystack)) according to use as literal pattern) exists)
     }
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (false) and (true))
-     verify ((primary match for (list of (false) and (true)) beginning at (beginning of (haystack)) in (entirety of (haystack)) according to use as literal pattern) does not exist)
+     let (• haystack: list of (truth value)) be ([
+      true
+      false
+      true
+     ])
+     verify ((primary match for ([
+      false
+      true
+     ]) beginning at (beginning of (haystack)) in (entirety of (haystack)) according to use as literal pattern) does not exist)
     }
    ]
    (

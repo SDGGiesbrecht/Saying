@@ -38,7 +38,9 @@ action (clients)
  )
  Unicode segments
  {
-  ← Unicode segments (list of (Unicode segment at (zero: natural number) containing (text)))
+  ← Unicode segments ([
+   Unicode segment at (zero: natural number) containing (text)
+  ])
  }
 
 use (clients)
@@ -94,13 +96,18 @@ use (clients)
   action (clients)
    [
     test (hidden) {
-     let (• two segments: Unicode segments) be (Unicode segments (list of (example: Unicode segment) and (example: Unicode segment)))
+     let (• two segments: Unicode segments) be (Unicode segments ([
+      example: Unicode segment
+      example
+     ]))
      let (• cursor: Unicode segments boundary) start as (beginning of (two segments))
      advance (↓ cursor) to next in (two segments) skipping bounds check
      advance (↓ cursor) to next in (two segments) skipping bounds check
     }
     test (hidden) {
-     let (• long segment: Unicode segments) be (Unicode segments (list of (Unicode segment at (zero: natural number) containing (“  ”))))
+     let (• long segment: Unicode segments) be (Unicode segments ([
+      Unicode segment at (zero: natural number) containing (“  ”)
+     ]))
      let (• cursor: Unicode segments boundary) start as (beginning of (long segment))
      advance (↓ cursor) to next in (long segment) skipping bounds check
      advance (↓ cursor) to next in (long segment) skipping bounds check
@@ -139,13 +146,18 @@ use (clients)
   action (clients)
    [
     test (hidden) {
-     let (• two segments: Unicode segments) be (Unicode segments (list of (example: Unicode segment) and (example: Unicode segment)))
+     let (• two segments: Unicode segments) be (Unicode segments ([
+      example: Unicode segment
+      example
+     ]))
      let (• cursor: Unicode segments boundary) start as (end of (two segments))
      backtrack (↓ cursor) to previous in (two segments) skipping bounds check
      backtrack (↓ cursor) to previous in (two segments) skipping bounds check
     }
     test (hidden) {
-     let (• long segment: Unicode segments) be (Unicode segments (list of (Unicode segment at (zero: natural number) containing (“  ”))))
+     let (• long segment: Unicode segments) be (Unicode segments ([
+      Unicode segment at (zero: natural number) containing (“  ”)
+     ]))
      let (• cursor: Unicode segments boundary) start as (end of (long segment))
      backtrack (↓ cursor) to previous in (long segment) skipping bounds check
      backtrack (↓ cursor) to previous in (long segment) skipping bounds check

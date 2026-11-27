@@ -554,11 +554,17 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true) and (true))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+     ])
      verify ((offset from (beginning of (list)) to (end of (list)) in (list) according to default use as list) is (“2”: integer))
     }
     test {
-     let (• list: list of (truth value)) be (list of (true) and (true))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+     ])
      verify ((offset from (end of (list)) to (beginning of (list)) in (list) according to default use as list) is (“−2”: integer))
     }
    ]
@@ -577,11 +583,17 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true) and (true))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+     ])
      verify ((platform fixed‐width offset from (beginning of (list)) to (end of (list)) in (list), skipping overflow check, according to default use as list) is (“2”: platform fixed‐width integer))
     }
     test {
-     let (• list: list of (truth value)) be (list of (true) and (true))
+     let (• list: list of (truth value)) be ([
+      true
+      true
+     ])
      verify ((platform fixed‐width offset from (end of (list)) to (beginning of (list)) in (list), skipping overflow check, according to default use as list) is (“−2”: platform fixed‐width integer))
     }
    ]
@@ -637,7 +649,10 @@ extension
   action (clients)
    [
     test {
-     let (• list: list of (truth value)) be (list of (true) and (false))
+     let (• list: list of (truth value)) be ([
+      true
+      false
+     ])
      verify ((entry after (beginning of (list)) in (list) skipping bounds check, according to default use as list) is (true))
     }
    ]
@@ -652,7 +667,10 @@ extension
 
   action (clients)
    [
-    test {verify ((first in (list of (true) and (false)) according to default use as list) is (wrap (true) into optional))}
+    test {verify ((first in ([
+     true
+     false
+    ]) according to default use as list) is (wrap (true) into optional))}
     test {verify ((first in (empty: list of (truth value)) according to default use as list) does not exist)}
    ]
    (
@@ -670,7 +688,10 @@ extension
   action (clients)
    [
     test {
-     verify ((last in (list of (true) and (false)) according to default use as list) is (wrap (false) into optional))
+     verify ((last in ([
+      true
+      false
+     ]) according to default use as list) is (wrap (false) into optional))
      verify ((last in (empty: list of (truth value)) according to default use as list) does not exist)
     }
    ]
@@ -688,7 +709,10 @@ extension
 
   action (clients)
    [
-    test {verify ((number of entries in (list of (true) and (false)) according to default use as list) is (“2”: natural number))}
+    test {verify ((number of entries in ([
+     true
+     false
+    ]) according to default use as list) is (“2”: natural number))}
    ]
    (
     English: number of entries in (list: list) according to default use as list
@@ -701,7 +725,10 @@ extension
 
   action (clients)
    [
-    test {verify ((platform fixed‐width number of entries in (list of (true) and (false)), skipping overflow check, according to default use as list) is (“2”: platform fixed‐width integer))}
+    test {verify ((platform fixed‐width number of entries in ([
+     true
+     false
+    ]), skipping overflow check, according to default use as list) is (“2”: platform fixed‐width integer))}
    ]
    (
     English: platform fixed‐width number of entries in (list: list), skipping overflow check, according to default use as list
@@ -727,7 +754,9 @@ extension
 
   action (clients)
    [
-    test {verify ((list of (true)) is not empty according to default use as list)}
+    test {verify (([
+     true
+    ]) is not empty according to default use as list)}
    ]
    (
     English: (list: list) is not empty according to default use as list

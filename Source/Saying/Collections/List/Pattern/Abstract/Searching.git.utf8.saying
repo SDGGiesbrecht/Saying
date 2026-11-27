@@ -184,9 +184,17 @@ extension
      English: The result is the same as {matches for () beginning at () in ()} for a slice encompassing the entire list.
     ]
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
+     let (• haystack: list of (truth value)) be ([
+      true
+      false
+      true
+      false
+     ])
      let (• cursor: list boundary) be (boundary after (beginning of (haystack)) in (haystack) skipping bounds check)
-     let (• matches: list of (slice of (list of (truth value)))) be (matches for (list of (false) and (true)) beginning at (cursor) in (haystack))
+     let (• matches: list of (slice of (list of (truth value)))) be (matches for ([
+      false
+      true
+     ]) beginning at (cursor) in (haystack))
      verify ((number of entries in (matches)) is (“1”: natural number))
      if (first in (matches)) exists, unwrap it as (• match: slice of (list of (truth value))), {
       verify ((beginning of (match)) is (cursor))
@@ -194,8 +202,16 @@ extension
      }
     }
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
-     verify ((matches for (list of (true) and (false)) beginning at (boundary after (beginning of (haystack)) in (haystack) skipping bounds check) in (haystack)) is empty)
+     let (• haystack: list of (truth value)) be ([
+      true
+      false
+      true
+      false
+     ])
+     verify ((matches for ([
+      true
+      false
+     ]) beginning at (boundary after (beginning of (haystack)) in (haystack) skipping bounds check) in (haystack)) is empty)
     }
    ]
    (
@@ -216,9 +232,17 @@ extension
      English: The result is the same as {primary match for () beginning at () in ()} for a slice encompassing the entire list.
     ]
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
+     let (• haystack: list of (truth value)) be ([
+      true
+      false
+      true
+      false
+     ])
      let (• cursor: list boundary) be (boundary after (beginning of (haystack)) in (haystack) skipping bounds check)
-     let (• primary match: optional (slice of (list of (truth value)))) be (primary match for (list of (false) and (true)) beginning at (cursor) in (haystack))
+     let (• primary match: optional (slice of (list of (truth value)))) be (primary match for ([
+      false
+      true
+     ]) beginning at (cursor) in (haystack))
      if (primary match) exists, unwrap it as (• match: slice of (list of (truth value))), {
       verify ((beginning of (match)) is (cursor))
       verify ((number of entries in (match)) is (“2”: natural number))
@@ -227,8 +251,16 @@ extension
      }
     }
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (false), (true) and (false))
-     verify ((primary match for (list of (true) and (false)) beginning at (boundary after (beginning of (haystack)) in (haystack) skipping bounds check) in (haystack)) does not exist)
+     let (• haystack: list of (truth value)) be ([
+      true
+      false
+      true
+      false
+     ])
+     verify ((primary match for ([
+      true
+      false
+     ]) beginning at (boundary after (beginning of (haystack)) in (haystack) skipping bounds check) in (haystack)) does not exist)
     }
    ]
    (
@@ -253,12 +285,29 @@ extension
   action (clients)
    [
     test {
-     let (• haystack: list of (natural number)) be (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“1”: natural number) and (“2”: natural number))
-     verify ((number of entries in (matches for (list of (“1”: natural number) and (“2”: natural number)) in (haystack))) is (“2”: natural number))
+     let (• haystack: list of (natural number)) be ([
+      “1”: natural number
+      “2”
+      “3”
+      “1”
+      “2”
+     ])
+     verify ((number of entries in (matches for ([
+      “1”: natural number
+      “2”
+     ]) in (haystack))) is (“2”: natural number))
     }
     test {
-     let (• haystack: list of (truth value)) be (list of (true), (true), (true) and (true))
-     verify ((number of entries in (matches for (list of (true) and (true)) in (haystack))) is (“2”: natural number))
+     let (• haystack: list of (truth value)) be ([
+      true
+      true
+      true
+      true
+     ])
+     verify ((number of entries in (matches for ([
+      true
+      true
+     ]) in (haystack))) is (“2”: natural number))
     }
    ]
    (
