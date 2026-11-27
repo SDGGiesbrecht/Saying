@@ -215,11 +215,13 @@ extension LiteralIntermediate {
             actionName: "",
             arguments: [],
             literal: self,
+            isList: false,
             passage: .into,
             resolvedResultType: .compilerGeneratedReference(to: LiteralIntermediate.unicodeScalarsName)
           )
         )
       ],
+      isList: false,
       passage: .into,
       resolvedResultType: .compilerGeneratedReference(to: result)
     )

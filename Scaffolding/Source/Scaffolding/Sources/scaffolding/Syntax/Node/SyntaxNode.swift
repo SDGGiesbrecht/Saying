@@ -42,7 +42,7 @@ extension SyntaxNodeProtocol {
             .joined()
         )
         stack.append(contentsOf: node.childNodes.suffix(1).reversed())
-      case .abilityName, .caseName, .cases, .documentation, .fulfillments, .multipleActionNames, .nonEmptyBracedStatementList, .parameterDetails, .paragraph, .partName, .provisions, .requirements, .sourceThingImplementation, .thingName:
+      case .abilityName, .caseName, .cases, .documentation, .fulfillments, .multipleActionNames, .nonEmptyBracedStatementList, .nonEmptyList, .parameterDetails, .paragraph, .partName, .provisions, .requirements, .sourceThingImplementation, .thingName:
         accumulator.append(
           contentsOf: node.childNodes.dropLast(2)
             .map({ String($0.formattedGitStyleSource(indent: indent + 1)) })

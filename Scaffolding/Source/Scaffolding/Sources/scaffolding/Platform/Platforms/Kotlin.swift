@@ -133,6 +133,12 @@ enum Kotlin: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func listStart(listType: String, entryType: String) -> String {
+    return "listOf("
+  }
+  static func listEnd(listType: String, numberOfEntries: Int) -> String {
+    return ")"
+  }
   static func numberedParameter(position: Int, type: String?) -> String {
     return "p\(position)"
   }

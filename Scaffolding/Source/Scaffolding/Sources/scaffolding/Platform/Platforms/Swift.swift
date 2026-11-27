@@ -186,6 +186,12 @@ enum Swift: Platform {
   static func literal(unicodeScalarNumericalValue: String) -> String {
     return "0x\(unicodeScalarNumericalValue)"
   }
+  static func listStart(listType: String, entryType: String) -> String {
+    return "["
+  }
+  static func listEnd(listType: String, numberOfEntries: Int) -> String {
+    return "] as \(listType)"
+  }
   static func numberedParameter(position: Int, type: String?) -> String {
     return "$\(position - 1)"
   }

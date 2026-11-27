@@ -100,6 +100,26 @@ extension ParsedTypeReference {
       )
     )
   }
+
+  static func compilerGeneratedReferenceToList(of type: ParsedTypeReference) -> ParsedTypeReference {
+    let typeName: UnicodeText
+    switch type {
+    case .simple(let reference):
+      typeName = reference.syntaxNode.source()
+    case .compound(let identifier, _):
+      typeName = identifier.source()
+    case .action(_, _):
+      fatalError("Actions are not supported in list literals yet.")
+    case .statements:
+      fatalError("Statement list in list literal.")
+    case .partReference(_, let identifier), .enumerationCase(_, let identifier):
+      typeName = identifier
+    }
+    return .compound(
+      identifier: ParsedUseSignature(source: "list of (\(typeName))", origin: compilerGeneratedOrigin())!,
+      components: [type]
+    )
+  }
 }
 
 extension ParsedTypeReference {

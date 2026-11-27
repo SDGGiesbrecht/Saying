@@ -209,6 +209,13 @@ extension Node {
             ])
           ),
           Node(
+            name: "EmptyBrackets",
+            kind: .compound(children: [
+              Child(name: "openingBracket", type: "OpeningBracketSyntax", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracketSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
             name: "EmptyBraces",
             kind: .compound(children: [
               Child(name: "openingBrace", type: "OpeningBraceSyntax", kind: .fixed),
@@ -450,7 +457,7 @@ extension Node {
             name: "PassedArgument",
             kind: .compound(children: [
               Child(name: "openingParenthesis", type: "OpeningParenthesisSyntax", kind: .fixed),
-              Child(name: "argument", type: "AnnotatedAction", kind: .required),
+              Child(name: "argument", type: "AnnotatedArgument", kind: .required),
               Child(name: "closingParenthesis", type: "ClosingParenthesisSyntax", kind: .fixed),
             ])
           ),
@@ -550,7 +557,8 @@ extension Node {
               Alternate(name: "compound", type: "CompoundAction"),
               Alternate(name: "reference", type: "ActionReference"),
               Alternate(name: "simple", type: "UninterruptedIdentifier"),
-              Alternate(name: "literal", type: "Literal")
+              Alternate(name: "literal", type: "Literal"),
+              Alternate(name: "list", type: "List")
             ])
           ),
           Node(
@@ -570,9 +578,42 @@ extension Node {
           Node(
             name: "AnnotatedAction",
             kind: .compound(children: [
-              Child(name: "passage", type: "Passage", kind: .optional),
               Child(name: "action", type: "ActionReferencedOrLiteral", kind: .required),
               Child(name: "type", type: "TypeAnnotation", kind: .optional),
+            ])
+          ),
+          Node(
+            name: "AnnotatedArgument",
+            kind: .compound(children: [
+              Child(name: "passage", type: "Passage", kind: .optional),
+              Child(name: "action", type: "AnnotatedAction", kind: .required),
+            ])
+          ),
+        ],
+        Node.separatedList(
+          name: "ListEntries",
+          entryName: "entry", entryNamePlural: "entries",
+          entryType: "AnnotatedAction",
+          separatorName: "lineBreak",
+          separatorType: "LineBreakSyntax",
+          fixedSeparator: true
+        ),
+        [
+          Node(
+            name: "NonEmptyList",
+            kind: .compound(children: [
+              Child(name: "openingBracket", type: "OpeningBracketSyntax", kind: .fixed),
+              Child(name: "openingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "entries", type: "ListEntries", kind: .required),
+              Child(name: "closingLineBreak", type: "LineBreakSyntax", kind: .fixed),
+              Child(name: "closingBracket", type: "ClosingBracketSyntax", kind: .fixed),
+            ])
+          ),
+          Node(
+            name: "List",
+            kind: .alternates([
+              Alternate(name: "empty", type: "EmptyBrackets"),
+              Alternate(name: "nonEmpty", type: "NonEmptyList"),
             ])
           ),
 

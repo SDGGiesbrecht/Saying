@@ -1279,7 +1279,14 @@ extension
     test {
      let (• list: list of (natural number)) start as (empty: list of (natural number))
      expect (“6”: natural number) entries in (↓ list) eventually
-     for each (• number: natural number) in (list of (“1”: natural number), (“2”: natural number), (“3”: natural number), (“4”: natural number), (“5”: natural number) and (“6”: natural number)), {
+     for each (• number: natural number) in ([
+      “1”: natural number
+      “2”
+      “3”
+      “4”
+      “5”
+      “6”
+     ]), {
       append (number) to (↓ list)
      }
      verify ((number of entries in (list)) is (“6”: natural number))
