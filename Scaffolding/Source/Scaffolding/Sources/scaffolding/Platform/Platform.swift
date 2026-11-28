@@ -579,7 +579,13 @@ extension Platform {
   }
 
   static func nativeName(of action: ActionIntermediate, referenceLookup: [ReferenceDictionary]) -> String? {
-    return action.baseName(for: self, referenceLookup: referenceLookup).map({ String($0.baseName) })
+    if let baseName = action.baseName(for: self, referenceLookup: referenceLookup) {
+      return String(baseName.baseName)
+    }
+    if let implementation = nativeImplementation(of: action) {
+      return String(implementation.expression.textComponents.joined())
+    }
+    return nil
   }
 
   static func nativeIsOverride(action: ActionIntermediate) -> Bool {
@@ -1668,10 +1674,9 @@ extension Platform {
     rearrangementList: [UnicodeText],
     referenceLookup: [ReferenceDictionary],
     identifierIndex: inout [String: [String: Int]],
-    lookupAction: () -> ActionIntermediate?,
-    lookupActionOutputName: (ActionIntermediate?) -> UnicodeText?,
-    lookupCallOrder: (ActionIntermediate?, UnicodeText?) -> [UnicodeText],
-    lookupCallParameterTypes: (ActionIntermediate?, UnicodeText?) -> [ParsedTypeReference],
+    lookupActionOutputName: () -> UnicodeText?,
+    lookupCallOrder: (UnicodeText?) -> [UnicodeText],
+    lookupCallParameterTypes: (UnicodeText?) -> [ParsedTypeReference],
     expectedPassedActionParameters: [ParameterIntermediate],
     anonymousCounter: inout Int,
     extractedAnonymousFunctions: inout [String],
@@ -1682,9 +1687,8 @@ extension Platform {
       return directPass(&anonymousCounter, &extractedAnonymousFunctions, &identifierIndex)
     } else {
       if !rearrangementList.isEmpty {
-        let action = lookupAction()
-        let actionOutputName = lookupActionOutputName(action)
-        let callOrder = lookupCallOrder(action, actionOutputName)
+        let actionOutputName = lookupActionOutputName()
+        let callOrder = lookupCallOrder(actionOutputName)
         let reordering = expectedPassedActionParameters.map({ parameter in
           return callOrder.firstIndex(where: { parameter.names.contains($0) })!
         })
@@ -1692,7 +1696,7 @@ extension Platform {
         if reordering == sorted {
           return directPass(&anonymousCounter, &extractedAnonymousFunctions, &identifierIndex)
         } else {
-          let fromParameterTypes = lookupCallParameterTypes(action, actionOutputName)
+          let fromParameterTypes = lookupCallParameterTypes(actionOutputName)
           let from = sorted.map({ index in
             return numberedParameter(
               position: index + 1,
@@ -1847,10 +1851,9 @@ extension Platform {
         rearrangementList: reference.rearrangedParameters,
         referenceLookup: referenceLookup,
         identifierIndex: &identifierIndex,
-        lookupAction: { nil },
-        lookupActionOutputName: { _ in nil },
-        lookupCallOrder: { _, _ in reference.rearrangedParameters },
-        lookupCallParameterTypes: { _, _ in assembledActionParameters },
+        lookupActionOutputName: { nil },
+        lookupCallOrder: { _ in reference.rearrangedParameters },
+        lookupCallParameterTypes: { _ in assembledActionParameters },
         expectedPassedActionParameters: expectedPassedActionParameters!,
         anonymousCounter: &anonymousCounter,
         extractedAnonymousFunctions: &extractedAnonymousFunctions,
@@ -2471,48 +2474,46 @@ extension Platform {
         captures: &captures
       ).joined(separator: "\n")
     } else {
-      let name = nativeName(of: action, referenceLookup: referenceLookup)
-        ?? parameterName
-        ?? capLengthOf(
-          identifier:  sanitize(
-            identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
-            leading: true,
-            entire: true
-          ),
-          index: &identifierIndex
-        )
       if action.isReferenceWrapper {
         guard case .action(let returnedActionParameters, let returnedActionReturn) = bareAction.returnValue! else { fatalError() }
+        let referencedIdentifier = bareAction.names.identifier()
+        let referencedAction = referenceLookup.lookupAction(referencedIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
+        let referencedName = nativeName(of: action, referenceLookup: referenceLookup)
+          ?? parameterName
+          ?? capLengthOf(
+            identifier:  sanitize(
+              identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+              leading: true,
+              entire: true
+            ),
+            index: &identifierIndex
+          )
         return rearrangeParametersIfNecessary(
           actionTypeParameters: returnedActionParameters,
           actionTypeReturn: returnedActionReturn,
           rearrangementList: reference.rearrangedParameters,
           referenceLookup: referenceLookup,
           identifierIndex: &identifierIndex,
-          lookupAction: {
-            let bareIdentifier = bareAction.names.identifier()
-            return referenceLookup.lookupAction(bareIdentifier, signature: returnedActionParameters, specifiedReturnValue: returnedActionReturn)!
+          lookupActionOutputName: {
+            return nativeNameDeclaration(of: referencedAction) ?? referencedAction.names.identifier()
           },
-          lookupActionOutputName: { referencedAction in
-            return nativeNameDeclaration(of: action) ?? bareAction.names.identifier()
-          },
-          lookupCallOrder: { referencedAction, outputName in
+          lookupCallOrder: { outputName in
             return order(
               reference.rearrangedParameters,
-              for: referencedAction!.parameters.reordering(from: reference.actionName, to: outputName!)
+              for: referencedAction.parameters.reordering(from: reference.actionName, to: outputName!)
             )
           },
-          lookupCallParameterTypes: { referencedAction, outputName in
-            return referencedAction!.parameters.ordered(for: outputName!).map({ $0.type })
+          lookupCallParameterTypes: { outputName in
+            return referencedAction.parameters.ordered(for: outputName!).map({ $0.type })
           },
           expectedPassedActionParameters: expectedPassedActionParameters!,
           anonymousCounter: &anonymousCounter,
           extractedAnonymousFunctions: &extractedAnonymousFunctions,
           directPass: { _, _, _ in
             let prefix = actionReferencePrefix(isVariable: parameterName != nil) ?? ""
-            return "\(prefix)\(name)"
+            return "\(prefix)\(referencedName)"
           },
-          wrappedNode: { _, _, _ in name }
+          wrappedNode: { _, _, _ in referencedName }
         )
       } else {
         var argumentsArray: [String] = []
@@ -2643,6 +2644,16 @@ extension Platform {
           let arguments = argumentsArray.joined(separator: ", ")
           return createInstance(of: type, parts: arguments)
         } else {
+          let name = nativeName(of: action, referenceLookup: referenceLookup)
+            ?? parameterName
+            ?? capLengthOf(
+              identifier:  sanitize(
+                identifier: action.globallyUniqueIdentifier(referenceLookup: referenceLookup),
+                leading: true,
+                entire: true
+              ),
+              index: &identifierIndex
+            )
           let nameStart = name.unicodeScalars.first(where: { $0 != "_" }).map({ String($0) }) ?? ""
           if sanitize(identifier: UnicodeText(nameStart), leading: false, entire: false) != nameStart {
             return "\(argumentsArray.joined(separator: " \(name) "))"
