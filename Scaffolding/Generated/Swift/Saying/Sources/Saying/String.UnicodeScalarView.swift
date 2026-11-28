@@ -54,7 +54,7 @@ func _0028_0029_0020reordered_0020canonically_002C_0020skipping_0020necessity_00
       reordered.append(scalar)
     } else {
       var cursor: String.UnicodeScalarView.Index = reordered.endIndex
-      while (scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020belongs_0020after_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003AUnicodeCombiningClass_003Aערך_0020אמת(cursor, reordered, clas_0073)) {
+      while scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020belongs_0020after_0020_0028_0029_003AUnicode_0020scalar_0020boundary_003AUnicode_0020scalars_003AUnicodeCombiningClass_003Aערך_0020אמת(cursor, reordered, clas_0073) {
         reordered.formIndex(before: &cursor)
       }
       reordered.insert(scalar, at: cursor)

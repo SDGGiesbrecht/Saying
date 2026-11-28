@@ -50,14 +50,14 @@ public struct UnicodeText {
           self.scalars += newElements.scalars
         } else {
           var seam_0020start: String.UnicodeScalarView.Index = self.endIndex
-          while (scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020start, self)) {
+          while scalar_0020before_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020start, self) {
             self.formIndex(before: &seam_0020start)
           }
           let seam_0020overlap: Range<String.UnicodeScalarView.Index> = seam_0020start ..< self.endIndex
           var seam: String.UnicodeScalarView = String.UnicodeScalarView(Slice(base: self.scalars, bounds: seam_0020overlap))
           self.removeSubrange(seam_0020overlap)
           var seam_0020end: String.UnicodeScalarView.Index = newElements.startIndex
-          while (scalar_0020after_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020end, newElements)) {
+          while scalar_0020after_0020_0028_0029_0020in_0020_0028_0029_0020is_0020reordrant_003AUnicode_0020scalar_0020boundary_003AUnicodeText_003Aערך_0020אמת(seam_0020end, newElements) {
             newElements.formIndex(after: &seam_0020end)
           }
           seam.append(contentsOf: Slice(base: newElements.scalars, bounds: newElements.startIndex ..< seam_0020end))
@@ -221,7 +221,7 @@ public struct UnicodeText {
     let end: UnicodeSegments.Boundary = slice.endIndex
     let segment_0020of_0020end: Int = end.beginning_0020of_0020segment
     var text: UnicodeText = .empty
-    while (cursor < end) {
+    while cursor < end {
       let segment_0020of_0020cursor: Int = cursor.beginning_0020of_0020segment
       let segment: UnicodeText = segments_0020of_0020whole[segment_0020of_0020cursor].source
       if let beginning = cursor.scalar {
@@ -259,7 +259,7 @@ func primary_0020match_0020for_0020_0028_0029_0020beginning_0020at_0020_0028_002
   let end_0020of_0020pattern: String.UnicodeScalarView.Index = pattern.endIndex
   var cursor_0020in_0020haystack: String.UnicodeScalarView.Index = beginning
   let end_0020of_0020haystack: String.UnicodeScalarView.Index = haystack.endIndex
-  while (cursor_0020in_0020pattern < end_0020of_0020pattern) {
+  while cursor_0020in_0020pattern < end_0020of_0020pattern {
     if cursor_0020in_0020haystack >= end_0020of_0020haystack {
       return nil
     }

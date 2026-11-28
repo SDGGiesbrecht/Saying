@@ -1,6 +1,6 @@
 extension Unicode.Scalar {
   public var isDecomposedAccordingtoCompatibilityDecomposition: Bool {
-    return compatibility_0020decomposition_0020quick_0020check_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003Aערך_0020אמת((self).value)
+    return compatibility_0020decomposition_0020quick_0020check_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003Aערך_0020אמת(self.value)
   }
 }
 
@@ -17,7 +17,7 @@ extension Unicode.Scalar {
 
 extension Unicode.Scalar {
   public var combiningClass: Unicode.CanonicalCombiningClass {
-    return Unicode.CanonicalCombiningClass(rawValue: canonical_0020combining_0020class_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003A8_2010bit_0020natural_0020number((self).value))
+    return Unicode.CanonicalCombiningClass(rawValue: canonical_0020combining_0020class_0020of_0020_0028_0029_003AUnicode_0020scalar_0020numerical_0020value_003A8_2010bit_0020natural_0020number(self.value))
   }
 }
 
@@ -28,7 +28,7 @@ extension Unicode.Scalar {
 }
 
 func full_0020compatibility_0020decomposition_0020of_0020_0028_0029_003AUnicode_0020scalar_003AUnicode_0020scalars(_ scalar: Unicode.Scalar) -> String.UnicodeScalarView {
-  let value: UInt32 = (scalar).value
+  let value: UInt32 = scalar.value
   if value <= 0x009F {
     return String(scalar).unicodeScalars
   }

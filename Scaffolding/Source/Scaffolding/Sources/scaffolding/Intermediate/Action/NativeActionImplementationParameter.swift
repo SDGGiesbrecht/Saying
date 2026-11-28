@@ -14,6 +14,7 @@ struct NativeActionImplementationParameter {
   var inlined: Bool
   var sanitizedForIdentifier: Bool
   var remainderOfScope: Bool
+  var parenthesizeClosures: Bool
 }
 
 extension NativeActionImplementationParameter {
@@ -38,6 +39,7 @@ extension NativeActionImplementationParameter {
     self.inlined = false
     self.sanitizedForIdentifier = false
     self.remainderOfScope = false
+    self.parenthesizeClosures = false
   }
 
   static func construct(
@@ -58,6 +60,7 @@ extension NativeActionImplementationParameter {
     var inlined = false
     var sanitizedForIdentifier = false
     var remainderOfScope = false
+    var parenthesizeClosures = false
     switch parameter {
     case .simple(let simple):
       name = simple.identifierText()
@@ -80,6 +83,9 @@ extension NativeActionImplementationParameter {
         held = true
       case "() inlined":
         inlined = true
+      case "() inlined, parenthesizing closures":
+        inlined = true
+        parenthesizeClosures = true
       case "() sanitized for identifier":
         sanitizedForIdentifier = true
       case "remainder of ()":
@@ -106,7 +112,8 @@ extension NativeActionImplementationParameter {
         held: held,
         inlined: inlined,
         sanitizedForIdentifier: sanitizedForIdentifier,
-        remainderOfScope: remainderOfScope
+        remainderOfScope: remainderOfScope,
+        parenthesizeClosures: parenthesizeClosures
       )
     )
   }
@@ -129,7 +136,8 @@ extension NativeActionImplementationParameter {
       held: held,
       inlined: inlined,
       sanitizedForIdentifier: sanitizedForIdentifier,
-      remainderOfScope: remainderOfScope
+      remainderOfScope: remainderOfScope,
+      parenthesizeClosures: parenthesizeClosures
     )
   }
 }

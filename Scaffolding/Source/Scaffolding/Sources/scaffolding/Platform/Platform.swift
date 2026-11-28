@@ -2256,6 +2256,13 @@ extension Platform {
                   delayUntilCleanUp: true,
                   cleanUpCode: &cleanUpCode
                 )
+                if parameter.parenthesizeClosures,
+                  result.contains("{") {
+                  result = "(\(result))"
+                } else if nativeExpression.textComponents[index...].dropFirst().first?.first == ".",
+                  result.contains("*") || result.contains(" as ") {
+                  result = "(\(result))"
+                }
                 accumulator.append(
                   contentsOf: result
                 )
