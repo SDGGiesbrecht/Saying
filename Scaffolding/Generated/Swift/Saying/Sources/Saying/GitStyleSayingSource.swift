@@ -50,7 +50,7 @@ func parse_0020line_0020in_0020_0028_0029_0020from_0020_0028_0029_0020to_0020_00
   if let start = beginning {
     var adjusted_0020offset: UInt64 = start.offset
     var segment: Slice<UnicodeText> = Slice(base: source.code, bounds: start.cursor ..< end)
-    while (segment.first == " " as Unicode.Scalar) {
+    while segment.first == " " as Unicode.Scalar {
       segment.removeFirst()
       adjusted_0020offset += .one
     }

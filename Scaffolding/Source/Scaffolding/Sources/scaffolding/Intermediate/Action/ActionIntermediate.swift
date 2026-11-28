@@ -228,7 +228,7 @@ extension ActionIntermediate {
       ),
       c: c ?? NativeActionImplementationIntermediate(
         expression: NativeActionExpressionIntermediate(
-          textComponents: ["(", ").", ""].map({ UnicodeText($0) }),
+          textComponents: ["", ".", ""].map({ UnicodeText($0) }),
           parameters: [
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("container"), origin: compilerGeneratedOrigin())!),
             NativeActionImplementationParameter(ParsedUninterruptedIdentifier(source: UnicodeText("part"), origin: compilerGeneratedOrigin())!),

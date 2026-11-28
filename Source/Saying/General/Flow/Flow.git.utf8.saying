@@ -44,7 +44,7 @@ flow (clients)
  C♯: “while (” (condition) inlined “) {” consequence “}”
  JavaScript: “while (” (condition) inlined “) {” consequence “}”
  Kotlin: “while (” (condition) inlined “) {” consequence “}”
- Swift: “while (” (condition) inlined “) {” consequence “}”
+ Swift: “while ” (condition) inlined, parenthesizing closures “ {” consequence “}”
 
 flow (clients)
  [

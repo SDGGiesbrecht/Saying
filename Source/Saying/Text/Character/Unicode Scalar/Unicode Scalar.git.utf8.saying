@@ -28,7 +28,7 @@ thing (clients)
    C♯ (“NETCOREAPP3¤(5F)0¤(5F)OR¤(5F)GREATER”): “” . “.Value”
    JavaScript: “” . “”
    Kotlin: “” . “”
-   Swift: “(” . “).value”
+   Swift: “” . “.value”
  }
 
 action (clients)

@@ -26,7 +26,7 @@ extension Slice<UnicodeText> {
   public func firstMatch(of pattern: UnicodeText) -> Slice<UnicodeText>? {
     var cursor: String.UnicodeScalarView.Index = self.startIndex
     let end: String.UnicodeScalarView.Index = self.endIndex
-    while (cursor < end) {
+    while cursor < end {
       let result: Slice<UnicodeText>? = pattern.primaryMatch(beginningAt: cursor, in: self)
       if result != nil {
         return result
